@@ -150,6 +150,8 @@ Detalle de las capas y de la procedencia en [`docs/datos.md`](docs/datos.md).
 | `docs/negocio.md` | Comprensión del negocio: decisión, objetivos, papel de cada zona, criterios de éxito, riesgos y plan. |
 | `docs/investigacion.md` | Qué zona es cuál, qué tan difícil es cada una y cómo pronostica la industria, con fuentes. |
 | `docs/datos.md` | Procedencia, diccionario de variables y las capas del pipeline. |
+| `docs/historico.md` | Cómo sortear que solo hay un año de histórico: opciones, evaluación honesta y amenazas a la validez. |
+| `experimentos/historico/` | Los scripts que respaldan las cifras de `docs/historico.md`. |
 | `.github/` | CI (ruff + pytest en cada push a `main` o `develop` y en cada PR), plantilla de PR y Dependabot. |
 | `data/` | Copia local de las capas (las compartidas están en Google Drive). No se versiona. |
 
