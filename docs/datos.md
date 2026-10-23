@@ -22,7 +22,8 @@ Zona 3 = Smir) **no está confirmado**.
 
 Los datos son coherentes con que la Zona 3 sea Smir, la zona costera y turística: es la que más sube en
 julio y agosto, la única cuyo consumo no baja el fin de semana y la que más cae fuera de temporada.
-Es un indicio, no una prueba. Las cifras están en el notebook de comprensión de los datos.
+Es un indicio, no una prueba. Las cifras y el razonamiento completo están en la
+[investigación](investigacion.md).
 
 ## Variables
 
