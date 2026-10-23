@@ -11,15 +11,24 @@ Las tablas se generan con `uv run python -m tetouan_power_forecast.perfiles`, so
 
 - UCI describe los datos solo como el consumo de "tres redes de distribución" de Tetuán. No nombra las
   zonas y no da unidades.
-- La descripción del dataset que circula en Kaggle y en los repositorios que lo usan agrega que los datos
-  vienen del SCADA de **Amendis**, el operador de distribución, y que la red se alimenta de **tres
-  subestaciones: Quads, Smir y Boussafou**. No dice qué subestación es cada zona.
-- El único mapeo que circula (Zona 1 = Quads, Zona 2 = Boussafou, Zona 3 = Smir) viene de un artículo
-  de divulgación sin respaldo. Los papers que usan los nombres no son de acceso abierto. Uno que sí lo es
-  (Hybrid LSTM-XGBoost, MDPI) solo numera las zonas.
+- El resumen del artículo original (Salam y El Hibaoui, 2018) confirma que los datos vienen del **SCADA**,
+  cada 10 minutos, de tres redes de distribución. Tampoco nombra las subestaciones.
+- La descripción del dataset que circula en Kaggle agrega que el operador es **Amendis** y que la red se
+  alimenta de **tres subestaciones: Quads, Smir y Boussafou**, sin decir cuál es cada zona. Un artículo con
+  revisión por pares (Chang y Ke, 2024, *IEEE Access*) repite los nombres, el SCADA y la transformación de
+  63 a 20 kV, también sin asignarlos.
+- **Circulan dos asignaciones que se contradicen, y ninguna cita una fuente primaria:**
+  - Zona 1 = Quads, Zona 2 = Smir y Zona 3 = Boussafou. Aparece en cinco obras, entre ellas Zhang et al.
+    (2024, *Electronics*, §4.1) y Abdillahi y Etem (2025), que cita como respaldo la ficha de UCI, que no
+    nombra las zonas. Coincide con el orden en que Kaggle lista los nombres.
+  - Zona 1 = Quads, Zona 2 = Boussafou y Zona 3 = Smir, en un artículo de divulgación en Medium.
+
+El detalle está en el [estado del arte](estado-del-arte.md#4-identidad-de-las-zonas).
 
 **Conclusión:** no hay una fuente primaria accesible que identifique las zonas. La identificación tiene
-que salir del comportamiento de los datos.
+que salir del comportamiento de los datos. Los dos artículos de los autores del dataset (IRSEC 2018 y
+*Mathematics and Computers in Simulation*, 2021) son de acceso cerrado y quedan pendientes: podrían
+resolverlo.
 
 ## 2. Lo que dicen los datos: la firma de carga
 
@@ -95,7 +104,7 @@ consecuencias:
 
 | Zona | Identidad probable | Confianza |
 |---|---|---|
-| Zona 3 | Smir, zona costera turística | Media-alta: varias señales independientes coinciden |
+| Zona 3 | Zona costera turística; coherente con Smir (la literatura le asigna Boussafou, sin fuente) | Media-alta sobre el tipo de zona; baja sobre el nombre |
 | Zona 2 | Zona de actividad laboral | Media: el patrón es claro, el nombre no |
 | Zona 1 | Red urbana principal | Media: la de mayor peso y comportamiento más mixto |
 
@@ -175,8 +184,9 @@ MAPE (%) de cada referencia en la partición cronológica del gold (sin las fila
 - Mapeo de zonas no confirmado: <https://medium.com/@mehranwaheed/project-overview-98fe6424f3b9>
 - *Forecasting Energy Consumption Using a Hybrid LSTM-XGBoost Model* (MDPI):
   <https://www.mdpi.com/2673-4591/144/1/4>
-- Habib et al. (2025). *Forecasting Tetouan energy demand employing shift approach in
-  machine-learning*. Quality & Quantity, 59.
+- Islam, M. T., Turja, S. A., Islam, M. S., Rahman, M. M. y Habib, A. (2025). *Forecasting Tetouan energy
+  demand employing shift approach in machine-learning: complementing econometric insights*. Quality &
+  Quantity, 59.
   <https://www.researchgate.net/publication/387440487_Forecasting_Tetouan_energy_demand_employing_shift_approach_in_machine-learning_complementing_econometric_insights>
 - Hong, T., Pinson, P. y Fan, S. (2014). Global Energy Forecasting Competition 2012. *International
   Journal of Forecasting*, 30(2), 357-363. <https://ideas.repec.org/a/eee/intfor/v30y2014i2p357-363.html>

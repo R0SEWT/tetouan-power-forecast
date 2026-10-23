@@ -17,8 +17,10 @@ repositorios que lo usan, no de una fuente primaria. Sirven como contexto, pero 
 ## Las tres zonas
 
 La red se alimenta de tres subestaciones: **Quads, Smir y Boussafou**. Ninguna fuente primaria dice
-qué subestación corresponde a cada zona. El mapeo que circula (Zona 1 = Quads, Zona 2 = Boussafou,
-Zona 3 = Smir) **no está confirmado**.
+qué subestación corresponde a cada zona. Circulan dos asignaciones que se contradicen, las dos sin
+respaldo: Zona 1 = Quads, Zona 2 = Smir y Zona 3 = Boussafou (en varios artículos) y Zona 1 = Quads,
+Zona 2 = Boussafou y Zona 3 = Smir (en un artículo de divulgación). Ninguna **está confirmada**; ver el
+[estado del arte](estado-del-arte.md#4-identidad-de-las-zonas).
 
 Los datos son coherentes con que la Zona 3 sea Smir, la zona costera y turística: es la que más sube en
 julio y agosto, la única cuyo consumo no baja el fin de semana y la que más cae fuera de temporada.
