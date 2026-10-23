@@ -120,3 +120,17 @@ def test_ventanas_de_la_validacion_no_cruzan_al_verano():
         assert fechas[tr].max() + pd.Timedelta(hours=1) < pd.Timestamp("2022-07-01")
     assert fechas[entrenamiento["sin_verano"]].min() == pd.Timestamp("2022-01-01")
     assert fechas[entrenamiento["2_anios"]].min() == pd.Timestamp("2020-07-01")
+
+
+def test_la_hora_repetida_de_octubre_con_las_marcas_2a_y_2b_de_ree():
+    marcas = ["2019-10-27 01:55", "2019-10-27 2A:00", "2019-10-27 2A:55",
+              "2019-10-27 2B:00", "2019-10-27 2B:55", "2019-10-27 03:00"]
+    df = parsear_respuesta(_jsonp(marcas))
+    esperado = pd.to_datetime(["2019-10-26 23:55", "2019-10-27 00:00", "2019-10-27 00:55",
+                               "2019-10-27 01:00", "2019-10-27 01:55", "2019-10-27 02:00"])
+    assert list(df["DateTime"]) == list(esperado)  # 2A en horario de verano (UTC+2), 2B en invierno (UTC+1)
+
+
+def test_una_marca_de_hora_desconocida_falla_diciendo_cual_es():
+    with pytest.raises(ValueError, match="24:00"):
+        parsear_respuesta(_jsonp(["2019-10-27 23:55", "2019-10-27 24:00"]))
