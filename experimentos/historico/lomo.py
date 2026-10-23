@@ -9,7 +9,11 @@ import pandas as pd
 
 from experimentos.historico import rolling as R
 
-BUFFER = 144  # un día de margen a cada lado del mes evaluado
+# Margen antes del mes: que ningún objetivo del entrenamiento (t+6) caiga dentro del mes evaluado.
+# Margen después: que ninguna variable del entrenamiento mire hacia el mes evaluado; el rezago y la
+# media semanales miran 1008 pasos atrás, así que hace falta más de una semana (más un día de holgura).
+MARGEN_ANTES = R.DAY
+MARGEN_DESPUES = R.WEEK + R.DAY
 
 
 def main():
@@ -27,7 +31,7 @@ def main():
         for m in (7, 8):
             ini, fin = pd.Timestamp(2017, m, 1), pd.Timestamp(2017, m + 1, 1)
             te = np.where((fechas >= ini) & (fechas < fin))[0]
-            lo, hi = te.min() - BUFFER, te.max() + BUFFER
+            lo, hi = te.min() - MARGEN_ANTES, te.max() + MARGEN_DESPUES
             tr = np.r_[np.arange(0, lo), np.arange(hi + 1, len(idx))]
             for vn, (X, yobj, yt, base) in prep.items():
                 Xv, yo, ytv, bv = X.iloc[idx], yobj.iloc[idx], yt.iloc[idx], base.iloc[idx]

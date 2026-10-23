@@ -78,9 +78,10 @@ paper que el modelo generaliza a otros años.
 
 **Qué resuelve:** (a) y buena parte de (c) y (d).
 
-Un árbol predice promedios de los objetivos que vio en sus hojas: no puede dar un valor por encima del
-máximo del entrenamiento, y con un solo año el nivel de cada mes se vuelve una seña de "en qué parte del
-año estoy". A una hora, casi todo lo que hay que saber es el nivel actual. Conviene que el modelo aprenda
+Un modelo de árboles, aunque sea un *boosting* que suma muchos árboles, es constante por tramos: para
+valores de las variables más allá de los que vio, repite lo que aprendió en el borde y no extrapola la
+tendencia. Sus predicciones quedan pegadas al rango de niveles del entrenamiento, y con un solo año el
+nivel de cada mes se vuelve una seña de "en qué parte del año estoy". A una hora, casi todo lo que hay que saber es el nivel actual. Conviene que el modelo aprenda
 solo lo que cambia respecto de ahora.
 
 Dos variantes probadas (experimento):
@@ -175,14 +176,17 @@ cuesta. El detalle está en [Evaluación honesta con un solo año](#evaluación-
   día anterior: hacia las 18 h, unos −4.9 MW y +4.9 MW. Comparando las dos semanas anteriores con las dos
   posteriores, la Zona 1 queda 12.5 % abajo, la Zona 2 11.3 % arriba, la suma de ambas solo baja 3.3 % y
   la Zona 3, 6.6 % (la caída estacional).
-- La **cuota de la Zona 1 en la suma** se movió entre 0.585 y 0.646 (semanal) durante todo el año, y desde
-  el 25 de octubre queda entre 0.545 y 0.568 hasta el 30 de diciembre. Es un nivel que el entrenamiento no
-  tiene. Buscar el único punto de quiebre que mejor parte la cuota diaria (mínimos cuadrados) da
-  exactamente el 25 de octubre (0.619 antes, 0.554 después).
+- La **cuota de la Zona 1 en la suma** se movió entre 0.584 y 0.647 (media semanal) hasta el 25 de
+  octubre, y en las semanas completas posteriores queda entre 0.546 y 0.562. Es un nivel que el
+  entrenamiento no tiene. Buscar el único punto de quiebre que mejor parte la cuota diaria (mínimos
+  cuadrados) da exactamente el 25 de octubre (0.619 antes, 0.554 después).
 - **No es la única maniobra.** Hay días con cambios en espejo frente al día anterior (correlación entre
-  ambas zonas menor a −0.9) el 8 de marzo, el 21 de abril, el 7 de julio y el 5 de octubre, y un día
-  completo transferido el 20 de abril (Zona 1 −11 %, Zona 2 +18 %, suma +1.5 % frente a la semana
-  anterior). Las transferencias son operación normal; la del 25 de octubre es la única que se queda.
+  ambas zonas menor a −0.9) el 8 y el 9 de marzo, el 21 de abril, el 7 de julio y el 5 de octubre, además
+  del 25 de octubre. El 20 de abril hay un día completo transferido: frente al jueves anterior, la Zona 1
+  baja 10.0 %, la Zona 2 sube 22.1 % y la suma, 1.5 %. Las transferencias son operación normal; la del
+  25 de octubre es la única que se queda.
+
+Estas cifras salen del script `cuota` ([`experimentos/historico/`](../experimentos/historico/)).
 
 **Cuánto afecta (experimento).** Modelos entrenados hasta el 30 de septiembre, sin reentrenar, MAPE:
 
@@ -218,10 +222,11 @@ cuesta. El detalle está en [Evaluación honesta con un solo año](#evaluación-
    modelo cuál es la topología vigente.
 4. **Detectar y documentar el quiebre.** Para el paper, una detección fuera de línea sobre la cuota diaria
    con `ruptures` (BSD-2-Clause; `rpt.Binseg` o `rpt.Pelt`) o con la búsqueda por mínimos cuadrados de
-   arriba. Para la app, un detector en línea simple: la cuota de la última hora frente a la media y la
-   desviación de las 4 semanas anteriores. Con un umbral de −2.5 desviaciones (media diaria), marcó el
-   20 de abril y del 26 al 28 de octubre, es decir, con 1 a 3 días de retraso. Sirve como alerta, no como
-   variable del modelo.
+   arriba. Para la app, un detector simple: la cuota de cada día frente a la media y la desviación de las 4
+   semanas anteriores. Con un umbral de −2.5 desviaciones marca el 20 de abril y del 25 al 28 de octubre,
+   pero también da cuatro falsas alarmas en el año (14 de febrero, 4 y 24 de julio y 28 de septiembre).
+   Como usa la cuota del día completo, avisa al cierre del día. Sirve como alerta, no como variable del
+   modelo.
 5. **Declararlo.** En la operación real, el centro de control conoce sus propias maniobras, y un sistema en
    producción recibiría el estado de la topología como entrada. El dataset no lo trae: es información
    faltante, no ruido.
@@ -509,26 +514,28 @@ objetivo relativo.
 
 Para el verano de la Zona 3 conviene reportar un rango, no un número:
 
-- **Cota pesimista:** los pliegues de julio y agosto del origen móvil. El modelo nunca vio un verano: es
-  el caso de desplegarlo sin haber pasado por uno.
-- **Cota optimista:** dejar fuera el mes (julio o agosto) con un día de margen a cada lado y entrenar con
-  el resto del año, incluido el futuro. Es lo más cerca que se puede estar de "ya vio un verano". Bergmeir,
+- **Cota pesimista:** el pliegue de julio del origen móvil, en el que el modelo nunca vio un verano: es el
+  caso de desplegarlo sin haber pasado por uno. El pliegue de agosto ya entrenó con julio, así que mide el
+  desempeño después de un mes de verano, no sin haber visto ninguno.
+- **Cota optimista:** dejar fuera el mes (julio o agosto) y entrenar con el resto del año, incluido el
+  futuro. El margen es de un día antes del mes, para que ningún objetivo del entrenamiento caiga dentro
+  de él, y de ocho días después, porque el rezago y la media semanales miran una semana atrás. Es lo más cerca que se puede estar de "ya vio un verano". Bergmeir,
   Hyndman y Koo (2018) justifican la validación cruzada en modelos autorregresivos cuando los rezagos
   relevantes están entre las variables, pero solo si los residuos no quedan autocorrelacionados, así que
   hay que presentarla como cota, no como estimación insesgada.
 
 Experimento, MAPE en verano (modelo actual / objetivo en razón):
 
-| | Cota pesimista: origen móvil | Cota optimista: mes fuera con margen | Mejor ingenua del mes |
+| | Origen móvil | Mes fuera con margen (cota optimista) | Mejor ingenua del mes |
 |---|---:|---:|---:|
-| Zona 3, julio | 6.62 / 2.46 % | 3.93 / 1.91 % | 3.38 % ("ayer") |
-| Zona 3, agosto | 3.57 / 3.17 % | 3.12 / 2.81 % | 4.01 % ("ayer") |
-| Zona 1, julio | 4.61 / 2.70 % | 2.58 / 2.03 % | 4.37 % ("ayer") |
-| Zona 1, agosto | 2.33 / 1.98 % | 2.22 / 1.87 % | 3.69 % ("ayer") |
+| Zona 3, julio (cota pesimista: sin verano previo) | 6.62 / 2.46 % | 4.21 / 2.00 % | 3.38 % ("ayer") |
+| Zona 3, agosto (ya vio julio) | 3.57 / 3.17 % | 3.16 / 3.04 % | 4.01 % ("ayer") |
+| Zona 1, julio (cota pesimista: sin verano previo) | 4.61 / 2.70 % | 2.90 / 2.15 % | 4.37 % ("ayer") |
+| Zona 1, agosto (ya vio julio) | 2.33 / 1.98 % | 2.23 / 1.92 % | 3.69 % ("ayer") |
 
-Con el objetivo en razón, el verano de la Zona 3 queda entre 1.9 y 2.5 % de MAPE en julio y entre 2.8 y
-3.2 % en agosto, siempre por debajo de la mejor ingenua. Con el modelo actual, julio va de 3.9 a 6.6 %, y
-la cota pesimista pierde contra "ayer". Ese rango, junto con la mejor ingenua, es lo que se reporta para
+Con el objetivo en razón, julio en la Zona 3 queda entre 2.0 y 2.5 % de MAPE y agosto, después de ver
+julio, entre 3.0 y 3.2 %, siempre por debajo de la mejor ingenua. Con el modelo actual, julio va de 4.2 a
+6.6 %, y la cota pesimista pierde contra "ayer". Ese rango, junto con la mejor ingenua, es lo que se reporta para
 la temporada que la prueba no cubre.
 
 ### Cómo tratar la transferencia en la evaluación
@@ -577,9 +584,12 @@ el silver del medallón. Se corren desde la raíz del repo, en local o en Colab
 | `global_model` | Modelo global de las tres zonas frente al local | Opción 2 |
 | `quiebre` | Antes y después del 25 de octubre, y reentrenamiento semanal | Opción 4 |
 | `lomo` | Mes fuera con margen (cota optimista del verano) | Evaluación honesta |
+| `cuota` | Cuota de la Zona 1, punto de quiebre, días en espejo y detector | Opción 4 |
 
-Al pasar los scripts al repo se volvieron a correr `lomo` y `rolling Z1`, que dieron exactamente las
-mismas cifras.
+Al pasar los scripts al repo se volvió a correr `rolling Z1`, que dio exactamente las mismas cifras. En
+`lomo` se amplió el margen posterior a ocho días, para que las variables semanales no miren el mes
+evaluado; sus cifras son las de esa corrida. `cuota` se escribió después y sus cifras reemplazan a las
+del primer análisis.
 
 **Datos.** El silver de 2017 (52,416 filas). El primer origen válido es el 8 de enero, por el rezago
 semanal y la media de 7 días. Objetivos: el consumo en t+6 de cada zona y de la Zona 1 + la Zona 2.
@@ -610,8 +620,8 @@ random_state=0)`, sin ajuste de hiperparámetros y con una sola semilla.
 - Prueba en las tablas generales: el último 15 % de los orígenes válidos (desde el 7 de noviembre a las
   09:50), entrenando con todo lo anterior menos 6 pasos. En el análisis de la transferencia y del
   reentrenamiento semanal, la prueba empieza el 6 de noviembre a las 09:30, como la partición oficial.
-- Mes fuera: julio o agosto como prueba, con un día de margen a cada lado y el resto del año como
-  entrenamiento.
+- Mes fuera: julio o agosto como prueba, con un día de margen antes y ocho después, y el resto del año
+  como entrenamiento.
 - Las métricas se calculan sobre el nivel reconstruido, en kW.
 
 **Resultados por mes (MAPE, %).**

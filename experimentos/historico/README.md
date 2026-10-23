@@ -9,7 +9,8 @@ silver del medallón y guardan sus resultados en `<datos>/reportes/historico/`. 
 | `rolling` | Objetivo en nivel, cambio y razón, con y sin calendario anual, con origen móvil mensual y en la prueba | ~1.5 min por serie |
 | `global_model` | Un modelo para las tres zonas frente a uno por zona | Algunos minutos |
 | `quiebre` | El efecto de la transferencia del 25 de octubre y de reentrenar cada semana | Algunos minutos |
-| `lomo` | El verano con el mes fuera y un día de margen (cota optimista) | ~20 s |
+| `lomo` | El verano con el mes fuera, con margen (cota optimista) | ~20 s |
+| `cuota` | La cuota de la Zona 1 dentro de Zona 1 + Zona 2: punto de quiebre, días en espejo y detector | Segundos |
 
 Los tiempos se midieron en una máquina de 8 núcleos con `OMP_NUM_THREADS=8`. Si se corren varios a la
 vez, conviene bajar los hilos de cada uno, o usar Colab.
@@ -23,6 +24,7 @@ uv run python -m experimentos.historico.rolling Z1,Z2,Z3,S12
 uv run python -m experimentos.historico.global_model
 uv run python -m experimentos.historico.quiebre
 uv run python -m experimentos.historico.lomo
+uv run python -m experimentos.historico.cuota
 ```
 
 `rolling` acepta las series que se quieran correr: `Z1`, `Z2`, `Z3` y `S12` (la suma de la Zona 1 y la
