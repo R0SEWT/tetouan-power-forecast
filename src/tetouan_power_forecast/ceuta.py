@@ -72,8 +72,9 @@ def _descargar_texto(url, timeout=60, intentos=3, espera=10):
 def parsear_respuesta(texto):
     """Respuesta JSONP de REE → DataFrame con DateTime en UTC (sin zona) y la demanda en MW.
 
-    En el cambio de hora de octubre la hora local de 2:00 a 2:55 aparece dos veces: la primera es horario
-    de verano y la segunda, de invierno. En el de marzo esa hora no existe.
+    En el cambio de hora de octubre, la hora local de 2:00 a 2:55 ocurre dos veces. REE la marca como
+    "2A:mm" (la primera, en horario de verano) y "2B:mm" (la segunda, en horario de invierno). Si una hora
+    sin marca aparece repetida, la primera se toma como de verano. En el cambio de marzo esa hora no existe.
     """
     cuerpo = re.search(r"\((\{.*\})\)", texto, re.DOTALL)
     if cuerpo is None:
@@ -82,9 +83,14 @@ def parsear_respuesta(texto):
     df = pd.DataFrame(valores, columns=["ts", "dem"])
     if df.empty:
         return pd.DataFrame(columns=["DateTime", "dem"])
-    local = pd.to_datetime(df["ts"], format="%Y-%m-%d %H:%M")
-    verano = ~df["ts"].duplicated(keep="first")  # la primera aparición de una hora repetida es la de verano
-    utc = local.dt.tz_localize(ZONA_HORARIA, ambiguous=verano.to_numpy(), nonexistent="shift_forward")
+    marca = df["ts"].str.extract(r"^(?P<dia>\d{4}-\d{2}-\d{2}) (?P<hora>\d{1,2})(?P<turno>[AB]?):(?P<minuto>\d{2})$")
+    if marca["dia"].isna().any():
+        raise ValueError(f"Marca de hora de REE con un formato desconocido: {df.loc[marca['dia'].isna(), 'ts'].iloc[0]!r}")
+    local = pd.to_datetime(marca["dia"] + " " + marca["hora"].str.zfill(2) + ":" + marca["minuto"],
+                           format="%Y-%m-%d %H:%M")
+    sin_turno = marca["turno"].eq("")
+    verano = (~df["ts"].duplicated(keep="first")).where(sin_turno, marca["turno"].eq("A"))
+    utc = local.dt.tz_localize(ZONA_HORARIA, ambiguous=verano.to_numpy(dtype=bool), nonexistent="shift_forward")
     return pd.DataFrame({"DateTime": utc.dt.tz_convert("UTC").dt.tz_localize(None), "dem": df["dem"].astype(float)})
 
 
