@@ -117,7 +117,7 @@ en la Zona 2 (semana pasada) y 6.0 % en la Zona 3 (ayer). La persistencia es la 
 |---|---|---|
 | Supuesto | Los consumos están en kW (lo dicen fuentes secundarias, no UCI) | Se declara en el paper |
 | Supuesto | La identidad de las zonas no está confirmada | Se describen por su comportamiento, sin afirmar nombres |
-| Restricción | Un solo año de datos: el verano y el ciclo anual se ven una vez | Validación de origen móvil y errores por temporada |
+| Restricción | Un solo año de datos: el verano y el ciclo anual se ven una vez | Validación de origen móvil y errores por temporada; opciones en [histórico](historico.md) |
 | Restricción | No hay pronósticos del clima | Solo se usa el clima observado hasta t |
 | Restricción | No se conoce la capacidad de cada subestación | El error en hora pico y la subestimación de picos hacen de proxy del riesgo de sobrecarga |
 | Riesgo | Los modelos de árboles no extrapolan a niveles que no vieron (el verano de la Zona 3) | Modelar el cambio respecto al consumo actual, no el nivel |
