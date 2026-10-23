@@ -23,7 +23,8 @@
   <a href="#avance">Avance</a> ·
   <a href="#empezar">Empezar</a> ·
   <a href="#convenciones">Convenciones</a> ·
-  <a href="https://colab.research.google.com/github/R0SEWT/tetouan-power-forecast/blob/main/notebooks/01_negocio_datos_preparacion.ipynb">Abrir en Colab</a>
+  <a href="docs/negocio.md">Negocio</a> ·
+  <a href="https://colab.research.google.com/github/R0SEWT/tetouan-power-forecast/blob/develop/notebooks/01_datos_preparacion.ipynb">Abrir en Colab</a>
 </p>
 
 </div>
@@ -46,19 +47,24 @@
 
 ## Qué es
 
-La red eléctrica de Tetuán (Marruecos) se reparte en tres zonas de distribución. El operador
-tiene que equilibrar en todo momento la energía que entrega con la que consume la ciudad: si la
-demanda supera lo previsto, la red se sobrecarga; si se sobreestima, se compra o genera energía
-que nadie usa.
+Tetuán (Marruecos) recibe la electricidad a través de Amendis, que la distribuye desde tres
+subestaciones. Si la demanda de una subestación supera su capacidad, la red se sobrecarga. El centro
+de control ve el consumo en tiempo real, pero solo cuando ya ocurrió.
 
-Estimamos el consumo de la **Zona 1** con **una hora de anticipación** (6 periodos de 10
-minutos), usando solo lo que se conoce en el momento de predecir: el consumo y el clima hasta
-ese instante, y el calendario. Una hora alcanza para ajustar la generación antes de un pico; diez
-minutos, no.
+Pronosticamos el consumo de **cada una de las tres zonas** con **una hora de anticipación** (6
+periodos de 10 minutos), usando solo lo que se conoce al momento de predecir: el consumo y el clima
+hasta ese instante, y el calendario. Una hora deja margen para transferir carga o preparar una
+maniobra antes del pico.
 
-**Criterio de éxito:** el modelo tiene que equivocarse menos que el *baseline* de persistencia,
-que supone que dentro de una hora se consumirá lo mismo que ahora. Si no lo supera, no aporta
-valor.
+| Zona | Comportamiento | Papel |
+|---|---|---|
+| Zona 1 | 45 % de la demanda, la más estable | Caso principal |
+| Zona 3 | Costera y de veraneo, picos de verano | Prueba de estrés |
+| Zona 2 | Ritmo laboral, cae domingos y feriados | Contraste |
+
+**Criterio de éxito:** equivocarse menos que la mejor de tres referencias ingenuas (lo mismo que ahora,
+lo mismo que ayer o lo mismo que la semana pasada a esa hora), también en las horas pico. El detalle
+está en [`docs/negocio.md`](docs/negocio.md) y la evidencia, en [`docs/investigacion.md`](docs/investigacion.md).
 
 <p align="right">(<a href="#inicio">volver arriba</a>)</p>
 
@@ -68,21 +74,17 @@ valor.
 
 | Fase CRISP-DM | Dónde | Estado |
 |---|---|---|
-| 1. Comprensión del negocio | [`01_negocio_datos_preparacion`](notebooks/01_negocio_datos_preparacion.ipynb) | Hecha |
-| 2. Comprensión de los datos | [`01_negocio_datos_preparacion`](notebooks/01_negocio_datos_preparacion.ipynb) | Hecha |
-| 3. Preparación de los datos | [`01_negocio_datos_preparacion`](notebooks/01_negocio_datos_preparacion.ipynb) | Hecha |
+| 1. Comprensión del negocio | [`docs/negocio.md`](docs/negocio.md) y [`docs/investigacion.md`](docs/investigacion.md) | Hecha |
+| 2. Comprensión de los datos | [`01_datos_preparacion`](notebooks/01_datos_preparacion.ipynb) y [`docs/datos.md`](docs/datos.md) | Hecha |
+| 3. Preparación de los datos | [`01_datos_preparacion`](notebooks/01_datos_preparacion.ipynb) y el medallón | Hecha para la Zona 1; el gold de las tres zonas ya existe |
 | 4. Modelado | `02_modelado_evaluacion` | Pendiente |
 | 5. Evaluación | `02_modelado_evaluacion` | Pendiente |
 | 6. Despliegue | app en Streamlit | Pendiente |
 
 La preparación deja una partición cronológica 70/15/15, rezagos de las tres zonas, calendario con
 codificación cíclica, validación cruzada temporal, información mutua, ablación por grupos de
-variables y una revisión de *leakage*.
-
-| Referencia a superar | MAE | RMSE | MAPE |
-|---|---:|---:|---:|
-| Persistencia, validación | 2,073 kW | 2,904 kW | 6.24 % |
-| Persistencia, prueba | 1,821 kW | 2,504 kW | 6.29 % |
+variables y una revisión de *leakage*. Las referencias ingenuas que hay que superar en cada zona están
+en [`docs/investigacion.md`](docs/investigacion.md#3-qué-tan-difícil-es-cada-zona-las-referencias-ingenuas).
 
 <p align="right">(<a href="#inicio">volver arriba</a>)</p>
 
@@ -91,16 +93,16 @@ variables y una revisión de *leakage*.
 ## Cómo está hecho
 
 ```
-UCI 849 (ucimlrepo) ──► 01 · negocio, datos, preparación ──► dataset t+6 (rezagos + calendario)
-                                                                     │
-                                                                     ▼
-                         src/tetouan_power_forecast ◄──── 02 · modelado y evaluación
-                         (métricas compartidas,             (varios modelos, CV temporal,
-                          con tests)                         comparación con persistencia)
-                                   │                                 │
-                                   ▼                                 ▼
-                         app en Streamlit ◄─────────────── modelo final
-                         (inputs, predicción, gráficos)
+UCI 849 ──► bronze ──► silver (auditado) ──► gold t+6, una tabla por zona      [Google Drive]
+                           │                       │
+                           ▼                       ▼
+                  01 · datos y preparación    02 · modelado y evaluación
+                  (firma de carga, clima,     (varios modelos, CV temporal,
+                   días especiales)            contra las 3 referencias ingenuas)
+                                                   │
+                  src/tetouan_power_forecast       ▼
+                  (medallón, perfiles,        app en Streamlit
+                   métricas; con tests)       (inputs, predicción, gráficos)
 ```
 
 <p align="right">(<a href="#inicio">volver arriba</a>)</p>
@@ -143,9 +145,11 @@ Detalle de las capas y de la procedencia en [`docs/datos.md`](docs/datos.md).
 | Ruta | Qué hay |
 |------|---------|
 | `notebooks/` | `00_medallon` prepara los datos en Drive; después, un notebook por tramo de CRISP-DM, numerados en orden. |
-| `src/tetouan_power_forecast/` | Código que comparten los notebooks y la app: el pipeline de datos (`medallon`), la construcción del dataset t+6 (`datos`) y las métricas (`metricas`). |
+| `src/tetouan_power_forecast/` | Código que comparten los notebooks y la app: el pipeline de datos (`medallon`), la construcción del dataset t+6 (`datos`), la firma de carga y las referencias ingenuas (`perfiles`) y las métricas (`metricas`). |
 | `tests/` | Pruebas de `src/` con pytest. |
-| `docs/datos.md` | Procedencia, diccionario de variables, las tres zonas y las capas del pipeline. |
+| `docs/negocio.md` | Comprensión del negocio: decisión, objetivos, papel de cada zona, criterios de éxito, riesgos y plan. |
+| `docs/investigacion.md` | Qué zona es cuál, qué tan difícil es cada una y cómo pronostica la industria, con fuentes. |
+| `docs/datos.md` | Procedencia, diccionario de variables y las capas del pipeline. |
 | `.github/` | CI (ruff + pytest en cada push a `main` o `develop` y en cada PR), plantilla de PR y Dependabot. |
 | `data/` | Copia local de las capas (las compartidas están en Google Drive). No se versiona. |
 
