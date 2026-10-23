@@ -149,6 +149,7 @@ Detalle de las capas y de la procedencia en [`docs/datos.md`](docs/datos.md).
 | `tests/` | Pruebas de `src/` con pytest. |
 | `docs/negocio.md` | Comprensión del negocio: decisión, objetivos, papel de cada zona, criterios de éxito, riesgos y plan. |
 | `docs/investigacion.md` | Qué zona es cuál, qué tan difícil es cada una y cómo pronostica la industria, con fuentes. |
+| `docs/estado-del-arte.md` | Los trabajos que usan este dataset: horizonte, partición, fugas y referencias ingenuas, y cómo se posiciona el proyecto. |
 | `docs/datos.md` | Procedencia, diccionario de variables y las capas del pipeline. |
 | `docs/historico.md` | Cómo sortear que solo hay un año de histórico: opciones, evaluación honesta y amenazas a la validez. |
 | `experimentos/historico/` | Los scripts que respaldan las cifras de `docs/historico.md`. |
