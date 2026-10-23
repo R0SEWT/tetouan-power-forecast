@@ -131,6 +131,26 @@ def test_la_hora_repetida_de_octubre_con_las_marcas_2a_y_2b_de_ree():
     assert list(df["DateTime"]) == list(esperado)  # 2A en horario de verano (UTC+2), 2B en invierno (UTC+1)
 
 
+def test_redata_horaria_en_hora_local_y_sin_repetir_descargas(tmp_path):
+    from experimentos.ceuta.comparar_2017 import horaria_redata
+
+    def descargar(url):
+        inicio = pd.Timestamp(url.split("start_date=")[1][:10], tz="Europe/Madrid")
+        horas = pd.date_range(inicio, inicio + pd.offsets.MonthEnd(1) + pd.Timedelta(hours=23), freq="h")
+        valores = [{"value": 20.0, "datetime": h.isoformat(timespec="milliseconds")} for h in horas]
+        return json.dumps({"included": [{"attributes": {"values": valores}}]})
+
+    serie = horaria_redata(2017, tmp_path, descargar=descargar, pausa=0)
+    assert len(list((tmp_path / "ceuta" / "bronze" / "redata").glob("*.json"))) == 12
+    assert serie.index.is_unique and serie.index.is_monotonic_increasing
+    assert serie.index[0] == pd.Timestamp("2017-01-01 00:00") and serie.index[-1] == pd.Timestamp("2017-12-31 23:00")
+
+    def falla(url):
+        raise AssertionError("no debía volver a descargar")
+
+    horaria_redata(2017, tmp_path, descargar=falla, pausa=0)
+
+
 def test_una_marca_de_hora_desconocida_falla_diciendo_cual_es():
     with pytest.raises(ValueError, match="24:00"):
         parsear_respuesta(_jsonp(["2019-10-27 23:55", "2019-10-27 24:00"]))

@@ -29,6 +29,21 @@ uv run python -m experimentos.ceuta.validacion
 
 Escribe `reportes/ceuta/resultados_validacion.csv` dentro de la carpeta de datos.
 
+## Ceuta y Tetuán en 2017
+
+`comparar_2017.py` baja de REData, la API oficial de REE, la demanda horaria de Ceuta de 2017 (12
+consultas, unos 700 KB) y la compara con las tres zonas: escala, estacionalidad, correlaciones, fin de
+semana, feriados de cada país y Ramadán. Solo necesita el silver de Tetuán, así que se puede correr en
+local:
+
+```bash
+uv run python -m experimentos.ceuta.comparar_2017
+```
+
+Guarda las respuestas en `ceuta/bronze/redata/` y la tabla en `reportes/ceuta/comparacion_2017.csv`. La
+forma diaria se parece a la de las zonas 1 y 2, pero no son la misma serie: cada una tiene los feriados y
+el fin de semana de su país.
+
 ## Resultado
 
 Corrida del 23 de octubre de 2026. MAPE (%) medio de julio y agosto de 2022 a 2026, los veranos con las
