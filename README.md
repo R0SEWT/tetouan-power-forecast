@@ -109,8 +109,10 @@ UCI 849 (ucimlrepo) ──► 01 · negocio, datos, preparación ──► datas
 
 ## Empezar
 
-**En Colab.** Abre el notebook con el enlace de arriba; descarga los datos solo. Si un notebook
-usa el código de `src/`, la primera celda lo instala:
+**En Colab.** Los datos viven en Google Drive y se procesan en Colab. Corre primero
+[`00_medallon`](https://colab.research.google.com/github/R0SEWT/tetouan-power-forecast/blob/develop/notebooks/00_medallon.ipynb):
+monta tu Drive y deja ahí las capas bronze, silver y gold. Los demás notebooks leen el gold desde el
+Drive. Si un notebook usa el código de `src/`, la primera celda lo instala:
 
 ```python
 !pip install -q git+https://github.com/R0SEWT/tetouan-power-forecast@develop
@@ -140,12 +142,12 @@ Detalle de las capas y de la procedencia en [`docs/datos.md`](docs/datos.md).
 
 | Ruta | Qué hay |
 |------|---------|
-| `notebooks/` | Un notebook por tramo de CRISP-DM, numerados en orden. |
+| `notebooks/` | `00_medallon` prepara los datos en Drive; después, un notebook por tramo de CRISP-DM, numerados en orden. |
 | `src/tetouan_power_forecast/` | Código que comparten los notebooks y la app: el pipeline de datos (`medallon`), la construcción del dataset t+6 (`datos`) y las métricas (`metricas`). |
 | `tests/` | Pruebas de `src/` con pytest. |
 | `docs/datos.md` | Procedencia, diccionario de variables, las tres zonas y las capas del pipeline. |
 | `.github/` | CI (ruff + pytest en cada push a `main` o `develop` y en cada PR), plantilla de PR y Dependabot. |
-| `data/` | Capas bronze, silver y gold que arma `uv run tetouan all`. No se versiona. |
+| `data/` | Copia local de las capas (las compartidas están en Google Drive). No se versiona. |
 
 <p align="right">(<a href="#inicio">volver arriba</a>)</p>
 

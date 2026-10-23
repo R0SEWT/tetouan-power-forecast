@@ -42,10 +42,32 @@ RANGOS = {
     "diffuse flows": (0, None),
 }
 PARTICIONES = ("entrenamiento", "validacion", "prueba")
+# Dentro de "Mi unidad": la carpeta original y el acceso directo que crea quien la recibe compartida
+CARPETAS_DRIVE = ("datalake/tetouan-power-forecast", "tetouan-power-forecast")
 
 
 def raiz_datos(raiz=None):
     return Path(raiz or os.environ.get("TETOUAN_DATA", "data"))
+
+
+def usar_drive(carpeta=None, montaje="/content/drive"):
+    """En Colab: monta Google Drive y deja ahí las capas del medallón.
+
+    Usa la primera carpeta de CARPETAS_DRIVE que exista (o `carpeta`, si se pasa) y la guarda en
+    TETOUAN_DATA, así bronze, silver, gold y cargar_gold la usan sin tener que pasarla.
+    """
+    try:
+        from google.colab import drive
+    except ImportError as error:
+        raise RuntimeError(
+            "usar_drive() solo funciona en Colab; en local, baja las capas con rclone (docs/datos.md)"
+        ) from error
+    drive.mount(montaje)
+    mi_unidad = Path(montaje) / "MyDrive"
+    candidatas = [carpeta] if carpeta else list(CARPETAS_DRIVE)
+    raiz = next((mi_unidad / c for c in candidatas if (mi_unidad / c).is_dir()), mi_unidad / candidatas[0])
+    os.environ["TETOUAN_DATA"] = str(raiz)
+    return raiz
 
 
 def _ruta(raiz, capa, nombre):

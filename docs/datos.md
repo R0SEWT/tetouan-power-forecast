@@ -53,4 +53,29 @@ uv run tetouan silver --forzar # rehace una capa aunque ya exista
 ```
 
 Cada capa se reutiliza si ya existe. Conviene, porque UCI tarda varios minutos en servir el CSV.
-En Colab, los datos quedan en `./data` del entorno; con `TETOUAN_DATA` se cambia la carpeta.
+
+## Dónde viven: Google Drive + Colab
+
+Las capas compartidas viven en Google Drive, en `Mi unidad/datalake/tetouan-power-forecast/`, y se
+procesan en Colab con [`notebooks/00_medallon.ipynb`](../notebooks/00_medallon.ipynb). El bronze ya
+está subido, así que en Colab el silver y el gold se arman en segundos sin volver a descargar de UCI.
+
+- **En Colab**, `usar_drive()` monta el Drive y apunta el pipeline a esa carpeta. Si te compartieron la
+  carpeta, agrégala a tu unidad con *Organizar › Agregar acceso directo*: también se reconoce el acceso
+  directo `Mi unidad/tetouan-power-forecast`.
+
+  ```python
+  from tetouan_power_forecast.medallon import cargar_gold, usar_drive
+
+  usar_drive()
+  df = cargar_gold(zona=1)
+  ```
+
+- **En local**, se sincroniza con [rclone](https://rclone.org/) (aquí el remoto se llama `gdrive`):
+
+  ```bash
+  rclone copy gdrive:datalake/tetouan-power-forecast data   # bajar las capas
+  rclone copy data gdrive:datalake/tetouan-power-forecast   # subir las que armaste
+  ```
+
+  Con `TETOUAN_DATA` se usa otra carpeta en lugar de `./data`.
