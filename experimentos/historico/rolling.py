@@ -31,16 +31,19 @@ def base_frame():
     return df
 
 
-def guardar(resultados, nombre):
+def guardar(resultados, nombre, carpeta="historico"):
     """Escribe en un temporal y lo mueve al final: una corrida cortada no deja un CSV a medias."""
-    destino = raiz_datos() / "reportes" / "historico" / nombre
+    destino = raiz_datos() / "reportes" / carpeta / nombre
     destino.parent.mkdir(parents=True, exist_ok=True)
     _reemplazar(destino, lambda ruta: resultados.to_csv(ruta, index=False))
     print("resultados en", destino)
 
 
-def features(df, serie, otras, variante):
-    """Devuelve X, el objetivo que aprende el modelo, el consumo real en t+6 y las referencias."""
+def features(df, serie, otras, variante, feriados=FERIADOS, ramadanes=(RAMADAN,)):
+    """Devuelve X, el objetivo que aprende el modelo, el consumo real en t+6 y las referencias.
+
+    `feriados` y `ramadanes` (pares de fechas de inicio y fin) cambian para otro sistema, como Ceuta.
+    """
     f = pd.DataFrame(index=df.index)
     t = df["DateTime"].dt
     y = df[serie]
@@ -63,8 +66,11 @@ def features(df, serie, otras, variante):
         f[w] = df[w]
     if variante["extra"]:
         fecha_obj = (df["DateTime"] + pd.Timedelta(minutes=10 * H)).dt.normalize()
-        f["Feriado"] = fecha_obj.isin(pd.to_datetime(FERIADOS)).astype(int)
-        f["Ramadan"] = ((fecha_obj >= RAMADAN[0]) & (fecha_obj <= RAMADAN[1])).astype(int)
+        f["Feriado"] = fecha_obj.isin(pd.to_datetime(list(feriados))).astype(int)
+        en_ramadan = pd.Series(False, index=df.index)
+        for inicio, fin in ramadanes:
+            en_ramadan |= (fecha_obj >= inicio) & (fecha_obj <= fin)
+        f["Ramadan"] = en_ramadan.astype(int)
         f["T_mean_24h"] = df["Temperature"].rolling(DAY).mean()
 
     m24 = y.rolling(DAY).mean()

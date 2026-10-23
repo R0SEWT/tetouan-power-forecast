@@ -37,6 +37,9 @@ Zona 2).
 %cd tetouan-power-forecast
 !pip install -q -e .
 
+import os, sys
+sys.path[:0] = [os.path.abspath("src"), os.path.abspath(".")]  # el kernel no lee el .pth editable
+
 from tetouan_power_forecast.medallon import usar_drive
 usar_drive()  # las capas y los resultados quedan en el Drive
 
