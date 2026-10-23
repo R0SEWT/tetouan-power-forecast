@@ -123,10 +123,14 @@ nombre › *Create branch*) y luego usa *Archivo › Guardar una copia en GitHub
 
 ```bash
 uv sync --extra dev
+uv run tetouan all      # datos: bronze → silver (auditado) → gold, en data/
 uv run pytest -q
 uv run ruff check .
 uv run jupyter lab
 ```
+
+La primera corrida tarda unos minutos porque UCI sirve el CSV lento; después, cada capa se reutiliza.
+Detalle de las capas y de la procedencia en [`docs/datos.md`](docs/datos.md).
 
 <p align="right">(<a href="#inicio">volver arriba</a>)</p>
 
@@ -137,10 +141,11 @@ uv run jupyter lab
 | Ruta | Qué hay |
 |------|---------|
 | `notebooks/` | Un notebook por tramo de CRISP-DM, numerados en orden. |
-| `src/tetouan_power_forecast/` | Código que comparten los notebooks y la app. Hoy: `metricas` (MAE, RMSE, MAPE). |
+| `src/tetouan_power_forecast/` | Código que comparten los notebooks y la app: el pipeline de datos (`medallon`), la construcción del dataset t+6 (`datos`) y las métricas (`metricas`). |
 | `tests/` | Pruebas de `src/` con pytest. |
+| `docs/datos.md` | Procedencia, diccionario de variables, las tres zonas y las capas del pipeline. |
 | `.github/` | CI (ruff + pytest en cada push a `main` o `develop` y en cada PR), plantilla de PR y Dependabot. |
-| `data/` | Copias locales de los datos. No se versiona. |
+| `data/` | Capas bronze, silver y gold que arma `uv run tetouan all`. No se versiona. |
 
 <p align="right">(<a href="#inicio">volver arriba</a>)</p>
 
@@ -156,7 +161,7 @@ uv run jupyter lab
 - **Lo repetido va a `src/`**: si dos notebooks (o un notebook y la app) usan la misma función,
   vive en `src/` y tiene su test.
 - **Ninguna cifra a mano**: las tablas y figuras del paper salen de los notebooks, no se copian a mano.
-- **Los datos no se versionan**: se descargan de UCI cada vez.
+- **Los datos no se versionan**: el pipeline los baja de UCI y guarda su procedencia (sha256 incluido).
 
 <p align="right">(<a href="#inicio">volver arriba</a>)</p>
 
