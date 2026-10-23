@@ -1,0 +1,7 @@
+# Dueños del código. Se activa cuando el grupo ya esté en el repo.
+#
+# Una regla activa asigna revisores en cada PR y, con "Require review from Code
+# Owners" en la protección de ramas, puede BLOQUEAR merges. Déjala comentada hasta
+# que todos tengan acceso.
+#
+# * @R0SEWT
