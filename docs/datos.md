@@ -57,6 +57,22 @@ uv run tetouan silver --forzar # rehace una capa aunque ya exista
 
 Cada capa se reutiliza si ya existe. Conviene, porque UCI tarda varios minutos en servir el CSV.
 
+## Ceuta: validación externa
+
+Para medir cuánto histórico hace falta, el proyecto usa también la demanda de **Ceuta**, un sistema aislado
+a menos de 40 km de Tetuán. La publica Red Eléctrica (REE) cada 5 minutos desde mayo de 2019. Sus capas
+viven en la misma carpeta de datos, dentro de `ceuta/` (`src/tetouan_power_forecast/ceuta.py`):
+
+| Capa | Archivo | Qué es |
+|---|---|---|
+| bronze | `ceuta/bronze/demanda/AAAA-MM.jsonl` y `procedencia.json` | Las respuestas de REE sin tocar, una línea por día consultado. Se puede cortar y retomar. |
+| bronze | `ceuta/bronze/clima.json` | El clima horario de ERA5 para Ceuta, desde Open-Meteo (CC BY 4.0). |
+| silver | `ceuta/silver/ceuta.parquet` y `auditoria.md` | Hora UTC cada 10 minutos (REE usa la hora peninsular, con cambio de horario), demanda en kW y clima interpolado. La auditoría reporta los huecos, pero no corta el pipeline. |
+
+Se arma y se evalúa en Colab con [`notebooks/00b_ceuta.ipynb`](../notebooks/00b_ceuta.ipynb). El aviso
+legal de REE permite usos académicos y no comerciales que citen la fuente, así que los datos quedan en el
+Drive y no se suben a ningún repositorio.
+
 ## Dónde viven: Google Drive + Colab
 
 Las capas compartidas viven en Google Drive, en `Mi unidad/datalake/tetouan-power-forecast/`, y se

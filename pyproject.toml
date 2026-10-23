@@ -34,3 +34,4 @@ extend-exclude = ["notebooks"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+pythonpath = ["."]  # para importar experimentos/ desde los tests

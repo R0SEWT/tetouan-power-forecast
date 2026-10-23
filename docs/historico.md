@@ -441,6 +441,11 @@ crudos al repositorio** y descargarlos con un script.
 3. **Preentrenamiento** (más arriesgado): un modelo global que entrene con Ceuta 2019-2025 y Tetuán 2017,
    con una variable de sistema. Ceuta aporta veranos y Ramadanes en distintas estaciones.
 
+**Implementación:** la ingesta está en `src/tetouan_power_forecast/ceuta.py` y la validación (entrenar sin
+verano o con 1, 2 o 3 años y evaluar julio y agosto de 2020 a 2026), en
+[`experimentos/ceuta/`](../experimentos/ceuta/). Todo se corre en Colab con
+[`notebooks/00b_ceuta.ipynb`](../notebooks/00b_ceuta.ipynb).
+
 **Riesgos:** el endpoint no documentado; las zonas horarias (Ceuta usa la hora peninsular española; la
 del dataset de Tetuán no está documentada); y que Ceuta es otro sistema, con otra mezcla de clientes. Lo
 que se aprenda ahí es evidencia indirecta, no una validación sobre Amendis.

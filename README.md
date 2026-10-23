@@ -144,7 +144,7 @@ Detalle de las capas y de la procedencia en [`docs/datos.md`](docs/datos.md).
 
 | Ruta | Qué hay |
 |------|---------|
-| `notebooks/` | `00_medallon` prepara los datos en Drive; después, un notebook por tramo de CRISP-DM, numerados en orden. |
+| `notebooks/` | `00_medallon` prepara los datos de Tetuán en Drive y `00b_ceuta`, los de Ceuta (validación externa); después, un notebook por tramo de CRISP-DM, numerados en orden. |
 | `src/tetouan_power_forecast/` | Código que comparten los notebooks y la app: el pipeline de datos (`medallon`), la construcción del dataset t+6 (`datos`), la firma de carga y las referencias ingenuas (`perfiles`) y las métricas (`metricas`). |
 | `tests/` | Pruebas de `src/` con pytest. |
 | `docs/negocio.md` | Comprensión del negocio: decisión, objetivos, papel de cada zona, criterios de éxito, riesgos y plan. |
@@ -153,6 +153,7 @@ Detalle de las capas y de la procedencia en [`docs/datos.md`](docs/datos.md).
 | `docs/datos.md` | Procedencia, diccionario de variables y las capas del pipeline. |
 | `docs/historico.md` | Cómo sortear que solo hay un año de histórico: opciones, evaluación honesta y amenazas a la validez. |
 | `experimentos/historico/` | Los scripts que respaldan las cifras de `docs/historico.md`. |
+| `experimentos/ceuta/` | Validación externa en Ceuta: cuánto histórico hace falta para pronosticar un verano. Se corre en Colab con `notebooks/00b_ceuta.ipynb`. |
 | `.github/` | CI (ruff + pytest en cada push a `main` o `develop` y en cada PR), plantilla de PR y Dependabot. |
 | `data/` | Copia local de las capas (las compartidas están en Google Drive). No se versiona. |
 
