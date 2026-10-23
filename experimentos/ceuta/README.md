@@ -29,6 +29,39 @@ uv run python -m experimentos.ceuta.validacion
 
 Escribe `reportes/ceuta/resultados_validacion.csv` dentro de la carpeta de datos.
 
+## Ceuta y Tetuán en 2017
+
+`comparar_2017.py` baja de REData, la API oficial de REE, la demanda horaria de Ceuta de 2017 (12
+consultas, unos 700 KB) y la compara con las tres zonas: escala, estacionalidad, correlaciones, fin de
+semana, feriados de cada país y Ramadán. Solo necesita el silver de Tetuán, así que se puede correr en
+local:
+
+```bash
+uv run python -m experimentos.ceuta.comparar_2017
+```
+
+Guarda las respuestas en `ceuta/bronze/redata/` y la tabla en `reportes/ceuta/comparacion_2017.csv`. La
+forma diaria se parece a la de las zonas 1 y 2, pero no son la misma serie: cada una tiene los feriados y
+el fin de semana de su país.
+
+## Resultado
+
+Corrida del 23 de octubre de 2026. MAPE (%) medio de julio y agosto de 2022 a 2026, los veranos con las
+cuatro historias:
+
+| Historia | V0, nivel con calendario anual | V4, razón sin calendario anual |
+|---|---:|---:|
+| `sin_verano` | 2.93 | 2.33 |
+| `1_anio` | 2.12 | 1.94 |
+| `2_anios` | 1.98 | 1.84 |
+| `3_anios` | 1.97 | 1.82 |
+
+La mejor referencia ingenua promedia 4.63 %. V4 le gana a V0 en los 25 pares de verano e historia, y todos
+los modelos le ganan a la mejor ingenua en todos los veranos. Sin haber visto un verano, V4 pierde 0.39
+puntos (un 20 % más de error); V0, 0.81 (38 %). Más de un año de historia aporta poco. La tabla por verano
+y lo que significa para Tetuán están en
+[`docs/historico.md`](../../docs/historico.md#resultado-de-la-validación-externa).
+
 ## Alcance
 
 - **Ceuta es otro sistema**, con otra mezcla de clientes. Lo que se aprende ahí es evidencia indirecta sobre

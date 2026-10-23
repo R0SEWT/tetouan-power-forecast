@@ -21,7 +21,11 @@ el MAE medio del modelo actual un 17, 21 y 37 % (zonas 1, 2 y 3), quitó el salt
 la mejor referencia ingenua en los 10 meses; un modelo global de las tres zonas sumó otro 5 a 10 %.
 Recomiendo: objetivo relativo y modelo global; origen móvil mensual con el verano de la Zona 3 como
 rango; pronosticar también la Zona 1 + la Zona 2 y reentrenar cada semana en la prueba, por la
-transferencia del 25 de octubre; y Chronos-2 sin ajuste en Colab Pro como referencia adicional.
+transferencia del 25 de octubre; y Chronos-2 sin ajuste en Colab Pro como referencia adicional. La
+[validación externa en Ceuta](#resultado-de-la-validación-externa), con los veranos de 2020 a 2026,
+respalda la elección: el objetivo en razón le ganó al modelo actual en todos los casos, y entrenar sin
+haber visto un verano subió su MAPE de julio y agosto de 1.94 a 2.33 %, la mitad que la mejor referencia
+ingenua (4.63 %).
 
 ## Opciones ordenadas por impacto y factibilidad
 
@@ -43,11 +47,11 @@ Los síntomas que cada opción ataca:
 | 5 | [Sin calendario anual](#5-calendario-anual-fuera-temperatura-suavizada-feriados-y-ramadán-dentro); temperatura media de 24 h, feriados, Ramadán y rezago semanal | b | Bajo (ya planificado) | Bajo; por sí solo cambia poco | Wang, Liu y Hong (2016); experimento |
 | 6 | [Chronos-2 sin ajuste](#6-modelos-fundacionales-como-referencia-sin-entrenamiento) como referencia adicional (Colab Pro, T4 o L4) | a, c, como control | Medio-bajo: 1 día | Medio: no hay evidencia a 1 h con datos de 10 min; tiende a subestimar picos | Ansari et al. (2025); Kaljevic et al. (2026); Meyer et al. (2024) |
 | 7 | [Clima de varios años](#7-clima-de-varios-años-para-tetuán) (ERA5 vía Open-Meteo) para situar 2017 | c, como validez externa | Bajo: medio día | Bajo | Open-Meteo; ECMWF |
-| 8 | [Ceuta](#8-ceuta-el-único-sistema-comparable-con-varios-años-a-5-minutos) (REE, 5 min, 2019-2026) como validación externa o preentrenamiento | a, b, c en un sistema vecino | Alto: 2-3 días | Medio-alto: servicio no documentado, licencia restrictiva, otro sistema | REE |
+| 8 | [Ceuta](#8-ceuta-el-único-sistema-comparable-con-varios-años-a-5-minutos) (REE: cada 5 min desde 2019, horaria desde 2011) como validación externa o preentrenamiento | a, b, c en un sistema vecino | Hecha la validación externa | Medio-alto: servicio no documentado, licencia restrictiva, otro sistema | REE; [experimento en Ceuta](#resultado-de-la-validación-externa) |
 | 9 | [Día similar](#9-día-similar-y-vecinos-más-cercanos) o vecinos más cercanos | a, en parte | Bajo: medio día | Bajo; poca ganancia esperada | Dudek (2015) |
 
 Las opciones 1 a 5 caben en una semana y no necesitan librerías nuevas. La 6 suma `chronos-forecasting`
-y una sesión de GPU. La 8 solo vale la pena si las primeras ya están hechas.
+y una sesión de GPU. De la 8 ya está hecha la validación externa; el preentrenamiento con Ceuta, no.
 
 ---
 
@@ -65,6 +69,10 @@ y una sesión de GPU. La 8 solo vale la pena si las primeras ya están hechas.
 - **No encontré un estudio controlado que diga cuántos años bastan a una hora.** La evidencia es
   indirecta. En el benchmark de hogares de Meyer et al. (2024), los Transformers entrenados desde cero
   usaron un año de calibración y los modelos fundacionales sin entrenar rindieron igual.
+- **Lo que muestra Ceuta** ([validación externa](#resultado-de-la-validación-externa), julio y agosto de
+  2022 a 2026): con el objetivo en razón, el MAPE fue de 2.33 % entrenando solo con enero a junio, 1.94 %
+  con un año, 1.84 % con dos y 1.82 % con tres. Lo que más pesa es haber visto un verano; el segundo año
+  aporta 0.1 puntos y el tercero, casi nada.
 - **Lo que muestra el experimento:** con el objetivo relativo, el pliegue de marzo (entrenado con solo
   enero y febrero) ya logra un MAPE de 2.3 % en la Zona 1, frente a 3.3 % de la mejor referencia ingenua;
   con más meses baja a 1.5-1.9 %.
@@ -72,7 +80,8 @@ y una sesión de GPU. La 8 solo vale la pena si las primeras ya están hechas.
 **Consecuencia para el proyecto:** un año alcanza para aprender la dinámica intradiaria y semanal, que es
 lo que decide el pronóstico a una hora. No alcanza para aprender el ciclo anual ni el nivel de verano.
 Lo que conviene es **no pedirle al modelo que aprenda el nivel** (opciones 1 y 2) y no afirmar en el
-paper que el modelo generaliza a otros años.
+paper que el modelo generaliza a otros años. En Ceuta, no haber visto un verano subió el MAPE un 20 % con
+el objetivo en razón y un 38 % con el modelo actual.
 
 ## 1. Pronosticar el cambio relativo, no el nivel
 
@@ -396,20 +405,38 @@ aguanta un año y un verano que no vio, y cuánto mejora con dos o tres años de
 
 **Qué es:** Red Eléctrica (REE) publica la demanda del sistema eléctrico de Ceuta, una ciudad aislada
 eléctricamente a menos de 40 km de Tetuán, **cada 5 minutos, en MW**, desde el **11 de mayo de 2019
-hasta hoy** (comprobado consultando días de 2019 a octubre de 2026). También hay serie para Melilla
-(comprobado en 2023).
+hasta hoy** (comprobado consultando días de 2019 a octubre de 2026). La API oficial, REData, tiene además
+la **demanda horaria desde enero de 2011**, incluido 2017, el mismo año que Tetuán. También hay serie
+para Melilla (comprobado en 2023).
 
-**Qué tan comparable es (experimento, 24 días muestreados de 2023, dos por mes):**
+**Qué tan comparable es (experimento, demanda horaria de Ceuta de 2017 contra las zonas promediadas por
+hora, con [`experimentos/ceuta/comparar_2017.py`](../experimentos/ceuta/comparar_2017.py)):**
 
-| | Ceuta 2023 | Zona 1 | Zona 2 | Zona 3 |
+| | Ceuta 2017 | Zona 1 | Zona 2 | Zona 3 |
 |---|---:|---:|---:|---:|
-| Demanda media | ~22 MW | 32.3 MW | 21.0 MW | 17.8 MW |
-| Mes más alto / mes más bajo | 1.26 | 1.26 | 1.40 | 2.55 |
-| Julio / promedio | 1.14 | 1.11 | 1.15 | 1.58 |
-| Correlación del perfil horario medio con Ceuta | — | 0.88 | 0.90 | 0.67 |
+| Demanda media | 23.2 MW | 32.3 MW | 21.0 MW | 17.8 MW |
+| Mes más alto / mes más bajo | 1.21 | 1.26 | 1.40 | 2.55 |
+| Julio / promedio | 1.02 | 1.11 | 1.15 | 1.58 |
+| Correlación del perfil horario medio con Ceuta | — | 0.89 | 0.91 | 0.70 |
+| Correlación hora a hora con Ceuta | — | 0.73 | 0.75 | 0.43 |
+| Correlación de la variación de un día al siguiente con Ceuta | — | 0.56 | 0.71 | −0.10 |
+| Sábado / promedio | 0.95 | 1.00 | 0.98 | 1.01 |
+| Ramadán, consumo de 0 a 3 h contra las cuatro semanas previas | +11 % | +46 % | +43 % | +49 % |
 
-Escala, estacionalidad y forma diaria se parecen mucho a las de la Zona 1 y la Zona 2. La Zona 3, con su
-veraneo, no tiene equivalente en Ceuta.
+Escala, estacionalidad y forma diaria se parecen a las de la Zona 1 y la Zona 2; la Zona 3, con su
+veraneo, no tiene equivalente en Ceuta. **No son la misma serie:** si lo fueran, la correlación hora a
+hora estaría cerca de 1, y cada una tiene los feriados y el fin de semana de su país. Consumo del día
+contra el mismo día de la semana dos semanas antes y dos después:
+
+| Días de 2017 | Ceuta | Tetuán (suma de las tres zonas) |
+|---|---:|---:|
+| Ocho feriados españoles: Reyes, Jueves y Viernes Santo, 15 de agosto, 12 de octubre, 6 y 8 de diciembre, Navidad | −7 a −21 % | −1 a +3 % |
+| Fiesta del Cordero (1 de septiembre), feriado en los dos | −11 % | −21 % |
+| Fin del Ramadán (26 de junio), feriado en Marruecos | +2 % | −11 % |
+| Mawlid (1 de diciembre), feriado en Marruecos | −2 % | −10 % |
+
+Ceuta tiene una parte grande de población musulmana, por eso el Ramadán también le sube la noche, pero
+mucho menos que a Tetuán. Las fechas de las fiestas islámicas son aproximadas (±1 día).
 
 **Cómo se accede:**
 
@@ -419,9 +446,11 @@ veraneo, no tiene equivalente en Ceuta.
   (campo `dem`; `MELILLAAU` para Melilla). Son unas 2,700 consultas para todo el periodo; con una pausa de
   un segundo entre consultas, menos de una hora. **No es una API documentada:** la deduje del código de
   la web y puede cambiar sin aviso.
-- **API oficial (REData):** `apidatos.ree.es` es pública y sin registro, pero para Ceuta solo devolvió
-  agregados (probé la demanda mensual de 2017 con `geo_limit=ceuta&geo_ids=8744`). El widget de demanda
-  en tiempo real no respondió para Ceuta.
+- **API oficial (REData):** `apidatos.ree.es` es pública y sin registro. Con
+  `geo_limit=ceuta&geo_ids=8744` y `time_trunc=hour` devuelve la demanda horaria de Ceuta (MWh de cada
+  hora, o sea MW medios) desde enero de 2011; para 2010 y antes responde con un error. Pedí un mes por
+  consulta: 2017 completo son 12 consultas y unos 700 KB. Con `time_trunc=day` o `month` da los
+  agregados. No tiene los 5 minutos, y el widget de demanda en tiempo real no respondió para Ceuta.
 - **e·sios:** la API de REE con todos los indicadores pide un token personal, que se solicita por correo.
   No verifiqué qué indicador corresponde a la demanda de Ceuta.
 - **Clima de Ceuta:** el dataset de REE no trae clima; habría que unirlo con ERA5 de Open-Meteo para las
@@ -441,6 +470,10 @@ crudos al repositorio** y descargarlos con un script.
 3. **Preentrenamiento** (más arriesgado): un modelo global que entrene con Ceuta 2019-2025 y Tetuán 2017,
    con una variable de sistema. Ceuta aporta veranos y Ramadanes en distintas estaciones.
 
+La serie horaria de REData agrega los años 2011 a 2018, 2017 entre ellos: ocho veranos más, pero a
+resolución horaria. Todavía no se usa; la validación externa trabaja con los datos cada 5 minutos desde
+2019.
+
 **Implementación:** la ingesta está en `src/tetouan_power_forecast/ceuta.py` y la validación (entrenar sin
 verano o con 1, 2 o 3 años y evaluar julio y agosto de 2020 a 2026), en
 [`experimentos/ceuta/`](../experimentos/ceuta/). Todo se corre en Colab con
@@ -449,6 +482,59 @@ verano o con 1, 2 o 3 años y evaluar julio y agosto de 2020 a 2026), en
 **Riesgos:** el endpoint no documentado; las zonas horarias (Ceuta usa la hora peninsular española; la
 del dataset de Tetuán no está documentada); y que Ceuta es otro sistema, con otra mezcla de clientes. Lo
 que se aprenda ahí es evidencia indirecta, no una validación sobre Amendis.
+
+### Resultado de la validación externa
+
+Se corrió en Colab con los datos descargados el 23 de octubre de 2026. El silver tiene 391,975
+intervalos de 10 minutos, del 11 de mayo de 2019 al 22 de octubre de 2026, sin fechas repetidas y con el
+clima completo; a 878 intervalos (0.22 %) les falta la demanda y 4 tienen una demanda no positiva. Los
+huecos de hasta una hora se rellenan por interpolación y los demás quedan fuera de la evaluación.
+
+Para cada verano se entrenaron el modelo actual (V0, en nivel y con calendario anual) y el objetivo en
+razón (V4, sin calendario anual), con las variables del [anexo](#anexo-el-experimento) salvo que en
+Ceuta no hay otras zonas ni una lista de feriados. Las cuatro historias terminan el 30 de junio: *sin
+verano* es enero a junio del mismo año, como el pliegue de julio del origen móvil de Tetuán; *1, 2 y 3
+años* son los 12, 24 o 36 meses anteriores. Se evalúan julio y agosto.
+
+MAPE (%) de julio y agosto en Ceuta:
+
+| Verano | Mejor ingenua | Actual, sin verano | Razón, sin verano | Actual, 1 año | Razón, 1 año | Razón, 2 años | Razón, 3 años |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| 2020 (confinamiento) | 4.72 ("semana pasada") | 2.60 | 2.06 | 1.84 | 1.70 | — | — |
+| 2021 | 3.85 ("semana pasada") | 2.61 | 2.37 | 1.62 | 1.53 | 1.48 | — |
+| 2022 | 4.58 (persistencia) | 3.18 | 2.93 | 2.54 | 2.43 | 2.34 | 2.33 |
+| 2023 | 4.84 (persistencia) | 2.43 | 2.07 | 1.95 | 1.86 | 1.74 | 1.75 |
+| 2024 | 4.47 (persistencia) | 3.68 | 2.62 | 2.30 | 2.02 | 1.90 | 1.91 |
+| 2025 | 4.60 (persistencia) | 2.35 | 1.89 | 1.84 | 1.69 | 1.54 | 1.50 |
+| 2026 | 4.64 (persistencia) | 3.03 | 2.14 | 1.96 | 1.71 | 1.67 | 1.63 |
+| **Media 2022-2026** | **4.63** | **2.93** | **2.33** | **2.12** | **1.94** | **1.84** | **1.82** |
+
+Con dos y tres años, el modelo actual promedia 1.98 y 1.97 %. Las medias son de 2022 a 2026, los únicos
+veranos con las cuatro historias.
+
+- **Todos los modelos le ganan a la mejor referencia ingenua en todos los veranos.** El objetivo en razón
+  tiene entre un 37 y un 68 % menos MAE que ella; el modelo actual sin verano, en 2024, solo un 13 %.
+- **El objetivo en razón le gana al modelo actual en los 25 pares de verano e historia.** Con al menos un
+  verano visto, el MAE baja entre un 3 y un 14 %; sin verano visto, entre un 9 y un 31 %.
+- **No haber visto un verano cuesta poco con el objetivo en razón:** de 1.94 a 2.33 % (+0.39 puntos, un
+  20 % más). Con el modelo actual, de 2.12 a 2.93 % (+0.81 puntos, un 38 % más), y el salto llega a 1.4
+  puntos en 2024.
+- **Más años aportan poco:** el segundo baja el MAPE 0.1 puntos y el tercero no cambia nada (1.84 contra
+  1.82 %).
+- **La mejor referencia ingenua cambia con el sistema:** en Ceuta es la persistencia desde 2022; en
+  Tetuán, "ayer" o "semana pasada" según la zona y el mes. Por eso cada comparación va contra la mejor
+  ingenua de su propio periodo.
+
+**Qué significa para Tetuán.** En el origen móvil de Tetuán, la cota pesimista de julio (sin verano
+previo) queda, con el objetivo en razón, un 26 % por encima de la optimista en la Zona 1 (2.70 contra
+2.15 %) y un 23 % en la Zona 3 (2.46 contra 2.00 %). En Ceuta, la distancia entre no haber visto un
+verano y haber visto uno es del mismo orden (20 %). Eso respalda reportar el verano de Tetuán como ese
+rango, y da una cifra para el paper: con un año más de datos, el error de verano bajaría alrededor de un
+20 %, no a la mitad. Sigue siendo evidencia de otro sistema, con otra mezcla de clientes y sin el veraneo
+de la Zona 3.
+
+Los resultados por verano están en `reportes/ceuta/resultados_validacion.csv`, dentro de la carpeta de
+datos; el diseño y cómo correrlo, en [`experimentos/ceuta/`](../experimentos/ceuta/).
 
 ## 9. Día similar y vecinos más cercanos
 
@@ -541,7 +627,9 @@ Experimento, MAPE en verano (modelo actual / objetivo en razón):
 Con el objetivo en razón, julio en la Zona 3 queda entre 2.0 y 2.5 % de MAPE y agosto, después de ver
 julio, entre 3.0 y 3.2 %, siempre por debajo de la mejor ingenua. Con el modelo actual, julio va de 4.2 a
 6.6 %, y la cota pesimista pierde contra "ayer". Ese rango, junto con la mejor ingenua, es lo que se reporta para
-la temporada que la prueba no cubre.
+la temporada que la prueba no cubre. En Ceuta, con varios años, no haber visto un verano costó un 20 % más
+de MAPE con el objetivo en razón ([resultado](#resultado-de-la-validación-externa)), del mismo orden que
+la distancia entre las dos cotas de julio.
 
 ### Cómo tratar la transferencia en la evaluación
 
@@ -575,7 +663,9 @@ anual).
 > reporta aparte. *De conclusión:* la prueba abarca ocho semanas con errores autocorrelacionados; las
 > diferencias se acompañan de intervalos por *bootstrap* por bloques y del error por mes del origen móvil.
 > El verano de la Zona 3 solo se evalúa con origen móvil, como un rango entre una cota pesimista y una
-> optimista.
+> optimista. Como evidencia indirecta, en Ceuta, un sistema vecino con datos de 2019 a 2026, entrenar sin
+> haber visto un verano subió el MAPE de julio y agosto de 1.94 a 2.33 %, todavía la mitad que la mejor
+> referencia ingenua.
 
 ## Anexo: el experimento
 
@@ -672,9 +762,13 @@ los efectos.
   <https://ecoactu.ma/impact-autoproduction-demande-electricite/>
 - REE, *Seguimiento de la demanda de energía eléctrica* (web): <https://demanda.ree.es/visiona/home>.
   Servicio que la alimenta, consultado para Ceuta y Melilla:
-  <https://demanda.ree.es/WSvisionaMovilesPeninsulaRest/resources/demandaGeneracionPeninsula?curva=CEUTAAU&fecha=2023-07-05>
+  <https://demanda.ree.es/WSvisionaMovilesPeninsulaRest/resources/demandaGeneracionPeninsula?curva=CEUTAAU&fecha=2023-07-05>.
+  Los datos de Ceuta de la validación externa se descargaron el 23 de octubre de 2026.
 - REE, REData API: <https://www.ree.es/es/apidatos>. Consulta de la demanda mensual de Ceuta en 2017:
-  <https://apidatos.ree.es/es/datos/demanda/evolucion?start_date=2017-01-01T00:00&end_date=2017-12-31T23:59&time_trunc=month&geo_trunc=electric_system&geo_limit=ceuta&geo_ids=8744>
+  <https://apidatos.ree.es/es/datos/demanda/evolucion?start_date=2017-01-01T00:00&end_date=2017-12-31T23:59&time_trunc=month&geo_trunc=electric_system&geo_limit=ceuta&geo_ids=8744>;
+  la horaria, un mes por consulta (enero de 2017):
+  <https://apidatos.ree.es/es/datos/demanda/evolucion?start_date=2017-01-01T00:00&end_date=2017-01-31T23:59&time_trunc=hour&geo_trunc=electric_system&geo_limit=ceuta&geo_ids=8744>.
+  La serie horaria de 2017 para la comparación con Tetuán se descargó el 23 de octubre de 2026.
 - REE, aviso legal (condiciones de reutilización): <https://www.ree.es/es/aviso-legal>
 - Cliente de e·sios con el procedimiento para pedir el token (documentación de terceros):
   <https://www.mintlify.com/datons/python-esios/core/client>
@@ -754,6 +848,9 @@ los efectos.
 
 - Los términos de reutilización de ENTSO-E y la licencia del paquete de OPSD.
 - El indicador de e·sios para la demanda de Ceuta y si su resolución es de 5 o 10 minutos.
+- En qué fechas caen los 4 valores no positivos del silver de Ceuta. Un cero en julio o agosto daría un
+  MAPE infinito, así que ahí no hay ceros; un valor negativo sí movería el MAPE de ese verano, de forma
+  parecida para todos los métodos, y apenas el MAE.
 - Un texto de licencia formal de NASA POWER (solo el agradecimiento que pide).
 - El corpus completo de preentrenamiento de Chronos-2 (solo las listas publicadas).
 - La longitud exacta del histórico que usaron Wang, Liu y Hong (2016).
