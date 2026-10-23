@@ -43,9 +43,9 @@ El pipeline (`src/tetouan_power_forecast/medallon.py`) arma tres capas en `data/
 
 | Capa | Archivo | Qué es |
 |---|---|---|
-| bronze | `bronze/uci849_tetouan.csv` y `.json` | El CSV tal como lo sirve UCI, sin tocar, más su procedencia: URL, DOI, licencia, fecha de descarga y sha256. |
-| silver | `silver/tetouan_2017.parquet` y `auditoria.md` | Columnas normalizadas, `DateTime` como fecha y orden cronológico. Pasa una auditoría (columnas, nulos, duplicados, continuidad cada 10 minutos, rangos físicos) que corta el pipeline si algo falla. |
-| gold | `gold/t6_zona{1,2,3}.parquet` | El dataset t+6 de una zona: calendario con codificación cíclica, rezagos, estadísticas móviles y la columna `particion` (70/15/15 cronológico). |
+| bronze | `bronze/uci849_tetouan.csv` y `.json` | El CSV tal como lo sirve UCI, sin tocar, más su procedencia: URL, DOI, licencia, fecha de descarga y sha256. Al reutilizarlo se comprueba el sha256. |
+| silver | `silver/tetouan_2017.parquet` y `auditoria.md` | Columnas normalizadas, `DateTime` como fecha y orden cronológico. Pasa una auditoría (columnas, cobertura completa del periodo, nulos, infinitos, duplicados, continuidad cada 10 minutos, rangos físicos) que corta el pipeline si algo falla. |
+| gold | `gold/t6_zona{1,2,3}.parquet` | El dataset t+6 de una zona: calendario con codificación cíclica, rezagos, estadísticas móviles y la columna `particion` (70/15/15 cronológico). Las 6 filas anteriores a cada corte quedan como `hueco`, porque su objetivo cae en la partición siguiente: no se usan ni para entrenar ni para evaluar. |
 
 ```bash
 uv run tetouan all             # bronze, silver y gold de la Zona 1
