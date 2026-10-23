@@ -1,0 +1,13 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Datos: se descargan con ucimlrepo, no se versionan
+data/
+
+# Sistema
+.DS_Store
