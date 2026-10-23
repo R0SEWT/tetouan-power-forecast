@@ -111,13 +111,13 @@ aprenden nada. Para un horizonte de una hora (t+6) hay tres habituales:
 - **ayer:** se consumirá lo mismo que a esa hora de ayer (t+6−144);
 - **semana pasada:** lo mismo que a esa hora hace una semana (t+6−1008).
 
-MAPE (%) de cada referencia en la partición cronológica del proyecto:
+MAPE (%) de cada referencia en la partición cronológica del gold (sin las filas de hueco):
 
 | | persistencia | ayer | semana_pasada |
 |---|---:|---:|---:|
-| Zona 1 · validacion | 6.24 | 3.64 | 4.56 |
+| Zona 1 · validacion | 6.25 | 3.64 | 4.56 |
 | Zona 1 · prueba | 6.29 | 3.44 | 2.94 |
-| Zona 2 · validacion | 6.45 | 6.49 | 5.51 |
+| Zona 2 · validacion | 6.45 | 6.49 | 5.50 |
 | Zona 2 · prueba | 6.78 | 5.15 | 4.32 |
 | Zona 3 · validacion | 7.51 | 4.63 | 6.62 |
 | Zona 3 · prueba | 8.08 | 6.00 | 11.13 |
