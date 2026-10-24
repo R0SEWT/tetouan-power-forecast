@@ -1,0 +1,7 @@
+ciudad,area,lat,lon,altitud_m,poblacion_censo_2017,peso_en_area,fuente
+Piura,norte,-5.194,-80.632,29,473025,0.2431,"coordenadas de la spec v2; población censada 2017 de la ciudad (anexo de ciudades del Perú en Wikipedia, que cita al INEI); altitud aproximada del centro"
+Chiclayo,norte,-6.771,-79.841,27,552508,0.2840,"coordenadas de la spec v2; población censada 2017 de la ciudad (anexo de ciudades del Perú en Wikipedia, que cita al INEI); altitud aproximada del centro"
+Trujillo,norte,-8.112,-79.029,34,919899,0.4729,"coordenadas de la Plaza de Armas; población censada 2017 de la ciudad (anexo de ciudades del Perú en Wikipedia, que cita al INEI); altitud aproximada del centro"
+Lima,centro,-12.046,-77.043,154,9562280,1.0000,"coordenadas de la spec v2; población de Lima Metropolitana (con Callao) en INEI (2018), Perú: Perfil Sociodemográfico, cap. 1, §1.1.6; altitud aproximada del centro histórico"
+Arequipa,sur,-16.399,-71.537,2335,1008290,0.7789,"coordenadas de la Plaza de Armas; población censada 2017 de la ciudad (anexo de ciudades del Perú en Wikipedia, que cita al INEI); altitud aproximada del centro"
+Tacna,sur,-18.014,-70.253,562,286240,0.2211,coordenadas de la Plaza de Armas; población censada 2017 de la ciudad según el anexo en español de Wikipedia (el de inglés da 293 119); altitud aproximada del centro

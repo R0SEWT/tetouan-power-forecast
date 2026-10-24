@@ -1,0 +1,26 @@
+departamento,area,fuente,confianza
+Amazonas,norte,"Cáclic (Amazonas) cuelga de Carhuaquero por la línea de CCNCM; la hoja FLUJOS del IEOD 2026 la lista en el bloque Norte",media
+Áncash,norte,"Chimbote y Huallanca son barras del Área Norte (Osinergmin 2023, Tabla 1) y la frontera Centro-Norte está en Chimbote 1 y Kiman Ayllu (hoja INTERCONEXIONES del IEOD); pero Vizcarra (Antamina), Conococha, Huallanca Nueva y Huarmey se alimentan desde el Centro",media
+Cajamarca,norte,"Cajamarca Norte y Carhuaquero son barras del Área Norte (Osinergmin 2023, Tabla 1); Yanacocha y Gold Fields en el bloque Norte de DEMANDA_UL 2017, 2023 y 2026",alta
+La Libertad,norte,"Trujillo y Guadalupe son barras del Área Norte (Osinergmin 2023, Tabla 1); Cementos Pacasmayo, Marsa y Barrick Alto Chicama en el bloque Norte de DEMANDA_UL",alta
+Lambayeque,norte,"Chiclayo es barra del Área Norte (Osinergmin 2023, Tabla 1)",alta
+Loreto,norte,"Iquitos y casi todo Loreto son sistemas aislados fuera del SEIN; solo Yurimaguas se conecta por Tarapoto (Norte)",baja
+Piura,norte,"Piura, Talara y La Niña son barras del Área Norte (Osinergmin 2023, Tabla 1); Misky Mayo y Textil Piura en el bloque Norte de DEMANDA_UL",alta
+San Martín,norte,"Moyobamba y Tarapoto se alimentan por Cáclic - Belaúnde Terry (Norte); Tocache, en cambio, cuelga de Tingo María (Centro)",media
+Tumbes,norte,"Zorritos es barra del Área Norte (Osinergmin 2023, Tabla 1)",alta
+Ayacucho,centro,"no tiene barra de transferencia propia; se alimenta desde Huancavelica (Mollepata, 220 kV) y desde Nazca (Puquio), ambas del Centro; DEMANDA_UL 2026 lista a Hochschild (minas de Ayacucho) en el bloque Centro",media
+Callao,centro,"parte del sistema de Lima (subárea Lima del IEOD); Refinería La Pampilla y Quimpac Oquendo en el bloque Centro de DEMANDA_UL",alta
+Huancavelica,centro,"Campo Armiño y Huancavelica son barras del Área Centro (Osinergmin 2023, Tabla 1); la frontera Centro-Sur se mide en Campo Armiño (hoja INTERCONEXIONES del IEOD 2023 y 2026)",alta
+Huánuco,centro,"Huánuco - Tingo María es barra del Área Centro (Osinergmin 2023, Tabla 1)",alta
+Ica,centro,"Independencia, Ica, Marcona y Desierto son barras del Área Centro (Osinergmin 2023, Tabla 1); Shougang y Aceros Arequipa (Pisco) en el bloque Centro de DEMANDA_UL; en el IEOD, Sur = Sur Este + Sur Oeste, sin la subárea Sur Medio",alta
+Junín,centro,"Pomacocha, Huayucachi y Electroandes son barras del Área Centro (Osinergmin 2023, Tabla 1); Chinalco y Doe Run Oroya en el bloque Centro de DEMANDA_UL",alta
+Lima,centro,"San Juan, Chavarría, Santa Rosa, Zapallal y Carabayllo son barras del Área Centro (Osinergmin 2023, Tabla 1); subárea Lima del IEOD",alta
+Pasco,centro,"Paragsha y Carhuamayo forman parte del sistema Electroandes, barra del Área Centro (Osinergmin 2023, Tabla 1); El Brocal, Milpo Pasco y Chungar en el bloque Centro de DEMANDA_UL 2017 y 2023 (en 2026 el IEOD las agrupa en Sur)",alta
+Ucayali,centro,"Pucallpa - Aguaytía es barra del Área Centro (Osinergmin 2023, Tabla 1)",alta
+Apurímac,sur,"Cusco - Abancay es barra del Área Sur (Osinergmin 2023, Tabla 1); Las Bambas en el bloque Sur de DEMANDA_UL; Cotaruse está en la frontera Centro-Sur (en 2017 la medición era en Cotaruse)",alta
+Arequipa,sur,"Arequipa, Ampliación Cerro Verde y Callalli son barras del Área Sur (Osinergmin 2023, Tabla 1); excepción: Caravelí (Bella Unión) se alimenta desde Marcona (Centro)",alta
+Cusco,sur,"Tintaya, Cusco - Abancay y Quencoro - Combapata son barras del Área Sur (Osinergmin 2023, Tabla 1)",alta
+Madre de Dios,sur,"no tiene barra de transferencia propia; se alimenta desde San Gabán (Puno) por Mazuco - Puerto Maldonado (138 kV)",media
+Moquegua,sur,"Moquegua, Ilo y SPCC son barras del Área Sur (Osinergmin 2023, Tabla 1)",alta
+Puno,sur,"Juliaca, Azángaro, Puno y Ayaviri son barras del Área Sur (Osinergmin 2023, Tabla 1)",alta
+Tacna,sur,"Tacna es barra del Área Sur (Osinergmin 2023, Tabla 1)",alta

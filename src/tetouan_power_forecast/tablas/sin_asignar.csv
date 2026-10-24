@@ -1,0 +1,8 @@
+empresa_original,fuente,motivo
+ATRIA ENERGIA S.A.C.,eventos COES 2023,titular de la C.H. Purmacana; no se pudo verificar la ubicación de la central
+CENTRALES SANTA ROSA S.A.C.,eventos COES 2023,titular de las C.H. Santa Rosa I y II; no se pudo verificar la ubicación de las centrales
+COES,eventos COES 2023,"es el operador del sistema, no un agente; sus 2 eventos de 2023 están rotulados 'ÁREA CENTRO' y se asignan por esa ubicación"
+ELECTRICA SANTA ROSA,eventos COES 2017,titular de la C.H. Purmacana en 2017; no se pudo verificar la ubicación de la central
+ELECTRICA YANAPAMPA SAC,eventos COES 2017,titular de la C.H. Yanapampa; no se pudo verificar la ubicación de la central
+INVERSIONES SHAQSHA S.A.C.,eventos COES 2023,solo aparece en eventos de la línea Cobriza I - Cobriza II (Huancavelica); no se identificó su actividad ni su tipo
+SOBREANDES S.A.C.,DEMANDA_UL 2026 (bloque sur),"solo aparece en DEMANDA_UL 2026, en el bloque Sur, que ese año incluye mineras del Centro; empresa no identificada"
