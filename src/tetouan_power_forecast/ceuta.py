@@ -142,9 +142,9 @@ def clima_ceuta(raiz=None, desde=INICIO, hasta=None, descargar=_descargar_texto,
     """
     destino = _ruta(raiz, "ceuta/bronze", "clima.json")
     procedencia_previa = destino.with_name("clima_procedencia.json")
-    if destino.exists() and procedencia_previa.exists() and not forzar:
-        if json.loads(procedencia_previa.read_text()).get("modelo") == MODELO_CLIMA:
-            return destino
+    if (destino.exists() and procedencia_previa.exists() and not forzar
+            and json.loads(procedencia_previa.read_text()).get("modelo") == MODELO_CLIMA):
+        return destino
     hasta = hasta or (datetime.now(UTC).date() - timedelta(days=7))  # ERA5 se publica con unos días de retraso
     url = (f"{URL_CLIMA}?latitude={LATITUD}&longitude={LONGITUD}&start_date={desde}&end_date={hasta}"
            f"&hourly={','.join(CLIMA)}&models={MODELO_CLIMA}&wind_speed_unit=ms&timezone=UTC")
