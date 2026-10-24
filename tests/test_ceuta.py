@@ -154,3 +154,24 @@ def test_redata_horaria_en_hora_local_y_sin_repetir_descargas(tmp_path):
 def test_una_marca_de_hora_desconocida_falla_diciendo_cual_es():
     with pytest.raises(ValueError, match="24:00"):
         parsear_respuesta(_jsonp(["2019-10-27 23:55", "2019-10-27 24:00"]))
+
+
+def test_el_clima_se_pide_a_era5_y_lo_bajado_sin_modelo_se_vuelve_a_bajar(tmp_path):
+    horas = pd.date_range("2023-01-01", "2023-01-02", freq="h")
+    respuesta = json.dumps({"hourly": {"time": [f"{h:%Y-%m-%dT%H:%M}" for h in horas],
+                                       **{clave: [1.0] * len(horas) for clave in CLIMA}}})
+    pedidos = []
+
+    def descargar(url):
+        pedidos.append(url)
+        return respuesta
+
+    destino = clima_ceuta(tmp_path, desde=date(2023, 1, 1), hasta=date(2023, 1, 2), descargar=descargar)
+    procedencia = destino.with_name("clima_procedencia.json")
+    assert "models=era5" in pedidos[0] and json.loads(procedencia.read_text())["modelo"] == "era5"
+    clima_ceuta(tmp_path, desde=date(2023, 1, 1), hasta=date(2023, 1, 2), descargar=descargar)
+    assert len(pedidos) == 1  # ya es ERA5: no se vuelve a pedir
+
+    procedencia.write_text(json.dumps({"consulta": "sin modelo"}))  # como lo que se bajó antes de pedir ERA5
+    clima_ceuta(tmp_path, desde=date(2023, 1, 1), hasta=date(2023, 1, 2), descargar=descargar)
+    assert len(pedidos) == 2
