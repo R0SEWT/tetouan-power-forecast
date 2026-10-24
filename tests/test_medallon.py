@@ -213,3 +213,29 @@ def test_usar_drive_fuera_de_colab_explica_que_hacer(monkeypatch):
     monkeypatch.setitem(sys.modules, "google.colab", None)
     with pytest.raises(RuntimeError, match="rclone"):
         usar_drive()
+
+
+def test_copiar_al_drive_espera_el_permiso_y_copia(tmp_path, monkeypatch):
+    import sys
+    import types
+
+    intentos = []
+
+    def mount(montaje):
+        intentos.append(montaje)
+        if len(intentos) < 3:
+            raise ValueError("mount failed")
+        (tmp_path / "drive" / "MyDrive").mkdir(parents=True, exist_ok=True)
+
+    colab = types.ModuleType("google.colab")
+    colab.drive = types.SimpleNamespace(mount=mount)
+    monkeypatch.setitem(sys.modules, "google", types.ModuleType("google"))
+    monkeypatch.setitem(sys.modules, "google.colab", colab)
+    origen = tmp_path / "datos" / "coes"
+    (origen / "silver").mkdir(parents=True)
+    (origen / "silver" / "x.parquet").write_text("x")
+    from tetouan_power_forecast.medallon import copiar_al_drive
+
+    destino = copiar_al_drive(origen, "coes", espera_s=0, montaje=str(tmp_path / "drive"))
+    assert len(intentos) == 4  # dos fallidos, el que funciona y el de usar_drive (ya montado)
+    assert (destino / "silver" / "x.parquet").read_text() == "x"
