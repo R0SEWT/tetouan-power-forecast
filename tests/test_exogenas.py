@@ -143,3 +143,16 @@ def test_eventos_y_fallas_en_curso(tmp_path):
                                                "2017-03-02 12:00"]), eventos)
     assert en_curso.tolist() == [0, 2, 1, 0]
 
+
+def test_una_falla_larga_cuenta_solo_sus_primeros_dos_dias():
+    eventos = pd.DataFrame({"inicio": pd.to_datetime(["2025-01-01 00:00"]),
+                            "final": pd.to_datetime(["2025-01-06 00:00"])})
+    en_curso = fallas_en_curso(pd.to_datetime(["2025-01-01 12:00", "2025-01-02 23:00", "2025-01-04 00:00"]), eventos)
+    assert en_curso.tolist() == [1, 1, 0]
+
+
+def test_un_evento_repetido_en_dos_archivos_cuenta_una_vez():
+    evento = {"empresa": "REP", "ubicacion": "S.E. X", "equipo": "L-1", "inicio": pd.Timestamp("2024-12-31 23:00"),
+              "final": pd.Timestamp("2025-01-01 01:00")}
+    eventos = pd.DataFrame([evento, evento])
+    assert fallas_en_curso(pd.to_datetime(["2025-01-01 00:00"]), eventos).tolist() == [1]

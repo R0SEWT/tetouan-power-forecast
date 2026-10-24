@@ -241,16 +241,20 @@ def leer_eventos(archivo):
 
 
 def fallas_en_curso(fechas, eventos, duracion_max=DURACION_MAX_FALLA):
-    """Cuántos eventos estaban en curso en cada fecha (inicio ≤ t < final). Sin área: el total del SEIN.
+    """Cuántos eventos estaban en curso en cada fecha. Sin área: el total del SEIN.
 
-    Los eventos de más de `duracion_max` quedan fuera: en el registro hay indisponibilidades de meses o años
-    (en 2023, un evento empieza en 2021 y otro termina en 2026) que no son fallas de la operación.
+    Un evento cuenta desde su inicio hasta su final, pero como mucho `duracion_max`: en el registro hay
+    indisponibilidades de meses o años (en 2023, un evento empieza en 2021 y otro termina en 2026) que no son
+    fallas de la operación. Se recorta y no se descarta, porque en el momento de predecir no se sabe cuánto
+    va a durar un evento que acaba de empezar.
     """
-    duracion = eventos["final"] - eventos["inicio"]
-    validos = eventos[(duracion >= pd.Timedelta(0)) & (duracion <= duracion_max)]
+    claves = [c for c in ("empresa", "ubicacion", "equipo", "inicio", "final") if c in eventos.columns]
+    validos = eventos.dropna(subset=["inicio", "final"]).drop_duplicates(subset=claves)  # un evento, una vez
+    validos = validos[validos["final"] >= validos["inicio"]]
+    final = np.minimum(validos["final"].to_numpy(), (validos["inicio"] + duracion_max).to_numpy())
     t = pd.to_datetime(np.asarray(fechas)).to_numpy()
     inicio = np.sort(validos["inicio"].to_numpy())
-    final = np.sort(validos["final"].to_numpy())
+    final = np.sort(final)
     return pd.Series(np.searchsorted(inicio, t, side="right") - np.searchsorted(final, t, side="right"),
                      name="fallas_en_curso")
 
@@ -263,8 +267,10 @@ def silver_exogenas(raiz=None, ciudades=CIUDADES, progreso=print):
         "nino12_semanal": leer_nino12_semanal((bronze / "nino12_semanal.txt").read_text()),
         "temperatura_areas": temperatura_por_area(raiz, ciudades),
         "saidi_saifi": leer_saidi((bronze / "saidi_saifi.csv").read_bytes()),
+        # Un evento que cruza de un año a otro aparece en los dos archivos: se deja una vez
         "eventos_coes": pd.concat([leer_eventos(a).assign(anio_archivo=int(a.stem))
-                                   for a in sorted((bronze / "eventos").glob("*.xlsx"))], ignore_index=True),
+                                   for a in sorted((bronze / "eventos").glob("*.xlsx"))], ignore_index=True)
+        .drop_duplicates(subset=["empresa", "ubicacion", "equipo", "inicio", "final"]),
     }
     for nombre, tabla in tablas.items():
         destino = _ruta(raiz, "exogenas/silver", f"{nombre}.parquet")
