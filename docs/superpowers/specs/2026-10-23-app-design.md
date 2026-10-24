@@ -100,7 +100,15 @@ JSON en español y snake_case; fechas ISO 8601 en hora de Lima, sin zona (`"2026
 | `POST /sensibilidad` | `area`, `origen`, `variable` | La dependencia parcial a 1 h |
 | `GET /diagnostico/{area}` | — | MAE por régimen, ablación con intervalos, adaptación (fijo, semanal, alerta de ENFEN; sin o con exógenas), importancias, real contra predicho y residuos |
 
-Errores: 404 si el área no existe; 422 si la fecha cae fuera de 2025-01-01 a 2026-10-31.
+Errores: 404 si el área no existe; 422 si la fecha cae fuera de lo que cubre el gold (desde 2025-01-01 hasta la
+fecha de corte que informa `/resumen`).
+
+- **El SEIN es la cuarta serie** en `/areas`, `/series` y `/pronostico`, junto a las tres áreas.
+- **El intervalo del pronóstico** sale de los cuantiles empíricos (5 % y 95 %) de los residuos de la validación de
+  2025, por área, horizonte y hora del día.
+- **Escenarios:** la temperatura y El Niño, solo a 24 h. La falla en curso es un evento, no un pronóstico, así que
+  sí vale a 1 h; a 24 h se dice que su efecto esperado es casi nulo, porque una falla dura de 26 a 62 minutos en
+  mediana.
 
 - **El backend carga al arrancar** el modelo final (joblib) y el gold de 2025-2026 (parquet), desde el Drive o desde
   el dataset privado de HF. Calcula las variables con el mismo código del paquete, así que no hay duplicación.

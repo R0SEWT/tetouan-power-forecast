@@ -149,11 +149,11 @@ Todo se mide en t: el momento en que se emite el pronóstico de t+H, con H = 2 o
 | **Demanda del área** | Rezagos t, t−1, t−2 y t−4; mismo momento de ayer y de la semana pasada respecto de t+H; media y desviación de la última hora; todo dividido por la media de 24 h del área | **Para el operador, sí** (SCADA en tiempo real). El público solo la ve al día siguiente en el IEOD. El proyecto toma la vista del operador y usa el IEOD (dato validado) como sustituto del dato en tiempo real, que no es público. Se declara |
 | Nivel reciente | Media de 24 h sobre la de 7 días | Igual que la demanda |
 | Calendario | Hora, minuto del día, día de la semana; seno y coseno diario y semanal; feriado y no laborable de la fecha de t+H | Sí: se conoce de antemano |
-| Clima, a 1 h | Temperatura del área en t; media de 24 h; anomalía frente a la climatología del propio entrenamiento por hora y mes | **No en sentido estricto:** ERA5 llega con ~5 días. Se usa como sustituto del dato observado que tendría el operador (supuesto de colaboración, §2) |
-| Clima, a 24 h | Temperatura del área pronosticada para t+H: la observada más un error simulado, con media cero y desviación igual al error típico de un pronóstico a un día (valor a fijar con literatura y declararlo) | Sí, bajo el supuesto de colaboración |
+| Clima, a 1 h | Temperatura del área en t (la **última hora ya publicada**: a las 00:30 vale la de las 00:00, no se interpola con la de la 01:00); media de 24 h; anomalía frente a la climatología de 2016-2024 por hora y mes, que queda fija en los reentrenamientos | **No en sentido estricto:** ERA5 llega con ~5 días. Se usa como sustituto del dato observado que tendría el operador (supuesto de colaboración, §2) |
+| Clima, a 24 h | Temperatura del área pronosticada para t+H: la observada (interpolada entre horas) más **un error por día de emisión y por área**, con media cero, porque el COES recibiría un pronóstico al día. Dos niveles, σ = 1 y 2 °C, con la fuente en la verificación de la temperatura a 2 m a 24 h del ECMWF. La misma semilla en entrenamiento, validación y prueba | Sí, bajo el supuesto de colaboración |
 | El Niño | ICEN definitivo **según su fecha de publicación**: el del mes m−2 si el día es ≥ 20 y el de m−3 si no; Niño 1+2 de la última semana publicada (~9 días) | Sí, con su rezago |
-| Fallas | Eventos del COES en curso en el área en t; minutos desde el inicio. Si el anexo trae `EVENTOS` con MW indisponibles o interrupción, se usa "falla con interrupción" | Sí: se registran durante la operación (falta medir con cuánto retraso se publican) |
-| SAIDI del área | SAIDI(m−2) como "estrés de la red" | Sí, con su rezago. **En la evaluación** se usa además el SAIDI del mismo mes (ex post) para marcar los meses con la red golpeada (§8.5) |
+| Fallas | Eventos del COES en curso en t. Un evento cuenta desde su inicio hasta su final, pero **como mucho 2 días**: no se descartan por su duración, que no se conoce al predecir. Por área cuando exista la tabla `empresa → área`; hasta entonces, el total del SEIN. Si el anexo trae `EVENTOS` con MW indisponibles o interrupción, se prueba "falla con interrupción" | Sí: se registran durante la operación (falta medir con cuánto retraso se publican) |
+| SAIDI del área | El último SAIDI publicado como "estrés de la red": el de m−2 desde el día 7 de cada mes, el de m−3 antes | Sí, con su rezago. **En la evaluación** se usa además el SAIDI del mismo mes (ex post) para marcar los meses con la red golpeada (§8.5) |
 | Contexto | Cuarentena por fases con inicio y fin (estricta del 16-mar-2020; reactivación por fases durante 2020), según los decretos | Sí |
 
 El calendario anual (mes, día del año) no entra en las variantes M. Se prueba aparte: M0 con y sin calendario
@@ -196,14 +196,29 @@ Los departamentos de cada área se confirman con el documento de áreas operativ
 | Validación | ene-2025 a dic-2025 | Elegir el modelo, las exógenas y la política de reentrenamiento |
 | **Prueba fuera de distribución** | ene-2026 a oct-2026 | El Niño extraordinario. Se toca una sola vez, al final |
 
-Entre tramos queda un hueco de H pasos.
+Entre tramos queda un hueco de H pasos. **El modelo, las exógenas y la política de reentrenamiento se eligen en 2025.** En 2026 se corre todo, pero no se elige nada.
 
 ### 8.2 Referencias
 
 | Horizonte | Referencias |
 |---|---|
 | 1 h | Persistencia (t), ayer a la misma hora (t+2−48) y semana pasada a la misma hora (t+2−336). Se compara contra la mejor de las tres en cada tramo |
-| 24 h | Persistencia, que a este horizonte coincide con "ayer a la misma hora" (t+48−48 = t), y semana pasada (t+48−336). Para el SEIN, además, **la Programación Diaria del COES**, evaluada contra el **SEIN del IEOD** (con `DESV_DEMANDA_PRONOS`, o uniendo el anual del portal con el IEOD), no contra el portal |
+| 24 h | Persistencia, que a este horizonte coincide con "ayer a la misma hora" (t+48−48 = t), y semana pasada (t+48−336). Para el SEIN, además, **la Programación Diaria del COES** (§8.2.1) |
+
+#### 8.2.1 Comparación con la Programación Diaria del COES
+
+Compararla con el modelo sobre la misma serie la sesgaría: la Programación Diaria se emite para el perímetro del
+portal, que queda +1-1.5 % sobre el IEOD, y es un pronóstico de 10 a 34 h emitido una vez al día, no uno móvil a
+t+48. Por eso:
+
+- se evalúa la Programación Diaria contra el **Ejecutado del portal**, y el modelo contra el **IEOD**, y se comparan
+  en términos relativos (MAPE);
+- se agrega una evaluación **"día siguiente"**, con origen fijo a las 12:00 del día anterior y horizontes de 12 a
+  36 h, para compararlos en igualdad;
+- se reporta por hora del día dónde gana cada uno;
+- en 2026 se usa también la hoja `DESV_DEMANDA_PRONOS` del IEOD, que compara la Programación Diaria con la ejecutada.
+
+Falta bajar el SEIN del portal y la Programación Diaria (`ExportarDemanda`, un xlsx por año).
 
 ### 8.3 Ablación de exógenas
 
@@ -223,9 +238,14 @@ En la validación de 2025 y en la prueba de 2026:
 | **Modelo fijo** | A | B |
 | **Reentrenado cada semana** | C | D |
 
-Más una quinta variante: **reentrenar cuando ENFEN cambia el estado de alerta.** Es la colaboración del §2. Si el
-estado de alerta no se puede armar desde los comunicados, se aproxima con los cruces de umbral del ICEN. Se reporta
-cuál adapta antes y mejor en los periodos extraordinarios.
+Más una quinta variante: **reentrenar cuando ENFEN cambia el estado de alerta**, que es la colaboración del §2. No
+puede adaptar antes que la semanal, porque dispara pocas veces. Se presenta como "casi la misma adaptación con muchos
+menos reentrenamientos" (costo frente a beneficio) y como disparador extra sobre la semanal.
+
+- La serie de alerta se arma con los cruces de umbral del ICEN, con su rezago de publicación; los comunicados en
+  PDF quedan como mejora opcional.
+- En todas las políticas: ventana creciente, hiperparámetros congelados (los elegidos en el entrenamiento) y un hueco
+  de H pasos antes de cada reentrenamiento.
 
 ### 8.5 Regímenes y criterios
 
@@ -273,13 +293,31 @@ Además, origen móvil mensual de 2023 a 2025 para el modelo elegido, M0 frente 
 
 - **Bronze:** el xlsx crudo de cada día en el Drive, con la procedencia (URL, fecha de descarga, sha256 y hojas
   presentes).
-- **Silver y gold:** en el Drive y en un dataset privado de Hugging Face del grupo, con el mismo sha256.
+- **Silver:** la demanda por área (`coes/silver/demanda_areas.parquet`) y las exógenas (`exogenas/silver/*.parquet`),
+  cada una con su marca de tiempo.
+- **Gold:** una fila por periodo de 30 minutos desde 2015-12-24 (la semana de rezago que necesita el primer día de
+  2016), con la demanda por área y las exógenas **ya con la regla de información aplicada**:
+  - ICEN, Niño 1+2 y SAIDI según su publicación;
+  - temperatura conocida en t;
+  - fallas en curso;
+  - feriados y cuarentena.
+
+  Las razones y los rezagos no van en el gold: los calcula `variables_sein.py` en los notebooks y en la API, así hay
+  una sola implementación.
+- **Silver y gold, publicados en el Drive y en un dataset privado de Hugging Face del grupo,** con el mismo sha256.
+  Falta `publicar_hf()`: el token va por los secretos de Colab y lo carga el usuario.
+- **Artefactos para la app**, el punto de control entre la fase 3 y la 4:
+  - `modelo_{area}_{horizonte}_{variante}.joblib`, para las tres áreas y el SEIN, a 1 h y 24 h, en M0 y M3;
+  - `diagnostico_{area}.json` y `resumen.json`;
+  - la versión (sha256) del gold con que se entrenaron.
 - **Los notebooks 01 y 02 arrancan del silver,** así que se pueden correr sin repetir la descarga.
 - **El COES no publica licencia:** se dice en el README y en el paper.
 
 ```
 notebooks/
-  00_medallon_coes.ipynb       Colab: bronze → silver → gold y publicación en el Drive y en HF
+  00_medallon_coes.ipynb       Colab: punto de control, bronze y silver del IEOD; copia al Drive
+  00c_exogenas.ipynb           Colab: bronze y silver de las exógenas
+  (gold y publicación en HF: pendiente)
   01_datos_preparacion.ipynb   CRISP-DM 2 y 3
   02_modelado_evaluacion.ipynb CRISP-DM 4 y 5: algoritmos, global frente a local, ablación, adaptación, prueba 2026
 src/<paquete>/
@@ -326,7 +364,7 @@ aula virtual. Los beads la ubican entre fines de noviembre y la primera semana d
 | 0a. Rutas e inventario del IEOD | — | Un anexo por año leído (hecho: 2016-2026 bien, 2015 sin la hoja) | SEIN = N + C + S en los once años | Caer al SEIN del portal como serie única; las áreas pasan a ser un extra |
 | 0b. Descarga masiva y exógenas | 0a | Bronze completo en el Drive; ERA5, ICEN, Niño 1+2, SAIDI, eventos | Archivos por mes contra el calendario | Usar solo los años completos y declararlo |
 | 0c. Silver y gold | 0b y las tablas | Silver auditado en el Drive y en HF | Auditoría: huecos marcados y SEIN = N + C + S en todos los días | Acortar el origen móvil a los años buenos |
-| 1. Comprensión y preparación | 0c | Notebook 01, con la cuota de usuarios libres por área | — | — |
+| 1. Comprensión y preparación | 0c | Notebook 01, con la cuota de usuarios libres por área (falta el lector de `DEMANDA_UL`) | Unión de silver y exógenas sin duplicados; pruebas de la regla de información; tabla de cuota de usuarios libres | — |
 | 2. Modelado | 1 y la generalización | Notebook 02: algoritmos, global frente a local con M0 | M0 le gana a la mejor referencia en las tres áreas en la validación | Si no, el problema no es de exógenas: revisar el objetivo y los rezagos antes de la ablación |
 | 3. Ablación y adaptación | 2 | M0-M4, la ablación que quita un grupo y las cinco variantes de adaptación | M3 frente a M0 en 2025, con su intervalo | Si cruza el cero ya en 2025, se ajusta la narrativa antes de redactar |
 | 4. Prueba 2026 y app conectada | 3 | Resultados finales; el backend sirve el modelo final | Contrato de la API probado en el CI | La app muestra solo el modelo elegido |
@@ -350,6 +388,6 @@ El modelado (5 puntos) se protege antes que la app (2 puntos).
 1. **Nombre del repo y del paquete.** Propuesta: renombrar el repo a `sein-power-forecast` (GitHub redirige el nombre
    viejo) y el paquete a `pronostico_demanda`, en el mismo PR que generaliza `variables.py`, `modelos.py` y
    `evaluacion.py`, porque ese PR ya toca todos los imports.
-2. **El error simulado del pronóstico de temperatura a un día:** su valor y su fuente.
+2. **El error simulado del pronóstico de temperatura a un día:** confirmar σ = 1 y 2 °C con la verificación del ECMWF.
 3. **Confirmar los departamentos de cada área operativa** con el documento del COES.
 4. **La fecha exacta de la entrega.**
