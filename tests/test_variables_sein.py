@@ -71,6 +71,20 @@ def test_a_24_h_la_temperatura_pronosticada_lleva_un_error_por_dia(demanda, temp
     assert fila["temp_objetivo"] == pytest.approx((base["2025-03-03 00:00"] + base["2025-03-03 01:00"]) / 2)
 
 
+def test_pasado_el_archivo_de_clima_la_temperatura_queda_vacia_y_la_fila_sale(demanda, temperatura):
+    fin = pd.Timestamp("2025-03-15 23:00")  # ERA5 llega con días de retraso: la demanda sigue hasta el 22
+    corta = temperatura[temperatura["fecha_hora"] <= fin]
+    a24 = dataset_area(demanda, "NORTE", horizonte=48, temperatura=corta, fin_climatologia="2025-03-10")
+    sin_clima = a24["DateTime"] + pd.Timedelta(hours=24) > fin
+    assert a24.loc[sin_clima, "temp_objetivo"].isna().all()  # ni la última hora repetida ni su error simulado
+    assert a24.loc[~sin_clima, "temp_objetivo"].notna().all()
+    assert filas_comunes(a24)["DateTime"].max() == fin - pd.Timedelta(hours=24)
+    # A 1 h el objetivo usa la temperatura de t: la última hora vale solo hasta que tocaba publicar la siguiente
+    a1 = dataset_area(demanda, "NORTE", horizonte=2, temperatura=corta, fin_climatologia="2025-03-10")
+    assert a1.loc[a1["DateTime"] >= fin + pd.Timedelta(hours=1), ["temp", "temp_objetivo"]].isna().all().all()
+    assert filas_comunes(a1)["DateTime"].max() == fin + pd.Timedelta(minutes=30)
+
+
 def test_error_diario_reproducible():
     fechas = pd.date_range("2025-01-01", periods=96, freq="30min")
     a, b = error_pronostico_diario(fechas, 1.0, 3), error_pronostico_diario(fechas, 1.0, 3)

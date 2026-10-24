@@ -51,16 +51,25 @@ def _relativo(serie, escala, rezagos, prefijo):
 
 
 def _temperatura_conocida(temperatura, area, fechas):
-    """La última temperatura horaria del área que ya existía en cada fecha (la de las 01:00 recién a las 01:00)."""
+    """La última temperatura horaria del área que ya existía en cada fecha (la de las 01:00 recién a las 01:00).
+
+    Pasado el archivo de clima queda vacía: falta la hora que ya se habría publicado y repetir la última sería
+    inventar el dato.
+    """
     horaria = temperatura.set_index("fecha_hora")[area.lower()].sort_index().dropna()
-    return horaria.reindex(pd.DatetimeIndex(fechas), method="ffill").to_numpy()
+    fechas = pd.DatetimeIndex(fechas)
+    conocida = horaria.reindex(fechas, method="ffill")
+    return conocida.where(fechas < horaria.index.max() + pd.Timedelta(hours=1)).to_numpy()
 
 
 def _temperatura_interpolada(temperatura, area, fechas):
-    """La temperatura del área en cada fecha, interpolada entre horas: solo para el pronóstico de t+H."""
+    """La temperatura del área en cada fecha, interpolada entre horas: solo para el pronóstico de t+H.
+
+    Solo entre dos horas observadas: fuera del archivo de clima queda vacía, sin alargar la última.
+    """
     horaria = temperatura.set_index("fecha_hora")[area.lower()].sort_index().dropna()
-    unida = horaria.reindex(horaria.index.union(pd.DatetimeIndex(fechas))).interpolate(method="time")
-    return unida.reindex(pd.DatetimeIndex(fechas)).to_numpy()
+    unida = horaria.reindex(horaria.index.union(pd.DatetimeIndex(fechas)))
+    return unida.interpolate(method="time", limit_area="inside").reindex(pd.DatetimeIndex(fechas)).to_numpy()
 
 
 def error_pronostico_diario(fechas, sigma, semilla=0):
