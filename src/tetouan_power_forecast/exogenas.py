@@ -34,6 +34,9 @@ URL_EVENTOS = f"{URL_PORTAL}/eventos/relevantes/ExportarEvento"
 INICIO = dt.date(2016, 1, 1)
 REZAGO_NINO12_DIAS = 9
 DURACION_MAX_FALLA = pd.Timedelta(days=2)  # más larga es una indisponibilidad, no una falla
+# Sin `models`, Open-Meteo da su "best match", que mezcla IFS HRES (desde 2017), ERA5 y ERA5-Land: la serie
+# cambiaría de fuente dentro del periodo de estudio. Se pide ERA5 solo, con la misma fuente de 2016 a hoy.
+MODELO_ERA5 = "era5"
 # Ciudades por área de la spec v2 (§6): costeras, sin Cusco por la altura. La tabla del paquete puede reemplazarlas.
 CIUDADES = {
     "norte": {"Piura": (-5.194, -80.632), "Chiclayo": (-6.771, -79.841), "Trujillo": (-8.112, -79.029)},
@@ -42,10 +45,11 @@ CIUDADES = {
 }
 
 
-def _guardar_crudo(raiz, nombre, url, contenido):
+def _guardar_crudo(raiz, nombre, url, contenido, **consulta):
+    """Guarda la respuesta sin tocar y su procedencia; `consulta` agrega lo que se pidió (modelo, fechas…)."""
     destino = _ruta(raiz, "exogenas/bronze", nombre)
     _reemplazar(destino, lambda r: r.write_bytes(contenido))
-    procedencia = {"url": url, "bytes": len(contenido), "sha256": hashlib.sha256(contenido).hexdigest(),
+    procedencia = {"url": url, **consulta, "bytes": len(contenido), "sha256": hashlib.sha256(contenido).hexdigest(),
                    "descargado_utc": dt.datetime.now(dt.UTC).isoformat(timespec="seconds")}
     texto = json.dumps(procedencia, ensure_ascii=False, indent=2) + "\n"
     _reemplazar(destino.with_name(destino.name + ".procedencia.json"), lambda r: r.write_text(texto))
@@ -100,23 +104,41 @@ def bronze_nino(raiz=None, descargar=_pedir):
 
 # --- Clima (ERA5 vía Open-Meteo) --------------------------------------------------------------------------------
 
-def url_era5(lat, lon, desde, hasta):
+def url_era5(lat, lon, desde, hasta, modelo=MODELO_ERA5):
     parametros = {"latitude": lat, "longitude": lon, "start_date": f"{desde}", "end_date": f"{hasta}",
-                  "hourly": "temperature_2m,apparent_temperature,relative_humidity_2m", "timezone": "America/Lima"}
+                  "hourly": "temperature_2m,apparent_temperature,relative_humidity_2m", "models": modelo,
+                  "timezone": "America/Lima"}
     return f"{URL_ERA5}?{urllib.parse.urlencode(parametros)}"
 
 
+def _cubre(archivo, consulta):
+    """Si lo ya bajado sirve para `consulta`: mismo modelo y coordenadas, y fechas que contienen las pedidas."""
+    procedencia = archivo.with_name(archivo.name + ".procedencia.json")
+    if not (archivo.exists() and procedencia.exists()):
+        return False
+    previa = json.loads(procedencia.read_text())
+    return (all(previa.get(clave) == consulta[clave] for clave in ("modelo", "latitud", "longitud"))
+            and previa.get("desde", "9999-12-31") <= consulta["desde"] and previa.get("hasta", "") >= consulta["hasta"])
+
+
 def bronze_era5(raiz=None, ciudades=CIUDADES, desde=INICIO, hasta=None, descargar=_pedir, progreso=print):
-    """Una consulta por ciudad a Open-Meteo (ERA5 horario, hora de Lima). Las ciudades ya bajadas no se repiten."""
+    """Una consulta por ciudad a Open-Meteo (ERA5 horario, hora de Lima).
+
+    Una ciudad ya bajada se repite solo si lo guardado no cubre lo pedido: otro modelo, otras coordenadas o menos
+    fechas (al correrlo otro día, `hasta` avanza y se rehace con la historia completa).
+    """
     hasta = hasta or (dt.date.today() - dt.timedelta(days=7))  # ERA5 llega con unos días de retraso
     for area, lugares in ciudades.items():
         for ciudad, (lat, lon) in lugares.items():
             nombre = f"era5/{area}_{ciudad.lower()}.json"
-            if _ruta(raiz, "exogenas/bronze", nombre).exists():
+            consulta = {"modelo": MODELO_ERA5, "latitud": lat, "longitud": lon, "desde": f"{desde}",
+                        "hasta": f"{hasta}"}
+            if _cubre(_ruta(raiz, "exogenas/bronze", nombre), consulta):
                 continue
-            contenido = descargar(url_era5(lat, lon, desde, hasta))
+            url = url_era5(lat, lon, desde, hasta)
+            contenido = descargar(url)
             json.loads(contenido)  # que sea JSON válido antes de guardarlo
-            _guardar_crudo(raiz, nombre, url_era5(lat, lon, desde, hasta), contenido)
+            _guardar_crudo(raiz, nombre, url, contenido, **consulta)
             progreso(f"ERA5 {area}/{ciudad}: listo")
 
 

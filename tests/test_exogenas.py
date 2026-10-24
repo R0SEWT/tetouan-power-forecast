@@ -52,17 +52,19 @@ def test_nino12_semanal_con_columnas_pegadas_y_rezago():
     assert serie.tolist() == [5.3, 5.2]
 
 
-def test_era5_por_area_es_la_media_de_sus_ciudades(tmp_path):
-    def descargar(url):
-        lat = float(url.split("latitude=")[1].split("&")[0])
-        horas = pd.date_range("2026-01-01", periods=3, freq="h")
-        return json.dumps({"hourly": {"time": [f"{h:%Y-%m-%dT%H:%M}" for h in horas],
-                                      "temperature_2m": [abs(lat)] * 3, "apparent_temperature": [0] * 3,
-                                      "relative_humidity_2m": [50] * 3}}).encode()
+def _era5_falso(url):
+    """Tres horas con la latitud (en positivo) como temperatura, para reconocer la ciudad en la tabla."""
+    lat = float(url.split("latitude=")[1].split("&")[0])
+    horas = pd.date_range("2026-01-01", periods=3, freq="h")
+    return json.dumps({"hourly": {"time": [f"{h:%Y-%m-%dT%H:%M}" for h in horas],
+                                  "temperature_2m": [abs(lat)] * 3, "apparent_temperature": [0] * 3,
+                                  "relative_humidity_2m": [50] * 3}}).encode()
 
+
+def test_era5_por_area_es_la_media_de_sus_ciudades(tmp_path):
     ciudades = {"norte": {"A": (-5.0, -80.0), "B": (-7.0, -79.0)}, "centro": {"Lima": (-12.0, -77.0)}}
     bronze_era5(tmp_path, ciudades=ciudades, desde=dt.date(2026, 1, 1), hasta=dt.date(2026, 1, 1),
-                descargar=descargar, progreso=lambda texto: None)
+                descargar=_era5_falso, progreso=lambda texto: None)
     tabla = temperatura_por_area(tmp_path, ciudades=ciudades)
     assert tabla["norte"].tolist() == [6.0] * 3 and tabla["centro"].tolist() == [12.0] * 3
     ponderada = temperatura_por_area(tmp_path, ciudades=ciudades, pesos={"norte": {"A": 3, "B": 1}})
@@ -71,7 +73,42 @@ def test_era5_por_area_es_la_media_de_sus_ciudades(tmp_path):
     def falla(url):
         raise AssertionError("no debía volver a descargar")
 
-    bronze_era5(tmp_path, ciudades=ciudades, descargar=falla, progreso=lambda texto: None)
+    bronze_era5(tmp_path, ciudades=ciudades, desde=dt.date(2026, 1, 1), hasta=dt.date(2026, 1, 1), descargar=falla,
+                progreso=lambda texto: None)
+
+
+def test_era5_se_pide_solo_y_queda_en_la_procedencia(tmp_path):
+    urls = []
+    bronze_era5(tmp_path, ciudades={"centro": {"Lima": (-12.0, -77.0)}}, desde=dt.date(2026, 1, 1),
+                hasta=dt.date(2026, 1, 1), descargar=lambda url: urls.append(url) or _era5_falso(url),
+                progreso=lambda texto: None)
+    assert "&models=era5&" in urls[0]  # sin `models`, Open-Meteo mezcla IFS desde 2017
+    procedencia = json.loads((tmp_path / "exogenas/bronze/era5/centro_lima.json.procedencia.json").read_text())
+    assert procedencia["modelo"] == "era5" and procedencia["url"] == urls[0]
+
+
+def test_era5_se_vuelve_a_bajar_si_lo_guardado_no_cubre_la_consulta(tmp_path):
+    urls = []
+
+    def bajar(ciudades, desde, hasta):
+        antes = len(urls)
+        bronze_era5(tmp_path, ciudades=ciudades, desde=desde, hasta=hasta,
+                    descargar=lambda url: urls.append(url) or _era5_falso(url), progreso=lambda texto: None)
+        return len(urls) - antes
+
+    enero, junio, octubre = dt.date(2026, 1, 1), dt.date(2026, 6, 1), dt.date(2026, 10, 1)
+    lima, otra_lima = {"centro": {"Lima": (-12.0, -77.0)}}, {"centro": {"Lima": (-12.05, -77.04)}}
+    assert bajar(lima, enero, enero) == 1
+    assert bajar(lima, enero, octubre) == 1  # más fechas: se rehace con la historia completa
+    assert bajar(lima, enero, junio) == 0  # ya cubierto
+    assert bajar(otra_lima, enero, octubre) == 1  # otras coordenadas
+    assert "end_date=2026-10-01" in urls[-1]
+    # Lo bajado antes de pedir ERA5 explícitamente no tiene modelo en la procedencia: es el best match
+    procedencia = tmp_path / "exogenas/bronze/era5/centro_lima.json.procedencia.json"
+    previa = json.loads(procedencia.read_text())
+    procedencia.write_text(json.dumps({k: v for k, v in previa.items() if k != "modelo"}))
+    assert bajar(otra_lima, enero, octubre) == 1
+    assert bajar(otra_lima, enero, octubre) == 0
 
 
 def test_saidi_por_area_con_la_mediana_y_lo_no_asignado():
@@ -105,3 +142,17 @@ def test_eventos_y_fallas_en_curso(tmp_path):
     en_curso = fallas_en_curso(pd.to_datetime(["2017-03-02 09:00", "2017-03-02 10:45", "2017-03-02 11:30",
                                                "2017-03-02 12:00"]), eventos)
     assert en_curso.tolist() == [0, 2, 1, 0]
+
+
+def test_una_falla_larga_cuenta_solo_sus_primeros_dos_dias():
+    eventos = pd.DataFrame({"inicio": pd.to_datetime(["2025-01-01 00:00"]),
+                            "final": pd.to_datetime(["2025-01-06 00:00"])})
+    en_curso = fallas_en_curso(pd.to_datetime(["2025-01-01 12:00", "2025-01-02 23:00", "2025-01-04 00:00"]), eventos)
+    assert en_curso.tolist() == [1, 1, 0]
+
+
+def test_un_evento_repetido_en_dos_archivos_cuenta_una_vez():
+    evento = {"empresa": "REP", "ubicacion": "S.E. X", "equipo": "L-1", "inicio": pd.Timestamp("2024-12-31 23:00"),
+              "final": pd.Timestamp("2025-01-01 01:00")}
+    eventos = pd.DataFrame([evento, evento])
+    assert fallas_en_curso(pd.to_datetime(["2025-01-01 00:00"]), eventos).tolist() == [1]

@@ -243,7 +243,10 @@ def leer_demanda_areas(archivo, dia):
             minutos = 24 * 60
         fecha = pd.Timestamp(dia) + pd.Timedelta(minutes=minutos)
         registros.append({"DateTime": fecha, **{a: _numero(fila[c]) for a, c in columnas.items()}})
-    return pd.DataFrame(registros, columns=["DateTime", *AREAS])
+    df = pd.DataFrame(registros, columns=["DateTime", *AREAS])
+    if not df["DateTime"].is_unique:  # p. ej. una columna de fecha leída como hora: el día se colapsaría
+        raise ValueError(f"{archivo}: horas repetidas en DEMANDA_AREAS ({df['DateTime'].duplicated().sum()})")
+    return df
 
 
 def auditar_areas(df, sin_anexo=()):
