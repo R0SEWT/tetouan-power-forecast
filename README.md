@@ -102,7 +102,8 @@ UCI 849 ──► bronze ──► silver (auditado) ──► gold t+6, una tab
                                                    │
                   src/tetouan_power_forecast       ▼
                   (medallón, perfiles,        app en Streamlit
-                   métricas; con tests)       (inputs, predicción, gráficos)
+                   variables, modelos,        (inputs, predicción, gráficos)
+                   evaluación; con tests)
 ```
 
 <p align="right">(<a href="#inicio">volver arriba</a>)</p>
@@ -145,7 +146,7 @@ Detalle de las capas y de la procedencia en [`docs/datos.md`](docs/datos.md).
 | Ruta | Qué hay |
 |------|---------|
 | `notebooks/` | `00_medallon` prepara los datos de Tetuán en Drive y `00b_ceuta`, los de Ceuta (validación externa); después, un notebook por tramo de CRISP-DM, numerados en orden. |
-| `src/tetouan_power_forecast/` | Código que comparten los notebooks y la app: el pipeline de datos (`medallon`), la construcción del dataset t+6 (`datos`), la firma de carga y las referencias ingenuas (`perfiles`) y las métricas (`metricas`). |
+| `src/tetouan_power_forecast/` | Código que comparten los notebooks y la app: el pipeline de datos (`medallon`), la construcción del dataset t+6 (`datos`), la firma de carga y las referencias ingenuas (`perfiles`), las métricas (`metricas`), las variables del objetivo en razón (`variables`), los modelos en razón y en cambio y la validación cruzada del modelo global (`modelos`) y la evaluación contra las referencias (`evaluacion`). |
 | `tests/` | Pruebas de `src/` con pytest. |
 | `docs/negocio.md` | Comprensión del negocio: decisión, objetivos, papel de cada zona, criterios de éxito, riesgos y plan. |
 | `docs/investigacion.md` | Qué zona es cuál, qué tan difícil es cada una y cómo pronostica la industria, con fuentes. |

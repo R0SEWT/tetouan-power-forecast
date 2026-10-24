@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Demanda del SEIN por área</title>
+  <meta name="description" content="Pronóstico de la demanda eléctrica de las áreas Norte, Centro y Sur del SEIN, a 1 hora y a 24 horas.">
+  <meta name="theme-color" content="#0e1117">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230e1117'/%3E%3Cpath d='M9 44 20 31l10 6 12-18 13 8' fill='none' stroke='%23D55E00' stroke-width='5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+
+  <!-- Tipografías: Plus Jakarta Sans para el texto, JetBrains Mono para las cifras -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="app" class="app">
+
+    <!-- Barra superior con chips -->
+    <header class="hud-top">
+      <div class="hud-row">
+        <a class="hud-brand" href="#/" aria-label="Ir al inicio">
+          <span class="brand-badge">SEIN</span>
+          <span class="brand-sub">Demanda por área</span>
+        </a>
+        <div class="hud-actions">
+          <button id="btnFicha" class="chip-btn icon-only" type="button" aria-label="Abrir la ficha técnica" title="Ficha técnica">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+          </button>
+          <button id="btnTema" class="chip-btn icon-only" type="button" aria-label="Cambiar a modo claro" title="Modo claro u oscuro">
+            <svg id="iconoLuna" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+            <svg id="iconoSol" hidden width="16" height="16" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="hud-chips">
+        <button id="chipRegimen" class="chip-btn" type="button" aria-haspopup="dialog">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"/></svg>
+          <span id="chipRegimenTxt">El Niño: cargando…</span>
+        </button>
+        <span id="chipArea" class="chip-static chip-area" hidden><span class="dot" aria-hidden="true"></span><span></span></span>
+        <span id="chipPrueba" class="chip-static chip-aviso" hidden title="El backend corre el modelo de prueba con datos sintéticos">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 3h6M10 3v6L4.5 18.5A1.7 1.7 0 0 0 6 21h12a1.7 1.7 0 0 0 1.5-2.5L14 9V3"/></svg>
+          Datos de prueba
+        </span>
+      </div>
+    </header>
+
+    <div id="bannerError" class="banner-error" role="alert" hidden></div>
+
+    <!-- Pantalla 1: Inicio -->
+    <main id="vistaInicio" class="vista" hidden>
+      <section class="intro">
+        <h1>¿Cuánta demanda viene en cada área?</h1>
+        <p class="muted">Pronóstico cada 30 minutos, a 1 hora y a 24 horas, para las tres áreas operativas del COES. Elige un área.</p>
+      </section>
+      <nav id="listaAreas" class="area-list" aria-label="Áreas del SEIN">
+        <p class="cargando-txt">Cargando las áreas…</p>
+      </nav>
+      <p class="nota">El mapa de las áreas llega en una próxima versión. Las áreas son las operativas del COES y no siguen exactamente los límites de los departamentos.</p>
+      <p id="notaPruebaInicio" class="nota aviso" hidden><strong>Datos de prueba.</strong> El modelo real todavía no está conectado: las curvas y los errores salen de series sintéticas y sirven para probar la app.</p>
+    </main>
+
+    <!-- Pantalla 2: Detalle del área -->
+    <main id="vistaArea" class="vista" hidden>
+      <div class="area-header">
+        <a href="#/" class="btn-back" aria-label="Volver al inicio">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
+        </a>
+        <span id="areaBadge" class="area-badge" aria-hidden="true"></span>
+        <div>
+          <h1 id="areaNombre">Área</h1>
+          <p id="areaDesc" class="muted"></p>
+        </div>
+      </div>
+
+      <section class="panel" aria-label="Qué pronóstico ver">
+        <div class="control-row">
+          <label class="field field-grow">
+            <span class="field-label">Día</span>
+            <input type="date" id="inFecha" min="2025-01-01" max="2026-10-31" required>
+          </label>
+          <div class="field">
+            <span class="field-label" id="lblHora">Hora</span>
+            <output id="outHora" class="time-pill" for="inHora" aria-labelledby="lblHora">15:00</output>
+          </div>
+        </div>
+        <div>
+          <input type="range" id="inHora" min="0" max="47" step="1" value="30" aria-label="Hora del pronóstico" aria-valuetext="15:00">
+          <div class="slider-ticks" aria-hidden="true"><span>00:00</span><span>06:00</span><span>12:00</span><span>18:00</span><span>23:30</span></div>
+        </div>
+        <div id="momentos" class="moment-chips" role="group" aria-label="Momentos del día"></div>
+        <div class="control-row">
+          <div class="field field-grow">
+            <span class="field-label" id="lblHorizonte">Horizonte</span>
+            <div class="segmented" role="group" aria-labelledby="lblHorizonte">
+              <button type="button" data-horizonte="1h" aria-pressed="true">1 hora</button>
+              <button type="button" data-horizonte="24h" aria-pressed="false">24 horas</button>
+            </div>
+          </div>
+          <div class="field field-grow">
+            <span class="field-label" id="lblVariante">Variables del modelo</span>
+            <div class="segmented" role="group" aria-labelledby="lblVariante">
+              <button type="button" data-variante="M0" aria-pressed="false" title="M0: demanda y calendario">Solo demanda</button>
+              <button type="button" data-variante="M3" aria-pressed="true" title="M3: más clima, El Niño y fallas">Con exógenas</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Dos tarjetas que se comparan -->
+      <section id="comparacion" class="compare" aria-label="Pronóstico frente a la mejor referencia">
+        <article id="cardModelo" class="cmp-card">
+          <div class="cmp-head">
+            <svg width="22" height="8" viewBox="0 0 22 8" aria-hidden="true"><line x1="1" y1="4" x2="21" y2="4" class="linea ln-pronostico"/></svg>
+            Modelo
+          </div>
+          <div class="cmp-sub" data-campo="sub"></div>
+          <div class="cmp-valor" data-campo="valor">—</div>
+          <div class="cmp-linea" data-campo="error"></div>
+          <div class="cmp-linea" data-campo="dia"></div>
+        </article>
+        <article id="cardReferencia" class="cmp-card">
+          <div class="cmp-head">
+            <svg width="22" height="8" viewBox="0 0 22 8" aria-hidden="true"><line x1="1" y1="4" x2="21" y2="4" class="linea ln-referencia"/></svg>
+            <span data-campo="titulo">Mejor referencia</span>
+          </div>
+          <div class="cmp-sub" data-campo="sub"></div>
+          <div class="cmp-valor" data-campo="valor">—</div>
+          <div class="cmp-linea" data-campo="error"></div>
+          <div class="cmp-linea" data-campo="dia"></div>
+        </article>
+        <p id="cmpFrase" class="cmp-frase" aria-live="polite"></p>
+      </section>
+
+      <section class="panel" aria-labelledby="tituloCurva">
+        <div class="panel-head">
+          <h2 id="tituloCurva">La curva del día</h2>
+          <span id="subCurva" class="muted small"></span>
+        </div>
+        <div id="graficoDia" class="chart"></div>
+        <ul id="leyendaDia" class="legend" aria-label="Leyenda"></ul>
+        <p id="notaDatos" class="muted small" hidden></p>
+        <p class="muted small">Toca la curva para elegir la hora.</p>
+      </section>
+    </main>
+
+    <!-- Hoja inferior con pestañas -->
+    <section id="hoja" class="bottom-sheet collapsed" aria-label="Detalle del pronóstico" hidden>
+      <button id="hojaAsa" class="sheet-handle" type="button" aria-expanded="false" aria-controls="hojaCuerpo">
+        <span class="handle-pill" aria-hidden="true"></span>
+        <span id="hojaAsaTxt" class="visually-hidden">Abrir la hoja</span>
+      </button>
+      <div class="sheet-tabs" role="tablist" aria-label="Secciones">
+        <button type="button" role="tab" class="sheet-tab" id="tab-operacion" aria-controls="panel-operacion" aria-selected="true" data-tab="operacion">Operación</button>
+        <button type="button" role="tab" class="sheet-tab" id="tab-escenarios" aria-controls="panel-escenarios" aria-selected="false" tabindex="-1" data-tab="escenarios">Escenarios</button>
+        <button type="button" role="tab" class="sheet-tab" id="tab-diagnostico" aria-controls="panel-diagnostico" aria-selected="false" tabindex="-1" data-tab="diagnostico">Diagnóstico</button>
+      </div>
+      <div id="hojaCuerpo" class="sheet-body">
+        <div role="tabpanel" id="panel-operacion" class="tab-panel" aria-labelledby="tab-operacion"></div>
+        <div role="tabpanel" id="panel-escenarios" class="tab-panel" aria-labelledby="tab-escenarios" hidden></div>
+        <div role="tabpanel" id="panel-diagnostico" class="tab-panel" aria-labelledby="tab-diagnostico" hidden></div>
+      </div>
+    </section>
+
+    <!-- Ficha técnica -->
+    <dialog id="dlgFicha" class="modal" aria-labelledby="tituloFicha">
+      <div class="modal-head">
+        <h2 id="tituloFicha">Ficha técnica</h2>
+        <button id="btnCerrarFicha" class="chip-btn icon-only" type="button" aria-label="Cerrar la ficha técnica">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div id="fichaCuerpo" class="modal-body"></div>
+    </dialog>
+  </div>
+
+  <script src="app.js" defer></script>
+</body>
+</html>

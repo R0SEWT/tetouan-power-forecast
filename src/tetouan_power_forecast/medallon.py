@@ -12,6 +12,7 @@ import argparse
 import hashlib
 import json
 import os
+import shutil
 import time
 import urllib.error
 import urllib.request
@@ -81,6 +82,28 @@ def usar_drive(carpeta=None, montaje="/content/drive"):
     print(f"Capas del medallón en: Mi unidad/{raiz.relative_to(mi_unidad)}")
     os.environ["TETOUAN_DATA"] = str(raiz)
     return raiz
+
+
+def copiar_al_drive(origen, subcarpeta, espera_s=300, montaje="/content/drive"):
+    """En Colab: copia `origen` a la carpeta del proyecto en el Drive en cuanto se pueda montar.
+
+    Si nadie acepta el permiso del Drive, lo vuelve a pedir cada `espera_s` segundos. Mientras espera, la sesión
+    sigue ocupada y Colab no la recicla por inactividad, así no se pierde lo que está en el disco de la máquina.
+    """
+    from google.colab import drive
+
+    while True:
+        try:
+            drive.mount(montaje)
+            break
+        except Exception as error:  # noqa: BLE001 - mount lanza ValueError o MessageError según cómo falle
+            print(f"{time.strftime('%H:%M')} esperando el permiso del Drive ({type(error).__name__}); "
+                  f"se vuelve a pedir en {espera_s // 60} min", flush=True)
+            time.sleep(espera_s)
+    destino = usar_drive(montaje=montaje) / subcarpeta
+    shutil.copytree(origen, destino, dirs_exist_ok=True)
+    print("copiado a", destino)
+    return destino
 
 
 def _ruta(raiz, capa, nombre):

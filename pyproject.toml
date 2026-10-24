@@ -11,6 +11,7 @@ dependencies = [
     "seaborn>=0.13",
     "ucimlrepo>=0.0.7",
     "pyarrow>=15.0",
+    "openpyxl>=3.1.5",
 ]
 
 [project.scripts]
@@ -18,6 +19,7 @@ tetouan = "tetouan_power_forecast.medallon:main"
 
 [project.optional-dependencies]
 dev = ["pytest>=8.0", "ruff>=0.4", "jupyterlab>=4.0"]
+app = ["fastapi>=0.115", "uvicorn>=0.30", "httpx>=0.27"]
 
 [build-system]
 requires = ["hatchling"]

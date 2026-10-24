@@ -1,0 +1,278 @@
+empresa_coes,empresa_original,tipo,area,departamento_principal,fuente,confianza
+ACEROS AREQUIPA,ACEROS AREQUIPA,usuario_libre,centro,Ica,planta de Pisco; aparece en: DEMANDA_UL 2017 (bloque centro); DEMANDA_UL 2026 (bloque centro); DEMANDA_UL 2023 (bloque centro),alta
+ADINELSA,ADINEL SA,distribuidora,centro,Lima,"empresa estatal con sistemas dispersos (SAIDI: Pasco Rural, Chuquibamba, Gracias a Dios); eventos en Huacho - Andahuasi (Lima); aparece en: SAIDI Osinergmin (código ADN)",media
+ADINELSA,ADINELSA ADN,distribuidora,centro,Lima,"empresa estatal con sistemas dispersos (SAIDI: Pasco Rural, Chuquibamba, Gracias a Dios); eventos en Huacho - Andahuasi (Lima); aparece en: eventos COES 2017; eventos COES 2023",media
+AGRO INDUSTRIAL PARAMONGA,AGRO INDUSTRIAL PARAMONGA,generadora,centro,Lima,C.T. Paramonga (bagazo); aparece en: eventos COES 2017; eventos COES 2023,alta
+AGROAURORA,AGROAURORA S.A.C.,usuario_libre,norte,Piura,planta de etanol (línea Piura Oeste - Planta de Etanol); aparece en: eventos COES 2017,alta
+AGROAURORA,AGROPECUARIA AURORA,usuario_libre,norte,Piura,planta de etanol (línea Piura Oeste - Planta de Etanol); aparece en: DEMANDA_UL 2023 (bloque norte),alta
+AGROINDUSTRIAS SAN JACINTO,AGROINDUSTRIAS SAN JACINTO S.A.A.,generadora,norte,Áncash,"C.T. San Jacinto (bagazo, Nepeña); aparece en: eventos COES 2023",alta
+AGUAS Y ENERGIA PERU,AGUAS Y ENERGIA PERU,generadora,norte,La Libertad,C.H. Pías; ubicación no verificada; aparece en: eventos COES 2017,baja
+ALICORP,ALICORP,usuario_libre,centro,Lima,aparece en: DEMANDA_UL 2026 (bloque centro); DEMANDA_UL 2023 (bloque centro),alta
+ANDEAN POWER,ANDEAN POWER S.A.C.,generadora,centro,Lima,C.H. Carhuac (línea Callahuanca - Carhuac); aparece en: eventos COES 2023,media
+ANGLO AMERICAN QUELLAVECO,ANGLO AMERICAN QUELLAVECO,usuario_libre,sur,Moquegua,aparece en: DEMANDA_UL 2023 (bloque sur),alta
+ANGLO AMERICAN QUELLAVECO,ANGLO AMERICAN QUELLAVECO S.A.,usuario_libre,sur,Moquegua,aparece en: DEMANDA_UL 2026 (bloque sur),alta
+ANTAMINA,ANTAMINA+09 OCTUBRE,usuario_libre,centro,Áncash,incluye la S.E. 09 de Octubre (Huarmey); aparece en: DEMANDA_UL 2017 (bloque centro),alta
+ANTAMINA,MINERA ANTAMINA,usuario_libre,centro,Áncash,alimentada desde Vizcarra (barra del Área Centro); aparece en: eventos COES 2017; DEMANDA_UL 2026 (bloque centro); DEMANDA_UL 2023 (bloque centro),alta
+ARCA CONTINENTAL LINDLEY,ARCA CONTINENTAL LINDLEY S.A.,usuario_libre,centro,Lima,"multiárea: DEMANDA_UL 2026 la lista en Norte, Centro y Sur; se asigna la sede de Lima; aparece en: DEMANDA_UL 2026 (bloque centro, norte, sur)",media
+ARUNTANI,ARUNTANI S.A.C.,usuario_libre,sur,Moquegua,mina Tucari; radial desde Puno (línea Puno - Tucari); aparece en: eventos COES 2017; eventos COES 2023,media
+ATLANTICA TRANSMISION SUR,ABY TRANSMISIÓN SUR,transmisora,sein,,antes Abengoa/ABY Transmisión Sur: 500 kV Chilca - Poroma - Ocoña - San José - Montalvo (Centro y Sur); aparece en: eventos COES 2017,alta
+ATLANTICA TRANSMISION SUR,ATLANTICA TRANSMISION SUR S.A.,transmisora,sein,,antes Abengoa/ABY Transmisión Sur: 500 kV Chilca - Poroma - Ocoña - San José - Montalvo (Centro y Sur); aparece en: eventos COES 2023,alta
+ATN,ATN S.A.,transmisora,sein,,línea Carhuamayo - Paragsha - Conococha - Kiman Ayllu - Cajamarca Norte (Centro y Norte); aparece en: eventos COES 2017; eventos COES 2023,alta
+ATN 1,ATN 1 S.A.,transmisora,sein,,eventos en Françoise (Pasco) y Tintaya Nueva - Constancia (Cusco); aparece en: eventos COES 2017; eventos COES 2023,media
+ATN 2,ATN 2 S.A.,transmisora,sur,Apurímac,Cotaruse - Las Bambas; aparece en: eventos COES 2017; eventos COES 2023,alta
+AUSTRAL GROUP,AUSTRAL GROUP S.A.A,usuario_libre,centro,Lima,"plantas pesqueras en el Norte y el Centro (DEMANDA_UL 2026); aparece en: DEMANDA_UL 2026 (bloque centro, norte)",baja
+BACKUS,UNIÓN DE CERVECERÍAS PERUANAS BACKUS Y JOHNSTON S.,usuario_libre,centro,Lima,"plantas en las tres áreas (DEMANDA_UL 2026); aparece en: DEMANDA_UL 2026 (bloque centro, norte, sur)",media
+BARRICK,BARRICK - PIERINA,usuario_libre,norte,Áncash,Pierina (Áncash) y Lagunas Norte/Alto Chicama (La Libertad); aparece en: DEMANDA_UL 2023 (bloque norte),alta
+BARRICK,BARRICK ALTO CHICAMA,usuario_libre,norte,La Libertad,Pierina (Áncash) y Lagunas Norte/Alto Chicama (La Libertad); aparece en: DEMANDA_UL 2017 (bloque norte),alta
+BARRICK,BARRICK PIERINA,usuario_libre,norte,Áncash,Pierina (Áncash) y Lagunas Norte/Alto Chicama (La Libertad); aparece en: DEMANDA_UL 2017 (bloque norte),alta
+BARRICK,BARRICK- ALTO CHICAMA,usuario_libre,norte,La Libertad,Pierina (Áncash) y Lagunas Norte/Alto Chicama (La Libertad); aparece en: DEMANDA_UL 2023 (bloque norte),alta
+BARRICK,MINERA PIERINA,usuario_libre,norte,Áncash,Pierina (Áncash) y Lagunas Norte/Alto Chicama (La Libertad); aparece en: eventos COES 2023,alta
+BIOENERGIA DEL CHIRA,BIOENERGIA DEL CHIRA S.A.,generadora,norte,Piura,"C.T. Caña Brava (bagazo, Sullana); aparece en: eventos COES 2023",alta
+CAL & CEMENTO SUR,CAL & CEMENTO SUR,usuario_libre,sur,Puno,aparece en: DEMANDA_UL 2023 (bloque sur),alta
+CAL & CEMENTO SUR,CAL & CEMENTO SUR S.A.,usuario_libre,sur,Puno,aparece en: DEMANDA_UL 2026 (bloque sur),alta
+CASAPALCA,CASAPALCA,usuario_libre,centro,Lima,Huarochirí; aparece en: DEMANDA_UL 2017 (bloque centro),alta
+CCNCM,CONCESIONARIA LINEA DE TRANSMISION CCNCM S.A.C.,transmisora,norte,Cajamarca,Carhuaquero - Cajamarca Norte - Cáclic - Moyobamba; aparece en: eventos COES 2017; eventos COES 2023,alta
+CELEPSA,CELEPSA,generadora,centro,Lima,C.H. El Platanal (Cañete); aparece en: eventos COES 2017; eventos COES 2023,alta
+CELEPSA RENOVABLES,CELEPSA RENOVABLES S.R.L.,generadora,centro,Huánuco,C.H. Marañón; aparece en: eventos COES 2023,media
+CEMENTOS PACASMAYO,CEMENTOS PACASMAYO,usuario_libre,norte,La Libertad,aparece en: eventos COES 2017; eventos COES 2023; DEMANDA_UL 2017 (bloque norte); DEMANDA_UL 2026 (bloque norte); DEMANDA_UL 2023 (bloque norte),alta
+CERRO DEL AGUILA,CERRO DEL AGUILA S.A.,generadora,centro,Huancavelica,C.H. Cerro del Águila; aparece en: eventos COES 2017,alta
+CHINANGO,CHINANGO S.A.C.,generadora,centro,Junín,C.H. Chimay y Yanango; aparece en: eventos COES 2017; eventos COES 2023,alta
+CIA MINERA SANTA LUISA,CIA MINERA SANTA LUISA S A,usuario_libre,centro,Áncash,"mina Huanzalá; S.E. Huallanca Nueva, alimentada desde Vizcarra (Centro); aparece en: eventos COES 2017; eventos COES 2023",media
+COELVISAC,COELVISAC,distribuidora,centro,Ica,"Consorcio Eléctrico de Villacurí; SAIDI en Villacurí (Ica), Andahuasi (Lima) y Olmos-Motupe (Lambayeque, Norte); aparece en: eventos COES 2023",media
+COELVISAC,CONSORCIO ELECTRICO DE VILLACURI S.A.C.,distribuidora,centro,Ica,"Consorcio Eléctrico de Villacurí; SAIDI en Villacurí (Ica), Andahuasi (Lima) y Olmos-Motupe (Lambayeque, Norte); aparece en: SAIDI Osinergmin (código CEV)",media
+COMPANIA MINERA ANTAPACCAY,ANTAPACCAY,usuario_libre,sur,Cusco,Espinar; aparece en: DEMANDA_UL 2017 (bloque sur); DEMANDA_UL 2023 (bloque sur),alta
+COMPANIA MINERA ANTAPACCAY,COMPAÑIA MINERA ANTAPACCAY S.A.,usuario_libre,sur,Cusco,Espinar; aparece en: eventos COES 2017; DEMANDA_UL 2026 (bloque sur),alta
+COMPANIA MINERA CHUNGAR,COMPAÑÍA MINERA CHUNGAR,usuario_libre,centro,Pasco,"Animón (Pasco), del grupo Volcan; aparece en: DEMANDA_UL 2023 (bloque centro)",media
+COMPANIA MINERA CHUNGAR,COMPAÑÍA MINERA CHUNGAR SAC,usuario_libre,centro,Pasco,"Animón (Pasco), del grupo Volcan; conflicto: DEMANDA_UL 2026 la agrupa en sur; se asigna por ubicación y por los años en que el bloque es coherente; aparece en: DEMANDA_UL 2026 (bloque sur)",media
+COMPANIA MINERA CONDESTABLE,COMPAÑIA MINERA CONDESTABLE,usuario_libre,centro,Lima,Mala (Cañete); aparece en: DEMANDA_UL 2026 (bloque centro); DEMANDA_UL 2023 (bloque centro),alta
+COMPANIA MINERA CONDESTABLE,MINERA CONDESTABLE,usuario_libre,centro,Lima,Mala (Cañete); aparece en: DEMANDA_UL 2017 (bloque centro),alta
+COMPANIA MINERA SAN IGNACIO DE MOROCOCHA,COMPAÑIA MINERA SAN IGNACIO DE MOROCOCHA S.A.A.,usuario_libre,centro,Junín,Morococha (Yauli); conflicto: DEMANDA_UL 2026 la agrupa en sur; se asigna por ubicación y por los años en que el bloque es coherente; aparece en: DEMANDA_UL 2026 (bloque sur),media
+COMPANIA TRANSMISORA ANDINA,COMPAÑIA TRANSMISORA ANDINA S.A.,transmisora,norte,Áncash,Huallanca - Huaraz Oeste y Trujillo Norte - Alto Chicama; aparece en: eventos COES 2017; eventos COES 2023,media
+COMPANIA TRANSMISORA AUTONOMA,COMPAÑIA TRANSMISORA AUTONOMA S.A.C.,transmisora,norte,La Libertad,Trujillo Norte - Alto Chicama; aparece en: eventos COES 2023,media
+COMPANIA TRANSMISORA SUR ANDINO,COMPAÑIA TRANSMISORA SUR ANDINO S.A.C.,transmisora,centro,Huancavelica,Huancavelica - Ingenio - Caudalosa; aparece en: eventos COES 2023,media
+CONELSUR LT,CONELSUR LT SAC,transmisora,sein,,"transmisión de Luz del Sur; eventos sobre todo en Lima, también en Huancavelica, Junín y Arequipa; aparece en: eventos COES 2017; eventos COES 2023",media
+CONENHUA,CONENHUA,transmisora,sein,,"líneas en Huancavelica (Centro), Arequipa (Sur) y Cajamarca (Norte); aparece en: eventos COES 2017; eventos COES 2023",alta
+CONSORCIO MINERO HORIZONTE,CONSORCIO MINERO HORIZONTE S.R.L.,usuario_libre,norte,La Libertad,Pataz (S.E. Llacuabamba); aparece en: DEMANDA_UL 2026 (bloque norte),alta
+CONSORCIO MINERO HORIZONTE,MINERA HORIZONTE,usuario_libre,norte,La Libertad,Pataz (S.E. Llacuabamba); aparece en: eventos COES 2017,alta
+CONSORCIO MINERO HORIZONTE,MINERA HORIZONTE-LLACUABAMBA,usuario_libre,norte,La Libertad,Pataz (S.E. Llacuabamba); aparece en: DEMANDA_UL 2023 (bloque norte),alta
+CONSORCIO TRANSMANTARO,TRANSMANTARO,transmisora,sein,,CTM: enlaces Centro-Sur (Mantaro - Cotaruse) y 500 kV en las tres áreas; aparece en: eventos COES 2017; eventos COES 2023,alta
+CORPORACION PESQUERA INCA,CORPORACIÓN PESQUERA INCA S.A.C.,usuario_libre,centro,Lima,"plantas pesqueras en el Norte y el Centro (DEMANDA_UL 2026); aparece en: DEMANDA_UL 2026 (bloque centro, norte)",baja
+CREDITEX,CREDITEX,usuario_libre,norte,,carga de Creditex que DEMANDA_UL 2023 agrupa en el Norte; sede no identificada; aparece en: DEMANDA_UL 2023 (bloque norte),baja
+CREDITEX,CREDITEX - INDEPENDENCIA,usuario_libre,centro,Lima,plantas textiles en Lima; DEMANDA_UL 2023 también lista una carga en el Norte; aparece en: DEMANDA_UL 2023 (bloque centro),alta
+CREDITEX,CREDITEX - INGENIEROS,usuario_libre,centro,Lima,plantas textiles en Lima; DEMANDA_UL 2023 también lista una carga en el Norte; aparece en: DEMANDA_UL 2023 (bloque centro),alta
+CREDITEX,CREDITEX: CIA IND.TEXTIL CREDISA,usuario_libre,centro,Lima,"plantas textiles en Lima; DEMANDA_UL 2023 también lista una carga en el Norte; aparece en: DEMANDA_UL 2026 (bloque centro, norte)",media
+DOE RUN PERU,DOE RUN - COBRIZA,usuario_libre,centro,Huancavelica,mina Cobriza; aparece en: DEMANDA_UL 2017 (bloque centro),alta
+DOE RUN PERU,DOE RUN - OROYA,usuario_libre,centro,Junín,complejo metalúrgico de La Oroya; también Cobriza (Huancavelica); aparece en: DEMANDA_UL 2017 (bloque centro),alta
+DOE RUN PERU,DOE RUN PERU S.R.L. EN LIQUIDACION,usuario_libre,centro,Junín,complejo metalúrgico de La Oroya; también Cobriza (Huancavelica); aparece en: eventos COES 2023,alta
+EDECANETE,EDECAÑETE,distribuidora,centro,Lima,SAIDI ECA-CAÑETE y ECA-LUNAHUANÁ hasta 2015-12; desde 2016 esos sistemas figuran en Luz del Sur; aparece en: SAIDI Osinergmin (código ECA),alta
+EDELSA,EDELSA,distribuidora,centro,Junín,SAIDI EDE-PANGOA (EDELSA); aparece en: SAIDI Osinergmin (código EDE),media
+EGASA,EGASA,generadora,sur,Arequipa,"C.H. Charcani y C.T. Chilina y Mollendo (Arequipa); también la C.T. Pisco (Ica, Centro); aparece en: eventos COES 2017; eventos COES 2023",alta
+EGEJUNIN,EGEJUNIN,generadora,centro,Junín,C.H. Runatullo y Huasahuasi; también Santa Cruz (Áncash); aparece en: eventos COES 2017; eventos COES 2023,alta
+EGEMSA,EGEMSA,generadora,sur,Cusco,C.H. Machupicchu; aparece en: eventos COES 2017; eventos COES 2023,alta
+EGEPSA,EGEPSA,distribuidora,centro,Junín,SAIDI EGP-PANGOA (EGEPSA); aparece en: SAIDI Osinergmin (código EGP),media
+EGESUR,EGESUR,generadora,sur,Tacna,"C.H. Aricota (Tacna) y C.T. Independencia (Pisco, Ica, Centro); eventos: 55 Centro, 21 Sur; aparece en: eventos COES 2017; eventos COES 2023; TEMP_AMB del IEOD",media
+EL BROCAL,EL BROCAL,usuario_libre,centro,Pasco,Colquijirca; aparece en: DEMANDA_UL 2017 (bloque centro); DEMANDA_UL 2023 (bloque centro),media
+EL BROCAL,EL BROCAL .S.A.,usuario_libre,centro,Pasco,Colquijirca; conflicto: DEMANDA_UL 2026 la agrupa en sur; se asigna por ubicación y por los años en que el bloque es coherente; aparece en: DEMANDA_UL 2026 (bloque sur),media
+ELECTRO DUNAS,ELECTRO DUNAS,distribuidora,centro,Ica,antes Electro Sur Medio (código ESM); SAIDI ESM-* en Ica; aparece en: eventos COES 2017; eventos COES 2023; SAIDI Osinergmin (código ESM),alta
+ELECTRO ORIENTE,ELECTRO ORIENTE,distribuidora,norte,San Martín,"en el SEIN: San Martín, Amazonas y Bagua-Jaén (Norte; Juanjuí se alimenta desde Tocache). Iquitos y otros sistemas de Loreto son aislados y no pertenecen al SEIN; aparece en: eventos COES 2017; eventos COES 2023; SAIDI Osinergmin (código EOR)",media
+ELECTRO PANGOA,ELECTRO PANGOA,distribuidora,centro,Junín,"SAIDI PAN-PANGOA (Satipo, Junín); aparece en: SAIDI Osinergmin (código PAN)",media
+ELECTRO PUNO,ELECTRO PUNO,distribuidora,sur,Puno,concesión en Puno; aparece en: eventos COES 2017; eventos COES 2023; SAIDI Osinergmin (código EPU),alta
+ELECTRO SUR ESTE,ELECTRO SUR ESTE,distribuidora,sur,Cusco,"Cusco, Apurímac y Madre de Dios; aparece en: eventos COES 2017; eventos COES 2023; SAIDI Osinergmin (código ESE)",alta
+ELECTRO TOCACHE,ELECTRO TOCACHE,distribuidora,centro,San Martín,SAIDI ETO-TOCACHE; Tocache se alimenta desde Tingo María (Centro); aparece en: SAIDI Osinergmin (código ETO),media
+ELECTRO UCAYALI,ELECTRO UCAYALI,distribuidora,centro,Ucayali,Pucallpa; barra Pucallpa - Aguaytía del Área Centro en Osinergmin (2023); aparece en: eventos COES 2017; eventos COES 2023; SAIDI Osinergmin (código EUC),alta
+ELECTROCENTRO,ELECTROCENTRO,distribuidora,centro,Junín,"SAIDI ELC-* en Junín, Huánuco, Pasco, Huancavelica y Ayacucho; aparece en: eventos COES 2017; eventos COES 2023; SAIDI Osinergmin (código ELC)",alta
+ELECTRONOROESTE,ELECTRONOROESTE,distribuidora,norte,Piura,Enosa (Distriluz): Piura y Tumbes; aparece en: SAIDI Osinergmin (código ENO),alta
+ELECTRONOROESTE,ELECTRONOROESTE S.A.,distribuidora,norte,Piura,Enosa (Distriluz): Piura y Tumbes; aparece en: eventos COES 2017; eventos COES 2023,alta
+ELECTRONORTE,ELECTRONORTE,distribuidora,norte,Lambayeque,Distriluz: Lambayeque y parte de Cajamarca; aparece en: SAIDI Osinergmin (código ELN),alta
+ELECTRONORTE,ELECTRONORTE S.A.,distribuidora,norte,Lambayeque,Distriluz: Lambayeque y parte de Cajamarca; aparece en: eventos COES 2017; eventos COES 2023,alta
+ELECTROPERU,ELECTROPERU,generadora,centro,Huancavelica,C.H. Mantaro y Restitución; también la C.T. Tumbes (Norte); aparece en: eventos COES 2017; eventos COES 2023,alta
+ELECTROSUR,ELECTROSUR,distribuidora,sur,Tacna,Tacna y Moquegua; aparece en: SAIDI Osinergmin (código ELS),alta
+ELECTROSUR,ELECTROSUR S.A.,distribuidora,sur,Tacna,Tacna y Moquegua; aparece en: eventos COES 2017,alta
+EMPRESA ADMINISTRADORA CERRO,ADMINISTRADORA CERRO,usuario_libre,centro,Pasco,Cerro de Pasco; aparece en: DEMANDA_UL 2023 (bloque centro),media
+EMPRESA ADMINISTRADORA CERRO,EMPRESA ADMINISTRADORA CERRO S.A.C.,usuario_libre,centro,Pasco,Cerro de Pasco; conflicto: DEMANDA_UL 2026 la agrupa en sur; se asigna por ubicación y por los años en que el bloque es coherente; aparece en: eventos COES 2023; DEMANDA_UL 2026 (bloque sur),media
+EMPRESA CONCESIONARIA ENERGIA LIMPIA,EMPRESA CONCESIONARIA ENERGIA LIMPIA SAC,generadora,centro,Lima,C.T. La Gringa V (biogás); aparece en: eventos COES 2017,media
+EMPRESA DE GENERACION ELECTRICA CANCHAYLLO,EMPRESA DE GENERACION ELECTRICA CANCHAYLLO SAC,generadora,centro,Junín,C.H. Canchayllo; aparece en: eventos COES 2017,alta
+EMPRESA DE GENERACION ELECTRICA RIO BANOS,EMPRESA DE GENERACION ELECTRICA RIO BAÑOS S.A.C.,generadora,centro,Lima,C.H. Rucuy; aparece en: eventos COES 2017; eventos COES 2023,media
+EMPRESA DE GENERACION ELECTRICA SANTA ANA,EMPRESA DE GENERACION ELECTRICA SANTA ANA S.A.C.,generadora,centro,Junín,C.H. Renovandes H1 (Chanchamayo); aparece en: eventos COES 2023,media
+EMPRESA DE GENERACION HUALLAGA,EMPRESA DE GENERACION HUALLAGA,generadora,centro,Huánuco,C.H. Chaglla; aparece en: eventos COES 2017; eventos COES 2023,alta
+EMPRESA DE GENERACION HUANZA,EMPRESA DE GENERACION HUANZA,generadora,centro,Lima,C.H. Huanza; aparece en: eventos COES 2017; eventos COES 2023,alta
+EMPRESA ELECTRICA AGUA AZUL,EMPRESA ELECTRICA AGUA AZUL,generadora,norte,Cajamarca,C.H. Potrero; aparece en: eventos COES 2017; eventos COES 2023,media
+EMPRESA ELECTRICA RIO DOBLE,EMPRESA ELECTRICA RIO DOBLE,generadora,norte,Cajamarca,C.H. Las Pizarras; aparece en: eventos COES 2017; eventos COES 2023,media
+EMSEMSA,EMSEMSA,distribuidora,centro,Lima,SAIDI EMP-PARAMONGA; aparece en: SAIDI Osinergmin (código EMP),alta
+EMSEU,EMPRESA MUNICIPAL DE SERVICIOS ELECTRICOS UTCUBAMBA S.A.C.,distribuidora,norte,Amazonas,SAIDI EMU-UTCUBAMBA (Bagua Grande); aparece en: SAIDI Osinergmin (código EMU),media
+ENEL GENERACION PERU,ENEL GENERACION PERU S.A.A.,generadora,centro,Lima,"centrales de Lima (Huinco, Matucana, Callahuanca, Moyopampa, Huampaní, Ventanilla, Santa Rosa); también Wayra (Ica) y Rubí/Clemesi (Moquegua); aparece en: eventos COES 2017; eventos COES 2023; TEMP_AMB del IEOD",alta
+ENEL GENERACION PIURA,ENEL GENERACION PIURA S.A.,generadora,norte,Piura,C.T. Malacas (Talara); aparece en: eventos COES 2017; eventos COES 2023; TEMP_AMB del IEOD,alta
+ENEL GREEN POWER PERU,ENEL GREEN POWER PERU S.A.,generadora,centro,Ica,"C.E. Wayra (Ica) y C.S. Rubí/Clemesi (Moquegua, Sur); en 2023 las pasa a Enel Generación Perú; aparece en: eventos COES 2017",media
+ENEL GREEN POWER PERU,ENEL GREEN POWER PERU S.A.C,generadora,centro,Ica,"C.E. Wayra (Ica) y C.S. Rubí/Clemesi (Moquegua, Sur); en 2023 las pasa a Enel Generación Perú; aparece en: eventos COES 2023",media
+ENERGIA EOLICA,ENERGÍA EÓLICA S.A.,generadora,norte,La Libertad,C.E. Cupisnique (Pacasmayo) y Talara; aparece en: eventos COES 2017,alta
+ENERGIA RENOVABLE DEL SUR,ENERGIA RENOVABLE DEL SUR S.A.,generadora,centro,Ica,C.E. San Juan y S.E. Ersur (línea Marcona - Ersur); aparece en: eventos COES 2023,media
+ENGIE ENERGIA PERU,ENGIE,generadora,centro,Lima,"multiárea: Chilca (Lima), Yuncán (Pasco), Quitaracsa (Áncash) e Ilo (Moquegua); eventos: 41 Centro, 22 Norte, 18 Sur; aparece en: eventos COES 2017; eventos COES 2023; TEMP_AMB del IEOD",media
+ENGIE ENERGIA PERU,ENGIE ENERGIA PERU S.A.A.,generadora,centro,Lima,"multiárea: Chilca (Lima), Yuncán (Pasco), Quitaracsa (Áncash) e Ilo (Moquegua); eventos: 41 Centro, 22 Norte, 18 Sur; aparece en: TEMP_AMB del IEOD",media
+ETENORTE,ETENORTE,transmisora,norte,Áncash,Chimbote 1 - Huallanca y otras líneas del Norte; aparece en: eventos COES 2017,alta
+ETESELVA,ETESELVA,transmisora,centro,Huánuco,Aguaytía - Tingo María - Vizcarra - Paramonga; aparece en: eventos COES 2017,alta
+FENIX POWER PERU,FENIX POWER PERÚ,generadora,centro,Lima,C.T. Fénix (Chilca); aparece en: eventos COES 2017; eventos COES 2023; TEMP_AMB del IEOD,alta
+FUNDICION CHILCA,FUNDICION CHILCA S.A.,usuario_libre,centro,Lima,aparece en: DEMANDA_UL 2026 (bloque centro),alta
+GENERACION ANDINA,GENERACIÓN ANDINA S.A.C.,generadora,centro,Huánuco,C.H. 8 de Agosto y El Carmen; aparece en: eventos COES 2023,media
+GENERADORA DE ENERGIA DEL PERU,GENERADORA DE ENERGÍA DEL PERÚ,generadora,sur,Puno,"C.H. Ángel I, II y III (Carabaya); aparece en: eventos COES 2017; eventos COES 2023",alta
+GM OPERACIONES,GM OPERACIONES S.A.C.,generadora,norte,Piura,CT Refinería Talara (TEMP_AMB 2026); aparece en: TEMP_AMB del IEOD,alta
+HIDRANDINA,HIDRANDINA,distribuidora,norte,La Libertad,"Distriluz: La Libertad, Áncash y Cajamarca; parte de Áncash (Huarmey) se alimenta desde Paramonga (Centro); aparece en: eventos COES 2017; eventos COES 2023; SAIDI Osinergmin (código HID)",alta
+HIDROCANETE,HIDROCAÑETE S.A.,generadora,centro,Lima,C.H. Nueva Imperial (Cañete); aparece en: eventos COES 2017; eventos COES 2023,alta
+HIDROELECTRICA HUANCHOR,HIDROELECTRICA HUANCHOR S.A.C.,generadora,centro,Lima,C.H. Huanchor (Huarochirí); aparece en: eventos COES 2023,alta
+HIDROELECTRICA SANTA CRUZ,HIDROELECTRICA SANTA CRUZ,generadora,norte,Áncash,C.H. Santa Cruz I y II (Áncash) y Huasahuasi I y II (Junín) en 2017; aparece en: eventos COES 2017,baja
+HIDROMARANON,HIDROMARAÑON,generadora,centro,Huánuco,C.H. Marañón; aparece en: eventos COES 2017,media
+HIPERMERCADOS TOTTUS,HIPERMERCADOS TOTTUS S.A,usuario_libre,centro,Lima,"tiendas en las tres áreas (DEMANDA_UL 2026); aparece en: DEMANDA_UL 2026 (bloque centro, norte, sur)",media
+HUAURA POWER GROUP,HUAURA POWER GROUP S.A.,generadora,centro,Lima,C.H. Yarucaya (Huaura); aparece en: eventos COES 2017; eventos COES 2023,alta
+HUDBAY PERU,CONSTANCIA,usuario_libre,sur,Cusco,Constancia (Chumbivilcas); aparece en: DEMANDA_UL 2017 (bloque sur),alta
+HUDBAY PERU,HUDBAY PERU,usuario_libre,sur,Cusco,Constancia (Chumbivilcas); aparece en: DEMANDA_UL 2023 (bloque sur),alta
+HUDBAY PERU,HUDBAY PERU S.A.C.,usuario_libre,sur,Cusco,Constancia (Chumbivilcas); aparece en: DEMANDA_UL 2026 (bloque sur),alta
+INDUSTRIA TEXTIL PIURA,INDUSTRIA TEXTIL PIURA,usuario_libre,norte,Piura,aparece en: DEMANDA_UL 2026 (bloque norte),alta
+INDUSTRIA TEXTIL PIURA,INDUSTRIAL PIURA,usuario_libre,norte,Piura,aparece en: DEMANDA_UL 2023 (bloque norte),alta
+INDUSTRIA TEXTIL PIURA,TEXTIL PIURA,usuario_libre,norte,Piura,aparece en: DEMANDA_UL 2017 (bloque norte),alta
+INDUSTRIAS CACHIMAYO,INCASAC,usuario_libre,sur,Cusco,INCASAC se interpreta como Industrias Cachimayo S.A.C.; en 2023 aparece con ese nombre en el mismo bloque Sur; aparece en: DEMANDA_UL 2017 (bloque sur),media
+INDUSTRIAS CACHIMAYO,INDUSTRIA CACHIMAYO,usuario_libre,sur,Cusco,aparece en: DEMANDA_UL 2026 (bloque sur),alta
+INDUSTRIAS CACHIMAYO,INDUSTRIAS CACHIMAYO,usuario_libre,sur,Cusco,aparece en: DEMANDA_UL 2023 (bloque sur),alta
+INFRAESTRUCTURAS Y ENERGIAS DEL PERU,INFRAESTRUCTURAS Y ENERGIAS DEL PERU S.A.C.,generadora,centro,Ucayali,reserva fría de Pucallpa (Centro) y de Puerto Maldonado (Sur); aparece en: eventos COES 2017,baja
+INLAND ENERGY,INLAND ENERGY SAC,generadora,sur,Cusco,C.H. Santa Teresa; aparece en: eventos COES 2023,alta
+INMUEBLES PANAMERICANA,INMUEBLES PANAMERICANA S.A.,usuario_libre,centro,Lima,centros comerciales; aparece en: DEMANDA_UL 2026 (bloque centro),media
+ISA PERU,ISA PERU,transmisora,sein,,eventos en Centro y Norte; aparece en: eventos COES 2017; eventos COES 2023,alta
+JOCKEY PLAZA,ADMINISTRADORA JOCKEY PLAZA SHOPPING CENTER S.A.,usuario_libre,centro,Lima,centro comercial; aparece en: DEMANDA_UL 2026 (bloque centro),alta
+JOCKEY PLAZA,JOCKEY PLAZA,usuario_libre,centro,Lima,centro comercial; aparece en: DEMANDA_UL 2017 (bloque centro); DEMANDA_UL 2023 (bloque centro),alta
+KALLPA GENERACION,KALLPA GENERACION,generadora,centro,Lima,Kallpa y Las Flores (Chilca); Cerro del Águila (Huancavelica); aparece en: eventos COES 2017,alta
+KALLPA GENERACION,KALLPA GENERACION S.A.,generadora,centro,Lima,Kallpa y Las Flores (Chilca); Cerro del Águila (Huancavelica); aparece en: eventos COES 2017; eventos COES 2023; TEMP_AMB del IEOD,alta
+KIMBERLY-CLARK PERU,KIMBERLY CLARK PERU,usuario_libre,centro,Lima,aparece en: DEMANDA_UL 2023 (bloque centro),alta
+KIMBERLY-CLARK PERU,KIMBERLY-CLARK PERU,usuario_libre,centro,Lima,aparece en: DEMANDA_UL 2026 (bloque centro),alta
+LA VIRGEN,LA VIRGEN,generadora,centro,Junín,C.H. La Virgen (Chanchamayo); aparece en: eventos COES 2023,media
+LECHE GLORIA,GLORIA,usuario_libre,centro,Lima,aparece en: DEMANDA_UL 2017 (bloque centro),alta
+LECHE GLORIA,LECHE GLORIA,usuario_libre,centro,Lima,aparece en: DEMANDA_UL 2023 (bloque centro),alta
+LECHE GLORIA,LECHE GLORIA S.A.,usuario_libre,centro,Lima,aparece en: DEMANDA_UL 2026 (bloque centro),alta
+LOS QUENUALES,EMPRESA MINERA LOS QUENUALES S.A.C.,usuario_libre,centro,Lima,Yauliyacu (Huarochirí) e Iscaycruz (Oyón); conflicto: DEMANDA_UL 2026 la agrupa en sur; se asigna por ubicación y por los años en que el bloque es coherente; aparece en: DEMANDA_UL 2026 (bloque sur),media
+LOS QUENUALES,LOS QUENUALES,usuario_libre,centro,Lima,Yauliyacu (Huarochirí) e Iscaycruz (Oyón); aparece en: DEMANDA_UL 2023 (bloque centro),media
+LUZ DEL SUR,LUZ DEL SUR,distribuidora,centro,Lima,"concesión de distribución en Lima Sur; SAIDI LDS-LIMA SUR, CAÑETE, LUNAHUANA; también opera la C.H. Santa Teresa (Cusco); aparece en: eventos COES 2017; eventos COES 2023; SAIDI Osinergmin (código LDS)",alta
+MAJA ENERGIA,MAJA ENERGIA S.A.C.,generadora,centro,Lima,C.H. Roncador (autorizada por la DREM de Lima); aparece en: eventos COES 2023,media
+MALL AVENTURA,MALL AVENTURA S.A.,usuario_libre,centro,Lima,"centros comerciales en Centro y Sur (DEMANDA_UL 2026); aparece en: DEMANDA_UL 2026 (bloque centro, sur)",media
+MARCOBRE,MARCOBRE,usuario_libre,centro,Ica,Mina Justa (Marcona); aparece en: DEMANDA_UL 2023 (bloque centro),alta
+MARCOBRE,MARCOBRE S.A.C.,usuario_libre,centro,Ica,Mina Justa (Marcona); aparece en: eventos COES 2023; DEMANDA_UL 2026 (bloque centro),alta
+MEPSA,MEPSA,usuario_libre,centro,Lima,Metalúrgica Peruana; aparece en: DEMANDA_UL 2017 (bloque centro); DEMANDA_UL 2023 (bloque centro),alta
+MINERA ALPAYANA,MINERA ALPAYANA,usuario_libre,centro,Lima,Huarochirí; aparece en: DEMANDA_UL 2023 (bloque centro),alta
+MINERA ARES,ARES-CALLALLI,usuario_libre,sur,Arequipa,carga de Ares en Callalli (Caylloma); aparece en: DEMANDA_UL 2017 (bloque sur); DEMANDA_UL 2023 (bloque sur),alta
+MINERA ARES,ARES-COTARUSE,usuario_libre,sur,Apurímac,carga de Ares en Cotaruse; aparece en: DEMANDA_UL 2017 (bloque sur); DEMANDA_UL 2023 (bloque sur),alta
+MINERA ARES,MINERA ARES,usuario_libre,sur,Arequipa,"Hochschild: Arcata/Ares (Arequipa); DEMANDA_UL 2026 también la lista en Centro (minas de Ayacucho); aparece en: eventos COES 2017; eventos COES 2023; DEMANDA_UL 2026 (bloque centro, sur)",media
+MINERA BATEAS,MINERA BATEAS S.A.C.,usuario_libre,sur,Arequipa,Caylloma; aparece en: eventos COES 2017,alta
+MINERA BUENAVENTURA,BUENAVENTURA (ARES),usuario_libre,sur,Arequipa,carga de Buenaventura en la S.E. Ares (Orcopampa); aparece en: DEMANDA_UL 2017 (bloque sur),alta
+MINERA BUENAVENTURA,BUENAVENTURA (UCHUCHACUA),usuario_libre,centro,Lima,Uchucchacua (Oyón); aparece en: DEMANDA_UL 2017 (bloque centro),alta
+MINERA BUENAVENTURA,MINERA BUENAVENTURA,usuario_libre,centro,Lima,"multiárea: Uchucchacua (Lima) y Julcani (Huancavelica) en Centro; Orcopampa y Tambomayo (Arequipa) en Sur; aparece en: eventos COES 2023; DEMANDA_UL 2026 (bloque centro, sur)",baja
+MINERA BUENAVENTURA,MINERA BUENAVENTURA (UCHUCHACUA+HUANCAVELICA),usuario_libre,centro,Lima,Uchucchacua (Oyón) y Julcani (Huancavelica); aparece en: DEMANDA_UL 2023 (bloque centro),alta
+MINERA BUENAVENTURA,MINERA BUENAVENTURA - ARES,usuario_libre,sur,Arequipa,carga de Buenaventura en la S.E. Ares (Orcopampa); aparece en: DEMANDA_UL 2023 (bloque sur),alta
+MINERA BUENAVENTURA,MINERA BUENAVENTURA - TAMBOMAYO,usuario_libre,sur,Arequipa,Tambomayo (Caylloma); aparece en: DEMANDA_UL 2023 (bloque sur),alta
+MINERA CERRO VERDE,CERRO VERDE (AMPLIACIÓN),usuario_libre,sur,Arequipa,aparece en: DEMANDA_UL 2023 (bloque sur),alta
+MINERA CERRO VERDE,CERRO VERDE (HIDROMETALÚRGICA),usuario_libre,sur,Arequipa,aparece en: DEMANDA_UL 2023 (bloque sur),alta
+MINERA CERRO VERDE,CERRO VERDE - SULFUROS,usuario_libre,sur,Arequipa,aparece en: DEMANDA_UL 2017 (bloque sur); DEMANDA_UL 2023 (bloque sur),alta
+MINERA CERRO VERDE,CERRO VERDE AMPLIACION,usuario_libre,sur,Arequipa,aparece en: DEMANDA_UL 2017 (bloque sur),alta
+MINERA CERRO VERDE,CERRO VERDE HIDROMETALÚRGICA,usuario_libre,sur,Arequipa,aparece en: DEMANDA_UL 2017 (bloque sur),alta
+MINERA CERRO VERDE,MINERA CERRO VERDE,usuario_libre,sur,Arequipa,aparece en: eventos COES 2017; eventos COES 2023; DEMANDA_UL 2026 (bloque sur),alta
+MINERA CHINALCO PERU,CHINALCO,usuario_libre,centro,Junín,Toromocho; aparece en: DEMANDA_UL 2017 (bloque centro); DEMANDA_UL 2023 (bloque centro),alta
+MINERA CHINALCO PERU,MINERA CHINALCO PERÚ S.A.,usuario_libre,centro,Junín,Toromocho; aparece en: eventos COES 2023; DEMANDA_UL 2026 (bloque centro),alta
+MINERA CORONA,MINERA CORONA,usuario_libre,centro,Lima,Yauricocha (Yauyos); aparece en: DEMANDA_UL 2026 (bloque sur); DEMANDA_UL 2023 (bloque centro),media
+MINERA GOLD FIELDS,GOLD FIELD,usuario_libre,norte,Cajamarca,Cerro Corona; aparece en: DEMANDA_UL 2017 (bloque norte); DEMANDA_UL 2023 (bloque norte),alta
+MINERA GOLD FIELDS,MINERA GOLD FIELDS,usuario_libre,norte,Cajamarca,Cerro Corona; aparece en: eventos COES 2017; DEMANDA_UL 2026 (bloque norte),alta
+MINERA LAS BAMBAS,LAS BAMBAS,usuario_libre,sur,Apurímac,aparece en: DEMANDA_UL 2017 (bloque sur),alta
+MINERA LAS BAMBAS,LAS_BAMBAS,usuario_libre,sur,Apurímac,aparece en: DEMANDA_UL 2023 (bloque sur),alta
+MINERA LAS BAMBAS,MINERA LAS BAMBAS S.A.,usuario_libre,sur,Apurímac,aparece en: eventos COES 2023; DEMANDA_UL 2026 (bloque sur),alta
+MINERA MARSA,MARSA,usuario_libre,norte,La Libertad,Pataz; aparece en: DEMANDA_UL 2017 (bloque norte); DEMANDA_UL 2023 (bloque norte),alta
+MINERA MARSA,MINERA MARSA,usuario_libre,norte,La Libertad,Pataz; aparece en: DEMANDA_UL 2026 (bloque norte),alta
+MINERA MISKY MAYO,MINERA MISKY MAYO,usuario_libre,norte,Piura,Bayóvar; aparece en: DEMANDA_UL 2026 (bloque norte),alta
+MINERA MISKY MAYO,MISKIMAYO,usuario_libre,norte,Piura,Bayóvar; aparece en: DEMANDA_UL 2017 (bloque norte),alta
+MINERA MISKY MAYO,MISKIMAYO-BAYOBAR,usuario_libre,norte,Piura,Bayóvar; aparece en: DEMANDA_UL 2023 (bloque norte),alta
+MINERA SHOUXIN PERU,MINERA SHOUXIN,usuario_libre,centro,Ica,Marcona; aparece en: DEMANDA_UL 2023 (bloque centro),alta
+MINERA SHOUXIN PERU,MINERA SHOUXIN PERU S.A.,usuario_libre,centro,Ica,Marcona; aparece en: DEMANDA_UL 2026 (bloque centro),alta
+MINERA VOLCAN,MINERA VOLCAN,usuario_libre,centro,Junín,"minas de Yauli (Junín) y Pasco; aparece en: eventos COES 2017; eventos COES 2023; DEMANDA_UL 2026 (bloque centro, sur); DEMANDA_UL 2023 (bloque centro)",alta
+MINERA YANACOCHA,MINERA YANACOCHA,usuario_libre,norte,Cajamarca,aparece en: DEMANDA_UL 2026 (bloque norte),alta
+MINERA YANACOCHA,YANACOCHA,usuario_libre,norte,Cajamarca,aparece en: DEMANDA_UL 2017 (bloque norte); DEMANDA_UL 2023 (bloque norte),alta
+MINSUR,MINSUR,usuario_libre,sur,Puno,"San Rafael (Puno) y Pucamarca (Tacna); DEMANDA_UL 2023 y 2026 también la listan en Centro (fundición de Pisco); aparece en: eventos COES 2017; DEMANDA_UL 2026 (bloque centro, sur); DEMANDA_UL 2023 (bloque centro)",media
+MINSUR,MINSUR - PUCAMARCA,usuario_libre,sur,Tacna,Pucamarca; aparece en: DEMANDA_UL 2023 (bloque sur),alta
+MINSUR,MINSUR - SAN RAFAEL,usuario_libre,sur,Puno,San Rafael (Melgar); aparece en: DEMANDA_UL 2017 (bloque sur); DEMANDA_UL 2023 (bloque sur),alta
+MOLYCOP ADESUR,MOLYCOP-ADESUR,usuario_libre,sur,Arequipa,"DEMANDA_UL 2026 la lista en Centro y Sur; aparece en: DEMANDA_UL 2026 (bloque centro, sur)",media
+NEXA RESOURCES CAJAMARQUILLA,NEXA RESOURCES CAJAMARQUILLA S.A.,usuario_libre,centro,Lima,refinería de zinc de Cajamarquilla (antes Votorantim Metais); aparece en: eventos COES 2023; DEMANDA_UL 2026 (bloque centro),alta
+NEXA RESOURCES CAJAMARQUILLA,REFINERIA ZINC CAJAMARQUILLA,usuario_libre,centro,Lima,refinería de zinc de Cajamarquilla (antes Votorantim Metais); aparece en: eventos COES 2017,alta
+NEXA RESOURCES CAJAMARQUILLA,VOTORANTIM METAIS CAJAMARQUILLA,usuario_libre,centro,Lima,refinería de zinc de Cajamarquilla (antes Votorantim Metais); aparece en: DEMANDA_UL 2017 (bloque centro); DEMANDA_UL 2023 (bloque centro),alta
+NEXA RESOURCES PERU,MILPO-DESIERTO,usuario_libre,centro,Ica,"Cerro Lindo, alimentada desde la S.E. Desierto (Chincha); aparece en: DEMANDA_UL 2017 (bloque centro)",alta
+NEXA RESOURCES PERU,MILPO-PASCO,usuario_libre,centro,Pasco,antes Milpo: El Porvenir y Atacocha (Pasco) y Cerro Lindo (Ica); aparece en: DEMANDA_UL 2017 (bloque centro),alta
+NEXA RESOURCES PERU,MINERA MILPO,usuario_libre,centro,Pasco,Milpo es la razón social anterior de Nexa; evento en la línea Paragsha II - Milpo; aparece en: eventos COES 2017,alta
+NEXA RESOURCES PERU,NEXA RESOURCES - DESIERTO,usuario_libre,centro,Ica,"Cerro Lindo, alimentada desde la S.E. Desierto (Chincha); aparece en: DEMANDA_UL 2023 (bloque centro)",alta
+NEXA RESOURCES PERU,NEXA RESOURCES - PASCO,usuario_libre,centro,Pasco,antes Milpo: El Porvenir y Atacocha (Pasco) y Cerro Lindo (Ica); aparece en: DEMANDA_UL 2023 (bloque centro),alta
+NEXA RESOURCES PERU,NEXA RESOURCES PERÚ S.A.A.,usuario_libre,centro,Pasco,"antes Milpo: El Porvenir y Atacocha (Pasco) y Cerro Lindo (Ica); aparece en: eventos COES 2023; DEMANDA_UL 2026 (bloque centro, sur)",media
+OPEN PLAZA,OPEN PLAZA,usuario_libre,centro,Lima,"centros comerciales en Norte y Centro (DEMANDA_UL 2026); aparece en: DEMANDA_UL 2026 (bloque centro, norte)",media
+OPP FILM,OPP FILM,usuario_libre,centro,Lima,aparece en: DEMANDA_UL 2026 (bloque centro); DEMANDA_UL 2023 (bloque centro),alta
+OPP FILM,OPPFILM,usuario_libre,centro,Lima,aparece en: DEMANDA_UL 2017 (bloque centro),alta
+ORAZUL ENERGY PERU,EGENOR,generadora,norte,Áncash,Egenor es la razón social anterior (Duke Energy Egenor); aparece en: eventos COES 2017,alta
+ORAZUL ENERGY PERU,ORAZUL ENERGY,generadora,norte,Áncash,"ex Duke Energy Egenor: C.H. Cañón del Pato (Áncash), Carhuaquero y Caña Brava (Cajamarca); aparece en: eventos COES 2017",alta
+ORAZUL ENERGY PERU,ORAZUL ENERGY PERÚ,generadora,norte,Áncash,"ex Duke Energy Egenor: C.H. Cañón del Pato (Áncash), Carhuaquero y Caña Brava (Cajamarca); aparece en: eventos COES 2017; eventos COES 2023",alta
+OWENS-ILLINOIS PERU,OWENS-ILLINOIS PERÚ S.A.,usuario_libre,centro,Lima,aparece en: DEMANDA_UL 2026 (bloque centro),alta
+OXIDOS DE PASCO,OXIDOS DE PASCO S.A.C.,usuario_libre,centro,Pasco,S.E. Françoise (Pasco); conflicto: DEMANDA_UL 2026 la agrupa en sur; se asigna por ubicación y por los años en que el bloque es coherente; aparece en: eventos COES 2017; DEMANDA_UL 2026 (bloque sur),media
+OXIDOS DE PASCO,OXIDOS PASCO,usuario_libre,centro,Pasco,S.E. Françoise (Pasco); aparece en: DEMANDA_UL 2023 (bloque centro),media
+PANAMERICANA SOLAR,PANAMERICANA SOLAR SAC.,generadora,sur,Moquegua,C.S. Panamericana Solar (Ilo); aparece en: eventos COES 2017; eventos COES 2023,alta
+PAPELERA NACIONAL,PANASA,usuario_libre,centro,Lima,PANASA es la sigla de Papelera Nacional S.A.; aparece en: DEMANDA_UL 2017 (bloque centro); DEMANDA_UL 2023 (bloque centro),media
+PAPELERA NACIONAL,PAPELERA NACIONAL S.A.,usuario_libre,centro,Lima,PANASA es la sigla de Papelera Nacional S.A.; aparece en: DEMANDA_UL 2026 (bloque centro),media
+PARQUE EOLICO MARCONA,PARQUE EOLICO MARCONA S.A.C.,generadora,centro,Ica,C.E. Marcona; aparece en: eventos COES 2023,alta
+PARQUE EOLICO MARCONA,PARQUE EOLICO MARCONA S.R.L.,generadora,centro,Ica,C.E. Marcona; aparece en: eventos COES 2017,alta
+PARQUE EOLICO TRES HERMANAS,PARQUE EOLICO TRES HERMANAS S.A.C.,generadora,centro,Ica,C.E. Tres Hermanas (Marcona); aparece en: eventos COES 2023,alta
+PERUANA DE INVERSIONES EN ENERGIAS RENOVABLES,PERUANA DE INVERSIONES EN ENERGIAS RENOVABLES S.A.,generadora,norte,Áncash,C.H. Manta (ProActivo: ubicada en Áncash); aparece en: eventos COES 2023,media
+PESQUERA DIAMANTE,PESQUERA DIAMANTE,usuario_libre,centro,Lima,"plantas pesqueras en las tres áreas (DEMANDA_UL 2026); aparece en: DEMANDA_UL 2026 (bloque centro, norte, sur)",baja
+PETRAMAS,PETRAMAS,generadora,centro,Lima,"C.T. Huaycoloro, Callao y La Gringa V (biogás); aparece en: eventos COES 2017; eventos COES 2023",alta
+PETROPERU,PETROPERU,usuario_libre,norte,Piura,refinería de Talara (S.E. GE1); aparece en: DEMANDA_UL 2026 (bloque norte),alta
+PETROPERU,PETROPERU CL-6768 SE GE1,usuario_libre,norte,Piura,refinería de Talara (S.E. GE1); aparece en: DEMANDA_UL 2023 (bloque norte),alta
+PETROPERU,PETROPERU CL-6769 SE GE1,usuario_libre,norte,Piura,refinería de Talara (S.E. GE1); aparece en: DEMANDA_UL 2023 (bloque norte),alta
+PLANTA DE RESERVA FRIA DE GENERACION DE ETEN,PLANTA DE RESERVA FRIA DE GENERACION DE ETEN S.A.,generadora,norte,Lambayeque,C.T. Reserva Fría de Eten; aparece en: eventos COES 2017,alta
+PLUZ ENERGIA PERU,EDELNOR,distribuidora,centro,Lima,"Lima Norte; Edelnor, Enel Distribución Perú y Pluz Energía Perú son la misma concesión (cambios de razón social); aparece en: demanda por barras del COES (inventario del proyecto, docs/peru/energia.md §2.2) (código 14)",alta
+PLUZ ENERGIA PERU,ENEL DISTRIBUCION PERU,distribuidora,centro,Lima,"Lima Norte; Edelnor, Enel Distribución Perú y Pluz Energía Perú son la misma concesión (cambios de razón social); aparece en: eventos COES 2017; eventos COES 2023",alta
+PLUZ ENERGIA PERU,PLUZ,distribuidora,centro,Lima,"Lima Norte; Edelnor, Enel Distribución Perú y Pluz Energía Perú son la misma concesión (cambios de razón social); aparece en: demanda por barras del COES (inventario del proyecto, docs/peru/energia.md §2.2) (código 15264)",alta
+PLUZ ENERGIA PERU,PLUZ ENERGIA PERU S.A.A..,distribuidora,centro,Lima,"Lima Norte; Edelnor, Enel Distribución Perú y Pluz Energía Perú son la misma concesión (cambios de razón social); aparece en: SAIDI Osinergmin (código EDN)",alta
+PROYECTO ESPECIAL CHAVIMOCHIC,PROYECTO ESPECIAL CHAVIMOCHIC,distribuidora,norte,La Libertad,SAIDI CHA-CHAO y CHA-TANGUCHE; aparece en: SAIDI Osinergmin (código CHA),alta
+PUERTO MALDONADO TRANSMISORA DE ENERGIA,PUERTO MALDONADO TRANSMISORA DE ENERGIA S.A.C.,transmisora,sein,,"concesión hacia Puerto Maldonado (Sur) y eventos 2023 en S.E. Valle del Chira (Piura, Norte); aparece en: eventos COES 2023",baja
+QUIMPAC,QUIMPAC - OQUENDO,usuario_libre,centro,Callao,plantas de Oquendo (Callao) y Paramonga (Lima); aparece en: DEMANDA_UL 2023 (bloque centro),alta
+QUIMPAC,QUIMPAC - PARAMONGA,usuario_libre,centro,Lima,planta de Paramonga; aparece en: DEMANDA_UL 2023 (bloque centro),alta
+QUIMPAC,QUIMPAC OQUENDO,usuario_libre,centro,Callao,plantas de Oquendo (Callao) y Paramonga (Lima); aparece en: DEMANDA_UL 2017 (bloque centro),alta
+QUIMPAC,QUIMPAC PARAMONGA,usuario_libre,centro,Lima,planta de Paramonga; aparece en: DEMANDA_UL 2017 (bloque centro),alta
+QUIMPAC,QUIMPAC S.A.,usuario_libre,centro,Callao,plantas de Oquendo (Callao) y Paramonga (Lima); aparece en: DEMANDA_UL 2026 (bloque centro),alta
+REAL PLAZA,REAL PLAZA S.R.L.,usuario_libre,centro,Lima,"centros comerciales en las tres áreas (DEMANDA_UL 2026); aparece en: DEMANDA_UL 2026 (bloque centro, norte, sur)",media
+RED DE ENERGIA DEL PERU,RED DE ENERGIA DEL PERU S.A.,transmisora,sein,,"REP: red troncal en las tres áreas (eventos en Norte, Centro y Sur); aparece en: eventos COES 2017; eventos COES 2023",alta
+REDESUR,REDESUR,transmisora,sur,Moquegua,Moquegua - Tacna - Puno; aparece en: eventos COES 2017; eventos COES 2023,alta
+REFINERIA LA PAMPILLA,REFINERIA LA PAMPILLA,usuario_libre,centro,Callao,Ventanilla; aparece en: DEMANDA_UL 2023 (bloque centro),alta
+REFINERIA LA PAMPILLA,REFINERIA LA PAMPILLA S.A.A,usuario_libre,centro,Callao,Ventanilla; aparece en: DEMANDA_UL 2026 (bloque centro),alta
+SAGA FALABELLA,SAGA FALABELLA,usuario_libre,centro,Lima,aparece en: DEMANDA_UL 2026 (bloque centro),alta
+SAMAY I,SAMAY I S.A.,generadora,sur,Arequipa,C.T. Puerto Bravo (Mollendo); aparece en: eventos COES 2017; eventos COES 2023,alta
+SAN GABAN,SAN GABAN,generadora,sur,Puno,C.H. San Gabán II; aparece en: eventos COES 2017; eventos COES 2023,alta
+SAN MIGUEL INDUSTRIAS PET,SAN MIGUEL INDUSTRIAS PET S.A.,usuario_libre,centro,Lima,aparece en: DEMANDA_UL 2026 (bloque centro),alta
+SDE PIURA,SDE PIURA,generadora,norte,Piura,C.T. Tablazo; aparece en: eventos COES 2017,alta
+SDF ENERGIA,SDF ENERGIA,generadora,centro,Callao,C.T. Oquendo (TEMP_AMB 2023); aparece en: TEMP_AMB del IEOD,alta
+SDF ENERGIA,SDF ENERGIA SAC,generadora,centro,Callao,C.T. Oquendo (TEMP_AMB 2023); aparece en: eventos COES 2023,alta
+SEAL,SEAL,distribuidora,sur,Arequipa,Sociedad Eléctrica del Sur Oeste; Caravelí (Bella Unión) se alimenta desde Marcona (Centro); aparece en: eventos COES 2017; eventos COES 2023; SAIDI Osinergmin (código SEA),alta
+SERVICIOS ELECTRICOS RIOJA,SERVICIOS ELECTRICOS RIOJA,distribuidora,norte,San Martín,SAIDI RIO-RIOJA; aparece en: SAIDI Osinergmin (código RIO),media
+SHOUGANG HIERRO PERU,SHOUGANG HIERRO PERU,usuario_libre,centro,Ica,Marcona; aparece en: eventos COES 2017; DEMANDA_UL 2017 (bloque centro); DEMANDA_UL 2026 (bloque centro); DEMANDA_UL 2023 (bloque centro),alta
+SHOUGESA,SHOUGESA,generadora,centro,Ica,Shougang Generación Eléctrica: C.T. San Nicolás (Marcona); aparece en: eventos COES 2017,alta
+SIDER PERU,SIDER PERU,usuario_libre,norte,Áncash,Chimbote; aparece en: DEMANDA_UL 2017 (bloque norte); DEMANDA_UL 2026 (bloque norte); DEMANDA_UL 2023 (bloque norte),alta
+SINERSA,SINERSA,generadora,norte,Piura,"C.H. Poechos I y II (Piura, Norte) y C.H. Chancay (Lima, Centro); eventos: 51 Norte, 9 Centro; aparece en: eventos COES 2017; eventos COES 2023",media
+SOFTYS PERU,SOFTYS,usuario_libre,centro,Lima,aparece en: DEMANDA_UL 2023 (bloque centro),alta
+SOFTYS PERU,SOFTYS PERU S.A.C.,usuario_libre,centro,Lima,aparece en: DEMANDA_UL 2026 (bloque centro),alta
+SOUTHERN PERU,SOUTHERN PERU CC,usuario_libre,sur,Moquegua,"Cuajone (Moquegua), Toquepala (Tacna) y la refinería de Ilo; aparece en: eventos COES 2017; eventos COES 2023; DEMANDA_UL 2026 (bloque sur)",alta
+SOUTHERN PERU,SPCC,usuario_libre,sur,Moquegua,"Cuajone (Moquegua), Toquepala (Tacna) y la refinería de Ilo; aparece en: DEMANDA_UL 2017 (bloque sur); DEMANDA_UL 2023 (bloque sur)",alta
+STATKRAFT PERU,STATKRAFT S.A,generadora,centro,Junín,"multiárea: ex Electroandes (Junín, Pasco), Cheves y Cahua (Lima), Pariac y Gallito Ciego (Norte) y centrales de Arequipa (Sur); eventos: 200 Centro, 76 Sur, 56 Norte; aparece en: eventos COES 2017; eventos COES 2023",media
+SUPERMERCADOS PERUANOS,SUPERMERCADOS PERUANOS S.A.,usuario_libre,centro,Lima,"tiendas en las tres áreas (DEMANDA_UL 2026); aparece en: DEMANDA_UL 2026 (bloque centro, norte, sur)",media
+TEJIDOS SAN JACINTO,TEJIDOS SAN JACINTO,usuario_libre,centro,Lima,aparece en: DEMANDA_UL 2026 (bloque centro); DEMANDA_UL 2023 (bloque centro),alta
+TERMOCHILCA,TERMOCHILCA,generadora,centro,Lima,C.T. Santo Domingo de los Olleros (Chilca); aparece en: eventos COES 2017; eventos COES 2023; TEMP_AMB del IEOD,alta
+TERMOCHILCA,TERMOCHILCA S.A.C.,generadora,centro,Lima,C.T. Santo Domingo de los Olleros (Chilca); aparece en: TEMP_AMB del IEOD,alta
+TERMOSELVA,TERMOSELVA,generadora,centro,Ucayali,C.T. Aguaytía; aparece en: eventos COES 2017; eventos COES 2023; TEMP_AMB del IEOD,alta
+TERNA PERU,TERNA PERU S.A.C.,transmisora,centro,Ucayali,Aguaytía - Pucallpa; aparece en: eventos COES 2023,media
+TRANSMISORA ELECTRICA DEL SUR,TRANSMISORA ELECTRICA DEL SUR S.A.C,transmisora,sur,Cusco,Tesur: Tintaya Nueva - Socabaya; aparece en: eventos COES 2017; eventos COES 2023,alta
+TRANSMISORA ELECTRICA DEL SUR 2,TRANSMISORA ELECTRICA DEL SUR 2 S.A.C.,transmisora,sur,Puno,Tesur 2: Pumiri - San Román; aparece en: eventos COES 2023,media
+TRANSMISORA ELECTRICA DEL SUR 4,TRANSMISORA ELECTRICA DEL SUR 4 S.A.C. - TESUR 4,transmisora,sur,Puno,Tesur 4: Tintaya Nueva - Pumiri; aparece en: eventos COES 2023,media
+TREN URBANO DE LIMA,TREN URBANO DE LIMA S.A.,usuario_libre,centro,Lima,Línea 1 del Metro de Lima; aparece en: DEMANDA_UL 2026 (bloque centro),alta
+TRUPAL,TRUPAL,usuario_libre,norte,La Libertad,papelera de Trujillo; la planta de Zárate (Lima) va en Centro; aparece en: DEMANDA_UL 2023 (bloque norte),media
+TRUPAL,TRUPAL - ZARATE,usuario_libre,centro,Lima,planta de Zárate (Lima); aparece en: DEMANDA_UL 2023 (bloque centro),alta
+TRUPAL,TRUPAL S.A.,usuario_libre,norte,La Libertad,"papelera de Trujillo; la planta de Zárate (Lima) va en Centro; aparece en: DEMANDA_UL 2026 (bloque centro, norte)",media
+UNACEM,UNACEM PERU S.A.,usuario_libre,centro,Lima,"Atocongo (Lima) y Condorcocha (Junín); DEMANDA_UL 2026 también la lista en Sur; aparece en: DEMANDA_UL 2026 (bloque centro, sur)",media
+UNACEM,UNACEM-ANDINO,usuario_libre,centro,Junín,planta Condorcocha (Tarma); aparece en: DEMANDA_UL 2017 (bloque centro); DEMANDA_UL 2023 (bloque centro),alta
+UNACEM,UNACEM-LIMA,usuario_libre,centro,Lima,planta Atocongo; aparece en: DEMANDA_UL 2017 (bloque centro); DEMANDA_UL 2023 (bloque centro),alta
+UNACEM,UNION ANDINA DE CEMENTO,usuario_libre,centro,Junín,razón social anterior; eventos en la línea Caripa - Condorcocha; aparece en: eventos COES 2017,media
+YURA,CEMENTOS YURA,usuario_libre,sur,Arequipa,Cementos Yura; aparece en: DEMANDA_UL 2017 (bloque sur); DEMANDA_UL 2023 (bloque sur),alta
+YURA,YURA,usuario_libre,sur,Arequipa,Cementos Yura; aparece en: DEMANDA_UL 2026 (bloque sur),alta
