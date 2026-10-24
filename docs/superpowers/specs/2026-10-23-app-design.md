@@ -88,14 +88,19 @@ Una app propia, usable desde el celular, que **ejecuta el modelo** y responde tr
 
 ## 6. API (contrato)
 
+JSON en español y snake_case; fechas ISO 8601 en hora de Lima, sin zona (`"2026-02-26T15:00"`).
+
 | Método y ruta | Entrada | Salida |
 |---|---|---|
-| `GET /health` | — | Estado, versión del modelo, fecha de corte de los datos |
-| `GET /areas` | — | Áreas, colores, GeoJSON aproximado y régimen de El Niño vigente |
-| `POST /pronostico` | `area`, `fecha` (día), `horizonte` (2 o 48), `variante` (`M0` o `M3`) | Por cada periodo de 30 min del día: real, pronóstico, mejor referencia, indicador de hueco o dato estimado, y el error del día frente a la referencia |
-| `POST /escenario` | Lo de `/pronostico` con `horizonte = 48`, más `delta_temp` (°C), `nino` (`observado` o `neutro`) y `falla` (bool) | La curva del escenario, la base y la diferencia en la hora de mayor demanda |
-| `POST /sensibilidad` | `area`, `fecha_hora`, `horizonte = 2` y la variable | La curva de dependencia parcial con su banda |
-| `GET /diagnostico/{area}` | — | MAE por régimen, ablación, adaptación, importancias y una muestra de real contra predicho y residuos |
+| `GET /salud` | — | Estado, modelo y versión de los datos |
+| `GET /areas` | — | Áreas con su color |
+| `GET /resumen` | — | Fechas de corte, régimen de El Niño vigente (estado, ICEN y mes) y métricas de la prueba por área |
+| `GET /series/{area}` | `fecha`, `horizonte` (`1h` o `24h`), `variante` (`M0` o `M3`) | Los 48 periodos del día: real, pronóstico, mejor referencia, Programación Diaria (24 h, SEIN), hueco y dato preliminar |
+| `POST /pronostico` | `area`, `origen`, `horizonte`, `variante` y `escenario` (`delta_temp_c`, `nino`, `falla`) | El pronóstico con su intervalo, la referencia, el real y una frase con el cambio en la hora de mayor demanda. A 1 h, un escenario distinto del base responde 422, con la explicación |
+| `POST /sensibilidad` | `area`, `origen`, `variable` | La dependencia parcial a 1 h |
+| `GET /diagnostico/{area}` | — | MAE por régimen, ablación con intervalos, adaptación (fijo, semanal, alerta de ENFEN; sin o con exógenas), importancias, real contra predicho y residuos |
+
+Errores: 404 si el área no existe; 422 si la fecha cae fuera de 2025-01-01 a 2026-10-31.
 
 - **El backend carga al arrancar** el modelo final (joblib) y el gold de 2025-2026 (parquet), desde el Drive o desde
   el dataset privado de HF. Calcula las variables con el mismo código del paquete, así que no hay duplicación.

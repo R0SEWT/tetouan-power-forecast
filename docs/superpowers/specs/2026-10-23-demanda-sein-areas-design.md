@@ -96,7 +96,7 @@ tiempo real los datos y los pronósticos de clima y de El Niño de ENFEN, que in
 Dentro:
 
 - **Medallón del COES:**
-  - el IEOD diario de 2015 a 2026, completo en el bronze;
+  - el IEOD diario de 2016 a 2026, completo en el bronze;
   - el SEIN del portal y la Programación Diaria;
   - los eventos relevantes.
 - **Exógenas:** ERA5 horario por área, ICEN, Niño 1+2, feriados, cuarentena y SAIDI por área.
@@ -124,18 +124,21 @@ Detalle y calidad en [`docs/peru/energia.md`](../../peru/energia.md) y [`docs/pe
 |---|---|---|---|---|
 | **COES, IEOD** (anexo diario) | `DEMANDA_AREAS` (SEIN, Norte, Centro, Sur); también `DEMANDA_UL` (usuarios libres), `G_AREAS` (generación por área y recurso), `EVENTOS` (con MW indisponibles e interrupción), `DESV_DEMANDA_PRONOS` y `TEMP_AMB`, cuando existen | 30 min, de oct-2011 a D+1 | Un xlsx por día (1.0-1.3 MB, ~400 MB/año). **El bronze guarda el xlsx completo** en el Drive y registra las hojas de cada archivo | Norte + Centro + Sur = SEIN exacto en el IEOD. Las hojas y los nombres cambian por año: en 2017 no hay `EVENTOS` ni `TEMP_AMB`. Hay variantes de formato (§9) |
 | COES, SEIN del portal | Ejecutado, Programación Diaria y Semanal | 30 min, del 2000 a casi hoy | Un xlsx por año (~0.63 MB) | 2015-2026 sin huecos ni duplicados. Queda **+1-1.5 % sobre el IEOD**: no se mezcla con él. Es el plan B (§12) |
-| COES, eventos relevantes | Fallas: empresa, ubicación, inicio y fin | Por evento; verificado de 2017 a 2026 | Un xlsx por año (~110 KB) | Texto libre. **2015-2016 por verificar:** si no existen, M3 y M4 se entrenan desde 2017 y se dice |
+| COES, eventos relevantes | Fallas: empresa, ubicación, inicio y fin | Por evento; verificado de 2017 a 2026 | Un xlsx por año (~110 KB) | Texto libre. **2016 por verificar.** En 2023 los eventos duran más que en 2017 (mediana de 62 frente a 26 min) y hay registros de meses o años: los de más de 2 días no cuentan como falla en curso |
 | Open-Meteo, ERA5 | Temperatura horaria por ciudad | Horaria, desde 1940; ~5 días de rezago | API, CC BY 4.0 | Completa. La lluvia de ERA5 en Lima no sirve |
 | IGP y ENFEN, ICEN | Régimen de El Niño Costero | Mensual, 1950 a 2026-08; el definitivo del mes m sale entre los días ~10 y 20 de m+2 | TXT de 16 KB | Sin huecos. Cambió de método en dic-2024: se usa una sola versión, fijada en la procedencia |
 | NOAA CPC, Niño 1+2 (OISST) | Temperatura del mar frente al norte | Semanal, de 1981 a hoy; ~9 días de rezago | TXT de 149 KB, dominio público | Sin huecos |
 | Osinergmin, SAIDI y SAIFI | Duración y frecuencia de los cortes por sistema eléctrico | Mensual, de 2004 a 2026-03; ~5 semanas de rezago | datosabiertos.gob.pe, ODC-By | Limpio. **No viene por área:** se agrega con la tabla `empresa → área` |
-| Feriados | Calendario | Diario, 2015-2026 | Paquete `holidays` (PE) para los nacionales; a mano, los no laborables decretados y los regionales relevantes | Los no laborables compensables aplican sobre todo al sector público: su efecto es parcial |
+| Feriados | Calendario | Diario, 2016-2026 | Paquete `holidays` (PE) para los nacionales; a mano, los no laborables decretados y los regionales relevantes | Los no laborables compensables aplican sobre todo al sector público: su efecto es parcial |
 | Tablas de asignación | `empresa → área` y `subestación → departamento → área` | Estáticas | Armadas a mano y revisadas, con su fuente | Las transmisoras (REP, CTM, ISA) cruzan áreas: lo que no se asigne queda como indicador del SEIN |
 
-**Por qué empezar en 2015:**
-- La demanda por área existe desde 2011, pero el pico diario cambió de lugar: en 2015 el 98 % de los días tenía el
-  máximo entre las 18 y las 23 h, y en 2026 solo el 29 %.
-- Empezar en 2015 deja dentro del entrenamiento dos eventos: El Niño Costero de 2017 y el de 2023 con el ciclón Yaku.
+**Por qué empezar en 2016:**
+- La demanda por área existe en el IEOD desde 2011, pero en 2015 el anexo es un `.xls` sin la hoja
+  `DEMANDA_AREAS`. El punto de control (§9) leyó bien de 2016 a 2026: 48 periodos por día y Norte + Centro + Sur =
+  SEIN exacto.
+- El pico diario cambió de lugar: en 2015 el 98 % de los días tenía el máximo entre las 18 y las 23 h, y en 2026
+  solo el 29 %. Empezar en 2016 deja fuera el año más antiguo de esa deriva.
+- Empezar en 2016 deja dentro del entrenamiento dos eventos: El Niño Costero de 2017 y el de 2023 con el ciclón Yaku.
 
 ## 6. Variables y regla de información
 
@@ -162,7 +165,7 @@ anual, antes de la ablación. En Tetuán, con un solo año, funcionó como ident
 |---|---|---|
 | Norte | Piura, Chiclayo y Trujillo | Costeras |
 | Centro | Lima | Electroandes y la minería del Centro no responden al clima de Lima |
-| Sur | Arequipa e Ilo o Tacna | **No** Cusco: está a 3,400 m y no muestra demanda por calor |
+| Sur | Arequipa y Tacna | **No** Cusco: está a 3,400 m y no muestra demanda por calor |
 
 Los departamentos de cada área se confirman con el documento de áreas operativas del COES.
 
@@ -189,7 +192,7 @@ Los departamentos de cada área se confirman con el documento de áreas operativ
 
 | Tramo | Fechas | Para qué |
 |---|---|---|
-| Entrenamiento | ene-2015 a dic-2024 | Ajuste y búsqueda de hiperparámetros. Incluye 2017, la cuarentena de 2020 y 2023 |
+| Entrenamiento | ene-2016 a dic-2024 | Ajuste y búsqueda de hiperparámetros. Incluye 2017, la cuarentena de 2020 y 2023 |
 | Validación | ene-2025 a dic-2025 | Elegir el modelo, las exógenas y la política de reentrenamiento |
 | **Prueba fuera de distribución** | ene-2026 a oct-2026 | El Niño extraordinario. Se toca una sola vez, al final |
 
@@ -246,7 +249,7 @@ Además, origen móvil mensual de 2023 a 2025 para el modelo elegido, M0 frente 
 3. Se reporta el tamaño del efecto de las exógenas y de la política de reentrenamiento, con su intervalo, contra la
    hipótesis escrita en el §1. No hay meta fija de mejora.
 4. Se reporta honestamente dónde falla: por ejemplo, si 2026 obliga a extrapolar la temperatura. En Lima, la máxima
-   de octubre va +4.8 °C, fuera del rango 2015-2024.
+   de octubre va +4.8 °C, fuera del rango 2016-2024.
 
 ## 9. Ingesta del IEOD: lo que ya se sabe del formato
 
@@ -261,8 +264,10 @@ Además, origen móvil mensual de 2023 a 2025 para el modelo elegido, M0 frente 
   - la columna de importación o intercambios internacionales no entra en la suma.
 - **La hoja se lee por su contenido** (`SEIN`, `NORTE`, `CENTRO`, `SUR`), no por su posición.
 - **Las marcas de "datos estimados" o "sin datos"** se propagan al silver como indicador.
-- **Punto de control antes de la descarga masiva:** un anexo por año, de 2015 a 2026, leído con el mismo parser, con
-  SEIN = N + C + S en los doce y una prueba por año en `tests/`.
+- **Punto de control antes de la descarga masiva:** un anexo por año (el 2 de marzo), leído con el mismo lector, con
+  SEIN = N + C + S. **Resultado:** de 2016 a 2026, 48 periodos por día y desvío 0.0 MW. En 2015 el anexo es
+  `Anexos_0203.xls` y no trae `DEMANDA_AREAS`. Desde 2018 hay varios anexos por día (`Anexo1`, `Anexo3_RSF`,
+  `Anexo4_Hop`…) y desde 2025 uno solo (`AnexoA`); el lector busca el que tenga la hoja.
 
 ## 10. Reproducibilidad y estructura
 
@@ -284,7 +289,8 @@ src/<paquete>/
   variables.py, modelos.py,    se generalizan: resolución, horizonte y horas de mayor demanda como parámetros
   evaluacion.py                (hoy fijos en 10 min, 6 pasos y 19-22 h)
 app/                           backend FastAPI y frontend (ver la spec de la app)
-data/tablas/                   empresa → área, subestación → departamento → área y feriados, versionadas con su fuente
+src/<paquete>/tablas/          departamentos, empresas y subestaciones → área, ciudades de ERA5, feriados y cuarentena,
+                               versionadas con su fuente (data/ no se versiona)
 docs/
   negocio.md, datos.md         se reescriben para el caso peruano
   peru/                        la investigación de datos
@@ -317,7 +323,7 @@ aula virtual. Los beads la ubican entre fines de noviembre y la primera semana d
 
 | Fase | Depende de | Entregable | Punto de control | Si falla |
 |---|---|---|---|---|
-| 0a. Rutas e inventario del IEOD | — | Lista de rutas por día de 2015 a 2026 y un anexo por año leído | SEIN = N + C + S en los doce años | Caer al SEIN del portal como serie única; las áreas pasan a ser un extra |
+| 0a. Rutas e inventario del IEOD | — | Un anexo por año leído (hecho: 2016-2026 bien, 2015 sin la hoja) | SEIN = N + C + S en los once años | Caer al SEIN del portal como serie única; las áreas pasan a ser un extra |
 | 0b. Descarga masiva y exógenas | 0a | Bronze completo en el Drive; ERA5, ICEN, Niño 1+2, SAIDI, eventos | Archivos por mes contra el calendario | Usar solo los años completos y declararlo |
 | 0c. Silver y gold | 0b y las tablas | Silver auditado en el Drive y en HF | Auditoría: huecos marcados y SEIN = N + C + S en todos los días | Acortar el origen móvil a los años buenos |
 | 1. Comprensión y preparación | 0c | Notebook 01, con la cuota de usuarios libres por área | — | — |
