@@ -29,8 +29,9 @@ packages = ["src/tetouan_power_forecast"]
 [tool.ruff]
 line-length = 100
 target-version = "py312"
-# Los notebooks vienen de Colab y se revisan a mano; ruff cubre src/ y tests/.
-extend-exclude = ["notebooks"]
+# Los notebooks vienen de Colab y se revisan a mano; ruff cubre src/ y tests/. Los scripts de
+# verificación de los datos del Perú se guardan tal cual corrieron, como evidencia de docs/peru/.
+extend-exclude = ["notebooks", "experimentos/peru/verificacion"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
