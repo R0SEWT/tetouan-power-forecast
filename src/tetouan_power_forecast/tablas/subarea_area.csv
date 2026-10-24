@@ -1,0 +1,8 @@
+subarea,area,departamentos,fuente,confianza
+norte_medio,norte,Áncash;La Libertad,"columna NORTE MEDIO de DEMANDA_AREAS (IEOD 2017 y 2023); el área se deduce del orden de las columnas; sus valores (17-85 MW) sugieren un saldo de flujos, no la demanda completa de esos departamentos",baja
+lima,centro,Lima;Callao,"columna LIMA de DEMANDA_AREAS (IEOD 2017 y 2023)",alta
+electroandes,centro,Junín;Pasco,"columna ELECTROANDES de DEMANDA_AREAS (IEOD 2017, 2023 y 2026); Electroandes es barra del Área Centro en Osinergmin (2023), Tabla 1",alta
+sur_medio,centro,Ica,"columna SUR MEDIO de DEMANDA_AREAS (IEOD 2017 y 2023); no forma parte del Sur porque SUR = SUR ESTE + SUR OESTE exacto; el nombre coincide con Electro Sur Medio (hoy Electro Dunas, Ica); trae valores negativos, así que sería un saldo de flujos",media
+sur_este,sur,Cusco;Puno;Apurímac;Madre de Dios,"columna SUR ESTE de DEMANDA_AREAS (IEOD 2017 y 2023); SUR = SUR ESTE + SUR OESTE exacto; los departamentos se infieren del nombre (Electro Sur Este y Electro Puno)",media
+sur_oeste,sur,Arequipa;Moquegua;Tacna,"columna SUR OESTE de DEMANDA_AREAS (IEOD 2017 y 2023); SUR = SUR ESTE + SUR OESTE exacto; contiene a la subárea Arequipa",media
+arequipa,sur,Arequipa,"columna AREQUIPA de DEMANDA_AREAS (IEOD 2017 y 2023); es un subconjunto de SUR OESTE (no suma aparte)",media
