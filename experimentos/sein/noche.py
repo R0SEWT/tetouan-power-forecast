@@ -6,7 +6,8 @@ Se corre desde un clon del repo, en el kernel del notebook 00_medallon_coes, cua
     %run /content/tpf/experimentos/sein/noche.py
 
 Reinstala el paquete de la rama (el kernel tenía otra versión), baja las exógenas, arma el silver de áreas si
-falta, corre la línea base en la validación de 2025 y deja todo esperando el permiso del Drive para copiarlo. La
+falta, corre la línea base en la validación de 2025, ejecuta el notebook 01 y deja todo esperando el permiso
+del Drive para copiarlo. La
 espera mantiene ocupada la sesión, así Colab no la recicla antes de que alguien acepte el permiso.
 """
 
@@ -37,5 +38,12 @@ exogenas.bronze_eventos()
 exogenas.bronze_era5()
 exogenas.silver_exogenas()
 linea_base.main()
+# El notebook 01 con los datos reales; el ejecutado se copia al Drive con lo demás
+salida = Path(DATOS) / "reportes" / "notebooks"
+salida.mkdir(parents=True, exist_ok=True)
+subprocess.run(["jupyter", "nbconvert", "--to", "notebook", "--execute", "--allow-errors",
+                "--ExecutePreprocessor.timeout=3600", "--output-dir", str(salida),
+                str(Path(__file__).resolve().parents[2] / "notebooks" / "01_sein_datos_preparacion.ipynb")],
+               env={**os.environ, "TETOUAN_DATA": DATOS}, check=False)
 for carpeta in ("coes", "exogenas", "reportes"):
     copiar_al_drive(f"{DATOS}/{carpeta}", carpeta)
