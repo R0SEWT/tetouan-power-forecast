@@ -82,6 +82,8 @@ tiempo real los datos y los pronósticos de clima y de El Niño de ENFEN, que in
 
   Tetuán y Ceuta quedan como **antecedente metodológico**: muestran que el objetivo en razón aguanta niveles que el
   modelo no vio.
+- **El paper es del caso peruano.** Tetuán y Ceuta entran solo como antecedente breve: un párrafo y una tabla contra
+  el estado del arte de Tetuán. El borrador de los dos está en [`docs/paper/antecedente.md`](../../paper/antecedente.md).
 - **App propia,** no Streamlit, aunque la rúbrica lo nombre. Riesgo aceptado en el criterio VI. Igual tiene que
   **ejecutar el modelo** ([spec de la app](2026-10-23-app-design.md)).
 - **Infraestructura:**
