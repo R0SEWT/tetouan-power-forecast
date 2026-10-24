@@ -259,6 +259,18 @@ def fallas_en_curso(fechas, eventos, duracion_max=DURACION_MAX_FALLA):
                      name="fallas_en_curso")
 
 
+def saidi_disponible(fechas, saidi_mensual, dia_publicacion=7):
+    """El último SAIDI mensual publicado en cada fecha: el de m−2 desde el día `dia_publicacion`, el de m−3 antes.
+
+    Osinergmin publica con ~5 semanas de rezago (el corte del 7 de mayo trajo marzo). `saidi_mensual` es una serie
+    con el primer día de cada mes como índice.
+    """
+    fechas = pd.Series(pd.to_datetime(np.asarray(fechas)))
+    rezago = np.where(fechas.dt.day >= dia_publicacion, 2, 3)
+    meses = (fechas.dt.to_period("M") - rezago).dt.to_timestamp()
+    return pd.Series(saidi_mensual.reindex(meses).to_numpy(), index=fechas.index, name="saidi")
+
+
 def silver_exogenas(raiz=None, ciudades=CIUDADES, progreso=print):
     """Las exógenas del bronze como tablas ordenadas en <datos>/exogenas/silver/."""
     bronze = _ruta(raiz, "exogenas/bronze", "x").parent

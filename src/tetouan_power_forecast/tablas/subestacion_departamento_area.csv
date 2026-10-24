@@ -1,0 +1,502 @@
+subestacion,departamento,area,kv,fuente,confianza
+S.E. BELLA UNIÓN,Arequipa,centro,60,Caravelí; radial desde Marcona (línea Marcona - Bella Unión de SEAL); eventos COES 2017/2023 (SEAL),media
+S.E. MOLLEPATA,Ayacucho,centro,220,línea Huancavelica - Mollepata (220 kV) de Transmantaro; eventos COES 2017/2023 (TRANSMANTARO),media
+S.E. PUQUIO,Ayacucho,centro,60,"radial desde Nazca (L-6630, Electro Dunas); eventos COES 2017/2023 (ELECTRO DUNAS)",media
+C.T. CTB CALLAO,Callao,centro,,C.T. Callao (biogás) de Petramas; eventos COES 2017/2023 (PETRAMAS),media
+C.T. OQUENDO,Callao,centro,,localidad homónima; eventos COES 2017/2023 (SDF ENERGIA SAC); hoja TEMP_AMB del IEOD,alta
+C.T. VENTANILLA,Callao,centro,,localidad homónima; eventos COES 2017/2023 (ENEL GENERACION PERU S.A.A.); hoja TEMP_AMB del IEOD,alta
+S.E. VENTANILLA,Callao,centro,220,"localidad homónima; eventos COES 2017/2023 (RED DE ENERGIA DEL PERU S.A., ENEL GENERACION PERU S.A.A.)",alta
+C.H. CERRO DEL AGUILA,Huancavelica,centro,,"localidad homónima; eventos COES 2017/2023 (CERRO DEL AGUILA S.A., KALLPA GENERACION S.A.)",alta
+C.H. MANTARO,Huancavelica,centro,,localidad homónima; eventos COES 2017/2023 (ELECTROPERU),alta
+C.H. MINI CENTRAL CERRO DEL AGUILA,Huancavelica,centro,,localidad homónima; eventos COES 2017/2023 (KALLPA GENERACION S.A.),alta
+C.H. RESTITUCIÓN,Huancavelica,centro,,localidad homónima; eventos COES 2017/2023 (ELECTROPERU),alta
+S.E. CAMPO ARMIÑO,Huancavelica,centro,220,"localidad homónima; eventos COES 2017/2023 (RED DE ENERGIA DEL PERU S.A., TRANSMANTARO)",alta
+S.E. CAUDALOSA,Huancavelica,centro,66,"localidad homónima; eventos COES 2017/2023 (CONENHUA, COMPAÑIA TRANSMISORA SUR ANDINO S.A.C.)",alta
+S.E. CERRO DEL AGUILA,Huancavelica,centro,220,"localidad homónima; eventos COES 2017/2023 (TRANSMANTARO, KALLPA GENERACION S.A.)",alta
+S.E. COBRIZA I,Huancavelica,centro,220,"localidad homónima; eventos COES 2017/2023 (ELECTROCENTRO, STATKRAFT S.A)",alta
+S.E. COBRIZA II,Huancavelica,centro,69,"localidad homónima; eventos COES 2017/2023 (STATKRAFT S.A, ELECTROCENTRO)",alta
+S.E. COLCABAMBA,Huancavelica,centro,500,localidad homónima; eventos COES 2017/2023 (TRANSMANTARO),alta
+S.E. HUANCAVELICA,Huancavelica,centro,220,"localidad homónima; eventos COES 2017/2023 (RED DE ENERGIA DEL PERU S.A., CONENHUA)",alta
+S.E. INGENIO,Huancavelica,centro,66,"localidad homónima; eventos COES 2017/2023 (CONENHUA, COMPAÑIA TRANSMISORA SUR ANDINO S.A.C.)",alta
+S.E. MANTARO,Huancavelica,centro,220,"S.E. Campo Armiño (complejo Mantaro); extremo Centro del enlace Mantaro - Cotaruse; eventos COES 2017/2023 (TRANSMANTARO, KALLPA GENERACION S.A.)",alta
+S.E. PAMPAS,Huancavelica,centro,69,localidad homónima; eventos COES 2017/2023 (ELECTROCENTRO),alta
+C.H. 8 DE AGOSTO,Huánuco,centro,,"titular en los eventos (Hidromarañón, Generación Andina); eventos COES 2017/2023 (GENERACIÓN ANDINA S.A.C.)",media
+C.H. CHAGLLA,Huánuco,centro,,localidad homónima; eventos COES 2017/2023 (EMPRESA DE GENERACION HUALLAGA),alta
+C.H. EL CARMEN (CH),Huánuco,centro,,"titular en los eventos (Hidromarañón, Generación Andina); eventos COES 2017/2023 (GENERACIÓN ANDINA S.A.C.)",media
+C.H. MARAÑON,Huánuco,centro,,"titular en los eventos (Hidromarañón, Generación Andina); eventos COES 2017/2023 (CELEPSA RENOVABLES S.R.L., HIDROMARAÑON)",media
+C.H. PCH CHAGLLA,Huánuco,centro,,localidad homónima; eventos COES 2017/2023 (EMPRESA DE GENERACION HUALLAGA),alta
+S.E. 8 DE AGOSTO,Huánuco,centro,138,localidad homónima; eventos COES 2017/2023 (GENERACIÓN ANDINA S.A.C.),alta
+S.E. AMARILIS,Huánuco,centro,138,localidad homónima; eventos COES 2017/2023 (RED DE ENERGIA DEL PERU S.A.),alta
+S.E. AUCAYACU,Huánuco,centro,138,localidad homónima; eventos COES 2017/2023 (RED DE ENERGIA DEL PERU S.A.),alta
+S.E. CHAGLLA,Huánuco,centro,220,localidad homónima; eventos COES 2017/2023 (EMPRESA DE GENERACION HUALLAGA),alta
+S.E. HUARICASHASH,Huánuco,centro,60,"entre Huallanca Nueva y la C.H. Marañón; eventos de Electrocentro; eventos COES 2017/2023 (HIDROMARAÑON, ELECTROCENTRO)",baja
+S.E. HUÁNUCO,Huánuco,centro,138,localidad homónima; eventos COES 2017/2023 (RED DE ENERGIA DEL PERU S.A.),alta
+S.E. LA UNION ELC,Huánuco,centro,,localidad homónima; eventos COES 2017/2023 (ELECTROCENTRO),alta
+S.E. MARAÑON,Huánuco,centro,60,"localidad homónima; eventos COES 2017/2023 (HIDROMARAÑON, CELEPSA RENOVABLES S.R.L.)",alta
+S.E. PCH CHAGLLA,Huánuco,centro,34.5,localidad homónima; eventos COES 2017/2023 (EMPRESA DE GENERACION HUALLAGA),alta
+S.E. PIEDRA BLANCA,Huánuco,centro,138,"localidad homónima; eventos COES 2017/2023 (RED DE ENERGIA DEL PERU S.A., EMPRESA DE GENERACION HUALLAGA)",alta
+S.E. TINGO MARÍA,Huánuco,centro,220,"localidad homónima; eventos COES 2017/2023 (RED DE ENERGIA DEL PERU S.A., ETESELVA)",alta
+C.E. CENTRAL EOLICA WAYRA I,Ica,centro,,"localidad homónima; eventos COES 2017/2023 (ENEL GREEN POWER PERU S.A.C, ENEL GENERACION PERU S.A.A.)",alta
+C.E. PARQUE EOLICO MARCONA,Ica,centro,,localidad homónima; eventos COES 2017/2023 (PARQUE EOLICO MARCONA S.A.C.),alta
+C.E. PUNTA LOMITAS,Ica,centro,,localidad homónima; eventos COES 2017/2023 (ENGIE),alta
+C.E. SAN JUAN,Ica,centro,,localidad homónima; eventos COES 2017/2023 (ENERGIA RENOVABLE DEL SUR S.A.),alta
+C.T. INDEPENDENCIA,Ica,centro,,localidad homónima; eventos COES 2017/2023 (EGESUR); hoja TEMP_AMB del IEOD,alta
+C.T. PISCO,Ica,centro,,localidad homónima; eventos COES 2017/2023 (EGASA),alta
+C.T. SAN NICOLÁS,Ica,centro,,localidad homónima; eventos COES 2017/2023 (SHOUGESA),alta
+S.E. CAHUACHI,Ica,centro,220,"localidad homónima; eventos COES 2017/2023 (ELECTRO DUNAS, TRANSMANTARO)",alta
+S.E. CHINCHA,Ica,centro,60,localidad homónima; eventos COES 2017/2023 (ELECTRO DUNAS),alta
+S.E. CHINCHA_NUEVA,Ica,centro,220,localidad homónima; eventos COES 2017/2023 (TRANSMANTARO),alta
+S.E. CHIRIBAMBA,Ica,centro,220,localidad homónima; eventos COES 2017/2023 (ELECTRO DUNAS),alta
+S.E. CT PISCO,Ica,centro,,localidad homónima; eventos COES 2017/2023 (EGASA),alta
+S.E. DERIVACION,Ica,centro,220,"localidad homónima; eventos COES 2017/2023 (ENGIE, RED DE ENERGIA DEL PERU S.A.)",alta
+S.E. DESIERTO,Ica,centro,220,"localidad homónima; eventos COES 2017/2023 (RED DE ENERGIA DEL PERU S.A., NEXA RESOURCES PERÚ S.A.A.)",alta
+S.E. EL HIERRO,Ica,centro,220,localidad homónima; eventos COES 2017/2023 (SHOUGANG HIERRO PERU),alta
+S.E. ERSUR,Ica,centro,220,localidad homónima; eventos COES 2017/2023 (ENERGIA RENOVABLE DEL SUR S.A.),alta
+S.E. FLAMENCO,Ica,centro,33,"localidad homónima; eventos COES 2017/2023 (ENEL GENERACION PERU S.A.A., ENEL GREEN POWER PERU S.A.C)",alta
+S.E. HUARANGO,Ica,centro,60,localidad homónima; eventos COES 2017/2023 (ELECTRO DUNAS),alta
+S.E. ICA,Ica,centro,220,"localidad homónima; eventos COES 2017/2023 (RED DE ENERGIA DEL PERU S.A., ELECTRO DUNAS)",alta
+S.E. ICA NORTE,Ica,centro,60,localidad homónima; eventos COES 2017/2023 (ELECTRO DUNAS),alta
+S.E. INDEPENDENCIA,Ica,centro,220,"localidad homónima; eventos COES 2017/2023 (RED DE ENERGIA DEL PERU S.A., ELECTRO DUNAS)",alta
+S.E. MARCONA,Ica,centro,220,"localidad homónima; eventos COES 2017/2023 (RED DE ENERGIA DEL PERU S.A., ELECTRO DUNAS)",alta
+S.E. MINA,Ica,centro,60,línea Marcona - Mina (60 kV) en los eventos; nombre genérico; eventos COES 2017/2023 (RED DE ENERGIA DEL PERU S.A.),baja
+S.E. MINA JUSTA,Ica,centro,,localidad homónima; eventos COES 2017/2023 (MARCOBRE S.A.C.),alta
+S.E. NAZCA,Ica,centro,60,localidad homónima; eventos COES 2017/2023 (ELECTRO DUNAS),alta
+S.E. PALPA,Ica,centro,60,localidad homónima; eventos COES 2017/2023 (ELECTRO DUNAS),alta
+S.E. PAMPA DE OCAS,Ica,centro,60,localidad homónima; eventos COES 2017/2023 (ELECTRO DUNAS),alta
+S.E. POROMA,Ica,centro,500,"localidad homónima; frontera de área en la hoja INTERCONEXIONES del IEOD: desde 2023 la medición Centro-Sur está en Poroma (L-5033/L-5034); eventos COES 2017/2023 (TRANSMANTARO, ATLANTICA TRANSMISION SUR S.A.)",alta
+S.E. PUEBLO NUEVO,Ica,centro,60,localidad homónima; eventos COES 2017/2023 (ELECTRO DUNAS),alta
+S.E. SAN NICOLÁS,Ica,centro,60,"localidad homónima; eventos COES 2017/2023 (RED DE ENERGIA DEL PERU S.A., SHOUGESA)",alta
+S.E. SEÑOR DE LUREN,Ica,centro,,localidad homónima; eventos COES 2017/2023 (ELECTRO DUNAS),alta
+S.E. TACAMA,Ica,centro,60,localidad homónima; eventos COES 2017/2023 (ELECTRO DUNAS),alta
+S.E. TRES HERMANAS,Ica,centro,220,"localidad homónima; eventos COES 2017/2023 (PARQUE EOLICO TRES HERMANAS S.A.C., PARQUE EOLICO MARCONA S.R.L.)",alta
+S.E. VILLACURI,Ica,centro,60,localidad homónima; eventos COES 2017/2023 (ELECTRO DUNAS),alta
+S.E. VILLACURÍ (COELVISAC),Ica,centro,,localidad homónima; eventos COES 2017/2023 (COELVISAC),alta
+C.H. CANCHAYLLO,Junín,centro,,localidad homónima; eventos COES 2017/2023 (EMPRESA DE GENERACION ELECTRICA CANCHAYLLO SAC),alta
+C.H. CHIMAY,Junín,centro,,localidad homónima; eventos COES 2017/2023 (CHINANGO S.A.C.),alta
+C.H. HUASAHUASI I,Junín,centro,,"localidad homónima; eventos COES 2017/2023 (EGEJUNIN, HIDROELECTRICA SANTA CRUZ)",alta
+C.H. HUASAHUASI II,Junín,centro,,"localidad homónima; eventos COES 2017/2023 (EGEJUNIN, HIDROELECTRICA SANTA CRUZ)",alta
+C.H. LA VIRGEN,Junín,centro,,Chanchamayo; titular en los eventos; eventos COES 2017/2023 (LA VIRGEN),media
+C.H. MALPASO,Junín,centro,,localidad homónima; eventos COES 2017/2023 (STATKRAFT S.A),alta
+C.H. OROYA,Junín,centro,,localidad homónima; eventos COES 2017/2023 (STATKRAFT S.A),alta
+C.H. PACHACHACA,Junín,centro,,localidad homónima; eventos COES 2017/2023 (STATKRAFT S.A),alta
+C.H. RENOVANDES H1,Junín,centro,,Chanchamayo; titular en los eventos; eventos COES 2017/2023 (EMPRESA DE GENERACION ELECTRICA SANTA ANA S.A.C.),media
+C.H. RUNATULLO II,Junín,centro,,localidad homónima; eventos COES 2017/2023 (EGEJUNIN),alta
+C.H. YANANGO,Junín,centro,,localidad homónima; eventos COES 2017/2023 (CHINANGO S.A.C.),alta
+S.E. ALAMBRÓN,Junín,centro,50,localidad homónima; eventos COES 2017/2023 (STATKRAFT S.A),alta
+S.E. ANDAYCHAGUA ELC,Junín,centro,50,localidad homónima; eventos COES 2017/2023 (STATKRAFT S.A),alta
+S.E. CAMPAS,Junín,centro,500,"S.E. Campas, enlace 500 kV Mantaro - Nueva Yanango - Carapongo (prensa de Transmantaro, 2023); eventos COES 2017/2023 (TRANSMANTARO)",media
+S.E. CANCHAYLLO,Junín,centro,69,"localidad homónima; eventos COES 2017/2023 (STATKRAFT S.A, EMPRESA DE GENERACION ELECTRICA CANCHAYLLO SAC)",alta
+S.E. CARAH. MINA,Junín,centro,50,localidad homónima; eventos COES 2017/2023 (STATKRAFT S.A),alta
+S.E. CARHUAMAYO,Junín,centro,220,"localidad homónima; eventos COES 2017/2023 (STATKRAFT S.A, TRANSMANTARO)",alta
+S.E. CARIPA,Junín,centro,138,localidad homónima; eventos COES 2017/2023 (UNION ANDINA DE CEMENTO),alta
+S.E. CARLOS FRANCISCO,Junín,centro,50,localidad homónima; eventos COES 2017/2023 (STATKRAFT S.A),alta
+S.E. CHANCHAMAYO,Junín,centro,,localidad homónima; eventos COES 2017/2023 (EMPRESA DE GENERACION ELECTRICA SANTA ANA S.A.C.),alta
+S.E. CHIMAY,Junín,centro,220,"localidad homónima; eventos COES 2017/2023 (CONELSUR LT SAC, CHINANGO S.A.C.)",alta
+S.E. CONCEPCION,Junín,centro,60,"localidad homónima; eventos COES 2017/2023 (EGEJUNIN, ELECTROCENTRO)",alta
+S.E. CONDORCOCHA,Junín,centro,138,"localidad homónima; eventos COES 2017/2023 (UNION ANDINA DE CEMENTO, ELECTROCENTRO)",alta
+S.E. DER. AZULCOCHA,Junín,centro,69,localidad homónima; eventos COES 2017/2023 (STATKRAFT S.A),alta
+S.E. DER. PACHACAYO,Junín,centro,69,localidad homónima; eventos COES 2017/2023 (STATKRAFT S.A),alta
+S.E. DERV. PUNTAYACU,Junín,centro,60,localidad homónima; eventos COES 2017/2023 (EMPRESA DE GENERACION ELECTRICA SANTA ANA S.A.C.),alta
+S.E. HUANCAYO ESTE,Junín,centro,60,localidad homónima; eventos COES 2017/2023 (ELECTROCENTRO),alta
+S.E. HUAYUCACHI,Junín,centro,220,"localidad homónima; eventos COES 2017/2023 (ELECTROCENTRO, RED DE ENERGIA DEL PERU S.A.)",alta
+S.E. JUNÍN,Junín,centro,50,localidad homónima; eventos COES 2017/2023 (STATKRAFT S.A),alta
+S.E. LA VIRGEN,Junín,centro,60,localidad homónima; eventos COES 2017/2023 (EMPRESA DE GENERACION ELECTRICA SANTA ANA S.A.C.),alta
+S.E. MAHR TÚNEL,Junín,centro,50,localidad homónima; eventos COES 2017/2023 (STATKRAFT S.A),alta
+S.E. MALPASO,Junín,centro,50,localidad homónima; eventos COES 2017/2023 (STATKRAFT S.A),alta
+S.E. MOROCOCHA,Junín,centro,50,localidad homónima; eventos COES 2017/2023 (STATKRAFT S.A),alta
+S.E. NINATAMBO,Junín,centro,,localidad homónima; eventos COES 2017/2023 (ELECTROCENTRO),alta
+S.E. ORCOTUNA,Junín,centro,220,"localidad homónima; eventos COES 2017/2023 (RED DE ENERGIA DEL PERU S.A., TRANSMANTARO)",alta
+S.E. OROYA,Junín,centro,,localidad homónima; eventos COES 2017/2023 (STATKRAFT S.A),alta
+S.E. OROYA NUEVA,Junín,centro,220,"localidad homónima; eventos COES 2017/2023 (STATKRAFT S.A, ISA PERU)",alta
+S.E. PACHACHACA,Junín,centro,220,"localidad homónima; eventos COES 2017/2023 (RED DE ENERGIA DEL PERU S.A., CONELSUR LT SAC)",alta
+S.E. PICHANAKI,Junín,centro,60,localidad homónima; eventos COES 2017/2023 (ELECTROCENTRO),alta
+S.E. PLANTA DE ZINC,Junín,centro,,localidad homónima; eventos COES 2017/2023 (DOE RUN PERU S.R.L. EN LIQUIDACION),alta
+S.E. POMACOCHA,Junín,centro,220,"localidad homónima; eventos COES 2017/2023 (RED DE ENERGIA DEL PERU S.A., TRANSMANTARO)",alta
+S.E. RUNATULLO III,Junín,centro,60,localidad homónima; eventos COES 2017/2023 (EGEJUNIN),alta
+S.E. RUNTAULLO II,Junín,centro,60,localidad homónima; eventos COES 2017/2023 (EGEJUNIN),alta
+S.E. SALESIANOS,Junín,centro,60,localidad homónima; eventos COES 2017/2023 (ELECTROCENTRO),alta
+S.E. SAN ANTONIO,Junín,centro,50,"localidad homónima; eventos COES 2017/2023 (MINERA VOLCAN, STATKRAFT S.A)",alta
+S.E. SAN CRISTOBAL,Junín,centro,50,"localidad homónima; eventos COES 2017/2023 (MINERA VOLCAN, STATKRAFT S.A)",alta
+S.E. SANTA ANA,Junín,centro,,localidad homónima; eventos COES 2017/2023 (EMPRESA DE GENERACION ELECTRICA SANTA ANA S.A.C.),alta
+S.E. SATIPO,Junín,centro,60,localidad homónima; eventos COES 2017/2023 (ELECTROCENTRO),alta
+S.E. TICLIO,Junín,centro,,localidad homónima; eventos COES 2017/2023 (MINERA VOLCAN),alta
+S.E. TOROMOCHO,Junín,centro,,localidad homónima; eventos COES 2017/2023 (MINERA CHINALCO PERÚ S.A.),alta
+S.E. TORRE 8,Junín,centro,,localidad homónima; eventos COES 2017/2023 (DOE RUN PERU S.R.L. EN LIQUIDACION),alta
+S.E. XAUXA,Junín,centro,60,localidad homónima; eventos COES 2017/2023 (ELECTROCENTRO),alta
+S.E. YANANGO,Junín,centro,220,"localidad homónima; eventos COES 2017/2023 (CONELSUR LT SAC, TRANSMANTARO)",alta
+C.H. CAHUA,Lima,centro,,localidad homónima; eventos COES 2017/2023 (STATKRAFT S.A),alta
+C.H. CALLAHUANCA,Lima,centro,,localidad homónima; eventos COES 2017/2023 (ENEL GENERACION PERU S.A.A.),alta
+C.H. CH HER 1,Lima,centro,,C.H. HER 1 de Enel Generación Perú; eventos COES 2017/2023 (ENEL GENERACION PERU S.A.A.),media
+C.H. CHANCAY,Lima,centro,,localidad homónima; eventos COES 2017/2023 (SINERSA),alta
+C.H. CHEVES,Lima,centro,,localidad homónima; eventos COES 2017/2023 (STATKRAFT S.A),alta
+C.H. EL PLATANAL,Lima,centro,,localidad homónima; eventos COES 2017/2023 (CELEPSA),alta
+C.H. HUAMPANÍ,Lima,centro,,localidad homónima; eventos COES 2017/2023 (ENEL GENERACION PERU S.A.A.),alta
+C.H. HUANCHOR,Lima,centro,,localidad homónima; eventos COES 2017/2023 (HIDROELECTRICA HUANCHOR S.A.C.),alta
+C.H. HUANZA,Lima,centro,,localidad homónima; eventos COES 2017/2023 (EMPRESA DE GENERACION HUANZA),alta
+C.H. HUINCO,Lima,centro,,localidad homónima; eventos COES 2017/2023 (ENEL GENERACION PERU S.A.A.),alta
+C.H. MATUCANA,Lima,centro,,localidad homónima; eventos COES 2017/2023 (ENEL GENERACION PERU S.A.A.),alta
+C.H. MOYOPAMPA,Lima,centro,,localidad homónima; eventos COES 2017/2023 (ENEL GENERACION PERU S.A.A.),alta
+C.H. NUEVA IMPERIAL,Lima,centro,,localidad homónima; eventos COES 2017/2023 (HIDROCAÑETE S.A.),alta
+C.H. RONCADOR,Lima,centro,,titular en los eventos; autorización de la DREM de Lima (Roncador); eventos COES 2017/2023 (MAJA ENERGIA S.A.C.),media
+C.H. RUCUY,Lima,centro,,titular en los eventos; autorización de la DREM de Lima (Roncador); eventos COES 2017/2023 (EMPRESA DE GENERACION ELECTRICA RIO BAÑOS S.A.C.),media
+C.H. YARUCAYA,Lima,centro,,localidad homónima; eventos COES 2017/2023 (HUAURA POWER GROUP S.A.),alta
+C.T. CHILCA 1,Lima,centro,,localidad homónima; eventos COES 2017/2023 (ENGIE); hoja TEMP_AMB del IEOD,alta
+C.T. CHILCA 2,Lima,centro,,localidad homónima; eventos COES 2017/2023 (ENGIE); hoja TEMP_AMB del IEOD,alta
+C.T. FENIX,Lima,centro,,localidad homónima; eventos COES 2017/2023 (FENIX POWER PERÚ); hoja TEMP_AMB del IEOD,alta
+C.T. HUAYCOLORO,Lima,centro,,localidad homónima; eventos COES 2017/2023 (PETRAMAS),alta
+C.T. KALLPA,Lima,centro,,"localidad homónima; eventos COES 2017/2023 (KALLPA GENERACION S.A., KALLPA GENERACION); hoja TEMP_AMB del IEOD",alta
+C.T. LA GRINGA V,Lima,centro,,"localidad homónima; eventos COES 2017/2023 (EMPRESA CONCESIONARIA ENERGIA LIMPIA SAC, PETRAMAS)",media
+C.T. LAS FLORES,Lima,centro,,localidad homónima; eventos COES 2017/2023 (KALLPA GENERACION S.A.); hoja TEMP_AMB del IEOD,alta
+C.T. OLLEROS,Lima,centro,,localidad homónima; hoja TEMP_AMB del IEOD,alta
+C.T. PARAMONGA,Lima,centro,,localidad homónima; eventos COES 2017/2023 (AGRO INDUSTRIAL PARAMONGA),alta
+C.T. SANTA ROSA,Lima,centro,,localidad homónima; eventos COES 2017/2023 (ENEL GENERACION PERU S.A.A.); hoja TEMP_AMB del IEOD,alta
+C.T. SANTO DOMINGO DE LOS OLLEROS,Lima,centro,,localidad homónima; eventos COES 2017/2023 (TERMOCHILCA),alta
+S.E. ALTO PRADERA,Lima,centro,220,"localidad homónima; eventos COES 2017/2023 (LUZ DEL SUR, RED DE ENERGIA DEL PERU S.A.)",alta
+S.E. ANDAHUASI,Lima,centro,66,"localidad homónima; eventos COES 2017/2023 (ADINELSA ADN, HUAURA POWER GROUP S.A.)",alta
+S.E. ASIA,Lima,centro,220,localidad homónima; eventos COES 2017/2023 (LUZ DEL SUR),alta
+S.E. BALNEARIOS,Lima,centro,60,"localidad homónima; eventos COES 2017/2023 (LUZ DEL SUR, CONELSUR LT SAC)",alta
+S.E. BARSI,Lima,centro,220,localidad homónima; eventos COES 2017/2023 (ENEL DISTRIBUCION PERU),alta
+S.E. BUJAMA,Lima,centro,60,localidad homónima; eventos COES 2017/2023 (LUZ DEL SUR),alta
+S.E. CAHUA,Lima,centro,138,localidad homónima; eventos COES 2017/2023 (STATKRAFT S.A),alta
+S.E. CAJAMARQUILLA,Lima,centro,220,"localidad homónima; eventos COES 2017/2023 (CONELSUR LT SAC, REFINERIA ZINC CAJAMARQUILLA)",alta
+S.E. CALLAHUANCA,Lima,centro,220,"localidad homónima; eventos COES 2017/2023 (CONELSUR LT SAC, ANDEAN POWER S.A.C.)",alta
+S.E. CALLAHUANCA (CNS),Lima,centro,,localidad homónima; eventos COES 2017/2023 (CONELSUR LT SAC),alta
+S.E. CALLAHUANCA (EDG),Lima,centro,220,localidad homónima; eventos COES 2017/2023 (ENEL GENERACION PERU S.A.A.),alta
+S.E. CALLAHUANCA (REP),Lima,centro,220,localidad homónima; eventos COES 2017/2023 (RED DE ENERGIA DEL PERU S.A.),alta
+S.E. CANTERA,Lima,centro,60,localidad homónima; eventos COES 2017/2023 (LUZ DEL SUR),alta
+S.E. CARABAYLLO,Lima,centro,500,"localidad homónima; eventos COES 2017/2023 (TRANSMANTARO, RED DE ENERGIA DEL PERU S.A.)",alta
+S.E. CARAPONGO,Lima,centro,500,localidad homónima; eventos COES 2017/2023 (TRANSMANTARO),alta
+S.E. CARHUAC,Lima,centro,60,localidad homónima; eventos COES 2017/2023 (ANDEAN POWER S.A.C.),alta
+S.E. CASAPALCA NORTE,Lima,centro,50,localidad homónima; eventos COES 2017/2023 (STATKRAFT S.A),alta
+S.E. CH CHANCAY,Lima,centro,60,localidad homónima; eventos COES 2017/2023 (SINERSA),alta
+S.E. CHANCAY,Lima,centro,220,localidad homónima; eventos COES 2017/2023 (TRANSMANTARO),alta
+S.E. CHANCAY CTM,Lima,centro,22.9,localidad homónima; eventos COES 2017/2023 (TRANSMANTARO),alta
+S.E. CHAVARRIA,Lima,centro,220,"localidad homónima; eventos COES 2017/2023 (ENEL DISTRIBUCION PERU, CONELSUR LT SAC)",alta
+S.E. CHEVES,Lima,centro,13.8,S.E. de la central homónima o localidad de Lima; eventos COES 2017/2023 (STATKRAFT S.A),alta
+S.E. CHILCA,Lima,centro,500,"localidad homónima; eventos COES 2017/2023 (TRANSMANTARO, LUZ DEL SUR)",alta
+S.E. CHILCA 1,Lima,centro,,localidad homónima; eventos COES 2017/2023 (ENGIE),alta
+S.E. CHILCA CTM,Lima,centro,500,"localidad homónima; eventos COES 2017/2023 (ATLANTICA TRANSMISION SUR S.A., ABY TRANSMISIÓN SUR)",alta
+S.E. CHILCA-CTM,Lima,centro,500,"localidad homónima; eventos COES 2017/2023 (TRANSMANTARO, ABY TRANSMISIÓN SUR)",alta
+S.E. CHOSICA,Lima,centro,60,"localidad homónima; eventos COES 2017/2023 (LUZ DEL SUR, CONELSUR LT SAC)",alta
+S.E. EL PLATANAL,Lima,centro,220,S.E. de la central homónima o localidad de Lima; eventos COES 2017/2023 (TRANSMANTARO),alta
+S.E. GLORIA,Lima,centro,,localidad homónima; eventos COES 2017/2023 (CONELSUR LT SAC),alta
+S.E. HUACHIPA,Lima,centro,60,"localidad homónima; eventos COES 2017/2023 (LUZ DEL SUR, CONELSUR LT SAC)",alta
+S.E. HUACHO,Lima,centro,220,"localidad homónima; eventos COES 2017/2023 (ADINELSA ADN, RED DE ENERGIA DEL PERU S.A.)",alta
+S.E. HUALMAY,Lima,centro,66,localidad homónima; eventos COES 2017/2023 (ENEL DISTRIBUCION PERU),alta
+S.E. HUAMPANÍ,Lima,centro,60,"localidad homónima; eventos COES 2017/2023 (CONELSUR LT SAC, ENEL GENERACION PERU S.A.A.)",alta
+S.E. HUANZA,Lima,centro,220,localidad homónima; eventos COES 2017/2023 (RED DE ENERGIA DEL PERU S.A.),alta
+S.E. HUARAL,Lima,centro,60,localidad homónima; eventos COES 2017/2023 (SINERSA),alta
+S.E. HUARANGAL,Lima,centro,60,S.E. de la central homónima o localidad de Lima; eventos COES 2017/2023 (ENEL DISTRIBUCION PERU),alta
+S.E. HUINCO,Lima,centro,220,localidad homónima; eventos COES 2017/2023 (CONELSUR LT SAC),alta
+S.E. INDUSTRIALES,Lima,centro,220,"localidad homónima; eventos COES 2017/2023 (TRANSMANTARO, LUZ DEL SUR)",alta
+S.E. KALLPA,Lima,centro,220,localidad homónima; eventos COES 2017/2023 (KALLPA GENERACION S.A.),alta
+S.E. LA PLANICIE,Lima,centro,500,localidad homónima; eventos COES 2017/2023 (TRANSMANTARO),alta
+S.E. LAS FLORES,Lima,centro,,localidad homónima; eventos COES 2017/2023 (KALLPA GENERACION S.A.),alta
+S.E. LAS PRADERAS,Lima,centro,60,localidad homónima; eventos COES 2017/2023 (LUZ DEL SUR),alta
+S.E. LOMERA,Lima,centro,60,localidad homónima; eventos COES 2017/2023 (CONENHUA),alta
+S.E. LOS INDUSTRIALES,Lima,centro,220,"localidad homónima; eventos COES 2017/2023 (LUZ DEL SUR, RED DE ENERGIA DEL PERU S.A.)",alta
+S.E. MANCHAY,Lima,centro,,localidad homónima; eventos COES 2017/2023 (LUZ DEL SUR),alta
+S.E. MATUCANA,Lima,centro,220,localidad homónima; eventos COES 2017/2023 (CONELSUR LT SAC),alta
+S.E. MEDIO MUNDO,Lima,centro,,localidad homónima; eventos COES 2017/2023 (RED DE ENERGIA DEL PERU S.A.),alta
+S.E. MOYOPAMPA,Lima,centro,60,localidad homónima; eventos COES 2017/2023 (CONELSUR LT SAC),alta
+S.E. OLLEROS 500,Lima,centro,,localidad homónima; eventos COES 2017/2023 (TRANSMANTARO),alta
+S.E. PACHACUTEC,Lima,centro,,localidad homónima; eventos COES 2017/2023 (LUZ DEL SUR),alta
+S.E. PARAMONGA E.,Lima,centro,138,localidad homónima; eventos COES 2017/2023 (STATKRAFT S.A),alta
+S.E. PARAMONGA EXISTENTE,Lima,centro,138,localidad homónima; eventos COES 2017/2023 (STATKRAFT S.A),alta
+S.E. PARAMONGA N.,Lima,centro,220,"localidad homónima; eventos COES 2017/2023 (HIDRANDINA, RED DE ENERGIA DEL PERU S.A.)",alta
+S.E. PARAMONGA NUEVA,Lima,centro,220,localidad homónima; eventos COES 2017/2023 (RED DE ENERGIA DEL PERU S.A.),alta
+S.E. PLANICIE,Lima,centro,500,"localidad homónima; eventos COES 2017/2023 (TRANSMANTARO, LUZ DEL SUR)",alta
+S.E. PORTILLO,Lima,centro,,localidad homónima; eventos COES 2017/2023 (CONELSUR LT SAC),alta
+S.E. PROGRESO,Lima,centro,,localidad homónima; eventos COES 2017/2023 (LUZ DEL SUR),alta
+S.E. PUENTE,Lima,centro,60,localidad homónima; eventos COES 2017/2023 (LUZ DEL SUR),alta
+S.E. SALAMANCA,Lima,centro,60,localidad homónima; eventos COES 2017/2023 (CONELSUR LT SAC),alta
+S.E. SAN BARTOLO,Lima,centro,60,localidad homónima; eventos COES 2017/2023 (LUZ DEL SUR),alta
+S.E. SAN JUAN,Lima,centro,220,localidad homónima; eventos COES 2017/2023 (RED DE ENERGIA DEL PERU S.A.),alta
+S.E. SAN MATEO,Lima,centro,50,localidad homónima; eventos COES 2017/2023 (STATKRAFT S.A),alta
+S.E. SAN MIGUEL,Lima,centro,220,localidad homónima; eventos COES 2017/2023 (LUZ DEL SUR),alta
+S.E. SANTA CLARA,Lima,centro,60,localidad homónima; eventos COES 2017/2023 (LUZ DEL SUR),alta
+S.E. SANTA ROSA A.,Lima,centro,60,"localidad homónima; eventos COES 2017/2023 (LUZ DEL SUR, ENEL DISTRIBUCION PERU)",alta
+S.E. SANTA ROSA ANTIGUA,Lima,centro,60,"localidad homónima; eventos COES 2017/2023 (ENEL DISTRIBUCION PERU, LUZ DEL SUR)",alta
+S.E. SANTA ROSA N.,Lima,centro,220,"localidad homónima; eventos COES 2017/2023 (CONELSUR LT SAC, LUZ DEL SUR)",alta
+S.E. SANTA ROSA NUEVA,Lima,centro,60,"localidad homónima; eventos COES 2017/2023 (RED DE ENERGIA DEL PERU S.A., LUZ DEL SUR)",alta
+S.E. UCHUCCHACUA,Lima,centro,138,"localidad homónima; eventos COES 2017/2023 (CONENHUA, MINERA BUENAVENTURA)",alta
+S.E. YARUCAYA,Lima,centro,66,S.E. de la central homónima o localidad de Lima; eventos COES 2017/2023 (HUAURA POWER GROUP S.A.),alta
+S.E. ZAPALLAL,Lima,centro,220,localidad homónima; eventos COES 2017/2023 (TRANSMANTARO),alta
+S.E. ÑAÑA,Lima,centro,60,localidad homónima; eventos COES 2017/2023 (CONELSUR LT SAC),alta
+C.H. YAUPI,Pasco,centro,,localidad homónima; eventos COES 2017/2023 (STATKRAFT S.A),alta
+C.H. YUNCÁN,Pasco,centro,,localidad homónima; eventos COES 2017/2023 (ENGIE),alta
+S.E. ANIMON,Pasco,centro,50,localidad homónima; eventos COES 2017/2023 (OXIDOS DE PASCO S.A.C.),alta
+S.E. EXCELSIOR,Pasco,centro,60,localidad homónima; eventos COES 2017/2023 (STATKRAFT S.A),alta
+S.E. FRANCOISE,Pasco,centro,220,"localidad homónima; eventos COES 2017/2023 (OXIDOS DE PASCO S.A.C., ATN 1 S.A.)",alta
+S.E. GOYLLAR,Pasco,centro,50,localidad homónima; eventos COES 2017/2023 (STATKRAFT S.A),alta
+S.E. HUARÓN,Pasco,centro,50,localidad homónima; eventos COES 2017/2023 (STATKRAFT S.A),alta
+S.E. HUICRA,Pasco,centro,50,localidad homónima; eventos COES 2017/2023 (STATKRAFT S.A),alta
+S.E. MILPO,Pasco,centro,138,localidad homónima; eventos COES 2017/2023 (MINERA MILPO),alta
+S.E. OXAPAMPA,Pasco,centro,60,localidad homónima; eventos COES 2017/2023 (ELECTROCENTRO),alta
+S.E. PARAGSHA,Pasco,centro,220,localidad homónima; eventos COES 2017/2023 (EMPRESA DE GENERACION HUALLAGA),alta
+S.E. PARAGSHA 2,Pasco,centro,220,localidad homónima; eventos COES 2017/2023 (ISA PERU),alta
+S.E. PARAGSHA I,Pasco,centro,60,localidad homónima; eventos COES 2017/2023 (STATKRAFT S.A),alta
+S.E. PARAGSHA II,Pasco,centro,220,"localidad homónima; eventos COES 2017/2023 (ATN S.A., CONENHUA)",alta
+S.E. PASCO,Pasco,centro,50,"localidad homónima; eventos COES 2017/2023 (ELECTROCENTRO, STATKRAFT S.A)",alta
+S.E. PLANTA OXIDOS I,Pasco,centro,,localidad homónima; eventos COES 2017/2023 (EMPRESA ADMINISTRADORA CERRO S.A.C.),alta
+S.E. SANTA ISABEL,Pasco,centro,138,"líneas Carhuamayo - Santa Isabel y Santa Isabel - Yaupi (Statkraft); eventos COES 2017/2023 (STATKRAFT S.A, ENGIE)",baja
+S.E. SHELBY,Pasco,centro,50,localidad homónima; eventos COES 2017/2023 (STATKRAFT S.A),alta
+S.E. VILLA RICA,Pasco,centro,60,localidad homónima; eventos COES 2017/2023 (ELECTROCENTRO),alta
+S.E. YAUPI,Pasco,centro,13.8,"localidad homónima; eventos COES 2017/2023 (STATKRAFT S.A, ELECTROCENTRO)",alta
+S.E. TOCACHE,San Martín,centro,138,"alimentada desde Tingo María (Aucayacu - Tocache, REP); Huánuco - Tingo María es barra del Área Centro en Osinergmin (2023); eventos COES 2017/2023 (RED DE ENERGIA DEL PERU S.A., ELECTRO ORIENTE)",media
+C.T. AGUAYTÍA,Ucayali,centro,,localidad homónima; eventos COES 2017/2023 (TERMOSELVA); hoja TEMP_AMB del IEOD,alta
+C.T. RESERVA FRIA PUCALLPA,Ucayali,centro,,localidad homónima; eventos COES 2017/2023 (INFRAESTRUCTURAS Y ENERGIAS DEL PERU S.A.C.),alta
+S.E. AGUAYTÍA,Ucayali,centro,220,"localidad homónima; barra de transferencia del área en Osinergmin (2023), Tabla 1 (Pucallpa - Aguaytía); eventos COES 2017/2023 (ISA PERU, ETESELVA)",alta
+S.E. CIUD. PUCALLPA,Ucayali,centro,60,"localidad homónima; barra de transferencia del área en Osinergmin (2023), Tabla 1 (Pucallpa - Aguaytía); eventos COES 2017/2023 (ELECTRO UCAYALI)",alta
+S.E. PQUE INDUSTRIAL,Ucayali,centro,60,"localidad homónima; barra de transferencia del área en Osinergmin (2023), Tabla 1 (Pucallpa - Aguaytía); eventos COES 2017/2023 (ELECTRO UCAYALI)",alta
+S.E. PUCALLPA,Ucayali,centro,138,"localidad homónima; barra de transferencia del área en Osinergmin (2023), Tabla 1 (Pucallpa - Aguaytía); eventos COES 2017/2023 (ISA PERU, ELECTRO UCAYALI)",alta
+S.E. YARINACOCHA,Ucayali,centro,60,"localidad homónima; barra de transferencia del área en Osinergmin (2023), Tabla 1 (Pucallpa - Aguaytía); eventos COES 2017/2023 (ELECTRO UCAYALI)",alta
+S.E. 09 DE OCTUBRE,Áncash,centro,66,"radial desde Paramonga Nueva (L-6655, 66 kV); DEMANDA_UL 2017 agrupa ANTAMINA+09 OCTUBRE en Centro; eventos COES 2017/2023 (HIDRANDINA)",media
+S.E. CONOCOCHA,Áncash,centro,220,"frontera de área en la hoja INTERCONEXIONES del IEOD: Conococha queda del lado Centro de L-2269/L-2270; eventos COES 2017/2023 (ATN S.A., ETESELVA)",media
+S.E. HUALLANCA NUEVA,Áncash,centro,220,"línea Vizcarra - Huallanca Nueva (220 kV); alimentada desde el Centro; eventos COES 2017/2023 (CIA MINERA SANTA LUISA S A, ELECTROCENTRO)",media
+S.E. HUARMEY,Áncash,centro,66,"radial desde Paramonga Nueva (L-6655, 66 kV); DEMANDA_UL 2017 agrupa ANTAMINA+09 OCTUBRE en Centro; eventos COES 2017/2023 (HIDRANDINA)",media
+S.E. VIZCARRA,Áncash,centro,220,"barra de transferencia del área en Osinergmin (2023), Tabla 1 (Área Centro); alimenta Antamina (DEMANDA_UL, bloque Centro); eventos COES 2017/2023 (ISA PERU, ETESELVA)",alta
+S.E. CACLIC,Amazonas,norte,220,localidad homónima; bloque de la hoja FLUJOS del IEOD 2026 (Norte); eventos COES 2017/2023 (CONCESIONARIA LINEA DE TRANSMISION CCNCM S.A.C.),media
+C.H. CARHUAQUERO,Cajamarca,norte,,"localidad homónima; eventos COES 2017/2023 (ORAZUL ENERGY PERÚ, ORAZUL ENERGY)",alta
+C.H. CARHUAQUERO IV,Cajamarca,norte,,"localidad homónima; eventos COES 2017/2023 (ORAZUL ENERGY PERÚ, ORAZUL ENERGY)",alta
+C.H. CAÑA BRAVA,Cajamarca,norte,,"C.H. Caña Brava de Orazul, junto a Carhuaquero; eventos COES 2017/2023 (ORAZUL ENERGY PERÚ, ORAZUL ENERGY)",media
+C.H. GALLITO CIEGO,Cajamarca,norte,,localidad homónima; eventos COES 2017/2023 (STATKRAFT S.A),alta
+C.H. LAS PIZARRAS,Cajamarca,norte,,línea Las Pizarras - Espina Colorada - Carhuaquero en los eventos; eventos COES 2017/2023 (EMPRESA ELECTRICA RIO DOBLE),media
+C.H. POTRERO,Cajamarca,norte,,C.H. Potrero de Agua Azul (San Marcos); eventos COES 2017/2023 (EMPRESA ELECTRICA AGUA AZUL),media
+S.E. CAJABAMBA,Cajamarca,norte,60,localidad homónima; eventos COES 2017/2023 (HIDRANDINA),alta
+S.E. CAJAMARCA,Cajamarca,norte,60,localidad homónima; eventos COES 2017/2023 (HIDRANDINA),alta
+S.E. CAJAMARCA NORTE,Cajamarca,norte,220,"localidad homónima; eventos COES 2017/2023 (CONCESIONARIA LINEA DE TRANSMISION CCNCM S.A.C., ATN S.A.)",alta
+S.E. CARHUAQUERO,Cajamarca,norte,220,"localidad homónima; eventos COES 2017/2023 (ELECTRONORTE S.A., CONCESIONARIA LINEA DE TRANSMISION CCNCM S.A.C.)",alta
+S.E. CERRO CORONA,Cajamarca,norte,13.8,localidad homónima; eventos COES 2017/2023 (MINERA GOLD FIELDS),alta
+S.E. CUTERVO,Cajamarca,norte,138,"localidad homónima; eventos COES 2017/2023 (ELECTRONORTE S.A., ELECTRO ORIENTE)",alta
+S.E. ESPINA COLORADA,Cajamarca,norte,138,"líneas Carhuaquero - Espina Colorada - Las Pizarras y Cajamarca Norte - Pampa Honda en los eventos; eventos COES 2017/2023 (ELECTRONORTE S.A., EMPRESA ELECTRICA RIO DOBLE)",baja
+S.E. GALLITO CIEGO,Cajamarca,norte,60,"localidad homónima; eventos COES 2017/2023 (HIDRANDINA, STATKRAFT S.A)",alta
+S.E. GOLD MILL,Cajamarca,norte,220,localidad homónima; eventos COES 2017/2023 (CONENHUA),alta
+S.E. NUEVA JAÉN,Cajamarca,norte,138,"localidad homónima; eventos COES 2017/2023 (ELECTRONORTE S.A., ELECTRO ORIENTE)",alta
+S.E. PAMPA HONDA,Cajamarca,norte,220,líneas Carhuaquero - Espina Colorada - Las Pizarras y Cajamarca Norte - Pampa Honda en los eventos; eventos COES 2017/2023 (ATN S.A.),baja
+S.E. PIZARRAS,Cajamarca,norte,138,S.E. de la C.H. Las Pizarras; eventos COES 2017/2023 (EMPRESA ELECTRICA RIO DOBLE),media
+S.E. SAN MARCOS,Cajamarca,norte,60,localidad homónima; eventos COES 2017/2023 (HIDRANDINA),alta
+S.E. TEMBLADERA,Cajamarca,norte,60,localidad homónima; eventos COES 2017/2023 (HIDRANDINA),alta
+S.E. ALTO CHICAMA,La Libertad,norte,138,"localidad homónima; eventos COES 2017/2023 (COMPAÑIA TRANSMISORA ANDINA S.A., COMPAÑIA TRANSMISORA AUTONOMA S.A.C.)",alta
+S.E. CHEPÉN,La Libertad,norte,60,localidad homónima; eventos COES 2017/2023 (HIDRANDINA),alta
+S.E. CHIMU,La Libertad,norte,220,localidad homónima; eventos COES 2017/2023 (RED DE ENERGIA DEL PERU S.A.),alta
+S.E. CUPISNIQUE,La Libertad,norte,220,localidad homónima; eventos COES 2017/2023 (ENERGÍA EÓLICA S.A.),alta
+S.E. GUADALUPE,La Libertad,norte,220,"localidad homónima; eventos COES 2017/2023 (HIDRANDINA, CEMENTOS PACASMAYO)",alta
+S.E. LA RAMADA,La Libertad,norte,220,línea Kiman Ayllu - La Ramada - Pampa Honda (ATN) hacia Cajamarca Norte; eventos COES 2017/2023 (ATN S.A.),baja
+S.E. LLACUABAMBA,La Libertad,norte,138,localidad homónima; eventos COES 2017/2023 (MINERA HORIZONTE),alta
+S.E. MOTIL,La Libertad,norte,138,localidad homónima; eventos COES 2017/2023 (HIDRANDINA),alta
+S.E. PACASMAYO,La Libertad,norte,60,localidad homónima; eventos COES 2017/2023 (CEMENTOS PACASMAYO),alta
+S.E. PACASMAYO PUEBLO,La Libertad,norte,60,localidad homónima; eventos COES 2017/2023 (HIDRANDINA),alta
+S.E. PORVENIR,La Libertad,norte,138,El Porvenir (Trujillo); transformador 138 kV de Hidrandina en los eventos; eventos COES 2017/2023 (HIDRANDINA),media
+S.E. RAMADA,La Libertad,norte,220,línea Kiman Ayllu - La Ramada - Pampa Honda (ATN) hacia Cajamarca Norte; eventos COES 2017/2023 (ATN S.A.),baja
+S.E. SANTIAGO DE CAO,La Libertad,norte,138,localidad homónima; eventos COES 2017/2023 (HIDRANDINA),alta
+S.E. TAYABAMBA,La Libertad,norte,138,"localidad homónima; eventos COES 2017/2023 (HIDRANDINA, MINERA HORIZONTE)",alta
+S.E. TRUJILLO 500,La Libertad,norte,500,localidad homónima; eventos COES 2017/2023 (TRANSMANTARO),alta
+S.E. TRUJILLO NOROESTE,La Libertad,norte,138,localidad homónima; eventos COES 2017/2023 (HIDRANDINA),alta
+S.E. TRUJILLO NORTE,La Libertad,norte,220,"localidad homónima; eventos COES 2017/2023 (HIDRANDINA, RED DE ENERGIA DEL PERU S.A.)",alta
+S.E. TRUJILLO NUEVA,La Libertad,norte,220,localidad homónima; eventos COES 2017/2023 (TRANSMANTARO),alta
+S.E. TRUJILLO SUR,La Libertad,norte,138,localidad homónima; eventos COES 2017/2023 (HIDRANDINA),alta
+C.T. RECKA,Lambayeque,norte,,localidad homónima; eventos COES 2017/2023 (MINERA CERRO VERDE),alta
+C.T. RESERVA FRIA DE GENERACION ETEN,Lambayeque,norte,,localidad homónima; eventos COES 2017/2023 (PLANTA DE RESERVA FRIA DE GENERACION  DE ETEN S.A.),alta
+S.E. CHICLAYO NORTE,Lambayeque,norte,,"localidad homónima; barra de transferencia del área en Osinergmin (2023), Tabla 1; eventos COES 2017/2023 (ELECTRONORTE S.A.)",alta
+S.E. CHICLAYO OESTE,Lambayeque,norte,220,"localidad homónima; barra de transferencia del área en Osinergmin (2023), Tabla 1; eventos COES 2017/2023 (RED DE ENERGIA DEL PERU S.A., ETENORTE)",alta
+S.E. FELAM,Lambayeque,norte,220,línea Chiclayo Oeste - Felam (REP) en los eventos; eventos COES 2017/2023 (RED DE ENERGIA DEL PERU S.A.),media
+S.E. REQUE,Lambayeque,norte,220,"localidad homónima; barra de transferencia del área en Osinergmin (2023), Tabla 1; eventos COES 2017/2023 (RED DE ENERGIA DEL PERU S.A.)",alta
+C.H. POECHOS I,Piura,norte,,localidad homónima; eventos COES 2017/2023 (SINERSA),alta
+C.H. POECHOS II,Piura,norte,,localidad homónima; eventos COES 2017/2023 (SINERSA),alta
+C.T. CAÑA BRAVA,Piura,norte,,localidad homónima; eventos COES 2017/2023 (BIOENERGIA DEL CHIRA S.A.),alta
+C.T. MALACAS,Piura,norte,,localidad homónima; eventos COES 2017/2023 (ENEL GENERACION PIURA S.A.),alta
+C.T. MALACAS 1,Piura,norte,,localidad homónima; eventos COES 2017/2023 (ENEL GENERACION PIURA S.A.),alta
+C.T. MALACAS 2,Piura,norte,,localidad homónima; hoja TEMP_AMB del IEOD,alta
+C.T. REFINERIA TALARA,Piura,norte,,localidad homónima; hoja TEMP_AMB del IEOD,alta
+C.T. RESERVA FRIA DE GENERACION TALARA,Piura,norte,,localidad homónima; eventos COES 2017/2023 (ENEL GENERACION PIURA S.A.),alta
+C.T. RF DE GENERACION TALARA,Piura,norte,,localidad homónima; hoja TEMP_AMB del IEOD,alta
+C.T. TABLAZO,Piura,norte,,localidad homónima; eventos COES 2017/2023 (SDE PIURA),alta
+S.E. ARENAL,Piura,norte,60,localidad homónima; eventos COES 2017/2023 (ELECTRONOROESTE S.A.),alta
+S.E. BAYÓVAR,Piura,norte,138,localidad homónima; eventos COES 2017/2023 (TRANSMANTARO),alta
+S.E. CATACAOS,Piura,norte,,localidad homónima; eventos COES 2017/2023 (ELECTRONOROESTE S.A.),alta
+S.E. EL ARENAL,Piura,norte,60,localidad homónima; eventos COES 2017/2023 (ELECTRONOROESTE S.A.),alta
+S.E. GE1,Piura,norte,60,"Talara; refinería de Petroperú (DEMANDA_UL 2023, bloque Norte); eventos COES 2017/2023 (TRANSMANTARO)",alta
+S.E. LA BREA,Piura,norte,60,"Talara; refinería de Petroperú (DEMANDA_UL 2023, bloque Norte); eventos COES 2017/2023 (TRANSMANTARO)",alta
+S.E. LA HUACA,Piura,norte,60,localidad homónima; eventos COES 2017/2023 (ELECTRONOROESTE S.A.),alta
+S.E. LA NIÑA,Piura,norte,220,"barra de transferencia del área en Osinergmin (2023), Tabla 1; línea La Niña - Bayóvar en los eventos; eventos COES 2017/2023 (RED DE ENERGIA DEL PERU S.A., TRANSMANTARO)",media
+S.E. LA NIÑA 500,Piura,norte,500,"barra de transferencia del área en Osinergmin (2023), Tabla 1; línea La Niña - Bayóvar en los eventos; eventos COES 2017/2023 (TRANSMANTARO)",media
+S.E. LA UNIÓN,Piura,norte,60,localidad homónima; eventos COES 2017/2023 (ELECTRONOROESTE S.A.),alta
+S.E. LOS EJIDOS,Piura,norte,60,localidad homónima; eventos COES 2017/2023 (ELECTRONOROESTE S.A.),alta
+S.E. MALACAS,Piura,norte,13.2,"Talara; refinería de Petroperú (DEMANDA_UL 2023, bloque Norte); eventos COES 2017/2023 (ENEL GENERACION PIURA S.A.)",alta
+S.E. MORROPON,Piura,norte,60,localidad homónima; eventos COES 2017/2023 (ELECTRONOROESTE S.A.),alta
+S.E. MÁNCORA,Piura,norte,60,localidad homónima; eventos COES 2017/2023 (ELECTROPERU),alta
+S.E. PAITA,Piura,norte,60,localidad homónima; eventos COES 2017/2023 (ELECTRONOROESTE S.A.),alta
+S.E. PARINAS,Piura,norte,220,localidad homónima; eventos COES 2017/2023 (RED DE ENERGIA DEL PERU S.A.),alta
+S.E. PIURA CENTRO,Piura,norte,60,localidad homónima; eventos COES 2017/2023 (ELECTRONOROESTE S.A.),alta
+S.E. PIURA OESTE,Piura,norte,220,"localidad homónima; eventos COES 2017/2023 (ELECTRONOROESTE S.A., RED DE ENERGIA DEL PERU S.A.)",alta
+S.E. PLANTA DE ETANOL,Piura,norte,60,localidad homónima; eventos COES 2017/2023 (AGROAURORA S.A.C.),alta
+S.E. POECHOS,Piura,norte,60,localidad homónima; eventos COES 2017/2023 (SINERSA),alta
+S.E. SECHURA,Piura,norte,60,localidad homónima; eventos COES 2017/2023 (ELECTRONOROESTE S.A.),alta
+S.E. SULLANA,Piura,norte,60,"localidad homónima; eventos COES 2017/2023 (SINERSA, ELECTRONOROESTE S.A.)",alta
+S.E. TABLAZO,Piura,norte,60,localidad homónima; eventos COES 2017/2023 (ELECTRONOROESTE S.A.),alta
+S.E. TALARA,Piura,norte,220,"localidad homónima; barra de transferencia del área en Osinergmin (2023), Tabla 1; eventos COES 2017/2023 (RED DE ENERGIA DEL PERU S.A.)",alta
+S.E. VALLE DEL CHIRA,Piura,norte,220,"localidad homónima; eventos COES 2017/2023 (ELECTRONOROESTE S.A., PUERTO MALDONADO TRANSMISORA DE ENERGIA S.A.C.)",alta
+S.E. BELAUNDE TERRY,San Martín,norte,220,"bloque de la hoja FLUJOS del IEOD 2026 (Norte); líneas de CCNCM y Electro Oriente; eventos COES 2017/2023 (CONCESIONARIA LINEA DE TRANSMISION CCNCM S.A.C., ELECTRO ORIENTE)",media
+S.E. CEMENTOS SELVA,San Martín,norte,220,bloque de la hoja FLUJOS del IEOD 2026 (Norte); líneas de CCNCM y Electro Oriente; eventos COES 2017/2023 (ELECTRO ORIENTE),media
+S.E. JUANJUI,San Martín,norte,138,línea Tocache - Juanjuí (Electro Oriente); el área depende de la topología; eventos COES 2017/2023 (ELECTRO ORIENTE),baja
+S.E. MOYOBAMBA,San Martín,norte,138,"bloque de la hoja FLUJOS del IEOD 2026 (Norte); líneas de CCNCM y Electro Oriente; eventos COES 2017/2023 (ELECTRO ORIENTE, CONCESIONARIA LINEA DE TRANSMISION CCNCM S.A.C.)",media
+S.E. TARAPOTO,San Martín,norte,138,"bloque de la hoja FLUJOS del IEOD 2026 (Norte); líneas de CCNCM y Electro Oriente; eventos COES 2017/2023 (ELECTRO ORIENTE, CONCESIONARIA LINEA DE TRANSMISION CCNCM S.A.C.)",media
+C.T. TUMBES,Tumbes,norte,,localidad homónima; eventos COES 2017/2023 (ELECTROPERU),alta
+S.E. NCT TUMBES,Tumbes,norte,,localidad homónima; eventos COES 2017/2023 (ELECTROPERU),alta
+S.E. TUMBES,Tumbes,norte,60,"localidad homónima; eventos COES 2017/2023 (ELECTRONOROESTE S.A., ELECTROPERU)",alta
+S.E. ZORRITOS,Tumbes,norte,220,"localidad homónima; barra de transferencia del área en Osinergmin (2023), Tabla 1; eventos COES 2017/2023 (RED DE ENERGIA DEL PERU S.A., ELECTROPERU)",alta
+C.H. CAÑÓN DEL PATO,Áncash,norte,,"localidad homónima; eventos COES 2017/2023 (ORAZUL ENERGY PERÚ, ORAZUL ENERGY)",alta
+C.H. MANTA I,Áncash,norte,,C.H. Manta de PIER (ProActivo: ubicada en Áncash); eventos COES 2017/2023 (PERUANA DE INVERSIONES EN ENERGIAS RENOVABLES S.A.),media
+C.H. PARIAC,Áncash,norte,,localidad homónima; eventos COES 2017/2023 (STATKRAFT S.A),alta
+C.H. QUITARACSA,Áncash,norte,,localidad homónima; eventos COES 2017/2023 (ENGIE),alta
+C.H. SANTA CRUZ I,Áncash,norte,,"localidad homónima; eventos COES 2017/2023 (HIDROELECTRICA SANTA CRUZ, EGEJUNIN)",alta
+C.T. SAN JACINTO,Áncash,norte,,Agroindustrias San Jacinto (Nepeña); eventos COES 2017/2023 (AGROINDUSTRIAS SAN JACINTO S.A.A.),alta
+S.E. CARAZ,Áncash,norte,66,localidad homónima; eventos COES 2017/2023 (HIDRANDINA),alta
+S.E. CASMA,Áncash,norte,138,"localidad homónima; frontera de área en la hoja INTERCONEXIONES del IEOD (Chimbote 1 y Chimbote Nueva, lado Norte); eventos COES 2017/2023 (HIDRANDINA)",alta
+S.E. CHIMBOTE 1,Áncash,norte,220,"localidad homónima; frontera de área en la hoja INTERCONEXIONES del IEOD (Chimbote 1 y Chimbote Nueva, lado Norte); eventos COES 2017/2023 (RED DE ENERGIA DEL PERU S.A., ETENORTE)",alta
+S.E. CHIMBOTE 2,Áncash,norte,138,"localidad homónima; frontera de área en la hoja INTERCONEXIONES del IEOD (Chimbote 1 y Chimbote Nueva, lado Norte); eventos COES 2017/2023 (ISA PERU, ETENORTE)",alta
+S.E. CHIMBOTE NORTE,Áncash,norte,138,"localidad homónima; frontera de área en la hoja INTERCONEXIONES del IEOD (Chimbote 1 y Chimbote Nueva, lado Norte); eventos COES 2017/2023 (HIDRANDINA)",alta
+S.E. CHIMBOTE SUR,Áncash,norte,138,"localidad homónima; frontera de área en la hoja INTERCONEXIONES del IEOD (Chimbote 1 y Chimbote Nueva, lado Norte); eventos COES 2017/2023 (HIDRANDINA)",alta
+S.E. CHIMBOTE1,Áncash,norte,500,"localidad homónima; frontera de área en la hoja INTERCONEXIONES del IEOD (Chimbote 1 y Chimbote Nueva, lado Norte); eventos COES 2017/2023 (TRANSMANTARO)",alta
+S.E. HUALLANCA,Áncash,norte,138,"localidad homónima; eventos COES 2017/2023 (ETENORTE, ISA PERU)",alta
+S.E. HUARAZ,Áncash,norte,66,localidad homónima; eventos COES 2017/2023 (HIDRANDINA),alta
+S.E. HUARAZ OESTE,Áncash,norte,138,"localidad homónima; eventos COES 2017/2023 (COMPAÑIA TRANSMISORA ANDINA S.A., HIDRANDINA)",alta
+S.E. KIMAN AYLLU,Áncash,norte,220,"frontera de área en la hoja INTERCONEXIONES del IEOD (L-2269/L-2270, lado Norte); eventos COES 2017/2023 (HIDRANDINA, ATN S.A.)",media
+S.E. LA PAMPA,Áncash,norte,66,localidad homónima; eventos COES 2017/2023 (HIDRANDINA),alta
+S.E. NEPEÑA,Áncash,norte,138,"localidad homónima; frontera de área en la hoja INTERCONEXIONES del IEOD (Chimbote 1 y Chimbote Nueva, lado Norte); eventos COES 2017/2023 (HIDRANDINA)",alta
+S.E. PIERINA,Áncash,norte,138,localidad homónima; eventos COES 2017/2023 (MINERA PIERINA),alta
+S.E. QUITARACSA,Áncash,norte,220,localidad homónima; eventos COES 2017/2023 (ENGIE),alta
+S.E. SAN JACINTO,Áncash,norte,138,Agroindustrias San Jacinto (Nepeña); eventos COES 2017/2023 (HIDRANDINA),alta
+S.E. SANTA,Áncash,norte,138,"localidad homónima; frontera de área en la hoja INTERCONEXIONES del IEOD (Chimbote 1 y Chimbote Nueva, lado Norte); eventos COES 2017/2023 (HIDRANDINA)",alta
+S.E. SANTA CRUZ,Áncash,norte,66,localidad homónima; eventos COES 2017/2023 (HIDRANDINA),alta
+S.E. SIHUAS,Áncash,norte,220,localidad homónima; eventos COES 2017/2023 (HIDRANDINA),alta
+S.E. TICAPAMPA,Áncash,norte,66,localidad homónima; eventos COES 2017/2023 (HIDRANDINA),alta
+S.E. TRAPECIO,Áncash,norte,,"localidad homónima; frontera de área en la hoja INTERCONEXIONES del IEOD (Chimbote 1 y Chimbote Nueva, lado Norte); eventos COES 2017/2023 (HIDRANDINA)",alta
+S.E. ABANCAY,Apurímac,sur,138,localidad homónima; eventos COES 2017/2023 (RED DE ENERGIA DEL PERU S.A.),alta
+S.E. ABANCAY NUEVA,Apurímac,sur,220,"localidad homónima; eventos COES 2017/2023 (TRANSMANTARO, RED DE ENERGIA DEL PERU S.A.)",alta
+S.E. ANDAHUAYLAS,Apurímac,sur,60,localidad homónima; eventos COES 2017/2023 (ELECTRO SUR ESTE),alta
+S.E. COTARUSE,Apurímac,sur,220,"localidad homónima; frontera de área en la hoja INTERCONEXIONES del IEOD: en 2017 la medición Centro-Sur estaba en Cotaruse y desde 2023 en Campo Armiño; eventos COES 2017/2023 (TRANSMANTARO, ATN 2 S.A.)",alta
+S.E. HUANCARAMA,Apurímac,sur,66,"localidad homónima; eventos COES 2017/2023 (CONENHUA, MINERA BUENAVENTURA)",alta
+S.E. LAS BAMBAS,Apurímac,sur,220,"localidad homónima; eventos COES 2017/2023 (ATN 2 S.A., MINERA LAS BAMBAS S.A.)",alta
+S.E. TAMBURCO,Apurímac,sur,60,localidad homónima; eventos COES 2017/2023 (ELECTRO SUR ESTE),alta
+C.H. CHARCANI I,Arequipa,sur,,localidad homónima; eventos COES 2017/2023 (EGASA),alta
+C.H. CHARCANI II,Arequipa,sur,,localidad homónima; eventos COES 2017/2023 (EGASA),alta
+C.H. CHARCANI IV,Arequipa,sur,,localidad homónima; eventos COES 2017/2023 (EGASA),alta
+C.H. CHARCANI V,Arequipa,sur,,localidad homónima; eventos COES 2017/2023 (EGASA),alta
+C.H. CHARCANI VI,Arequipa,sur,,localidad homónima; eventos COES 2017/2023 (EGASA),alta
+C.H. HUAYLLACHO,Arequipa,sur,,centrales de Statkraft en Arequipa (antiguo sistema de Arcata); eventos COES 2017/2023 (STATKRAFT S.A),media
+C.H. LA JOYA,Arequipa,sur,,localidad homónima; eventos COES 2017/2023 (GENERADORA DE ENERGÍA DEL PERÚ),alta
+C.H. MISAPUQUIO,Arequipa,sur,,centrales de Statkraft en Arequipa (antiguo sistema de Arcata); eventos COES 2017/2023 (STATKRAFT S.A),media
+C.H. SAN ANTONIO,Arequipa,sur,,centrales de Statkraft en Arequipa (antiguo sistema de Arcata); eventos COES 2017/2023 (STATKRAFT S.A),media
+C.H. SAN IGNACIO,Arequipa,sur,,centrales de Statkraft en Arequipa (antiguo sistema de Arcata); eventos COES 2017/2023 (STATKRAFT S.A),media
+C.T. CHILINA D,Arequipa,sur,,localidad homónima; eventos COES 2017/2023 (EGASA),alta
+C.T. MOLLENDO D,Arequipa,sur,,localidad homónima; eventos COES 2017/2023 (EGASA),alta
+C.T. PUERTO BRAVO,Arequipa,sur,,localidad homónima; eventos COES 2017/2023 (SAMAY I S.A.),alta
+S.E. ARCATA,Arequipa,sur,66,localidad homónima; eventos COES 2017/2023 (MINERA ARES),alta
+S.E. ARES,Arequipa,sur,138,"localidad homónima; eventos COES 2017/2023 (CONENHUA, MINERA ARES)",alta
+S.E. CALLALLI,Arequipa,sur,138,"localidad homónima; eventos COES 2017/2023 (RED DE ENERGIA DEL PERU S.A., MINERA ARES)",alta
+S.E. CAMANA,Arequipa,sur,138,localidad homónima; eventos COES 2017/2023 (SEAL),alta
+S.E. CAYLLOMA,Arequipa,sur,66,"localidad homónima; eventos COES 2017/2023 (MINERA ARES, MINERA BATEAS S.A.C.)",alta
+S.E. CERRO VERDE,Arequipa,sur,220,localidad homónima; eventos COES 2017/2023 (MINERA CERRO VERDE),alta
+S.E. CHALLAPAMPA,Arequipa,sur,33,localidad homónima; eventos COES 2017/2023 (SEAL),alta
+S.E. CHARCANI IV,Arequipa,sur,33,localidad homónima; eventos COES 2017/2023 (EGASA),alta
+S.E. CHILINA,Arequipa,sur,33,"localidad homónima; eventos COES 2017/2023 (SEAL, EGASA)",alta
+S.E. CHUQUIBAMBA,Arequipa,sur,60,localidad homónima; eventos COES 2017/2023 (SEAL),alta
+S.E. CONVERTIDOR,Arequipa,sur,,localidad homónima; eventos COES 2017/2023 (EGASA),alta
+S.E. HIDROMETALURGICA,Arequipa,sur,10,localidad homónima; eventos COES 2017/2023 (MINERA CERRO VERDE),alta
+S.E. JESUS,Arequipa,sur,138,"localidad homónima; eventos COES 2017/2023 (SEAL, RED DE ENERGIA DEL PERU S.A.)",alta
+S.E. LA HUERTA,Arequipa,sur,138,localidad homónima; eventos COES 2017/2023 (SEAL),alta
+S.E. LA JOYA,Arequipa,sur,138,localidad homónima; eventos COES 2017/2023 (GENERADORA DE ENERGÍA DEL PERÚ),alta
+S.E. MAJES,Arequipa,sur,138,localidad homónima; eventos COES 2017/2023 (SEAL),alta
+S.E. MOLLENDO,Arequipa,sur,138,"localidad homónima; eventos COES 2017/2023 (RED DE ENERGIA DEL PERU S.A., EGASA)",alta
+S.E. OCONA,Arequipa,sur,500,"localidad homónima; frontera de área en la hoja INTERCONEXIONES del IEOD: en 2017 la medición Centro-Sur estaba en San José (L-5036), así que Ocoña quedaba del lado Centro; eventos COES 2017/2023 (ABY TRANSMISIÓN SUR, ATLANTICA TRANSMISION SUR S.A.)",media
+S.E. PEDREGAL SOLAR,Arequipa,sur,138,localidad homónima; eventos COES 2017/2023 (SEAL),alta
+S.E. PORONGOCHE,Arequipa,sur,33,localidad homónima; eventos COES 2017/2023 (SEAL),alta
+S.E. PQUE INDUSTRIAL_AREQUIPA,Arequipa,sur,33,localidad homónima; eventos COES 2017/2023 (SEAL),alta
+S.E. PQUE. INDUSTRIAL_AQ,Arequipa,sur,33,localidad homónima; eventos COES 2017/2023 (SEAL),alta
+S.E. PUERTO BRAVO,Arequipa,sur,18,localidad homónima; eventos COES 2017/2023 (SAMAY I S.A.),alta
+S.E. REPARTICION,Arequipa,sur,138,"localidad homónima; eventos COES 2017/2023 (GENERADORA DE ENERGÍA DEL PERÚ, SEAL)",alta
+S.E. SAN JOSE,Arequipa,sur,500,"localidad homónima; eventos COES 2017/2023 (MINERA CERRO VERDE, ATLANTICA TRANSMISION SUR S.A.)",alta
+S.E. SAN LUIS,Arequipa,sur,220,localidad homónima; eventos COES 2017/2023 (MINERA CERRO VERDE),alta
+S.E. SANTUARIO,Arequipa,sur,138,localidad homónima; eventos COES 2017/2023 (RED DE ENERGIA DEL PERU S.A.),alta
+S.E. SOCABAYA,Arequipa,sur,220,"localidad homónima; eventos COES 2017/2023 (TRANSMANTARO, TRANSMISORA ELECTRICA DEL SUR S.A.C)",alta
+S.E. SULFUROS,Arequipa,sur,,localidad homónima; eventos COES 2017/2023 (MINERA CERRO VERDE),alta
+S.E. TALTA,Arequipa,sur,138,"localidad homónima; eventos COES 2017/2023 (CONENHUA, CONELSUR LT SAC)",alta
+S.E. TAMBOMAYO,Arequipa,sur,138,localidad homónima; eventos COES 2017/2023 (CONENHUA),alta
+S.E. YARABAMBA,Arequipa,sur,500,localidad homónima; eventos COES 2017/2023 (TRANSMANTARO),alta
+C.H. MACHUPICCHU,Cusco,sur,,localidad homónima; eventos COES 2017/2023 (EGEMSA),alta
+C.H. SANTA TERESA,Cusco,sur,,"localidad homónima; eventos COES 2017/2023 (LUZ DEL SUR, INLAND ENERGY SAC)",alta
+S.E. AGUAS CALIENTES,Cusco,sur,60,localidad homónima; eventos COES 2017/2023 (HIDRANDINA),alta
+S.E. CACHIMAYO,Cusco,sur,138,"localidad homónima; eventos COES 2017/2023 (RED DE ENERGIA DEL PERU S.A., EGEMSA)",alta
+S.E. COMBAPATA,Cusco,sur,138,"localidad homónima; eventos COES 2017/2023 (RED DE ENERGIA DEL PERU S.A., ELECTRO SUR ESTE)",alta
+S.E. CONSTANCIA,Cusco,sur,220,localidad homónima; eventos COES 2017/2023 (ATN 1 S.A.),alta
+S.E. DOLORESPATA,Cusco,sur,138,"localidad homónima; eventos COES 2017/2023 (EGEMSA, RED DE ENERGIA DEL PERU S.A.)",alta
+S.E. MACHUPICCHU,Cusco,sur,138,"localidad homónima; eventos COES 2017/2023 (EGEMSA, ELECTRO SUR ESTE)",alta
+S.E. QUENCORO,Cusco,sur,138,"localidad homónima; eventos COES 2017/2023 (EGEMSA, RED DE ENERGIA DEL PERU S.A.)",alta
+S.E. SANTA MARIA,Cusco,sur,60,localidad homónima; eventos COES 2017/2023 (ELECTRO SUR ESTE),alta
+S.E. SICUANI,Cusco,sur,66,localidad homónima; eventos COES 2017/2023 (ELECTRO SUR ESTE),alta
+S.E. SURIRAY,Cusco,sur,220,localidad homónima; eventos COES 2017/2023 (TRANSMANTARO),alta
+S.E. TINTAYA,Cusco,sur,138,"localidad homónima; eventos COES 2017/2023 (RED DE ENERGIA DEL PERU S.A., TRANSMISORA ELECTRICA DEL SUR S.A.C)",alta
+S.E. TINTAYA NUEVA,Cusco,sur,220,"localidad homónima; eventos COES 2017/2023 (TRANSMISORA ELECTRICA DEL SUR S.A.C, ATN 1 S.A.)",alta
+S.E. URPIPATA,Cusco,sur,60,localidad homónima; eventos COES 2017/2023 (ELECTRO SUR ESTE),alta
+C.T. RESERVA FRIA PTO MALDONADO,Madre de Dios,sur,,localidad homónima; eventos COES 2017/2023 (INFRAESTRUCTURAS Y ENERGIAS DEL PERU S.A.C.),alta
+S.E. MAZUCO,Madre de Dios,sur,138,localidad homónima; eventos COES 2017/2023 (ELECTRO SUR ESTE),alta
+S.E. PTO MALDONADO,Madre de Dios,sur,138,localidad homónima; eventos COES 2017/2023 (ELECTRO SUR ESTE),alta
+S.E. PUERTO MALDONADO,Madre de Dios,sur,,localidad homónima; eventos COES 2017/2023 (ELECTRO SUR ESTE),alta
+C.S. CENTRAL SOLAR CLEMESI,Moquegua,sur,,localidad homónima; eventos COES 2017/2023 (ENEL GREEN POWER PERU S.A.C),alta
+C.S. CENTRAL SOLAR RUBI,Moquegua,sur,,"localidad homónima; eventos COES 2017/2023 (ENEL GREEN POWER PERU S.A., ENEL GENERACION PERU S.A.A.)",alta
+C.S. INTIPAMPA_CSF,Moquegua,sur,,localidad homónima; eventos COES 2017/2023 (ENGIE),alta
+C.T. ILO 1,Moquegua,sur,,localidad homónima; eventos COES 2017/2023 (ENGIE),alta
+C.T. ILO 2,Moquegua,sur,,localidad homónima; eventos COES 2017/2023 (ENGIE); hoja TEMP_AMB del IEOD,alta
+C.T. ILO 4,Moquegua,sur,,localidad homónima; eventos COES 2017/2023 (ENGIE),alta
+C.T. RESERVA FRIA PLANTA ILO,Moquegua,sur,,localidad homónima; eventos COES 2017/2023 (ENGIE),alta
+C.T. RF PLANTA ILO,Moquegua,sur,,localidad homónima; hoja TEMP_AMB del IEOD,alta
+S.E. AMPLIACION BOTIFLACA,Moquegua,sur,138,localidad homónima; eventos COES 2017/2023 (SOUTHERN PERU CC),alta
+S.E. BOTIFLACA (CUAJONE),Moquegua,sur,138,localidad homónima; eventos COES 2017/2023 (SOUTHERN PERU CC),alta
+S.E. DERIV. QUEBRADA,Moquegua,sur,138,localidad homónima; eventos COES 2017/2023 (PANAMERICANA  SOLAR SAC.),alta
+S.E. ILO,Moquegua,sur,138,localidad homónima; eventos COES 2017/2023 (PANAMERICANA  SOLAR SAC.),alta
+S.E. ILO 1,Moquegua,sur,138,localidad homónima; eventos COES 2017/2023 (SOUTHERN PERU CC),alta
+S.E. ILO 2,Moquegua,sur,220,localidad homónima; eventos COES 2017/2023 (ENGIE),alta
+S.E. ILO 3,Moquegua,sur,138,localidad homónima; eventos COES 2017/2023 (SOUTHERN PERU CC),alta
+S.E. ILO 4,Moquegua,sur,500,localidad homónima; eventos COES 2017/2023 (ENGIE),alta
+S.E. INTIPAMPA,Moquegua,sur,138,localidad homónima; eventos COES 2017/2023 (ENGIE),alta
+S.E. MONTALVO,Moquegua,sur,500,"localidad homónima; eventos COES 2017/2023 (ABY TRANSMISIÓN SUR, ATLANTICA TRANSMISION SUR S.A.)",alta
+S.E. MOQUEGUA,Moquegua,sur,220,"localidad homónima; eventos COES 2017/2023 (REDESUR, ENGIE)",alta
+S.E. PANAMERICANA SOLAR,Moquegua,sur,138,localidad homónima; eventos COES 2017/2023 (PANAMERICANA  SOLAR SAC.),alta
+S.E. REFINERÍA,Moquegua,sur,138,localidad homónima; eventos COES 2017/2023 (SOUTHERN PERU CC),alta
+S.E. RUBI,Moquegua,sur,220,"localidad homónima; eventos COES 2017/2023 (ENEL GREEN POWER PERU S.A., ENEL GREEN POWER PERU S.A.C)",alta
+S.E. SATELITE,Moquegua,sur,138,localidad homónima; eventos COES 2017/2023 (SOUTHERN PERU CC),alta
+S.E. TUCARI,Moquegua,sur,60,mina Tucari de Aruntani (Carumas); radial desde Puno; eventos COES 2017/2023 (ARUNTANI S.A.C.),baja
+C.H. SAN GABÁN II,Puno,sur,,localidad homónima; eventos COES 2017/2023 (SAN GABAN),alta
+C.H. ÁNGEL I,Puno,sur,,localidad homónima; eventos COES 2017/2023 (GENERADORA DE ENERGÍA DEL PERÚ),alta
+C.H. ÁNGEL II,Puno,sur,,localidad homónima; eventos COES 2017/2023 (GENERADORA DE ENERGÍA DEL PERÚ),alta
+C.H. ÁNGEL III,Puno,sur,,localidad homónima; eventos COES 2017/2023 (GENERADORA DE ENERGÍA DEL PERÚ),alta
+S.E. ANTAUTA,Puno,sur,60,localidad homónima; eventos COES 2017/2023 (ELECTRO PUNO),alta
+S.E. AYAVIRI,Puno,sur,138,localidad homónima; eventos COES 2017/2023 (RED DE ENERGIA DEL PERU S.A.),alta
+S.E. AZÁNGARO,Puno,sur,138,"localidad homónima; eventos COES 2017/2023 (ELECTRO PUNO, SAN GABAN)",alta
+S.E. CHILOTA,Puno,sur,220,línea Moquegua - Chilota (Redesur); FLUJOS 2026 la lista junto a Azángaro y Puno; eventos COES 2017/2023 (REDESUR),baja
+S.E. EL ÁNGEL,Puno,sur,,localidad homónima; eventos COES 2017/2023 (GENERADORA DE ENERGÍA DEL PERÚ),alta
+S.E. ILAVE,Puno,sur,66,localidad homónima; eventos COES 2017/2023 (ELECTRO PUNO),alta
+S.E. JULIACA,Puno,sur,138,localidad homónima; eventos COES 2017/2023 (RED DE ENERGIA DEL PERU S.A.),alta
+S.E. POMATA,Puno,sur,66,localidad homónima; eventos COES 2017/2023 (ELECTRO PUNO),alta
+S.E. PUMIRI,Puno,sur,220,"líneas Tintaya Nueva - Pumiri - San Román (Tesur 2 y 4); eventos COES 2017/2023 (TRANSMISORA ELECTRICA DEL SUR 2 S.A.C., TRANSMISORA ELECTRICA DEL SUR 4 S.A.C. - TESUR 4)",baja
+S.E. PUNO,Puno,sur,220,"localidad homónima; eventos COES 2017/2023 (ARUNTANI S.A.C., ELECTRO PUNO)",alta
+S.E. PUTINA,Puno,sur,60,localidad homónima; eventos COES 2017/2023 (ELECTRO PUNO),alta
+S.E. SAN GABÁN II,Puno,sur,138,"localidad homónima; eventos COES 2017/2023 (ELECTRO SUR ESTE, SAN GABAN)",alta
+S.E. SAN RAFAEL,Puno,sur,138,localidad homónima; eventos COES 2017/2023 (SAN GABAN),alta
+S.E. SAN ROMAN,Puno,sur,220,"localidad homónima; eventos COES 2017/2023 (TRANSMISORA ELECTRICA DEL SUR 2 S.A.C., RED DE ENERGIA DEL PERU S.A.)",alta
+S.E. ÁNGEL,Puno,sur,138,localidad homónima; eventos COES 2017/2023 (SAN GABAN),alta
+C.H. ARICOTA I,Tacna,sur,,localidad homónima; eventos COES 2017/2023 (EGESUR),alta
+C.H. ARICOTA II,Tacna,sur,,localidad homónima; eventos COES 2017/2023 (EGESUR),alta
+S.E. ARICOTA 1,Tacna,sur,66,localidad homónima; eventos COES 2017/2023 (EGESUR),alta
+S.E. ARICOTA 2,Tacna,sur,66,localidad homónima; eventos COES 2017/2023 (EGESUR),alta
+S.E. LA YARADA,Tacna,sur,66,localidad homónima; eventos COES 2017/2023 (ELECTROSUR S.A.),alta
+S.E. LOS HÉROES,Tacna,sur,66,"localidad homónima; eventos COES 2017/2023 (EGESUR, MINSUR)",alta
+S.E. MILLSITE,Tacna,sur,138,localidad homónima; eventos COES 2017/2023 (SOUTHERN PERU CC),alta
+S.E. PLAZA TOQUEPALA,Tacna,sur,138,localidad homónima; eventos COES 2017/2023 (SOUTHERN PERU CC),alta
+S.E. PUCAMARCA,Tacna,sur,60,localidad homónima; eventos COES 2017/2023 (MINSUR),alta
+S.E. QDA. HONDA,Tacna,sur,138,línea Millsite - Quebrada Honda - Ilo 3 (Southern); eventos COES 2017/2023 (SOUTHERN PERU CC),baja
+S.E. SARITA,Tacna,sur,66,localidad homónima; eventos COES 2017/2023 (EGESUR),alta
+S.E. TACNA,Tacna,sur,66,localidad homónima; eventos COES 2017/2023 (ELECTROSUR S.A.),alta
+S.E. TOMASIRI,Tacna,sur,66,localidad homónima; eventos COES 2017/2023 (EGESUR),alta

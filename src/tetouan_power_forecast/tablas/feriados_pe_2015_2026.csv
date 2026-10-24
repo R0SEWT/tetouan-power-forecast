@@ -1,0 +1,259 @@
+fecha,nombre,tipo,ambito,fuente
+2015-01-01,Año Nuevo,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2015-01-02,Día no laborable,no_laborable,nacional,DS 073-2014-PCM
+2015-04-02,Jueves Santo,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2015-04-03,Viernes Santo,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2015-05-01,Día del Trabajo,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2015-06-24,Inti Raymi (departamento de Cusco),feriado,regional,Decreto Ley 21860 (1977)
+2015-06-29,San Pedro y San Pablo,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2015-07-27,Día no laborable (puente de Fiestas Patrias),no_laborable,nacional,DS 051-2015-PCM
+2015-07-28,Fiestas Patrias (28 de julio),feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2015-07-29,Fiestas Patrias (29 de julio),feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2015-08-15,Aniversario de la fundación de Arequipa (provincia de Arequipa),feriado,regional,"Ley 24875, art. 8 (día cívico no laborable; Gestión, 07-ago-2024)"
+2015-08-28,Reincorporación de Tacna al Perú (departamento de Tacna),feriado,regional,Ley 23849 (día cívico no laborable)
+2015-08-30,Santa Rosa de Lima,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2015-10-08,Combate de Angamos,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2015-10-09,Juntas Anuales del Banco Mundial y el FMI (Lima Metropolitana y Callao),no_laborable,regional,DS 008-2015-TR
+2015-11-01,Todos los Santos,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2015-12-08,Inmaculada Concepción,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2015-12-25,Navidad,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2016-01-01,Año Nuevo,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2016-03-24,Jueves Santo,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2016-03-25,Viernes Santo,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2016-05-01,Día del Trabajo,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2016-06-24,Inti Raymi (departamento de Cusco),feriado,regional,Decreto Ley 21860 (1977)
+2016-06-29,San Pedro y San Pablo,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2016-07-28,Fiestas Patrias (28 de julio),feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2016-07-29,Fiestas Patrias (29 de julio),feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2016-08-15,Aniversario de la fundación de Arequipa (provincia de Arequipa),feriado,regional,"Ley 24875, art. 8 (día cívico no laborable; Gestión, 07-ago-2024)"
+2016-08-28,Reincorporación de Tacna al Perú (departamento de Tacna),feriado,regional,Ley 23849 (día cívico no laborable)
+2016-08-30,Santa Rosa de Lima,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2016-10-08,Combate de Angamos,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2016-11-01,Todos los Santos,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2016-11-17,Cumbre APEC 2016 (Lima Metropolitana y Callao),no_laborable,regional,DS 059-2016-PCM
+2016-11-18,Cumbre APEC 2016 (Lima Metropolitana y Callao),no_laborable,regional,DS 059-2016-PCM
+2016-11-19,Cumbre APEC 2016 (Lima Metropolitana y Callao),no_laborable,regional,DS 059-2016-PCM
+2016-12-08,Inmaculada Concepción,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2016-12-25,Navidad,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2017-01-01,Año Nuevo,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2017-04-13,Jueves Santo,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2017-04-14,Viernes Santo,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2017-05-01,Día del Trabajo,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2017-06-24,Inti Raymi (departamento de Cusco),feriado,regional,Decreto Ley 21860 (1977)
+2017-06-29,San Pedro y San Pablo,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2017-06-30,Día no laborable compensable,no_laborable,sector_publico,DS 001-2017-PCM
+2017-07-27,Día no laborable compensable,no_laborable,sector_publico,DS 001-2017-PCM
+2017-07-28,Fiestas Patrias (28 de julio),feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2017-07-29,Fiestas Patrias (29 de julio),feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2017-08-15,Aniversario de la fundación de Arequipa (provincia de Arequipa),feriado,regional,"Ley 24875, art. 8 (día cívico no laborable; Gestión, 07-ago-2024)"
+2017-08-28,Reincorporación de Tacna al Perú (departamento de Tacna),feriado,regional,Ley 23849 (día cívico no laborable)
+2017-08-30,Santa Rosa de Lima,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2017-10-08,Combate de Angamos,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2017-11-01,Todos los Santos,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2017-12-08,Inmaculada Concepción,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2017-12-25,Navidad,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2018-01-01,Año Nuevo,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2018-01-02,Día no laborable compensable,no_laborable,sector_publico,DS 001-2017-PCM y DS 021-2017-TR
+2018-01-19,"Visita del papa Francisco (Puerto Maldonado, Madre de Dios)",no_laborable,regional,"decreto supremo de nov-2017, número no verificado (Panamericana, nota 238731)"
+2018-01-20,"Visita del papa Francisco (Trujillo, La Libertad)",no_laborable,regional,"decreto supremo de nov-2017, número no verificado (Panamericana, nota 238731)"
+2018-03-29,Jueves Santo,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2018-03-30,Viernes Santo,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2018-04-13,VIII Cumbre de las Américas (Lima Metropolitana y Callao),no_laborable,regional,DS 022-2017-TR
+2018-04-14,VIII Cumbre de las Américas (Lima Metropolitana y Callao),no_laborable,regional,DS 022-2017-TR
+2018-05-01,Día del Trabajo,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2018-06-24,Inti Raymi (departamento de Cusco),feriado,regional,Decreto Ley 21860 (1977)
+2018-06-29,San Pedro y San Pablo,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2018-07-27,Día no laborable compensable,no_laborable,sector_publico,DS 021-2017-TR
+2018-07-28,Fiestas Patrias (28 de julio),feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2018-07-29,Fiestas Patrias (29 de julio),feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2018-08-15,Aniversario de la fundación de Arequipa (provincia de Arequipa),feriado,regional,"Ley 24875, art. 8 (día cívico no laborable; Gestión, 07-ago-2024)"
+2018-08-28,Reincorporación de Tacna al Perú (departamento de Tacna),feriado,regional,Ley 23849 (día cívico no laborable)
+2018-08-30,Santa Rosa de Lima,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2018-08-31,Día no laborable compensable,no_laborable,sector_publico,DS 021-2017-TR
+2018-10-08,Combate de Angamos,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2018-11-01,Todos los Santos,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2018-11-02,Día no laborable compensable,no_laborable,sector_publico,DS 021-2017-TR
+2018-12-08,Inmaculada Concepción,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2018-12-25,Navidad,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2019-01-01,Año Nuevo,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2019-04-18,Jueves Santo,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2019-04-19,Viernes Santo,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2019-05-01,Día del Trabajo,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2019-06-24,Inti Raymi (departamento de Cusco),feriado,regional,Decreto Ley 21860 (1977)
+2019-06-29,San Pedro y San Pablo,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2019-07-26,"Inauguración de los Juegos Panamericanos Lima 2019 (Lima Metropolitana y Callao, desde las 12:00)",no_laborable,regional,DS 124-2019-PCM
+2019-07-27,Juegos Panamericanos Lima 2019 (Lima Metropolitana y Callao),no_laborable,regional,DS 124-2019-PCM
+2019-07-28,Fiestas Patrias (28 de julio),feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2019-07-29,Fiestas Patrias (29 de julio),feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2019-07-30,Día no laborable compensable,no_laborable,sector_publico,DS 002-2019-PCM
+2019-08-15,Aniversario de la fundación de Arequipa (provincia de Arequipa),feriado,regional,"Ley 24875, art. 8 (día cívico no laborable; Gestión, 07-ago-2024)"
+2019-08-28,Reincorporación de Tacna al Perú (departamento de Tacna),feriado,regional,Ley 23849 (día cívico no laborable)
+2019-08-29,Día no laborable compensable,no_laborable,sector_publico,DS 002-2019-PCM
+2019-08-30,Santa Rosa de Lima,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2019-10-08,Combate de Angamos,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2019-10-31,Día no laborable compensable,no_laborable,sector_publico,DS 002-2019-PCM
+2019-11-01,Todos los Santos,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2019-12-08,Inmaculada Concepción,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2019-12-25,Navidad,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2020-01-01,Año Nuevo,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2020-04-09,Jueves Santo,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2020-04-10,Viernes Santo,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2020-05-01,Día del Trabajo,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2020-06-24,Inti Raymi (departamento de Cusco),feriado,regional,Decreto Ley 21860 (1977)
+2020-06-29,San Pedro y San Pablo,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2020-07-27,Día no laborable compensable,no_laborable,sector_publico,DS 197-2019-PCM
+2020-07-28,Fiestas Patrias (28 de julio),feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2020-07-29,Fiestas Patrias (29 de julio),feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2020-08-15,Aniversario de la fundación de Arequipa (provincia de Arequipa),feriado,regional,"Ley 24875, art. 8 (día cívico no laborable; Gestión, 07-ago-2024)"
+2020-08-28,Reincorporación de Tacna al Perú (departamento de Tacna),feriado,regional,Ley 23849 (día cívico no laborable)
+2020-08-30,Santa Rosa de Lima,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2020-10-08,Combate de Angamos,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2020-10-09,Día no laborable compensable,no_laborable,sector_publico,DS 197-2019-PCM
+2020-11-01,Todos los Santos,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2020-12-08,Inmaculada Concepción,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2020-12-24,Día no laborable compensable,no_laborable,sector_publico,DS 194-2020-PCM
+2020-12-25,Navidad,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2020-12-31,Día no laborable compensable,no_laborable,sector_publico,DS 197-2019-PCM
+2021-01-01,Año Nuevo,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2021-04-01,Jueves Santo,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2021-04-02,Viernes Santo,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2021-05-01,Día del Trabajo,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2021-06-24,Inti Raymi (departamento de Cusco),feriado,regional,Decreto Ley 21860 (1977)
+2021-06-29,San Pedro y San Pablo,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2021-07-28,Fiestas Patrias (28 de julio),feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2021-07-29,Fiestas Patrias (29 de julio),feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2021-08-15,Aniversario de la fundación de Arequipa (provincia de Arequipa),feriado,regional,"Ley 24875, art. 8 (día cívico no laborable; Gestión, 07-ago-2024)"
+2021-08-28,Reincorporación de Tacna al Perú (departamento de Tacna),feriado,regional,Ley 23849 (día cívico no laborable)
+2021-08-30,Santa Rosa de Lima,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2021-10-08,Combate de Angamos,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2021-10-11,Día no laborable compensable,no_laborable,sector_publico,DS 161-2021-PCM
+2021-11-01,Todos los Santos,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2021-11-02,Día no laborable compensable,no_laborable,sector_publico,DS 161-2021-PCM
+2021-12-08,Inmaculada Concepción,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2021-12-24,Día no laborable compensable,no_laborable,sector_publico,DS 161-2021-PCM
+2021-12-25,Navidad,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2021-12-27,Día no laborable compensable,no_laborable,sector_publico,DS 161-2021-PCM
+2021-12-31,Día no laborable compensable,no_laborable,sector_publico,DS 161-2021-PCM
+2022-01-01,Año Nuevo,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2022-01-03,Día no laborable compensable,no_laborable,sector_publico,DS 161-2021-PCM
+2022-04-14,Jueves Santo,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2022-04-15,Viernes Santo,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2022-05-01,Día del Trabajo,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2022-05-02,Día no laborable compensable,no_laborable,sector_publico,DS 033-2022-PCM
+2022-06-24,Inti Raymi (departamento de Cusco),feriado,regional,Decreto Ley 21860 (1977)
+2022-06-24,Día no laborable compensable,no_laborable,sector_publico,DS 033-2022-PCM
+2022-06-29,San Pedro y San Pablo,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2022-07-28,Fiestas Patrias (28 de julio),feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2022-07-29,Fiestas Patrias (29 de julio),feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2022-08-06,Batalla de Junín,feriado,nacional,ley del Congreso de 2022 (número no verificado); holidays 0.107 (PE)
+2022-08-15,Aniversario de la fundación de Arequipa (provincia de Arequipa),feriado,regional,"Ley 24875, art. 8 (día cívico no laborable; Gestión, 07-ago-2024)"
+2022-08-28,Reincorporación de Tacna al Perú (departamento de Tacna),feriado,regional,Ley 23849 (día cívico no laborable)
+2022-08-29,Día no laborable compensable,no_laborable,sector_publico,DS 033-2022-PCM
+2022-08-30,Santa Rosa de Lima,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2022-10-07,Día no laborable compensable,no_laborable,sector_publico,DS 033-2022-PCM
+2022-10-08,Combate de Angamos,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2022-10-31,Día no laborable compensable,no_laborable,sector_publico,DS 033-2022-PCM
+2022-11-01,Todos los Santos,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2022-12-08,Inmaculada Concepción,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2022-12-09,Batalla de Ayacucho,feriado,nacional,Ley 31381; holidays 0.107 (PE)
+2022-12-25,Navidad,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2022-12-26,Día no laborable compensable,no_laborable,sector_publico,DS 033-2022-PCM
+2022-12-30,Día no laborable compensable,no_laborable,sector_publico,DS 033-2022-PCM
+2023-01-01,Año Nuevo,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2023-01-02,Día no laborable compensable,no_laborable,sector_publico,DS 151-2022-PCM
+2023-04-06,Jueves Santo,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2023-04-07,Viernes Santo,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2023-04-28,Día no laborable compensable,no_laborable,sector_publico,DS 151-2022-PCM
+2023-05-01,Día del Trabajo,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2023-06-24,Inti Raymi (departamento de Cusco),feriado,regional,Decreto Ley 21860 (1977)
+2023-06-29,San Pedro y San Pablo,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2023-06-30,Día no laborable compensable,no_laborable,sector_publico,DS 151-2022-PCM
+2023-07-23,Día de la Fuerza Aérea del Perú,feriado,nacional,ley del Congreso de 2023 (número no verificado); holidays 0.107 (PE)
+2023-07-27,Día no laborable compensable,no_laborable,sector_publico,DS 151-2022-PCM
+2023-07-28,Fiestas Patrias (28 de julio),feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2023-07-29,Fiestas Patrias (29 de julio),feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2023-08-06,Batalla de Junín,feriado,nacional,ley del Congreso de 2022 (número no verificado); holidays 0.107 (PE)
+2023-08-15,Aniversario de la fundación de Arequipa (provincia de Arequipa),feriado,regional,"Ley 24875, art. 8 (día cívico no laborable; Gestión, 07-ago-2024)"
+2023-08-28,Reincorporación de Tacna al Perú (departamento de Tacna),feriado,regional,Ley 23849 (día cívico no laborable)
+2023-08-30,Santa Rosa de Lima,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2023-10-08,Combate de Angamos,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2023-10-09,Día no laborable compensable,no_laborable,sector_publico,DS 151-2022-PCM
+2023-11-01,Todos los Santos,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2023-12-07,Día no laborable compensable,no_laborable,sector_publico,DS 151-2022-PCM
+2023-12-08,Inmaculada Concepción,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2023-12-09,Batalla de Ayacucho,feriado,nacional,Ley 31381; holidays 0.107 (PE)
+2023-12-25,Navidad,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2023-12-26,Día no laborable compensable,no_laborable,sector_publico,DS 151-2022-PCM
+2024-01-01,Año Nuevo,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2024-01-02,Día no laborable compensable,no_laborable,sector_publico,DS 151-2022-PCM
+2024-03-28,Jueves Santo,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2024-03-29,Viernes Santo,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2024-05-01,Día del Trabajo,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2024-06-07,Batalla de Arica y Día de la Bandera,feriado,nacional,"Ley 31788 (El Peruano, 15-jun-2023); holidays 0.107 (PE)"
+2024-06-24,Inti Raymi (departamento de Cusco),feriado,regional,Decreto Ley 21860 (1977)
+2024-06-29,San Pedro y San Pablo,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2024-07-23,Día de la Fuerza Aérea del Perú,feriado,nacional,ley del Congreso de 2023 (número no verificado); holidays 0.107 (PE)
+2024-07-26,Día no laborable compensable,no_laborable,sector_publico,DS 011-2024-PCM
+2024-07-27,Día no laborable compensable,no_laborable,sector_publico,DS 066-2024-PCM
+2024-07-28,Fiestas Patrias (28 de julio),feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2024-07-29,Fiestas Patrias (29 de julio),feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2024-08-06,Batalla de Junín,feriado,nacional,ley del Congreso de 2022 (número no verificado); holidays 0.107 (PE)
+2024-08-15,Aniversario de la fundación de Arequipa (provincia de Arequipa),feriado,regional,"Ley 24875, art. 8 (día cívico no laborable; Gestión, 07-ago-2024)"
+2024-08-28,Reincorporación de Tacna al Perú (departamento de Tacna),feriado,regional,Ley 23849 (día cívico no laborable)
+2024-08-30,Santa Rosa de Lima,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2024-10-07,Día no laborable compensable,no_laborable,sector_publico,DS 011-2024-PCM
+2024-10-08,Combate de Angamos,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2024-11-01,Todos los Santos,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2024-11-14,"Semana de Líderes APEC 2024 (Lima Metropolitana, Huaral y Callao)",no_laborable,regional,"DS 110-2024-PCM, modificado por DS 123-2024-PCM"
+2024-11-15,"Semana de Líderes APEC 2024 (Lima Metropolitana, Huaral y Callao)",no_laborable,regional,"DS 110-2024-PCM, modificado por DS 123-2024-PCM"
+2024-11-16,"Semana de Líderes APEC 2024 (Lima Metropolitana, Huaral y Callao)",no_laborable,regional,"DS 110-2024-PCM, modificado por DS 123-2024-PCM"
+2024-12-06,Día no laborable compensable,no_laborable,sector_publico,DS 011-2024-PCM
+2024-12-08,Inmaculada Concepción,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2024-12-09,Batalla de Ayacucho,feriado,nacional,Ley 31381; holidays 0.107 (PE)
+2024-12-23,Día no laborable compensable,no_laborable,sector_publico,DS 011-2024-PCM
+2024-12-24,Día no laborable compensable,no_laborable,sector_publico,DS 011-2024-PCM
+2024-12-25,Navidad,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2024-12-30,Día no laborable compensable,no_laborable,sector_publico,DS 011-2024-PCM
+2024-12-31,Día no laborable compensable,no_laborable,sector_publico,DS 011-2024-PCM
+2025-01-01,Año Nuevo,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2025-04-17,Jueves Santo,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2025-04-18,Viernes Santo,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2025-05-01,Día del Trabajo,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2025-05-02,Día no laborable compensable,no_laborable,sector_publico,DS 042-2025-PCM
+2025-06-07,Batalla de Arica y Día de la Bandera,feriado,nacional,"Ley 31788 (El Peruano, 15-jun-2023); holidays 0.107 (PE)"
+2025-06-24,Inti Raymi (departamento de Cusco),feriado,regional,Decreto Ley 21860 (1977)
+2025-06-29,San Pedro y San Pablo,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2025-07-23,Día de la Fuerza Aérea del Perú,feriado,nacional,ley del Congreso de 2023 (número no verificado); holidays 0.107 (PE)
+2025-07-28,Fiestas Patrias (28 de julio),feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2025-07-29,Fiestas Patrias (29 de julio),feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2025-08-06,Batalla de Junín,feriado,nacional,ley del Congreso de 2022 (número no verificado); holidays 0.107 (PE)
+2025-08-15,Aniversario de la fundación de Arequipa (provincia de Arequipa),feriado,regional,"Ley 24875, art. 8 (día cívico no laborable; Gestión, 07-ago-2024)"
+2025-08-28,Reincorporación de Tacna al Perú (departamento de Tacna),feriado,regional,Ley 23849 (día cívico no laborable)
+2025-08-30,Santa Rosa de Lima,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2025-10-08,Combate de Angamos,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2025-11-01,Todos los Santos,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2025-12-08,Inmaculada Concepción,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2025-12-09,Batalla de Ayacucho,feriado,nacional,Ley 31381; holidays 0.107 (PE)
+2025-12-25,Navidad,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2025-12-26,Día no laborable compensable,no_laborable,sector_publico,DS 042-2025-PCM
+2026-01-01,Año Nuevo,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2026-01-02,Día no laborable compensable,no_laborable,sector_publico,DS 042-2025-PCM
+2026-04-02,Jueves Santo,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2026-04-03,Viernes Santo,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2026-05-01,Día del Trabajo,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2026-06-07,Batalla de Arica y Día de la Bandera,feriado,nacional,"Ley 31788 (El Peruano, 15-jun-2023); holidays 0.107 (PE)"
+2026-06-24,Inti Raymi (departamento de Cusco),feriado,regional,Decreto Ley 21860 (1977)
+2026-06-29,San Pedro y San Pablo,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2026-07-23,Día de la Fuerza Aérea del Perú,feriado,nacional,ley del Congreso de 2023 (número no verificado); holidays 0.107 (PE)
+2026-07-27,Día no laborable compensable,no_laborable,sector_publico,DS 075-2026-PCM
+2026-07-28,Fiestas Patrias (28 de julio),feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2026-07-29,Fiestas Patrias (29 de julio),feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2026-08-06,Batalla de Junín,feriado,nacional,ley del Congreso de 2022 (número no verificado); holidays 0.107 (PE)
+2026-08-15,Aniversario de la fundación de Arequipa (provincia de Arequipa),feriado,regional,"Ley 24875, art. 8 (día cívico no laborable; Gestión, 07-ago-2024)"
+2026-08-28,Reincorporación de Tacna al Perú (departamento de Tacna),feriado,regional,Ley 23849 (día cívico no laborable)
+2026-08-30,Santa Rosa de Lima,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2026-10-08,Combate de Angamos,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2026-11-01,Todos los Santos,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2026-12-08,Inmaculada Concepción,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
+2026-12-09,Batalla de Ayacucho,feriado,nacional,Ley 31381; holidays 0.107 (PE)
+2026-12-25,Navidad,feriado,nacional,"D. Leg. 713, art. 6; holidays 0.107 (PE)"
