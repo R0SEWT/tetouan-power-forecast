@@ -73,7 +73,8 @@ def test_era5_por_area_es_la_media_de_sus_ciudades(tmp_path):
     def falla(url):
         raise AssertionError("no debía volver a descargar")
 
-    bronze_era5(tmp_path, ciudades=ciudades, descargar=falla, progreso=lambda texto: None)
+    bronze_era5(tmp_path, ciudades=ciudades, desde=dt.date(2026, 1, 1), hasta=dt.date(2026, 1, 1), descargar=falla,
+                progreso=lambda texto: None)
 
 
 def test_era5_se_pide_solo_y_queda_en_la_procedencia(tmp_path):
@@ -84,6 +85,30 @@ def test_era5_se_pide_solo_y_queda_en_la_procedencia(tmp_path):
     assert "&models=era5&" in urls[0]  # sin `models`, Open-Meteo mezcla IFS desde 2017
     procedencia = json.loads((tmp_path / "exogenas/bronze/era5/centro_lima.json.procedencia.json").read_text())
     assert procedencia["modelo"] == "era5" and procedencia["url"] == urls[0]
+
+
+def test_era5_se_vuelve_a_bajar_si_lo_guardado_no_cubre_la_consulta(tmp_path):
+    urls = []
+
+    def bajar(ciudades, desde, hasta):
+        antes = len(urls)
+        bronze_era5(tmp_path, ciudades=ciudades, desde=desde, hasta=hasta,
+                    descargar=lambda url: urls.append(url) or _era5_falso(url), progreso=lambda texto: None)
+        return len(urls) - antes
+
+    enero, junio, octubre = dt.date(2026, 1, 1), dt.date(2026, 6, 1), dt.date(2026, 10, 1)
+    lima, otra_lima = {"centro": {"Lima": (-12.0, -77.0)}}, {"centro": {"Lima": (-12.05, -77.04)}}
+    assert bajar(lima, enero, enero) == 1
+    assert bajar(lima, enero, octubre) == 1  # más fechas: se rehace con la historia completa
+    assert bajar(lima, enero, junio) == 0  # ya cubierto
+    assert bajar(otra_lima, enero, octubre) == 1  # otras coordenadas
+    assert "end_date=2026-10-01" in urls[-1]
+    # Lo bajado antes de pedir ERA5 explícitamente no tiene modelo en la procedencia: es el best match
+    procedencia = tmp_path / "exogenas/bronze/era5/centro_lima.json.procedencia.json"
+    previa = json.loads(procedencia.read_text())
+    procedencia.write_text(json.dumps({k: v for k, v in previa.items() if k != "modelo"}))
+    assert bajar(otra_lima, enero, octubre) == 1
+    assert bajar(otra_lima, enero, octubre) == 0
 
 
 def test_saidi_por_area_con_la_mediana_y_lo_no_asignado():
@@ -117,3 +142,4 @@ def test_eventos_y_fallas_en_curso(tmp_path):
     en_curso = fallas_en_curso(pd.to_datetime(["2017-03-02 09:00", "2017-03-02 10:45", "2017-03-02 11:30",
                                                "2017-03-02 12:00"]), eventos)
     assert en_curso.tolist() == [0, 2, 1, 0]
+
