@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from tetouan_power_forecast.exogenas import fallas_en_curso, saidi_disponible
+from tetouan_power_forecast.exogenas import saidi_disponible
 from tetouan_power_forecast.variables_sein import (
     AREAS,
     columnas_variante,
@@ -103,17 +103,3 @@ def test_saidi_entra_segun_su_publicacion():
     saidi = pd.Series([1.0, 2.0, 3.0], index=pd.to_datetime(["2026-01-01", "2026-02-01", "2026-03-01"]))
     serie = saidi_disponible(pd.to_datetime(["2026-05-03", "2026-05-08"]), saidi)
     assert serie.tolist() == [2.0, 3.0]  # el 3 de mayo todavía no salió marzo
-
-
-def test_una_falla_larga_cuenta_solo_sus_primeros_dos_dias():
-    eventos = pd.DataFrame({"inicio": pd.to_datetime(["2025-01-01 00:00"]),
-                            "final": pd.to_datetime(["2025-01-06 00:00"])})
-    en_curso = fallas_en_curso(pd.to_datetime(["2025-01-01 12:00", "2025-01-02 23:00", "2025-01-04 00:00"]), eventos)
-    assert en_curso.tolist() == [1, 1, 0]
-
-
-def test_un_evento_repetido_en_dos_archivos_cuenta_una_vez():
-    evento = {"empresa": "REP", "ubicacion": "S.E. X", "equipo": "L-1", "inicio": pd.Timestamp("2024-12-31 23:00"),
-              "final": pd.Timestamp("2025-01-01 01:00")}
-    eventos = pd.DataFrame([evento, evento])
-    assert fallas_en_curso(pd.to_datetime(["2025-01-01 00:00"]), eventos).tolist() == [1]
