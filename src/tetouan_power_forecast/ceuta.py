@@ -28,6 +28,8 @@ from tetouan_power_forecast.medallon import _reemplazar, _ruta
 URL_REE = ("https://demanda.ree.es/WSvisionaMovilesPeninsulaRest/resources/demandaGeneracionPeninsula"
            "?curva=CEUTAAU&fecha={fecha}")
 URL_CLIMA = "https://archive-api.open-meteo.com/v1/archive"
+# Sin `models`, Open-Meteo devuelve su "best match", que mezcla ERA5 con IFS desde 2017: se pide ERA5 solo
+MODELO_CLIMA = "era5"
 INICIO = date(2019, 5, 11)  # primer día con datos de Ceuta en el servicio de REE
 LATITUD, LONGITUD = 35.889, -5.319  # Ceuta
 ZONA_HORARIA = "Europe/Madrid"  # las marcas de REE están en hora local peninsular
@@ -134,17 +136,22 @@ def bronze_ceuta(raiz=None, desde=INICIO, hasta=None, descargar=_descargar_texto
 
 
 def clima_ceuta(raiz=None, desde=INICIO, hasta=None, descargar=_descargar_texto, forzar=False):
-    """Clima horario de ERA5 para Ceuta (una sola consulta a Open-Meteo)."""
+    """Clima horario de ERA5 para Ceuta (una sola consulta a Open-Meteo).
+
+    Reutiliza lo guardado solo si se pidió a ERA5: lo bajado antes sin `models` se vuelve a bajar.
+    """
     destino = _ruta(raiz, "ceuta/bronze", "clima.json")
-    if destino.exists() and not forzar:
+    procedencia_previa = destino.with_name("clima_procedencia.json")
+    if (destino.exists() and procedencia_previa.exists() and not forzar
+            and json.loads(procedencia_previa.read_text()).get("modelo") == MODELO_CLIMA):
         return destino
     hasta = hasta or (datetime.now(UTC).date() - timedelta(days=7))  # ERA5 se publica con unos días de retraso
     url = (f"{URL_CLIMA}?latitude={LATITUD}&longitude={LONGITUD}&start_date={desde}&end_date={hasta}"
-           f"&hourly={','.join(CLIMA)}&wind_speed_unit=ms&timezone=UTC")
+           f"&hourly={','.join(CLIMA)}&models={MODELO_CLIMA}&wind_speed_unit=ms&timezone=UTC")
     texto = descargar(url)
     json.loads(texto)  # que sea JSON válido antes de guardarlo
     _reemplazar(destino, lambda ruta: ruta.write_text(texto))
-    procedencia = json.dumps({**FUENTES["clima"], "consulta": url,
+    procedencia = json.dumps({**FUENTES["clima"], "modelo": MODELO_CLIMA, "consulta": url,
                               "descargado_utc": datetime.now(UTC).isoformat(timespec="seconds")},
                              ensure_ascii=False, indent=2) + "\n"
     _reemplazar(destino.with_name("clima_procedencia.json"), lambda ruta: ruta.write_text(procedencia))
