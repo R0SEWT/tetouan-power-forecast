@@ -132,6 +132,18 @@ def test_bronze_retoma_sin_repetir_y_marca_los_dias_sin_anexo(tmp_path):
                 progreso=lambda texto: None)
 
 
+def test_un_dia_sin_anexo_se_vuelve_a_buscar_en_la_corrida_siguiente(tmp_path):
+    raiz = tmp_path / "datos"
+    portal = _PortalFalso(tmp_path, sin_anexo={dt.date(2026, 1, 2)})
+    bronze_ieod(raiz, desde=dt.date(2026, 1, 1), hasta=dt.date(2026, 1, 2), listar=portal.listar,
+                descargar=portal.descargar, progreso=lambda texto: None)
+    portal.sin_anexo = set()  # el COES lo publicó después
+    bronze_ieod(raiz, desde=dt.date(2026, 1, 1), hasta=dt.date(2026, 1, 2), listar=portal.listar,
+                descargar=portal.descargar, progreso=lambda texto: None)
+    assert portal.descargas[-1].endswith("AnexoA_0201.xlsx") and len(portal.descargas) == 2
+    assert (raiz / "coes/bronze/ieod/2026/2026-01-02/AnexoA_0201.xlsx").exists()
+
+
 def test_silver_continuo_cada_30_minutos_con_auditoria(tmp_path):
     portal = _PortalFalso(tmp_path, sin_anexo={dt.date(2026, 1, 2)})
     raiz = tmp_path / "datos"

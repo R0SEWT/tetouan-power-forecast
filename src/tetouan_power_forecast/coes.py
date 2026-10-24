@@ -36,7 +36,7 @@ from tetouan_power_forecast.medallon import _reemplazar, _ruta
 URL_PORTAL = "https://www.coes.org.pe/Portal"
 BASE_IEOD = "Post Operación/Reportes/IEOD/"
 AREAS = ["SEIN", "NORTE", "CENTRO", "SUR"]
-INICIO = dt.date(2015, 1, 1)
+INICIO = dt.date(2016, 1, 1)  # en 2015 el anexo es un .xls sin la hoja DEMANDA_AREAS
 CABECERAS = {"User-Agent": "Mozilla/5.0 (X11; Linux x86_64) tetouan-power-forecast (investigación académica)"}
 FUENTE = {
     "fuente": "COES SINAC, Informe de Evaluación de la Operación Diaria (IEOD), anexo diario",
@@ -166,13 +166,14 @@ def bronze_ieod(raiz=None, desde=INICIO, hasta=None, listar=listar, descargar=_d
                 progreso=print):
     """Baja los anexos del IEOD día por día, sin tocarlos. Se puede cortar y retomar.
 
-    Un día ya registrado en la procedencia no se vuelve a pedir; los días sin anexo quedan marcados como
-    `sin_anexo` para revisarlos, no se reintentan solos. Los días de un mes se bajan con `hilos` en paralelo.
+    Un día ya bajado no se vuelve a pedir. Los días sin anexo quedan marcados como `sin_anexo` y se vuelven a
+    buscar en la corrida siguiente (solo cuesta listar la carpeta). Los días de un mes se bajan con `hilos` en
+    paralelo.
     """
     hasta = hasta or (dt.datetime.now(dt.UTC).date() - dt.timedelta(days=2))  # el IEOD sale en D+1
     navegador = Navegador(listar)
     for anio in range(desde.year, hasta.year + 1):
-        hechos = dias_bajados(raiz, anio)
+        hechos = {f for f, linea in dias_bajados(raiz, anio).items() if linea["estado"] == "ok"}
         pendientes = [d for d in _dias(max(desde, dt.date(anio, 1, 1)), min(hasta, dt.date(anio, 12, 31)))
                       if f"{d:%Y-%m-%d}" not in hechos]
         for mes in sorted({(d.year, d.month) for d in pendientes}):
@@ -302,7 +303,7 @@ def cargar_demanda_areas(raiz=None):
     return pd.read_parquet(silver_areas(raiz))
 
 
-def un_anexo_por_anio(raiz=None, anios=range(2015, 2027), listar=listar, descargar=_descargar_archivo,
+def un_anexo_por_anio(raiz=None, anios=range(2016, 2027), listar=listar, descargar=_descargar_archivo,
                       progreso=print):
     """Punto de control antes de la descarga masiva: el 2 de marzo de cada año, leído con el mismo lector.
 
@@ -313,7 +314,7 @@ def un_anexo_por_anio(raiz=None, anios=range(2015, 2027), listar=listar, descarg
     for anio in anios:
         dia = dt.date(anio, 3, 2)
         linea = dias_bajados(raiz, anio).get(f"{dia:%Y-%m-%d}")
-        if linea is None:  # se registra en la procedencia: la descarga masiva no lo vuelve a pedir
+        if linea is None or linea["estado"] != "ok":  # se registra en la procedencia: la descarga masiva no lo vuelve a pedir
             linea = _bajar_dia(raiz, dia, navegador, descargar)
             with _procedencia(raiz, anio).open("a") as salida:
                 salida.write(json.dumps(linea, ensure_ascii=False) + "\n")
