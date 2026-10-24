@@ -219,18 +219,33 @@ def leer_eventos(archivo):
 
 
 def fallas_en_curso(fechas, eventos, duracion_max=DURACION_MAX_FALLA):
-    """Cuántos eventos estaban en curso en cada fecha (inicio ≤ t < final). Sin área: el total del SEIN.
+    """Cuántos eventos estaban en curso en cada fecha. Sin área: el total del SEIN.
 
-    Los eventos de más de `duracion_max` quedan fuera: en el registro hay indisponibilidades de meses o años
-    (en 2023, un evento empieza en 2021 y otro termina en 2026) que no son fallas de la operación.
+    Un evento cuenta desde su inicio hasta su final, pero como mucho `duracion_max`: en el registro hay
+    indisponibilidades de meses o años (en 2023, un evento empieza en 2021 y otro termina en 2026) que no son
+    fallas de la operación. Se recorta y no se descarta, porque en el momento de predecir no se sabe cuánto
+    va a durar un evento que acaba de empezar.
     """
-    duracion = eventos["final"] - eventos["inicio"]
-    validos = eventos[(duracion >= pd.Timedelta(0)) & (duracion <= duracion_max)]
+    validos = eventos.dropna(subset=["inicio", "final"])
+    validos = validos[validos["final"] >= validos["inicio"]]
+    final = np.minimum(validos["final"].to_numpy(), (validos["inicio"] + duracion_max).to_numpy())
     t = pd.to_datetime(np.asarray(fechas)).to_numpy()
     inicio = np.sort(validos["inicio"].to_numpy())
-    final = np.sort(validos["final"].to_numpy())
+    final = np.sort(final)
     return pd.Series(np.searchsorted(inicio, t, side="right") - np.searchsorted(final, t, side="right"),
                      name="fallas_en_curso")
+
+
+def saidi_disponible(fechas, saidi_mensual, dia_publicacion=7):
+    """El último SAIDI mensual publicado en cada fecha: el de m−2 desde el día `dia_publicacion`, el de m−3 antes.
+
+    Osinergmin publica con ~5 semanas de rezago (el corte del 7 de mayo trajo marzo). `saidi_mensual` es una serie
+    con el primer día de cada mes como índice.
+    """
+    fechas = pd.Series(pd.to_datetime(np.asarray(fechas)))
+    rezago = np.where(fechas.dt.day >= dia_publicacion, 2, 3)
+    meses = (fechas.dt.to_period("M") - rezago).dt.to_timestamp()
+    return pd.Series(saidi_mensual.reindex(meses).to_numpy(), index=fechas.index, name="saidi")
 
 
 def silver_exogenas(raiz=None, ciudades=CIUDADES, progreso=print):
