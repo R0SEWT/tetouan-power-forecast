@@ -12,17 +12,13 @@ import pandas as pd
 from sklearn.ensemble import HistGradientBoostingRegressor
 
 from tetouan_power_forecast.medallon import _reemplazar, cargar_silver, raiz_datos
+from tetouan_power_forecast.variables import FERIADOS, RAMADAN
 
 H = 6  # horizonte: 6 periodos de 10 minutos
 DAY = 144
 WEEK = 1008
 ZC = {1: "Zone 1 Power Consumption", 2: "Zone 2 Power Consumption", 3: "Zone 3 Power Consumption"}
 WEATHER = ["Temperature", "Humidity", "Wind Speed", "general diffuse flows", "diffuse flows"]
-# Fechas aproximadas: el grupo debe verificarlas
-FERIADOS = ["2017-01-11", "2017-05-01", "2017-06-26", "2017-06-27", "2017-07-30", "2017-08-14",
-            "2017-08-20", "2017-08-21", "2017-09-01", "2017-09-02", "2017-09-21", "2017-11-06",
-            "2017-11-18", "2017-12-01", "2017-01-01"]
-RAMADAN = ("2017-05-27", "2017-06-25")  # Marruecos 2017
 
 
 def base_frame():
