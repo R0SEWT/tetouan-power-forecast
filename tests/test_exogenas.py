@@ -52,17 +52,19 @@ def test_nino12_semanal_con_columnas_pegadas_y_rezago():
     assert serie.tolist() == [5.3, 5.2]
 
 
-def test_era5_por_area_es_la_media_de_sus_ciudades(tmp_path):
-    def descargar(url):
-        lat = float(url.split("latitude=")[1].split("&")[0])
-        horas = pd.date_range("2026-01-01", periods=3, freq="h")
-        return json.dumps({"hourly": {"time": [f"{h:%Y-%m-%dT%H:%M}" for h in horas],
-                                      "temperature_2m": [abs(lat)] * 3, "apparent_temperature": [0] * 3,
-                                      "relative_humidity_2m": [50] * 3}}).encode()
+def _era5_falso(url):
+    """Tres horas con la latitud (en positivo) como temperatura, para reconocer la ciudad en la tabla."""
+    lat = float(url.split("latitude=")[1].split("&")[0])
+    horas = pd.date_range("2026-01-01", periods=3, freq="h")
+    return json.dumps({"hourly": {"time": [f"{h:%Y-%m-%dT%H:%M}" for h in horas],
+                                  "temperature_2m": [abs(lat)] * 3, "apparent_temperature": [0] * 3,
+                                  "relative_humidity_2m": [50] * 3}}).encode()
 
+
+def test_era5_por_area_es_la_media_de_sus_ciudades(tmp_path):
     ciudades = {"norte": {"A": (-5.0, -80.0), "B": (-7.0, -79.0)}, "centro": {"Lima": (-12.0, -77.0)}}
     bronze_era5(tmp_path, ciudades=ciudades, desde=dt.date(2026, 1, 1), hasta=dt.date(2026, 1, 1),
-                descargar=descargar, progreso=lambda texto: None)
+                descargar=_era5_falso, progreso=lambda texto: None)
     tabla = temperatura_por_area(tmp_path, ciudades=ciudades)
     assert tabla["norte"].tolist() == [6.0] * 3 and tabla["centro"].tolist() == [12.0] * 3
     ponderada = temperatura_por_area(tmp_path, ciudades=ciudades, pesos={"norte": {"A": 3, "B": 1}})
@@ -72,6 +74,16 @@ def test_era5_por_area_es_la_media_de_sus_ciudades(tmp_path):
         raise AssertionError("no debía volver a descargar")
 
     bronze_era5(tmp_path, ciudades=ciudades, descargar=falla, progreso=lambda texto: None)
+
+
+def test_era5_se_pide_solo_y_queda_en_la_procedencia(tmp_path):
+    urls = []
+    bronze_era5(tmp_path, ciudades={"centro": {"Lima": (-12.0, -77.0)}}, desde=dt.date(2026, 1, 1),
+                hasta=dt.date(2026, 1, 1), descargar=lambda url: urls.append(url) or _era5_falso(url),
+                progreso=lambda texto: None)
+    assert "&models=era5&" in urls[0]  # sin `models`, Open-Meteo mezcla IFS desde 2017
+    procedencia = json.loads((tmp_path / "exogenas/bronze/era5/centro_lima.json.procedencia.json").read_text())
+    assert procedencia["modelo"] == "era5" and procedencia["url"] == urls[0]
 
 
 def test_saidi_por_area_con_la_mediana_y_lo_no_asignado():
