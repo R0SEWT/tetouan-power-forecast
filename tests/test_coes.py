@@ -165,3 +165,13 @@ def test_punto_de_control_un_anexo_por_anio(tmp_path):
     assert list(tabla["periodos"]) == [48, 48] and (tabla["desvio_max_mw"] < 0.01).all()
     un_anexo_por_anio(tmp_path / "datos", anios=[2017], listar=portal.listar, descargar=lambda r: 1 / 0,
                       progreso=lambda texto: None)  # ya está en la procedencia: no descarga de nuevo
+
+
+def test_horas_repetidas_en_el_anexo_fallan(tmp_path):
+    ruta = _anexo(tmp_path / "Anexo.xlsx", "2026")
+    libro = openpyxl.load_workbook(ruta)
+    hoja = libro["DEMANDA_AREAS"]
+    hoja.cell(row=5, column=1, value="00:30")  # la segunda fila de datos repite las 00:30
+    libro.save(ruta)
+    with pytest.raises(ValueError, match="horas repetidas"):
+        leer_demanda_areas(ruta, dt.date(2026, 1, 1))
