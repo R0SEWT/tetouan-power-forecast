@@ -134,3 +134,15 @@ def test_regla_fases_de_cuarentena_en_orden(crudas):
     q = crudas["cuarentena_pe_2020"]
     q.loc[1, "desde"] = q.loc[0, "desde"]
     assert _hay(tablas.errores(crudas), "se solapan")
+
+
+def test_tabla_sin_una_columna_da_el_error_de_esquema_y_no_un_keyerror(crudas, monkeypatch):
+    crudas["departamentos_area"] = crudas["departamentos_area"].drop(columns="departamento")
+    crudas["sin_asignar"] = crudas["sin_asignar"].drop(columns="empresa_original")  # la regla cruzada
+    monkeypatch.setattr(tablas, "_leer_crudo", crudas.__getitem__)
+    with pytest.raises(ValueError) as error:
+        tablas.validar()
+    mensaje = str(error.value)
+    assert "departamentos_area: columnas ['area', 'fuente', 'confianza'] != ['departamento'," in mensaje
+    assert "sin_asignar: columnas ['fuente', 'motivo'] != ['empresa_original'," in mensaje
+    assert "se esperan los 25" not in mensaje  # sus reglas propias no corren sobre la tabla rota

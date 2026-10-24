@@ -97,13 +97,16 @@ def cargar(nombre: str) -> pd.DataFrame:
 def errores(t: dict[str, pd.DataFrame]) -> list[str]:
     """Aplica las reglas a un diccionario ``{nombre: DataFrame crudo}`` y devuelve los problemas.
 
-    Las tablas llegan como texto (sin convertir tipos), tal como están en el CSV.
+    Las tablas llegan como texto (sin convertir tipos), tal como están en el CSV. Una tabla con
+    otras columnas solo reporta eso: sus reglas propias y las que la cruzan con otra no se aplican.
     """
     err: list[str] = []
+    con_columnas: dict[str, pd.DataFrame] = {}
     for nombre, df in t.items():
         if list(df.columns) != COLUMNAS[nombre]:
             err.append(f"{nombre}: columnas {list(df.columns)} != {COLUMNAS[nombre]}")
             continue
+        con_columnas[nombre] = df
         if df.empty:
             err.append(f"{nombre}: vacía")
         if df.duplicated().any():
@@ -125,7 +128,7 @@ def errores(t: dict[str, pd.DataFrame]) -> list[str]:
                 vals = set(df[col]) - {""} if col == "departamento_principal" else set(df[col])
                 if vals - DEPARTAMENTOS:
                     err.append(f"{nombre}: {col} desconocido: {sorted(vals - DEPARTAMENTOS)}")
-    err += _reglas_especificas(t)
+    err += _reglas_especificas(con_columnas)
     return err
 
 
