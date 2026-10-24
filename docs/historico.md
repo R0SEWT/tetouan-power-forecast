@@ -24,8 +24,8 @@ rango; pronosticar también la Zona 1 + la Zona 2 y reentrenar cada semana en la
 transferencia del 25 de octubre; y Chronos-2 sin ajuste en Colab Pro como referencia adicional. La
 [validación externa en Ceuta](#resultado-de-la-validación-externa), con los veranos de 2020 a 2026,
 respalda la elección: el objetivo en razón le ganó al modelo actual en todos los casos, y entrenar sin
-haber visto un verano subió su MAPE de julio y agosto de 1.94 a 2.33 %, la mitad que la mejor referencia
-ingenua (4.63 %).
+haber visto un verano subió su MAPE de julio y agosto de 1.93 a 2.31 %, la mitad que la mejor referencia
+ingenua (4.62 %).
 
 ## Opciones ordenadas por impacto y factibilidad
 
@@ -70,8 +70,8 @@ y una sesión de GPU. De la 8 ya está hecha la validación externa; el preentre
   indirecta. En el benchmark de hogares de Meyer et al. (2024), los Transformers entrenados desde cero
   usaron un año de calibración y los modelos fundacionales sin entrenar rindieron igual.
 - **Lo que muestra Ceuta** ([validación externa](#resultado-de-la-validación-externa), julio y agosto de
-  2022 a 2026): con el objetivo en razón, el MAPE fue de 2.33 % entrenando solo con enero a junio, 1.94 %
-  con un año, 1.84 % con dos y 1.82 % con tres. Lo que más pesa es haber visto un verano; el segundo año
+  2022 a 2026): con el objetivo en razón, el MAPE fue de 2.31 % entrenando solo con enero a junio, 1.93 %
+  con un año, 1.84 % con dos y 1.81 % con tres. Lo que más pesa es haber visto un verano; el segundo año
   aporta 0.1 puntos y el tercero, casi nada.
 - **Lo que muestra el experimento:** con el objetivo relativo, el pliegue de marzo (entrenado con solo
   enero y febrero) ya logra un MAPE de 2.3 % en la Zona 1, frente a 3.3 % de la mejor referencia ingenua;
@@ -81,7 +81,7 @@ y una sesión de GPU. De la 8 ya está hecha la validación externa; el preentre
 lo que decide el pronóstico a una hora. No alcanza para aprender el ciclo anual ni el nivel de verano.
 Lo que conviene es **no pedirle al modelo que aprenda el nivel** (opciones 1 y 2) y no afirmar en el
 paper que el modelo generaliza a otros años. En Ceuta, no haber visto un verano subió el MAPE un 20 % con
-el objetivo en razón y un 38 % con el modelo actual.
+el objetivo en razón y un 37 % con el modelo actual.
 
 ## 1. Pronosticar el cambio relativo, no el nivel
 
@@ -485,10 +485,12 @@ que se aprenda ahí es evidencia indirecta, no una validación sobre Amendis.
 
 ### Resultado de la validación externa
 
-Se corrió en Colab con los datos descargados el 23 de octubre de 2026. El silver tiene 391,975
-intervalos de 10 minutos, del 11 de mayo de 2019 al 22 de octubre de 2026, sin fechas repetidas y con el
-clima completo; a 878 intervalos (0.22 %) les falta la demanda y 4 tienen una demanda no positiva. Los
-huecos de hasta una hora se rellenan por interpolación y los demás quedan fuera de la evaluación.
+Se corrió en Colab con la demanda descargada el 23 de octubre de 2026 y el clima del 24 de octubre, pedido
+solo a ERA5. La primera corrida usó el clima por defecto de Open-Meteo, que mezcla ERA5 con IFS desde 2017;
+con ERA5 puro las cifras cambian a lo sumo 0.1 puntos y las conclusiones son las mismas. El silver tiene
+391,975 intervalos de 10 minutos, del 11 de mayo de 2019 al 22 de octubre de 2026, sin fechas repetidas y
+con el clima completo; a 878 intervalos (0.22 %) les falta la demanda y 4 tienen una demanda no positiva.
+Los huecos de hasta una hora se rellenan por interpolación y los demás quedan fuera de la evaluación.
 
 Para cada verano se entrenaron el modelo actual (V0, en nivel y con calendario anual) y el objetivo en
 razón (V4, sin calendario anual), con las variables del [anexo](#anexo-el-experimento) salvo que en
@@ -500,27 +502,27 @@ MAPE (%) de julio y agosto en Ceuta:
 
 | Verano | Mejor ingenua | Actual, sin verano | Razón, sin verano | Actual, 1 año | Razón, 1 año | Razón, 2 años | Razón, 3 años |
 |---|---:|---:|---:|---:|---:|---:|---:|
-| 2020 (confinamiento) | 4.72 ("semana pasada") | 2.60 | 2.06 | 1.84 | 1.70 | — | — |
-| 2021 | 3.85 ("semana pasada") | 2.61 | 2.37 | 1.62 | 1.53 | 1.48 | — |
-| 2022 | 4.58 (persistencia) | 3.18 | 2.93 | 2.54 | 2.43 | 2.34 | 2.33 |
-| 2023 | 4.84 (persistencia) | 2.43 | 2.07 | 1.95 | 1.86 | 1.74 | 1.75 |
-| 2024 | 4.47 (persistencia) | 3.68 | 2.62 | 2.30 | 2.02 | 1.90 | 1.91 |
-| 2025 | 4.60 (persistencia) | 2.35 | 1.89 | 1.84 | 1.69 | 1.54 | 1.50 |
-| 2026 | 4.64 (persistencia) | 3.03 | 2.14 | 1.96 | 1.71 | 1.67 | 1.63 |
-| **Media 2022-2026** | **4.63** | **2.93** | **2.33** | **2.12** | **1.94** | **1.84** | **1.82** |
+| 2020 (confinamiento) | 4.72 ("semana pasada") | 2.57 | 2.19 | 1.84 | 1.69 | — | — |
+| 2021 | 3.85 ("semana pasada") | 2.70 | 2.04 | 1.58 | 1.55 | 1.48 | — |
+| 2022 | 4.58 (persistencia) | 3.04 | 2.71 | 2.54 | 2.40 | 2.37 | 2.31 |
+| 2023 | 4.84 (persistencia) | 2.51 | 2.10 | 1.94 | 1.85 | 1.72 | 1.74 |
+| 2024 | 4.47 (persistencia) | 3.50 | 2.72 | 2.28 | 2.00 | 1.93 | 1.91 |
+| 2025 | 4.60 (persistencia) | 2.32 | 1.92 | 1.78 | 1.67 | 1.52 | 1.49 |
+| 2026 | 4.64 (persistencia) | 2.97 | 2.12 | 1.96 | 1.70 | 1.67 | 1.62 |
+| **Media 2022-2026** | **4.62** | **2.87** | **2.31** | **2.10** | **1.93** | **1.84** | **1.81** |
 
-Con dos y tres años, el modelo actual promedia 1.98 y 1.97 %. Las medias son de 2022 a 2026, los únicos
+Con dos y tres años, el modelo actual promedia 1.98 y 1.99 %. Las medias son de 2022 a 2026, los únicos
 veranos con las cuatro historias.
 
 - **Todos los modelos le ganan a la mejor referencia ingenua en todos los veranos.** El objetivo en razón
-  tiene entre un 37 y un 68 % menos MAE que ella; el modelo actual sin verano, en 2024, solo un 13 %.
+  tiene entre un 38 y un 68 % menos MAE que ella; el modelo actual sin verano, en 2024, solo un 18 %.
 - **El objetivo en razón le gana al modelo actual en los 25 pares de verano e historia.** Con al menos un
-  verano visto, el MAE baja entre un 3 y un 14 %; sin verano visto, entre un 9 y un 31 %.
-- **No haber visto un verano cuesta poco con el objetivo en razón:** de 1.94 a 2.33 % (+0.39 puntos, un
-  20 % más). Con el modelo actual, de 2.12 a 2.93 % (+0.81 puntos, un 38 % más), y el salto llega a 1.4
+  verano visto, el MAE baja entre un 2 y un 15 %; sin verano visto, entre un 12 y un 29 %.
+- **No haber visto un verano cuesta poco con el objetivo en razón:** de 1.93 a 2.31 % (+0.38 puntos, un
+  20 % más). Con el modelo actual, de 2.10 a 2.87 % (+0.77 puntos, un 37 % más), y el salto llega a 1.2
   puntos en 2024.
-- **Más años aportan poco:** el segundo baja el MAPE 0.1 puntos y el tercero no cambia nada (1.84 contra
-  1.82 %).
+- **Más años aportan poco:** el segundo baja el MAPE 0.1 puntos y el tercero casi nada (1.84 contra
+  1.81 %).
 - **La mejor referencia ingenua cambia con el sistema:** en Ceuta es la persistencia desde 2022; en
   Tetuán, "ayer" o "semana pasada" según la zona y el mes. Por eso cada comparación va contra la mejor
   ingenua de su propio periodo.
@@ -664,7 +666,7 @@ anual).
 > diferencias se acompañan de intervalos por *bootstrap* por bloques y del error por mes del origen móvil.
 > El verano de la Zona 3 solo se evalúa con origen móvil, como un rango entre una cota pesimista y una
 > optimista. Como evidencia indirecta, en Ceuta, un sistema vecino con datos de 2019 a 2026, entrenar sin
-> haber visto un verano subió el MAPE de julio y agosto de 1.94 a 2.33 %, todavía la mitad que la mejor
+> haber visto un verano subió el MAPE de julio y agosto de 1.93 a 2.31 %, todavía la mitad que la mejor
 > referencia ingenua.
 
 ## Anexo: el experimento
@@ -763,7 +765,8 @@ los efectos.
 - REE, *Seguimiento de la demanda de energía eléctrica* (web): <https://demanda.ree.es/visiona/home>.
   Servicio que la alimenta, consultado para Ceuta y Melilla:
   <https://demanda.ree.es/WSvisionaMovilesPeninsulaRest/resources/demandaGeneracionPeninsula?curva=CEUTAAU&fecha=2023-07-05>.
-  Los datos de Ceuta de la validación externa se descargaron el 23 de octubre de 2026.
+  Los datos de Ceuta de la validación externa se descargaron el 23 de octubre de 2026; el clima se volvió a
+  bajar el 24, pidiendo solo ERA5.
 - REE, REData API: <https://www.ree.es/es/apidatos>. Consulta de la demanda mensual de Ceuta en 2017:
   <https://apidatos.ree.es/es/datos/demanda/evolucion?start_date=2017-01-01T00:00&end_date=2017-12-31T23:59&time_trunc=month&geo_trunc=electric_system&geo_limit=ceuta&geo_ids=8744>;
   la horaria, un mes por consulta (enero de 2017):

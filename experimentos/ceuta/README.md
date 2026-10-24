@@ -46,19 +46,19 @@ el fin de semana de su país.
 
 ## Resultado
 
-Corrida del 23 de octubre de 2026. MAPE (%) medio de julio y agosto de 2022 a 2026, los veranos con las
-cuatro historias:
+Corrida del 24 de octubre de 2026, con el clima pedido solo a ERA5. MAPE (%) medio de julio y agosto de 2022
+a 2026, los veranos con las cuatro historias:
 
 | Historia | V0, nivel con calendario anual | V4, razón sin calendario anual |
 |---|---:|---:|
-| `sin_verano` | 2.93 | 2.33 |
-| `1_anio` | 2.12 | 1.94 |
+| `sin_verano` | 2.87 | 2.31 |
+| `1_anio` | 2.10 | 1.93 |
 | `2_anios` | 1.98 | 1.84 |
-| `3_anios` | 1.97 | 1.82 |
+| `3_anios` | 1.99 | 1.81 |
 
-La mejor referencia ingenua promedia 4.63 %. V4 le gana a V0 en los 25 pares de verano e historia, y todos
-los modelos le ganan a la mejor ingenua en todos los veranos. Sin haber visto un verano, V4 pierde 0.39
-puntos (un 20 % más de error); V0, 0.81 (38 %). Más de un año de historia aporta poco. La tabla por verano
+La mejor referencia ingenua promedia 4.62 %. V4 le gana a V0 en los 25 pares de verano e historia, y todos
+los modelos le ganan a la mejor ingenua en todos los veranos. Sin haber visto un verano, V4 pierde 0.38
+puntos (un 20 % más de error); V0, 0.77 (37 %). Más de un año de historia aporta poco. La tabla por verano
 y lo que significa para Tetuán están en
 [`docs/historico.md`](../../docs/historico.md#resultado-de-la-validación-externa).
 
