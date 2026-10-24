@@ -28,7 +28,7 @@ la demanda se sale de lo que el modelo vio, y medir qué ayuda más a adaptarla 
 | **Datos** | UCI 849: 2017, cada 10 min, tres zonas | Red Eléctrica: demanda de Ceuta, mayo de 2019 a octubre de 2026, cada 10 min | COES (IEOD): Norte, Centro y Sur, 2016 a 2026, cada 30 min; ERA5, ICEN, Niño 1+2, fallas del COES, SAIDI |
 | **Lo que se pone a prueba** | Niveles no vistos dentro del año (el verano, la transferencia de carga del 25 de octubre) | Veranos no vistos en siete años distintos | Un nivel no visto en el sistema nacional, distinto en cada área |
 | **Criterio de éxito** | Le gana a la mejor referencia ingenua en todas las zonas y meses; al menos 20 % menos MAE que ella en la prueba | El objetivo en razón le gana al objetivo en nivel, y entrenar sin haber visto un verano sigue por debajo de la mejor ingenua | M0 le gana a la mejor ingenua en las tres áreas en 2025; en 2026, la diferencia entre variantes con su intervalo al 95 %. "Sin efecto" también es un resultado |
-| **Estado** | Hecho: le gana en 24 de 24 meses-zona y en la prueba queda 41-56 % por debajo de la mejor ingenua | Hecho: gana en los 25 pares de verano e historia; sin verano, 2.33 % de MAPE contra 4.63 % de la mejor ingenua | Validación 2025 hecha (M0 gana en los 6 casos; las exógenas no ayudan, como se previó). Faltan la prueba de 2026, el experimento de adaptación y la comparación con la Programación Diaria del COES |
+| **Estado** | Hecho: le gana en 24 de 24 meses-zona y en la prueba queda 41-56 % por debajo de la mejor ingenua | Hecho: gana en los 25 pares de verano e historia; sin verano, 2.31 % de MAPE contra 4.62 % de la mejor ingenua | Validación 2025 hecha (M0 gana en los 6 casos; las exógenas no ayudan, como se previó). Faltan la prueba de 2026, el experimento de adaptación y la comparación con la Programación Diaria del COES |
 
 Las hipótesis del OE3 están escritas antes de ver la prueba, en la [spec](../superpowers/specs/2026-10-23-demanda-sein-areas-design.md) (§1).
 
@@ -86,12 +86,12 @@ Notas para el pie de la tabla:
 
 ## Tabla 2 (borrador): Ceuta, julio y agosto
 
-Media de los veranos 2022-2026, MAPE (%). "Nivel" es el modelo con el objetivo en nivel y calendario anual; "razón",
+Media de los veranos 2022-2026, MAPE (%), con el clima solo de ERA5. "Nivel" es el modelo con el objetivo en nivel y calendario anual; "razón",
 el objetivo en razón. Fuente: [`docs/historico.md`](../historico.md), sección 8.
 
 | Mejor ingenua | Nivel, sin verano | Razón, sin verano | Nivel, 1 año | Razón, 1 año | Razón, 2 años | Razón, 3 años |
 |---:|---:|---:|---:|---:|---:|---:|
-| 4.63 | 2.93 | **2.33** | 2.12 | **1.94** | 1.84 | 1.82 |
+| 4.62 | 2.87 | **2.31** | 2.10 | **1.93** | 1.84 | 1.81 |
 
 ## De dónde sale cada cifra
 
