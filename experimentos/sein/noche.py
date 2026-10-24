@@ -2,7 +2,7 @@
 
 Se corre desde un clon del repo, en el kernel del notebook 00_medallon_coes, cuando termina la descarga:
 
-    !git clone -q -b feature/nucleo-sein https://github.com/R0SEWT/tetouan-power-forecast /content/tpf
+    !git clone -q -b develop https://github.com/R0SEWT/tetouan-power-forecast /content/tpf
     %run /content/tpf/experimentos/sein/noche.py
 
 Reinstala el paquete de la rama (el kernel tenía otra versión), baja las exógenas, arma el silver de áreas si
@@ -16,7 +16,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-RAMA = "feature/nucleo-sein"
+RAMA = "develop"
 DATOS = "/content/datos"
 
 subprocess.run([sys.executable, "-m", "pip", "install", "-q", "--force-reinstall", "--no-deps",
