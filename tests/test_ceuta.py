@@ -1,5 +1,5 @@
 import json
-from datetime import date, timedelta
+from datetime import UTC, date, datetime, timedelta
 
 import pandas as pd
 import pytest
@@ -101,12 +101,13 @@ def test_huecos_cortos_se_rellenan_y_los_largos_no():
     assert rellena.iloc[3:11].isna().all()
 
 
-def test_el_dia_de_hoy_no_se_pide_por_defecto(tmp_path, monkeypatch):
+def test_el_dia_de_hoy_no_se_pide_por_defecto(tmp_path):
     pedidos = []
-    ayer = date.today() - timedelta(days=1)
+    hoy = datetime.now(UTC).date()  # la misma referencia que bronze_ceuta, en cualquier zona horaria
+    ayer = hoy - timedelta(days=1)
     bronze_ceuta(tmp_path, desde=ayer, descargar=lambda url: pedidos.append(url) or _respuesta_dia(f"{ayer}"),
                  pausa=0, progreso=lambda texto: None)
-    assert all(f"{date.today():%Y-%m-%d}" not in url for url in pedidos)
+    assert pedidos and all(f"{hoy:%Y-%m-%d}" not in url for url in pedidos)
 
 
 def test_ventanas_de_la_validacion_no_cruzan_al_verano():
