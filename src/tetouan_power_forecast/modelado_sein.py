@@ -41,19 +41,17 @@ CATEGORIAS_ICEN = [
     (3.0, np.inf, "cálida extraordinaria"),
 ]
 VARIANTES_ABLACION = ["M0", "M1", "M2", "M3"]  # M4 espera el SAIDI por área
-DISPOSITIVO = "cuda" if shutil.which("nvidia-smi") else "cpu"  # los árboles van a la GPU cuando la hay
+DISPOSITIVO = "cuda" if shutil.which("nvidia-smi") else "cpu"  # XGBoost va a la GPU cuando la hay
 
 
-def random_forest(semilla=0, dispositivo=DISPOSITIVO, **parametros):
-    """Random Forest: el de cuML en la GPU, el de scikit-learn en la CPU. Los dos usan los mismos hiperparámetros.
+def random_forest(semilla=0, **parametros):
+    """Random Forest de scikit-learn, en la CPU con todos los núcleos.
 
-    En el Centro a 1 h dan el mismo MAE en 2025 (54.71 frente a 54.70 MW) y el de cuML ajusta unas cinco veces más
-    rápido. Con un solo stream (`n_streams=1`), el bosque de cuML es reproducible con la misma semilla.
+    Se probaron dos en la GPU con el dataset real del Centro a 1 h: el de cuML ajusta cinco veces más rápido, pero no
+    es reproducible (con la misma semilla, predicciones que difieren hasta 29 MW) y al pasarlo a scikit-learn cambia
+    (el MAE sube de 54.70 a 55.56 MW); el de XGBoost (`num_parallel_tree`) es reproducible pero tarda de 74 a 119 s
+    por ajuste, frente a 17.6 s de este, con el mismo error.
     """
-    if dispositivo == "cuda":
-        from cuml.ensemble import RandomForestRegressor as RandomForestGPU
-
-        return RandomForestGPU(random_state=semilla, n_streams=1, **parametros)
     return RandomForestRegressor(n_jobs=-1, random_state=semilla, **parametros)
 
 
@@ -65,9 +63,8 @@ def gradient_boosting(semilla=0, dispositivo=DISPOSITIVO, **parametros):
 def candidatos(semilla=0, dispositivo=DISPOSITIVO):
     """Los tres algoritmos de la spec (§7), envueltos en `ModeloRazon`, con su espacio de hiperparámetros.
 
-    Random Forest (cuML en la GPU) y Gradient Boosting (XGBoost) corren en la GPU cuando la hay; Ridge, que ajusta
-    en segundos, en la CPU. Random Forest lleva `max_samples` ≤ 0.3: con 150,000 periodos por área, cada árbol ve
-    una muestra chica.
+    Gradient Boosting (XGBoost) corre en la GPU cuando la hay; Random Forest (ver `random_forest`) y Ridge, en la CPU.
+    Random Forest lleva `max_samples` ≤ 0.3: con 150,000 periodos por área, cada árbol ve una muestra chica.
     """
     return {
         "Ridge": (
@@ -75,10 +72,10 @@ def candidatos(semilla=0, dispositivo=DISPOSITIVO):
             {"estimador__ridge__alpha": np.logspace(-3, 3, 13)},
         ),
         "Random Forest": (
-            ModeloRazon(random_forest(semilla, dispositivo)),
+            ModeloRazon(random_forest(semilla)),
             {
                 "estimador__n_estimators": [100, 200, 300],
-                "estimador__max_depth": [12, 16, 20],
+                "estimador__max_depth": [None, 12, 20],
                 "estimador__min_samples_leaf": [5, 20, 50],
                 "estimador__max_features": [0.3, 0.5, 1.0],
                 "estimador__max_samples": [0.1, 0.2, 0.3],
@@ -106,16 +103,13 @@ def gradient_boosting_global(semilla=0, dispositivo=DISPOSITIVO, **parametros):
 
 
 def portable(modelo):
-    """El modelo listo para guardarse y cargarse en una máquina sin GPU (la app): XGBoost pasa a la CPU y el
-    Random Forest de cuML, si se puede, al de scikit-learn. Devuelve una copia ajustada; no cambia el original."""
+    """El modelo listo para guardarse y cargarse en una máquina sin GPU (la app): si es XGBoost, pasa a la CPU.
+    Devuelve una copia; no cambia el original."""
     import copy
 
     salida = copy.deepcopy(modelo)
-    estimador = salida.estimador_
-    if isinstance(estimador, XGBRegressor):
-        estimador.set_params(device="cpu")
-    elif type(estimador).__module__.startswith("cuml") and hasattr(estimador, "as_sklearn"):
-        salida.estimador_ = estimador.as_sklearn()
+    if isinstance(salida.estimador_, XGBRegressor):
+        salida.estimador_.set_params(device="cpu")
     return salida
 
 
