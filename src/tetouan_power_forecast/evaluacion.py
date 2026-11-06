@@ -65,5 +65,5 @@ def plegados_mensuales(fechas, desde_mes=3, dias_minimos=7, adelanto=ADELANTO, d
         if len(te) == 0 or fechas.iloc[te].dt.normalize().nunique() < dias_minimos:
             continue
         tr = np.flatnonzero((fechas < inicio - adelanto).to_numpy())
-        plegados.append((f"{mes:%Y-%m}", tr, te))
+        plegados.append((mes.strftime("%Y-%m"), tr, te))  # f"{mes:%Y-%m}" falla con el pandas de Colab
     return plegados

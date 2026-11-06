@@ -54,7 +54,8 @@ class ModeloRazon(RegressorMixin, BaseEstimator):
 
     def predict(self, X):
         variables, escala = self._separar(X)
-        return escala * self.estimador_.predict(variables)
+        # np.asarray: los estimadores de cuML devuelven una Serie de pandas si reciben un DataFrame
+        return escala * np.asarray(self.estimador_.predict(variables), dtype=float)
 
     def _separar(self, X):
         return X.drop(columns=self.columna_escala), np.asarray(X[self.columna_escala], dtype=float)
