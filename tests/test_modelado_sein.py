@@ -3,7 +3,8 @@ import itertools
 import numpy as np
 import pandas as pd
 import pytest
-from sklearn.ensemble import HistGradientBoostingRegressor
+from sklearn.ensemble import HistGradientBoostingRegressor, RandomForestRegressor
+from xgboost import XGBRegressor
 
 from tetouan_power_forecast.modelado_sein import (
     bloques,
@@ -14,6 +15,7 @@ from tetouan_power_forecast.modelado_sein import (
     gradient_boosting_global,
     horas_mayor_demanda,
     mejor_referencia,
+    portable,
     predecir_global,
     predecir_local,
     predecir_por_bloques,
@@ -55,10 +57,28 @@ def exogenas():
 
 
 def test_los_candidatos_son_los_de_la_spec():
-    modelos = candidatos()
+    modelos = candidatos(dispositivo="cpu")
     assert set(modelos) == {"Ridge", "Random Forest", "Gradient Boosting"}
     assert all(isinstance(m, ModeloRazon) for m, _ in modelos.values())
     assert max(modelos["Random Forest"][1]["estimador__max_samples"]) <= 0.3
+    assert isinstance(modelos["Random Forest"][0].estimador, RandomForestRegressor)  # en la CPU, el de sklearn
+    gb = modelos["Gradient Boosting"][0].estimador
+    assert isinstance(gb, XGBRegressor) and gb.get_params()["device"] == "cpu"
+    for modelo, espacio in modelos.values():  # cada hiperparámetro del espacio existe en su estimador
+        assert set(espacio) <= set(modelo.get_params())
+
+
+def test_portable_deja_xgboost_en_la_cpu_sin_tocar_el_original(demanda):
+    locales, _ = preparar_datasets(demanda, horizonte=2, variantes=["M0"])
+    d = tramo(locales["NORTE"], "entrenamiento")
+    cols = columnas_variante(d, "M0")
+    modelo = gradient_boosting_global(n_estimators=5, dispositivo="cpu").fit(d[cols], d["real"])
+    antes = modelo.predict(d[cols])
+    modelo.estimador_.set_params(device="cuda")  # como quedaría tras entrenar en Colab
+    copia = portable(modelo)
+    assert copia.estimador_.get_params()["device"] == "cpu"
+    assert modelo.estimador_.get_params()["device"] == "cuda"
+    np.testing.assert_allclose(copia.predict(d[cols]), antes)
 
 
 def test_el_global_y_los_locales_quedan_en_las_mismas_filas(demanda, exogenas):
@@ -96,11 +116,12 @@ def test_predecir_local_y_global_devuelven_una_prediccion_por_fila_evaluada(dema
     entrenar, evaluar = (lambda d: tramo(d, "entrenamiento")), (lambda d: tramo(d, "validacion"))
     hgb = ModeloRazon(HistGradientBoostingRegressor(max_iter=5, early_stopping=False, random_state=0))
     local = predecir_local(hgb, locales, "M0", entrenar, evaluar)
-    global_pred = predecir_global(gradient_boosting_global(max_iter=5), global_,
+    global_pred = predecir_global(gradient_boosting_global(n_estimators=5, dispositivo="cpu"), global_,
                                   lambda d: columnas_sin_grupo(d, "nino"), entrenar, evaluar)
     for area in AREAS:
         n = len(evaluar(locales[area]))
         assert len(local[area]) == n == len(global_pred[area])
+        assert isinstance(local[area], np.ndarray) and isinstance(global_pred[area], np.ndarray)
         assert np.isfinite(local[area]).all() and np.isfinite(global_pred[area]).all()
         assert abs(local[area].mean() / evaluar(locales[area])["real"].mean() - 1) < 0.1  # en MW, no en razón
 

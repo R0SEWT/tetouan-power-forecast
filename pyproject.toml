@@ -12,6 +12,7 @@ dependencies = [
     "ucimlrepo>=0.0.7",
     "pyarrow>=15.0",
     "openpyxl>=3.1.5",
+    "xgboost>=2.0",  # Gradient Boosting del SEIN, en la GPU cuando la hay
 ]
 
 [project.scripts]

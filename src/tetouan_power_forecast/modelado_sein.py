@@ -5,14 +5,17 @@ políticas de reentrenamiento del experimento de adaptación (§8.4) y los regí
 (§8.5). Las métricas se calculan siempre en MW, sobre `real`.
 """
 
+import shutil
+
 import numpy as np
 import pandas as pd
 from scipy.stats import loguniform
 from sklearn.base import clone
-from sklearn.ensemble import HistGradientBoostingRegressor, RandomForestRegressor
+from sklearn.ensemble import RandomForestRegressor
 from sklearn.linear_model import Ridge
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import StandardScaler
+from xgboost import XGBRegressor
 
 from tetouan_power_forecast.modelos import ModeloRazon
 from tetouan_power_forecast.variables_sein import (
@@ -38,13 +41,30 @@ CATEGORIAS_ICEN = [
     (3.0, np.inf, "cálida extraordinaria"),
 ]
 VARIANTES_ABLACION = ["M0", "M1", "M2", "M3"]  # M4 espera el SAIDI por área
+DISPOSITIVO = "cuda" if shutil.which("nvidia-smi") else "cpu"  # XGBoost va a la GPU cuando la hay
 
 
-def candidatos(semilla=0):
+def random_forest(semilla=0, **parametros):
+    """Random Forest de scikit-learn, en la CPU con todos los núcleos.
+
+    Se probaron dos en la GPU con el dataset real del Centro a 1 h: el de cuML ajusta cinco veces más rápido, pero no
+    es reproducible (con la misma semilla, predicciones que difieren hasta 29 MW) y al pasarlo a scikit-learn cambia
+    (el MAE sube de 54.70 a 55.56 MW); el de XGBoost (`num_parallel_tree`) es reproducible pero tarda de 74 a 119 s
+    por ajuste, frente a 17.6 s de este, con el mismo error.
+    """
+    return RandomForestRegressor(n_jobs=-1, random_state=semilla, **parametros)
+
+
+def gradient_boosting(semilla=0, dispositivo=DISPOSITIVO, **parametros):
+    """Gradient Boosting con XGBoost (histogramas), en la GPU cuando la hay; es determinista en las dos."""
+    return XGBRegressor(tree_method="hist", device=dispositivo, random_state=semilla, **parametros)
+
+
+def candidatos(semilla=0, dispositivo=DISPOSITIVO):
     """Los tres algoritmos de la spec (§7), envueltos en `ModeloRazon`, con su espacio de hiperparámetros.
 
-    Random Forest lleva `max_samples` ≤ 0.3: con 150,000 periodos por área, cada árbol ve una muestra chica y el
-    bosque entero cabe en el tiempo de Colab.
+    Gradient Boosting (XGBoost) corre en la GPU cuando la hay; Random Forest (ver `random_forest`) y Ridge, en la CPU.
+    Random Forest lleva `max_samples` ≤ 0.3: con 150,000 periodos por área, cada árbol ve una muestra chica.
     """
     return {
         "Ridge": (
@@ -52,9 +72,9 @@ def candidatos(semilla=0):
             {"estimador__ridge__alpha": np.logspace(-3, 3, 13)},
         ),
         "Random Forest": (
-            ModeloRazon(RandomForestRegressor(n_jobs=-1, random_state=semilla)),
+            ModeloRazon(random_forest(semilla)),
             {
-                "estimador__n_estimators": [100, 200],
+                "estimador__n_estimators": [100, 200, 300],
                 "estimador__max_depth": [None, 12, 20],
                 "estimador__min_samples_leaf": [5, 20, 50],
                 "estimador__max_features": [0.3, 0.5, 1.0],
@@ -62,22 +82,35 @@ def candidatos(semilla=0):
             },
         ),
         "Gradient Boosting": (
-            ModeloRazon(HistGradientBoostingRegressor(early_stopping=False, random_state=semilla)),
+            ModeloRazon(gradient_boosting(semilla, dispositivo)),
             {
                 "estimador__learning_rate": loguniform(0.02, 0.2),
-                "estimador__max_iter": [200, 300, 500],
-                "estimador__max_leaf_nodes": [15, 31, 63],
-                "estimador__min_samples_leaf": [20, 50, 100],
-                "estimador__l2_regularization": [0.0, 0.1, 1.0],
+                "estimador__n_estimators": [200, 300, 500, 800],
+                "estimador__max_depth": [4, 6, 8, 10],
+                "estimador__min_child_weight": [20, 50, 100],
+                "estimador__reg_lambda": [0.0, 0.1, 1.0, 10.0],
+                "estimador__subsample": [0.7, 0.85, 1.0],
+                "estimador__colsample_bytree": [0.7, 0.85, 1.0],
             },
         ),
     }
 
 
-def gradient_boosting_global(semilla=0, **parametros):
-    """El Gradient Boosting de las tres áreas apiladas, con `area_cod` como categórica."""
-    return ModeloRazon(HistGradientBoostingRegressor(early_stopping=False, random_state=semilla,
-                                                     categorical_features=["area_cod"], **parametros))
+def gradient_boosting_global(semilla=0, dispositivo=DISPOSITIVO, **parametros):
+    """El Gradient Boosting de las tres áreas apiladas. `area_cod` (0, 1, 2) entra como número: con dos cortes, un
+    árbol separa cualquier área."""
+    return ModeloRazon(gradient_boosting(semilla, dispositivo, **parametros))
+
+
+def portable(modelo):
+    """El modelo listo para guardarse y cargarse en una máquina sin GPU (la app): si es XGBoost, pasa a la CPU.
+    Devuelve una copia; no cambia el original."""
+    import copy
+
+    salida = copy.deepcopy(modelo)
+    if isinstance(salida.estimador_, XGBRegressor):
+        salida.estimador_.set_params(device="cpu")
+    return salida
 
 
 def preparar_datasets(demanda, horizonte, variantes=tuple(VARIANTES_ABLACION), feriados=(), **exogenas):
