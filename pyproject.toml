@@ -31,8 +31,8 @@ packages = ["src/tetouan_power_forecast"]
 [tool.ruff]
 line-length = 100
 target-version = "py312"
-# Los notebooks vienen de Colab y se revisan a mano; ruff cubre src/ y tests/.
-extend-exclude = ["notebooks"]
+# Los notebooks (y los entregables) vienen de Colab y se revisan a mano; ruff cubre src/ y tests/.
+extend-exclude = ["notebooks", "entregables"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
