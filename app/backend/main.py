@@ -8,6 +8,8 @@ Correr en local (desde la raíz del repo):
 Variables de entorno:
 - ``TPF_CORS_ORIGENES``: orígenes extra separados por comas, además de localhost y 127.0.0.1
   (por ejemplo la IP del celular en la red local o el dominio de Tailscale).
+- ``TPF_PRONOSTICADOR``: ``real`` para servir el modelo entrenado sobre las capas del SEIN
+  (``pronosticador_real.py``, con ``TETOUAN_DATA`` apuntando a la carpeta de datos); si no, el de prueba.
 """
 
 import os
@@ -47,21 +49,24 @@ def _validar_area(area: str) -> None:
         raise HTTPException(404, f"El área «{area}» no existe. Usa una de: {disponibles}.")
 
 
-def _validar_fecha(fecha: date) -> None:
-    if not FECHA_MIN <= fecha <= FECHA_MAX:
+def _validar_fecha(fecha: date, pronosticador: Pronosticador) -> None:
+    # El pronosticador real conoce el rango que cubren sus datos; el de prueba usa el del contrato
+    minimo = getattr(pronosticador, "fecha_min", FECHA_MIN)
+    maximo = getattr(pronosticador, "fecha_max", FECHA_MAX)
+    if not minimo <= fecha <= maximo:
         raise HTTPException(
             422,
             f"La fecha {fecha.isoformat()} está fuera del rango con datos: "
-            f"de {FECHA_MIN.isoformat()} a {FECHA_MAX.isoformat()}.",
+            f"de {minimo.isoformat()} a {maximo.isoformat()}.",
         )
 
 
-def _leer_origen(origen: str) -> datetime:
+def _leer_origen(origen: str, pronosticador: Pronosticador) -> datetime:
     try:
         momento = datetime.strptime(origen, FORMATO_FECHA_HORA)
     except ValueError as error:
         raise HTTPException(422, f"El origen «{origen}» no es una fecha válida.") from error
-    _validar_fecha(momento.date())
+    _validar_fecha(momento.date(), pronosticador)
     return momento
 
 
@@ -107,13 +112,13 @@ def crear_app(pronosticador: Pronosticador | None = None) -> FastAPI:
         variante: Variante = "M3",
     ) -> Serie:
         _validar_area(area)
-        _validar_fecha(fecha)
+        _validar_fecha(fecha, modelo(request))
         return modelo(request).serie(area, fecha, horizonte, variante)
 
     @app.post("/pronostico", response_model=Pronostico)
     def pronostico(request: Request, pedido: PedidoPronostico) -> Pronostico:
         _validar_area(pedido.area)
-        origen = _leer_origen(pedido.origen)
+        origen = _leer_origen(pedido.origen, modelo(request))
         if pedido.horizonte == "1h" and not pedido.escenario.es_base:
             raise HTTPException(422, MENSAJE_ESCENARIO_1H)
         return modelo(request).pronosticar(
@@ -123,7 +128,7 @@ def crear_app(pronosticador: Pronosticador | None = None) -> FastAPI:
     @app.post("/sensibilidad", response_model=Sensibilidad)
     def sensibilidad(request: Request, pedido: PedidoSensibilidad) -> Sensibilidad:
         _validar_area(pedido.area)
-        origen = _leer_origen(pedido.origen)
+        origen = _leer_origen(pedido.origen, modelo(request))
         return modelo(request).sensibilidad(pedido.area, origen, pedido.variable)
 
     @app.get("/diagnostico/{area}", response_model=Diagnostico)
@@ -134,4 +139,12 @@ def crear_app(pronosticador: Pronosticador | None = None) -> FastAPI:
     return app
 
 
-app = crear_app()
+def _pronosticador_por_defecto() -> Pronosticador | None:
+    if os.environ.get("TPF_PRONOSTICADOR") == "real":
+        from .pronosticador_real import PronosticadorReal
+
+        return PronosticadorReal()
+    return None
+
+
+app = crear_app(_pronosticador_por_defecto())

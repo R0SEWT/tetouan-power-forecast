@@ -17,7 +17,7 @@ const API = (() => {
 })();
 
 const FECHA_MIN = '2025-01-01';
-const FECHA_MAX = '2026-10-31';
+let FECHA_MAX = '2026-10-31'; // con el modelo real, /resumen trae el último día con datos
 const ESCENARIO_BASE = Object.freeze({ delta_temp_c: 0, nino: 'observado', falla: 'observada' });
 
 const MESES = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto',
@@ -1211,6 +1211,8 @@ async function cargarBase() {
   S.salud = salud;
   S.areas = areas;
   S.resumen = resumen;
+  const hasta = resumen.fechas_corte && resumen.fechas_corte.prueba_hasta;
+  if (/^\d{4}-\d{2}-\d{2}$/.test(hasta || '')) FECHA_MAX = hasta;
   const prueba = salud.modelo === 'prueba';
   $('#chipPrueba').hidden = !prueba;
   $('#notaPruebaInicio').hidden = !prueba;
