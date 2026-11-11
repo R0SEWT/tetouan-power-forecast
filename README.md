@@ -112,7 +112,7 @@ es un resultado y se reporta con su intervalo.
 | **1 · Tetuán** | Negocio, datos y preparación ([`01_datos_preparacion`](notebooks/01_datos_preparacion.ipynb)); modelado y evaluación ([`02_modelado_evaluacion`](notebooks/02_modelado_evaluacion.ipynb)); [estado del arte](docs/estado-del-arte.md) | Le gana a la mejor referencia ingenua en los 24 meses-zona del origen móvil; en la prueba de noviembre y diciembre, el error queda entre 41 y 56 % por debajo de ella | Las conclusiones del notebook 02 |
 | **2 · Ceuta** | Validación externa ([`experimentos/ceuta`](experimentos/ceuta/), [`docs/historico.md`](docs/historico.md)) | El objetivo en razón gana en los 25 pares de verano e historia; sin haber visto un verano, 2.31 % de MAPE frente a 4.62 % de la mejor referencia | — |
 | **3 · SEIN** | Ingesta del COES y de las exógenas (notebooks [`00_medallon_coes`](notebooks/00_medallon_coes.ipynb) y [`00c_exogenas`](notebooks/00c_exogenas.ipynb)); comprensión y preparación ([`01_sein_datos_preparacion`](notebooks/01_sein_datos_preparacion.ipynb)); línea base de 2025 ([`experimentos/sein`](experimentos/sein/)); modelado y evaluación en 2025 ([`02_sein_modelado_evaluacion`](notebooks/02_sein_modelado_evaluacion.ipynb)); prueba de 2026 ([`03_sein_prueba_2026`](notebooks/03_sein_prueba_2026.ipynb)); [tablas de referencia](docs/peru/tablas.md); base de la app | En 2026, con El Niño extraordinario, el modelo fijo le gana a la mejor referencia en las tres áreas y los dos horizontes (a 1 h, 52 % en el Norte, 58 % en el Centro y 29 % en el Sur); reentrenar cada semana y las exógenas aportan como mucho alrededor de 1 %, y a 24 h el clima empeora el pronóstico | La comparación con la Programación Diaria del COES (opcional) |
-| **App** | Frontend propio y backend FastAPI que ya responden con datos de prueba | — | Conectar el modelo y las predicciones de 2026, y la demo en la 4060 |
+| **App** | Frontend propio y backend FastAPI que ejecutan el XGBoost global sobre las capas reales: pronóstico a 1 h y 24 h, escenarios, sensibilidad y diagnóstico ([`pronosticador_real.py`](app/backend/pronosticador_real.py)) | En 2026, a 1 h, el mismo error que el XGBoost del notebook 03 | La demo en la 4060 |
 | **Paper** | Objetivos y estructura en tres actos, con las tablas de Tetuán y Ceuta | — | Redacción, con los resultados de 2026 |
 
 <p align="right">(<a href="#inicio">volver arriba</a>)</p>
@@ -174,14 +174,20 @@ uv run ruff check .
 uv run tetouan all      # las capas de Tetuán en data/ (las del SEIN, mejor en Colab)
 ```
 
-**La app**, con datos de prueba mientras no esté el modelo final:
+**La app.** Sirve el XGBoost global del notebook 02, que empató con el Random Forest en 2025 y en 2026 y pesa
+unos 130 MB en vez de 1 GB. Necesita las capas silver del SEIN en `data/` (o donde apunte `TETOUAN_DATA`). Los
+modelos se entrenan una vez (unos 4 minutos en una laptop) y quedan en `data/modelos/sein/app/`:
 
 ```bash
 uv sync --extra dev --extra app
-uv run uvicorn app.backend.main:app --reload
+uv run python -m app.backend.pronosticador_real entrenar
+TPF_PRONOSTICADOR=real uv run uvicorn app.backend.main:app
 ```
 
-y abrir `app/web/index.html` en el navegador: busca la API en el puerto 8000.
+y abrir `app/web/index.html` en el navegador: busca la API en el puerto 8000. Sin `TPF_PRONOSTICADOR=real`, la API
+responde con datos de prueba sintéticos. Para los intervalos usa los errores fuera de muestra de 2025 del notebook 02
+(`reportes/sein/modelado/predicciones_validacion_*.csv`) y para la adaptación, la tabla del notebook 03
+(`reportes/sein/prueba_2026/adaptacion.csv`); los dos están en el Drive.
 
 <p align="right">(<a href="#inicio">volver arriba</a>)</p>
 
