@@ -12,10 +12,13 @@ y la API lo usa con ``TPF_PRONOSTICADOR=real`` (ver ``main.py``).
 contrato, con su inicio. Un origen O del contrato es el inicio del último periodo observado, así que lo último que
 se conoce termina en O + 30 min. El periodo que empieza en S se pronostica con la fila del dataset de
 S + 30 min − H: el pronóstico a H emitido H pasos antes, que solo usa información hasta el origen. A 24 h, el último
-periodo se pronostica desde el origen mismo y los anteriores, con lo que se sabía un poco antes.
+periodo se pronostica desde el origen mismo y los anteriores, con lo que se sabía un poco antes. La excepción es la
+declarada en la spec (§2 y §6): a 24 h, ``temp_objetivo`` es el pronóstico de temperatura que el COES recibiría de
+ENFEN, simulado con la temperatura observada de ERA5 más un error por día de emisión.
 
 **De dónde sale cada parte.** El pronóstico, las series, los escenarios, la sensibilidad, las métricas de 2026, el
-error por régimen, la ablación, la importancia y los residuos se calculan aquí con el modelo. La adaptación (fijo
+error por régimen, la ablación, la importancia y los residuos se calculan aquí con el modelo, siempre sobre la
+prueba de 2026, que el modelo no vio (con 2025 adentro serían errores dentro de muestra). La adaptación (fijo
 frente a reentrenado cada semana) no se puede reentrenar en vivo: sale de la tabla del notebook 03, con el Random
 Forest. Los intervalos del 90 % usan los errores fuera de muestra de 2025 del notebook 02 cuando están; si no, los
 de este modelo en 2025 (dentro de muestra, más angostos de lo debido).
@@ -24,7 +27,9 @@ de este modelo en 2025 (dentro de muestra, más angostos de lo debido).
 from __future__ import annotations
 
 import json
+import shutil
 import sys
+import tempfile
 from datetime import date, datetime
 from pathlib import Path
 
@@ -103,6 +108,8 @@ def _feriados():
     try:
         import holidays
     except ImportError:
+        print("Aviso: falta el paquete holidays (extra app); los feriados quedan en cero y el modelo no los ve.",
+              file=sys.stderr)
         return []
     return list(holidays.PE(years=range(2016, 2028)))
 
@@ -167,8 +174,9 @@ def entrenar(raiz=None, hiperparametros=None, progreso=print):
     hiperparametros = hiperparametros or HIPERPARAMETROS
     demanda, exogenas = cargar_capas(raiz)
     datos = armar_datasets(demanda, exogenas, _feriados())
-    carpeta = carpeta_modelos(raiz)
-    carpeta.mkdir(parents=True, exist_ok=True)
+    destino = carpeta_modelos(raiz)
+    destino.parent.mkdir(parents=True, exist_ok=True)
+    carpeta = Path(tempfile.mkdtemp(prefix="app-", dir=destino.parent))  # se publica entera al final
     meta = {"modelo": "XGBoost global (hiperparámetros del notebook 02)", "hiperparametros": hiperparametros,
             "entrenado_hasta": str(FIN_DESARROLLO - MEDIO), "columnas": {}, "mejor_referencia": {}, "intervalos": {}}
     for nombre_h, variantes in VARIANTES_APP.items():
@@ -185,19 +193,50 @@ def entrenar(raiz=None, hiperparametros=None, progreso=print):
             for area, d in datos[nombre_h].items():
                 cuantiles = _cuantiles_notebook_02(raiz, area, nombre_h, v)
                 if cuantiles is None:  # respaldo: el error de este modelo en 2025, dentro de muestra
-                    val = d[(d.index >= FIN_ENTRENAMIENTO) & (d.index < FIN_DESARROLLO)].dropna(subset=columnas + ["real"])
+                    val = _validacion(d, nombre_h).dropna(subset=columnas + ["real"])
                     relativo = val["real"] / portable(modelo).predict(val[columnas]) - 1
                     cuantiles = [float(relativo.quantile(0.05)), float(relativo.quantile(0.95))]
                 meta["intervalos"][f"{area}_{nombre_h}_{v}"] = cuantiles
     for nombre_h, por_area in datos.items():
         for area, d in por_area.items():
-            val = d[(d.index >= FIN_ENTRENAMIENTO) & (d.index < FIN_DESARROLLO)].dropna(subset=["real", *REFERENCIAS])
+            val = _validacion(d, nombre_h).dropna(subset=["real", *REFERENCIAS])
             candidatas = REFERENCIAS if nombre_h == "1h" else ["ayer", "semana_pasada"]  # a 24 h, ayer = persistencia
             mae = {r: float((val["real"] - val[r]).abs().mean()) for r in candidatas}
             meta["mejor_referencia"][f"{area}_{nombre_h}"] = min(mae, key=mae.get)
     (carpeta / "metadatos.json").write_text(json.dumps(meta, ensure_ascii=False, indent=2))
-    progreso(f"modelos y metadatos en {carpeta}")
-    return carpeta
+    _publicar(carpeta, destino)
+    progreso(f"modelos y metadatos en {destino}")
+    return destino
+
+
+def _validacion(d, nombre_h):
+    """Las filas de 2025 cuyo objetivo también cae en 2025: sin el hueco, a 24 h alcanzarían enero de 2026."""
+    return d[(d.index >= FIN_ENTRENAMIENTO) & (d.index < FIN_DESARROLLO - PASOS[nombre_h] * PASO)]
+
+
+def _publicar(nueva, destino):
+    """Reemplaza la carpeta de modelos de una vez: la API nunca ve una mezcla de dos entrenamientos."""
+    vieja = destino.with_name(destino.name + ".anterior")
+    shutil.rmtree(vieja, ignore_errors=True)
+    if destino.exists():
+        destino.rename(vieja)
+    nueva.rename(destino)
+    shutil.rmtree(vieja, ignore_errors=True)
+
+
+def _bootstrap_mae(error, dias, rng, n=300):
+    """Intervalo al 95 % del MAE remuestreando días enteros, solo los que tienen datos.
+
+    Cada remuestra pondera los días por su cantidad de periodos, igual que el MAE que se reporta.
+    """
+    error, dias = np.asarray(error, dtype=float), np.asarray(dias)
+    ok = ~np.isnan(error)
+    unicos, posicion = np.unique(dias[ok], return_inverse=True)
+    suma = np.bincount(posicion, weights=error[ok])
+    cuenta = np.bincount(posicion).astype(float)
+    remuestras = rng.integers(0, len(unicos), size=(n, len(unicos)))
+    medias = suma[remuestras].sum(axis=1) / cuenta[remuestras].sum(axis=1)
+    return float(np.percentile(medias, 2.5)), float(np.percentile(medias, 97.5))
 
 
 def _texto(momento) -> str:
@@ -426,10 +465,10 @@ class PronosticadorReal:
         nombre_ref = self._mejor_referencia(area, "24h")
         rng = np.random.default_rng(0)
 
-        # Error por régimen de El Niño (ICEN definitivo del mes que se predice), en 2025 y 2026
-        d = self._datos["24h"][area]
-        fin = pd.Timestamp(self.fecha_max) + pd.Timedelta(days=1)
-        filas = d[(d.index >= pd.Timestamp(FECHA_MIN)) & (d.index < fin)].dropna(subset=["real", nombre_ref])
+        # Error por régimen de El Niño (ICEN definitivo del mes que se predice), solo en la prueba de 2026:
+        # el modelo se entrenó con 2025, así que ahí sus errores serían dentro de muestra
+        prueba = self._prueba(area, "24h")
+        filas = prueba.dropna(subset=[nombre_ref])
         pred = self._predicciones_area(area, "24h", "M3").reindex(filas.index).to_numpy()
         bien = ~np.isnan(pred)
         filas, pred = filas[bien], pred[bien]
@@ -444,21 +483,15 @@ class PronosticadorReal:
                     regimen=estado, modelo=round(float(np.abs(filas["real"].to_numpy()[m] - pred[m]).mean()), 1),
                     referencia=round(float(np.abs(filas["real"] - filas[nombre_ref]).to_numpy()[m].mean()), 1)))
 
-        # Ablación en la prueba de 2026, con intervalo por bootstrap de días
-        prueba = self._prueba(area, "24h")
-        dias = (prueba.index.normalize() - prueba.index.normalize().min()).days.to_numpy()
-        remuestras = rng.integers(0, dias.max() + 1, size=(300, dias.max() + 1))
+        # Ablación en la prueba de 2026, con intervalo por bootstrap de los días que tienen datos
+        dias = prueba.index.normalize().to_numpy()
         ablacion, mae = [], {}
         for v in VARIANTES_APP["24h"]:
             p = self._predicciones_area(area, "24h", v).reindex(prueba.index).to_numpy()
             error = np.abs(prueba["real"].to_numpy() - p)
-            ok = ~np.isnan(error)
-            por_dia = np.bincount(dias[ok], weights=error[ok], minlength=dias.max() + 1) / np.maximum(
-                np.bincount(dias[ok], minlength=dias.max() + 1), 1)
-            boot = por_dia[remuestras].mean(axis=1)
-            mae[v] = float(error[ok].mean())
-            ablacion.append(Ablacion(variante=v, mae=round(mae[v], 1), ic_inf=round(float(np.percentile(boot, 2.5)), 1),
-                                     ic_sup=round(float(np.percentile(boot, 97.5)), 1)))
+            mae[v] = float(np.nanmean(error))
+            bajo, alto = _bootstrap_mae(error, dias, rng)
+            ablacion.append(Ablacion(variante=v, mae=round(mae[v], 1), ic_inf=round(bajo, 1), ic_sup=round(alto, 1)))
 
         # Importancia por grupo: cuánto sube el MAE al desordenar juntas las variables del grupo (M3)
         columnas = self._columnas("24h", "M3")

@@ -16,7 +16,13 @@ with warnings.catch_warnings():
 from app.backend.contrato import Escenario
 from app.backend.main import crear_app
 from app.backend.pronosticador import FRASE_M0_SIN_ESCENARIOS, Pronosticador
-from app.backend.pronosticador_real import MEDIO, PronosticadorReal, entrenar
+from app.backend.pronosticador_real import (
+    MEDIO,
+    PronosticadorReal,
+    _bootstrap_mae,
+    carpeta_modelos,
+    entrenar,
+)
 
 PEDIDO = {"area": "centro", "origen": "2026-01-20T15:00", "horizonte": "24h", "variante": "M3"}
 
@@ -172,3 +178,18 @@ def test_fecha_fuera_del_rango_con_datos(cliente, pronosticador):
 def test_sin_modelos_entrenados_lo_dice(tmp_path):
     with pytest.raises(FileNotFoundError, match="entrenar"):
         PronosticadorReal(tmp_path)
+
+
+def test_el_bootstrap_ignora_los_dias_sin_datos():
+    dias = np.repeat(np.arange(10), 4)
+    error = np.full(40, 10.0)
+    error[:4] = np.nan  # el primer día no tiene ningún pronóstico válido
+    bajo, alto = _bootstrap_mae(error, dias, np.random.default_rng(0))
+    assert bajo == alto == 10.0  # con días en cero, el intervalo bajaría de 10
+
+
+def test_entrenar_publica_la_carpeta_entera(pronosticador):
+    carpeta = carpeta_modelos(pronosticador._raiz)
+    vecinos = sorted(x.name for x in carpeta.parent.iterdir())
+    assert vecinos == ["app"]  # ni temporales ni la anterior
+    assert len(list(carpeta.glob("xgboost_global_*.joblib"))) == 6 and (carpeta / "metadatos.json").exists()
