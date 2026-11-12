@@ -296,7 +296,8 @@ corresponde.
 
 **Importancia de variables.** Por permutación en la validación de 2025: cuánto sube el MAE (en MW) al desordenar
 una variable, por área y agregada por grupo. La columna de escala (`media_24h`) no es una variable del modelo
-(el estimador no la ve; solo multiplica la predicción) y se excluye de la tabla.
+(el estimador no la ve; solo multiplica la predicción) y no entra en la importancia: desordenarla rompe la vuelta
+a MW, y el aumento del error que resulta no mide información, sino ese artefacto.
 
 ## 4.5 Evaluación
 
@@ -357,6 +358,11 @@ julio, el primer mes de verano que el modelo nunca vio, la Zona 3 queda en 554 k
 referencia.[^tet-movil] Dónde pierde: en el Ramadán, en la Zona 3, 631 frente a 588 kW de la mejor referencia
 (−7.4 %); y tras la transferencia del 25 de octubre la ventaja en la Zona 1 baja de 51.2 a 39.2 %, aunque sigue
 ganando.[^tet-regimenes]
+
+**Qué pesa.** Por permutación en la validación, la importancia se concentra en el consumo actual (`Zona_t`:
+4,100.8 / 2,920.4 / 1,827.9 kW en las Zonas 1 / 2 / 3), el de ayer a la hora de t+6 (`Zona_lag_24h`: 939.3 /
+537.6 / 581.6) y el de la semana pasada (`Zona_lag_1w`: 683.9 / 475.3 / 311.9); el clima en t casi no aporta a
+una hora (la temperatura queda en cero o por debajo).[^tet-imp]
 
 **Frente al estado del arte.** La comparación justa es la mejora frente a la persistencia, que es lo único que los
 trabajos publicados reportan; contra la mejor referencia (tabla anterior) la mejora es menor y es la que vale
@@ -423,8 +429,9 @@ menos del 1 % de esas horas a 1 hora y entre 1.2 y 2.4 % a 24 horas.[^reg25]
 error); el clima mejora el Centro −0.25 MW (IC −0.47 a −0.01) y nada en el Norte ni el Sur. A 24 horas, el clima
 mejora el Centro −0.61 MW (IC −1.15 a −0.07), un 0.7 %, y no se distingue de cero en el Norte ni el Sur. Quitar El
 Niño de M3 mejora un poco el Centro a 1 hora (−0.40 MW).[^abl25] En la importancia por permutación, el clima suma
-1.10 MW en el Centro frente a más de 100 MW de la demanda reciente (`Area_t`, 119.5 MW; `Area_media_1h`, 55.3); El
-Niño, 0.04, y las fallas, −0.01.[^imp25]
+1.10 MW en el Centro frente a 248.0 MW del grupo de demanda y calendario (`Area_t` sola, 119.5 MW; la media de la
+última hora, 55.3); El Niño, 0.04, y las fallas, −0.01. En el Norte y el Sur, el grupo de demanda y calendario
+pesa 49.5 y 43.4 MW, y el clima, 0.18 y 0.23.[^imp25]
 
 **Reentrenar ayuda poco en un año normal.** Reentrenar cada semana (52 veces) baja el error a 1 hora como mucho
 0.56 MW (Centro, con exógenas), menos del 1 %; sin exógenas se distingue de cero en el Centro (−0.31 MW) y el Sur
@@ -543,16 +550,16 @@ celdas de texto) para exportarlas a la versión final.
 | 5 | Origen móvil del SEIN a 1 h, 2023-2025: MAE del modelo sobre el de la mejor referencia, por mes y área (por debajo de 100 el modelo gana) | `notebooks/02_sein_modelado_evaluacion.ipynb`, celda 26 | 5.3 |
 | 6 | Real contra predicho y distribución de residuos en 2025, por área (el equivalente de la matriz de confusión) | `02_sein_modelado_evaluacion.ipynb`, celda 31 (segunda figura) | 6.2 |
 | 7 | Error por hora del día en 2025: modelo frente a la mejor referencia, por área y horizonte | `02_sein_modelado_evaluacion.ipynb`, celda 29 | 6.2 |
-| 8 | Importancia de variables por permutación y por grupo (quitando la fila de la escala `media_24h`; ver nota) | `02_sein_modelado_evaluacion.ipynb`, celda 33 | 5.3 |
+| 8 | Importancia de variables por permutación (las 15 principales) y por grupo, sin la escala `media_24h` (ver nota) | `02_sein_modelado_evaluacion.ipynb`, celda 33, versión del PR #30 | 5.3 |
 | 9 | Error mes a mes en 2026: modelo fijo, reentrenado y mejor referencia, por área y horizonte | `notebooks/03_sein_prueba_2026.ipynb`, celda 16 | 5.4 |
 | 10 | Norte, dos semanas de julio de 2026 (el pico de El Niño): lo real, el modelo fijo, el reentrenado y la referencia, a 1 y 24 h; y los residuos del modelo fijo | `03_sein_prueba_2026.ipynb`, celda 20 | 6.2 |
 | 11 | Tetuán: origen móvil mensual y error por hora en la prueba | `notebooks/02_modelado_evaluacion.ipynb`, celdas 22 y 26 | 5.1 |
 | 12 | La iteración del Entregable 7: los mismos modelos en nivel y en razón frente a las tres referencias | `entregables/Entregable6_MDS_Grupo03.ipynb`, celda 86 | 7 |
 | 13 | Captura de la app: vista de pronóstico y de escenarios *(pendiente: tomarla en la demo)* | `app/web/index.html` | 4.6 |
 
-Nota a la figura 8: la figura del notebook incluye `media_24h`, que es la escala con la que la razón vuelve a MW,
-no una variable que el modelo vea; al permutarla se rompe la reconstrucción y sale como la más importante. En el
-paper se muestra sin esa fila.
+Nota a la figura 8: `media_24h` es la escala con la que la razón vuelve a MW, no una variable que el modelo vea;
+al permutarla se rompe la reconstrucción y salía como la más importante. Desde el PR #30 los notebooks la excluyen
+de la importancia; la figura se exporta de esa versión.
 
 ## 6.2 Qué dicen las figuras
 
@@ -570,9 +577,10 @@ paper se muestra sin esa fila.
 - **Error por hora (figura 7).** Permite ver en qué horas del día el modelo le saca más ventaja a la referencia y
   comprobar que en las horas de mayor demanda la ventaja se mantiene (55, 33 y 35 % en 2025).[^reg25] *[Por
   redactar al exportar la figura.]*
-- **Importancia (figura 8).** La demanda reciente (`Area_t`, 119.5 MW en el Centro; la media de la última hora,
-  55.3) y el calendario diario dominan; el clima suma 1.10 MW en el Centro y El Niño y las fallas, menos de
-  0.05.[^imp25]
+- **Importancia (figura 8).** La demanda reciente y el calendario (grupo M0) suman 49.5 MW en el Norte, 248.0 en
+  el Centro y 43.4 en el Sur; dentro del grupo mandan `Area_t` (23.0 / 119.5 / 22.7) y la media de la última hora
+  (10.1 / 55.3 / 11.2), y después el calendario diario (`Time_Cos` y `MinuteOfDay`, unos 14-15 MW en el Centro).
+  El clima suma 0.18 / 1.10 / 0.23 MW; El Niño, 0.02 / 0.04 / 0.02; las fallas, 0.00 / −0.01 / 0.00.[^imp25]
 
 ## 6.3 La app
 
@@ -768,8 +776,12 @@ Las tablas de 2025 son de la corrida del notebook 02 del SEIN del 4 de noviembre
 [^reg25]: `reportes/sein/modelado/regimenes.csv` (notebook 02, celda 28): mayor demanda a 1 h, mejora M0 55.0,
     33.0 y 34.9 %; subestimación > p90: 0.07, 0.92 y 0.72 %.
 [^abl25]: `reportes/sein/modelado/ablacion.csv` (notebook 02, celda 19).
-[^imp25]: `reportes/sein/modelado/importancias.csv` e `importancias_por_grupo.csv` (notebook 02, celda 33), sin la
-    fila `media_24h`.
+[^imp25]: `reportes/sein/modelado/importancias.csv` e `importancias_por_grupo.csv` en el Drive, versión del PR #30
+    (`fix/importancia-sin-escala`, commit `c687feb`; las anteriores, con la fila `media_24h`, quedaron en `respaldo/`);
+    salida de la celda 33 del notebook 02 del SEIN en esa rama. Los valores por variable no cambian: solo se quita la
+    fila de la escala.
+[^tet-imp]: `notebooks/02_modelado_evaluacion.ipynb`, celda 33, versión del PR #30 (sin la fila de la escala
+    `media_24h`); `reportes/modelado/importancias.csv` en el Drive.
 [^adap25]: `reportes/sein/modelado/adaptacion.csv` y `efectos_adaptacion.csv` (notebook 02, celdas 22 y 23).
 [^mes26]: `data/reportes/sein/prueba_2026/mensual.csv` (notebook 03, celda 16).
 [^reg26]: `data/reportes/sein/prueba_2026/regimenes.csv` (notebook 03, celda 18) y la salida de esa celda ("Días

@@ -14,12 +14,13 @@ resultado.** Las celdas se citan por su índice dentro del `.ipynb` (de 0 en ade
 Ningún hallazgo obliga a rehacer una corrida. La disciplina temporal (regla de información, particiones con
 hueco, elección en 2025, prueba de 2026 corrida una sola vez) está implementada en `src/` y cubierta por tests,
 y las cifras de los notebooks se corresponden con las tablas guardadas. Lo que hay son **tres hallazgos graves de
-redacción**, que cambian afirmaciones que el paper no debe hacer tal como están en los notebooks o en los docs;
+redacción** (uno de ellos, G1, ya resuelto en el PR #30 el 12-nov), que cambian afirmaciones que el paper no
+debe hacer tal como están en los notebooks o en los docs;
 **quince puntos que hay que declarar** en la sección de limitaciones; y **once menores**.
 
 | Clase | Cuántos | Qué implican |
 |---|---|---|
-| **Grave (de redacción o de alcance)** | 3 | Cambian una afirmación o un objetivo del paper. No piden rehacer corridas |
+| **Grave (de redacción o de alcance)** | 3 (G1 ya resuelto) | Cambian una afirmación o un objetivo del paper. No piden rehacer corridas |
 | **A declarar** | 15 | Van a la sección de limitaciones o amenazas a la validez, o cambian cómo se presenta un resultado |
 | **Menor** | 11 | Se anotan; no cambian conclusiones |
 
@@ -27,7 +28,9 @@ Los tres graves, en una línea cada uno:
 
 - **G1.** La importancia por permutación incluye la columna de escala `media_24h`, que no es una variable del
   modelo: al permutarla se rompe la reconstrucción a MW y sale como "la más importante" (207 MW en el Centro).
-  El paper no debe presentarla como variable.
+  El paper no debe presentarla como variable. **Resuelto** en el PR #30 (`fix/importancia-sin-escala`, commit
+  `c687feb`, sin fusionar a `develop` al 12-nov): los notebooks 02 del SEIN y de Tetuán y la app quitan la fila; el
+  grupo "demanda y calendario" baja de 455.3 a 248.0 MW en el Centro y ninguna conclusión cambia.
 - **G2.** `fallas_en_curso` no mide fallas: es mayor que cero en el 91 % de los periodos de 2025 y su media por
   periodo creció de 0.47 en 2016 a 1.8 en 2026 por cómo se registran los eventos. Las conclusiones del tipo
   "las fallas no ayudan" no están respaldadas: la variable **no se pudo evaluar**. La variante con exógenas que
@@ -40,7 +43,7 @@ Los tres graves, en una línea cada uno:
 
 | ID | Tema | Clase | Hallazgo |
 |---|---|---|---|
-| G1 | Importancia de variables | Grave | La escala `media_24h` aparece como variable más importante (artefacto) |
+| G1 | Importancia de variables | Grave · **resuelto (PR #30)** | La escala `media_24h` aparecía como variable más importante (artefacto); los notebooks ya la excluyen |
 | G2 | Ablación de exógenas | Grave | `fallas_en_curso` es una variable degenerada; "sin efecto de las fallas" no está respaldado |
 | G3 | Alcance | Grave | No hay comparación con la Programación Diaria del COES; el OE3 la menciona |
 | D1 | Supuesto COES-ENFEN | A declarar | A 1 h el "observado" es ERA5 (reanálisis con ~5 días de rezago); a 24 h el pronóstico simulado es la observada futura más N(0, 1.5 °C) por día; la spec prometía dos niveles (1 y 2 °C) |
@@ -259,6 +262,16 @@ sumar el grupo M0 (la cifra incluye la escala). Las variables que sí importan q
 `Area_media_1h`, el calendario diario (`MinuteOfDay`, `Time_Cos`, `Obj_Cos`) y `Area_semana_pasada`; el clima suma
 1.10 MW en el Centro y 0.18-0.23 en las otras áreas.
 
+**Estado (12-nov): resuelto en el PR #30** (`fix/importancia-sin-escala`, commit `c687feb`, todavía sin fusionar a
+`develop`). Los notebooks 02 del SEIN y de Tetuán hacen `importancias.drop(index="media_24h")` después de calcular
+(los valores de las demás variables no cambian) y la app lo replica en `GRUPOS_IMPORTANCIA`. Con la fila fuera, el
+grupo "demanda y calendario" queda en 49.46 / 247.97 / 43.37 MW (Norte / Centro / Sur) en vez de 96.11 / 455.29 /
+109.19; clima (0.18 / 1.10 / 0.23), El Niño (0.02 / 0.04 / 0.02) y fallas (0.00 / −0.01 / 0.00) no cambian, y la
+conclusión 5 del notebook ahora dice "1.1 MW frente a 248 MW". En Tetuán, `Zona_t` pasa a primera (4,100.8 /
+2,920.4 / 1,827.9 kW), seguida de `Zona_lag_24h` y `Zona_lag_1w`. Verificado en las salidas de la celda 33 de los
+dos notebooks en esa rama. Las tablas nuevas están en el Drive (`reportes/sein/modelado/importancias.csv` e
+`importancias_por_grupo.csv`; las anteriores, en `respaldo/`).
+
 **Lectura de la ablación con esta corrección.** A 1 h: en 2025, M1 − M0 en el Centro −0.25 MW (IC −0.47 a −0.01)
 y nada en el Norte ni el Sur; en 2026, −0.46 (IC −0.71 a −0.20) en el Centro y nada en las otras. A 24 h: en 2025
 el clima mejora el Centro −0.61 MW (IC −1.15 a −0.07); en 2026 lo empeora +1.35 (IC 0.10 a 2.97) y al Norte +0.42
@@ -454,8 +467,8 @@ Una lista corta, en el orden en que conviene decirlas:
 
 Ninguno es necesario para el paper; están ordenados por lo que aportarían.
 
-1. **Importancias sin la escala** (G1): volver a correr la celda 33 del notebook 02 con `cols` sin `media_24h`
-   (unos 15 minutos en Colab). Mientras tanto, basta con quitar la fila.
+1. **Importancias sin la escala** (G1): **hecho** en el PR #30 (la fila se quita después de calcular; los demás
+   valores no cambian). Falta fusionarlo a `develop`.
 2. **Sensibilidad al error del pronóstico de temperatura** (D1): M1 a 24 h en 2026 con σ = 1 y 2 °C, con el modelo
    fijo (dos bloques, unos 10 minutos cada uno en Colab). Diría si el daño del clima a 24 h depende del supuesto.
 3. **Una definición útil de falla** (G2): solo eventos con interrupción de carga o con MW indisponibles, por área
