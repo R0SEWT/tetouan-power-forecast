@@ -88,9 +88,11 @@ FIN_ENTRENAMIENTO = pd.Timestamp("2025-01-01")
 FIN_DESARROLLO = pd.Timestamp("2026-01-01")  # el modelo de la app se entrena hasta aquí
 MEDIO = pd.Timedelta(minutes=30)
 DIA = 48
+# media_24h no va en ningún grupo: es la escala con que ModeloRazon vuelve a MW, no una variable. Desordenarla rompe
+# esa reconstrucción y aparecería como "la más importante" sin serlo.
 GRUPOS_IMPORTANCIA = {
     "demanda_reciente": ["Area_t", "Area_t_menos_1", "Area_t_menos_2", "Area_t_menos_4", "Area_ayer",
-                         "Area_semana_pasada", "Area_media_1h", "Area_desv_1h", "Area_m24_vs_m7d", "media_24h"],
+                         "Area_semana_pasada", "Area_media_1h", "Area_desv_1h", "Area_m24_vs_m7d"],
     "calendario": ["Hour", "MinuteOfDay", "DayOfWeek", "Time_Sin", "Time_Cos", "Week_Sin", "Week_Cos", "Obj_Sin",
                    "Obj_Cos", "DiaSemanaObjetivo", "FinDeSemanaObjetivo", "FeriadoObjetivo", "Cuarentena"],
     "clima": GRUPOS["clima"],
