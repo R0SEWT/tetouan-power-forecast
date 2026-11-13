@@ -81,8 +81,10 @@ const S = {
   sensVar: 'temperatura',
   serie: null,
   pron: null,
+  pico: null,
   diag: new Map(),
-  turnos: { serie: 0, pron: 0, esc: 0, sens: 0, diag: 0 },
+  seguimiento: new Map(),
+  turnos: { serie: 0, pron: 0, esc: 0, sens: 0, diag: 0, pico: 0, seg: 0 },
 };
 
 // ---- Utilidades ----------------------------------------------------------------
@@ -128,6 +130,13 @@ function fechaLarga(iso) {
   const p = partesFecha(iso);
   return `${DIAS[p.dow]} ${p.d} de ${MESES[p.m - 1]} de ${p.y}`;
 }
+
+// «19:30 del martes 10 de marzo», para un inicio de periodo AAAA-MM-DDTHH:MM
+const cuandoTxt = (fechaHora) => `${horaDe(fechaHora)} del ${fechaDiaMes(fechaHora)}`;
+const mesLargo = (aaaamm) => MESES[Number(aaaamm.slice(5, 7)) - 1] || aaaamm;
+const mesCorto = (aaaamm) => MESES_CORTOS[Number(aaaamm.slice(5, 7)) - 1] || aaaamm;
+// «Combinado (recomendado)» → «combinado», para usarlo dentro de una frase
+const nombreCorto = (m) => (m ? m.nombre.replace(/\s*\(.*\)\s*$/, '').toLowerCase() : 'modelo');
 
 function sumarDias(iso, dias) {
   const p = partesFecha(iso);
@@ -198,17 +207,28 @@ function mensajeDe(datos, estado) {
 
 // El parámetro `modelo` solo viaja si el backend ofrece más de uno (un backend anterior no lo conoce).
 const hayVariosModelos = () => S.modelos.length > 1;
-const modeloActual = () => S.modelos.find((m) => m.id === S.modelo) || null;
-// Un modelo puede no distinguir variantes (el híbrido usa solo la demanda) y tener su propio rango de fechas.
-const soloDemanda = () => {
+const modeloPorId = (id) => S.modelos.find((m) => m.id === id) || null;
+const modeloActual = () => modeloPorId(S.modelo);
+const esFecha = (x) => /^\d{4}-\d{2}-\d{2}$/.test(x || '');
+const enRango = (m, fecha) => !m || !fecha
+  || ((!esFecha(m.fecha_min) || fecha >= m.fecha_min) && (!esFecha(m.fecha_max) || fecha <= m.fecha_max));
+// El modelo que responde: el elegido o, en un día sin sus pronósticos precalculados, su respaldo (el base).
+function modeloEfectivo() {
   const m = modeloActual();
-  return Boolean(m && Array.isArray(m.variantes) && !m.variantes.includes('M3'));
-};
+  if (m && m.respaldo && !enRango(m, S.fecha)) return modeloPorId(m.respaldo) || m;
+  return m;
+}
+// Un modelo puede no distinguir variantes (el híbrido usa solo la demanda) y tener su propio rango de fechas.
+const usaSoloDemanda = (m) => Boolean(m && Array.isArray(m.variantes) && !m.variantes.includes('M3'));
+const soloDemanda = () => usaSoloDemanda(modeloEfectivo());
 function aplicarModelo() {
   const m = modeloActual();
-  const esFecha = (x) => /^\d{4}-\d{2}-\d{2}$/.test(x || '');
-  FECHA_MIN = m && esFecha(m.fecha_min) ? m.fecha_min : '2025-01-01';
-  if (m && esFecha(m.fecha_max)) FECHA_MAX = m.fecha_max;
+  const r = m && m.respaldo ? modeloPorId(m.respaldo) : null;
+  // Con respaldo, el selector de fecha abarca los dos rangos: fuera del rango del modelo responde el respaldo
+  const minimos = [m, r].filter((x) => x && esFecha(x.fecha_min)).map((x) => x.fecha_min).sort();
+  const maximos = [m, r].filter((x) => x && esFecha(x.fecha_max)).map((x) => x.fecha_max).sort();
+  FECHA_MIN = minimos[0] || '2025-01-01';
+  if (maximos.length) FECHA_MAX = maximos[maximos.length - 1];
   if (soloDemanda()) S.variante = 'M0';
   if (S.fecha) S.fecha = acotarFecha(S.fecha) || S.fecha;
   const ayuda = $('#ayudaModelo');
@@ -224,7 +244,20 @@ function aplicarModelo() {
       : '«Con clima y El Niño» también usa las fallas en curso de la red.';
   }
 }
-const conModelo = (obj) => (hayVariosModelos() && S.modelo ? { ...obj, modelo: S.modelo } : obj);
+const conModelo = (obj) => {
+  const m = modeloEfectivo();
+  return hayVariosModelos() && m ? { ...obj, modelo: m.id } : obj;
+};
+// Los escenarios y la sensibilidad necesitan un modelo que use el clima: si el elegido no lo usa, el base.
+function modeloConClima() {
+  if (!soloDemanda()) return modeloEfectivo();
+  return S.modelos.find((m) => !usaSoloDemanda(m)) || modeloEfectivo();
+}
+const conModeloClima = (obj) => {
+  const m = modeloConClima();
+  const variante = usaSoloDemanda(m) ? 'M0' : (soloDemanda() ? 'M3' : S.variante);
+  return hayVariosModelos() && m ? { ...obj, variante, modelo: m.id } : { ...obj, variante };
+};
 
 async function api(ruta, cuerpo) {
   const opciones = cuerpo
@@ -728,6 +761,7 @@ function mostrarArea(id, q) {
   if (cambioDeArea) {
     S.serie = null;
     S.pron = null;
+    S.pico = null;
     S.escenario = { ...ESCENARIO_BASE };
   }
 
@@ -748,15 +782,19 @@ function mostrarArea(id, q) {
   escribirRuta();
   cargarSerie();
   cargarPronostico();
+  cargarPico();
   pintarTab();
 }
 
 function recargar() {
+  aplicarModelo(); // un día sin pronósticos precalculados del modelo elegido pasa a su respaldo
   escribirRuta();
   sincronizarControles();
   cargarSerie();
   cargarPronostico();
+  cargarPico();
   if (S.tab === 'escenarios') pintarEscenarios();
+  if (S.tab === 'diagnostico') pintarDiagnostico(); // «mes a mes» sigue al horizonte y al modelo
 }
 
 let esperaHora = null;
@@ -770,6 +808,7 @@ function elegirHora(i) {
   clearTimeout(esperaHora);
   esperaHora = setTimeout(() => {
     cargarPronostico();
+    cargarPico();
     if (S.tab === 'escenarios') pintarEscenarios();
   }, 250);
 }
@@ -811,9 +850,64 @@ async function cargarSerie() {
 
 const horizonteTxt = () => (S.horizonte === '1h' ? '1 hora' : '24 horas');
 const nombreModelo = () => {
-  const m = S.modelos.find((x) => x.id === S.modelo);
+  const m = modeloEfectivo();
   return m ? m.nombre : (S.salud ? S.salud.modelo : 'modelo');
 };
+
+// Si respondió otro modelo que el elegido (un día sin sus pronósticos precalculados), se dice en la respuesta.
+function pintarAvisoModelo() {
+  const aviso = $('#respAviso');
+  const elegido = modeloActual();
+  const respondio = S.serie && S.serie.modelo ? modeloPorId(S.serie.modelo) : modeloEfectivo();
+  if (!elegido || !respondio || respondio.id === elegido.id) {
+    aviso.hidden = true;
+    return;
+  }
+  const rango = esFecha(elegido.fecha_min) && esFecha(elegido.fecha_max)
+    ? ` (los hay del ${fechaCorta(elegido.fecha_min)} al ${fechaCorta(elegido.fecha_max)})` : '';
+  aviso.textContent = `Para el ${fechaLarga(S.fecha)} no hay pronósticos precalculados del modelo ${nombreCorto(elegido)}${rango}: se muestra el modelo ${respondio.nombre}.`;
+  aviso.hidden = false;
+}
+
+// La ficha del número: de qué piezas sale y con qué pesos (el combinado), o qué modelo es (los demás).
+function pintarFichaNumero() {
+  const s = S.serie;
+  if (!s) return;
+  const i = S.idx;
+  const m = (s.modelo && modeloPorId(s.modelo)) || modeloEfectivo();
+  const area = S.areas.find((a) => a.id === S.area);
+  const piezas = Array.isArray(s.componentes) && s.componentes.length ? s.componentes : null;
+  const resumen = $('#respFichaResumen');
+  const cuerpo = $('#respFichaCuerpo');
+  if (!piezas) {
+    resumen.textContent = '· un solo modelo, sin mezcla';
+    const datos = usaSoloDemanda(m) ? 'Usa solo la demanda y el calendario.'
+      : (S.variante === 'M3' ? 'Aquí usa la demanda, el calendario, el clima, El Niño y las fallas en curso.' : 'Aquí usa solo la demanda y el calendario.');
+    cuerpo.innerHTML = `<p><strong>${esc(m ? m.nombre : nombreModelo())}.</strong> ${esc((m && m.descripcion) || '')} ${esc(datos)}</p>`
+      + '<p class="muted small">El número es el pronóstico directo del modelo para esa media hora, emitido con la anticipación elegida.</p>';
+    return;
+  }
+  const corto = (c) => c.nombre.replace(/\s*\(.*\)\s*$/, '');
+  resumen.textContent = `· ${piezas.map((c) => `${nf0.format(100 * c.peso)} % ${corto(c)}`).join(' + ')}`;
+  let html = `<p>${esc(m ? m.nombre : 'Combinado')}, ${esc(area ? area.nombre : '')} a ${horizonteTxt()}, para las ${idxAHora(i)}:</p>`;
+  const faltan = piezas.filter((c) => c.valores[i] == null);
+  if (faltan.length) {
+    html += `<p>En esta media hora falta el pronóstico de ${esc(faltan.map((c) => c.nombre).join(' y '))}: el número usa la referencia simple.</p>`;
+  } else {
+    const suma = piezas.reduce((t, c) => t + c.peso * c.valores[i], 0);
+    html += '<div class="tabla-scroll ficha-tabla" tabindex="0" role="region" aria-label="Cómo se arma el número"><table class="tabla">'
+      + '<caption class="visually-hidden">Cómo se arma el número: pronóstico de cada pieza por su peso</caption>'
+      + '<thead><tr><th scope="col">Pieza</th><th scope="col" class="num">Pronóstico</th><th scope="col" class="num">Peso</th><th scope="col" class="num">Aporte</th></tr></thead><tbody>'
+      + piezas.map((c) => `<tr><th scope="row">${esc(c.nombre)}</th><td class="num mono">${mw(c.valores[i])} MW</td>`
+        + `<td class="num mono">× ${c.peso.toFixed(2)}</td><td class="num mono">${nf1.format(c.peso * c.valores[i])}</td></tr>`).join('')
+      + `</tbody><tfoot><tr><th scope="row" colspan="3">Suma</th><td class="num mono">${mw(suma)} MW</td></tr></tfoot></table></div>`;
+    html += `<p class="small">${piezas.map((c) => `${esc(corto(c))} × ${c.peso.toFixed(2)}`).join(' + ')} = <strong class="num">${mw(suma)} MW</strong>: `
+      + `el número de arriba (${mw(s.pronostico[i])} MW). Puede diferir en 1 MW por el redondeo.</p>`;
+  }
+  const origenPesos = m && m.composicion ? m.composicion : 'Los pesos se fijaron por área y horizonte con la validación de 2025.';
+  html += `<p class="muted small">${esc(origenPesos)} Chronos-2 se ajustó y el híbrido se entrenó con datos hasta 2024; sus pronósticos se calcularon aparte con GPU y la app los lee guardados.</p>`;
+  cuerpo.innerHTML = html;
+}
 
 // La respuesta: el pronóstico para la hora elegida, emitido con la anticipación elegida.
 function pintarRespuesta() {
@@ -831,6 +925,8 @@ function pintarRespuesta() {
   $('#respTitulo').textContent = `Para las ${idxAHora(i)} del ${fechaLarga(S.fecha)}`;
   $('#respEmision').textContent = `Emitido a las ${emision} · ${nombreModelo()}, ${soloDemanda() ? 'sin clima ni El Niño' : (S.variante === 'M3' ? 'con clima y El Niño' : 'solo con la demanda')}`;
   $('#respValor').textContent = mw(v);
+  pintarAvisoModelo();
+  pintarFichaNumero();
   $('#respRango').textContent = iv ? `${mw(iv.inferior[i])} – ${mw(iv.superior[i])} MW` : 'no disponible';
   $('#respMarca').innerHTML = '';
   if (real == null) {
@@ -894,7 +990,7 @@ function pintarConfianza() {
     if (n) items.push(`<li><strong>Rango probable:</strong> la demanda real cayó dentro en <span class="num">${dentro}</span> de <span class="num">${n}</span> medias horas del día (se espera alrededor de 9 de cada 10).</li>`);
   }
   const met = S.resumen && S.resumen.metricas_prueba[S.area];
-  if (met) items.push(`<li><strong>En toda la prueba de 2026</strong> (a 24 h, con clima y El Niño): error medio <span class="num">${nf1.format(met.mae_mw)} MW</span> (<span class="num">${pct(met.mape_pct)}</span>).</li>`);
+  if (met) items.push(`<li><strong>En toda la prueba de 2026</strong> (a 24 h, ${usaSoloDemanda(modeloActual()) ? 'solo con la demanda' : 'con clima y El Niño'}): error medio <span class="num">${nf1.format(met.mae_mw)} MW</span> (<span class="num">${pct(met.mape_pct)}</span>). Mes a mes, en «Diagnóstico».</li>`);
   items.push('<li><strong>Referencia simple:</strong> la mejor de tres reglas sin modelo (el último dato, ayer o la semana pasada a la misma hora). Es la vara mínima que el modelo debe superar.</li>');
   $('#listaConfianza').innerHTML = items.join('');
 }
@@ -959,6 +1055,56 @@ function pintarTablaDia() {
     + `<caption class="visually-hidden">Demanda del ${esc(fechaLarga(S.fecha))}, en MW, pronóstico a ${horizonteTxt()}</caption>`
     + '<thead><tr><th scope="col">Hora</th><th scope="col" class="num">Modelo</th><th scope="col" class="num">Rango probable</th><th scope="col" class="num">Real</th><th scope="col" class="num">Referencia</th></tr></thead>'
     + `<tbody>${filas}</tbody></table></div>`;
+}
+
+// ---- Máximo y mayor subida de las próximas 24 h -------------------------------------------------
+
+async function cargarPico() {
+  const turno = ++S.turnos.pico;
+  const panel = $('#pico');
+  panel.setAttribute('aria-busy', 'true');
+  try {
+    const q = new URLSearchParams(conModelo({ origen: origen(), variante: S.variante }));
+    const datos = await api(`/pico/${encodeURIComponent(S.area)}?${q}`);
+    if (turno !== S.turnos.pico) return;
+    S.pico = datos;
+    panel.hidden = false;
+    pintarPico();
+  } catch (err) {
+    if (turno !== S.turnos.pico) return;
+    if (err.estado === 404 && /not found/i.test(err.message)) panel.hidden = true; // un backend sin /pico
+    else manejarError(err, $('#picoCuerpo'));
+  } finally {
+    if (turno === S.turnos.pico) panel.setAttribute('aria-busy', 'false');
+  }
+}
+
+function pintarPico() {
+  const d = S.pico;
+  if (!d) return;
+  const area = S.areas.find((a) => a.id === S.area);
+  const m = d.modelo ? modeloPorId(d.modelo) : null;
+  const { pico, rampa, acierto } = d;
+  let html = `<p class="muted small">Si se emite a las ${idxAHora(S.idx)} del ${esc(fechaDiaMes(S.fecha))}: de las ${esc(cuandoTxt(d.desde))} a las ${esc(cuandoTxt(d.hasta))}, con el pronóstico a 24 h${m ? ` del modelo ${esc(nombreCorto(m))}` : ''}.</p>`;
+  html += '<dl class="pico-datos">';
+  html += `<div><dt>Máximo</dt><dd><span class="pico-valor num">${mw(pico.valor)} MW</span> a las ${esc(cuandoTxt(pico.fecha_hora))}`
+    + `<span class="pico-nota">Rango probable: <span class="num">${mw(pico.inferior)} – ${mw(pico.superior)} MW</span></span></dd></div>`;
+  if (rampa) {
+    html += `<div><dt>Mayor subida en una hora</dt><dd><span class="pico-valor num">+${mw(rampa.subida_mw)} MW</span> de las ${horaDe(rampa.desde)} a las ${esc(cuandoTxt(rampa.hasta))}`
+      + `<span class="pico-nota"><span class="marca ${rampa.fuerte ? 'fuera' : 'dentro'}">${rampa.fuerte ? 'rampa fuerte' : 'subida habitual'}</span></span></dd></div>`;
+  } else {
+    html += '<div><dt>Mayor subida en una hora</dt><dd>La demanda pronosticada no sube en ninguna hora de la ventana.</dd></div>';
+  }
+  html += '</dl>';
+  if (acierto) {
+    html += `<p class="pico-acierto">¿Acierta la hora? En 2026, la hora del máximo pronosticado de cada día cayó a ±1 h de la del máximo real en <strong class="num">${nf1.format(acierto.pct_hora)} %</strong> de los días`
+      + ` (${nf0.format(acierto.dias)}); la referencia simple, en ${nf1.format(acierto.pct_hora_referencia)} %. El valor del máximo se equivocó en promedio <span class="num">${mw(acierto.mae_pico_mw)} MW</span> (la referencia, ${mw(acierto.mae_pico_referencia_mw)} MW).</p>`;
+  }
+  const umbral = rampa && rampa.umbral_mw != null
+    ? ` «Rampa fuerte» es subir más de ${mw(rampa.umbral_mw)} MW en una hora: la mayor subida del día solo pasó de ahí en el 5 % de los días de 2016 a 2024 en ${area ? `el ${esc(area.nombre)}` : 'el área'}.`
+    : '';
+  html += `<p class="muted small">Cada media hora de la ventana es el pronóstico a 24 h emitido 24 h antes, el mismo de la curva: a las ${idxAHora(S.idx)} ya estaban todos emitidos.${umbral}</p>`;
+  $('#picoCuerpo').innerHTML = html;
 }
 
 // ---- Pestañas de detalle ------------------------------------------------------------------
@@ -1079,8 +1225,10 @@ function pintarEscenarios() {
   const panel = $('#panel-escenarios');
   let html = '<h3>¿Y si mañana hace más calor, o El Niño se calma?</h3>';
   html += `<p class="muted small">Cambia un supuesto y el modelo vuelve a calcular las próximas 24 h desde las ${idxAHora(S.idx)} del ${esc(fechaCorta(S.fecha))}. Supuesto del proyecto: el COES recibe de ENFEN los pronósticos de clima y de El Niño.</p>`;
-  if (soloDemanda()) {
-    html += `<div class="nota aviso">${esc(nombreModelo())} usa solo la demanda: los escenarios de clima y de El Niño no lo cambian. Para probarlos, elige otro modelo en «Modelo».</div>`;
+  if (soloDemanda() && !usaSoloDemanda(modeloConClima())) {
+    html += `<div class="nota aviso">El modelo ${esc(nombreCorto(modeloEfectivo()))} usa solo la demanda, así que el clima y El Niño no lo mueven. Estos escenarios los calcula el modelo ${esc(modeloConClima().nombre)}, con clima y El Niño.</div>`;
+  } else if (soloDemanda()) {
+    html += `<div class="nota aviso">${esc(nombreModelo())} usa solo la demanda: los escenarios de clima y de El Niño no lo cambian.</div>`;
   } else if (S.variante === 'M0') {
     html += '<div class="nota aviso">«Solo demanda» no usa clima, El Niño ni fallas: los escenarios no la cambian. <button type="button" class="btn" data-accion="usar-m3">Usar «Con clima y El Niño»</button></div>';
   }
@@ -1105,7 +1253,7 @@ const esBase = (e) => e.delta_temp_c === 0 && e.nino === 'observado' && e.falla 
 
 async function cargarEscenario() {
   const turno = ++S.turnos.esc;
-  const pedido = conModelo({ area: S.area, origen: origen(), horizonte: '24h', variante: S.variante });
+  const pedido = conModeloClima({ area: S.area, origen: origen(), horizonte: '24h' });
   const base = esBase(S.escenario);
   try {
     const pedidos = [api('/pronostico', { ...pedido, escenario: ESCENARIO_BASE })];
@@ -1146,7 +1294,7 @@ function pintarSensibilidad() {
     <div class="nota"><strong>A 1 hora no hay escenarios.</strong> La demanda de la última media hora ya contiene el clima del momento: si hace más calor, ya se nota en la demanda reciente. Por eso aquí se muestra cómo responde el modelo, no un escenario. Para «¿y si mañana hace más calor?», usa el horizonte de 24 horas.
       <div style="margin-top:8px"><button type="button" class="btn" data-accion="ir-24h">Ver escenarios a 24 h</button></div></div>
     <h3>¿Cuánto le importa al modelo la temperatura a 1 h?</h3>
-    <p class="muted small">Cómo cambia el pronóstico de las ${objetivo} al mover una variable y dejar todo lo demás igual (usa los datos con clima y El Niño).</p>
+    <p class="muted small">Cómo cambia el pronóstico de las ${objetivo} al mover una variable y dejar todo lo demás igual (usa los datos con clima y El Niño${soloDemanda() && !usaSoloDemanda(modeloConClima()) ? `: lo calcula el modelo ${esc(modeloConClima().nombre)}, porque el ${esc(nombreCorto(modeloEfectivo()))} usa solo la demanda` : ''}).</p>
     ${grupoOpciones('lblSens', 'Variable', [
       opcion('sens', 'temperatura', 'Temperatura', S.sensVar === 'temperatura'),
       opcion('sens', 'icen', 'ICEN (El Niño)', S.sensVar === 'icen'),
@@ -1160,7 +1308,8 @@ async function cargarSensibilidad() {
   const turno = ++S.turnos.sens;
   const variable = S.sensVar;
   try {
-    const s = await api('/sensibilidad', conModelo({ area: S.area, origen: origen(), variable }));
+    const { modelo } = conModeloClima({});
+    const s = await api('/sensibilidad', modelo ? { area: S.area, origen: origen(), variable, modelo } : { area: S.area, origen: origen(), variable });
     if (turno !== S.turnos.sens || !$('#graficoSens')) return;
     const temp = variable === 'temperatura';
     const fmtX = (v) => (temp ? `${nf1.format(v)} °C` : nf1.format(v));
@@ -1206,13 +1355,18 @@ async function pintarDiagnostico() {
   const d = S.diag.get(clave);
   const prueba = S.salud && S.salud.modelo === 'prueba';
   panel.innerHTML = `
-    <p class="muted small">Todo a 24 horas, con el error medio en MW (menos es mejor).${prueba ? ' <strong>Datos de prueba:</strong> los números son ilustrativos.' : ''}</p>
+    <p class="muted small">El error medio va en MW (menos es mejor). «Mes a mes» sigue la anticipación elegida; lo demás es a 24 horas.${prueba ? ' <strong>Datos de prueba:</strong> los números son ilustrativos.' : ''}</p>
     <section class="diag-seccion">
       <h3>¿Con qué fase de El Niño se equivoca más?</h3>
       <p class="muted small">Error medio en la prueba de 2026 según la fase de El Niño.</p>
       <ul class="legend"><li><svg width="18" height="11" aria-hidden="true"><rect width="18" height="11" rx="3" class="barra-modelo"/></svg>Modelo</li><li><svg width="18" height="11" aria-hidden="true"><rect x="0.75" y="0.75" width="16.5" height="9.5" rx="3" class="barra-referencia"/></svg>Referencia simple</li></ul>
       <p id="lecRegimen" class="lectura"></p>
       <div id="gRegimen" class="chart"></div>
+    </section>
+    <section class="diag-seccion" aria-labelledby="tituloSeguimiento">
+      <h3 id="tituloSeguimiento">Mes a mes en 2026: ¿sigue ganándole a la referencia?</h3>
+      <p class="muted small">Error medio de cada mes de la prueba de 2026, a ${horizonteTxt()}, con pronósticos que los modelos no vieron al entrenar.</p>
+      <div id="seguimientoCuerpo"></div>
     </section>
     <section class="diag-seccion">
       <h3>¿Cuánto aporta cada grupo de datos?</h3>
@@ -1269,6 +1423,7 @@ async function pintarDiagnostico() {
   })), { aria: 'Importancia de cada grupo de variables.' });
 
   pintarLecturas(d);
+  cargarSeguimiento();
 
   const { real, predicho } = d.residuos;
   graficoDispersion($('#gDispersion'), real, predicho);
@@ -1276,6 +1431,122 @@ async function pintarDiagnostico() {
   graficoHistograma($('#gResiduos'), errores);
   const sub = errores.filter((e) => e < 0).length / errores.length;
   $('#txtResiduos').textContent = `El modelo subestimó la demanda en ${pct(100 * sub)} de las medias horas. Subestimar cuesta más: obliga a arrancar generación cara de urgencia.`;
+}
+
+// Mes a mes: el MAE de cada modelo frente a la referencia y la cobertura del rango del modelo elegido.
+async function cargarSeguimiento() {
+  const cont = $('#seguimientoCuerpo');
+  if (!cont) return;
+  const turno = ++S.turnos.seg;
+  const { area, horizonte } = S;
+  const elegido = modeloActual();
+  // El elegido primero; los demás, para comparar
+  const modelos = hayVariosModelos() ? [elegido, ...S.modelos.filter((m) => m !== elegido)].filter(Boolean) : [elegido || { id: null, nombre: nombreModelo() }];
+  const pedir = (m) => {
+    const variante = m === elegido ? S.variante : 'M3';
+    const clave = `${m.id}|${area}|${horizonte}|${variante}`;
+    if (!S.seguimiento.has(clave)) {
+      const q = new URLSearchParams({ horizonte, variante });
+      if (hayVariosModelos() && m.id) q.set('modelo', m.id);
+      const promesa = api(`/seguimiento/${encodeURIComponent(area)}?${q}`);
+      promesa.catch(() => S.seguimiento.delete(clave));
+      S.seguimiento.set(clave, promesa);
+    }
+    return S.seguimiento.get(clave);
+  };
+  cont.innerHTML = '<p class="cargando-txt">Calculando el seguimiento…</p>';
+  let resultados;
+  try {
+    resultados = await Promise.all(modelos.map(pedir));
+  } catch (err) {
+    if (turno === S.turnos.seg && $('#seguimientoCuerpo')) manejarError(err, $('#seguimientoCuerpo'));
+    return;
+  }
+  if (turno !== S.turnos.seg || !$('#seguimientoCuerpo')) return;
+  pintarSeguimiento(modelos, resultados);
+}
+
+function pintarSeguimiento(modelos, res) {
+  const cont = $('#seguimientoCuerpo');
+  const sel = res[0];
+  const meses = sel.meses.map((m) => m.mes);
+  const n = meses.length;
+  const clases = ['ln-pronostico', 'ln-modelo-2', 'ln-modelo-3'];
+  const porMes = (r, campo) => meses.map((mes) => {
+    const fila = r.meses.find((x) => x.mes === mes);
+    return fila ? fila[campo] : null;
+  });
+  const nombreRef = (TITULO_REF[sel.referencia_nombre] || 'Referencia simple').toLowerCase();
+  const leyenda = modelos.map((m, k) => itemLinea(clases[k] || 'ln-modelo-3', m.nombre)).join('') + itemLinea('ln-referencia', `Referencia: ${nombreRef}`);
+  const meta = sel.meta_cobertura_pct;
+
+  // Lecturas: la conclusión de cada gráfico, calculada
+  const ganados = sel.meses.filter((m) => m.mae_modelo < m.mae_referencia).length;
+  const peor = sel.meses.reduce((a, b) => (b.mae_modelo > a.mae_modelo ? b : a));
+  const totales = modelos.map((m, k) => `${nombreCorto(m)} ${nf1.format(res[k].total.mae_modelo)} MW`).join('; ');
+  const lecMae = `Todo 2026, a ${horizonteTxt()}: ${totales}; la referencia simple, ${nf1.format(sel.total.mae_referencia)} MW. `
+    + `El ${nombreCorto(modelos[0])} se equivocó menos que la referencia en ${ganados === n ? `los ${n} meses` : `${ganados} de ${n} meses`}; su peor mes fue ${mesLargo(peor.mes)} (${nf1.format(peor.mae_modelo)} MW).`;
+  const cubierto = sel.total.cobertura_pct;
+  const dif = cubierto - meta;
+  let veredicto = 'cumple lo que promete';
+  if (dif < -5) veredicto = 'queda corto: el rango es más angosto de lo que debería';
+  else if (dif < -2) veredicto = 'queda algo corto: el rango es un poco más angosto de lo que debería';
+  else if (dif > 5) veredicto = 'es más ancho de lo necesario';
+  else if (dif > 2) veredicto = 'cubre algo más de lo que promete: el rango es un poco más ancho de lo necesario';
+  const bajos = sel.meses.filter((m) => m.cobertura_pct < meta - 5);
+  const minimo = sel.meses.reduce((a, b) => (b.cobertura_pct < a.cobertura_pct ? b : a));
+  const lecCob = `El rango probable del ${nombreCorto(modelos[0])} promete cubrir el ${nf0.format(meta)} % de las medias horas; en 2026 cubrió el ${nf1.format(cubierto)} %: ${veredicto}. `
+    + (bajos.length
+      ? `En ${bajos.length} de ${n} meses quedó por debajo del ${nf0.format(meta - 5)} %: ${bajos.map((m) => `${mesLargo(m.mes)} (${nf1.format(m.cobertura_pct)} %)`).join(', ')}.`
+      : `Ningún mes bajó del ${nf0.format(meta - 5)} %; el más bajo fue ${mesLargo(minimo.mes)} (${nf1.format(minimo.cobertura_pct)} %).`);
+
+  const filas = meses.map((mes, j) => `<tr><th scope="row">${esc(mesLargo(mes))}</th>`
+    + res.map((r) => `<td class="num mono">${nf1.format(porMes(r, 'mae_modelo')[j] ?? NaN)}</td>`).join('')
+    + `<td class="num mono">${nf1.format(sel.meses[j].mae_referencia)}</td><td class="num mono">${nf1.format(sel.meses[j].cobertura_pct)} %</td></tr>`).join('');
+  const pie = '<tr><th scope="row">Todo 2026</th>' + res.map((r) => `<td class="num mono">${nf1.format(r.total.mae_modelo)}</td>`).join('')
+    + `<td class="num mono">${nf1.format(sel.total.mae_referencia)}</td><td class="num mono">${nf1.format(sel.total.cobertura_pct)} %</td></tr>`;
+
+  cont.innerHTML = `<p id="lecSeguimiento" class="lectura">${esc(lecMae)}</p>
+    <div id="gSeguimiento" class="chart"></div>
+    <ul class="legend" aria-label="Leyenda">${leyenda}</ul>
+    <h4 class="diag-sub">¿El rango probable cubre lo que promete?</h4>
+    <p class="muted small">Qué parte de las medias horas de cada mes cayó dentro del rango probable del ${esc(nombreCorto(modelos[0]))}. La línea punteada es la meta (${nf0.format(meta)} %).</p>
+    <p id="lecCobertura" class="lectura">${esc(lecCob)}</p>
+    <div id="gCobertura" class="chart"></div>
+    <details class="tabla-datos"><summary>Ver la tabla mes a mes</summary>
+      <div class="tabla-scroll" tabindex="0" role="region" aria-label="Error y cobertura mes a mes"><table class="tabla">
+        <caption class="visually-hidden">Error medio en MW de cada modelo y de la referencia, y cobertura del rango del ${esc(nombreCorto(modelos[0]))}, por mes de 2026, a ${horizonteTxt()}</caption>
+        <thead><tr><th scope="col">Mes</th>${modelos.map((m) => `<th scope="col" class="num">${esc(m.nombre)}</th>`).join('')}<th scope="col" class="num">Referencia</th><th scope="col" class="num">Cobertura</th></tr></thead>
+        <tbody>${filas}</tbody><tfoot>${pie}</tfoot></table></div>
+    </details>`;
+
+  const angosto = anchoDe($('#gSeguimiento')) < 400;
+  const etiquetaMes = (j) => (!angosto || j % 2 === 0 || j === n - 1 ? mesCorto(meses[j]) : null);
+  graficoLineas($('#gSeguimiento'), {
+    n,
+    series: [
+      { clase: 'ln-referencia', valores: sel.meses.map((m) => m.mae_referencia), nombre: `Referencia: ${nombreRef}` },
+      ...modelos.slice(1).map((m, k) => ({ clase: clases[k + 1] || 'ln-modelo-3', valores: porMes(res[k + 1], 'mae_modelo'), nombre: m.nombre })),
+      { clase: 'ln-pronostico', valores: sel.meses.map((m) => m.mae_modelo), nombre: modelos[0].nombre, puntos: true },
+    ],
+    etiquetaX: etiquetaMes,
+    etiquetaPunto: (j) => `${mesLargo(meses[j])} de ${meses[j].slice(0, 4)}`,
+    formatoY: (v) => `${mw(v)}`,
+    alto: 220,
+    aria: `Error medio por mes de 2026, en MW. ${lecMae}`,
+  });
+  graficoLineas($('#gCobertura'), {
+    n,
+    series: [
+      { clase: 'ln-meta', valores: meses.map(() => meta), nombre: 'Meta' },
+      { clase: 'ln-pronostico', valores: sel.meses.map((m) => m.cobertura_pct), nombre: 'Cubrió', puntos: true },
+    ],
+    etiquetaX: etiquetaMes,
+    etiquetaPunto: (j) => `${mesLargo(meses[j])} de ${meses[j].slice(0, 4)}`,
+    formatoY: (v) => `${nf0.format(v)} %`,
+    alto: 170,
+    aria: `Cobertura del rango probable por mes de 2026. ${lecCob}`,
+  });
 }
 
 // Una frase por gráfico: la conclusión, para quien no lee gráficos de error.
@@ -1475,7 +1746,6 @@ function conectarEventos() {
     aplicarModelo();
     cargarResumen();
     recargar();
-    if (S.tab === 'diagnostico') pintarDiagnostico();
   });
   $('#inHora').addEventListener('input', (ev) => elegirHora(Number(ev.target.value)));
   $('#momentos').addEventListener('click', (ev) => {
