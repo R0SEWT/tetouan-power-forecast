@@ -9,6 +9,23 @@
   <link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230e1117'/%3E%3Cpath d='M9 44 20 31l10 6 12-18 13 8' fill='none' stroke='%23D55E00' stroke-width='5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
 
+  <!-- Pide los datos de arranque mientras baja app.js (lo que más pesa en una red lenta): app.js los reutiliza -->
+  <script>
+    (() => {
+      const u = new URLSearchParams(location.search).get('api');
+      const api = u ? u.replace(/\/+$/, '') : (location.protocol === 'file:' || !location.hostname
+        ? 'http://localhost:8000' : `${location.protocol}//${location.hostname}:8000`);
+      const rutas = ['/salud', '/areas', '/resumen', '/modelos'];
+      const m = location.hash.match(/^#\/area\/([^?]+)\?(.*)$/);
+      if (m) {
+        const h = new URLSearchParams(m[2]);
+        const q = new URLSearchParams();
+        ['fecha', 'horizonte', 'variante', 'modelo'].forEach((k) => { if (h.get(k)) q.set(k, h.get(k)); });
+        if (q.get('fecha') && q.get('horizonte') && q.get('variante')) rutas.push(`/series/${m[1]}?${q}`);
+      }
+      window.PRECARGA = new Map(rutas.map((r) => [r, fetch(api + r).catch(() => null)]));
+    })();
+  </script>
   <!-- Tipografías del sistema: sin peticiones a terceros, funciona sin internet en una sala de control -->
   <link rel="stylesheet" href="style.css">
 </head>

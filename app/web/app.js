@@ -131,6 +131,12 @@ function fechaLarga(iso) {
   return `${DIAS[p.dow]} ${p.d} de ${MESES[p.m - 1]} de ${p.y}`;
 }
 
+// «10/03/2026»: el control de fecha sigue el idioma del navegador; esto, siempre el formato peruano
+function fechaNumerica(iso) {
+  const p = partesFecha(iso);
+  return `${String(p.d).padStart(2, '0')}/${String(p.m).padStart(2, '0')}/${p.y}`;
+}
+
 // «19:30 del martes 10 de marzo», para un inicio de periodo AAAA-MM-DDTHH:MM
 const cuandoTxt = (fechaHora) => `${horaDe(fechaHora)} del ${fechaDiaMes(fechaHora)}`;
 const mesLargo = (aaaamm) => MESES[Number(aaaamm.slice(5, 7)) - 1] || aaaamm;
@@ -260,13 +266,32 @@ const conModeloClima = (obj) => {
   return hayVariosModelos() && m ? { ...obj, variante, modelo: m.id } : { ...obj, variante };
 };
 
+// index.html pide los datos de arranque antes de que baje este archivo; cada respuesta se usa una sola vez.
+const PRECARGA = window.PRECARGA instanceof Map ? window.PRECARGA : new Map();
+// La serie que pidió index.html sirve si es del mismo día y horizonte, de la misma variante (o el modelo no la usa)
+// y del mismo modelo; un enlace sin modelo se precargó sin él y luego se revisa cuál respondió.
+function seriePrecargada(q) {
+  for (const ruta of PRECARGA.keys()) {
+    const [camino, consulta] = ruta.split('?');
+    if (camino !== `/series/${encodeURIComponent(S.area)}`) continue;
+    const p = new URLSearchParams(consulta);
+    if (p.get('fecha') !== q.get('fecha') || p.get('horizonte') !== q.get('horizonte')) continue;
+    if (p.get('variante') !== q.get('variante') && !soloDemanda()) continue;
+    if (p.has('modelo') && p.get('modelo') !== q.get('modelo')) continue;
+    return ruta;
+  }
+  return null;
+}
+
 async function api(ruta, cuerpo) {
   const opciones = cuerpo
     ? { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(cuerpo) }
     : undefined;
+  const precargada = cuerpo ? null : PRECARGA.get(ruta);
+  PRECARGA.delete(ruta);
   let r;
   try {
-    r = await fetch(API + ruta, opciones);
+    r = (precargada && await precargada) || await fetch(API + ruta, opciones);
   } catch {
     throw new ErrorApi(0, 'sin conexión');
   }
@@ -731,7 +756,7 @@ function sincronizarControles() {
   $('#inFecha').value = S.fecha;
   $('#inFecha').min = FECHA_MIN;
   $('#inFecha').max = FECHA_MAX;
-  $('#fechaLarga').textContent = fechaLarga(S.fecha);
+  $('#fechaLarga').textContent = `${fechaLarga(S.fecha)} (${fechaNumerica(S.fecha)})`;
   $('#inModelo').value = S.modelo || '';
   $('#inHora').value = String(S.idx);
   $('#inHora').setAttribute('aria-valuetext', idxAHora(S.idx));
@@ -830,7 +855,10 @@ async function cargarSerie() {
   marcarCargando(true);
   try {
     const q = new URLSearchParams(conModelo({ fecha: S.fecha, horizonte: S.horizonte, variante: S.variante }));
-    const datos = await api(`/series/${encodeURIComponent(S.area)}?${q}`);
+    const precargada = seriePrecargada(q);
+    let datos = precargada ? await api(precargada).catch(() => null) : null;
+    if (datos && q.has('modelo') && datos.modelo !== q.get('modelo')) datos = null; // respondió otro modelo
+    if (!datos) datos = await api(`/series/${encodeURIComponent(S.area)}?${q}`);
     if (turno !== S.turnos.serie) return;
     S.serie = datos;
     limpiarError();
