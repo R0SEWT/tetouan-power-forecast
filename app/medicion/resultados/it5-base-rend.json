@@ -1,0 +1,49 @@
+{
+  "etiqueta": "it5-base-rend",
+  "version": "it4",
+  "fecha": "2026-11-13T11:10:30.028Z",
+  "modelo": "Combinado: Chronos-2 ajustado + híbrido",
+  "caso": {
+    "area": "centro",
+    "fecha": "2026-03-10",
+    "hora": "19:00",
+    "idx": 38,
+    "horizonte": "24h",
+    "variante": "M3"
+  },
+  "rendimiento": {
+    "local": {
+      "grafico_ms": 63,
+      "grafico_rango_ms": [
+        61,
+        81
+      ],
+      "respuesta_ms": 64,
+      "respuesta_rango_ms": [
+        62,
+        82
+      ]
+    },
+    "peticiones": 10,
+    "kb": 143,
+    "kb_por_tipo": {
+      "stylesheet": 31,
+      "document": 14,
+      "script": 88,
+      "fetch": 11
+    },
+    "peticiones_a_terceros": 0,
+    "red_lenta": {
+      "grafico_ms": 1326,
+      "grafico_rango_ms": [
+        1325,
+        1333
+      ],
+      "respuesta_ms": 1329,
+      "respuesta_rango_ms": [
+        1329,
+        1335
+      ]
+    }
+  }
+}
