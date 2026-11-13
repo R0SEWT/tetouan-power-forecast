@@ -23,7 +23,10 @@ from chronos import Chronos2Pipeline
 NOMBRE, MODELO, COV, INICIO, FIN = sys.argv[1], sys.argv[2], int(sys.argv[3]), pd.Timestamp(sys.argv[4]), pd.Timestamp(sys.argv[5])
 CONTEXTO = int(sys.argv[6]) if len(sys.argv) > 6 else 2048
 AREAS = ["NORTE", "CENTRO", "SUR"]
-H, PASOS, BLOQUE, LOTE = 48, [2, 48], 4096, 1024
+CAL = {}
+import os
+
+H, PASOS, BLOQUE, LOTE = 48, [2, 48], 4096, int(os.environ.get("LOTE", "1024"))
 SALIDA = Path(f"/content/fm/{NOMBRE}_c{CONTEXTO}")
 SALIDA.mkdir(parents=True, exist_ok=True)
 
@@ -45,6 +48,16 @@ def cargar_datos():
     pe = holidays.country_holidays("PE", years=range(2015, 2028))
     dia_periodo = (fechas - pd.Timedelta(minutes=30)).normalize()  # DateTime marca el fin del periodo
     feriado = np.array([d in pe for d in dia_periodo], dtype=np.float32)
+    # calendario ampliado (COV 3): todo se conoce de antemano
+    dias_u = pd.DatetimeIndex(np.sort(dia_periodo.unique()))
+    es_fer = pd.Series([d in pe for d in dias_u], index=dias_u)
+    dow = pd.Series(dias_u.dayofweek, index=dias_u)
+    libre = es_fer | (dow >= 5)
+    vispera = es_fer.shift(-1, fill_value=False) & ~es_fer
+    puente = ~libre & libre.shift(1, fill_value=False) & libre.shift(-1, fill_value=False)
+    por_dia = {"sabado": (dow == 5), "domingo": (dow == 6), "vispera": vispera, "puente": puente}
+    global CAL
+    CAL = {"feriado": feriado, **{k: v.reindex(dia_periodo).to_numpy(dtype=np.float32) for k, v in por_dia.items()}}
     return demanda.to_numpy(dtype=np.float32), fechas, conocida, interpolada, error, feriado
 
 
@@ -77,6 +90,9 @@ if __name__ == "__main__":
                     futc = {"temp": temp_fut.astype(np.float32), "feriado": feriado[dentro]}
                     if COV == 2:  # solo calendario
                         del pas["temp"], futc["temp"]
+                    if COV == 3:  # calendario ampliado, sin temperatura
+                        pas = {k: v[i - CONTEXTO + 1:i + 1] for k, v in CAL.items()}
+                        futc = {k: v[dentro] for k, v in CAL.items()}
                     entradas.append({"target": valores[i - CONTEXTO + 1:i + 1, j], "past_covariates": pas,
                                      "future_covariates": futc})
             else:

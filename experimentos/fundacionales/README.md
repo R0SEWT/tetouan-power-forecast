@@ -11,8 +11,8 @@ A100 para el ajuste fino); el notebook solo lee sus salidas, que están en el Dr
 | `adaptadores.py` | Una función por modelo: contextos `[B, C]` → mediana y cuantiles 10 y 90 a 48 pasos |
 | `fm_bench.py` | Pronóstico zero-shot desde cada origen (cada 30 min), retomable por bloques |
 | `cola.sh` | Corre en serie las líneas `modelo contexto` de una cola |
-| `chronos2_variantes.py` | Chronos-2 con covariables (temperatura, feriados) o con pesos ajustados |
-| `ajuste_fino.py` | Ajuste fino de Chronos-2 con la demanda hasta 2024 |
+| `chronos2_variantes.py` | Chronos-2 con covariables (1: temperatura y feriados; 2: solo feriados; 3: calendario ampliado) o con pesos ajustados |
+| `ajuste_fino.py` | Ajuste fino de Chronos-2 con la demanda hasta 2024 (comprueba el corte con un `assert`; acepta semilla) |
 | `apilar.py` | XGBoost global en razón con el pronóstico fundacional como variable |
 
 ## Cómo reproducir
@@ -26,6 +26,7 @@ python fm_bench.py simons 2048 2025-01-01 2026-10-23          # validación y pr
 python fm_bench.py simons 2048 2016-03-01 2025-01-01 train    # orígenes de entrenamiento, para el apilado
 python chronos2_variantes.py chronos2cal amazon/chronos-2 2 2025-01-01 2026-10-23   # solo feriados
 python ajuste_fino.py ft_cal 1e-6 3000 full 2                 # ajuste fino con feriados, datos ≤ 2024
+python ajuste_fino.py ft_cal_s2 1e-6 3000 full 2 2            # la misma receta con otra semilla (la original usó 42)
 python chronos2_variantes.py chronos2ftcal /content/ft/ft_cal/finetuned-ckpt 2 2025-01-01 2026-10-23
 python apilar.py simons                                       # lee las dos salidas de Simons de /content/fm/; necesita el repo en /content/tpf y las capas en /content/datalake
 ```
