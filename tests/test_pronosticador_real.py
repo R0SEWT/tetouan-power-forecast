@@ -200,3 +200,373 @@ def test_entrenar_publica_la_carpeta_entera(pronosticador):
 
 def test_la_escala_no_cuenta_como_variable_en_la_importancia():
     assert not any("media_24h" in variables for variables in GRUPOS_IMPORTANCIA.values())
+
+
+# ---- modelo híbrido -------------------------------------------------------------------------------
+
+
+@pytest.fixture(scope="module")
+def hibrido(pronosticador):
+    """Un "fundacional" sintético (lo real más ruido) desde febrero de 2024 y el apilado entrenado con él."""
+    from app.backend.pronosticador_hibrido import (
+        PronosticadorHibrido,
+        entrenar_hibrido,
+        ruta_fundacional,
+    )
+
+    raiz = pronosticador._raiz
+    rng = np.random.default_rng(1)
+    piezas = []
+    for area, serie in pronosticador._real.items():
+        origenes = serie.index[(serie.index >= "2024-02-01") & (serie.index < "2026-02-20")]
+        fila = {"DateTime": origenes, "area": area.upper()}
+        for h in (2, 48):
+            pred = serie.reindex(origenes + h * pd.Timedelta(minutes=30)).to_numpy() * (1 + rng.normal(0, 0.01, len(origenes)))
+            fila[f"pred_{h}"], fila[f"q10_{h}"], fila[f"q90_{h}"] = pred, pred * 0.98, pred * 1.02
+        piezas.append(pd.DataFrame(fila))
+    todo = pd.concat(piezas, ignore_index=True).dropna()
+    ruta = ruta_fundacional(raiz)
+    ruta.parent.mkdir(parents=True, exist_ok=True)
+    todo[todo["DateTime"] < "2025-01-01"].to_parquet(ruta.with_name(ruta.stem + "_train.parquet"), index=False)
+    todo[todo["DateTime"] >= "2025-01-01"].to_parquet(ruta, index=False)
+    entrenar_hibrido(raiz, hiperparametros={"n_estimators": 20, "max_depth": 4, "learning_rate": 0.3},
+                     progreso=lambda *_: None)
+    return PronosticadorHibrido(pronosticador)
+
+
+@pytest.fixture(scope="module")
+def cliente_dos(pronosticador, hibrido):
+    return TestClient(crear_app(pronosticador, [hibrido]))
+
+
+def test_modelos_lista_el_base_primero_y_el_hibrido(cliente_dos, hibrido):
+    modelos = cliente_dos.get("/modelos").json()
+    assert [m["id"] for m in modelos] == ["XGBoost global", "hibrido"]
+    assert modelos[1]["variantes"] == ["M0"]
+    assert modelos[1]["fecha_min"] == "2025-01-02" == hibrido.fecha_min.isoformat()
+
+
+def test_sin_parametro_modelo_responde_el_base(cliente_dos, cliente):
+    ruta = "/series/centro?fecha=2026-01-15&horizonte=24h&variante=M0"
+    assert cliente_dos.get(ruta).json() == cliente.get(ruta).json()
+
+
+@pytest.mark.parametrize("horizonte", ["1h", "24h"])
+def test_serie_del_hibrido_usa_el_fundacional_del_origen_correcto(cliente_dos, hibrido, horizonte):
+    r = cliente_dos.get(f"/series/centro?fecha=2026-01-15&horizonte={horizonte}&modelo=hibrido")
+    assert r.status_code == 200
+    serie = r.json()
+    inicios = pd.to_datetime(serie["fecha_hora"])
+    emision = hibrido._emision(inicios, horizonte)
+    filas = hibrido._datos[horizonte]["centro"].reindex(emision)
+    esperado = hibrido._predecir_filas(horizonte, "M0", filas)
+    assert np.allclose(serie["pronostico"], np.round(esperado, 1))
+    # El fundacional sintético casi acierta lo real, así que el híbrido debe quedar cerca de lo real
+    real = np.array(serie["real"], dtype=float)
+    assert np.mean(np.abs(np.array(serie["pronostico"]) - real)) < 0.03 * real.mean()
+    assert all(i <= p <= s for i, p, s in zip(serie["intervalo"]["inferior"], serie["pronostico"],
+                                              serie["intervalo"]["superior"], strict=True))
+
+
+def test_pronostico_del_hibrido_ignora_variante_y_escenario(cliente_dos):
+    pedido = {"area": "sur", "origen": "2026-01-15T10:00", "horizonte": "24h", "modelo": "hibrido"}
+    base = cliente_dos.post("/pronostico", json={**pedido, "variante": "M0"}).json()
+    con_calor = cliente_dos.post("/pronostico", json={**pedido, "variante": "M3", "escenario": {"delta_temp_c": 4}}).json()
+    assert len(base["pronostico"]) == 48
+    assert con_calor["pronostico"] == base["pronostico"]
+    assert con_calor["frase"] == FRASE_M0_SIN_ESCENARIOS
+
+
+def test_hibrido_fuera_de_su_rango_y_modelo_desconocido(cliente_dos):
+    r = cliente_dos.get("/series/centro?fecha=2025-01-01&horizonte=24h&modelo=hibrido")
+    assert r.status_code == 422 and "2025-01-02" in r.json()["detail"]
+    assert cliente_dos.get("/series/centro?fecha=2026-01-15&modelo=otro").status_code == 404
+    pedido = {"area": "centro", "origen": "2026-01-15T10:00", "horizonte": "1h", "modelo": "otro"}
+    assert cliente_dos.post("/pronostico", json=pedido).status_code == 404
+
+
+def test_resumen_y_diagnostico_del_hibrido(cliente_dos):
+    resumen = cliente_dos.get("/resumen?modelo=hibrido").json()
+    assert resumen["modelo"].startswith("Híbrido") and resumen["fechas_corte"]["disponible_desde"] == "2025-01-02"
+    d = cliente_dos.get("/diagnostico/centro?modelo=hibrido").json()
+    assert [a["variante"] for a in d["ablacion"]] == ["M0", "M3", "hibrido"]
+    assert all(a["ic_inf"] <= a["mae"] <= a["ic_sup"] for a in d["ablacion"])
+    assert {i["variable"] for i in d["importancias"]} == {"demanda_reciente", "calendario", "fundacional"}
+    assert d["adaptacion"] == [] and len(d["residuos"]["real"]) > 100
+
+
+def test_sensibilidad_del_hibrido_es_plana(cliente_dos):
+    pedido = {"area": "centro", "origen": "2026-01-15T10:00", "variable": "temperatura", "modelo": "hibrido"}
+    pronostico = cliente_dos.post("/sensibilidad", json=pedido).json()["pronostico"]
+    assert len(set(pronostico)) == 1
+
+
+# ---- modelo combinado -----------------------------------------------------------------------------
+
+
+@pytest.fixture(scope="module")
+def combinado(hibrido):
+    """Un "fundacional ajustado" sintético con sesgo de +2 %: la mezcla debe caer entre sus dos piezas."""
+    from app.backend.pronosticador_hibrido import PronosticadorCombinado, ruta_ajustado
+
+    piezas = []
+    for area, serie in hibrido._real.items():
+        origenes = serie.index[(serie.index >= "2025-01-01") & (serie.index < "2026-02-20")]
+        fila = {"DateTime": origenes, "area": area.upper()}
+        for h in (2, 48):
+            pred = serie.reindex(origenes + h * pd.Timedelta(minutes=30)).to_numpy() * 1.02
+            fila[f"pred_{h}"], fila[f"q10_{h}"], fila[f"q90_{h}"] = pred, pred * 0.98, pred * 1.02
+        piezas.append(pd.DataFrame(fila))
+    pd.concat(piezas, ignore_index=True).dropna().to_parquet(ruta_ajustado(hibrido._raiz), index=False)
+    return PronosticadorCombinado(hibrido)
+
+
+@pytest.fixture(scope="module")
+def cliente_tres(pronosticador, hibrido, combinado):
+    return TestClient(crear_app(pronosticador, [hibrido, combinado]))
+
+
+@pytest.mark.parametrize(("horizonte", "area"), [("1h", "norte"), ("24h", "centro"), ("24h", "sur")])
+def test_el_combinado_mezcla_con_el_peso_del_area_y_el_horizonte(cliente_tres, combinado, hibrido, horizonte, area):
+    ruta = f"/series/{area}?fecha=2026-01-15&horizonte={horizonte}"
+    mezcla = np.array(cliente_tres.get(f"{ruta}&modelo=combinado").json()["pronostico"])
+    del_hibrido = np.array(cliente_tres.get(f"{ruta}&modelo=hibrido").json()["pronostico"])
+    inicios = pd.date_range("2026-01-15", periods=48, freq="30min")
+    paso = {"1h": 2, "24h": 48}[horizonte]
+    # el ajustado sintético es lo real × 1.02, emitido H pasos antes del final de cada periodo
+    ajustado = combinado._real[area].reindex(inicios + pd.Timedelta(minutes=30)).to_numpy() * 1.02
+    peso = combinado.pesos[horizonte][area]
+    assert np.allclose(mezcla, peso * ajustado + (1 - peso) * del_hibrido, atol=0.11)
+    filas = combinado._datos[horizonte][area].reindex(combinado._emision(inicios, horizonte))
+    assert np.allclose(combinado._predecir_ajustado(horizonte, filas), ajustado)
+    assert paso == len(cliente_tres.post("/pronostico", json={
+        "area": area, "origen": "2026-01-15T10:00", "horizonte": horizonte, "modelo": "combinado"}).json()["pronostico"])
+
+
+def test_modelos_y_diagnostico_del_combinado(cliente_tres):
+    modelos = cliente_tres.get("/modelos").json()
+    assert [m["id"] for m in modelos] == ["XGBoost global", "hibrido", "combinado"]
+    assert [m["nombre"] for m in modelos] == ["Base (XGBoost)", "Híbrido (XGBoost + Simons)", "Combinado (recomendado)"]
+    d = cliente_tres.get("/diagnostico/centro?modelo=combinado").json()
+    assert [a["variante"] for a in d["ablacion"]] == ["M0", "hibrido", "ajustado", "combinado"]
+    assert {i["variable"] for i in d["importancias"]} == {"ajustado", "hibrido"}
+    resumen = cliente_tres.get("/resumen?modelo=combinado").json()
+    assert set(resumen["metricas_prueba"]) == {"norte", "centro", "sur"}
+
+
+# ---- pesos del combinado en un archivo -----------------------------------------------------------
+
+
+def test_sin_archivo_de_pesos_usa_los_del_notebook_04(tmp_path):
+    from app.backend.pronosticador_hibrido import PESOS_POR_DEFECTO, leer_pesos
+
+    pesos, origen = leer_pesos(tmp_path)
+    assert pesos == PESOS_POR_DEFECTO and pesos["24h"]["centro"] == 0.85
+    assert "2025" in origen and "por defecto" in origen
+
+
+def test_guardar_pesos_lee_la_tabla_del_notebook_04(tmp_path):
+    from app.backend.pronosticador_hibrido import guardar_pesos, leer_pesos, ruta_tabla_pesos
+
+    tabla = ruta_tabla_pesos(tmp_path)
+    tabla.parent.mkdir(parents=True)
+    filas = [{"Horizonte": h, "Área": a, "Peso del primero": w, "Primero": "x", "Segundo": "y"}
+             for h, a, w in [("1h", "Norte", 0.35000000000000003), ("1h", "Centro", 0.5), ("1h", "Sur", 0.6),
+                             ("24h", "Norte", 0.7000000000000001), ("24h", "Centro", 0.8), ("24h", "Sur", 0.9)]]
+    pd.DataFrame(filas).to_csv(tabla, index=False)
+    ruta = guardar_pesos(tmp_path)
+    pesos, origen = leer_pesos(tmp_path)
+    assert pesos["1h"] == {"norte": 0.35, "centro": 0.5, "sur": 0.6}
+    assert pesos["24h"] == {"norte": 0.7, "centro": 0.8, "sur": 0.9}
+    assert "validación de 2025" in origen and ruta.name == "combinado.json"
+
+
+def test_guardar_pesos_no_deja_temporales(tmp_path):
+    from app.backend.pronosticador_hibrido import guardar_pesos
+
+    ruta = guardar_pesos(tmp_path)
+    assert [x.name for x in ruta.parent.iterdir()] == ["combinado.json"]
+
+
+def test_con_peso_1_la_otra_pieza_no_cuenta(combinado):
+    from app.backend.pronosticador_hibrido import PronosticadorCombinado
+
+    otro = PronosticadorCombinado(combinado._hibrido)
+    otro._peso_por_codigo = {h: {c: 1.0 for c in pesos} for h, pesos in otro._peso_por_codigo.items()}
+    filas = otro._datos["24h"]["centro"].reindex(pd.date_range("2026-01-15", periods=48, freq="30min"))
+    filas = filas.copy()
+    filas[[c for c in filas.columns if c.startswith("Area_")]] = np.nan  # el híbrido no puede predecir
+    assert np.allclose(otro._predecir_filas("24h", "M0", filas), otro._predecir_ajustado("24h", filas))
+
+
+def test_pesos_invalidos_se_rechazan(tmp_path):
+    import json
+
+    from app.backend.pronosticador_hibrido import leer_pesos, ruta_pesos
+
+    ruta = ruta_pesos(tmp_path)
+    ruta.parent.mkdir(parents=True)
+    ruta.write_text(json.dumps({"pesos_ajustado": {"1h": {"norte": 1.4, "centro": 0.5, "sur": 0.5},
+                                                   "24h": {"norte": 0.5, "centro": 0.5, "sur": 0.5}}}))
+    with pytest.raises(ValueError, match="fuera de 0-1"):
+        leer_pesos(tmp_path)
+    ruta.write_text(json.dumps({"pesos_ajustado": {"1h": {"norte": 0.5}}}))
+    with pytest.raises(ValueError, match="peso numérico"):
+        leer_pesos(tmp_path)
+
+
+def test_el_combinado_usa_los_pesos_del_archivo(hibrido):
+    import json
+
+    from app.backend.pronosticador_hibrido import PronosticadorCombinado, ruta_pesos
+
+    ruta = ruta_pesos(hibrido._raiz)
+    pesos = {"1h": {"norte": 0.1, "centro": 0.2, "sur": 0.3}, "24h": {"norte": 0.4, "centro": 0.5, "sur": 0.6}}
+    ruta.write_text(json.dumps({"pesos_ajustado": pesos, "origen": "prueba"}))
+    try:
+        otro = PronosticadorCombinado(hibrido)
+    finally:
+        ruta.unlink()
+    assert otro.pesos == pesos and otro.origen_pesos == "prueba"
+    s = otro.serie("centro", pd.Timestamp("2026-01-15").date(), "24h", "M0")
+    assert [c.peso for c in s.componentes] == [0.5, 0.5]
+
+
+# ---- el combinado por defecto, con respaldo en el base ------------------------------------------
+
+
+@pytest.fixture(scope="module")
+def cliente_defecto(pronosticador, hibrido, combinado):
+    """Como en la app con los datos reales: el combinado primero y el base como respaldo."""
+    return TestClient(crear_app(combinado, [pronosticador, hibrido]))
+
+
+def test_modelos_con_el_combinado_primero_y_su_respaldo(cliente_defecto):
+    modelos = cliente_defecto.get("/modelos").json()
+    assert [m["id"] for m in modelos] == ["combinado", "XGBoost global", "hibrido"]
+    assert [m["respaldo"] for m in modelos] == ["XGBoost global", None, "XGBoost global"]
+
+
+def test_sin_modelo_responde_el_combinado_dentro_de_su_rango(cliente_defecto):
+    ruta = "/series/centro?fecha=2026-01-15&horizonte=24h&variante=M3"
+    s = cliente_defecto.get(ruta).json()
+    assert s["modelo"] == "combinado"
+    assert s == cliente_defecto.get(f"{ruta}&modelo=combinado").json()
+    p = cliente_defecto.post("/pronostico", json=PEDIDO | {"origen": "2026-01-15T10:00"}).json()
+    assert p["modelo"] == "combinado"
+
+
+def test_sin_modelo_fuera_del_rango_responde_el_base_y_lo_dice(cliente_defecto, combinado):
+    assert combinado.fecha_min.isoformat() == "2025-01-02"
+    ruta = "/series/centro?fecha=2025-01-01&horizonte=24h&variante=M3"
+    s = cliente_defecto.get(ruta).json()
+    assert s["modelo"] == "XGBoost global" and s["componentes"] is None
+    assert s == cliente_defecto.get(f"{ruta}&modelo=XGBoost global").json()
+    p = cliente_defecto.post("/pronostico", json=PEDIDO | {"origen": "2025-01-01T10:00"}).json()
+    assert p["modelo"] == "XGBoost global"
+    # Pedido a mano, el combinado no inventa: fuera de su rango responde 422
+    r = cliente_defecto.get(f"{ruta}&modelo=combinado")
+    assert r.status_code == 422 and "2025-01-02" in r.json()["detail"]
+
+
+def test_la_ficha_del_combinado_suma_sus_piezas(cliente_defecto, combinado):
+    s = cliente_defecto.get("/series/sur?fecha=2026-01-20&horizonte=24h").json()
+    ajustado, hibrido = s["componentes"]
+    assert (ajustado["id"], hibrido["id"]) == ("ajustado", "hibrido")
+    assert ajustado["peso"] == combinado.pesos["24h"]["sur"] and round(ajustado["peso"] + hibrido["peso"], 6) == 1
+    suma = [ajustado["peso"] * a + hibrido["peso"] * h for a, h in zip(ajustado["valores"], hibrido["valores"], strict=True)]
+    assert np.allclose(suma, s["pronostico"], atol=0.11)  # cada número va redondeado a 0.1 MW
+
+
+# ---- seguimiento del error y de la cobertura en 2026 ---------------------------------------------
+
+
+@pytest.mark.parametrize("horizonte", ["1h", "24h"])
+def test_seguimiento_mes_a_mes(cliente_defecto, horizonte):
+    r = cliente_defecto.get(f"/seguimiento/centro?horizonte={horizonte}&modelo=XGBoost global")
+    assert r.status_code == 200
+    s = r.json()
+    assert s["horizonte"] == horizonte and s["meta_cobertura_pct"] == 90
+    assert [m["mes"] for m in s["meses"]] == ["2026-01", "2026-02"]
+    assert s["total"]["mes"] == "2026" and s["total"]["periodos"] == sum(m["periodos"] for m in s["meses"])
+    ponderado = sum(m["mae_modelo"] * m["periodos"] for m in s["meses"]) / s["total"]["periodos"]
+    assert abs(ponderado - s["total"]["mae_modelo"]) < 0.1
+    assert all(0 <= m["cobertura_pct"] <= 100 and m["mae_referencia"] > 0 for m in s["meses"])
+
+
+def test_cada_mes_es_el_error_de_sus_periodos(pronosticador):
+    """Febrero de 2026 a 1 h, recalculado desde las series del día, que van redondeadas a 0.1 MW."""
+    s = pronosticador.seguimiento("centro", "1h", "M3")
+    errores = []
+    for dia in pd.date_range("2026-02-01", pronosticador.fecha_max, freq="D"):
+        serie = pronosticador.serie("centro", dia.date(), "1h", "M3")
+        errores += [abs(r - p) for r, p in zip(serie.real, serie.pronostico, strict=True) if r is not None]
+    febrero = next(m for m in s.meses if m.mes == "2026-02")
+    assert febrero.mae_modelo == pytest.approx(np.mean(errores), abs=0.2)
+    assert abs(febrero.periodos - len(errores)) <= 1  # a lo sumo el primer periodo del día siguiente
+    assert len({m.mae_modelo for m in s.meses}) == len(s.meses)  # no repite el total en cada mes
+
+
+def test_el_seguimiento_coincide_con_el_error_de_2026(cliente_defecto):
+    """El total es el mismo error de 2026 del resumen (base, 24 h, M3) y del diagnóstico (combinado)."""
+    base = cliente_defecto.get("/seguimiento/norte?modelo=XGBoost global").json()["total"]
+    resumen = cliente_defecto.get("/resumen?modelo=XGBoost global").json()["metricas_prueba"]["norte"]
+    assert base["mae_modelo"] == resumen["mae_mw"]
+    total = cliente_defecto.get("/seguimiento/centro").json()["total"]
+    diagnostico = cliente_defecto.get("/diagnostico/centro").json()["ablacion"]
+    assert total["mae_modelo"] == next(a["mae"] for a in diagnostico if a["variante"] == "combinado")
+
+
+def test_la_cobertura_es_la_del_rango_que_muestra_la_serie(combinado):
+    s = combinado.seguimiento("centro", "1h", "M0")
+    dentro = n = 0
+    for dia in pd.date_range("2026-01-01", combinado.fecha_max, freq="D"):
+        serie = combinado.serie("centro", dia.date(), "1h", "M0")
+        for real, inf, sup in zip(serie.real, serie.intervalo.inferior, serie.intervalo.superior, strict=True):
+            if real is not None:
+                n, dentro = n + 1, dentro + (inf <= real <= sup)
+    assert abs(100 * dentro / n - s.total.cobertura_pct) < 1.0
+
+
+# ---- pico y rampa de las próximas 24 h -----------------------------------------------------------
+
+
+def test_pico_y_rampa_salen_del_pronostico_a_24_h(cliente_defecto):
+    r = cliente_defecto.get("/pico/centro?origen=2026-01-15T10:00")
+    assert r.status_code == 200
+    pr = r.json()
+    p = cliente_defecto.post("/pronostico", json=PEDIDO | {"origen": "2026-01-15T10:00"}).json()
+    assert pr["modelo"] == p["modelo"] == "combinado"
+    assert (pr["desde"], pr["hasta"]) == (p["fecha_hora"][0], p["fecha_hora"][-1])
+    j = int(np.argmax(p["pronostico"]))
+    assert pr["pico"] == {"fecha_hora": p["fecha_hora"][j], "valor": p["pronostico"][j],
+                          "inferior": p["intervalo"]["inferior"][j], "superior": p["intervalo"]["superior"][j]}
+    subidas = np.array(p["pronostico"][2:]) - np.array(p["pronostico"][:-2])
+    k = int(np.argmax(subidas))
+    assert pr["rampa"]["subida_mw"] == pytest.approx(subidas[k], abs=0.05)
+    assert (pr["rampa"]["desde"], pr["rampa"]["hasta"]) == (p["fecha_hora"][k], p["fecha_hora"][k + 2])
+    assert pr["rampa"]["umbral_mw"] > 0 and pr["rampa"]["fuerte"] == (pr["rampa"]["subida_mw"] > pr["rampa"]["umbral_mw"])
+    acierto = pr["acierto"]
+    assert acierto["dias"] > 30 and 0 <= acierto["pct_hora"] <= 100 and acierto["mae_pico_mw"] >= 0
+
+
+def test_el_acierto_del_pico_es_el_de_las_series_del_dia(combinado):
+    """La cifra que muestra la app (y escribe el script) sale de las mismas series del día que dibuja."""
+    a = combinado.acierto_pico("norte")
+    aciertos = dias = 0
+    for dia in pd.date_range("2026-01-01", combinado.fecha_max, freq="D"):
+        s = combinado.serie("norte", dia.date(), "24h", "M0")
+        if any(x is None for x in s.real):
+            continue
+        dias += 1
+        aciertos += abs(int(np.argmax(s.pronostico)) - int(np.argmax(s.real))) <= 2
+    assert a.dias == dias and a.pct_hora == pytest.approx(100 * aciertos / dias, abs=0.05)
+
+
+def test_el_script_del_pico_tabula_cada_modelo_y_area(pronosticador, hibrido, combinado):
+    from experimentos.sein.pico_2026 import tabla
+
+    t = tabla([combinado, pronosticador, hibrido])
+    assert len(t) == 9 and set(t["Área"]) == {"Norte", "Centro", "Sur"}
+    fila = t[(t["Modelo"] == combinado.nombre) & (t["Área"] == "Centro")].iloc[0]
+    assert fila["Hora del máximo a ±1 h (%)"] == combinado.acierto_pico("centro").pct_hora

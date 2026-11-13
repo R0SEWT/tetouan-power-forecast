@@ -322,3 +322,267 @@ y los oráculos no cambian.
 - Okabe, M. e Ito, K. (2008). *Color Universal Design (CUD): How to make figures and presentations that are friendly to
   colorblind people*.
 - W3C (2023). *Web Content Accessibility Guidelines (WCAG) 2.2*.
+
+## Iteración 3: el selector de modelo ya elige
+
+El selector de modelo, que quedó preparado en la iteración 2, ahora tiene tres opciones (`GET /modelos`):
+
+- **Base (XGBoost)**: el modelo del proyecto, con o sin clima, El Niño y fallas.
+- **Híbrido (XGBoost + Simons)**: el mismo XGBoost con el pronóstico de un modelo fundacional como variable.
+- **Combinado (recomendado)**: mezcla el híbrido con Chronos-2 ajustado a estas series con datos hasta 2024.
+
+Los dos modelos nuevos necesitan GPU, así que sus pronósticos se calculan aparte y la app los lee ya guardados
+(notebook 04). Decisiones de interfaz:
+
+- Debajo del selector, una frase dice qué es el modelo elegido y qué no hace.
+- Híbrido y combinado usan solo la demanda: «Con clima y El Niño» queda deshabilitado y la ayuda lo explica, en
+  vez de dejar un control que no cambia nada. En «¿Y si…?» una nota dice que los escenarios no los mueven.
+- La ficha, «¿Qué tan bueno es?» y el diagnóstico muestran el error de 2026 del modelo elegido. El diagnóstico
+  compara, en las mismas filas, el base, el híbrido, Chronos-2 ajustado y el combinado.
+- El enlace de la página guarda el modelo (`modelo=combinado`), así que la demo se puede abrir ya en él.
+- La app sigue abriendo con el modelo base: es el único que responde a los escenarios, y el arnés de medición
+  compara contra él. (Cambió en la iteración 4: ahora abre con el combinado.)
+
+Medición (`resultados/it3.json`, misma ruta que la iteración 2, modo rápido, con el modelo base): las cuatro
+tareas se cumplen con los mismos pasos (KLM de 16.2, 0, 5.3 y 2.7 s), axe sigue en 0 infracciones en 28 pantallas,
+0 menciones a la Programación Diaria y el peso sube de 115 a 119 KB. Además, axe da 0 infracciones con el
+combinado elegido, en teléfono y escritorio, en claro y oscuro. No se midió con personas.
+
+Error en la prueba de 2026 de cada opción, a 24 h (MAE en MW; Centro / Norte / Sur): base con clima y El Niño
+83.7 / 32.7 / 51.2; híbrido 75.6 / 28.7 / 49.9; combinado 71.9 / 27.9 / 44.6. El rango del 90 % del combinado
+cubrió el 91.1 / 89.6 / 91.8 % de los periodos de 2026.
+
+## Iteración 4: el combinado por defecto, de dónde sale el número, el error mes a mes y el pico
+
+Las ideas 1 a 3 de la lista priorizada del producto final: lo que más se parece a lo que publican los operadores
+(CAISO pone el pico arriba; NESO publica su error cada mes) y que ya se podía calcular con lo que hay.
+
+**1. El combinado por defecto, con su ficha a la vista.** `GET /modelos` lista primero el combinado (el de menor
+error en 2026) y la app abre con él. Para un día sin pronósticos precalculados del combinado (hoy, solo el 1 de
+enero de 2025: el primer origen guardado es de ese día) responde el modelo base y la respuesta lo dice en un aviso
+amarillo: «Para el miércoles 1 de enero de 2025 no hay pronósticos precalculados del modelo combinado (los hay del
+2 ene 2025 al 15 oct 2026): se muestra el modelo Base (XGBoost).» El backend hace lo mismo sin el parámetro
+`modelo`, y `Serie` y `Pronostico` dicen en `modelo` cuál respondió (pruebas en `test_pronosticador_real.py`).
+Bajo el número, «¿De dónde sale este número? · 85 % Chronos-2 ajustado + 15 % Híbrido» se despliega en la cuenta
+de esa media hora; en el caso de las tareas: 4,764 MW × 0.85 + 4,781 MW × 0.15 = 4,767 MW, el número mostrado.
+Los pesos salieron del código: viven en `modelos/sein/fundacionales/combinado.json`, junto a los modelos del
+híbrido, con su origen (notebook 04: el peso con menor MAE en la validación de 2025, de 0 a 1 cada 0.05, por área y
+horizonte; se aplican tal cual a 2026). `python -m app.backend.pronosticador_hibrido pesos` lo escribe desde la
+tabla del notebook 04 (`reportes/sein/fundacionales/tablas/pesos_combinacion.csv`); si falta, se usan los mismos
+valores por defecto.
+
+**2. El error y la cobertura mes a mes en 2026.** Una sección del diagnóstico, «Mes a mes en 2026», con el MAE de
+cada mes de los tres modelos y de la mejor referencia, a la anticipación elegida, y la cobertura del rango del
+modelo elegido frente a su meta del 90 % (`GET /seguimiento/{área}`). Son los mismos periodos que el error de 2026
+del resumen y del diagnóstico (orígenes desde enero de 2026, que ningún modelo vio). Cada gráfico lleva su
+conclusión calculada y una tabla.
+
+| Combinado, 2026 | Norte 1 h / 24 h | Centro 1 h / 24 h | Sur 1 h / 24 h |
+|---|---|---|---|
+| MAE, MW | 18.8 / 27.9 | **48.8 / 71.9** | 20.9 / 44.6 |
+| Cobertura del rango del 90 %, % | 91.6 / 89.6 | 89.5 / 91.1 | 90.9 / 91.8 |
+
+El MAE del Centro coincide con la tabla 5.5 del paper (48.83 y 71.92 MW). En el año, el rango cumple lo que promete
+en las tres áreas; **por meses no siempre**: en el Centro a 24 h quedó algo corto en marzo (85.9 %) y mayo
+(87.4 %), y la app lo dice. El combinado se equivocó menos que la referencia en los 10 meses en el Centro a 24 h
+(su peor mes, marzo: 86.1 MW frente a 178.1).
+
+**3. Máximo y mayor subida de las próximas 24 h.** Un panel nuevo, entre los controles y «¿Qué tan bueno es?»:
+para la hora de emisión elegida, el máximo pronosticado de las 24 h siguientes con su hora y su rango, y la mayor
+subida en una hora con la hora en que ocurre, marcada en texto como «rampa fuerte» o «subida habitual» (`GET
+/pico/{área}`). No es un pronóstico de varios pasos: el pronóstico a 24 h del proyecto es directo, y cada media
+hora de la ventana es el emitido 24 h antes de ella, el mismo que dibuja la curva; a la hora de emisión ya
+estaban todos emitidos. «Rampa fuerte» es superar el percentil 95 de la mayor subida horaria de cada día real de
+2016 a 2024 (Norte 173, Centro 496, Sur 179 MW/h; con todas las subidas, casi cualquier tarde lo superaría). Junto al
+pico va qué tan bien ubica el modelo el máximo de cada día de 2026, de `experimentos/sein/pico_2026.py`, que usa la
+misma función que la API y guarda `reportes/sein/app/pico_2026.csv`:
+
+| Hora del máximo a ±1 h del real, % de los 288 días (error del máximo, MW) | Norte | Centro | Sur |
+|---|---|---|---|
+| Combinado | 55.2 (28.3) | 61.5 (83.9) | 64.6 (46.8) |
+| Híbrido | 54.2 (28.3) | 56.9 (85.9) | 58.0 (56.4) |
+| Base, con clima y El Niño | 55.6 (32.3) | 54.9 (92.1) | 51.0 (55.8) |
+| Mejor referencia simple | 46.9 (39.0) | 56.9 (143.2) | 55.6 (49.6) |
+
+La hora del máximo es difícil: ningún modelo pasa del 65 % y el base ubica peor la hora que la referencia en el
+Centro y el Sur, aunque yerra menos el valor (salvo en el Sur). La app muestra la cifra del modelo y la de la
+referencia, para que no se lea de más.
+
+**Escenarios.** El combinado no usa el clima, así que «¿Y si…?» los calcula con el modelo base (con clima y El
+Niño) y lo dice en una nota. Así T3 no cambia de camino.
+
+### Medición
+
+Misma ruta que la iteración 2 (`versiones.mjs`, `it4`), modo rápido, contra el backend real; la tabla sale de
+`node tabla.mjs it3 it4`. Las cifras del caso de las tareas cambian porque cambió el modelo por defecto: T1 4,712
+→ 4,767 MW (rango 4,588–4,929, real 4,784), T2 33.6 → 31.1 MW frente a 65.9 de la referencia, T4 «Niño débil, 86.8»
+→ «Niño moderado, 80.6» (el diagnóstico del combinado); T3 sigue en 15 MW porque lo calcula el base.
+
+| | It. 3 | It. 4 |
+|---|---|---|
+| Modelo con que abre | Base (XGBoost) | Combinado |
+| T1 a T4: cumplidas y acciones (escritorio = móvil) | 4 de 4; 16 / 0 / 2 / 1 | 4 de 4; 16 / 0 / 2 / 1 |
+| Tiempo estimado de las 4 tareas (KLM) | 24.2 s | 24.2 s |
+| axe-core, infracciones en 28 pantallas | 0 | 0 |
+| axe-core con la ficha abierta, el seguimiento a 1 h y a 24 h y el día de respaldo (16 pantallas más) | — | 0 |
+| Número visible sin desplazarse / barras fijas (móvil) | sí / 8 % | sí / 8 % |
+| Tabulaciones hasta el horizonte / hasta «Diagnóstico» | 12 / 10 | **13** / 10 |
+| Peso de la vista del área / peticiones | 119 KB / 9 | **143 KB / 10** |
+| Hasta ver el número: red local / red lenta | 60 / 1230 ms | 67 / 1340 ms |
+
+| La respuesta con su ficha | El pico y la rampa | Mes a mes |
+|---|---|---|
+| ![La respuesta con la ficha abierta: 4,764 × 0.85 + 4,781 × 0.15 = 4,767 MW](img/app-hcd/it4-ficha.jpg) | ![Máximo y mayor subida de las próximas 24 h](img/app-hcd/it4-pico.jpg) | ![MAE por mes de los tres modelos y la referencia, y cobertura del rango](img/app-hcd/it4-seguimiento.jpg) |
+
+**Lo que empeoró, y por qué se acepta.** Una tabulación más hasta el horizonte (el desplegable de la ficha va antes
+de los controles; sigue lejos de las 18 de la base). 24 KB más: el JavaScript sin comprimir (19 KB), los estilos
+y la petición del pico; el servidor de la demo no comprime. La red lenta sube 9 %, dentro del ruido del
+instrumento (§5). No se midió con personas.
+
+**Pendientes.** La versión en `/salud` (commit y sha256 de los artefactos) y la fecha de corte a la vista; el
+combinado solo cubre hasta el 15 de octubre de 2026 porque hereda el último día del base con clima, aunque sus
+pronósticos guardados llegan al 22; el seguimiento móvil (7 y 30 días) en lugar de mensual; y probar la ficha y
+el panel del pico con operadores.
+
+Cómo repetirlo:
+
+```bash
+uv run python -m app.backend.pronosticador_hibrido pesos   # combinado.json desde la tabla del notebook 04
+uv run python -m experimentos.sein.pico_2026               # la tabla del pico, en reportes/sein/app/
+cd app/medicion && node medir.mjs --version it4 --etiqueta it4 --rapido && node tabla.mjs it3 it4
+```
+
+## Iteración 5: el número antes, la fecha en formato peruano y el recorrido de demo
+
+Se volvió a medir la iteración 4 tal como está en la rama (`resultados/it5-base.json`, servida desde su commit en
+otro puerto) y se eligieron las métricas que seguían fallando: el tiempo hasta ver el número en red lenta, que no
+había bajado en ninguna iteración (1,143 ms en la base, 1,338 ms ahora), y el formato de la fecha (H10 de la línea
+base, sin resolver). Las otras dos candidatas se dejaron: la tabulación de más hasta el horizonte (el desplegable de la
+ficha va bajo el número, y moverlo después de los controles lo separaría de la cifra que explica) y el peso.
+
+**1. Pedir los datos mientras baja `app.js`.** La cascada de una carga en red lenta mostraba tres tramos en serie:
+el HTML y `app.js` (89 KB sin comprimir, que llega a los ~915 ms), después `/salud`, `/areas`, `/resumen` y
+`/modelos` en paralelo (~180 ms), y recién entonces `/series` (~190 ms), de la que sale el número. Ahora un script
+corto en el `<head>` de `index.html` pide esas cuatro rutas y, si el enlace trae área, fecha, horizonte y variante,
+también la serie, y `api()` usa cada respuesta una sola vez. Un enlace sin `modelo` (como el del arnés) se precarga
+sin él: la respuesta dice qué modelo respondió y solo se usa si es el que la app pediría; para un modelo que usa solo
+la demanda, la variante no cuenta (la serie del combinado con M3 y con M0 es idéntica). Si no coincide, se pide como
+antes: en el peor caso, una petición de más. Los dos tramos de la API quedan ocultos detrás de la descarga de
+`app.js`:
+
+| Red lenta, CPU × 4 (ms desde el inicio) | It. 4 | It. 5 |
+|---|---|---|
+| `app.js` descargado | 914 | 975 |
+| `/salud`, `/areas`, `/resumen`, `/modelos` | 940 → 1,118 | 189 → 421 |
+| `/series` (el número) | 1,137 → 1,322 | 189 → 429 |
+
+**2. La fecha también como dd/mm/aaaa.** El control de fecha sigue el idioma del navegador (en uno en inglés,
+03/10/2026 se lee en Perú como 3 de octubre). Junto al control, la línea que ya decía «martes 10 de marzo de 2026»
+ahora agrega «(10/03/2026)», siempre en formato peruano. No suma tabulaciones ni objetivos táctiles.
+
+### Medición
+
+Mismo arnés y misma ruta (`versiones.mjs`, `it4`), modo rápido, contra el backend real. El tiempo hasta ver el número
+se midió dos veces por versión (3 y 5 cargas; `it5-base-rend.json` e `it5-rend.json`, con `--solo rendimiento`).
+
+| | It. 4 (medida de nuevo) | It. 5 |
+|---|---|---|
+| T1 a T4: cumplidas y acciones (escritorio = móvil) | 4 de 4; 16 / 0 / 2 / 1 | 4 de 4; 16 / 0 / 2 / 1 |
+| Cifras de las tareas (combinado) | T1 4,767 (4,588–4,929, real 4,784); T2 31.1 vs 65.9; T3 15 MW; T4 Niño moderado, 80.6 | las mismas |
+| axe-core, infracciones en 28 pantallas | 0 | 0 |
+| **Hasta ver el número en red lenta, mediana (rango de las 8 cargas)** | **1,338 y 1,329 ms (1,329–1,353)** | **1,096 y 1,103 ms (1,077–1,120)** |
+| Hasta ver el número en red local | 71 y 64 ms | 59 y 67 ms |
+| Peso de la vista del área / peticiones | 143 KB / 10 | 145 KB / 10 |
+| Tabulaciones hasta el horizonte / hasta «Diagnóstico» | 13 / 10 | 13 / 10 |
+| Fecha en formato peruano junto al control | no | sí |
+| Demo: acciones desde su enlace hasta cumplir T1 a T4 | — | 3 (0 / 0 / 2 / 1) |
+
+El número aparece un 17 % antes en red lenta. Es menos que el 25 % que §5 da como ruido, pero ese umbral se midió
+cuando la página pedía tipografías a internet; ahora no hay terceros y los rangos de las dos versiones, de 8 cargas
+cada una, no se tocan.
+
+**Lo que no mejoró.** Los 1.1 s que quedan son casi todos la descarga de `app.js` y `style.css` sin comprimir a 1.6
+Mbps: con gzip pesarían 26 y 7 KB en vez de 89 y 31, pero eso es del servidor de la demo (`python -m http.server` no
+comprime), no de la página. La precarga solo sirve a un enlace con fecha, horizonte y variante; abrir `#/` y elegir
+el área sigue en serie. Las tabulaciones siguen en 13 y el peso sube 2 KB (el script del `<head>`). No se midió con
+personas.
+
+**Pendientes.** Servir la web comprimida (o desde el backend con `GZipMiddleware`), la tabulación de más, y probar
+el recorrido de demo con alguien que no conozca la app.
+
+### Recorrido de demo (3 minutos)
+
+Caso: Centro, martes 10 de marzo de 2026, 19:00, a 24 h, modelo combinado, en el proyector (1366 × 768). Verificado
+con el arnés: desde el enlace del paso 1, las cifras de T1 y T2 se ven sin tocar nada, T3 pide 2 clics y T4, 1.
+La app debe estar levantada con `app/levantar.sh` (web en `:8080`).
+
+| Paso | Dónde | Qué decir |
+|---|---|---|
+| 1 | Abrir `http://localhost:8080/#/area/centro?fecha=2026-03-10&hora=19:00&horizonte=24h&variante=M0&modelo=combinado` | «Para el martes 10/03/2026 a las 19:00, emitido 24 h antes, el modelo combinado pronosticó 4,767 MW, con 9 de cada 10 veces entre 4,588 y 4,929; lo real fue 4,784.» (T1) |
+| 2 | La misma pantalla, bajo el número | «Ese día se equivocó 31.1 MW en promedio, un 53 % menos que repetir la semana pasada a la misma hora (65.9 MW).» (T2) |
+| 3 | Clic en «¿De dónde sale este número?» | «No es una caja negra: es 85 % Chronos-2 ajustado y 15 % el híbrido, 4,764 × 0.85 + 4,781 × 0.15 = 4,767 MW.» |
+| 4 | Bajar al panel del máximo de las próximas 24 h | «El máximo viene el 11 a las 14:30, 4,977 MW, y la mayor subida, 414 MW en una hora desde las 7:30, es habitual; el modelo acierta la hora del máximo a ±1 h el 61.5 % de los días.» |
+| 5 | Barra de secciones: «¿Y si…?» y luego «+2 °C» | «Con 2 °C más, el pronóstico sube 15 MW; lo calcula el modelo base, porque el combinado no usa el clima.» (T3) |
+| 6 | Barra de secciones: «Diagnóstico» | «Donde más se equivoca es con El Niño moderado: 80.6 MW de error medio.» (T4) |
+| 7 | En «Diagnóstico», bajar a «Mes a mes en 2026» | «En 2026 se equivocó menos que la referencia los 10 meses, y su rango del 90 % cubrió el 91.1 % de las medias horas; el mes más flojo fue marzo.» |
+
+Cómo repetirlo:
+
+```bash
+git archive c9ef2bf app/web | tar -x -C /tmp/it4 && python3 -m http.server 8081 --directory /tmp/it4/app/web &
+cd app/medicion
+TPF_WEB=http://localhost:8081 node medir.mjs --version it4 --etiqueta it5-base --rapido
+node medir.mjs --version it4 --etiqueta it5 --rapido
+TPF_WEB=http://localhost:8081 node medir.mjs --version it4 --etiqueta it5-base-rend --solo rendimiento
+node medir.mjs --version it4 --etiqueta it5-rend --solo rendimiento
+```
+
+## Iteración 6: servir comprimido
+
+La iteración 5 dejó medido de dónde salen los ~1.1 s hasta ver el número en red lenta: casi todo es bajar `app.js` y
+`style.css` sin comprimir, porque `python -m http.server` no comprime. No se tocó la página; cambió solo quién la sirve.
+
+**Qué cambió.** El backend comprime con gzip todas sus respuestas de más de 500 bytes (`GZipMiddleware`), incluidas las
+series, y además sirve `app/web` en su propio origen (`http://localhost:8000/`, con `StaticFiles` montado después de
+las rutas de la API, que tienen prioridad). `app/levantar.sh` sigue dando la web en `:8080`, pero con un servidor
+mínimo que comprime (`app/backend/web.py`, sin cargar los modelos) en lugar de `http.server`. La web no cambió: sigue
+buscando la API en `:8000` del mismo host, y `?api=` funciona igual.
+
+### Medición
+
+Mismo arnés, misma ruta (`it4`) y mismo caso, contra el backend real. La base es la rama tal como quedó en la
+iteración 5, servida con `http.server`; el tiempo hasta ver el número se midió con 8 cargas por versión (5 + 3).
+
+| | It. 5 (`http.server`) | It. 6 (gzip) |
+|---|---|---|
+| T1 a T4: cumplidas y acciones (escritorio = móvil) | 4 de 4; 16 / 0 / 2 / 1 (`it5.json`) | 4 de 4; 16 / 0 / 2 / 1 |
+| axe-core, infracciones en 28 pantallas | 0 (`it5.json`) | 0 |
+| **Hasta ver el número en red lenta, mediana (rango de las 8 cargas)** | **1,119 y 1,097 ms (1,088–1,163)** | **657 y 658 ms (648–669)** |
+| Hasta ver el número en red local | 72 y 70 ms | 66 y 65 ms |
+| Peso transferido de la vista del área / peticiones | 145 KB / 10 | 43 KB / 10 |
+| Script / estilos / HTML / API | 89 / 31 / 14 / 11 KB | 26 / 7 / 5 / 6 KB |
+
+El número aparece un 41 % antes en red lenta (unos 450 ms menos) y los rangos están lejos de tocarse; la página pesa un 70 %
+menos. En red local no cambia (comprimir cuesta lo que ahorra). Tareas, cifras, foco, tamaños y axe quedan igual.
+
+**Lo que no mejoró, o empeoró.** Abrir la web desde el mismo origen del backend (`TPF_WEB=http://localhost:8000`, 5
+cargas) es más lento que desde `:8080`: 750 ms (730–770). Con todo en un solo host, la precarga de cinco rutas más
+`app.js` y `style.css` pasa el límite de seis conexiones por host de HTTP/1.1 y una petición espera; con dos puertos
+son dos hosts. Por eso la demo sigue en `:8080` y el mismo origen queda como comodidad (un solo proceso, sin CORS). Los
+~650 ms que quedan son sobre todo latencia (150 ms por ida y vuelta: HTML, luego `app.js` y las rutas en paralelo),
+que la compresión no toca. No se midió con personas.
+
+**Pendientes.** La tabulación de más hasta el horizonte y probar el recorrido de demo con alguien que no conozca la app.
+
+Cómo repetirlo:
+
+```bash
+# Base: la rama de la iteración 5 con http.server en :8080 y la API en :8000
+cd app/medicion
+node medir.mjs --version it4 --etiqueta it6-base-rend --solo rendimiento
+node medir.mjs --version it4 --etiqueta it6-base-rend3 --solo rendimiento --rapido
+# Después: app/levantar.sh de esta iteración
+node medir.mjs --version it4 --etiqueta it6-rend --solo rendimiento
+node medir.mjs --version it4 --etiqueta it6 --rapido
+TPF_WEB=http://localhost:8000 node medir.mjs --version it4 --etiqueta it6-mismo-origen-rend --solo rendimiento
+```

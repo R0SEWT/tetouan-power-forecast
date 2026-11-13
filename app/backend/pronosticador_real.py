@@ -55,6 +55,7 @@ from .contrato import (
     FORMATO_FECHA_HORA,
     PASOS,
     Ablacion,
+    AciertoPico,
     Adaptacion,
     Diagnostico,
     Escenario,
@@ -62,16 +63,19 @@ from .contrato import (
     Importancia,
     Intervalo,
     MaeRegimen,
+    MesSeguimiento,
     MetricaPrueba,
     Pronostico,
     RegimenNino,
     Residuos,
     Resumen,
+    Seguimiento,
     Sensibilidad,
     Serie,
     VariableSensibilidad,
     Variante,
 )
+from .pico import acierto_pico, umbral_rampa
 from .pronosticador import (
     FRASE_M0_SIN_ESCENARIOS,
     NOMBRE_REFERENCIA,
@@ -264,6 +268,10 @@ def _con_nulos(x) -> list[float | None]:
 class PronosticadorReal:
     """Cumple el ``Protocol`` ``Pronosticador`` con el XGBoost global y las capas reales del SEIN."""
 
+    descripcion = "El modelo del proyecto: XGBoost sobre la demanda, con o sin clima, El Niño y fallas."
+    variantes: tuple[str, ...] = ("M0", "M3")
+    respaldo = None  # el modelo que responde fuera del rango de fechas de este; el base no lo necesita
+
     def __init__(self, raiz=None):
         carpeta = carpeta_modelos(raiz)
         ruta_meta = carpeta / "metadatos.json"
@@ -281,6 +289,7 @@ class PronosticadorReal:
         self._diagnosticos: dict[str, Diagnostico] = {}
         self._resumen: Resumen | None = None
         self.modelo = "XGBoost global"
+        self.nombre = "Base (XGBoost)"
         self.version_datos = f"IEOD hasta {self._demanda['DateTime'].max():%Y-%m-%d}"
         self.fecha_min = FECHA_MIN
         self.fecha_max = self._ultima_fecha()
@@ -330,6 +339,25 @@ class PronosticadorReal:
 
     def _real_en(self, area: str, inicios: pd.DatetimeIndex) -> np.ndarray:
         return self._real[area].reindex(inicios + MEDIO).to_numpy()
+
+    def _variante(self, variante: str) -> str:
+        """La variante que de verdad usa este modelo (el híbrido y el combinado solo distinguen M0)."""
+        return variante if variante in self.variantes else "M0"
+
+    def _periodos(self, area: str, horizonte: Horizonte, variante: str, inicios: pd.DatetimeIndex):
+        """Pronóstico, real y mejor referencia de cada periodo, como los muestra la serie del día.
+
+        Como en ``serie``, si al modelo le falta una variable en un periodo se usa la mejor referencia.
+        """
+        emision = self._emision(inicios, horizonte)
+        filas = self._datos[horizonte][area].reindex(emision)
+        referencia = filas[self._mejor_referencia(area, horizonte)].to_numpy(dtype=float)
+        pred = self._predicciones_area(area, horizonte, self._variante(variante)).reindex(emision).to_numpy()
+        return np.where(np.isnan(pred), referencia, pred), self._real_en(area, inicios), referencia
+
+    def _cache(self, nombre: str) -> dict:
+        # El híbrido y el combinado no llaman a este __init__: la caché se crea al primer uso
+        return self.__dict__.setdefault(nombre, {})
 
     # ---- contrato ------------------------------------------------------------------------------
 
@@ -463,6 +491,61 @@ class PronosticadorReal:
                                          mes=str(publicado)),
                 metricas_prueba=metricas, modelo=self.modelo, version_datos=self.version_datos)
         return self._resumen
+
+    def seguimiento(self, area: str, horizonte: Horizonte, variante: Variante) -> Seguimiento:
+        """MAE por mes del periodo pronosticado y cobertura del rango probable, en la prueba de 2026.
+
+        Son las mismas filas que el error de 2026 del resumen y del diagnóstico (orígenes desde 2026, que el modelo
+        no vio), restringidas a las que también tienen valor de la referencia.
+        """
+        clave = (area, horizonte, self._variante(variante))
+        cache = self._cache("_seguimientos")
+        if clave in cache:
+            return cache[clave]
+        nombre_ref = self._mejor_referencia(area, horizonte)
+        prueba = self._prueba(area, horizonte)
+        prueba = prueba[prueba.index >= FIN_DESARROLLO]
+        pred = self._predicciones_area(area, horizonte, clave[2]).reindex(prueba.index).to_numpy()
+        intervalo = self._intervalo(area, horizonte, clave[2], pred)
+        tabla = pd.DataFrame({
+            "real": prueba["real"].to_numpy(dtype=float), "pred": pred,
+            "ref": prueba[nombre_ref].to_numpy(dtype=float),
+            "inferior": np.asarray(intervalo.inferior, dtype=float), "superior": np.asarray(intervalo.superior, dtype=float),
+        }, index=prueba.index + PASOS[horizonte] * PASO - MEDIO)  # inicio del periodo pronosticado
+        tabla = tabla.dropna()
+        if tabla.empty:
+            raise LookupError(f"No hay pronósticos de {FIN_DESARROLLO.year} con dato real para {area} a {horizonte}.")
+        tabla["e_modelo"] = (tabla["real"] - tabla["pred"]).abs()
+        tabla["e_ref"] = (tabla["real"] - tabla["ref"]).abs()
+        tabla["dentro"] = (tabla["real"] >= tabla["inferior"]) & (tabla["real"] <= tabla["superior"])
+
+        def fila(mes, t):
+            return MesSeguimiento(mes=mes, mae_modelo=round(float(t["e_modelo"].mean()), 1),
+                                  mae_referencia=round(float(t["e_ref"].mean()), 1),
+                                  cobertura_pct=round(100 * float(t["dentro"].mean()), 1), periodos=len(t))
+
+        meses = [fila(str(m), t) for m, t in tabla.groupby(tabla.index.to_period("M"))]
+        cache[clave] = Seguimiento(horizonte=horizonte, referencia_nombre=nombre_ref, meses=meses,
+                                   total=fila(str(FIN_DESARROLLO.year), tabla))
+        return cache[clave]
+
+    def umbral_rampa(self, area: str) -> float | None:
+        """La subida horaria que marca una «rampa fuerte»: percentil 95 de la mayor de cada día, 2016-2024."""
+        cache = self._cache("_umbrales")
+        if area not in cache:
+            cache[area] = umbral_rampa(self._real[area], FIN_ENTRENAMIENTO)
+        return cache[area]
+
+    def acierto_pico(self, area: str, variante: Variante = "M3") -> AciertoPico | None:
+        """Qué tan bien ubica el máximo de cada día de 2026, a 24 h, con los mismos valores de la serie del día."""
+        clave = (area, self._variante(variante))
+        cache = self._cache("_aciertos")
+        if clave not in cache:
+            dias = pd.date_range(FIN_DESARROLLO, pd.Timestamp(self.fecha_max), freq="D")
+            inicios = pd.date_range(dias[0], periods=len(dias) * DIA, freq="30min")
+            pred, real, referencia = self._periodos(area, "24h", clave[1], inicios)
+            cache[clave] = acierto_pico(*(x.reshape(len(dias), DIA) for x in (pred, real, referencia)))
+        return cache[clave]
 
     def diagnostico(self, area: str) -> Diagnostico:
         if area not in self._diagnosticos:

@@ -16,6 +16,7 @@ from datetime import date, datetime, timedelta
 from typing import Protocol, runtime_checkable
 
 import numpy as np
+import pandas as pd
 
 from .contrato import (
     FECHA_MAX,
@@ -24,6 +25,7 @@ from .contrato import (
     IDS_AREAS,
     PASOS,
     Ablacion,
+    AciertoPico,
     Adaptacion,
     Diagnostico,
     Escenario,
@@ -32,17 +34,20 @@ from .contrato import (
     Importancia,
     Intervalo,
     MaeRegimen,
+    MesSeguimiento,
     MetricaPrueba,
     Pronostico,
     Referencia,
     RegimenNino,
     Residuos,
     Resumen,
+    Seguimiento,
     Sensibilidad,
     Serie,
     VariableSensibilidad,
     Variante,
 )
+from .pico import acierto_pico, umbral_rampa
 
 
 @runtime_checkable
@@ -70,6 +75,8 @@ class Pronosticador(Protocol):
     ) -> Sensibilidad: ...
 
     def diagnostico(self, area: str) -> Diagnostico: ...
+
+    def seguimiento(self, area: str, horizonte: Horizonte, variante: Variante) -> Seguimiento: ...
 
 
 # --------------------------------------------------------------------------------------------
@@ -658,6 +665,50 @@ class PronosticadorDePrueba:
         if area not in self._diagnosticos:
             self._diagnosticos[area] = self._calcular_diagnostico(area)
         return self._diagnosticos[area]
+
+    def seguimiento(self, area: str, horizonte: Horizonte, variante: Variante) -> Seguimiento:
+        d = self._datos[area]
+        h = PASOS[horizonte]
+        i = self._prueba(area)
+        grupos = GRUPOS[variante]
+        pred = self._predecir(area, i - h, np.full_like(i, h), grupos)
+        nombre_ref = self._mejor_referencia[(area, horizonte)]
+        ancho = self._ancho(grupos, np.full(len(i), h))
+        real = d.observado[i]
+        tabla = pd.DataFrame({
+            "e_modelo": np.abs(real - pred),
+            "e_ref": np.abs(real - self._referencia(area, nombre_ref, i - h, i)),
+            "dentro": (real >= np.round(pred * (1 - ancho), 1)) & (real <= np.round(pred * (1 + ancho), 1)),
+        }, index=[_momento(j).strftime("%Y-%m") for j in i])
+
+        def fila(mes: str, t: pd.DataFrame) -> MesSeguimiento:
+            return MesSeguimiento(
+                mes=mes,
+                mae_modelo=round(float(t["e_modelo"].mean()), 1),
+                mae_referencia=round(float(t["e_ref"].mean()), 1),
+                cobertura_pct=round(100 * float(t["dentro"].mean()), 1),
+                periodos=len(t),
+            )
+
+        meses = [fila(str(m), t) for m, t in tabla.groupby(level=0)]
+        return Seguimiento(
+            horizonte=horizonte, referencia_nombre=nombre_ref, meses=meses, total=fila("2026", tabla)
+        )
+
+    def umbral_rampa(self, area: str) -> float | None:
+        i = np.arange(_indice(datetime(2025, 1, 1)))
+        fin = pd.DatetimeIndex([_momento(j) for j in i]) + pd.Timedelta(minutes=30)
+        return umbral_rampa(pd.Series(self._datos[area].verdad[i], index=fin), pd.Timestamp("2025-01-01"))
+
+    def acierto_pico(self, area: str, variante: Variante = "M3") -> AciertoPico | None:
+        d = self._datos[area]
+        h = PASOS["24h"]
+        i0 = _indice(datetime(2026, 1, 1))
+        dias = (_indice(datetime.combine(FECHA_MAX, datetime.min.time())) - i0) // DIA + 1
+        i = i0 + np.arange(dias * DIA)
+        pred = self._predecir(area, i - h, np.full_like(i, h), GRUPOS[variante])
+        ref = self._referencia(area, self._mejor_referencia[(area, "24h")], i - h, i)
+        return acierto_pico(*(x.reshape(dias, DIA) for x in (pred, d.observado[i], ref)))
 
     def _calcular_diagnostico(self, area: str) -> Diagnostico:
         d = self._datos[area]

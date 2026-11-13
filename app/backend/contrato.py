@@ -5,8 +5,10 @@ Reglas comunes:
 - Fechas y horas en ISO 8601, en hora de Lima y sin zona, con minutos en punto o y media
   (``"2026-02-26T15:00"``). Cada ``fecha_hora`` marca el inicio de su periodo de 30 minutos.
 - Demanda en MW.
-- Errores: 404 si el área no existe; 422 si la fecha cae fuera de ``FECHA_MIN``-``FECHA_MAX``,
+- Errores: 404 si el área o el modelo no existen; 422 si la fecha cae fuera de ``FECHA_MIN``-``FECHA_MAX``,
   si un campo no cumple su formato o si se pide un escenario a 1 h.
+- Sin el parámetro ``modelo`` responde el primero de ``GET /modelos``; si la fecha cae fuera de su rango y tiene
+  ``respaldo``, responde el respaldo. ``Serie`` y ``Pronostico`` dicen en ``modelo`` cuál respondió.
 
 Este archivo es la fuente de verdad del contrato: el frontend y las pruebas trabajan contra él.
 """
@@ -43,11 +45,20 @@ class Salud(BaseModel):
 
 
 class ModeloDisponible(BaseModel):
-    """Un modelo que el backend puede servir. Hoy hay uno; la app ya muestra el selector."""
+    """Un modelo que el backend puede servir. El primero de la lista es el que se usa si no se pide otro."""
 
     id: str
     nombre: str
     descripcion: str = ""
+    variantes: list[Variante] = Field(default=["M0", "M3"], description="Las variantes que el modelo distingue")
+    fecha_min: str | None = Field(default=None, description="Primer día que puede pronosticar, AAAA-MM-DD")
+    fecha_max: str | None = Field(default=None, description="Último día que puede pronosticar, AAAA-MM-DD")
+    respaldo: str | None = Field(
+        default=None, description="Id del modelo que responde por este fuera de su rango de fechas"
+    )
+    composicion: str | None = Field(
+        default=None, description="Si es una mezcla, de dónde salen sus pesos (la app lo muestra en la ficha)"
+    )
 
 
 class Area(BaseModel):
@@ -95,6 +106,15 @@ class Intervalo(BaseModel):
     superior: list[float]
 
 
+class Componente(BaseModel):
+    """Una pieza de un pronóstico combinado: ``pronostico ≈ Σ peso · valores`` (± el redondeo a 0.1 MW)."""
+
+    id: str
+    nombre: str
+    peso: float
+    valores: list[float | None] = Field(description="Un valor por periodo; nulo si la pieza falta ahí")
+
+
 class Serie(BaseModel):
     """Los 48 periodos de un día. El pronóstico de cada periodo se emitió H pasos antes."""
 
@@ -116,6 +136,10 @@ class Serie(BaseModel):
         description="Rango probable (90 %) de cada periodo, emitido H pasos antes como el "
         "pronóstico (agregado al contrato: la app lo muestra junto al número y en la curva)",
     )
+    modelo: str | None = Field(default=None, description="Id del modelo que respondió")
+    componentes: list[Componente] | None = Field(
+        default=None, description="Si el modelo es una mezcla, sus piezas y pesos (la app arma la ficha)"
+    )
 
 
 class Escenario(BaseModel):
@@ -134,6 +158,7 @@ class PedidoPronostico(BaseModel):
     horizonte: Horizonte
     variante: Variante = "M3"
     escenario: Escenario = Field(default_factory=Escenario)
+    modelo: str | None = Field(default=None, description="Id de GET /modelos; si falta, el primero")
 
 
 class Pronostico(BaseModel):
@@ -148,12 +173,14 @@ class Pronostico(BaseModel):
     real: list[float | None]
     intervalo: Intervalo
     frase: str = Field(description="El cambio en la hora de mayor demanda, en texto llano")
+    modelo: str | None = Field(default=None, description="Id del modelo que respondió")
 
 
 class PedidoSensibilidad(BaseModel):
     area: str
     origen: str = Field(pattern=PATRON_ORIGEN, examples=["2026-02-26T15:00"])
     variable: VariableSensibilidad
+    modelo: str | None = Field(default=None, description="Id de GET /modelos; si falta, el primero")
 
 
 class Sensibilidad(BaseModel):
@@ -200,3 +227,72 @@ class Diagnostico(BaseModel):
     adaptacion: list[Adaptacion]
     importancias: list[Importancia]
     residuos: Residuos
+
+
+class MesSeguimiento(BaseModel):
+    """El error y la cobertura de un mes de la prueba de 2026 (o de todo el año, con ``mes="2026"``)."""
+
+    mes: str = Field(description="AAAA-MM del periodo pronosticado, o AAAA para el total")
+    mae_modelo: float
+    mae_referencia: float
+    cobertura_pct: float = Field(description="% de periodos cuyo valor real cayó dentro del rango probable")
+    periodos: int
+
+
+class Seguimiento(BaseModel):
+    """Seguimiento del error y de la cobertura en la prueba de 2026, solo con pronósticos fuera de muestra.
+
+    El modelo y la referencia se miden en los mismos periodos: los que tienen dato real, pronóstico del modelo y
+    valor de la referencia.
+    """
+
+    horizonte: Horizonte
+    referencia_nombre: Referencia
+    meta_cobertura_pct: float = Field(default=90.0, description="Lo que el rango promete cubrir")
+    meses: list[MesSeguimiento]
+    total: MesSeguimiento
+
+
+class Pico(BaseModel):
+    fecha_hora: str = Field(description="Inicio del periodo con la mayor demanda pronosticada")
+    valor: float
+    inferior: float
+    superior: float
+
+
+class Rampa(BaseModel):
+    """La mayor subida en una hora: del periodo ``desde`` al que empieza una hora después (``hasta``)."""
+
+    desde: str
+    hasta: str
+    subida_mw: float
+    fuerte: bool = Field(description="True si supera ``umbral_mw``")
+    umbral_mw: float | None = Field(
+        default=None,
+        description="Percentil 95 de la mayor subida horaria de cada día del área en 2016-2024 (lo real)",
+    )
+
+
+class AciertoPico(BaseModel):
+    """Qué tan bien ubica el máximo de cada día de la prueba de 2026, a 24 h."""
+
+    dias: int = Field(description="Días con los 48 periodos reales")
+    pct_hora: float = Field(description="% de días con la hora del máximo pronosticado a ±1 h de la real")
+    pct_hora_referencia: float
+    mae_pico_mw: float = Field(description="Error medio del máximo diario, en MW")
+    mae_pico_referencia_mw: float
+
+
+class PicoRampa(BaseModel):
+    """El máximo y la mayor subida de las 24 h siguientes al origen, según el pronóstico a 24 h.
+
+    No es un pronóstico de varios pasos: cada periodo es el pronóstico directo a 24 h emitido 24 h antes de
+    ese periodo, como en la serie del día. Todos ya estaban emitidos en el origen.
+    """
+
+    desde: str = Field(description="Primer periodo de la ventana")
+    hasta: str = Field(description="Último periodo de la ventana")
+    pico: Pico
+    rampa: Rampa | None = Field(description="Nula si la ventana no sube en ninguna hora")
+    acierto: AciertoPico | None = Field(default=None, description="El del modelo y el área en 2026")
+    modelo: str | None = Field(default=None, description="Id del modelo que respondió")

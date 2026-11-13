@@ -185,8 +185,9 @@ uv run python -m app.backend.pronosticador_real entrenar
 TPF_PRONOSTICADOR=real uv run uvicorn app.backend.main:app
 ```
 
-y abrir `app/web/index.html` en el navegador: busca la API en el puerto 8000 (o correr `app/levantar.sh`, que levanta
-la API y la web en http://localhost:8080, con el modelo real si encuentra los datos). Sin `TPF_PRONOSTICADOR=real`, la API
+y abrir http://localhost:8000/, donde la API también sirve la web, comprimida (o `app/web/index.html`, que busca la API
+en el puerto 8000; o correr `app/levantar.sh`, que levanta la API y la web en http://localhost:8080, con el modelo real
+si encuentra los datos). Sin `TPF_PRONOSTICADOR=real`, la API
 responde con datos de prueba sintéticos. Para los intervalos usa los errores fuera de muestra de 2025 del notebook 02
 (`reportes/sein/modelado/predicciones_validacion_*.csv`) y para la adaptación, la tabla del notebook 03
 (`reportes/sein/prueba_2026/adaptacion.csv`); los dos están en el Drive.

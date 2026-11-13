@@ -1,0 +1,491 @@
+{
+  "etiqueta": "it5-base",
+  "version": "it4",
+  "fecha": "2026-11-13T11:04:33.853Z",
+  "modelo": "Combinado: Chronos-2 ajustado + híbrido",
+  "caso": {
+    "area": "centro",
+    "fecha": "2026-03-10",
+    "hora": "19:00",
+    "idx": 38,
+    "horizonte": "24h",
+    "variante": "M3"
+  },
+  "tareas": {
+    "t1": {
+      "nombre": "Pronóstico de un área, horizonte y fecha, con intervalo y real",
+      "fichas": {
+        "pronostico": [
+          "4,767"
+        ],
+        "intervalo inferior": [
+          "4,588"
+        ],
+        "intervalo superior": [
+          "4,929"
+        ],
+        "real": [
+          "4,784"
+        ]
+      },
+      "escritorio": {
+        "cumplida": true,
+        "vistos": 4,
+        "total": 4,
+        "faltan": [],
+        "acciones": 16,
+        "clics": 4,
+        "escrituras": 1,
+        "pulsaciones": 10,
+        "desplazamientos": 1,
+        "segundos_robot": 2.11,
+        "segundos_klm": 16.2
+      },
+      "movil": {
+        "cumplida": true,
+        "vistos": 4,
+        "total": 4,
+        "faltan": [],
+        "acciones": 16,
+        "clics": 4,
+        "escrituras": 1,
+        "pulsaciones": 10,
+        "desplazamientos": 1,
+        "segundos_robot": 2.06,
+        "segundos_klm": 16.2
+      }
+    },
+    "t2": {
+      "nombre": "¿Se puede confiar? Error reciente frente a la referencia",
+      "fichas": {
+        "error del modelo": [
+          "31.1",
+          "31 MW"
+        ],
+        "comparación con la referencia": [
+          "65.9",
+          "35 MW",
+          "35 MW menos"
+        ]
+      },
+      "escritorio": {
+        "cumplida": true,
+        "vistos": 2,
+        "total": 2,
+        "faltan": [],
+        "acciones": 0,
+        "clics": 0,
+        "escrituras": 0,
+        "pulsaciones": 0,
+        "desplazamientos": 0,
+        "segundos_robot": 0.13,
+        "segundos_klm": 0
+      },
+      "movil": {
+        "cumplida": true,
+        "vistos": 2,
+        "total": 2,
+        "faltan": [],
+        "acciones": 0,
+        "clics": 0,
+        "escrituras": 0,
+        "pulsaciones": 0,
+        "desplazamientos": 0,
+        "segundos_robot": 0.13,
+        "segundos_klm": 0
+      }
+    },
+    "t3": {
+      "nombre": "Efecto de +2 °C en el pronóstico a 24 h",
+      "fichas": {
+        "cambio del escenario": [
+          "15 MW",
+          "4,934"
+        ]
+      },
+      "escritorio": {
+        "cumplida": true,
+        "vistos": 1,
+        "total": 1,
+        "faltan": [],
+        "acciones": 2,
+        "clics": 2,
+        "escrituras": 0,
+        "pulsaciones": 0,
+        "desplazamientos": 0,
+        "segundos_robot": 0.95,
+        "segundos_klm": 5.3
+      },
+      "movil": {
+        "cumplida": true,
+        "vistos": 1,
+        "total": 1,
+        "faltan": [],
+        "acciones": 2,
+        "clics": 2,
+        "escrituras": 0,
+        "pulsaciones": 0,
+        "desplazamientos": 0,
+        "segundos_robot": 0.99,
+        "segundos_klm": 5.3
+      }
+    },
+    "t4": {
+      "nombre": "Diagnóstico: régimen de El Niño con más error",
+      "fichas": {
+        "régimen": [
+          "Niño moderado"
+        ],
+        "error": [
+          "80.6"
+        ]
+      },
+      "escritorio": {
+        "cumplida": true,
+        "vistos": 2,
+        "total": 2,
+        "faltan": [],
+        "acciones": 1,
+        "clics": 1,
+        "escrituras": 0,
+        "pulsaciones": 0,
+        "desplazamientos": 0,
+        "segundos_robot": 0.52,
+        "segundos_klm": 2.7
+      },
+      "movil": {
+        "cumplida": true,
+        "vistos": 2,
+        "total": 2,
+        "faltan": [],
+        "acciones": 1,
+        "clics": 1,
+        "escrituras": 0,
+        "pulsaciones": 0,
+        "desplazamientos": 0,
+        "segundos_robot": 0.51,
+        "segundos_klm": 2.7
+      }
+    }
+  },
+  "rendimiento": {
+    "local": {
+      "grafico_ms": 69,
+      "grafico_rango_ms": [
+        64,
+        72
+      ],
+      "respuesta_ms": 71,
+      "respuesta_rango_ms": [
+        66,
+        74
+      ]
+    },
+    "peticiones": 10,
+    "kb": 143,
+    "kb_por_tipo": {
+      "stylesheet": 31,
+      "document": 14,
+      "script": 88,
+      "fetch": 11
+    },
+    "peticiones_a_terceros": 0,
+    "red_lenta": {
+      "grafico_ms": 1334,
+      "grafico_rango_ms": [
+        1327,
+        1350
+      ],
+      "respuesta_ms": 1338,
+      "respuesta_rango_ms": [
+        1330,
+        1353
+      ]
+    }
+  },
+  "axe": {
+    "pantallas": 28,
+    "infracciones": 0,
+    "nodos": 0,
+    "buenas_practicas_nodos": 0,
+    "reglas": {},
+    "corridas": [
+      {
+        "estado": "inicio",
+        "vista": "movil",
+        "tema": "dark",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "inicio",
+        "vista": "movil",
+        "tema": "light",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "inicio",
+        "vista": "escritorio",
+        "tema": "dark",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "inicio",
+        "vista": "escritorio",
+        "tema": "light",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "area",
+        "vista": "movil",
+        "tema": "dark",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "area",
+        "vista": "movil",
+        "tema": "light",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "area",
+        "vista": "escritorio",
+        "tema": "dark",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "area",
+        "vista": "escritorio",
+        "tema": "light",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "operacion",
+        "vista": "movil",
+        "tema": "dark",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "operacion",
+        "vista": "movil",
+        "tema": "light",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "operacion",
+        "vista": "escritorio",
+        "tema": "dark",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "operacion",
+        "vista": "escritorio",
+        "tema": "light",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "escenarios",
+        "vista": "movil",
+        "tema": "dark",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "escenarios",
+        "vista": "movil",
+        "tema": "light",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "escenarios",
+        "vista": "escritorio",
+        "tema": "dark",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "escenarios",
+        "vista": "escritorio",
+        "tema": "light",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "sensibilidad",
+        "vista": "movil",
+        "tema": "dark",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "sensibilidad",
+        "vista": "movil",
+        "tema": "light",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "sensibilidad",
+        "vista": "escritorio",
+        "tema": "dark",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "sensibilidad",
+        "vista": "escritorio",
+        "tema": "light",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "diagnostico",
+        "vista": "movil",
+        "tema": "dark",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "diagnostico",
+        "vista": "movil",
+        "tema": "light",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "diagnostico",
+        "vista": "escritorio",
+        "tema": "dark",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "diagnostico",
+        "vista": "escritorio",
+        "tema": "light",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "ficha",
+        "vista": "movil",
+        "tema": "dark",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "ficha",
+        "vista": "movil",
+        "tema": "light",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "ficha",
+        "vista": "escritorio",
+        "tema": "dark",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "ficha",
+        "vista": "escritorio",
+        "tema": "light",
+        "reglas": [],
+        "nodos": 0
+      }
+    ]
+  },
+  "foco": {
+    "movil": {
+      "enfocables": 29,
+      "tapados": 0,
+      "tapados_ejemplos": [],
+      "sin_indicador": 0,
+      "sin_indicador_ejemplos": [],
+      "tabs_hasta_horizonte": 13,
+      "tabs_hasta_diagnostico": 10
+    },
+    "escritorio": {
+      "enfocables": 29,
+      "tapados": 0,
+      "tapados_ejemplos": [],
+      "sin_indicador": 0,
+      "sin_indicador_ejemplos": [],
+      "tabs_hasta_horizonte": 13,
+      "tabs_hasta_diagnostico": 10
+    }
+  },
+  "estructura": {
+    "movil": {
+      "interactivos": 28,
+      "menores_24px": 0,
+      "menores_44px": 0,
+      "ejemplos_menores_24": [],
+      "cromo_fijo_pct": 8,
+      "respuesta_sin_desplazar": true,
+      "tamano_fuente_respuesta_px": 44,
+      "alto_pagina_px": 3713
+    },
+    "escritorio": {
+      "interactivos": 28,
+      "menores_24px": 0,
+      "menores_44px": 25,
+      "ejemplos_menores_24": [],
+      "cromo_fijo_pct": 7,
+      "respuesta_sin_desplazar": true,
+      "tamano_fuente_respuesta_px": 52,
+      "alto_pagina_px": 2067
+    },
+    "desborde_px": {
+      "320px": 0,
+      "375px": 0
+    }
+  },
+  "color": {
+    "dark": {
+      "contraste_series": {
+        "ln-real": 15.63,
+        "ln-pronostico": 4.46,
+        "ln-referencia": 5.63
+      },
+      "series_bajo_3a1": 0,
+      "deltaE_min_entre_series": {
+        "normal": 52.7,
+        "protan": 41,
+        "deutan": 33.3,
+        "tritan": 37
+      }
+    },
+    "light": {
+      "contraste_series": {
+        "ln-real": 17.85,
+        "ln-pronostico": 3.87,
+        "ln-referencia": 4.59
+      },
+      "series_bajo_3a1": 0,
+      "deltaE_min_entre_series": {
+        "normal": 61.7,
+        "protan": 37.3,
+        "deutan": 45.1,
+        "tritan": 27.7
+      }
+    }
+  },
+  "afirmaciones": {
+    "programacion_diaria_visible": 0,
+    "donde": []
+  }
+}
