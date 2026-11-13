@@ -18,5 +18,8 @@ api=$!
 python3 -m http.server "${PUERTO_WEB:-8080}" --directory "$raiz/app/web" &
 web=$!
 trap 'kill $api $web 2>/dev/null' EXIT INT TERM
-echo "Abre http://localhost:${PUERTO_WEB:-8080}"
+url="http://localhost:${PUERTO_WEB:-8080}"
+# La web busca la API en :8000; si el puerto es otro, se le pasa con ?api=URL.
+if [[ "${PUERTO_API:-8000}" != 8000 ]]; then url+="/?api=http://localhost:$PUERTO_API"; fi
+echo "Abre $url"
 wait
