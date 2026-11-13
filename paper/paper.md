@@ -59,6 +59,12 @@ Recomendación para el operador: pronosticar la razón con la media de 24 horas,
 ingenua, reentrenar cada semana a 1 hora y no apoyarse en el clima a 24 horas durante un evento extraordinario.
 La app del proyecto ejecuta el modelo y permite probar escenarios.
 
+Como extensión posterior a la prueba, se compararon ocho modelos fundacionales de series de tiempo sin entrenar
+(zero-shot) sobre las mismas filas: a 1 hora los mejores ya le ganan al modelo elegido en las tres áreas, a 24
+horas no en el Centro ni el Norte, y un híbrido que suma su pronóstico como variable al XGBoost en razón es el
+mejor en cinco de los seis casos de 2025 (Centro: 49.0 frente a 54.6 MW a 1 hora y 81.3 frente a 86.1 a 24
+horas).[^fm]
+
 # 3. Introducción al problema
 
 **El problema del operador.** El Comité de Operación Económica del Sistema (COES) opera el SEIN y programa cada
@@ -300,6 +306,20 @@ una variable, por área y agregada por grupo. La columna de escala (`media_24h`)
 (el estimador no la ve; solo multiplica la predicción) y no entra en la importancia: desordenarla rompe la vuelta
 a MW, y el aumento del error que resulta no mide información, sino ese artefacto.
 
+**Extensión posterior a la prueba: modelos fundacionales.** Después de cerrar la prueba de 2026 se agregó una
+comparación con modelos fundacionales de series de tiempo: redes preentrenadas con millones de series de otros
+rubros, que pronostican una serie nueva sin entrenarse con ella (*zero-shot*). Como 2026 ya se había usado en la
+prueba, esta extensión **no es una prueba ciega**: todo lo que se elige se elige con 2025, y 2026 es una
+confirmación posterior. El protocolo: ocho modelos de Hugging Face (Simons-297M, Timestral-209M, t0-gamma,
+Chronos-2, Toto-2.0, TimesFM 3.0, TimesFM 2.5 y TiRex-2), cada uno con un contexto de 2,048 periodos (43 días) de
+demanda del área hasta t, pidiendo 48 pasos y guardando los pasos 2 (1 hora) y 48 (24 horas) con sus cuantiles 0.1
+y 0.9; los mismos orígenes y las mismas filas que el Random Forest en 2025 y 2026; los 336 huecos de la serie se
+interpolan solo en el contexto. Después, dos variantes de Chronos-2 (con covariables de temperatura pronosticada
+simulada y feriados, bajo la misma regla de información, y con ajuste fino hasta 2024) y un **híbrido**: el XGBoost
+global en razón (M0) recibe como variables el pronóstico zero-shot del fundacional, el ancho de su intervalo y su
+pronóstico al otro horizonte, todos divididos por la media de 24 horas; se entrena con orígenes de marzo de 2016 a
+2024 y se valida en 2025. Los resultados están en la sección 5.5 y el detalle, en el notebook 04.[^fm]
+
 ## 4.5 Evaluación
 
 - **Métricas:** MAE (la del criterio de éxito), RMSE, MAPE y R², siempre en MW sobre la predicción reconstruida.
@@ -538,6 +558,58 @@ Tres hipótesis no se cumplieron, y dos de ellas fallaron en la dirección que m
 fue **mejor** de lo esperado en el Norte (1b) y el clima a 24 horas, **peor** (4). Se reportan tal como quedaron
 escritas.
 
+## 5.5 Extensión posterior a la prueba: modelos fundacionales
+
+Esta sección se agregó después de la prueba de 2026 (sección 4.4): 2026 ya se había usado en el notebook 03, así
+que lo que sigue se eligió con 2025 y en 2026 solo se confirma. MAE en MW, Norte / Centro / Sur, sobre las mismas
+filas que el modelo elegido:[^fm]
+
+| Modelo | 2025, 1 h | 2025, 24 h | 2026, 1 h | 2026, 24 h |
+|---|---|---|---|---|
+| Random Forest elegido (A, M0) | 19.7 / 54.6 / 24.1 | 28.8 / 86.1 / 56.7 | 20.2 / 54.1 / 22.4 | 29.0 / 78.1 / 48.3 |
+| XGBoost global base (mismas filas que el híbrido) | 19.6 / 53.6 / 24.7 | 28.6 / 85.9 / 57.7 | 20.0 / 54.1 / 22.5 | 29.3 / 80.7 / 49.4 |
+| Simons-297M, zero-shot | 18.8 / 49.7 / 22.4 | 30.0 / 92.9 / 54.2 | 19.3 / 50.6 / 21.3 | 30.9 / 83.4 / 46.8 |
+| Timestral-209M, zero-shot | 19.0 / 50.0 / 22.5 | 30.5 / 97.6 / 54.2 | 19.5 / 51.0 / 21.4 | 31.5 / 87.1 / 46.8 |
+| Chronos-2, zero-shot | 19.4 / 52.2 / 23.2 | 33.0 / 101.0 / 55.2 | 19.9 / 52.6 / 21.6 | 31.6 / 87.3 / 46.9 |
+| Chronos-2, ajuste fino suave hasta 2024 | 19.0 / 50.8 / 22.8 | 29.6 / 89.8 / 53.3 | 19.3 / 51.0 / 21.3 | 29.9 / 81.6 / 45.3 |
+| TimesFM 2.5, zero-shot | 19.9 / 56.0 / 23.8 | 31.2 / 107.5 / 57.0 | 20.6 / 57.0 / 22.4 | 32.0 / 98.5 / 49.3 |
+| Híbrido: XGBoost + Chronos-2 | 18.7 / 49.9 / 23.5 | 28.6 / 82.7 / 56.9 | 19.0 / 50.0 / 21.2 | 28.7 / 77.3 / 49.7 |
+| **Híbrido: XGBoost + Simons** | **18.6 / 49.0 / 23.5** | **27.9 / 81.3 / 57.0** | **18.9 / 49.2 / 21.2** | **28.7 / 75.6 / 49.8** |
+
+Los otros cuatro modelos zero-shot (t0-gamma, Toto-2.0, TimesFM 3.0 y TiRex-2) quedan entre Simons y TimesFM 2.5
+en 2026 a 1 hora en el Centro (50.7, 51.8, 53.2 y 59.5 MW) y ninguno supera a Simons; sus filas completas van en
+el notebook 04.[^fm-otros] El "XGBoost global base" es el mismo algoritmo del híbrido sin las variables
+fundacionales, entrenado sobre las mismas filas (desde marzo de 2016): no es el XGBoost del notebook 03, que
+entrena con todo y, para 2026, hasta 2025.
+
+**El híbrido frente al modelo elegido**, con intervalos del 95 % por bootstrap de días. En 2025: Centro −5.62 MW
+(IC −6.58 a −4.81) a 1 hora y −4.77 (IC −7.18 a −2.57) a 24 horas; Norte −1.10 y −0.90, distinguibles de cero;
+Sur −0.60 (IC −1.14 a 0.10) y +0.28 (IC −0.79 a 1.36), que no se distinguen. En 2026 mejora a 1 hora en las tres
+áreas (Centro −4.85, IC −5.44 a −4.27); a 24 horas mejora el Centro (−2.57, IC −4.32 a −0.90), no se distingue en
+el Norte y **empeora** el Sur (+1.54, IC 0.34 a 2.79).[^fm]
+
+**Lo que se aprende:**
+
+1. **Sin entrenar nada, los mejores fundacionales ya ganan a 1 hora en las tres áreas:** Simons queda unos 5 MW por
+   debajo del Random Forest en el Centro (49.7 frente a 54.6 en 2025; 50.6 frente a 54.1 en 2026), alrededor de
+   9 % menos error.
+2. **A 24 horas no ganan solos en el Centro ni el Norte** (92.9 frente a 86.1 y 30.0 frente a 28.8 en 2025): les
+   falta el calendario, y 43 días de contexto es poco para el programa del día siguiente. **Sí ganan en el Sur**,
+   el punto débil del proyecto (54.2 frente a 56.7 en 2025; 46.8 frente a 48.3 en 2026, aunque en 2026 la
+   diferencia no se distingue de cero).
+3. **Las covariables de temperatura no ayudan a Chronos-2**, coherente con la hipótesis 1 y con la ablación: a
+   1 hora no mejoran y en 2026 a 24 horas lo empeoran (Centro, 97.6 frente a 87.3 MW).
+4. **El híbrido es el mejor en cinco de los seis casos de 2025** (todos menos el Sur a 24 horas) y se propone como
+   siguiente versión del modelo: aporta lo que el fundacional ve en la forma reciente de la serie y conserva el
+   calendario y la razón. En el Sur a 24 horas conviene el fundacional directo.
+5. **Costo.** Generar el pronóstico fundacional exige GPU (unas 195 series por segundo en una L4); la app lo
+   leería precomputado, como la tabla de adaptación.
+
+**Límites propios de esta extensión.** Un solo año de validación para elegir (2025) y una confirmación posterior
+en un año ya usado (2026); no se puede descartar que series parecidas a estas estén en el preentrenamiento de los
+modelos; las licencias difieren por modelo (Simons OpenMDW-1.1, Chronos-2 Apache-2.0, TimesFM 3.0 no comercial;
+por confirmar en cada ficha) y condicionan un uso operativo; faltan las corridas con contexto de 8,192 periodos.
+
 # 6. Visualización y análisis
 
 ## 6.1 Figuras propuestas
@@ -560,6 +632,7 @@ celdas de texto) para exportarlas a la versión final.
 | 11 | Tetuán: origen móvil mensual y error por hora en la prueba | `notebooks/02_modelado_evaluacion.ipynb`, celdas 22 y 26 | 5.1 |
 | 12 | La iteración del Entregable 7: los mismos modelos en nivel y en razón frente a las tres referencias | `entregables/Entregable6_MDS_Grupo03.ipynb`, celda 86 | 7 |
 | 13 | Captura de la app: vista de pronóstico y de escenarios *(pendiente: tomarla en la demo)* | `app/web/index.html` | 4.6 |
+| 14 | Modelos fundacionales: MAE por modelo, área y horizonte en 2025 y 2026, con el híbrido *(pendiente: celda del notebook 04)* | `notebooks/04_sein_modelos_fundacionales.ipynb` (en preparación) | 5.5 |
 
 Nota a la figura 8: `media_24h` es la escala con la que la razón vuelve a MW, no una variable que el modelo vea;
 al permutarla se rompe la reconstrucción y salía como la más importante. Desde el PR #30 los notebooks la excluyen
@@ -636,6 +709,11 @@ Lo que un lector debe tener en cuenta antes de generalizar los resultados.
    de clientes.
 10. **Validez de constructo.** El MAE no refleja la asimetría entre subestimar y sobrestimar; por eso se reporta
     aparte la subestimación en las horas de mayor demanda.
+11. **La extensión con modelos fundacionales no es una prueba ciega.** Se hizo después de la prueba de 2026, así
+    que sus cifras de 2026 confirman una elección hecha con 2025 pero no la ponen a prueba por primera vez. Además,
+    no se puede descartar que series parecidas estén en el preentrenamiento de los modelos, las licencias difieren
+    por modelo y el "XGBoost global base" de esa comparación no es el del notebook 03 (distinta ventana de
+    entrenamiento).
 
 # 7. Conclusiones y lecciones aprendidas
 
@@ -685,17 +763,28 @@ Lo que un lector debe tener en cuenta antes de generalizar los resultados.
    Random Forest en la CPU (la versión en GPU no era reproducible), y guardar cada bloque apenas termina, fue lo
    que hizo posible una prueba de tres horas en Colab que se cayó tres veces.
 
-**Trabajo futuro.** Tres cosas que este trabajo no hizo y que un lector del COES pediría primero: (1) comparar el
+**Extensión: modelos fundacionales.** Después de la prueba, ocho modelos preentrenados sin entrenar ya le ganan al
+modelo elegido a 1 hora en las tres áreas (Simons: 49.7 frente a 54.6 MW en el Centro en 2025), pero no a 24 horas
+en el Centro ni el Norte, y un híbrido que suma su pronóstico al XGBoost en razón es el mejor en cinco de los seis
+casos de 2025 (49.0 frente a 54.6 a 1 hora y 81.3 frente a 86.1 a 24 horas en el Centro) y lo confirma 2026 salvo
+en el Sur a 24 horas. Se propone como siguiente versión del modelo, con dos cuidados: fue elegido con un solo año
+y confirmado en uno ya usado, y exige GPU para generar el pronóstico fundacional.
+
+**Trabajo futuro.** Cuatro cosas que este trabajo no hizo y que un lector del COES pediría primero: (1) comparar el
 pronóstico a 24 horas con la Programación Diaria del COES, evaluada sobre el perímetro del portal y en igualdad de
 origen y horizonte, que es la vara oficial; (2) medir la sensibilidad del resultado a 24 horas al error del
 pronóstico de temperatura (1 y 2 °C, como preveía el diseño), para saber si el daño del clima depende del supuesto;
-y (3) construir una variable de fallas que sí separe la operación normal de una falla (solo eventos con
-interrupción de carga o potencia indisponible, por área) y repetir la ablación con ella.
+(3) construir una variable de fallas que sí separe la operación normal de una falla (solo eventos con
+interrupción de carga o potencia indisponible, por área) y repetir la ablación con ella; y (4) llevar el híbrido
+con modelos fundacionales a una prueba ciega en el próximo año, con contextos más largos (8,192 periodos) y con
+una licencia que permita el uso operativo.
 
 # 8. Bibliografía
 
 *(Formato APA provisional; ajustar a la norma que indique el curso.)*
 
+- Ansari, A. F., et al. (2025). *Chronos-2: From univariate to universal forecasting* [Preprint]. arXiv.
+  https://arxiv.org/abs/2510.15821. Modelo: `amazon/chronos-2` (Hugging Face, Apache-2.0).
 - Al-Quraan, M. M., Khan, A. R., Centeno, A., Zoha, A., Imran, M. A., & Mohjazi, L. (2023). FedraTrees: A novel
   computation-communication efficient federated learning framework investigated in smart grids. *Engineering
   Applications of Artificial Intelligence, 124*, 106654. https://doi.org/10.1016/j.engappai.2023.106654
@@ -709,6 +798,9 @@ interrupción de carga o potencia indisponible, por área) y repetir la ablació
   International Conference on Knowledge Discovery and Data Mining* (pp. 785-794).
 - COES. (2016-2026). *Informe de Evaluación de la Operación Diaria (IEOD), anexo diario; Eventos relevantes*.
   Comité de Operación Económica del Sistema Interconectado Nacional. https://www.coes.org.pe
+- Das, A., Kong, W., Sen, R., & Zhou, Y. (2024). A decoder-only foundation model for time-series forecasting. En
+  *Proceedings of the 41st International Conference on Machine Learning (ICML)*. Modelos:
+  `google/timesfm-2.5-200m-pytorch` y `google/timesfm-3.0-pytorch` (Hugging Face).
 - ENFEN. (2024). *Nota Técnica ENFEN 01-2024: categorías del Índice Costero El Niño*. Comisión Multisectorial
   ENFEN.
 - Hewamalage, H., Ackermann, K., & Bergmeir, C. (2023). Forecast evaluation for data scientists: Common pitfalls
@@ -719,8 +811,15 @@ interrupción de carga o potencia indisponible, por área) y repetir la ablació
   Forecasting, 30*(2), 357-363.
 - IGP. (2026). *Índice Costero El Niño (ICEN)* [Serie mensual]. Instituto Geofísico del Perú.
   http://met.igp.gob.pe/datos/ICEN.txt
+- Kaljevic, T., Arzola, I., & Zhang, Y. (2026). *Benchmarking time series foundation models for load forecasting
+  under covariate uncertainty* [Preprint]. arXiv. https://arxiv.org/abs/2610.07232
 - Kshetrimayum, N., Hoque, N., & Nath, D. (2024). PConvLSTM: An effective parallel ConvLSTM-based model for
   short-term electricity load forecasting. *International Journal of Data Science and Analytics*.
+- Meyer, M., et al. (2024). *Benchmarking time series foundation models for short-term household electricity load
+  forecasting* [Preprint]. arXiv. https://arxiv.org/abs/2410.09487
+- Modelos fundacionales usados en la extensión, por su ficha de Hugging Face *[PENDIENTE: fecha de consulta,
+  versión y licencia de cada ficha; referencia académica de los que la tengan]*: `abel-lab/Simons-297M`,
+  `mistralai/Timestral-209M`, `theforecastingcompany/t0-gamma`, `Datadog/Toto-2.0-313m` y `NX-AI/TiRex-2`.
 - Montero-Manso, P., & Hyndman, R. J. (2021). Principles and algorithms for forecasting groups of time series:
   Locality and globality. *International Journal of Forecasting, 37*(4), 1632-1653.
 - NOAA Climate Prediction Center. (2026). *Weekly Niño 1+2 SST and anomalies* [Serie semanal].
@@ -811,3 +910,18 @@ Las tablas de 2025 son de la corrida del notebook 02 del SEIN del 4 de noviembre
     celda 34.
 [^e7]: `entregables/Entregable6_MDS_Grupo03.ipynb`, celda 93 (conclusiones): "ayer" 1,007 kW (MAPE 3.5 %); en nivel,
     Random Forest 1,795 y XGBoost 1,958; en razón, XGBoost 526 (MAPE 1.8 %) y Random Forest 544.
+[^fm]: Corrida del 13 de noviembre de 2026 de la rama `feature/modelos-fundacionales` (scripts en
+    `experimentos/fundacionales/`: `fm_bench.py`, `adaptadores.py`, `chronos2_variantes.py`, `ajuste_fino.py` y
+    `apilar.py`; evaluación en `src/tetouan_power_forecast/fundacionales.py`), cuyo detalle irá en
+    `notebooks/04_sein_modelos_fundacionales.ipynb` (PR en preparación). Tablas recibidas de esa corrida; los
+    pronósticos por origen están en `data/reportes/sein/fundacionales/*_c2048.parquet` y los MAE de 2025 de los
+    híbridos, en `resumen_chronos2_simons.json`. **Verificación local:** los MAE de 2026 se reprodujeron fila a fila
+    sobre las 13,920 / 13,871 filas de la prueba (`predicciones_{1h,24h}_*.csv`), los de 2025 a 1 h también, y los
+    de los híbridos a 24 h coinciden con el JSON; los intervalos de 2026 del híbrido con Simons frente al Random
+    Forest se reprodujeron con `bootstrap_diferencia_mae` (Centro 1 h −4.85, IC −5.46 a −4.23; 24 h −2.57, IC −4.19
+    a −0.90; Sur 24 h +1.54, IC 0.29 a 2.80; Norte 24 h −0.24, IC −0.78 a 0.30). Los intervalos de 2025, el costo
+    (195 series por segundo) y las licencias no se verificaron en local: confirmar con el notebook 04.
+[^fm-otros]: MAE de 2026 a 1 h en el Centro calculados sobre las filas de la prueba desde
+    `t0_c2048.parquet`, `toto2_c2048.parquet`, `timesfm3_c2048.parquet` y `tirex2_c2048.parquet` (51.8, 50.7, 53.2 y
+    59.5 MW); el efecto de las covariables, desde `chronos2cov_c2048.parquet` frente a `chronos2_c2048.parquet`
+    (Centro, 24 h, 2026: 97.6 frente a 87.3). Confirmar con la tabla del notebook 04.

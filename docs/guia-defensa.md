@@ -43,6 +43,7 @@ puedo decir es que…». **Nunca inventar una cifra.**
 | 13 | **3 hipótesis no se cumplieron** | La 1b, la 3 y la 4 | §5.4, tabla «Las hipótesis, una por una» |
 | 14 | **18 kW frente a más de 1,200 kW** | Lo que movió cambiar de algoritmo frente a cambiar el objetivo (del Entregable 7 a la versión en razón) | §7, lección 1 |
 | 15 | **Tetuán 41-56 % · Ceuta 2.31 frente a 4.62 %** | Tetuán: menos error que la mejor referencia en la prueba. Ceuta: MAPE sin haber visto un verano frente a la mejor regla simple | §5.1, tabla de la prueba; §5.2, tabla de MAPE |
+| 16 | **49.0 frente a 54.6 MW (1 h) · 81.3 frente a 86.1 (24 h)** | El híbrido XGBoost + Simons frente al Random Forest en el Centro, 2025. Zero-shot solo, Simons: 49.7 a 1 h (gana) y 92.9 a 24 h (pierde) | §5.5, tabla de MAE |
 
 ---
 
@@ -67,6 +68,7 @@ Según la auditoría metodológica. La columna de la derecha dice el hallazgo.
 | 13 | «Los intervalos muestran que funcionará en el próximo Niño» | «Los intervalos miden la incertidumbre dentro de 2026: un solo año y un solo evento» | D5 |
 | 14 | «Las horas de mayor demanda de 2026 o los días fuera de rango son reglas que el operador puede usar» | «Son cortes definidos con los propios datos de 2026, para describir dónde falla el modelo» | D10 |
 | 15 | «Usamos el SAIDI, los feriados regionales y los comunicados de ENFEN», o «la app reentrena en vivo» | «M4 (SAIDI) no se corrió; los feriados son los nacionales; la alerta sale de los cambios de categoría del ICEN publicado. La adaptación de la app sale de la tabla del notebook 03» | D14, §13 |
+| 16 | «Los modelos fundacionales pasaron la prueba ciega de 2026» o «reemplazan a nuestro modelo» | «Es una extensión posterior a la prueba: se eligió con 2025 y 2026 solo la confirma. El híbrido se propone como siguiente versión; no está en la app ni fue parte de las hipótesis» | §6.4, punto 11; D16 |
 
 ---
 
@@ -342,14 +344,18 @@ app salen de los errores de 2025 del Random Forest (auditoría, M4). Decir «int
 
 **25. ¿Cómo queda su modelo frente a los modelos fundacionales, como TimesFM o Chronos-2?**
 
-**[PENDIENTE: resultado modelos fundacionales]** Esqueleto para completar cuando el resultado esté en el paper:
+Son modelos preentrenados con millones de series de tiempo de distintos rubros, que pronostican una serie nueva sin
+entrenarse con ella. Después de la prueba de 2026 comparamos ocho (Simons, Timestral, t0-gamma, Chronos-2, Toto,
+TimesFM 2.5 y 3.0, TiRex) sin entrenar, con 43 días de contexto, sobre las mismas filas que nuestro modelo, en 2025
+y 2026, a 1 y 24 horas y en las tres áreas. Solos, los mejores ganan a una hora en las tres áreas, pero a 24 horas
+pierden en el Centro y el Norte: les falta el calendario. Darle temperatura a Chronos-2 no lo mejora, como con
+nuestro modelo. Lo mejor fue un híbrido: nuestro XGBoost en razón con el pronóstico del fundacional como variable,
+que gana en cinco de los seis casos de 2025 y lo confirma 2026, salvo en el Sur a 24 horas. Lo proponemos como
+siguiente versión, con dos cuidados: se eligió con un solo año y se confirmó en un año que ya habíamos usado, y
+necesita GPU para generar el pronóstico fundacional.
 
-- *Qué son, en una frase:* modelos preentrenados con muchísimas series de tiempo de distintos rubros, que pueden
-  pronosticar una serie nueva sin entrenarse con ella.
-- *Qué comparamos:* [PENDIENTE: modelos, periodo, áreas y horizontes; si se usaron sin ajuste o ajustados; si
-  recibieron clima o solo la demanda].
-- *Resultado:* [PENDIENTE: mejora de cada modelo frente a la mejor referencia y diferencia con el Random Forest, con su
-  intervalo].
-- *Lectura:* [PENDIENTE: qué significa para el operador y qué cuesta usarlos].
-
-*Respaldo:* [PENDIENTE: sección y tabla del paper].
+*Respaldo:* §5.5, tabla de MAE (Centro, 2025): Simons 49.7, Random Forest 54.6, híbrido 49.0 MW a 1 h; 92.9, 86.1 y
+81.3 a 24 h. Híbrido frente a Random Forest en 2025, Centro: −5.62 MW (IC −6.58 a −4.81) a 1 h y −4.77 (IC −7.18 a
+−2.57) a 24 h; en 2026, Sur a 24 h +1.54 (IC 0.34 a 2.79). Covariables: Chronos-2 a 24 h en el Centro en 2026, 97.6
+frente a 87.3 MW. *Límites:* §6.4, punto 11 (no es prueba ciega; posible contaminación del preentrenamiento;
+licencias). *Ojo:* el «XGBoost global base» de esa tabla no es el XGBoost del notebook 03 (§5.5).

@@ -76,9 +76,11 @@ tabla de la sección 6.1 del paper.
     Dos barras: «sumar clima y El Niño» y «reentrenar cada semana», ambas alrededor del 1 % del error. Una alerta:
     «A 24 h, el clima empeoró el pronóstico (Centro +1.35 MW)». Una línea: «Tres hipótesis no se cumplieron: 1b, 3
     y 4». Cierre: «"Sin efecto" también es un resultado». (§5.4 y §6.4)
-11. **[PENDIENTE: resultado modelos fundacionales]**
-    Título tentativo: «Frente a los modelos fundacionales (TimesFM, Chronos-2…)». Contenido por completar cuando
-    esté el resultado en el paper.
+11. **Frente a los modelos fundacionales: solos ganan a 1 hora; combinados, en casi todo**
+    Una fila por caso, Centro (2025): «A 1 hora: Simons 49.7 · nuestro Random Forest 54.6 · híbrido 49.0 MW». «A 24
+    horas: Simons 92.9 · Random Forest 86.1 · híbrido 81.3 MW». Debajo: «8 modelos preentrenados, sin entrenar con
+    nuestros datos (zero-shot), mismas filas» y «Extensión posterior a la prueba: elegido con 2025, confirmado en
+    2026». (§5.5, tabla de MAE)
 12. **Conclusiones y recomendación**
     Tres conclusiones (una por objetivo), la recomendación para el operador en cuatro puntos, la lección («cambiar el
     objetivo movió más de 1,200 kW; cambiar el algoritmo, 18») y los límites en una línea. (§2, §6.4 y §7)
@@ -90,6 +92,7 @@ tabla de la sección 6.1 del paper.
 - **R4.** Tabla «Las hipótesis, una por una» (§5.4).
 - **R5.** Tablas de ablación y de adaptación de 2026 (§5.4).
 - **R6.** Limitaciones (§6.4).
+- **R7.** Tabla completa de los modelos fundacionales, 2025 y 2026 (§5.5).
 
 ## Cronograma
 
@@ -105,7 +108,7 @@ tabla de la sección 6.1 del paper.
 | 10:30–11:40 | 1:10 | 8 · Antes de 2026 | 4 |
 | 11:40–13:20 | 1:40 | 9 · La prueba de 2026 | 4 |
 | 13:20–14:40 | 1:20 | 10 · ¿Qué ayuda a adaptarse? | 4 |
-| 14:40–15:40 | 1:00 | 11 · [PENDIENTE: resultado modelos fundacionales] | 5 |
+| 14:40–15:40 | 1:00 | 11 · Modelos fundacionales | 5 |
 | 15:40–18:40 | 3:00 | Demo de la app | 5 |
 | 18:40–20:00 | 1:20 | 12 · Conclusiones | 1 |
 
@@ -309,24 +312,25 @@ tabla «Las hipótesis, una por una». Efectos de 0.09 a 1.48 MW, alrededor del 
 
 **Pase:** «[Expositor 5] les cuenta cómo quedamos frente a los modelos fundacionales y les muestra la app.»
 
-### 14:40–15:40 · Diapositiva 11 · Expositor 5 · [PENDIENTE: resultado modelos fundacionales]
+### 14:40–15:40 · Diapositiva 11 · Expositor 5 · Modelos fundacionales
 
-Este minuto queda reservado para la comparación con modelos fundacionales que se está agregando al paper. Estructura
-sugerida; completar **solo con cifras que estén en el paper**:
+**Qué decir:**
 
-- «Además nos comparamos con modelos fundacionales de series de tiempo, como TimesFM y Chronos-2.»
-- «Son modelos preentrenados con muchísimas series de distintos rubros, que pueden pronosticar una serie nueva sin
-  entrenarse con ella.»
-- «[PENDIENTE: en qué periodo, áreas y horizontes se compararon, y contra qué referencia]»
-- «[PENDIENTE: resultado modelos fundacionales: mejora de cada uno frente a la mejor referencia y diferencia con
-  nuestro modelo, con su intervalo]»
-- «[PENDIENTE: la lectura en una frase: si ganan, empatan o pierden frente al modelo en razón, y qué significa para
-  el operador]»
+- «Además probamos ocho modelos fundacionales de series de tiempo, como Chronos-2 y TimesFM.»
+- «Son modelos preentrenados con millones de series de otros rubros, que pronostican una serie nueva sin entrenarse
+  con ella. Los corrimos así, sin entrenar, sobre las mismas filas que nuestro modelo.»
+- «Solos, los mejores ya ganan a una hora en las tres áreas: en el Centro, Simons tuvo 49.7 megavatios de error
+  frente a 54.6 de nuestro Random Forest.»
+- «A 24 horas no ganan solos en el Centro ni en el Norte: les falta el calendario, y 43 días de contexto es poco.»
+- «Lo mejor fue combinarlos: nuestro XGBoost en razón recibe el pronóstico del fundacional como una variable más.
+  En el Centro, 49 megavatios frente a 55 a una hora, y 81 frente a 86 a 24 horas.»
+- «Es una extensión posterior a la prueba: lo elegimos con 2025 y en 2026 lo confirmamos. Y necesita GPU.»
 
-**Cifra:** [PENDIENTE: sección y tabla del paper].
+**Cifras:** §5.5, tabla de MAE (2025, Centro): Simons 49.7, Random Forest 54.6 e híbrido 49.0 MW a 1 h; 92.9, 86.1 y
+81.3 MW a 24 h. Mejor en 5 de 6 casos de 2025: §5.5, lectura 4. **Ojo:** no decir que fue una prueba ciega en 2026
+ni que reemplaza al modelo del paper; es «la siguiente versión propuesta» (§6.4, punto 11).
 
-**Si el resultado no llega a tiempo:** se quita la diapositiva y ese minuto se le da al cierre. No se improvisan
-cifras.
+**Si preguntan por el detalle:** la tabla completa está en la diapositiva de respaldo R7 y en el notebook 04.
 
 ### 15:40–18:40 · Demo de la app · Expositor 5
 

@@ -64,6 +64,7 @@ Los tres graves, en una línea cada uno:
 | D13 | Tetuán | A declarar | Unidad (kW) e identidad de las zonas sin fuente primaria; la temperatura del dataset no coincide con ERA5; el modelo pierde en el Ramadán de la Zona 3 (−7.4 %) y su ventaja baja tras la transferencia (51 → 39 % en la Zona 1) |
 | D14 | Variables no usadas | A declarar | Feriados con `holidays.PE` (nacionales), no la tabla curada de `docs/peru/tablas.md`; M4 (SAIDI) no se corrió; la alerta de ENFEN sale de cruces del ICEN, no de los comunicados |
 | D15 | Entregable 7 | A declarar (lección) | El grupo entregó la versión en nivel, que pierde contra "ayer"; la corregida (en razón) está en el repo |
+| D16 | Modelos fundacionales (extensión del 13-nov) | A declarar | Se hizo después de la prueba de 2026: elegido con 2025, 2026 solo confirma; posible contaminación del preentrenamiento; licencias distintas; el "XGBoost base" de esa comparación no es el del notebook 03 |
 | M1 | Tetuán, Ridge | Menor | `alpha` = 0.001 queda en el borde de la grilla |
 | M2 | Auditoría del silver | Menor | En 2026, N + C + S − SEIN llega a 47.6 MW ("a revisar antes de la prueba") y no se revisó; no afecta a los modelos por área |
 | M3 | Variables a 24 h | Menor | `Area_ayer` duplica `Area_t` a 24 h (ayer = persistencia) |
@@ -435,6 +436,34 @@ elegido; sus intervalos son empíricos, de los errores de 2025".
   declarada). El paper debe describir lo que se usó, no lo que la spec planeó.
 - **M9.** `Cuarentena` es un indicador de la fase estricta (16-mar a 1-jul-2020), no las cinco fases de
   `cuarentena_pe_2020`.
+
+### 15. Extensión del 13-nov: modelos fundacionales (D16)
+
+**Lo que consta.** Rama `feature/modelos-fundacionales` (worktree `tpf-fm`, aún sin commit ni PR): `fm_bench.py`
+(ocho modelos de Hugging Face en zero-shot, contexto de 2,048 periodos, orígenes de 2025-01-01 a 2026-10-23, pasos 2
+y 48, mediana como punto, 336 huecos del silver interpolados), `chronos2_variantes.py` (covariables con la regla de
+información del proyecto: temperatura conocida, pronóstico simulado con error de 1.5 °C por día y feriados),
+`ajuste_fino.py` (Chronos-2 ajustado solo con datos hasta 2024-12-31) y `apilar.py` (híbrido: XGBoost global en
+razón con `pred`, `ancho` y `otro` del fundacional divididos por `media_24h`, entrenado con orígenes de 2016-03 a
+2024, validado en 2025; el "XGBoost base" se entrena sobre las mismas filas). Salidas en
+`data/reportes/sein/fundacionales/`. El notebook 04 está en preparación.
+
+**Verificado en local** (sobre las filas de `prueba_2026/predicciones_*.csv` y el silver de la demanda): los MAE de
+2026 de todos los modelos coinciden fila a fila con los de la tabla del paper; los de 2025 a 1 h también; los de los
+híbridos a 24 h coinciden con `resumen_chronos2_simons.json`. Los intervalos de 2026 del híbrido con Simons frente
+al Random Forest se reproducen con `bootstrap_diferencia_mae`. **No verificado:** los intervalos de 2025 (las
+predicciones de validación del Random Forest están en el Drive), el costo en GPU y las licencias.
+
+**A declarar (D16).** (1) Es una extensión posterior a la prueba: 2026 ya se había usado en el notebook 03, así que
+sus cifras confirman, no prueban; el paper lo dice en §4.4, §5.5 y §6.4. (2) No se puede descartar que series
+parecidas estén en el preentrenamiento (el corpus de Chronos-2 no es público completo; ver `docs/historico.md`,
+§6). (3) Las licencias difieren por modelo (Simons OpenMDW-1.1, Chronos-2 Apache-2.0, TimesFM 3.0 no comercial,
+según las fichas; por confirmar). (4) El "XGBoost global base" de la comparación (53.6 / 19.6 / 24.7 MW en 2025 a
+1 h) no es el XGBoost del notebook 03 (53.5 / 19.6 / 24.7 en 2025; distinta ventana para 2026): comparar dentro de
+la tabla. (5) En el Sur a 24 h en 2026, la ventaja del zero-shot no se distingue de cero (−1.44 MW, IC −3.24 a
+0.30) y el híbrido empeora (+1.54, IC 0.29 a 2.80). (6) Faltan las corridas con contexto de 8,192 y la variante
+`chronos2ftcal` (ajuste fino con calendario), cuyo parquet da 72.5 MW en el Centro a 24 h en 2026, mejor que el
+híbrido (75.6): si el notebook 04 la confirma, cambia la lectura 2 del paper.
 
 ## Lo que se verificó y se sostiene (para la defensa)
 
