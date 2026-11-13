@@ -1270,7 +1270,7 @@ select {
 
 .barra-fila {
   display: grid;
-  grid-template-columns: minmax(0, 9.5em) 1fr auto;
+  grid-template-columns: minmax(0, 13em) 1fr auto;
   align-items: center;
   gap: 8px;
   font-size: 12.5px;
@@ -1411,8 +1411,7 @@ select {
   .nav-secciones button,
   select,
   input[type='date'],
-  .time-pill,
-  .tabla-datos summary {
+  .time-pill {
     min-height: 44px;
   }
 
@@ -1431,8 +1430,7 @@ select {
   }
 
   .tabla-datos summary {
-    display: flex;
-    align-items: center;
+    padding: 12px 0; /* 44 px sin perder el triángulo del desplegable */
   }
 }
 
