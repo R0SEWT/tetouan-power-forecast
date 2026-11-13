@@ -47,6 +47,7 @@ def test_modelos_lista_el_que_se_sirve(cliente):
     modelos = r.json()
     assert [m["id"] for m in modelos] == [cliente.get("/salud").json()["modelo"]]
     assert all(m["nombre"] for m in modelos)
+    assert modelos[0]["respaldo"] is None
 
 
 def test_areas_con_la_paleta_de_wong(cliente):
@@ -111,6 +112,11 @@ def test_el_rango_de_la_serie_es_el_del_pronostico_emitido_h_antes(cliente):
     assert s["intervalo"]["superior"][i] == p["intervalo"]["superior"][-1]
 
 
+def test_series_dice_que_modelo_respondio(cliente):
+    s = cliente.get("/series/sur", params={"fecha": "2026-03-10", "horizonte": "24h"}).json()
+    assert s["modelo"] == "prueba" and s["componentes"] is None
+
+
 def test_series_marca_los_huecos(cliente):
     s = cliente.get("/series/centro", params={"fecha": "2026-02-26", "horizonte": "24h"}).json()
     assert any(s["hueco"])
@@ -150,7 +156,8 @@ def test_pronostico_cubre_el_horizonte(cliente, horizonte, pasos):
     r = cliente.post("/pronostico", json=pedido(horizonte=horizonte))
     assert r.status_code == 200
     p = r.json()
-    assert set(p) == {"fecha_hora", "pronostico", "referencia", "real", "intervalo", "frase"}
+    assert set(p) == {"fecha_hora", "pronostico", "referencia", "real", "intervalo", "frase", "modelo"}
+    assert p["modelo"] == "prueba"
     for campo in ("fecha_hora", "pronostico", "referencia", "real"):
         assert len(p[campo]) == pasos, campo
     assert p["fecha_hora"][0] == "2026-02-26T15:30"
@@ -288,6 +295,101 @@ def test_diagnostico(cliente):
 
 def test_diagnostico_area_inexistente(cliente):
     assert cliente.get("/diagnostico/oeste").status_code == 404
+
+
+# ---- /seguimiento y /pico --------------------------------------------------------------------
+
+
+@pytest.mark.parametrize("horizonte", ["1h", "24h"])
+def test_seguimiento(cliente, horizonte):
+    r = cliente.get("/seguimiento/norte", params={"horizonte": horizonte})
+    assert r.status_code == 200
+    s = r.json()
+    assert set(s) == {"horizonte", "referencia_nombre", "meta_cobertura_pct", "meses", "total"}
+    assert [m["mes"] for m in s["meses"]] == [f"2026-{m:02d}" for m in range(1, 11)]
+    assert s["total"]["periodos"] == sum(m["periodos"] for m in s["meses"])
+    for m in [*s["meses"], s["total"]]:
+        assert m["mae_modelo"] > 0 and m["mae_referencia"] > 0 and 0 <= m["cobertura_pct"] <= 100
+    # el modelo de prueba le gana a la referencia en el año
+    assert s["total"]["mae_modelo"] < s["total"]["mae_referencia"]
+
+
+def test_seguimiento_errores(cliente):
+    assert cliente.get("/seguimiento/oeste").status_code == 404
+    assert cliente.get("/seguimiento/sur", params={"horizonte": "6h"}).status_code == 422
+    assert cliente.get("/seguimiento/sur", params={"modelo": "otro"}).status_code == 404
+
+
+def test_pico_y_rampa_de_las_proximas_24_h(cliente):
+    r = cliente.get("/pico/centro", params={"origen": "2026-03-09T19:00"})
+    assert r.status_code == 200
+    pr = r.json()
+    p = cliente.post("/pronostico", json=pedido(origen="2026-03-09T19:00")).json()
+    assert pr["desde"] == "2026-03-09T19:30" and pr["hasta"] == "2026-03-10T19:00"
+    assert pr["pico"]["valor"] == max(p["pronostico"])
+    assert pr["pico"]["inferior"] <= pr["pico"]["valor"] <= pr["pico"]["superior"]
+    assert pr["rampa"]["subida_mw"] > 0 and isinstance(pr["rampa"]["fuerte"], bool)
+    assert pr["rampa"]["hasta"] > pr["rampa"]["desde"]
+    assert pr["acierto"]["dias"] > 200 and 0 <= pr["acierto"]["pct_hora"] <= 100
+    assert pr["modelo"] == "prueba"
+
+
+def test_pico_errores(cliente):
+    assert cliente.get("/pico/oeste", params={"origen": "2026-03-09T19:00"}).status_code == 404
+    assert cliente.get("/pico/centro", params={"origen": "2026-03-09T19:15"}).status_code == 422
+    assert cliente.get("/pico/centro", params={"origen": "2027-01-01T00:00"}).status_code == 422
+    assert cliente.get("/pico/centro").status_code == 422
+
+
+def test_pico_rampa_a_mano():
+    from app.backend.contrato import Intervalo, Pronostico
+    from app.backend.pico import pico_rampa
+
+    horas = [f"2026-03-10T{h // 2:02d}:{30 * (h % 2):02d}" for h in range(6)]
+    valores = [100.0, 110.0, 150.0, 170.0, 160.0, 120.0]
+    p = Pronostico(fecha_hora=horas, pronostico=valores, referencia=valores, real=[None] * 6,
+                   intervalo=Intervalo(inferior=[v - 5 for v in valores], superior=[v + 5 for v in valores]),
+                   frase="")
+    r = pico_rampa(p, umbral=50.0)
+    assert r.pico.fecha_hora == "2026-03-10T01:30" and (r.pico.inferior, r.pico.superior) == (165.0, 175.0)
+    # mayor subida en una hora: de 00:30 (110) a 01:30 (170), +60 MW
+    assert (r.rampa.desde, r.rampa.hasta, r.rampa.subida_mw, r.rampa.fuerte) == ("2026-03-10T00:30", "2026-03-10T01:30", 60.0, True)
+    assert not pico_rampa(p, umbral=60.0).rampa.fuerte and pico_rampa(p).rampa.umbral_mw is None
+    bajando = p.model_copy(update={"pronostico": sorted(valores, reverse=True)})
+    assert pico_rampa(bajando).rampa is None
+
+
+def test_acierto_del_pico_a_mano():
+    import numpy as np
+
+    from app.backend.pico import acierto_pico
+
+    real = np.tile(np.sin(np.linspace(0, np.pi, 48)), (4, 1))  # máximo en el periodo 23 o 24
+    pico_real = int(real[0].argmax())
+    pred = real.copy()
+    pred[1] = np.roll(real[1], 2)  # dos periodos tarde: acierta (±1 h)
+    pred[2] = np.roll(real[2], 3)  # tres periodos: no
+    pred[3] = real[3] + 2.0  # en la hora, 2 MW arriba
+    referencia = np.roll(real, 6, axis=1)
+    a = acierto_pico(pred, real, referencia)
+    assert a.dias == 4 and a.pct_hora == 75.0 and a.pct_hora_referencia == 0.0
+    assert a.mae_pico_mw == 0.5 and pico_real in (23, 24)
+    real[0, 5] = np.nan  # un día sin todos sus datos no cuenta
+    assert acierto_pico(pred, real, referencia).dias == 3
+
+
+def test_umbral_de_rampa_usa_la_mayor_subida_de_cada_dia():
+    import numpy as np
+    import pandas as pd
+
+    from app.backend.pico import umbral_rampa
+
+    fin = pd.date_range("2024-01-01 00:30", periods=48 * 20, freq="30min")
+    subida_del_dia = np.repeat(np.arange(1, 21) * 10.0, 48)  # el día k sube 10·k MW por media hora a las 18:00
+    valores = np.where((fin - pd.Timedelta(minutes=30)).hour == 18, subida_del_dia, 0.0).cumsum()
+    real = pd.Series(valores, index=fin)
+    assert umbral_rampa(real, pd.Timestamp("2024-01-21"), percentil=50) == pytest.approx(np.median(np.arange(1, 21) * 20.0))
+    assert umbral_rampa(real, pd.Timestamp("2023-01-01")) is None
 
 
 # ---- infraestructura -------------------------------------------------------------------------

@@ -23,6 +23,8 @@ horizonte, el ancho de su intervalo 10–90 % y el pronóstico del otro horizont
 
 from __future__ import annotations
 
+import json
+import sys
 from datetime import date
 from pathlib import Path
 
@@ -37,6 +39,7 @@ from tetouan_power_forecast.variables_sein import PASO
 from .contrato import (
     PASOS,
     Ablacion,
+    Componente,
     Diagnostico,
     Escenario,
     Horizonte,
@@ -58,6 +61,7 @@ from .pronosticador_real import (
     HIPERPARAMETROS,
     PronosticadorReal,
     _bootstrap_mae,
+    _con_nulos,
     _feriados,
     _redondear,
     armar_datasets,
@@ -148,6 +152,7 @@ class PronosticadorHibrido(PronosticadorReal):
                 f"{ruta_fundacional(raiz)}.")
         # Las capas y los datasets son los del modelo base: no se cargan dos veces
         self._base = base
+        self.respaldo = base  # fuera de su rango de fechas responde el modelo base
         self._raiz = raiz
         self._meta = base._meta
         self._demanda, self._exogenas, self._datos, self._real = base._demanda, base._exogenas, base._datos, base._real
@@ -281,26 +286,74 @@ class PronosticadorHibrido(PronosticadorReal):
 
 ID_COMBINADO = "combinado"
 ARCHIVO_AJUSTADO = "chronos2ftcal_c2048.parquet"
-# Peso del fundacional ajustado en la mezcla; el resto es del híbrido. Se fijaron con la validación de 2025
-# (notebook 04), por horizonte y área, y se aplican tal cual a 2026.
-PESOS_AJUSTADO = {
+ARCHIVO_PESOS = "combinado.json"
+# Peso del fundacional ajustado en la mezcla; el resto es del híbrido. Viven en ``combinado.json``, junto a los
+# modelos del híbrido (ver ``guardar_pesos``); estos son los del notebook 04 y se usan si falta el archivo.
+PESOS_POR_DEFECTO = {
     "1h": {"norte": 0.35, "centro": 0.45, "sur": 0.65},
     "24h": {"norte": 0.70, "centro": 0.85, "sur": 0.95},
 }
+ORIGEN_PESOS = ("Notebook 04: para cada horizonte y área, el peso con menor MAE en la validación de 2025 "
+                "(rejilla de 0 a 1 cada 0.05). Se fijaron con 2025 y se aplican tal cual a 2026.")
 
 
 def ruta_ajustado(raiz=None) -> Path:
     return raiz_datos(raiz) / "reportes" / "sein" / "fundacionales" / ARCHIVO_AJUSTADO
 
 
+def ruta_pesos(raiz=None) -> Path:
+    return carpeta_hibrido(raiz) / ARCHIVO_PESOS
+
+
+def ruta_tabla_pesos(raiz=None) -> Path:
+    """La tabla de pesos que escribe el notebook 04."""
+    return raiz_datos(raiz) / "reportes" / "sein" / "fundacionales" / "tablas" / "pesos_combinacion.csv"
+
+
 def combinado_disponible(raiz=None) -> bool:
     return hibrido_disponible(raiz) and ruta_ajustado(raiz).exists()
+
+
+def leer_pesos(raiz=None) -> tuple[dict[str, dict[str, float]], str]:
+    """Los pesos del ajustado por horizonte y área y de dónde salen. Sin ``combinado.json``, los por defecto."""
+    ruta = ruta_pesos(raiz)
+    if not ruta.exists():
+        return PESOS_POR_DEFECTO, f"{ORIGEN_PESOS} (valores por defecto: falta {ruta.name})"
+    datos = json.loads(ruta.read_text())
+    try:
+        pesos = {h: {a: float(datos["pesos_ajustado"][h][a]) for a in areas} for h, areas in PESOS_POR_DEFECTO.items()}
+    except (KeyError, TypeError, ValueError) as error:
+        raise ValueError(f"{ruta} no trae un peso numérico por horizonte y área: {error}") from error
+    fuera = [f"{h} {a}" for h, areas in pesos.items() for a, w in areas.items() if not 0 <= w <= 1]
+    if fuera:
+        raise ValueError(f"{ruta}: pesos fuera de 0-1 en {', '.join(fuera)}")
+    return pesos, str(datos.get("origen") or ORIGEN_PESOS)
+
+
+def guardar_pesos(raiz=None) -> Path:
+    """Escribe ``combinado.json`` con los pesos de la tabla del notebook 04 (o los por defecto si no está)."""
+    pesos = {h: dict(areas) for h, areas in PESOS_POR_DEFECTO.items()}
+    tabla = ruta_tabla_pesos(raiz)
+    if tabla.exists():
+        filas = pd.read_csv(tabla)
+        for _, f in filas.iterrows():
+            pesos[f["Horizonte"]][f["Área"].lower()] = round(float(f["Peso del primero"]), 2)
+    ruta = ruta_pesos(raiz)
+    ruta.parent.mkdir(parents=True, exist_ok=True)
+    ruta.write_text(json.dumps({
+        "pesos_ajustado": pesos,
+        "formula": "pronóstico = peso · Chronos-2 ajustado + (1 − peso) · híbrido (XGBoost + Simons)",
+        "ajustado": ARCHIVO_AJUSTADO,
+        "origen": ORIGEN_PESOS,
+        "tabla": str(tabla.relative_to(raiz_datos(raiz))) if tabla.exists() else None,
+    }, ensure_ascii=False, indent=2) + "\n")
+    return ruta
 
 
 class PronosticadorCombinado(PronosticadorHibrido):
     """Mezcla lineal de dos pronósticos: Chronos-2 con ajuste fino y feriados, y el híbrido.
 
-    ``pronóstico = peso · ajustado + (1 − peso) · híbrido``, con el peso de ``PESOS_AJUSTADO``. Chronos-2 se
+    ``pronóstico = peso · ajustado + (1 − peso) · híbrido``, con el peso de ``combinado.json``. Chronos-2 se
     ajustó con datos hasta 2024 y, como Simons, se calcula aparte con GPU: la app lee sus pronósticos guardados
     (``reportes/sein/fundacionales/chronos2ftcal_c2048.parquet``). Los pesos y el rango del 90 % (cuantiles 5 y
     95 % del error relativo de la mezcla) se fijaron con 2025, así que en 2025 las cifras son optimistas; la
@@ -317,6 +370,7 @@ class PronosticadorCombinado(PronosticadorHibrido):
             raise FileNotFoundError(f"Faltan los pronósticos del fundacional ajustado en {ruta_ajustado(raiz)}.")
         self._hibrido = hibrido
         self._base = hibrido._base
+        self.respaldo = hibrido._base
         self._modelos_hibridos, self._columnas_hibrido = hibrido._modelos_hibridos, hibrido._columnas_hibrido
         self._fundacional = hibrido._fundacional
         self._raiz = raiz
@@ -326,8 +380,9 @@ class PronosticadorCombinado(PronosticadorHibrido):
         ajustado = pd.read_parquet(ruta_ajustado(raiz))
         ajustado["area_cod"] = ajustado["area"].str.upper().map(CODIGO_AREA)
         self._ajustado = ajustado.drop_duplicates(["area_cod", "DateTime"]).set_index(["area_cod", "DateTime"]).sort_index()
+        self.pesos, self.origen_pesos = leer_pesos(raiz)
         self._peso_por_codigo = {h: {CODIGO_AREA[a.upper()]: w for a, w in pesos.items()}
-                                 for h, pesos in PESOS_AJUSTADO.items()}
+                                 for h, pesos in self.pesos.items()}
         self._predicciones = {}
         self._diagnosticos = {}
         self._resumen = None
@@ -347,6 +402,22 @@ class PronosticadorCombinado(PronosticadorHibrido):
         peso = filas["area_cod"].map(self._peso_por_codigo[nombre_h]).to_numpy(dtype=float)
         return (peso * self._predecir_ajustado(nombre_h, filas)
                 + (1 - peso) * self._hibrido._predecir_filas(nombre_h, variante, filas))
+
+    def serie(self, area: str, fecha: date, horizonte: Horizonte, variante: Variante) -> Serie:
+        """La serie del día con sus dos piezas y sus pesos, para que la app muestre cómo se arma cada número."""
+        serie = super().serie(area, fecha, horizonte, variante)
+        inicios = pd.date_range(pd.Timestamp(fecha), periods=DIA, freq="30min")
+        emision = self._emision(inicios, horizonte)
+        filas = self._datos[horizonte][area].reindex(emision)
+        peso = self.pesos[horizonte][area]
+        hibrido = self._hibrido._predicciones_area(area, horizonte, "M0").reindex(emision).to_numpy()
+        componentes = [
+            Componente(id="ajustado", nombre="Chronos-2 ajustado", peso=round(peso, 2),
+                       valores=_con_nulos(self._predecir_ajustado(horizonte, filas))),
+            Componente(id=ID_HIBRIDO, nombre="Híbrido (XGBoost + Simons)", peso=round(1 - peso, 2),
+                       valores=_con_nulos(hibrido)),
+        ]
+        return serie.model_copy(update={"componentes": componentes})
 
     def _calcular_diagnostico(self, area: str) -> Diagnostico:
         """Como el del híbrido, pero compara las piezas de la mezcla y mide qué se pierde al quitar cada una."""
@@ -371,3 +442,20 @@ class PronosticadorCombinado(PronosticadorHibrido):
                         Importancia(variable=ID_HIBRIDO, valor=round(mae["ajustado"] - mae[ID_COMBINADO], 1))]
         importancias.sort(key=lambda x: x.valor, reverse=True)
         return diagnostico.model_copy(update={"ablacion": ablacion, "importancias": importancias})
+
+
+def main(argv=None):
+    argv = sys.argv[1:] if argv is None else argv
+    if argv[:1] == ["entrenar"]:
+        print(f"modelos del híbrido en {entrenar_hibrido()}")
+        return 0
+    if argv[:1] == ["pesos"]:
+        ruta = guardar_pesos()
+        print(f"pesos del combinado en {ruta}:\n{ruta.read_text()}")
+        return 0
+    print("Uso: python -m app.backend.pronosticador_hibrido {entrenar|pesos}")
+    return 2
+
+
+if __name__ == "__main__":
+    sys.exit(main())
