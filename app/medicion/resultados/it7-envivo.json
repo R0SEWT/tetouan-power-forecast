@@ -1,0 +1,247 @@
+{
+  "etiqueta": "it7-envivo",
+  "version": "it7",
+  "fecha": "2026-11-13T15:36:24.694Z",
+  "modelo": "Combinado: Chronos-2 ajustado + híbrido",
+  "caso": {
+    "area": "centro",
+    "fecha": "2026-03-10",
+    "hora": "19:00",
+    "idx": 38,
+    "horizonte": "24h",
+    "variante": "M3"
+  },
+  "axe": {
+    "pantallas": 32,
+    "infracciones": 0,
+    "nodos": 0,
+    "buenas_practicas_nodos": 0,
+    "reglas": {},
+    "corridas": [
+      {
+        "estado": "inicio",
+        "vista": "movil",
+        "tema": "dark",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "inicio",
+        "vista": "movil",
+        "tema": "light",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "inicio",
+        "vista": "escritorio",
+        "tema": "dark",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "inicio",
+        "vista": "escritorio",
+        "tema": "light",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "area",
+        "vista": "movil",
+        "tema": "dark",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "area",
+        "vista": "movil",
+        "tema": "light",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "area",
+        "vista": "escritorio",
+        "tema": "dark",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "area",
+        "vista": "escritorio",
+        "tema": "light",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "operacion",
+        "vista": "movil",
+        "tema": "dark",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "operacion",
+        "vista": "movil",
+        "tema": "light",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "operacion",
+        "vista": "escritorio",
+        "tema": "dark",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "operacion",
+        "vista": "escritorio",
+        "tema": "light",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "escenarios",
+        "vista": "movil",
+        "tema": "dark",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "escenarios",
+        "vista": "movil",
+        "tema": "light",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "escenarios",
+        "vista": "escritorio",
+        "tema": "dark",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "escenarios",
+        "vista": "escritorio",
+        "tema": "light",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "sensibilidad",
+        "vista": "movil",
+        "tema": "dark",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "sensibilidad",
+        "vista": "movil",
+        "tema": "light",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "sensibilidad",
+        "vista": "escritorio",
+        "tema": "dark",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "sensibilidad",
+        "vista": "escritorio",
+        "tema": "light",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "diagnostico",
+        "vista": "movil",
+        "tema": "dark",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "diagnostico",
+        "vista": "movil",
+        "tema": "light",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "diagnostico",
+        "vista": "escritorio",
+        "tema": "dark",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "diagnostico",
+        "vista": "escritorio",
+        "tema": "light",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "ficha",
+        "vista": "movil",
+        "tema": "dark",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "ficha",
+        "vista": "movil",
+        "tema": "light",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "ficha",
+        "vista": "escritorio",
+        "tema": "dark",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "ficha",
+        "vista": "escritorio",
+        "tema": "light",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "envivo",
+        "vista": "movil",
+        "tema": "dark",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "envivo",
+        "vista": "movil",
+        "tema": "light",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "envivo",
+        "vista": "escritorio",
+        "tema": "dark",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "envivo",
+        "vista": "escritorio",
+        "tema": "light",
+        "reglas": [],
+        "nodos": 0
+      }
+    ]
+  }
+}

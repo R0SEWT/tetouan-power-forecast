@@ -1735,14 +1735,18 @@ function pintarEnVivo(d) {
   if (reconstruido === u.tipo.length) tipoTxt = '<strong>Reconstruido:</strong> se calculó después de conocerse el real; no es un pronóstico en vivo.';
   else if (exAnte === u.tipo.length) tipoTxt = 'Se emitió antes de que empezara el día: las 48 medias horas son ex ante.';
   else tipoTxt = `De sus 48 medias horas, ${plural(exAnte, 'todavía no empezaba', 'todavía no empezaban')} al emitirse; las otras ${nf0.format(enVivo + reconstruido)} ya habían empezado, pero su real aún no estaba publicado.`;
-  const primeraExAnte = u.tipo.indexOf('ex_ante_estricto');
+  // La marca va en la media hora en que se emitió, si fue ese mismo día
+  const idxEmision = u.emitido_lima.slice(0, 10) === u.fecha ? horaAIdx(horaDe(u.emitido_lima)) : null;
 
   const a24 = d.verificado.filter((v) => v.horizonte === '24h');
-  const filas = a24.map((v) => `<tr><th scope="row">${esc(fechaCorta(v.fecha))}</th>`
+  const diaMes = (iso) => `${partesFecha(iso).d} ${MESES_CORTOS[partesFecha(iso).m - 1]}`;
+  const filas = a24.map((v) => `<tr><th scope="row" class="mono">${esc(diaMes(v.fecha))}</th>`
     + `<td><span class="etiqueta-tipo ${v.tipo === 'en_vivo' ? 'tipo-vivo' : 'tipo-reconstruido'}">${esc(TIPO_DIA[v.tipo])}</span></td>`
     + `<td class="num mono">${nf1.format(v.mae_modelo)}</td>`
-    + `<td class="num mono">${nf1.format(v.mae_referencia)} <span class="muted small">${esc(REF_CORTA[v.referencia_nombre] || v.referencia_nombre)}</span></td>`
+    + `<td class="num mono">${nf1.format(v.mae_referencia)}</td>`
     + `<td class="num mono">${nf0.format(v.cobertura_pct)} %</td></tr>`).join('');
+  const refsTabla = [...new Map(a24.map((v) => [v.tipo, v.referencia_nombre])).entries()]
+    .map(([tipo, ref]) => `${TIPO_DIA[tipo].toLowerCase()}, ${(TITULO_REF[ref] || ref).toLowerCase()}`).join('; ');
 
   const grupo = (g, h) => d.resumen.find((r) => r.grupo === g && r.horizonte === h);
   const linea = (r) => `error medio <span class="num">${nf1.format(r.mae_modelo)} MW</span>; la referencia simple (${esc(REF_CORTA[r.referencia_nombre] || r.referencia_nombre)}), <span class="num">${nf1.format(r.mae_referencia)} MW</span>; el rango 10–90 % cubrió el <span class="num">${nf0.format(r.cobertura_pct)} %</span> (promete 80 %)`;
@@ -1775,6 +1779,7 @@ function pintarEnVivo(d) {
         <caption class="visually-hidden">Error medio en MW del modelo y de la referencia simple, y cobertura del rango 10–90 %, por día pronosticado a 24 h</caption>
         <thead><tr><th scope="col">Día</th><th scope="col">Tipo</th><th scope="col" class="num">Modelo</th><th scope="col" class="num">Referencia</th><th scope="col" class="num">Cobertura</th></tr></thead>
         <tbody>${filas}</tbody></table></div>
+      <p class="muted small">Error medio del día en MW. Referencia simple (la mejor en el acumulado de cada tipo): ${esc(refsTabla)}.</p>
     </details>` : ''}
     <p class="muted small">Modelo: ${esc(d.modelo || '—')}${d.version_pesos ? ` · pesos <span class="mono">${esc(d.version_pesos.slice(0, 12))}</span>` : ''}. Datos del IEOD del COES.</p>`;
 
@@ -1787,7 +1792,7 @@ function pintarEnVivo(d) {
       { clase: 'ln-pronostico', valores: u.pronostico, nombre: 'Modelo', banda: { inf: u.inferior, sup: u.superior, clase: 'banda-pronostico', nombre: 'Rango 10–90 %' } },
       { clase: 'ln-real', valores: u.real, nombre: 'Real', puente: true },
     ],
-    marcador: primeraExAnte > 0 ? { i: primeraExAnte, txt: `Emitido ${horaDe(u.emitido_lima)}` } : null,
+    marcador: idxEmision != null ? { i: idxEmision, txt: `Emitido ${horaDe(u.emitido_lima)}` } : null,
     etiquetaX: (i) => (i % 12 === 0 ? idxAHora(i) : null),
     etiquetaPunto: (i) => horaDe(u.fecha_hora[i]),
     alto: 220,
