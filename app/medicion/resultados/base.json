@@ -1,7 +1,7 @@
 {
   "etiqueta": "base",
   "version": "base",
-  "fecha": "2026-11-13T06:49:59.440Z",
+  "fecha": "2026-11-13T07:12:25.607Z",
   "modelo": "XGBoost global",
   "caso": {
     "area": "centro",
@@ -41,7 +41,7 @@
         "escrituras": 1,
         "pulsaciones": 10,
         "desplazamientos": 1,
-        "segundos_robot": 2.4,
+        "segundos_robot": 2.13,
         "segundos_klm": 18.8
       },
       "movil": {
@@ -57,7 +57,7 @@
         "escrituras": 1,
         "pulsaciones": 10,
         "desplazamientos": 1,
-        "segundos_robot": 2.42,
+        "segundos_robot": 2.13,
         "segundos_klm": 18.8
       }
     },
@@ -84,7 +84,7 @@
         "escrituras": 0,
         "pulsaciones": 0,
         "desplazamientos": 0,
-        "segundos_robot": 0.14,
+        "segundos_robot": 0.13,
         "segundos_klm": 0
       },
       "movil": {
@@ -97,7 +97,7 @@
         "escrituras": 0,
         "pulsaciones": 0,
         "desplazamientos": 1,
-        "segundos_robot": 0.36,
+        "segundos_robot": 0.34,
         "segundos_klm": 1
       }
     },
@@ -119,7 +119,7 @@
         "escrituras": 0,
         "pulsaciones": 0,
         "desplazamientos": 0,
-        "segundos_robot": 1.11,
+        "segundos_robot": 0.97,
         "segundos_klm": 5.3
       },
       "movil": {
@@ -132,7 +132,7 @@
         "escrituras": 0,
         "pulsaciones": 0,
         "desplazamientos": 0,
-        "segundos_robot": 1.1,
+        "segundos_robot": 0.95,
         "segundos_klm": 5.3
       }
     },
@@ -156,7 +156,7 @@
         "escrituras": 0,
         "pulsaciones": 0,
         "desplazamientos": 0,
-        "segundos_robot": 0.57,
+        "segundos_robot": 0.52,
         "segundos_klm": 2.7
       },
       "movil": {
@@ -169,44 +169,44 @@
         "escrituras": 0,
         "pulsaciones": 0,
         "desplazamientos": 0,
-        "segundos_robot": 0.58,
+        "segundos_robot": 0.52,
         "segundos_klm": 2.7
       }
     }
   },
   "rendimiento": {
     "local": {
-      "grafico_ms": 320,
+      "grafico_ms": 286,
       "grafico_rango_ms": [
-        306,
-        357
+        216,
+        422
       ],
-      "respuesta_ms": 325,
+      "respuesta_ms": 288,
       "respuesta_rango_ms": [
-        310,
-        360
+        218,
+        423
       ]
     },
     "peticiones": 11,
-    "kb": 156,
+    "kb": 157,
     "kb_por_tipo": {
       "stylesheet": 24,
       "document": 11,
       "script": 57,
-      "fetch": 7,
+      "fetch": 8,
       "font": 57
     },
     "peticiones_a_terceros": 3,
     "red_lenta": {
-      "grafico_ms": 1362,
+      "grafico_ms": 1139,
       "grafico_rango_ms": [
-        1335,
-        1436
+        1138,
+        1152
       ],
-      "respuesta_ms": 1381,
+      "respuesta_ms": 1143,
       "respuesta_rango_ms": [
-        1343,
-        1447
+        1142,
+        1156
       ]
     }
   },
@@ -522,49 +522,49 @@
   },
   "lighthouse": {
     "inicio_movil": {
-      "rendimiento": 96,
+      "rendimiento": 97,
       "accesibilidad": 100,
       "buenas_practicas": 100,
-      "fcp_ms": 1485,
-      "lcp_ms": 2431,
-      "tbt_ms": 40,
+      "fcp_ms": 1515,
+      "lcp_ms": 1979,
+      "tbt_ms": 0,
       "cls": 0.087,
       "kb": 151,
       "rendimiento_rango": [
-        96,
-        96
+        97,
+        97
       ],
       "fallas_accesibilidad": [],
       "fallas_buenas_practicas": []
     },
     "inicio_escritorio": {
-      "rendimiento": 99,
+      "rendimiento": 100,
       "accesibilidad": 100,
       "buenas_practicas": 100,
-      "fcp_ms": 543,
-      "lcp_ms": 780,
+      "fcp_ms": 508,
+      "lcp_ms": 508,
       "tbt_ms": 0,
       "cls": 0,
       "kb": 151,
       "rendimiento_rango": [
-        99,
+        100,
         100
       ],
       "fallas_accesibilidad": [],
       "fallas_buenas_practicas": []
     },
     "area_movil": {
-      "rendimiento": 94,
+      "rendimiento": 96,
       "accesibilidad": 100,
       "buenas_practicas": 100,
-      "fcp_ms": 1486,
-      "lcp_ms": 2582,
-      "tbt_ms": 72,
+      "fcp_ms": 1518,
+      "lcp_ms": 1994,
+      "tbt_ms": 0,
       "cls": 0.098,
-      "kb": 157,
+      "kb": 158,
       "rendimiento_rango": [
-        94,
-        94
+        96,
+        96
       ],
       "fallas_accesibilidad": [],
       "fallas_buenas_practicas": []
@@ -573,13 +573,13 @@
       "rendimiento": 99,
       "accesibilidad": 100,
       "buenas_practicas": 100,
-      "fcp_ms": 501,
-      "lcp_ms": 821,
+      "fcp_ms": 517,
+      "lcp_ms": 804,
       "tbt_ms": 0,
-      "cls": 0.069,
-      "kb": 157,
+      "cls": 0.068,
+      "kb": 158,
       "rendimiento_rango": [
-        98,
+        99,
         99
       ],
       "fallas_accesibilidad": [],
