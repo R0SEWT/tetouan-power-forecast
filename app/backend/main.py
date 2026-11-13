@@ -207,7 +207,10 @@ def crear_app(pronosticador: Pronosticador | None = None, otros: list[Pronostica
     ) -> Seguimiento:
         """MAE por mes y cobertura del rango probable en la prueba de 2026, frente a la mejor referencia."""
         _validar_area(area)
-        return modelo(request, id_modelo).seguimiento(area, horizonte, variante)
+        try:
+            return modelo(request, id_modelo).seguimiento(area, horizonte, variante)
+        except LookupError as error:  # sin datos de la prueba (por ejemplo, capas que terminan antes de 2026)
+            raise HTTPException(422, str(error)) from error
 
     @app.get("/pico/{area}", response_model=PicoRampa)
     def pico(

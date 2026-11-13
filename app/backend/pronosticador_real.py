@@ -513,6 +513,8 @@ class PronosticadorReal:
             "inferior": np.asarray(intervalo.inferior, dtype=float), "superior": np.asarray(intervalo.superior, dtype=float),
         }, index=prueba.index + PASOS[horizonte] * PASO - MEDIO)  # inicio del periodo pronosticado
         tabla = tabla.dropna()
+        if tabla.empty:
+            raise LookupError(f"No hay pronósticos de {FIN_DESARROLLO.year} con dato real para {area} a {horizonte}.")
         tabla["e_modelo"] = (tabla["real"] - tabla["pred"]).abs()
         tabla["e_ref"] = (tabla["real"] - tabla["ref"]).abs()
         tabla["dentro"] = (tabla["real"] >= tabla["inferior"]) & (tabla["real"] <= tabla["superior"])

@@ -381,6 +381,24 @@ def test_guardar_pesos_lee_la_tabla_del_notebook_04(tmp_path):
     assert "validación de 2025" in origen and ruta.name == "combinado.json"
 
 
+def test_guardar_pesos_no_deja_temporales(tmp_path):
+    from app.backend.pronosticador_hibrido import guardar_pesos
+
+    ruta = guardar_pesos(tmp_path)
+    assert [x.name for x in ruta.parent.iterdir()] == ["combinado.json"]
+
+
+def test_con_peso_1_la_otra_pieza_no_cuenta(combinado):
+    from app.backend.pronosticador_hibrido import PronosticadorCombinado
+
+    otro = PronosticadorCombinado(combinado._hibrido)
+    otro._peso_por_codigo = {h: {c: 1.0 for c in pesos} for h, pesos in otro._peso_por_codigo.items()}
+    filas = otro._datos["24h"]["centro"].reindex(pd.date_range("2026-01-15", periods=48, freq="30min"))
+    filas = filas.copy()
+    filas[[c for c in filas.columns if c.startswith("Area_")]] = np.nan  # el híbrido no puede predecir
+    assert np.allclose(otro._predecir_filas("24h", "M0", filas), otro._predecir_ajustado("24h", filas))
+
+
 def test_pesos_invalidos_se_rechazan(tmp_path):
     import json
 
@@ -474,6 +492,19 @@ def test_seguimiento_mes_a_mes(cliente_defecto, horizonte):
     ponderado = sum(m["mae_modelo"] * m["periodos"] for m in s["meses"]) / s["total"]["periodos"]
     assert abs(ponderado - s["total"]["mae_modelo"]) < 0.1
     assert all(0 <= m["cobertura_pct"] <= 100 and m["mae_referencia"] > 0 for m in s["meses"])
+
+
+def test_cada_mes_es_el_error_de_sus_periodos(pronosticador):
+    """Febrero de 2026 a 1 h, recalculado desde las series del día, que van redondeadas a 0.1 MW."""
+    s = pronosticador.seguimiento("centro", "1h", "M3")
+    errores = []
+    for dia in pd.date_range("2026-02-01", pronosticador.fecha_max, freq="D"):
+        serie = pronosticador.serie("centro", dia.date(), "1h", "M3")
+        errores += [abs(r - p) for r, p in zip(serie.real, serie.pronostico, strict=True) if r is not None]
+    febrero = next(m for m in s.meses if m.mes == "2026-02")
+    assert febrero.mae_modelo == pytest.approx(np.mean(errores), abs=0.2)
+    assert abs(febrero.periodos - len(errores)) <= 1  # a lo sumo el primer periodo del día siguiente
+    assert len({m.mae_modelo for m in s.meses}) == len(s.meses)  # no repite el total en cada mes
 
 
 def test_el_seguimiento_coincide_con_el_error_de_2026(cliente_defecto):

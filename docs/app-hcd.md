@@ -427,15 +427,15 @@ Misma ruta que la iteración 2 (`versiones.mjs`, `it4`), modo rápido, contra el
 | axe-core con la ficha abierta, el seguimiento a 1 h y a 24 h y el día de respaldo (16 pantallas más) | — | 0 |
 | Número visible sin desplazarse / barras fijas (móvil) | sí / 8 % | sí / 8 % |
 | Tabulaciones hasta el horizonte / hasta «Diagnóstico» | 12 / 10 | **13** / 10 |
-| Peso de la vista del área / peticiones | 119 KB / 9 | **141 KB / 10** |
-| Hasta ver el número: red local / red lenta | 60 / 1230 ms | 66 / 1337 ms |
+| Peso de la vista del área / peticiones | 119 KB / 9 | **143 KB / 10** |
+| Hasta ver el número: red local / red lenta | 60 / 1230 ms | 67 / 1340 ms |
 
 | La respuesta con su ficha | El pico y la rampa | Mes a mes |
 |---|---|---|
 | ![La respuesta con la ficha abierta: 4,764 × 0.85 + 4,781 × 0.15 = 4,767 MW](img/app-hcd/it4-ficha.jpg) | ![Máximo y mayor subida de las próximas 24 h](img/app-hcd/it4-pico.jpg) | ![MAE por mes de los tres modelos y la referencia, y cobertura del rango](img/app-hcd/it4-seguimiento.jpg) |
 
 **Lo que empeoró, y por qué se acepta.** Una tabulación más hasta el horizonte (el desplegable de la ficha va antes
-de los controles; sigue lejos de las 18 de la base). 22 KB más: el JavaScript sin comprimir (18 KB), los estilos
+de los controles; sigue lejos de las 18 de la base). 24 KB más: el JavaScript sin comprimir (19 KB), los estilos
 y la petición del pico; el servidor de la demo no comprime. La red lenta sube 9 %, dentro del ruido del
 instrumento (§5). No se midió con personas.
 

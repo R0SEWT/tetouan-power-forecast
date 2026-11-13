@@ -1,7 +1,7 @@
 {
   "etiqueta": "it4",
   "version": "it4",
-  "fecha": "2026-11-13T09:42:38.341Z",
+  "fecha": "2026-11-13T10:56:48.478Z",
   "modelo": "Combinado: Chronos-2 ajustado + híbrido",
   "caso": {
     "area": "centro",
@@ -38,7 +38,7 @@
         "escrituras": 1,
         "pulsaciones": 10,
         "desplazamientos": 1,
-        "segundos_robot": 2.09,
+        "segundos_robot": 2.14,
         "segundos_klm": 16.2
       },
       "movil": {
@@ -51,7 +51,7 @@
         "escrituras": 1,
         "pulsaciones": 10,
         "desplazamientos": 1,
-        "segundos_robot": 2.04,
+        "segundos_robot": 2.15,
         "segundos_klm": 16.2
       }
     },
@@ -78,7 +78,7 @@
         "escrituras": 0,
         "pulsaciones": 0,
         "desplazamientos": 0,
-        "segundos_robot": 0.13,
+        "segundos_robot": 0.15,
         "segundos_klm": 0
       },
       "movil": {
@@ -113,7 +113,7 @@
         "escrituras": 0,
         "pulsaciones": 0,
         "desplazamientos": 0,
-        "segundos_robot": 0.93,
+        "segundos_robot": 0.98,
         "segundos_klm": 5.3
       },
       "movil": {
@@ -126,7 +126,7 @@
         "escrituras": 0,
         "pulsaciones": 0,
         "desplazamientos": 0,
-        "segundos_robot": 0.97,
+        "segundos_robot": 0.95,
         "segundos_klm": 5.3
       }
     },
@@ -150,7 +150,7 @@
         "escrituras": 0,
         "pulsaciones": 0,
         "desplazamientos": 0,
-        "segundos_robot": 0.55,
+        "segundos_robot": 0.52,
         "segundos_klm": 2.7
       },
       "movil": {
@@ -163,43 +163,43 @@
         "escrituras": 0,
         "pulsaciones": 0,
         "desplazamientos": 0,
-        "segundos_robot": 0.55,
+        "segundos_robot": 0.53,
         "segundos_klm": 2.7
       }
     }
   },
   "rendimiento": {
     "local": {
-      "grafico_ms": 64,
+      "grafico_ms": 66,
       "grafico_rango_ms": [
-        63,
-        64
+        59,
+        69
       ],
-      "respuesta_ms": 66,
+      "respuesta_ms": 67,
       "respuesta_rango_ms": [
-        65,
-        66
+        60,
+        71
       ]
     },
     "peticiones": 10,
-    "kb": 141,
+    "kb": 143,
     "kb_por_tipo": {
       "stylesheet": 31,
       "document": 14,
-      "script": 87,
+      "script": 88,
       "fetch": 11
     },
     "peticiones_a_terceros": 0,
     "red_lenta": {
-      "grafico_ms": 1333,
+      "grafico_ms": 1335,
       "grafico_rango_ms": [
         1327,
-        1351
+        1336
       ],
-      "respuesta_ms": 1337,
+      "respuesta_ms": 1340,
       "respuesta_rango_ms": [
-        1332,
-        1356
+        1331,
+        1340
       ]
     }
   },

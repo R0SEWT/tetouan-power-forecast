@@ -340,13 +340,15 @@ def guardar_pesos(raiz=None) -> Path:
             pesos[f["Horizonte"]][f["Área"].lower()] = round(float(f["Peso del primero"]), 2)
     ruta = ruta_pesos(raiz)
     ruta.parent.mkdir(parents=True, exist_ok=True)
-    ruta.write_text(json.dumps({
+    temporal = ruta.with_name(ruta.name + ".tmp")
+    temporal.write_text(json.dumps({
         "pesos_ajustado": pesos,
         "formula": "pronóstico = peso · Chronos-2 ajustado + (1 − peso) · híbrido (XGBoost + Simons)",
         "ajustado": ARCHIVO_AJUSTADO,
         "origen": ORIGEN_PESOS,
         "tabla": str(tabla.relative_to(raiz_datos(raiz))) if tabla.exists() else None,
     }, ensure_ascii=False, indent=2) + "\n")
+    temporal.replace(ruta)  # de una vez: quien lo lea nunca ve un JSON a medias
     return ruta
 
 
@@ -400,8 +402,10 @@ class PronosticadorCombinado(PronosticadorHibrido):
 
     def _predecir_filas(self, nombre_h: str, variante: str, filas: pd.DataFrame) -> np.ndarray:
         peso = filas["area_cod"].map(self._peso_por_codigo[nombre_h]).to_numpy(dtype=float)
-        return (peso * self._predecir_ajustado(nombre_h, filas)
-                + (1 - peso) * self._hibrido._predecir_filas(nombre_h, variante, filas))
+        ajustado = self._predecir_ajustado(nombre_h, filas)
+        hibrido = self._hibrido._predecir_filas(nombre_h, variante, filas)
+        # Con peso 0 o 1 la otra pieza no cuenta, aunque falte (0 · NaN seguiría siendo NaN)
+        return np.where(peso >= 1, ajustado, np.where(peso <= 0, hibrido, peso * ajustado + (1 - peso) * hibrido))
 
     def serie(self, area: str, fecha: date, horizonte: Horizonte, variante: Variante) -> Serie:
         """La serie del día con sus dos piezas y sus pesos, para que la app muestre cómo se arma cada número."""

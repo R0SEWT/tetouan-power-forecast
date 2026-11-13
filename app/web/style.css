@@ -1732,3 +1732,8 @@ select {
 .ficha-tabla td {
   white-space: nowrap;
 }
+
+.pico.desactualizada #picoCuerpo {
+  opacity: 0.45;
+  transition: opacity 0.15s ease;
+}

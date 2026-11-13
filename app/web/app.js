@@ -255,7 +255,8 @@ function modeloConClima() {
 }
 const conModeloClima = (obj) => {
   const m = modeloConClima();
-  const variante = usaSoloDemanda(m) ? 'M0' : (soloDemanda() ? 'M3' : S.variante);
+  // Si el elegido usa solo la demanda (también cuando responde su respaldo), los escenarios van con clima
+  const variante = usaSoloDemanda(m) ? 'M0' : (usaSoloDemanda(modeloActual()) ? 'M3' : S.variante);
   return hayVariosModelos() && m ? { ...obj, variante, modelo: m.id } : { ...obj, variante };
 };
 
@@ -806,6 +807,7 @@ function elegirHora(i) {
   pintarCurva();
   pintarTablaDia();
   clearTimeout(esperaHora);
+  invalidarPico();
   esperaHora = setTimeout(() => {
     cargarPronostico();
     cargarPico();
@@ -1059,15 +1061,24 @@ function pintarTablaDia() {
 
 // ---- Máximo y mayor subida de las próximas 24 h -------------------------------------------------
 
-async function cargarPico() {
-  const turno = ++S.turnos.pico;
+// Lo que se ve es de la elección anterior: se descarta la respuesta en vuelo y se atenúa hasta la nueva.
+function invalidarPico() {
+  S.turnos.pico += 1;
   const panel = $('#pico');
   panel.setAttribute('aria-busy', 'true');
+  panel.classList.toggle('desactualizada', Boolean(S.pico));
+}
+
+async function cargarPico() {
+  invalidarPico();
+  const turno = S.turnos.pico;
+  const panel = $('#pico');
+  const pedido = { area: S.area, fecha: S.fecha, idx: S.idx };
   try {
     const q = new URLSearchParams(conModelo({ origen: origen(), variante: S.variante }));
-    const datos = await api(`/pico/${encodeURIComponent(S.area)}?${q}`);
+    const datos = await api(`/pico/${encodeURIComponent(pedido.area)}?${q}`);
     if (turno !== S.turnos.pico) return;
-    S.pico = datos;
+    S.pico = { ...datos, pedido }; // el origen viaja con la respuesta
     panel.hidden = false;
     pintarPico();
   } catch (err) {
@@ -1075,7 +1086,10 @@ async function cargarPico() {
     if (err.estado === 404 && /not found/i.test(err.message)) panel.hidden = true; // un backend sin /pico
     else manejarError(err, $('#picoCuerpo'));
   } finally {
-    if (turno === S.turnos.pico) panel.setAttribute('aria-busy', 'false');
+    if (turno === S.turnos.pico) {
+      panel.setAttribute('aria-busy', 'false');
+      panel.classList.remove('desactualizada');
+    }
   }
 }
 
@@ -1085,12 +1099,13 @@ function pintarPico() {
   const area = S.areas.find((a) => a.id === S.area);
   const m = d.modelo ? modeloPorId(d.modelo) : null;
   const { pico, rampa, acierto } = d;
-  let html = `<p class="muted small">Si se emite a las ${idxAHora(S.idx)} del ${esc(fechaDiaMes(S.fecha))}: de las ${esc(cuandoTxt(d.desde))} a las ${esc(cuandoTxt(d.hasta))}, con el pronóstico a 24 h${m ? ` del modelo ${esc(nombreCorto(m))}` : ''}.</p>`;
+  const { fecha, idx } = d.pedido || { fecha: S.fecha, idx: S.idx };
+  let html = `<p class="muted small">Si se emite a las ${idxAHora(idx)} del ${esc(fechaDiaMes(fecha))}: de las ${esc(cuandoTxt(d.desde))} a las ${esc(cuandoTxt(d.hasta))}, con el pronóstico a 24 h${m ? ` del modelo ${esc(nombreCorto(m))}` : ''}.</p>`;
   html += '<dl class="pico-datos">';
   html += `<div><dt>Máximo</dt><dd><span class="pico-valor num">${mw(pico.valor)} MW</span> a las ${esc(cuandoTxt(pico.fecha_hora))}`
     + `<span class="pico-nota">Rango probable: <span class="num">${mw(pico.inferior)} – ${mw(pico.superior)} MW</span></span></dd></div>`;
   if (rampa) {
-    html += `<div><dt>Mayor subida en una hora</dt><dd><span class="pico-valor num">+${mw(rampa.subida_mw)} MW</span> de las ${horaDe(rampa.desde)} a las ${esc(cuandoTxt(rampa.hasta))}`
+    html += `<div><dt>Mayor subida en una hora</dt><dd><span class="pico-valor num">+${mw(rampa.subida_mw)} MW</span> de las ${esc(horaDe(rampa.desde))} a las ${esc(cuandoTxt(rampa.hasta))}`
       + `<span class="pico-nota"><span class="marca ${rampa.fuerte ? 'fuera' : 'dentro'}">${rampa.fuerte ? 'rampa fuerte' : 'subida habitual'}</span></span></dd></div>`;
   } else {
     html += '<div><dt>Mayor subida en una hora</dt><dd>La demanda pronosticada no sube en ninguna hora de la ventana.</dd></div>';
@@ -1103,7 +1118,7 @@ function pintarPico() {
   const umbral = rampa && rampa.umbral_mw != null
     ? ` «Rampa fuerte» es subir más de ${mw(rampa.umbral_mw)} MW en una hora: la mayor subida del día solo pasó de ahí en el 5 % de los días de 2016 a 2024 en ${area ? `el ${esc(area.nombre)}` : 'el área'}.`
     : '';
-  html += `<p class="muted small">Cada media hora de la ventana es el pronóstico a 24 h emitido 24 h antes, el mismo de la curva: a las ${idxAHora(S.idx)} ya estaban todos emitidos.${umbral}</p>`;
+  html += `<p class="muted small">Cada media hora de la ventana es el pronóstico a 24 h emitido 24 h antes, el mismo de la curva: a las ${idxAHora(idx)} ya estaban todos emitidos.${umbral}</p>`;
   $('#picoCuerpo').innerHTML = html;
 }
 
@@ -1229,7 +1244,7 @@ function pintarEscenarios() {
     html += `<div class="nota aviso">El modelo ${esc(nombreCorto(modeloEfectivo()))} usa solo la demanda, así que el clima y El Niño no lo mueven. Estos escenarios los calcula el modelo ${esc(modeloConClima().nombre)}, con clima y El Niño.</div>`;
   } else if (soloDemanda()) {
     html += `<div class="nota aviso">${esc(nombreModelo())} usa solo la demanda: los escenarios de clima y de El Niño no lo cambian.</div>`;
-  } else if (S.variante === 'M0') {
+  } else if (S.variante === 'M0' && !usaSoloDemanda(modeloActual())) {
     html += '<div class="nota aviso">«Solo demanda» no usa clima, El Niño ni fallas: los escenarios no la cambian. <button type="button" class="btn" data-accion="usar-m3">Usar «Con clima y El Niño»</button></div>';
   }
   html += grupoOpciones('lblTemp', 'Temperatura frente a la esperada', TEMPERATURAS.map((t) => (
@@ -1486,6 +1501,10 @@ function pintarSeguimiento(modelos, res) {
   const totales = modelos.map((m, k) => `${nombreCorto(m)} ${nf1.format(res[k].total.mae_modelo)} MW`).join('; ');
   const lecMae = `Todo 2026, a ${horizonteTxt()}: ${totales}; la referencia simple, ${nf1.format(sel.total.mae_referencia)} MW. `
     + `El ${nombreCorto(modelos[0])} se equivocó menos que la referencia en ${ganados === n ? `los ${n} meses` : `${ganados} de ${n} meses`}; su peor mes fue ${mesLargo(peor.mes)} (${nf1.format(peor.mae_modelo)} MW).`;
+  const periodos = [...new Set(res.map((r) => r.total.periodos))];
+  const avisoFilas = periodos.length > 1
+    ? ` Ojo: no se midieron en las mismas medias horas (${modelos.map((m, k) => `${nombreCorto(m)} ${nf0.format(res[k].total.periodos)}`).join(', ')}), así que la comparación no es exacta.`
+    : ` Los ${modelos.length > 1 ? `${modelos.length} modelos se midieron en las mismas ${nf0.format(periodos[0])} medias horas` : `${nf0.format(periodos[0])} medias horas`}.`;
   const cubierto = sel.total.cobertura_pct;
   const dif = cubierto - meta;
   let veredicto = 'cumple lo que promete';
@@ -1506,7 +1525,7 @@ function pintarSeguimiento(modelos, res) {
   const pie = '<tr><th scope="row">Todo 2026</th>' + res.map((r) => `<td class="num mono">${nf1.format(r.total.mae_modelo)}</td>`).join('')
     + `<td class="num mono">${nf1.format(sel.total.mae_referencia)}</td><td class="num mono">${nf1.format(sel.total.cobertura_pct)} %</td></tr>`;
 
-  cont.innerHTML = `<p id="lecSeguimiento" class="lectura">${esc(lecMae)}</p>
+  cont.innerHTML = `<p id="lecSeguimiento" class="lectura">${esc(lecMae + avisoFilas)}</p>
     <div id="gSeguimiento" class="chart"></div>
     <ul class="legend" aria-label="Leyenda">${leyenda}</ul>
     <h4 class="diag-sub">¿El rango probable cubre lo que promete?</h4>
