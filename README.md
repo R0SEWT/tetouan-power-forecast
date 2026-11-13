@@ -203,6 +203,7 @@ responde con datos de prueba sintéticos. Para los intervalos usa los errores fu
 | `experimentos/` | Los scripts que respaldan las cifras: `historico/` (un solo año en Tetuán), `ceuta/` (validación externa) y `sein/` (línea base de 2025 y la corrida en Colab). |
 | `tests/` | Pruebas de `src/`, de los experimentos y del contrato de la app, con pytest. |
 | `docs/negocio.md` | Comprensión del negocio de Tetuán: decisión, objetivos, criterios de éxito, riesgos y plan. |
+| [`docs/producto-final.md`](docs/producto-final.md) | El producto final: visión, usuarios, ideas priorizadas para la entrega y la siguiente iteración, y riesgos. |
 | `docs/investigacion.md` | Qué zona de Tetuán es cuál, qué tan difícil es cada una y cómo pronostica la industria. |
 | `docs/estado-del-arte.md` | Los trabajos que usan el dataset de Tetuán y cómo se posiciona el proyecto. |
 | `docs/historico.md` | Cómo sortear que solo hay un año de histórico, con la validación externa en Ceuta. |

@@ -77,12 +77,12 @@ mejora la confianza o la calidad; **bajo** si es pulido.
 | ID | Idea | Impacto | Esfuerzo |
 |---|---|---|---|
 | M1 | El **combinado como modelo por defecto**, con respaldo al base fuera del rango precalculado | alto | S |
-| M2 | **Intervalos por *bootstrap* de días** de la combinación frente al Random Forest, en 2025 y 2026 (el paper los da por pendientes) | alto | S |
+| M2 | **Intervalos por *bootstrap* de días** de la combinación frente al Random Forest, en 2025 y 2026 (el paper los da por pendientes), con una comprobación por bloques de semanas | alto | S |
 | M3 | Medir la **cobertura del rango del 90 %** de cada modelo en 2026 y recalibrarlo si se aleja (hoy sale de los cuantiles del error de 2025: es conformal partido) | medio | S |
 | M4 | Banda con los **cuantiles propios de Chronos-2** (P10, P50, P90) en vez de un ancho fijo relativo, evaluada con pérdida *pinball* y cobertura | medio | M |
 | M5 | **«Número para la reserva»**: el P90 a 24 h como lectura aparte, porque subestimar cuesta más que sobrestimar | medio | S |
 | M6 | Contexto largo (8,192 periodos) para los fundacionales | bajo | L |
-| M7 | **Prueba ciega hacia adelante**: congelar hoy la versión (tag y sha256 de los artefactos) y evaluarla con lo que venga de noviembre de 2026 en adelante | alto | L |
+| M7 | **Prueba ciega hacia adelante**: congelar hoy la versión (tag y sha256 de los artefactos) y evaluarla con lo que venga de noviembre de 2026 en adelante; sería la primera cifra limpia del modelo | alto | L |
 
 ### Datos
 
@@ -110,7 +110,7 @@ mejora la confianza o la calidad; **bajo** si es pulido.
 
 | ID | Idea | Impacto | Esfuerzo |
 |---|---|---|---|
-| O1 | **Demo pública con Tailscale Funnel** desde la máquina con GPU, con una verificación antes de exponer | alto | S |
+| O1 | **Demo pública con Tailscale Funnel** desde la máquina con GPU, con una verificación antes de exponer; aplica desde el PR #35 y solo con lo publicable o con acceso protegido (ver criterio 5) | alto | S |
 | O2 | **Respaldo sin red**: capturas de los días destacados y un video de 60 a 90 s | medio | S |
 | O3 | **Versión en `/salud`**: commit, sha256 corto de los artefactos, fin del entrenamiento y fecha de corte | medio | S |
 | O4 | Prueba de humo de los notebooks en CI: papermill con datos sintéticos pequeños; jupytext para revisar sus diferencias | medio | M |
@@ -122,7 +122,7 @@ mejora la confianza o la calidad; **bajo** si es pulido.
 | ID | Idea | Impacto | Esfuerzo |
 |---|---|---|---|
 | C1 | **Guion de demo de 3 minutos** sobre los días destacados, ensayado con cronómetro | alto | S |
-| C2 | Diapositiva «del Random Forest al combinado»: 54.6 → 48.2 MW a 1 h y 86.1 → 75.3 a 24 h en el Centro, con la cifra limpia de 2026 y su intervalo | alto | S |
+| C2 | Diapositiva «del Random Forest al combinado»: 54.6 → 48.2 MW a 1 h y 86.1 → 75.3 a 24 h en el Centro, con la cifra de 2026 (fuera del entrenamiento, pero ya inspeccionada) y su intervalo | alto | S |
 | C3 | Ficha del modelo de una página: datos, entrenamiento, métricas de 2025 y 2026, límites y licencias | medio | S |
 | C4 | QR a la demo y una diapositiva de «qué no hace» | bajo | S |
 
@@ -174,7 +174,8 @@ Requisito previo: fusionar el PR #31, la rama del selector de modelo y el PR #32
 - El MAE total de 2026 que muestra la app para el combinado coincide con la tabla 5.5 del paper (Centro: 48.8 MW a
   1 h y 71.9 a 24 h) con una diferencia de 0.5 MW o menos; si no, el texto explica la diferencia de filas.
 - La cobertura del rango del 90 % en 2026, total y móvil de 30 días, con la línea del 90 % de referencia. Si la total
-  cae fuera de 85–95 %, la app lo dice en una frase («el rango cubrió N %: es más angosto de lo que debería»).
+  queda bajo 85 %, la app dice que el rango es más angosto de lo que debería («el rango cubrió N %: se queda corto»);
+  si pasa de 95 %, que es más ancho de lo necesario («cubrió N %: exagera el margen»).
 - Una frase con la conclusión del gráfico, del tipo «En N de las M semanas el modelo quedó por debajo de la
   referencia», calculada, no escrita a mano.
 
@@ -193,16 +194,32 @@ Requisito previo: fusionar el PR #31, la rama del selector de modelo y el PR #32
 
 - Doce intervalos al 95 % (tres áreas, dos horizontes, 2025 y 2026) de la diferencia de MAE entre la combinación y el
   Random Forest, por *bootstrap* de días con la misma semilla y el mismo número de remuestreos que el notebook 04.
+- **Límite declarado:** remuestrear días como si fueran independientes ignora que el error de un día se parece al del
+  siguiente, y los intervalos pueden salir más angostos de lo que son. Como comprobación, se repiten con *bootstrap*
+  por bloques de una semana; si alguna conclusión cambia de signo o deja de distinguirse de cero, se reporta así.
 - La tabla queda en el notebook 04 y en la sección 5.5 del paper, y desaparece la frase «Sus intervalos los calculará
   el notebook 04».
-- La diapositiva C2 cita la cifra de 2026 con su intervalo y marca la de 2025 como dentro de muestra.
+- La diapositiva C2 cita la cifra de 2026 con su intervalo como «fuera del entrenamiento, pero ya inspeccionada» (2026
+  se usó en el notebook 03) y marca la de 2025 como dentro de muestra. «Limpia» se reserva para la prueba congelada
+  hacia adelante (M7).
 
 **5. Demo pública a prueba de caídas.**
 
+Dos condiciones antes de exponer nada:
+
+- **Qué se expone es decisión del dueño del repo.** Con el pronosticador real, `/series/{area}` entrega la demanda
+  real de las capas del COES sin autenticación, y el COES no publica licencia. La demo pública debe servir solo lo ya
+  publicable (por ejemplo, pronósticos y errores, sin la serie real) o ir protegida (solo dentro de la red de
+  Tailscale o con contraseña). Mientras no se decida, la demo va por la red de Tailscale, no por Funnel.
+- **Funnel sobre el puerto 8000 sirve la app solo desde el PR #35**, en el que el backend entrega `app/web`
+  comprimido en el mismo origen (sin otro puerto ni CORS extra). Antes de ese PR, la URL pública mostraría solo la API.
+
+Con eso resuelto:
+
 - Una URL HTTPS abre la app desde un celular con datos móviles, fuera de la red de Tailscale; el número aparece en
   2 s o menos (mediana de 5 cargas).
-- Un script de verificación consulta `/salud`, `/modelos` y una serie de cada modelo, sale con código 0 en menos de
-  30 s y se corre 30 minutos antes de la exposición.
+- Un script de verificación consulta `/salud`, `/modelos` (existe desde el PR #31) y una serie de cada modelo, sale
+  con código 0 en menos de 30 s y se corre 30 minutos antes de la exposición.
 - Entre 4 y 6 días destacados con URL fija; el guion de 3 minutos se ensaya dos veces y dura 3:00 o menos.
 - El respaldo (capturas de los días destacados y video de 60 a 90 s) abre sin internet desde la laptop de la
   exposición.
@@ -244,7 +261,7 @@ En este orden:
 
 | Necesidad | Herramienta | Veredicto | Por qué |
 |---|---|---|---|
-| Demo pública | [Tailscale Funnel](https://tailscale.com/kb/1223/tailscale-funnel) | **Adoptar** | La demo ya corre detrás de Tailscale; Funnel da HTTPS público a un puerto local sin abrir puertos. Límite de ancho de banda no configurable y acceso para cualquiera con la URL: solo durante la exposición |
+| Demo pública | [Tailscale Funnel](https://tailscale.com/kb/1223/tailscale-funnel) | **Adoptar**, con condiciones | La demo ya corre detrás de Tailscale; Funnel da HTTPS público a un puerto local sin abrir puertos. Sirve la app desde el PR #35 (web y API en el mismo origen). Acceso para cualquiera con la URL y límite de ancho de banda no configurable: solo durante la exposición y solo con lo publicable o protegido (criterio 5) |
 | Hospedaje gratuito | Hugging Face Spaces (Docker) | Descartar | En 2026 hay reportes de que el CPU gratuito para Docker pide plan pagado o se queda sin cuota ([foro de HF](https://discuss.huggingface.co/t/cpu-basic-quota-limit-with-only-one-space/180646); no confirmado oficialmente), se duerme sin uso y obligaría a subir capas del COES |
 | Servir el modelo | BentoML, LitServe | Descartar | La app lee pronósticos precalculados; FastAPI alcanza |
 | Intervalos | [MAPIE](https://mapie.readthedocs.io/en/stable/generated/mapie.regression.TimeSeriesRegressor.html) 1.6 (EnbPI, ACI) | Probar | Para la siguiente iteración (M3, M4). En la entrega basta el rango por cuantiles del error de 2025, que ya es conformal partido |
@@ -264,9 +281,9 @@ En este orden:
 | **Licencia de Chronos-2 (Apache-2.0)** | Permisiva; si se redistribuye el modelo ajustado, hay que acompañarlo de la licencia y el aviso, y señalar que se modificó | Mencionarlo en la ficha y en el notebook 04 |
 | **Otros fundacionales** | TimesFM 3.0 es de uso no comercial (según el paper; por confirmar en su ficha) | Fuera de la app (ver «No hacer») |
 | **Dependencia de GPU** | Sin los pronósticos precalculados, el híbrido y el combinado no tienen qué servir; rehacerlos pide una L4 o una A100 (unas 195 series por segundo en una L4; el ajuste fino, 26 minutos en una A100) | La app vuelve al base y lo dice (criterio 1); los archivos precalculados quedan respaldados en el Drive con su sha256 |
-| **Datos del COES** | No publican licencia; el IEOD validado llega con días de rezago; un cambio en el portal rompe la ingesta; las capas llegan al 23 de octubre de 2026 | Citar al COES, no subir datos crudos al repo, mostrar la fecha de corte (D5) y dejar la ingesta diaria para la siguiente iteración |
-| **Cifras que se leen de más** | Los pesos de la combinación se fijaron en 2025 y 2026 ya se había usado | En la app y en la exposición, la cifra principal es la de 2026, con su intervalo (criterio 4) |
+| **Datos del COES** | No publican licencia; el IEOD validado llega con días de rezago; un cambio en el portal rompe la ingesta; las capas llegan al 23 de octubre de 2026; una demo pública con el pronosticador real los entrega por `/series/{area}` | Citar al COES, no subir datos crudos al repo, mostrar la fecha de corte (D5), no exponer la serie real sin que el dueño del repo lo decida (criterio 5) y dejar la ingesta diaria para la siguiente iteración |
+| **Cifras que se leen de más** | Los pesos de la combinación se fijaron en 2025 y 2026 ya se había usado; el *bootstrap* de días puede dar intervalos angostos | En la app y en la exposición, la cifra principal es la de 2026, presentada como fuera del entrenamiento pero ya inspeccionada, con su intervalo y la comprobación por semanas (criterio 4) |
 | **La demo falla en vivo** | Sin red, la máquina apagada o Funnel caído | Verificación 30 minutos antes y respaldo sin red (criterio 5) |
-| **URL pública** | Cualquiera con el enlace puede entrar | Solo datos de la demo; se apaga al terminar |
+| **URL pública** | Cualquiera con el enlace puede entrar y extraer lo que la API entregue | Solo lo publicable o acceso protegido, según decida el dueño del repo; se apaga al terminar |
 | **Usabilidad sin personas** | Todo lo medido es sintético | Declararlo en la exposición; sesiones en la siguiente iteración (A6) |
-| **Orden de fusión** | Esta lista asume el PR #31, el selector de modelo y el PR #32 ya fusionados | Fusionar en ese orden antes de empezar |
+| **Orden de fusión** | Esta lista asume el PR #31, el selector de modelo y el PR #32 ya fusionados, y el PR #35 para la demo pública | Fusionar en ese orden antes de empezar |
