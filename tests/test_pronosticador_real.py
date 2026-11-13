@@ -17,6 +17,7 @@ from app.backend.contrato import Escenario
 from app.backend.main import crear_app
 from app.backend.pronosticador import FRASE_M0_SIN_ESCENARIOS, Pronosticador
 from app.backend.pronosticador_real import (
+    GRUPOS_IMPORTANCIA,
     MEDIO,
     PronosticadorReal,
     _bootstrap_mae,
@@ -193,3 +194,7 @@ def test_entrenar_publica_la_carpeta_entera(pronosticador):
     vecinos = sorted(x.name for x in carpeta.parent.iterdir())
     assert vecinos == ["app"]  # ni temporales ni la anterior
     assert len(list(carpeta.glob("xgboost_global_*.joblib"))) == 6 and (carpeta / "metadatos.json").exists()
+
+
+def test_la_escala_no_cuenta_como_variable_en_la_importancia():
+    assert not any("media_24h" in variables for variables in GRUPOS_IMPORTANCIA.values())
