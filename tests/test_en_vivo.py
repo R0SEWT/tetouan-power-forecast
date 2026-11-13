@@ -337,3 +337,47 @@ def test_diario_sale_con_3_si_el_anexo_es_invalido(raiz):
                        progreso=_silencio)
     assert codigo == ev.INVALIDO
     assert ev.leer_registro(raiz).empty
+
+
+# ---- API: GET /en-vivo/{area} -------------------------------------------------------------------------------------
+
+
+def _cliente(raiz):
+    pytest.importorskip("fastapi")
+    import warnings
+
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", UserWarning)  # Starlette recomienda httpx2; con httpx funciona igual
+        from fastapi.testclient import TestClient
+    from app.backend.main import crear_app
+    from app.backend.pronosticador import PronosticadorDePrueba
+
+    return TestClient(crear_app(PronosticadorDePrueba(), web=None, en_vivo=ev.rutas(raiz).reportes))
+
+
+def test_api_en_vivo_muestra_el_ultimo_perfil_y_lo_verificado(raiz):
+    _con_tres_dias(raiz)
+    ev.emitir(raiz, ModeloFalso(), ahora=lambda: LIMA_10_05, progreso=_silencio)
+    ev.evaluar(raiz, _silencio)
+    cliente = _cliente(raiz)
+    d = cliente.get("/en-vivo/centro").json()
+    ultimo = d["ultimo"]
+    assert ultimo["fecha"] == "2026-10-26" and ultimo["horizonte"] == "24h"
+    assert len(ultimo["pronostico"]) == len(ultimo["inferior"]) == len(ultimo["superior"]) == 48
+    assert ultimo["fecha_hora"][0] == "2026-10-26T00:00"  # la API marca el inicio del periodo
+    assert ultimo["emitido_en"] == "2026-10-26T15:05:00Z" and ultimo["emitido_lima"] == "2026-10-26T10:05"
+    assert ultimo["datos_hasta"] == "2026-10-26T00:00"
+    assert ultimo["real"] == [None] * 48  # el real del 26 todavía no llega
+    assert ultimo["tipo"].count("en_vivo") == 21 and ultimo["tipo"].count("ex_ante_estricto") == 27
+    assert d["dias_en_vivo"] == 1 and d["primer_dia_en_vivo"] == "2026-10-26" and d["dias_reconstruidos"] == 3
+    assert d["nivel_rango_pct"] == 80 and d["version_pesos"] == "v1"
+    assert {(r["grupo"], r["horizonte"]) for r in d["resumen"]} == {("reconstruido", "24h"), ("reconstruido", "1h")}
+    a24 = [v for v in d["verificado"] if v["horizonte"] == "24h"]
+    assert [v["fecha"] for v in a24] == ["2026-10-25", "2026-10-24", "2026-10-23"]
+    assert all(v["tipo"] == "reconstruido" and v["periodos"] == 48 for v in a24)
+    assert cliente.get("/en-vivo/oeste").status_code == 404
+
+
+def test_api_en_vivo_sin_registro(tmp_path):
+    d = _cliente(tmp_path).get("/en-vivo/norte").json()
+    assert d["ultimo"] is None and d["resumen"] == [] and d["verificado"] == [] and d["dias_en_vivo"] == 0

@@ -97,6 +97,19 @@ VERSIONES.it2 = {
 // siguen los mismos caminos que en la iteración 2 (el pico va en su propio panel y la ficha, plegada).
 VERSIONES.it4 = VERSIONES.it2;
 
+// Iteración 7: la sección «En vivo» (GET /en-vivo/{area}) al final de la vista del área, con su botón en la barra de
+// secciones. Los demás estados y las tareas no cambian; se agrega el estado con la sección a la vista.
+VERSIONES.it7 = {
+  estados: {
+    ...VERSIONES.it2.estados,
+    envivo: async (p) => {
+      await seccion('En vivo')(p).click();
+      await p.locator('#envivo[aria-busy="false"]').waitFor();
+    },
+  },
+  tareas: VERSIONES.it2.tareas,
+};
+
 export function version(nombre) {
   const v = VERSIONES[nombre];
   if (!v) throw new Error(`Versión desconocida: ${nombre}. Hay: ${Object.keys(VERSIONES).join(', ')}`);

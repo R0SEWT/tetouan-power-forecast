@@ -1737,3 +1737,23 @@ select {
   opacity: 0.45;
   transition: opacity 0.15s ease;
 }
+
+/* ---- En vivo: el tipo de cada día va escrito, no solo en color ---- */
+.etiqueta-tipo {
+  display: inline-block;
+  padding: 1px 8px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border-strong);
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.etiqueta-tipo.tipo-vivo {
+  border-color: var(--c-bueno);
+}
+
+.etiqueta-tipo.tipo-reconstruido {
+  border-style: dashed;
+  color: var(--text-muted);
+}

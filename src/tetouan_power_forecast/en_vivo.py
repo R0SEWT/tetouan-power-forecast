@@ -595,13 +595,13 @@ def emitir(raiz=None, modelo=None, desde=ARRANQUE, hasta_objetivo=None, ahora=_a
     sha_por_dia = dict(zip(vivo["DateTime"].iloc[::PERIODOS_DIA].dt.normalize(), vivo["sha256"].iloc[::PERIODOS_DIA]))
     version_codigo = _version_codigo()
     filas = []
-    for horizonte, dia, objetivos, desde_origen, datos_hasta in planes:
+    for horizonte, dia, objetivos, origenes_dia, datos_hasta in planes:
         p = PASOS[horizonte]
         tipo = clasificar(emitido, objetivos)
         for area in AREAS:
-            fila = pronostico.reindex(pd.MultiIndex.from_arrays([desde_origen, [area] * PERIODOS_DIA]))
+            fila = pronostico.reindex(pd.MultiIndex.from_arrays([origenes_dia, [area] * PERIODOS_DIA]))
             filas.append(pd.DataFrame({
-                "fecha_objetivo": pd.Timestamp(dia), "objetivo": objetivos, "origen": desde_origen, "area": area,
+                "fecha_objetivo": pd.Timestamp(dia), "objetivo": objetivos, "origen": origenes_dia, "area": area,
                 "horizonte": horizonte, "pred": fila[f"pred_{p}"].to_numpy(dtype=float),
                 "q10": fila[f"q10_{p}"].to_numpy(dtype=float), "q90": fila[f"q90_{p}"].to_numpy(dtype=float),
                 "modelo": modelo.nombre, "version_pesos": modelo.version, "emitido_en": emitido,
