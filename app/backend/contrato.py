@@ -5,7 +5,7 @@ Reglas comunes:
 - Fechas y horas en ISO 8601, en hora de Lima y sin zona, con minutos en punto o y media
   (``"2026-02-26T15:00"``). Cada ``fecha_hora`` marca el inicio de su periodo de 30 minutos.
 - Demanda en MW.
-- Errores: 404 si el área no existe; 422 si la fecha cae fuera de ``FECHA_MIN``-``FECHA_MAX``,
+- Errores: 404 si el área o el modelo no existen; 422 si la fecha cae fuera de ``FECHA_MIN``-``FECHA_MAX``,
   si un campo no cumple su formato o si se pide un escenario a 1 h.
 
 Este archivo es la fuente de verdad del contrato: el frontend y las pruebas trabajan contra él.
@@ -43,11 +43,14 @@ class Salud(BaseModel):
 
 
 class ModeloDisponible(BaseModel):
-    """Un modelo que el backend puede servir. Hoy hay uno; la app ya muestra el selector."""
+    """Un modelo que el backend puede servir. El primero de la lista es el que se usa si no se pide otro."""
 
     id: str
     nombre: str
     descripcion: str = ""
+    variantes: list[Variante] = Field(default=["M0", "M3"], description="Las variantes que el modelo distingue")
+    fecha_min: str | None = Field(default=None, description="Primer día que puede pronosticar, AAAA-MM-DD")
+    fecha_max: str | None = Field(default=None, description="Último día que puede pronosticar, AAAA-MM-DD")
 
 
 class Area(BaseModel):
@@ -134,6 +137,7 @@ class PedidoPronostico(BaseModel):
     horizonte: Horizonte
     variante: Variante = "M3"
     escenario: Escenario = Field(default_factory=Escenario)
+    modelo: str | None = Field(default=None, description="Id de GET /modelos; si falta, el primero")
 
 
 class Pronostico(BaseModel):
@@ -154,6 +158,7 @@ class PedidoSensibilidad(BaseModel):
     area: str
     origen: str = Field(pattern=PATRON_ORIGEN, examples=["2026-02-26T15:00"])
     variable: VariableSensibilidad
+    modelo: str | None = Field(default=None, description="Id de GET /modelos; si falta, el primero")
 
 
 class Sensibilidad(BaseModel):

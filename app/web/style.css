@@ -1592,3 +1592,9 @@ select {
     animation: none !important;
   }
 }
+
+/* Una opción que el modelo elegido no tiene (el híbrido no distingue clima ni El Niño) */
+.segmented button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}

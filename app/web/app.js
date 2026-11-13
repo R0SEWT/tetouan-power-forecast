@@ -16,7 +16,7 @@ const API = (() => {
   return `${location.protocol}//${location.hostname}:8000`;
 })();
 
-const FECHA_MIN = '2025-01-01';
+let FECHA_MIN = '2025-01-01'; // cada modelo puede traer su primer día en /modelos
 let FECHA_MAX = '2026-10-31'; // con el modelo real, /resumen trae el último día con datos
 const ESCENARIO_BASE = Object.freeze({ delta_temp_c: 0, nino: 'observado', falla: 'observada' });
 
@@ -45,9 +45,13 @@ const REGIMEN = {
 const VARIANTE = {
   M0: 'M0 · demanda y calendario', M1: 'M1 · + clima', M2: 'M2 · + El Niño', M3: 'M3 · + fallas',
   M4: 'M4 · + SAIDI', M3_sin_clima: 'M3 sin clima', M3_sin_nino: 'M3 sin El Niño', M3_sin_fallas: 'M3 sin fallas',
+  hibrido: 'Híbrido · XGBoost + Simons', ajustado: 'Chronos-2 ajustado', combinado: 'Combinado',
 };
 const POLITICA = { fijo: 'Sin reentrenar', semanal: 'Reentreno semanal', alerta_enfen: 'Reentreno con alerta ENFEN' };
-const VARIABLE = { demanda_reciente: 'Demanda reciente', clima: 'Clima', nino: 'El Niño', fallas: 'Fallas', saidi: 'SAIDI' };
+const VARIABLE = {
+  demanda_reciente: 'Demanda reciente', calendario: 'Calendario', clima: 'Clima', nino: 'El Niño', fallas: 'Fallas', saidi: 'SAIDI',
+  fundacional: 'Pronóstico del modelo fundacional', ajustado: 'Chronos-2 ajustado', hibrido: 'Híbrido (XGBoost + Simons)',
+};
 const CORTE = {
   entrenamiento_hasta: 'Entrenamiento hasta', validacion_hasta: 'Validación hasta', prueba_hasta: 'Prueba hasta',
   demanda: 'Demanda (COES)', clima: 'Clima (ERA5)', icen: 'ICEN (IGP y ENFEN)', nino12: 'Niño 1+2 (NOAA)',
@@ -192,8 +196,34 @@ function mensajeDe(datos, estado) {
   return `Error ${estado}`;
 }
 
-// Preparado para elegir modelo: hoy el backend sirve uno solo y no recibe el parámetro.
+// El parámetro `modelo` solo viaja si el backend ofrece más de uno (un backend anterior no lo conoce).
 const hayVariosModelos = () => S.modelos.length > 1;
+const modeloActual = () => S.modelos.find((m) => m.id === S.modelo) || null;
+// Un modelo puede no distinguir variantes (el híbrido usa solo la demanda) y tener su propio rango de fechas.
+const soloDemanda = () => {
+  const m = modeloActual();
+  return Boolean(m && Array.isArray(m.variantes) && !m.variantes.includes('M3'));
+};
+function aplicarModelo() {
+  const m = modeloActual();
+  const esFecha = (x) => /^\d{4}-\d{2}-\d{2}$/.test(x || '');
+  FECHA_MIN = m && esFecha(m.fecha_min) ? m.fecha_min : '2025-01-01';
+  if (m && esFecha(m.fecha_max)) FECHA_MAX = m.fecha_max;
+  if (soloDemanda()) S.variante = 'M0';
+  if (S.fecha) S.fecha = acotarFecha(S.fecha) || S.fecha;
+  const ayuda = $('#ayudaModelo');
+  if (ayuda) {
+    ayuda.textContent = (m && m.descripcion) || '';
+    ayuda.hidden = !(m && m.descripcion);
+  }
+  $$('[data-variante]').forEach((b) => { b.disabled = soloDemanda() && b.dataset.variante !== 'M0'; });
+  const ayudaVar = $('#ayudaVariante');
+  if (ayudaVar) {
+    ayudaVar.textContent = soloDemanda()
+      ? 'Este modelo usa solo la demanda: no distingue clima ni El Niño.'
+      : '«Con clima y El Niño» también usa las fallas en curso de la red.';
+  }
+}
 const conModelo = (obj) => (hayVariosModelos() && S.modelo ? { ...obj, modelo: S.modelo } : obj);
 
 async function api(ruta, cuerpo) {
@@ -690,7 +720,12 @@ function mostrarArea(id, q) {
   S.idx = horaAIdx(q.get('hora')) ?? (S.fecha === ahora.fecha ? ahora.idx : S.idx);
   if (['1h', '24h'].includes(q.get('horizonte'))) S.horizonte = q.get('horizonte');
   if (['M0', 'M3'].includes(q.get('variante'))) S.variante = q.get('variante');
-  if (q.get('modelo') && S.modelos.some((m) => m.id === q.get('modelo'))) S.modelo = q.get('modelo');
+  if (q.get('modelo') && S.modelos.some((m) => m.id === q.get('modelo')) && q.get('modelo') !== S.modelo) {
+    S.modelo = q.get('modelo');
+    S.diag.clear();
+    cargarResumen();
+  }
+  aplicarModelo();
   if (cambioDeArea) {
     S.serie = null;
     S.pron = null;
@@ -795,7 +830,7 @@ function pintarRespuesta() {
     : `${idxAHora(i)} del ${fechaDiaMes(sumarDias(S.fecha, -1))}`;
   $('#respKicker').textContent = `${area ? area.nombre : ''} · a ${horizonteTxt()}`;
   $('#respTitulo').textContent = `Para las ${idxAHora(i)} del ${fechaLarga(S.fecha)}`;
-  $('#respEmision').textContent = `Emitido a las ${emision} · ${nombreModelo()}, ${S.variante === 'M3' ? 'con clima y El Niño' : 'solo con la demanda'}`;
+  $('#respEmision').textContent = `Emitido a las ${emision} · ${nombreModelo()}, ${soloDemanda() ? 'sin clima ni El Niño' : (S.variante === 'M3' ? 'con clima y El Niño' : 'solo con la demanda')}`;
   $('#respValor').textContent = mw(v);
   $('#respRango').textContent = iv ? `${mw(iv.inferior[i])} – ${mw(iv.superior[i])} MW` : 'no disponible';
   $('#respMarca').innerHTML = '';
@@ -1045,7 +1080,9 @@ function pintarEscenarios() {
   const panel = $('#panel-escenarios');
   let html = '<h3>¿Y si mañana hace más calor, o El Niño se calma?</h3>';
   html += `<p class="muted small">Cambia un supuesto y el modelo vuelve a calcular las próximas 24 h desde las ${idxAHora(S.idx)} del ${esc(fechaCorta(S.fecha))}. Supuesto del proyecto: el COES recibe de ENFEN los pronósticos de clima y de El Niño.</p>`;
-  if (S.variante === 'M0') {
+  if (soloDemanda()) {
+    html += `<div class="nota aviso">${esc(nombreModelo())} usa solo la demanda: los escenarios de clima y de El Niño no lo cambian. Para probarlos, elige otro modelo en «Modelo».</div>`;
+  } else if (S.variante === 'M0') {
     html += '<div class="nota aviso">«Solo demanda» no usa clima, El Niño ni fallas: los escenarios no la cambian. <button type="button" class="btn" data-accion="usar-m3">Usar «Con clima y El Niño»</button></div>';
   }
   html += grupoOpciones('lblTemp', 'Temperatura frente a la esperada', TEMPERATURAS.map((t) => (
@@ -1253,13 +1290,28 @@ function pintarLecturas(d) {
   }
   const m0 = d.ablacion.find((a) => a.variante === 'M0');
   const m3 = d.ablacion.find((a) => a.variante === 'M3');
-  if (m0 && m3) {
+  const hib = d.ablacion.find((a) => a.variante === 'hibrido');
+  const comb = d.ablacion.find((a) => a.variante === 'combinado');
+  if (m0 && comb) {
+    const solapan = comb.ic_inf <= m0.ic_sup && m0.ic_inf <= comb.ic_sup;
+    $('#lecAblacion').textContent = `Combinado: ${nf1.format(comb.mae)} MW; el modelo base solo con la demanda (M0): ${nf1.format(m0.mae)} MW`
+      + (hib ? `; el híbrido: ${nf1.format(hib.mae)} MW. ` : '. ')
+      + (solapan ? 'Los intervalos del combinado y del base se superponen: la diferencia no es concluyente.'
+        : `Combinar baja el error ${nf1.format(Math.abs(m0.mae - comb.mae))} MW frente al base.`);
+  } else if (m0 && hib) {
+    const solapan = hib.ic_inf <= m0.ic_sup && m0.ic_inf <= hib.ic_sup;
+    const dif = m0.mae - hib.mae;
+    $('#lecAblacion').textContent = `Híbrido: ${nf1.format(hib.mae)} MW; el modelo sin el pronóstico fundacional (M0): ${nf1.format(m0.mae)} MW. `
+      + (solapan ? 'Los intervalos se superponen: la diferencia no es concluyente.'
+        : `${dif > 0 ? 'Sumar el fundacional baja' : 'Sumar el fundacional sube'} el error ${nf1.format(Math.abs(dif))} MW.`);
+  } else if (m0 && m3) {
     const solapan = m3.ic_inf <= m0.ic_sup && m0.ic_inf <= m3.ic_sup;
     const dif = m0.mae - m3.mae;
     $('#lecAblacion').textContent = `Con clima, El Niño y fallas (M3): ${nf1.format(m3.mae)} MW; solo demanda (M0): ${nf1.format(m0.mae)} MW. `
       + (solapan ? 'Los intervalos se superponen: la diferencia no es concluyente.'
         : `${dif > 0 ? 'Sumar esos datos baja' : 'Sumar esos datos sube'} el error ${nf1.format(Math.abs(dif))} MW.`);
   }
+  if (!d.adaptacion.length) $('#lecAdaptacion').textContent = 'No se midió para este modelo: reentrenarlo pide volver a calcular los pronósticos fundacionales.';
   if (d.adaptacion.length) {
     const mejor = d.adaptacion.reduce((a, b) => (b.mae < a.mae ? b : a));
     const fijo = d.adaptacion.find((a) => a.politica === 'fijo' && !a.exogenas);
@@ -1289,7 +1341,7 @@ function pintarFicha() {
   }
   $('#fichaCuerpo').innerHTML = `
     <section><h3>Qué hace</h3><p>Pronostica la demanda eléctrica de las áreas Norte, Centro y Sur del SEIN cada 30 minutos, a 1 hora y a 24 horas, con su rango probable. La compara con la referencia simple: la mejor de tres reglas sin modelo (el último dato, ayer o la semana pasada a la misma hora).</p></section>
-    <section><h3>Modelo</h3><p>Modelo <span class="mono">${esc(s ? s.modelo : '—')}</span>, datos <span class="mono">${esc(s ? s.version_datos : '—')}</span>.${prueba ? ' Es el modelo de prueba: persistencia, ciclo diario y ruido sobre series sintéticas. Sirve para probar la app; sus números no son resultados.' : ''}</p></section>
+    <section><h3>Modelo</h3><p>Modelo <span class="mono">${esc(s ? nombreModelo() : '—')}</span>, datos <span class="mono">${esc(s ? s.version_datos : '—')}</span>.${prueba ? ' Es el modelo de prueba: persistencia, ciclo diario y ruido sobre series sintéticas. Sirve para probar la app; sus números no son resultados.' : ''}</p></section>
     <section><h3>El Niño Costero</h3><p>${esc(nino)}Cada variable entra con su rezago real de publicación.</p></section>
     <section><h3>Fechas de corte</h3><table class="tabla"><tbody>${cortes}</tbody></table></section>
     <section><h3>Fuentes y licencias</h3><ul>
@@ -1325,6 +1377,16 @@ function enrutar() {
   else mostrarInicio();
 }
 
+// Las métricas de la ficha y de «¿qué tan bueno es?» son las del modelo elegido.
+async function cargarResumen() {
+  if (!hayVariosModelos() || !S.modelo) return;
+  try {
+    S.resumen = await api(`/resumen?modelo=${encodeURIComponent(S.modelo)}`);
+  } catch {
+    /* se conserva el resumen anterior */
+  }
+}
+
 async function cargarBase() {
   // /modelos es opcional: un backend anterior no lo tiene y entonces el único modelo es el de /salud
   const [salud, areas, resumen, modelos] = await Promise.all([
@@ -1340,6 +1402,7 @@ async function cargarBase() {
   if (!S.modelos.some((m) => m.id === S.modelo)) S.modelo = S.modelos[0].id;
   $('#inModelo').innerHTML = S.modelos.map((m) => `<option value="${esc(m.id)}">${esc(m.nombre)}</option>`).join('');
   $('#campoModelo').classList.toggle('unico', S.modelos.length === 1);
+  aplicarModelo();
   const prueba = salud.modelo === 'prueba';
   $('#chipPrueba').hidden = !prueba;
   $('#notaPruebaInicio').hidden = !prueba;
@@ -1403,6 +1466,8 @@ function conectarEventos() {
   $('#inModelo').addEventListener('change', (ev) => {
     S.modelo = ev.target.value;
     S.diag.clear();
+    aplicarModelo();
+    cargarResumen();
     recargar();
   });
   $('#inHora').addEventListener('input', (ev) => elegirHora(Number(ev.target.value)));

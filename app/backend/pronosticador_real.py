@@ -264,6 +264,8 @@ def _con_nulos(x) -> list[float | None]:
 class PronosticadorReal:
     """Cumple el ``Protocol`` ``Pronosticador`` con el XGBoost global y las capas reales del SEIN."""
 
+    descripcion = "El modelo del proyecto: XGBoost sobre la demanda, con o sin clima, El Niño y fallas."
+
     def __init__(self, raiz=None):
         carpeta = carpeta_modelos(raiz)
         ruta_meta = carpeta / "metadatos.json"
@@ -281,6 +283,7 @@ class PronosticadorReal:
         self._diagnosticos: dict[str, Diagnostico] = {}
         self._resumen: Resumen | None = None
         self.modelo = "XGBoost global"
+        self.nombre = "Base (XGBoost)"
         self.version_datos = f"IEOD hasta {self._demanda['DateTime'].max():%Y-%m-%d}"
         self.fecha_min = FECHA_MIN
         self.fecha_max = self._ultima_fecha()

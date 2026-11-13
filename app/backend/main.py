@@ -10,6 +10,8 @@ Variables de entorno:
   (por ejemplo la IP del celular en la red local o el dominio de Tailscale).
 - ``TPF_PRONOSTICADOR``: ``real`` para servir el modelo entrenado sobre las capas del SEIN
   (``pronosticador_real.py``, con ``TETOUAN_DATA`` apuntando a la carpeta de datos); si no, el de prueba.
+  Si además están los archivos de los modelos híbrido y combinado (``pronosticador_hibrido.py``), se ofrecen
+  como opciones del selector de modelo.
 """
 
 import os
@@ -71,8 +73,12 @@ def _leer_origen(origen: str, pronosticador: Pronosticador) -> datetime:
     return momento
 
 
-def crear_app(pronosticador: Pronosticador | None = None) -> FastAPI:
-    """Arma la API con el pronosticador dado; por defecto, el de prueba."""
+def _id(pronosticador: Pronosticador) -> str:
+    return getattr(pronosticador, "id", pronosticador.modelo)
+
+
+def crear_app(pronosticador: Pronosticador | None = None, otros: list[Pronosticador] | None = None) -> FastAPI:
+    """Arma la API con el pronosticador dado (por defecto, el de prueba) y, si los hay, otros modelos elegibles."""
     app = FastAPI(
         title="Demanda por área del SEIN",
         description="Pronóstico a 1 h y a 24 h de la demanda de Norte, Centro y Sur.",
@@ -87,9 +93,17 @@ def crear_app(pronosticador: Pronosticador | None = None) -> FastAPI:
         allow_headers=["Content-Type"],
     )
     app.state.pronosticador = pronosticador or PronosticadorDePrueba()
+    app.state.pronosticadores = {_id(p): p for p in [app.state.pronosticador, *(otros or [])]}
 
-    def modelo(request: Request) -> Pronosticador:
-        return request.app.state.pronosticador
+    def modelo(request: Request, pedido: str | None = None) -> Pronosticador:
+        if pedido is None:
+            return request.app.state.pronosticador
+        disponibles = request.app.state.pronosticadores
+        if pedido not in disponibles:
+            raise HTTPException(404, f"El modelo «{pedido}» no existe. Usa uno de: {', '.join(disponibles)}.")
+        return disponibles[pedido]
+
+    PARAMETRO_MODELO = Query(default=None, alias="modelo", description="Id de GET /modelos; si falta, el primero")
 
     @app.get("/salud", response_model=Salud)
     def salud(request: Request) -> Salud:
@@ -98,18 +112,26 @@ def crear_app(pronosticador: Pronosticador | None = None) -> FastAPI:
 
     @app.get("/modelos", response_model=list[ModeloDisponible])
     def modelos(request: Request) -> list[ModeloDisponible]:
-        """Los modelos disponibles. Hoy solo el que se sirve; cuando haya más, los demás endpoints
-        recibirán un parámetro ``modelo`` (la app solo lo envía si esta lista tiene más de uno)."""
-        p = modelo(request)
-        return [ModeloDisponible(id=p.modelo, nombre=p.modelo, descripcion=getattr(p, "descripcion", ""))]
+        """Los modelos disponibles; el primero es el que se usa cuando no se envía ``modelo``."""
+
+        def fecha(p, nombre):
+            valor = getattr(p, nombre, None)
+            return valor.isoformat() if valor else None
+
+        return [
+            ModeloDisponible(id=_id(p), nombre=getattr(p, "nombre", p.modelo), descripcion=getattr(p, "descripcion", ""),
+                             variantes=list(getattr(p, "variantes", ("M0", "M3"))),
+                             fecha_min=fecha(p, "fecha_min"), fecha_max=fecha(p, "fecha_max"))
+            for p in request.app.state.pronosticadores.values()
+        ]
 
     @app.get("/areas", response_model=list[Area])
     def areas() -> list[Area]:
         return AREAS
 
     @app.get("/resumen", response_model=Resumen)
-    def resumen(request: Request) -> Resumen:
-        return modelo(request).resumen()
+    def resumen(request: Request, id_modelo: str | None = PARAMETRO_MODELO) -> Resumen:
+        return modelo(request, id_modelo).resumen()
 
     @app.get("/series/{area}", response_model=Serie)
     def series(
@@ -118,41 +140,58 @@ def crear_app(pronosticador: Pronosticador | None = None) -> FastAPI:
         fecha: Annotated[date, Query(description="Día, AAAA-MM-DD")],
         horizonte: Horizonte = "1h",
         variante: Variante = "M3",
+        id_modelo: str | None = PARAMETRO_MODELO,
     ) -> Serie:
         _validar_area(area)
-        _validar_fecha(fecha, modelo(request))
-        return modelo(request).serie(area, fecha, horizonte, variante)
+        p = modelo(request, id_modelo)
+        _validar_fecha(fecha, p)
+        return p.serie(area, fecha, horizonte, variante)
 
     @app.post("/pronostico", response_model=Pronostico)
     def pronostico(request: Request, pedido: PedidoPronostico) -> Pronostico:
         _validar_area(pedido.area)
-        origen = _leer_origen(pedido.origen, modelo(request))
+        p = modelo(request, pedido.modelo)
+        origen = _leer_origen(pedido.origen, p)
         if pedido.horizonte == "1h" and not pedido.escenario.es_base:
             raise HTTPException(422, MENSAJE_ESCENARIO_1H)
-        return modelo(request).pronosticar(
+        return p.pronosticar(
             pedido.area, origen, pedido.horizonte, pedido.variante, pedido.escenario
         )
 
     @app.post("/sensibilidad", response_model=Sensibilidad)
     def sensibilidad(request: Request, pedido: PedidoSensibilidad) -> Sensibilidad:
         _validar_area(pedido.area)
-        origen = _leer_origen(pedido.origen, modelo(request))
-        return modelo(request).sensibilidad(pedido.area, origen, pedido.variable)
+        p = modelo(request, pedido.modelo)
+        origen = _leer_origen(pedido.origen, p)
+        return p.sensibilidad(pedido.area, origen, pedido.variable)
 
     @app.get("/diagnostico/{area}", response_model=Diagnostico)
-    def diagnostico(request: Request, area: str) -> Diagnostico:
+    def diagnostico(request: Request, area: str, id_modelo: str | None = PARAMETRO_MODELO) -> Diagnostico:
         _validar_area(area)
-        return modelo(request).diagnostico(area)
+        return modelo(request, id_modelo).diagnostico(area)
 
     return app
 
 
-def _pronosticador_por_defecto() -> Pronosticador | None:
-    if os.environ.get("TPF_PRONOSTICADOR") == "real":
-        from .pronosticador_real import PronosticadorReal
+def _pronosticadores_por_defecto() -> tuple[Pronosticador | None, list[Pronosticador]]:
+    """El modelo real y, si están sus archivos, el híbrido; sin ``TPF_PRONOSTICADOR=real``, el de prueba."""
+    if os.environ.get("TPF_PRONOSTICADOR") != "real":
+        return None, []
+    from .pronosticador_hibrido import (
+        PronosticadorCombinado,
+        PronosticadorHibrido,
+        combinado_disponible,
+        hibrido_disponible,
+    )
+    from .pronosticador_real import PronosticadorReal
 
-        return PronosticadorReal()
-    return None
+    base = PronosticadorReal()
+    otros: list[Pronosticador] = []
+    if hibrido_disponible():
+        otros.append(PronosticadorHibrido(base))
+        if combinado_disponible():
+            otros.append(PronosticadorCombinado(otros[0]))
+    return base, otros
 
 
-app = crear_app(_pronosticador_por_defecto())
+app = crear_app(*_pronosticadores_por_defecto())

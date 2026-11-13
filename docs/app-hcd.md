@@ -322,3 +322,32 @@ y los oráculos no cambian.
 - Okabe, M. e Ito, K. (2008). *Color Universal Design (CUD): How to make figures and presentations that are friendly to
   colorblind people*.
 - W3C (2023). *Web Content Accessibility Guidelines (WCAG) 2.2*.
+
+## Iteración 3: el selector de modelo ya elige
+
+El selector de modelo, que quedó preparado en la iteración 2, ahora tiene tres opciones (`GET /modelos`):
+
+- **Base (XGBoost)**: el modelo del proyecto, con o sin clima, El Niño y fallas.
+- **Híbrido (XGBoost + Simons)**: el mismo XGBoost con el pronóstico de un modelo fundacional como variable.
+- **Combinado (recomendado)**: mezcla el híbrido con Chronos-2 ajustado a estas series con datos hasta 2024.
+
+Los dos modelos nuevos necesitan GPU, así que sus pronósticos se calculan aparte y la app los lee ya guardados
+(notebook 04). Decisiones de interfaz:
+
+- Debajo del selector, una frase dice qué es el modelo elegido y qué no hace.
+- Híbrido y combinado usan solo la demanda: «Con clima y El Niño» queda deshabilitado y la ayuda lo explica, en
+  vez de dejar un control que no cambia nada. En «¿Y si…?» una nota dice que los escenarios no los mueven.
+- La ficha, «¿Qué tan bueno es?» y el diagnóstico muestran el error de 2026 del modelo elegido. El diagnóstico
+  compara, en las mismas filas, el base, el híbrido, Chronos-2 ajustado y el combinado.
+- El enlace de la página guarda el modelo (`modelo=combinado`), así que la demo se puede abrir ya en él.
+- La app sigue abriendo con el modelo base: es el único que responde a los escenarios, y el arnés de medición
+  compara contra él.
+
+Medición (`resultados/it3.json`, misma ruta que la iteración 2, modo rápido, con el modelo base): las cuatro
+tareas se cumplen con los mismos pasos (KLM de 16.2, 0, 5.3 y 2.7 s), axe sigue en 0 infracciones en 28 pantallas,
+0 menciones a la Programación Diaria y el peso sube de 115 a 119 KB. Además, axe da 0 infracciones con el
+combinado elegido, en teléfono y escritorio, en claro y oscuro. No se midió con personas.
+
+Error en la prueba de 2026 de cada opción, a 24 h (MAE en MW; Centro / Norte / Sur): base con clima y El Niño
+83.7 / 32.7 / 51.2; híbrido 75.6 / 28.7 / 49.9; combinado 71.9 / 27.9 / 44.6. El rango del 90 % del combinado
+cubrió el 91.1 / 89.6 / 91.8 % de los periodos de 2026.
