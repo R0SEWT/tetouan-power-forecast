@@ -39,6 +39,7 @@ def _escenario(tmp_path, ruido_modelo=1.0, ruido_elegido=5.0, dias=20):
             partes.append(pd.DataFrame(pron))
     pd.concat(partes).to_parquet(carpeta / "bueno_c2048.parquet")
     pd.concat(partes).to_parquet(carpeta / "bueno_c2048_train.parquet")
+    pd.concat(partes).to_parquet(carpeta / "bueno_train_c2048.parquet")
     return reportes, carpeta
 
 

@@ -23,9 +23,9 @@ REJILLA = np.linspace(0, 1, 21)
 def cargar_pronosticos(carpeta):
     """Los pronósticos por origen de cada modelo que haya en la carpeta: {nombre: tabla}.
 
-    Los archivos `*_train` son pronósticos sobre el entrenamiento (las variables del apilado) y no se evalúan.
+    Los archivos con `_train` en el nombre son pronósticos sobre el entrenamiento (las variables del apilado) y no se evalúan.
     """
-    return {f.stem: pd.read_parquet(f) for f in sorted(Path(carpeta).glob("*.parquet")) if not f.stem.endswith("_train")}
+    return {f.stem: pd.read_parquet(f) for f in sorted(Path(carpeta).glob("*.parquet")) if "_train" not in f.stem}
 
 
 def cargar_base(reportes, tramo, horizonte, area):
