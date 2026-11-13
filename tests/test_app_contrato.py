@@ -41,6 +41,14 @@ def test_salud(cliente):
     assert r.json() == {"estado": "ok", "modelo": "prueba", "version_datos": "sin-datos"}
 
 
+def test_modelos_lista_el_que_se_sirve(cliente):
+    r = cliente.get("/modelos")
+    assert r.status_code == 200
+    modelos = r.json()
+    assert [m["id"] for m in modelos] == [cliente.get("/salud").json()["modelo"]]
+    assert all(m["nombre"] for m in modelos)
+
+
 def test_areas_con_la_paleta_de_wong(cliente):
     assert cliente.get("/areas").json() == [
         {"id": "norte", "nombre": "Norte", "color": "#E69F00"},

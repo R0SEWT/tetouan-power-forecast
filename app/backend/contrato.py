@@ -42,6 +42,14 @@ class Salud(BaseModel):
     version_datos: str
 
 
+class ModeloDisponible(BaseModel):
+    """Un modelo que el backend puede servir. Hoy hay uno; la app ya muestra el selector."""
+
+    id: str
+    nombre: str
+    descripcion: str = ""
+
+
 class Area(BaseModel):
     id: str
     nombre: str

@@ -29,6 +29,7 @@ from .contrato import (
     Area,
     Diagnostico,
     Horizonte,
+    ModeloDisponible,
     PedidoPronostico,
     PedidoSensibilidad,
     Pronostico,
@@ -94,6 +95,13 @@ def crear_app(pronosticador: Pronosticador | None = None) -> FastAPI:
     def salud(request: Request) -> Salud:
         p = modelo(request)
         return Salud(modelo=p.modelo, version_datos=p.version_datos)
+
+    @app.get("/modelos", response_model=list[ModeloDisponible])
+    def modelos(request: Request) -> list[ModeloDisponible]:
+        """Los modelos disponibles. Hoy solo el que se sirve; cuando haya más, los demás endpoints
+        recibirán un parámetro ``modelo`` (la app solo lo envía si esta lista tiene más de uno)."""
+        p = modelo(request)
+        return [ModeloDisponible(id=p.modelo, nombre=p.modelo, descripcion=getattr(p, "descripcion", ""))]
 
     @app.get("/areas", response_model=list[Area])
     def areas() -> list[Area]:
