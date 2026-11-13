@@ -84,7 +84,6 @@ const S = {
   pico: null,
   diag: new Map(),
   seguimiento: new Map(),
-  envivo: new Map(),
   turnos: { serie: 0, pron: 0, esc: 0, sens: 0, diag: 0, pico: 0, seg: 0, vivo: 0 },
 };
 
@@ -775,6 +774,7 @@ function mostrarArea(id, q) {
   }
   const ahora = ahoraEnLima();
   const cambioDeArea = S.area !== id;
+  const llega = $('#vistaArea').hidden; // desde el inicio (o al abrir la app): la sección en vivo se vuelve a pedir
   S.area = id;
   S.fecha = acotarFecha(q.get('fecha')) || S.fecha || acotarFecha(ahora.fecha);
   S.idx = horaAIdx(q.get('hora')) ?? (S.fecha === ahora.fecha ? ahora.idx : S.idx);
@@ -811,7 +811,7 @@ function mostrarArea(id, q) {
   cargarPronostico();
   cargarPico();
   pintarTab();
-  if (cambioDeArea) cargarEnVivo();
+  if (cambioDeArea || llega) cargarEnVivo();
 }
 
 function recargar() {
@@ -1686,20 +1686,15 @@ const TIPO_DIA = { en_vivo: 'En vivo', reconstruido: 'Reconstruido' };
 const REF_CORTA = { persistencia: 'último dato', ayer: 'ayer', semana_pasada: 'semana pasada' };
 const plural = (n, uno, varios) => `${nf0.format(n)} ${n === 1 ? uno : varios}`;
 
+// Sin caché: la tubería agrega filas cada mañana, así que se vuelve a pedir al entrar al área y al ir a la sección.
 async function cargarEnVivo() {
   const cont = $('#envivoCuerpo');
   const panel = $('#envivo');
-  const area = S.area;
   const turno = ++S.turnos.vivo;
-  if (!S.envivo.has(area)) {
-    const promesa = api(`/en-vivo/${encodeURIComponent(area)}`);
-    promesa.catch(() => S.envivo.delete(area));
-    S.envivo.set(area, promesa);
-  }
   panel.setAttribute('aria-busy', 'true');
   let d;
   try {
-    d = await S.envivo.get(area);
+    d = await api(`/en-vivo/${encodeURIComponent(S.area)}`);
   } catch (err) {
     if (turno !== S.turnos.vivo) return;
     panel.setAttribute('aria-busy', 'false');
@@ -1880,7 +1875,9 @@ function conectarEventos() {
   });
   $('.nav-secciones').addEventListener('click', (ev) => {
     const b = ev.target.closest('[data-ir]');
-    if (b) irASeccion(b.dataset.ir);
+    if (!b) return;
+    irASeccion(b.dataset.ir);
+    if (b.dataset.ir === 'envivo') cargarEnVivo(); // por si la tubería emitió algo desde que se abrió el área
   });
   $('#tablaDia').addEventListener('toggle', pintarTablaDia);
 

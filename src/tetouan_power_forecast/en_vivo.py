@@ -58,12 +58,14 @@ import subprocess
 import sys
 import time
 import urllib.parse
+import zipfile
 from dataclasses import dataclass
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
 import numpy as np
 import pandas as pd
+from openpyxl.utils.exceptions import InvalidFileException
 
 from tetouan_power_forecast import coes
 from tetouan_power_forecast.medallon import _reemplazar, raiz_datos
@@ -260,7 +262,11 @@ def _bajar(dia, ruta, firma, portal, r):
     destino = _guardar_version(r.bronze / f"{dia:%Y-%m-%d}", coes._nombre(ruta), contenido, sha)
     info = {"fecha": f"{dia:%Y-%m-%d}", "ruta_coes": ruta, "archivo": destino.name, "bytes": len(contenido),
             "sha256": sha, "firma": firma, "descargado_utc": _ahora_utc().isoformat(timespec="seconds")}
-    return coes.leer_demanda_areas(destino, dia), info
+    try:
+        return coes.leer_demanda_areas(destino, dia), info
+    except (ValueError, KeyError, zipfile.BadZipFile, InvalidFileException) as error:
+        # Horas repetidas, sin la cabecera SEIN, sin un área o un archivo que no es un Excel (una página de error)
+        raise AnexoInvalido(f"{dia}: no se pudo leer {destino.name}: {error}") from error
 
 
 def bajar_dia(dia, portal, raiz=None):

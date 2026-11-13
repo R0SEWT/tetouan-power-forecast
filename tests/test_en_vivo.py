@@ -195,6 +195,21 @@ def test_anexo_cuyas_areas_no_suman_el_sein_no_entra(raiz):
     assert ev.cargar_en_vivo(raiz).empty
 
 
+@pytest.mark.parametrize("contenido", [b"<html>Error del servidor</html>", "sin_sein"])
+def test_anexo_que_no_se_puede_leer_es_invalido(raiz, contenido):
+    if contenido == "sin_sein":  # la hoja existe pero sin la cabecera SEIN
+        libro = openpyxl.Workbook()
+        libro.create_sheet("DEMANDA_AREAS").append(["FECHA HORA", "NORTE", "CENTRO", "SUR"])
+        salida = io.BytesIO()
+        libro.save(salida)
+        contenido = salida.getvalue()
+    falso = COESFalso({dt.date(2026, 10, 23): contenido})
+    with pytest.raises(ev.AnexoInvalido, match="no se pudo leer"):
+        ev.ingerir(raiz, hoy=dt.date(2026, 10, 24), portal=_portal(falso), progreso=_silencio)
+    assert ev.correr("diario", raiz, portal=_portal(falso), modelo=ModeloFalso(), hoy=dt.date(2026, 10, 24),
+                     progreso=_silencio) == ev.INVALIDO
+
+
 def test_salto_en_el_empalme_se_rechaza(raiz):
     falso = COESFalso({dt.date(2026, 10, 23): _anexo(dt.date(2026, 10, 23), desplazamiento=900.0)})
     with pytest.raises(ev.AnexoInvalido, match="salto en el empalme"):
