@@ -60,10 +60,11 @@ ingenua, reentrenar cada semana a 1 hora y no apoyarse en el clima a 24 horas du
 La app del proyecto ejecuta el modelo y permite probar escenarios.
 
 Como extensión posterior a la prueba, se compararon ocho modelos fundacionales de series de tiempo sin entrenar
-(zero-shot) sobre las mismas filas: a 1 hora los mejores ya le ganan al modelo elegido en las tres áreas, a 24
-horas no en el Centro ni el Norte, y un híbrido que suma su pronóstico como variable al XGBoost en razón es el
-mejor en cinco de los seis casos de 2025 (Centro: 49.0 frente a 54.6 MW a 1 hora y 81.3 frente a 86.1 a 24
-horas).[^fm]
+(zero-shot) sobre las mismas filas: a 1 hora los mejores ya le ganan al modelo elegido en las tres áreas; a 24
+horas, no en el Centro ni el Norte. Ajustando Chronos-2 con datos hasta 2024 y el feriado como covariable, y
+combinándolo con un híbrido que suma el pronóstico de un fundacional al XGBoost en razón, el error del Centro
+baja de 54.6 a 48.2 MW a 1 hora y de 86.1 a 75.3 a 24 horas en 2025, y el Sur a 24 horas, el punto débil, de 56.7
+a 51.8; en 2026 se sostiene (48.8 y 71.9 en el Centro; 44.6 frente a 48.3 en el Sur).[^fm]
 
 # 3. Introducción al problema
 
@@ -314,11 +315,14 @@ confirmación posterior. El protocolo: ocho modelos de Hugging Face (Simons-297M
 Chronos-2, Toto-2.0, TimesFM 3.0, TimesFM 2.5 y TiRex-2), cada uno con un contexto de 2,048 periodos (43 días) de
 demanda del área hasta t, pidiendo 48 pasos y guardando los pasos 2 (1 hora) y 48 (24 horas) con sus cuantiles 0.1
 y 0.9; los mismos orígenes y las mismas filas que el Random Forest en 2025 y 2026; los 336 huecos de la serie se
-interpolan solo en el contexto. Después, dos variantes de Chronos-2 (con covariables de temperatura pronosticada
-simulada y feriados, bajo la misma regla de información, y con ajuste fino hasta 2024) y un **híbrido**: el XGBoost
-global en razón (M0) recibe como variables el pronóstico zero-shot del fundacional, el ancho de su intervalo y su
-pronóstico al otro horizonte, todos divididos por la media de 24 horas; se entrena con orígenes de marzo de 2016 a
-2024 y se valida en 2025. Los resultados están en la sección 5.5 y el detalle, en el notebook 04.[^fm]
+interpolan solo en el contexto. Después, Chronos-2 con covariables (temperatura pronosticada simulada y feriados,
+bajo la misma regla de información); **cuatro variantes de ajuste fino** de Chronos-2 solo con datos hasta 2024
+(tasa de aprendizaje 1e-6 o 1e-5, con y sin el feriado como covariable futura), elegidas con 2025; un
+**híbrido**: el XGBoost global en razón (M0) recibe como variables el pronóstico zero-shot del fundacional, el
+ancho de su intervalo y su pronóstico al otro horizonte, todos divididos por la media de 24 horas, y se entrena
+con orígenes de marzo de 2016 a 2024; y, por último, una **combinación lineal** del mejor Chronos-2 ajustado y del
+híbrido, con un peso por horizonte y área fijado en 2025. Los resultados están en la sección 5.5 y el detalle, en
+el notebook 04.[^fm]
 
 ## 4.5 Evaluación
 
@@ -571,10 +575,12 @@ filas que el modelo elegido:[^fm]
 | Simons-297M, zero-shot | 18.8 / 49.7 / 22.4 | 30.0 / 92.9 / 54.2 | 19.3 / 50.6 / 21.3 | 30.9 / 83.4 / 46.8 |
 | Timestral-209M, zero-shot | 19.0 / 50.0 / 22.5 | 30.5 / 97.6 / 54.2 | 19.5 / 51.0 / 21.4 | 31.5 / 87.1 / 46.8 |
 | Chronos-2, zero-shot | 19.4 / 52.2 / 23.2 | 33.0 / 101.0 / 55.2 | 19.9 / 52.6 / 21.6 | 31.6 / 87.3 / 46.9 |
-| Chronos-2, ajuste fino suave hasta 2024 | 19.0 / 50.8 / 22.8 | 29.6 / 89.8 / 53.3 | 19.3 / 51.0 / 21.3 | 29.9 / 81.6 / 45.3 |
+| Chronos-2, ajuste fino hasta 2024, sin covariables | 19.0 / 50.8 / 22.8 | 29.6 / 89.8 / 53.3 | 19.3 / 51.0 / 21.3 | 29.9 / 81.6 / 45.3 |
+| Chronos-2, ajustado hasta 2024 con el feriado como covariable ("ajustado con calendario") | 18.8 / 49.8 / 22.9 | 27.1 / 75.6 / 51.8 | 19.2 / 50.3 / 21.1 | 28.2 / 72.5 / 44.6 |
 | TimesFM 2.5, zero-shot | 19.9 / 56.0 / 23.8 | 31.2 / 107.5 / 57.0 | 20.6 / 57.0 / 22.4 | 32.0 / 98.5 / 49.3 |
 | Híbrido: XGBoost + Chronos-2 | 18.7 / 49.9 / 23.5 | 28.6 / 82.7 / 56.9 | 19.0 / 50.0 / 21.2 | 28.7 / 77.3 / 49.7 |
-| **Híbrido: XGBoost + Simons** | **18.6 / 49.0 / 23.5** | **27.9 / 81.3 / 57.0** | **18.9 / 49.2 / 21.2** | **28.7 / 75.6 / 49.8** |
+| Híbrido: XGBoost + Simons | 18.6 / 49.0 / 23.5 | 27.9 / 81.3 / 57.0 | 18.9 / 49.2 / 21.2 | 28.7 / 75.6 / 49.8 |
+| **Combinación: Chronos-2 ajustado con calendario + híbrido XGBoost + Simons (pesos fijados en 2025)** | **18.5 / 48.2 / 22.5** | **26.9 / 75.3 / 51.8** | **18.8 / 48.8 / 20.9** | **27.9 / 71.9 / 44.6** |
 
 Los otros cuatro modelos zero-shot (t0-gamma, Toto-2.0, TimesFM 3.0 y TiRex-2) quedan entre Simons y TimesFM 2.5
 en 2026 a 1 hora en el Centro (50.7, 51.8, 53.2 y 59.5 MW) y ninguno supera a Simons; sus filas completas van en
@@ -588,27 +594,47 @@ Sur −0.60 (IC −1.14 a 0.10) y +0.28 (IC −0.79 a 1.36), que no se distingue
 áreas (Centro −4.85, IC −5.44 a −4.27); a 24 horas mejora el Centro (−2.57, IC −4.32 a −0.90), no se distingue en
 el Norte y **empeora** el Sur (+1.54, IC 0.34 a 2.79).[^fm]
 
+**Chronos-2 ajustado con calendario frente al modelo elegido.** De las cuatro variantes de ajuste fino (tasa de
+aprendizaje 1e-6 o 1e-5, con y sin feriado), elegidas con 2025, la mejor es la de tasa 1e-6 con el feriado como
+covariable futura (3,000 pasos; 26 minutos en una GPU A100). Le gana al Random Forest con intervalos del 95 % que
+excluyen el cero en todos los casos salvo el Norte a 24 horas en 2026 (−0.77 MW, IC −1.71 a 0.10). Su intervalo
+10-90 cubre entre 73 y 78 % de los periodos: algo estrecho. La variante con tasa 1e-5 sobreajusta (Sur a 24 horas,
+63.9 MW en 2025). La temperatura como covariable no ayuda, ni en zero-shot ni ajustado.[^fm]
+
+**La combinación final.** Una combinación lineal del Chronos-2 ajustado con calendario y del híbrido XGBoost +
+Simons, con el peso del Chronos-2 fijado en 2025 por horizonte y área (0.35 / 0.45 / 0.65 a 1 hora y 0.70 / 0.85 /
+0.95 a 24 horas, Norte / Centro / Sur), le gana al Random Forest en los doce casos y es la mejor de la tabla en
+todos salvo el Sur a 1 hora en 2025 (22.5 frente a 22.4 de Simons zero-shot). En el Centro reduce el error
+alrededor de 12 % a 1 hora y 12.6 % a 24 horas en 2025, y lo sostiene en 2026 (10 y 8 %). **Los pesos de 2025 son
+dentro de muestra: la cifra limpia es la de 2026.** Sus intervalos los calculará el notebook 04.[^fm]
+
 **Lo que se aprende:**
 
 1. **Sin entrenar nada, los mejores fundacionales ya ganan a 1 hora en las tres áreas:** Simons queda unos 5 MW por
    debajo del Random Forest en el Centro (49.7 frente a 54.6 en 2025; 50.6 frente a 54.1 en 2026), alrededor de
    9 % menos error.
-2. **A 24 horas no ganan solos en el Centro ni el Norte** (92.9 frente a 86.1 y 30.0 frente a 28.8 en 2025): les
-   falta el calendario, y 43 días de contexto es poco para el programa del día siguiente. **Sí ganan en el Sur**,
-   el punto débil del proyecto (54.2 frente a 56.7 en 2025; 46.8 frente a 48.3 en 2026, aunque en 2026 la
-   diferencia no se distingue de cero).
-3. **Las covariables de temperatura no ayudan a Chronos-2**, coherente con la hipótesis 1 y con la ablación: a
-   1 hora no mejoran y en 2026 a 24 horas lo empeoran (Centro, 97.6 frente a 87.3 MW).
-4. **El híbrido es el mejor en cinco de los seis casos de 2025** (todos menos el Sur a 24 horas) y se propone como
-   siguiente versión del modelo: aporta lo que el fundacional ve en la forma reciente de la serie y conserva el
-   calendario y la razón. En el Sur a 24 horas conviene el fundacional directo.
-5. **Costo.** Generar el pronóstico fundacional exige GPU (unas 195 series por segundo en una L4); la app lo
-   leería precomputado, como la tabla de adaptación.
+2. **A 24 horas, sin entrenar, no ganan en el Centro ni el Norte** (92.9 frente a 86.1 y 30.0 frente a 28.8 en
+   2025): les falta el calendario, y 43 días de contexto es poco para el programa del día siguiente. Sí ganan en el
+   Sur, el punto débil del proyecto (54.2 frente a 56.7 en 2025; 46.8 frente a 48.3 en 2026, aunque en 2026 la
+   diferencia no se distingue de cero). **Con ajuste fino hasta 2024 y el feriado como covariable, Chronos-2 sí
+   gana a 24 horas en las tres áreas** (27.1 / 75.6 / 51.8 MW en 2025 y 28.2 / 72.5 / 44.6 en 2026, frente a 28.8 /
+   86.1 / 56.7 y 29.0 / 78.1 / 48.3 del Random Forest).
+3. **La temperatura como covariable no ayuda a Chronos-2**, ni en zero-shot ni ajustado, coherente con la
+   hipótesis 1 y con la ablación: a 1 hora no mejora y en 2026 a 24 horas lo empeora (Centro, 97.6 frente a 87.3
+   MW en zero-shot). El feriado sí ayuda.
+4. **La propuesta final es la combinación** del Chronos-2 ajustado con calendario y del híbrido XGBoost + Simons:
+   el modelo preentrenado aporta el patrón reciente de la serie y el XGBoost, el calendario y el nivel. Le gana al
+   Random Forest en los doce casos; el híbrido solo es el mejor en cinco de los seis casos de 2025 a 1 hora y
+   pierde a 24 horas frente al ajustado.
+5. **Costo.** Generar el pronóstico fundacional exige GPU (unas 195 series por segundo en una L4; el ajuste fino,
+   26 minutos en una A100); la app lo leería precomputado, como la tabla de adaptación.
 
 **Límites propios de esta extensión.** Un solo año de validación para elegir (2025) y una confirmación posterior
-en un año ya usado (2026); no se puede descartar que series parecidas a estas estén en el preentrenamiento de los
-modelos; las licencias difieren por modelo (Simons OpenMDW-1.1, Chronos-2 Apache-2.0, TimesFM 3.0 no comercial;
-por confirmar en cada ficha) y condicionan un uso operativo; faltan las corridas con contexto de 8,192 periodos.
+en un año ya usado (2026); los pesos de la combinación se fijaron en 2025 y ahí se evalúan dentro de muestra, y
+sus intervalos están pendientes; no se puede descartar que series parecidas a estas estén en el preentrenamiento
+de los modelos; las licencias difieren por modelo (Simons OpenMDW-1.1, Chronos-2 Apache-2.0, TimesFM 3.0 no
+comercial; por confirmar en cada ficha) y condicionan un uso operativo; faltan las corridas con contexto de 8,192
+periodos.
 
 # 6. Visualización y análisis
 
@@ -713,7 +739,8 @@ Lo que un lector debe tener en cuenta antes de generalizar los resultados.
     que sus cifras de 2026 confirman una elección hecha con 2025 pero no la ponen a prueba por primera vez. Además,
     no se puede descartar que series parecidas estén en el preentrenamiento de los modelos, las licencias difieren
     por modelo y el "XGBoost global base" de esa comparación no es el del notebook 03 (distinta ventana de
-    entrenamiento).
+    entrenamiento). Los pesos de la combinación final se fijaron en 2025, así que sus cifras de 2025 son dentro de
+    muestra; la cifra limpia es la de 2026, todavía sin intervalos.
 
 # 7. Conclusiones y lecciones aprendidas
 
@@ -765,19 +792,21 @@ Lo que un lector debe tener en cuenta antes de generalizar los resultados.
 
 **Extensión: modelos fundacionales.** Después de la prueba, ocho modelos preentrenados sin entrenar ya le ganan al
 modelo elegido a 1 hora en las tres áreas (Simons: 49.7 frente a 54.6 MW en el Centro en 2025), pero no a 24 horas
-en el Centro ni el Norte, y un híbrido que suma su pronóstico al XGBoost en razón es el mejor en cinco de los seis
-casos de 2025 (49.0 frente a 54.6 a 1 hora y 81.3 frente a 86.1 a 24 horas en el Centro) y lo confirma 2026 salvo
-en el Sur a 24 horas. Se propone como siguiente versión del modelo, con dos cuidados: fue elegido con un solo año
-y confirmado en uno ya usado, y exige GPU para generar el pronóstico fundacional.
+en el Centro ni el Norte. Ajustando Chronos-2 con datos hasta 2024 y el feriado como covariable, y combinándolo
+con el híbrido que suma el pronóstico de Simons al XGBoost en razón, el error del Centro baja de 54.6 a 48.2 MW a
+1 hora y de 86.1 a 75.3 a 24 horas en 2025 (48.8 y 71.9 en 2026), y el Sur a 24 horas, el punto débil, de 56.7 a
+51.8 (44.6 frente a 48.3 en 2026). Se propone como siguiente versión del modelo, con tres cuidados: se eligió con
+un solo año y se confirmó en uno ya usado, los pesos de la combinación son de 2025 y sus intervalos están
+pendientes, y exige GPU para generar el pronóstico fundacional.
 
 **Trabajo futuro.** Cuatro cosas que este trabajo no hizo y que un lector del COES pediría primero: (1) comparar el
 pronóstico a 24 horas con la Programación Diaria del COES, evaluada sobre el perímetro del portal y en igualdad de
 origen y horizonte, que es la vara oficial; (2) medir la sensibilidad del resultado a 24 horas al error del
 pronóstico de temperatura (1 y 2 °C, como preveía el diseño), para saber si el daño del clima depende del supuesto;
 (3) construir una variable de fallas que sí separe la operación normal de una falla (solo eventos con
-interrupción de carga o potencia indisponible, por área) y repetir la ablación con ella; y (4) llevar el híbrido
-con modelos fundacionales a una prueba ciega en el próximo año, con contextos más largos (8,192 periodos) y con
-una licencia que permita el uso operativo.
+interrupción de carga o potencia indisponible, por área) y repetir la ablación con ella; y (4) llevar la combinación
+con modelos fundacionales a una prueba ciega en el próximo año, con sus intervalos, contextos más largos (8,192
+periodos) y una licencia que permita el uso operativo.
 
 # 8. Bibliografía
 
@@ -919,8 +948,12 @@ Las tablas de 2025 son de la corrida del notebook 02 del SEIN del 4 de noviembre
     sobre las 13,920 / 13,871 filas de la prueba (`predicciones_{1h,24h}_*.csv`), los de 2025 a 1 h también, y los
     de los híbridos a 24 h coinciden con el JSON; los intervalos de 2026 del híbrido con Simons frente al Random
     Forest se reprodujeron con `bootstrap_diferencia_mae` (Centro 1 h −4.85, IC −5.46 a −4.23; 24 h −2.57, IC −4.19
-    a −0.90; Sur 24 h +1.54, IC 0.29 a 2.80; Norte 24 h −0.24, IC −0.78 a 0.30). Los intervalos de 2025, el costo
-    (195 series por segundo) y las licencias no se verificaron en local: confirmar con el notebook 04.
+    a −0.90; Sur 24 h +1.54, IC 0.29 a 2.80; Norte 24 h −0.24, IC −0.78 a 0.30). El Chronos-2 ajustado con
+    calendario (`chronos2ftcal_c2048.parquet`) y la combinación con los pesos indicados también se reprodujeron
+    fila a fila en 2026 (18.8 / 48.8 / 20.9 y 27.9 / 71.9 / 44.6) y a 1 h en 2025, con el Δ del ajustado frente al
+    Random Forest en el Norte a 24 h (−0.77, IC −1.65 a 0.12) y la cobertura 10-90 (74 a 77 %). Los intervalos de
+    2025, el costo (195 series por segundo; 26 minutos de ajuste), el número de pasos y las licencias no se
+    verificaron en local: confirmar con el notebook 04.
 [^fm-otros]: MAE de 2026 a 1 h en el Centro calculados sobre las filas de la prueba desde
     `t0_c2048.parquet`, `toto2_c2048.parquet`, `timesfm3_c2048.parquet` y `tirex2_c2048.parquet` (51.8, 50.7, 53.2 y
     59.5 MW); el efecto de las covariables, desde `chronos2cov_c2048.parquet` frente a `chronos2_c2048.parquet`

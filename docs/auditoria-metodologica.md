@@ -64,7 +64,7 @@ Los tres graves, en una línea cada uno:
 | D13 | Tetuán | A declarar | Unidad (kW) e identidad de las zonas sin fuente primaria; la temperatura del dataset no coincide con ERA5; el modelo pierde en el Ramadán de la Zona 3 (−7.4 %) y su ventaja baja tras la transferencia (51 → 39 % en la Zona 1) |
 | D14 | Variables no usadas | A declarar | Feriados con `holidays.PE` (nacionales), no la tabla curada de `docs/peru/tablas.md`; M4 (SAIDI) no se corrió; la alerta de ENFEN sale de cruces del ICEN, no de los comunicados |
 | D15 | Entregable 7 | A declarar (lección) | El grupo entregó la versión en nivel, que pierde contra "ayer"; la corregida (en razón) está en el repo |
-| D16 | Modelos fundacionales (extensión del 13-nov) | A declarar | Se hizo después de la prueba de 2026: elegido con 2025, 2026 solo confirma; posible contaminación del preentrenamiento; licencias distintas; el "XGBoost base" de esa comparación no es el del notebook 03 |
+| D16 | Modelos fundacionales (extensión del 13-nov) | A declarar | Se hizo después de la prueba de 2026: elegido con 2025, 2026 solo confirma; los pesos de la combinación final son de 2025 (dentro de muestra) y sin intervalos; posible contaminación del preentrenamiento; licencias distintas; el "XGBoost base" de esa comparación no es el del notebook 03 |
 | M1 | Tetuán, Ridge | Menor | `alpha` = 0.001 queda en el borde de la grilla |
 | M2 | Auditoría del silver | Menor | En 2026, N + C + S − SEIN llega a 47.6 MW ("a revisar antes de la prueba") y no se revisó; no afecta a los modelos por área |
 | M3 | Variables a 24 h | Menor | `Area_ayer` duplica `Area_t` a 24 h (ayer = persistencia) |
@@ -461,9 +461,16 @@ parecidas estén en el preentrenamiento (el corpus de Chronos-2 no es público c
 según las fichas; por confirmar). (4) El "XGBoost global base" de la comparación (53.6 / 19.6 / 24.7 MW en 2025 a
 1 h) no es el XGBoost del notebook 03 (53.5 / 19.6 / 24.7 en 2025; distinta ventana para 2026): comparar dentro de
 la tabla. (5) En el Sur a 24 h en 2026, la ventaja del zero-shot no se distingue de cero (−1.44 MW, IC −3.24 a
-0.30) y el híbrido empeora (+1.54, IC 0.29 a 2.80). (6) Faltan las corridas con contexto de 8,192 y la variante
-`chronos2ftcal` (ajuste fino con calendario), cuyo parquet da 72.5 MW en el Centro a 24 h en 2026, mejor que el
-híbrido (75.6): si el notebook 04 la confirma, cambia la lectura 2 del paper.
+0.30) y el híbrido empeora (+1.54, IC 0.29 a 2.80). (6) La variante `chronos2ftcal` (ajuste fino hasta 2024 con
+tasa 1e-6 y el feriado como covariable futura) resultó la mejor de cuatro variantes elegidas con 2025 y entró al
+paper como "Chronos-2 ajustado con calendario" (2026: 19.2 / 50.3 / 21.1 y 28.2 / 72.5 / 44.6 MW, verificados fila
+a fila; Δ frente al Random Forest en el Norte a 24 h −0.77, IC −1.65 a 0.12, reproducido; cobertura 10-90 de 74 a
+77 %, reproducida). (7) **La combinación final** (Chronos-2 ajustado con calendario + híbrido XGBoost + Simons,
+con pesos por horizonte y área fijados en 2025: 0.35 / 0.45 / 0.65 a 1 h y 0.70 / 0.85 / 0.95 a 24 h) se reprodujo
+en 2026 fila a fila (18.8 / 48.8 / 20.9 y 27.9 / 71.9 / 44.6) y en 2025 a 1 h; **sus cifras de 2025 son dentro de
+muestra** (los pesos se eligieron ahí) y sus intervalos no existen todavía (los calculará el notebook 04): el paper
+lo dice en §5.5, §6.4 y §7, y la guía de defensa prohíbe dar un intervalo. (8) Faltan las corridas con contexto de
+8,192.
 
 ## Lo que se verificó y se sostiene (para la defensa)
 

@@ -76,11 +76,11 @@ tabla de la sección 6.1 del paper.
     Dos barras: «sumar clima y El Niño» y «reentrenar cada semana», ambas alrededor del 1 % del error. Una alerta:
     «A 24 h, el clima empeoró el pronóstico (Centro +1.35 MW)». Una línea: «Tres hipótesis no se cumplieron: 1b, 3
     y 4». Cierre: «"Sin efecto" también es un resultado». (§5.4 y §6.4)
-11. **Frente a los modelos fundacionales: solos ganan a 1 hora; combinados, en casi todo**
-    Una fila por caso, Centro (2025): «A 1 hora: Simons 49.7 · nuestro Random Forest 54.6 · híbrido 49.0 MW». «A 24
-    horas: Simons 92.9 · Random Forest 86.1 · híbrido 81.3 MW». Debajo: «8 modelos preentrenados, sin entrenar con
-    nuestros datos (zero-shot), mismas filas» y «Extensión posterior a la prueba: elegido con 2025, confirmado en
-    2026». (§5.5, tabla de MAE)
+11. **Frente a los modelos fundacionales: solos ganan a 1 hora; ajustados y combinados, en todo**
+    Tres cifras grandes, Centro (2025): «A 1 hora: 55 → 48 MW», «A 24 horas: 86 → 75 MW» y «Sur a 24 horas: 57 →
+    52 MW». Debajo: «8 modelos preentrenados sin entrenar (zero-shot) · Chronos-2 ajustado con nuestros datos hasta
+    2024 + nuestro XGBoost» y «Extensión posterior a la prueba: elegido con 2025, confirmado en 2026». (§5.5, tabla
+    de MAE)
 12. **Conclusiones y recomendación**
     Tres conclusiones (una por objetivo), la recomendación para el operador en cuatro puntos, la lección («cambiar el
     objetivo movió más de 1,200 kW; cambiar el algoritmo, 18») y los límites en una línea. (§2, §6.4 y §7)
@@ -319,16 +319,19 @@ tabla «Las hipótesis, una por una». Efectos de 0.09 a 1.48 MW, alrededor del 
 - «Además probamos ocho modelos fundacionales de series de tiempo, como Chronos-2 y TimesFM.»
 - «Son modelos preentrenados con millones de series de otros rubros, que pronostican una serie nueva sin entrenarse
   con ella. Los corrimos así, sin entrenar, sobre las mismas filas que nuestro modelo.»
-- «Solos, los mejores ya ganan a una hora en las tres áreas: en el Centro, Simons tuvo 49.7 megavatios de error
-  frente a 54.6 de nuestro Random Forest.»
-- «A 24 horas no ganan solos en el Centro ni en el Norte: les falta el calendario, y 43 días de contexto es poco.»
-- «Lo mejor fue combinarlos: nuestro XGBoost en razón recibe el pronóstico del fundacional como una variable más.
-  En el Centro, 49 megavatios frente a 55 a una hora, y 81 frente a 86 a 24 horas.»
-- «Es una extensión posterior a la prueba: lo elegimos con 2025 y en 2026 lo confirmamos. Y necesita GPU.»
+- «Sin entrenar, ya ganan a una hora. A 24 horas no, en el Centro ni en el Norte: les falta el calendario.»
+- «Entonces ajustamos uno, Chronos-2, con nuestros datos hasta 2024 y el feriado, y lo sumamos a nuestro modelo.»
+- «En el Centro, el error baja de 55 a 48 megavatios a una hora y de 86 a 75 a 24 horas. Y el Sur a 24 horas, que
+  era nuestro punto débil, mejora de 57 a 52.»
+- «¿Por qué funciona? El modelo preentrenado aporta el patrón reciente de la serie; nuestro XGBoost, el calendario
+  y el nivel.»
+- «Es una extensión posterior a la prueba: lo elegimos con 2025 y en 2026 se sostiene. Y necesita GPU para generar
+  el pronóstico; la app lo leería ya calculado.»
 
-**Cifras:** §5.5, tabla de MAE (2025, Centro): Simons 49.7, Random Forest 54.6 e híbrido 49.0 MW a 1 h; 92.9, 86.1 y
-81.3 MW a 24 h. Mejor en 5 de 6 casos de 2025: §5.5, lectura 4. **Ojo:** no decir que fue una prueba ciega en 2026
-ni que reemplaza al modelo del paper; es «la siguiente versión propuesta» (§6.4, punto 11).
+**Cifras:** §5.5, tabla de MAE (2025, Centro): Random Forest 54.6 → combinación 48.2 MW a 1 h; 86.1 → 75.3 a 24 h;
+Sur a 24 h, 56.7 → 51.8. En 2026: 54.1 → 48.8, 78.1 → 71.9 y 48.3 → 44.6. Simons zero-shot a 1 h en el Centro:
+49.7. **Ojo:** no decir que fue una prueba ciega en 2026 ni que reemplaza al modelo del paper; es «la siguiente
+versión propuesta», sus pesos se fijaron en 2025 y sus intervalos están pendientes (§6.4, punto 11).
 
 **Si preguntan por el detalle:** la tabla completa está en la diapositiva de respaldo R7 y en el notebook 04.
 
