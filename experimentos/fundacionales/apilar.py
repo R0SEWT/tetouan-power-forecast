@@ -29,7 +29,8 @@ demanda, exogenas = cargar_capas(RAIZ)
 datos = armar_datasets(demanda, exogenas, _feriados())
 fm = {}
 for m in FMS:
-    f = pd.concat([pd.read_parquet(f"/content/fmpred/{m}_train.parquet"), pd.read_parquet(f"/content/fmpred/{m}.parquet")])
+    # las dos salidas de fm_bench.py: los orígenes de entrenamiento (sufijo train) y los de 2025 y 2026
+    f = pd.concat([pd.read_parquet(f"/content/fm/{m}_c2048_train.parquet"), pd.read_parquet(f"/content/fm/{m}_c2048.parquet")])
     f["area"] = f["area"].str.lower()
     fm[m] = f.drop_duplicates(["DateTime", "area"]).set_index(["area", "DateTime"])
 

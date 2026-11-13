@@ -55,11 +55,14 @@ if __name__ == "__main__":
     pipe = Chronos2Pipeline.from_pretrained(MODELO, device_map="cuda")
     n = len(fechas)
     inicio = time.time()
+    bloques = []
     for b in range(0, len(origenes), BLOQUE):
-        destino = SALIDA / f"bloque_{b // BLOQUE:04d}.parquet"
+        idx = origenes[b:b + BLOQUE]
+        # el nombre lleva el primer y el último origen: si cambia el rango pedido, el bloque se vuelve a calcular
+        destino = SALIDA / f"bloque_{idx[0]}_{idx[-1]}.parquet"
+        bloques.append(destino)
         if destino.exists():
             continue
-        idx = origenes[b:b + BLOQUE]
         partes = []
         for j, area in enumerate(AREAS):
             if COV:
@@ -89,5 +92,5 @@ if __name__ == "__main__":
         pd.concat(partes).to_parquet(destino.with_suffix(".tmp"))
         destino.with_suffix(".tmp").rename(destino)
         print(f"[{time.strftime('%H:%M')}] {NOMBRE} {min(b + BLOQUE, len(origenes))}/{len(origenes)} · {(time.time() - inicio) / 60:.1f} min", flush=True)
-    pd.concat(pd.read_parquet(f) for f in sorted(SALIDA.glob("bloque_*.parquet"))).to_parquet(f"/content/fm/{NOMBRE}_c{CONTEXTO}.parquet")
+    pd.concat(pd.read_parquet(f) for f in bloques).to_parquet(f"/content/fm/{NOMBRE}_c{CONTEXTO}.parquet")
     print("TERMINO", NOMBRE, flush=True)

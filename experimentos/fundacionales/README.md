@@ -27,7 +27,7 @@ python fm_bench.py simons 2048 2016-03-01 2025-01-01 train    # orígenes de ent
 python chronos2_variantes.py chronos2cal amazon/chronos-2 2 2025-01-01 2026-10-23   # solo feriados
 python ajuste_fino.py ft_cal 1e-6 3000 full 2                 # ajuste fino con feriados, datos ≤ 2024
 python chronos2_variantes.py chronos2ftcal /content/ft/ft_cal/finetuned-ckpt 2 2025-01-01 2026-10-23
-python apilar.py simons                                       # necesita el repo en /content/tpf y las capas en /content/datalake
+python apilar.py simons                                       # lee las dos salidas de Simons de /content/fm/; necesita el repo en /content/tpf y las capas en /content/datalake
 ```
 
 Cada corrida deja un parquet con una fila por origen y área: `DateTime` (el origen), `area`, `pred_2`, `q10_2`,
