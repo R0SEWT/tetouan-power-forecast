@@ -328,10 +328,11 @@ tabla «Las hipótesis, una por una». Efectos de 0.09 a 1.48 MW, alrededor del 
 - «Es una extensión posterior a la prueba: lo elegimos con 2025 y en 2026 se sostiene. Y necesita GPU para generar
   el pronóstico; la app lo leería ya calculado.»
 
-**Cifras:** §5.5, tabla de MAE (2025, Centro): Random Forest 54.6 → combinación 48.2 MW a 1 h; 86.1 → 75.3 a 24 h;
-Sur a 24 h, 56.7 → 51.8. En 2026: 54.1 → 48.8, 78.1 → 71.9 y 48.3 → 44.6. Simons zero-shot a 1 h en el Centro:
-49.7. **Ojo:** no decir que fue una prueba ciega en 2026 ni que reemplaza al modelo del paper; es «la siguiente
-versión propuesta», sus pesos se fijaron en 2025 y sus intervalos están pendientes (§6.4, punto 11).
+**Cifras:** §5.5, tabla de MAE (2025, Centro): Random Forest 54.6 → combinación 48.2 MW a 1 h; 86.1 → 75.2 a 24 h;
+Sur a 24 h, 56.7 → 51.8. En 2026: 54.1 → 48.8, 78.1 → 71.9 y 48.3 → 44.6, con intervalos que excluyen el cero en
+los seis casos (Centro a 24 h: −6.2 MW, IC −8.7 a −3.8). Simons zero-shot a 1 h en el Centro: 49.7. **Ojo:** no
+decir que fue una prueba ciega en 2026 ni que reemplaza al modelo del paper; es «la siguiente versión propuesta» y
+sus pesos se fijaron en 2025, así que las cifras de 2025 son optimistas (§6.4, punto 11).
 
 **Si preguntan por el detalle:** la tabla completa está en la diapositiva de respaldo R7 y en el notebook 04.
 

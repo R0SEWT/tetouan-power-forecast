@@ -64,7 +64,7 @@ Los tres graves, en una línea cada uno:
 | D13 | Tetuán | A declarar | Unidad (kW) e identidad de las zonas sin fuente primaria; la temperatura del dataset no coincide con ERA5; el modelo pierde en el Ramadán de la Zona 3 (−7.4 %) y su ventaja baja tras la transferencia (51 → 39 % en la Zona 1) |
 | D14 | Variables no usadas | A declarar | Feriados con `holidays.PE` (nacionales), no la tabla curada de `docs/peru/tablas.md`; M4 (SAIDI) no se corrió; la alerta de ENFEN sale de cruces del ICEN, no de los comunicados |
 | D15 | Entregable 7 | A declarar (lección) | El grupo entregó la versión en nivel, que pierde contra "ayer"; la corregida (en razón) está en el repo |
-| D16 | Modelos fundacionales (extensión del 13-nov) | A declarar | Se hizo después de la prueba de 2026: elegido con 2025, 2026 solo confirma; los pesos de la combinación final son de 2025 (dentro de muestra) y sin intervalos; posible contaminación del preentrenamiento; licencias distintas; el "XGBoost base" de esa comparación no es el del notebook 03 |
+| D16 | Modelos fundacionales (extensión del 13-nov) | A declarar | Se hizo después de la prueba de 2026: elegido con 2025, 2026 solo confirma; los pesos de la combinación final son de 2025 (sus diferencias de 2025 son optimistas; las de 2026, limpias, excluyen el cero en los seis casos); posible contaminación del preentrenamiento; licencias distintas; el "XGBoost base" de esa comparación no es el del notebook 03 |
 | M1 | Tetuán, Ridge | Menor | `alpha` = 0.001 queda en el borde de la grilla |
 | M2 | Auditoría del silver | Menor | En 2026, N + C + S − SEIN llega a 47.6 MW ("a revisar antes de la prueba") y no se revisó; no afecta a los modelos por área |
 | M3 | Variables a 24 h | Menor | `Area_ayer` duplica `Area_t` a 24 h (ayer = persistencia) |
@@ -439,7 +439,8 @@ elegido; sus intervalos son empíricos, de los errores de 2025".
 
 ### 15. Extensión del 13-nov: modelos fundacionales (D16)
 
-**Lo que consta.** Rama `feature/modelos-fundacionales` (worktree `tpf-fm`, aún sin commit ni PR): `fm_bench.py`
+**Lo que consta.** Rama `feature/modelos-fundacionales` (worktree `tpf-fm`; notebook
+`04_sein_modelos_fundacionales.ipynb` ejecutado el 13-nov, commit `bf1098b`, PR #32, sin fusionar): `fm_bench.py`
 (ocho modelos de Hugging Face en zero-shot, contexto de 2,048 periodos, orígenes de 2025-01-01 a 2026-10-23, pasos 2
 y 48, mediana como punto, 336 huecos del silver interpolados), `chronos2_variantes.py` (covariables con la regla de
 información del proyecto: temperatura conocida, pronóstico simulado con error de 1.5 °C por día y feriados),
@@ -468,9 +469,12 @@ a fila; Δ frente al Random Forest en el Norte a 24 h −0.77, IC −1.65 a 0.12
 77 %, reproducida). (7) **La combinación final** (Chronos-2 ajustado con calendario + híbrido XGBoost + Simons,
 con pesos por horizonte y área fijados en 2025: 0.35 / 0.45 / 0.65 a 1 h y 0.70 / 0.85 / 0.95 a 24 h) se reprodujo
 en 2026 fila a fila (18.8 / 48.8 / 20.9 y 27.9 / 71.9 / 44.6) y en 2025 a 1 h; **sus cifras de 2025 son dentro de
-muestra** (los pesos se eligieron ahí) y sus intervalos no existen todavía (los calculará el notebook 04): el paper
-lo dice en §5.5, §6.4 y §7, y la guía de defensa prohíbe dar un intervalo. (8) Faltan las corridas con contexto de
-8,192.
+muestra** (los pesos se eligieron ahí). Sus intervalos frente al Random Forest (`tablas/comparacion.csv` del
+notebook 04) excluyen el cero en los doce casos; los de 2025 son optimistas por los pesos y los de 2026, limpios
+(Centro a 24 h: −6.23 MW, IC −8.67 a −3.81). El paper lo dice en §5.5, §6.4 y §7, y la guía de defensa pide citar
+los de 2026. (8) El contexto de 8,192 periodos casi no cambia el zero-shot (Simons, Centro a 24 h: 91.5 frente a
+92.9 MW en 2025). (9) Pendiente: la comprobación del ajuste fino con dos semillas más; el paper deja el hueco
+"[PENDIENTE: rango entre semillas]" en los límites de §5.5.
 
 ## Lo que se verificó y se sostiene (para la defensa)
 

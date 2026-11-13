@@ -43,7 +43,7 @@ puedo decir es que…». **Nunca inventar una cifra.**
 | 13 | **3 hipótesis no se cumplieron** | La 1b, la 3 y la 4 | §5.4, tabla «Las hipótesis, una por una» |
 | 14 | **18 kW frente a más de 1,200 kW** | Lo que movió cambiar de algoritmo frente a cambiar el objetivo (del Entregable 7 a la versión en razón) | §7, lección 1 |
 | 15 | **Tetuán 41-56 % · Ceuta 2.31 frente a 4.62 %** | Tetuán: menos error que la mejor referencia en la prueba. Ceuta: MAPE sin haber visto un verano frente a la mejor regla simple | §5.1, tabla de la prueba; §5.2, tabla de MAPE |
-| 16 | **55 → 48 MW (1 h) · 86 → 75 (24 h) · Sur 24 h: 57 → 52** | La combinación final (Chronos-2 ajustado con calendario + híbrido XGBoost + Simons) frente al Random Forest, 2025 (54.6 → 48.2; 86.1 → 75.3; 56.7 → 51.8). En 2026: 54.1 → 48.8, 78.1 → 71.9 y 48.3 → 44.6. Zero-shot solo, Simons: 49.7 a 1 h (gana) y 92.9 a 24 h (pierde) | §5.5, tabla de MAE |
+| 16 | **55 → 48 MW (1 h) · 86 → 75 (24 h) · Sur 24 h: 57 → 52** | La combinación final (Chronos-2 ajustado con calendario + híbrido XGBoost + Simons) frente al Random Forest, 2025 (54.6 → 48.2; 86.1 → 75.2; 56.7 → 51.8). En 2026: 54.1 → 48.8, 78.1 → 71.9 y 48.3 → 44.6; la diferencia excluye el cero en los 12 casos (2026, Centro 24 h: −6.2 MW, IC −8.7 a −3.8). Zero-shot solo, Simons: 49.7 a 1 h (gana) y 92.9 a 24 h (pierde) | §5.5, tabla de MAE y tabla de diferencias |
 
 ---
 
@@ -68,7 +68,7 @@ Según la auditoría metodológica. La columna de la derecha dice el hallazgo.
 | 13 | «Los intervalos muestran que funcionará en el próximo Niño» | «Los intervalos miden la incertidumbre dentro de 2026: un solo año y un solo evento» | D5 |
 | 14 | «Las horas de mayor demanda de 2026 o los días fuera de rango son reglas que el operador puede usar» | «Son cortes definidos con los propios datos de 2026, para describir dónde falla el modelo» | D10 |
 | 15 | «Usamos el SAIDI, los feriados regionales y los comunicados de ENFEN», o «la app reentrena en vivo» | «M4 (SAIDI) no se corrió; los feriados son los nacionales; la alerta sale de los cambios de categoría del ICEN publicado. La adaptación de la app sale de la tabla del notebook 03» | D14, §13 |
-| 16 | «Los modelos fundacionales pasaron la prueba ciega de 2026», «reemplazan a nuestro modelo» o dar un intervalo de la combinación | «Es una extensión posterior a la prueba: se eligió con 2025 y 2026 solo la confirma. La combinación se propone como siguiente versión; sus pesos se fijaron en 2025 (dentro de muestra) y sus intervalos están pendientes; no está en la app ni fue parte de las hipótesis» | §6.4, punto 11; D16 |
+| 16 | «Los modelos fundacionales pasaron la prueba ciega de 2026», «reemplazan a nuestro modelo» o citar las diferencias de 2025 de la combinación como si fueran limpias | «Es una extensión posterior a la prueba: se eligió con 2025 y 2026 solo la confirma. La combinación se propone como siguiente versión; sus pesos se fijaron en 2025 (dentro de muestra, cifras optimistas) y las de 2026 son las limpias; no está en la app ni fue parte de las hipótesis» | §6.4, punto 11; D16 |
 
 ---
 
@@ -355,13 +355,16 @@ baja de 55 a 48 MW a una hora y de 86 a 75 a 24 horas, y el Sur a 24 horas, el p
 funciona? El modelo preentrenado aporta el patrón reciente de la serie; el XGBoost, el calendario y el nivel. ¿Qué
 cuesta? GPU para generar el pronóstico fundacional (y 26 minutos para ajustar Chronos-2); la app lo leería ya
 calculado. La temperatura como covariable no lo ayuda, igual que a nuestro modelo. Lo proponemos como siguiente
-versión, con tres cuidados: se eligió con un solo año y se confirmó en un año que ya habíamos usado, los pesos de
-la combinación se fijaron en 2025 y sus intervalos están pendientes.
+versión, con tres cuidados: se eligió con un solo año y se confirmó en un año que ya habíamos usado, y los pesos de
+la combinación se fijaron en 2025, así que sus cifras de 2025 son optimistas y las limpias son las de 2026.
 
-*Respaldo:* §5.5, tabla de MAE (Centro, 2025): Random Forest 54.6 → combinación 48.2 MW a 1 h; 86.1 → 75.3 a 24 h;
-Sur a 24 h 56.7 → 51.8. En 2026: 54.1 → 48.8, 78.1 → 71.9 y 48.3 → 44.6. Simons zero-shot a 1 h en el Centro, 49.7.
-Chronos-2 ajustado con calendario frente a Random Forest: gana con intervalos que excluyen el cero salvo en el
-Norte a 24 h en 2026 (−0.77 MW, IC −1.71 a 0.10). Covariables de temperatura: Chronos-2 zero-shot a 24 h en el
-Centro en 2026, 97.6 frente a 87.3 MW. *Límites:* §6.4, punto 11 (no es prueba ciega; pesos de 2025 dentro de
-muestra, sin intervalos; posible contaminación del preentrenamiento; licencias). *Ojo:* el «XGBoost global base» de
-esa tabla no es el XGBoost del notebook 03 (§5.5). No dar intervalos de la combinación: no existen todavía.
+*Respaldo:* §5.5, tabla de MAE (Centro, 2025): Random Forest 54.6 → combinación 48.2 MW a 1 h; 86.1 → 75.2 a 24 h;
+Sur a 24 h 56.7 → 51.8. En 2026: 54.1 → 48.8, 78.1 → 71.9 y 48.3 → 44.6. Diferencias con el Random Forest en 2026
+(tabla de §5.5): Centro −5.2 MW a 1 h (IC −5.8 a −4.6) y −6.2 a 24 h (IC −8.7 a −3.8); Sur a 24 h −3.7 (IC −5.5 a
+−1.9); Norte a 24 h −1.1 (IC −1.8 a −0.3); ninguno cruza el cero. Mejora media frente a la mejor referencia: 35.2 →
+40.7 % en 2025 y 37.9 → 42.3 % en 2026. Simons zero-shot a 1 h en el Centro, 49.7; con cuatro veces más contexto,
+casi igual (91.5 frente a 92.9 a 24 h en 2025). Chronos-2 ajustado con calendario frente a Random Forest: gana con
+intervalos que excluyen el cero salvo en el Norte a 24 h en 2026 (−0.77 MW, IC −1.65 a 0.12). Covariables de
+temperatura: Chronos-2 zero-shot a 24 h en el Centro en 2026, 97.6 frente a 87.3 MW. *Límites:* §6.4, punto 11 (no
+es prueba ciega; pesos de 2025 dentro de muestra; posible contaminación del preentrenamiento; licencias). *Ojo:* el
+«XGBoost global base» de esa tabla no es el XGBoost del notebook 03 (§5.5). Detalle: notebook 04 (PR #32).
