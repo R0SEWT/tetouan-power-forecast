@@ -479,6 +479,11 @@ class PronosticadorDePrueba:
     def _sigma(k: np.ndarray) -> np.ndarray:
         return 0.002 + 0.004 * np.sqrt(np.asarray(k) / DIA)
 
+    def _ancho(self, grupos: frozenset[str], k: np.ndarray) -> np.ndarray:
+        """Medio ancho relativo del intervalo del 90 % a k pasos: crece con el horizonte."""
+        escala = 1.0 - 0.05 * len(grupos & {"clima", "nino", "fallas"})
+        return 1.645 * np.hypot(escala * self._sigma(k), 0.006 + 0.02 * np.sqrt(k / DIA))
+
     def _referencia(
         self, area: str, nombre: Referencia, o: np.ndarray, i: np.ndarray
     ) -> np.ndarray:
@@ -508,6 +513,7 @@ class PronosticadorDePrueba:
         pred = self._predecir(area, o, np.full_like(i, h), GRUPOS[variante])
         nombre_ref = self._mejor_referencia[(area, horizonte)]
         ref = self._referencia(area, nombre_ref, o, i)
+        ancho = self._ancho(GRUPOS[variante], np.full(DIA, h))
         programacion = None
         if horizonte == "24h":
             programacion = _con_nulos(d.verdad[i] * (1 + 0.008 + 0.015 * d.z_prog[i]))
@@ -521,6 +527,9 @@ class PronosticadorDePrueba:
             programacion_diaria=programacion,
             hueco=[bool(x) for x in np.isnan(real)],
             preliminar=[bool(x) for x in d.preliminar[i]],
+            intervalo=Intervalo(
+                inferior=_redondear(pred * (1 - ancho)), superior=_redondear(pred * (1 + ancho))
+            ),
         )
 
     def pronosticar(
@@ -552,8 +561,7 @@ class PronosticadorDePrueba:
             )
         nombre_ref = self._mejor_referencia[(area, horizonte)]
         ref = self._referencia(area, nombre_ref, o, i)
-        escala = 1.0 - 0.05 * len(grupos & {"clima", "nino", "fallas"})
-        ancho = 1.645 * np.hypot(escala * self._sigma(k), 0.006 + 0.02 * np.sqrt(k / DIA))
+        ancho = self._ancho(grupos, k)
         momentos = [_momento(j) for j in i]
 
         if escenario.es_base:
