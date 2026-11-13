@@ -473,8 +473,14 @@ muestra** (los pesos se eligieron ahí). Sus intervalos frente al Random Forest 
 notebook 04) excluyen el cero en los doce casos; los de 2025 son optimistas por los pesos y los de 2026, limpios
 (Centro a 24 h: −6.23 MW, IC −8.67 a −3.81). El paper lo dice en §5.5, §6.4 y §7, y la guía de defensa pide citar
 los de 2026. (8) El contexto de 8,192 periodos casi no cambia el zero-shot (Simons, Centro a 24 h: 91.5 frente a
-92.9 MW en 2025). (9) Pendiente: la comprobación del ajuste fino con dos semillas más; el paper deja el hueco
-"[PENDIENTE: rango entre semillas]" en los límites de §5.5.
+92.9 MW en 2025). (9) **Robustez del ajuste fino, verificada:** el Chronos-2 ajustado con calendario se repitió con dos semillas más
+(`chronos2ftcal_s2_c2048.parquet` y `_s3`, corrida del 13-nov); recalculado en local sobre las filas de 2025 y
+2026, el MAE cambia como mucho 0.19 MW entre las tres semillas (Centro a 24 h en 2026) y entre 0.01 y 0.09 en los
+otros once casos, frente a una ventaja de −10.5 MW sobre el Random Forest en el Centro a 24 h en 2025. Según la
+revisión del código reportada por la corrida (no la repetí): el ajuste solo ve datos hasta el 31-dic-2024 23:30, sin
+validación ni selección de checkpoint; en inferencia la única covariable futura es el feriado; los 336 periodos
+interpolados son los siete días que faltan en el silver (uno de 2017 y dos por año de 2018 a 2020, notebook 01,
+celda 6), ninguno en el contexto de un origen de 2025-2026. El paper lo dice en los límites de §5.5.
 
 ## Lo que se verificó y se sostiene (para la defensa)
 

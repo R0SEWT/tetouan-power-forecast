@@ -366,5 +366,7 @@ Sur a 24 h 56.7 → 51.8. En 2026: 54.1 → 48.8, 78.1 → 71.9 y 48.3 → 44.6.
 casi igual (91.5 frente a 92.9 a 24 h en 2025). Chronos-2 ajustado con calendario frente a Random Forest: gana con
 intervalos que excluyen el cero salvo en el Norte a 24 h en 2026 (−0.77 MW, IC −1.65 a 0.12). Covariables de
 temperatura: Chronos-2 zero-shot a 24 h en el Centro en 2026, 97.6 frente a 87.3 MW. *Límites:* §6.4, punto 11 (no
-es prueba ciega; pesos de 2025 dentro de muestra; posible contaminación del preentrenamiento; licencias). *Ojo:* el
+es prueba ciega; pesos de 2025 dentro de muestra; posible contaminación del preentrenamiento; licencias). *Robustez:* el ajuste fino repetido con tres semillas
+cambia el MAE como mucho 0.2 MW, frente a −10.5 MW de ventaja en el Centro a 24 h; el código se revisó y no hay
+fuga (solo ve datos hasta 2024; la única covariable futura es el feriado). *Ojo:* el
 «XGBoost global base» de esa tabla no es el XGBoost del notebook 03 (§5.5). Detalle: notebook 04 (PR #32).

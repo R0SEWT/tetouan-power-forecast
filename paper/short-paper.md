@@ -381,8 +381,12 @@ queda a menudo por encima del cero y el ajustado por debajo, lo que justifica su
 8. **La extensión con fundacionales no es una prueba ciega** (2026 ya se había usado); la diferencia entre los
    primeros puestos es de pocos puntos y los pesos de la combinación son de 2025; no se puede auditar qué vieron
    los modelos al preentrenarse; las licencias difieren (Chronos-2 y Simons permiten cualquier uso; TimesFM 3.0 es
-   solo no comercial); hace falta GPU; está en curso una comprobación del ajuste fino con dos semillas más
-   *[PENDIENTE: rango entre semillas]*.
+   solo no comercial); hace falta GPU. El ajuste fino es robusto a la semilla: repetido con tres semillas, su MAE
+   cambia como mucho 0.19 MW, frente a una ventaja de −10.5 MW sobre el Random Forest en el Centro a 24 horas; una
+   revisión del código no encontró fugas (solo ve datos hasta 2024, sin selección de checkpoint; la única covariable
+   futura es el feriado).
+<!-- rango entre semillas: chronos2ftcal_c2048.parquet y las corridas _s2 y _s3 del 13-nov, calculado en local
+sobre las filas de 2025 y 2026; detalle en paper.md, nota [^semillas]. -->
 9. **Validez de constructo.** El MAE no refleja la asimetría entre subestimar y sobrestimar; por eso se reporta
    aparte la subestimación en las horas de mayor demanda.
 

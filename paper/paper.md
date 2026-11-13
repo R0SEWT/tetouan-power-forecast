@@ -661,8 +661,13 @@ preentrenarse (varios se entrenaron con series de carga eléctrica de otros paí
 que series parecidas estén en sus datos; las licencias difieren por modelo (Chronos-2, Apache-2.0, y Simons,
 OpenMDW-1.1, permiten cualquier uso; TimesFM 3.0 es solo para uso no comercial y Timestral limita el uso en
 empresas grandes) y condicionan un uso operativo; no se buscaron hiperparámetros del híbrido, no se ajustaron
-otros modelos ni se reentrenó durante 2026; y está en curso una comprobación del ajuste fino con dos semillas más
-*[PENDIENTE: rango entre semillas]*.
+otros modelos ni se reentrenó durante 2026. El ajuste fino con calendario se repitió con dos semillas más (tres en
+total, misma receta): el MAE cambia como mucho 0.19 MW entre semillas en los doce casos (Centro a 24 horas en 2026;
+entre 0.01 y 0.09 en los demás), muy por debajo de su ventaja sobre el Random Forest (−10.5 MW en el Centro a 24
+horas en 2025). Una revisión del código línea por línea no encontró fugas: el ajuste solo ve datos hasta el 31 de
+diciembre de 2024 a las 23:30, sin conjunto de validación ni selección de checkpoint; en inferencia la única
+covariable futura es el feriado, que se conoce de antemano; y los 336 periodos interpolados son siete días enteros
+de 2017 a 2020 (los que faltan en el silver), ninguno dentro del contexto de un origen de 2025 o 2026.[^semillas]
 
 # 6. Visualización y análisis
 
@@ -989,6 +994,11 @@ Las tablas de 2025 son de la corrida del notebook 02 del SEIN del 4 de noviembre
     Random Forest en el Norte a 24 h (−0.77, IC −1.65 a 0.12) y la cobertura 10-90 (74 a 77 %). Los intervalos de
     2025 y los de la combinación, la mejora media, el contexto de 8,192, el costo y las licencias se toman de las
     tablas y las conclusiones del notebook 04 y no se recalcularon en local.
+[^semillas]: Pronósticos por semilla del ajuste fino con calendario: `chronos2ftcal_c2048.parquet` (semilla
+    original) y `chronos2ftcal_s2_c2048.parquet` y `_s3` (corrida del 13-nov, en el Drive). Rango del MAE entre las
+    tres semillas calculado en local sobre las filas de la prueba de 2026 y los orígenes de 2025: 0.02 / 0.06 / 0.04
+    MW a 1 h y 0.06 / 0.08 / 0.09 a 24 h en 2025 (Norte / Centro / Sur); 0.02 / 0.08 / 0.01 y 0.07 / 0.19 / 0.03 en
+    2026. Los días faltantes del silver (uno en 2017, dos por año de 2018 a 2020): notebook 01 del SEIN, celda 6.
 [^fm-otros]: MAE de 2026 a 1 h en el Centro calculados sobre las filas de la prueba desde
     `t0_c2048.parquet`, `toto2_c2048.parquet`, `timesfm3_c2048.parquet` y `tirex2_c2048.parquet` (51.8, 50.7, 53.2 y
     59.5 MW); el efecto de las covariables, desde `chronos2cov_c2048.parquet` frente a `chronos2_c2048.parquet`
