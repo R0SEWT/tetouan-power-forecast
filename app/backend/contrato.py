@@ -296,3 +296,84 @@ class PicoRampa(BaseModel):
     rampa: Rampa | None = Field(description="Nula si la ventana no sube en ninguna hora")
     acierto: AciertoPico | None = Field(default=None, description="El del modelo y el área en 2026")
     modelo: str | None = Field(default=None, description="Id del modelo que respondió")
+
+
+# ---- En vivo: lo que registra la tubería diaria (tetouan_power_forecast.en_vivo) ----------------------------------
+
+TipoEnVivo = Literal["ex_ante_estricto", "en_vivo", "reconstruido"]
+GrupoEnVivo = Literal["en_vivo", "ex_ante_estricto", "reconstruido"]
+
+
+class PerfilEnVivo(BaseModel):
+    """El último perfil a 24 h que emitió la tubería: los 48 periodos de un día, cada uno desde su origen 24 h antes.
+
+    Todos se emitieron juntos, en ``emitido_en``, con los datos hasta ``datos_hasta``.
+    """
+
+    fecha: str = Field(description="Día pronosticado, AAAA-MM-DD")
+    horizonte: Horizonte
+    emitido_en: str = Field(description="Sello de la corrida, ISO 8601 en UTC (termina en Z)")
+    emitido_lima: str = Field(description="El mismo sello en hora de Lima, AAAA-MM-DDTHH:MM")
+    datos_hasta: str = Field(description="Fin del último periodo con dato que se usó, hora de Lima")
+    fecha_hora: list[str] = Field(description="Inicio de cada periodo")
+    pronostico: list[float]
+    inferior: list[float] = Field(description="Cuantil 10 %")
+    superior: list[float] = Field(description="Cuantil 90 %")
+    real: list[float | None] = Field(description="Nulo mientras el COES no publique el real")
+    tipo: list[TipoEnVivo] = Field(description="Cuándo se emitió cada periodo frente a su real (ver EnVivo)")
+
+
+class DiaEnVivo(BaseModel):
+    """Un día ya verificado contra el real."""
+
+    fecha: str
+    horizonte: Horizonte
+    tipo: Literal["en_vivo", "reconstruido"] = Field(
+        description="«en_vivo» si se emitió antes de que el COES publicara el real; «reconstruido» si después"
+    )
+    periodos: int
+    periodos_ex_ante: int = Field(description="Periodos que todavía no empezaban al emitirse")
+    mae_modelo: float
+    mae_referencia: float
+    referencia_nombre: Referencia
+    cobertura_pct: float = Field(description="% de periodos con el real dentro del rango 10–90 %")
+
+
+class ResumenEnVivo(BaseModel):
+    """El error acumulado de un grupo de filas, frente a la mejor referencia ingenua en esas mismas filas."""
+
+    grupo: GrupoEnVivo = Field(description="«en_vivo» incluye las ex ante estrictas; «ex_ante_estricto» las separa")
+    horizonte: Horizonte
+    desde: str
+    hasta: str
+    dias: int
+    periodos: int
+    mae_modelo: float
+    mae_referencia: float
+    referencia_nombre: Referencia
+    sesgo: float = Field(description="Media de pronóstico − real, en MW")
+    cobertura_pct: float
+
+
+class EnVivo(BaseModel):
+    """El pronóstico en vivo de un área: el último perfil emitido, lo ya verificado y el acumulado por tipo.
+
+    Tipos de cada periodo, según su sello de emisión:
+    - ``ex_ante_estricto``: el periodo todavía no empezaba.
+    - ``en_vivo``: ya había empezado, pero el COES aún no podía haber publicado su real (sale al día siguiente).
+    - ``reconstruido``: se emitió después de conocerse el real (el relleno inicial y todo el 1 h, que no puede ser
+      en vivo con un día de retraso), usando solo los datos hasta su origen.
+
+    Sin registro todavía, ``ultimo`` es nulo y las listas van vacías.
+    """
+
+    area: str
+    modelo: str | None = Field(default=None, description="Nombre del modelo que emite")
+    version_pesos: str | None = Field(default=None, description="sha256 de los pesos")
+    nivel_rango_pct: int = Field(default=80, description="El rango va del cuantil 10 al 90: cubre 8 de cada 10")
+    ultimo: PerfilEnVivo | None = None
+    verificado: list[DiaEnVivo] = Field(default_factory=list, description="Del más reciente al más antiguo")
+    resumen: list[ResumenEnVivo] = Field(default_factory=list)
+    dias_en_vivo: int = Field(default=0, description="Días con pronóstico a 24 h emitido en vivo (verificados o no)")
+    primer_dia_en_vivo: str | None = None
+    dias_reconstruidos: int = Field(default=0, description="Días con pronóstico a 24 h reconstruido")

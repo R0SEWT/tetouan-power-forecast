@@ -7,6 +7,8 @@ Correr en local (desde la raíz del repo):
 
 Sirve también la web (``app/web``) en ``http://localhost:8000/``, y todo comprimido con gzip.
 
+La tubería en vivo (``python -m tetouan_power_forecast.en_vivo diario``) se lee en ``GET /en-vivo/{area}``.
+
 Variables de entorno:
 - ``TPF_CORS_ORIGENES``: orígenes extra separados por comas, además de localhost y 127.0.0.1
   (por ejemplo la IP del celular en la red local o el dominio de Tailscale).
@@ -37,6 +39,7 @@ from .contrato import (
     PATRON_ORIGEN,
     Area,
     Diagnostico,
+    EnVivo,
     Escenario,
     Horizonte,
     ModeloDisponible,
@@ -51,6 +54,7 @@ from .contrato import (
     Serie,
     Variante,
 )
+from .en_vivo import LectorEnVivo
 from .pico import pico_rampa
 from .pronosticador import Pronosticador, PronosticadorDePrueba
 from .web import GZIP_MINIMO, WEB, archivos_web
@@ -94,11 +98,13 @@ def crear_app(
     pronosticador: Pronosticador | None = None,
     otros: list[Pronosticador] | None = None,
     web: Path | None = WEB,
+    en_vivo: Path | None = None,
 ) -> FastAPI:
     """Arma la API con el pronosticador dado (por defecto, el de prueba) y, si los hay, otros modelos elegibles.
 
     Las respuestas van comprimidas con gzip si el navegador lo acepta. Si ``web`` es una carpeta, la sirve en ``/``
-    (la web encuentra la API en el mismo origen); las rutas de la API tienen prioridad.
+    (la web encuentra la API en el mismo origen); las rutas de la API tienen prioridad. ``en_vivo`` es la carpeta de
+    la tubería diaria (por defecto, ``reportes/sein/en_vivo`` de ``TETOUAN_DATA``); no depende del pronosticador.
     """
     app = FastAPI(
         title="Demanda por área del SEIN",
@@ -116,6 +122,7 @@ def crear_app(
     app.add_middleware(GZipMiddleware, minimum_size=GZIP_MINIMO)
     app.state.pronosticador = pronosticador or PronosticadorDePrueba()
     app.state.pronosticadores = {_id(p): p for p in [app.state.pronosticador, *(otros or [])]}
+    app.state.en_vivo = LectorEnVivo(en_vivo)
 
     def respaldo(request: Request, p: Pronosticador) -> Pronosticador | None:
         """El modelo que responde por ``p`` fuera de su rango, si la API también lo sirve."""
@@ -241,6 +248,15 @@ def crear_app(
         umbral = p.umbral_rampa(area) if hasattr(p, "umbral_rampa") else None
         acierto = p.acierto_pico(area, variante) if hasattr(p, "acierto_pico") else None
         return pico_rampa(resultado, umbral, acierto, modelo=_id(p))
+
+    @app.get("/en-vivo/{area}", response_model=EnVivo)
+    def en_vivo_area(request: Request, area: str) -> EnVivo:
+        """El último perfil a 24 h que emitió la tubería diaria, lo ya verificado contra el real y el acumulado por tipo.
+
+        Es aditivo: no depende del modelo elegido ni de ``FECHA_MIN``-``FECHA_MAX``. Sin registro, ``ultimo`` es nulo.
+        """
+        _validar_area(area)
+        return request.app.state.en_vivo.area(area)
 
     # Al final, para que las rutas de la API vayan antes que los archivos.
     if web is not None and web.is_dir():

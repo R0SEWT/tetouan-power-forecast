@@ -84,7 +84,7 @@ const S = {
   pico: null,
   diag: new Map(),
   seguimiento: new Map(),
-  turnos: { serie: 0, pron: 0, esc: 0, sens: 0, diag: 0, pico: 0, seg: 0 },
+  turnos: { serie: 0, pron: 0, esc: 0, sens: 0, diag: 0, pico: 0, seg: 0, vivo: 0 },
 };
 
 // ---- Utilidades ----------------------------------------------------------------
@@ -774,6 +774,7 @@ function mostrarArea(id, q) {
   }
   const ahora = ahoraEnLima();
   const cambioDeArea = S.area !== id;
+  const llega = $('#vistaArea').hidden; // desde el inicio (o al abrir la app): la sección en vivo se vuelve a pedir
   S.area = id;
   S.fecha = acotarFecha(q.get('fecha')) || S.fecha || acotarFecha(ahora.fecha);
   S.idx = horaAIdx(q.get('hora')) ?? (S.fecha === ahora.fecha ? ahora.idx : S.idx);
@@ -810,6 +811,7 @@ function mostrarArea(id, q) {
   cargarPronostico();
   cargarPico();
   pintarTab();
+  if (cambioDeArea || llega) cargarEnVivo();
 }
 
 function recargar() {
@@ -1678,6 +1680,121 @@ function pintarFicha() {
     </ul></section>`;
 }
 
+// ---- En vivo: lo que registra cada día la tubería con el anexo del COES ---------------------------------------
+
+const TIPO_DIA = { en_vivo: 'En vivo', reconstruido: 'Reconstruido' };
+const REF_CORTA = { persistencia: 'último dato', ayer: 'ayer', semana_pasada: 'semana pasada' };
+const plural = (n, uno, varios) => `${nf0.format(n)} ${n === 1 ? uno : varios}`;
+
+// Sin caché: la tubería agrega filas cada mañana, así que se vuelve a pedir al entrar al área y al ir a la sección.
+async function cargarEnVivo() {
+  const cont = $('#envivoCuerpo');
+  const panel = $('#envivo');
+  const turno = ++S.turnos.vivo;
+  panel.setAttribute('aria-busy', 'true');
+  let d;
+  try {
+    d = await api(`/en-vivo/${encodeURIComponent(S.area)}`);
+  } catch (err) {
+    if (turno !== S.turnos.vivo) return;
+    panel.setAttribute('aria-busy', 'false');
+    if (err.estado === 404) cont.innerHTML = '<p class="vacio">Este backend no tiene la sección en vivo.</p>';
+    else manejarError(err, cont);
+    return;
+  }
+  if (turno !== S.turnos.vivo) return;
+  panel.setAttribute('aria-busy', 'false');
+  pintarEnVivo(d);
+}
+
+function pintarEnVivo(d) {
+  const cont = $('#envivoCuerpo');
+  if (!d.ultimo) {
+    cont.innerHTML = '<p class="vacio">Todavía no hay pronósticos en vivo de esta área: la tubería diaria no ha corrido con estos datos.</p>';
+    return;
+  }
+  const u = d.ultimo;
+  const cuenta = (t) => u.tipo.filter((x) => x === t).length;
+  const exAnte = cuenta('ex_ante_estricto');
+  const enVivo = cuenta('en_vivo');
+  const reconstruido = u.tipo.length - exAnte - enVivo;
+  const diaDatos = sumarDias(u.datos_hasta.slice(0, 10), -1); // datos_hasta es el fin del último periodo: las 24:00
+  const hayReal = u.real.some((v) => v != null);
+
+  let lectura = d.dias_en_vivo
+    ? `Lleva ${plural(d.dias_en_vivo, 'día', 'días')} en vivo, desde el ${fechaDiaMes(d.primer_dia_en_vivo)}.`
+    : 'Todavía no hay días en vivo: solo reconstruidos.';
+  if (d.dias_reconstruidos) lectura += ` Antes, ${plural(d.dias_reconstruidos, 'día reconstruido', 'días reconstruidos')}: se calcularon después de conocerse el real, con los datos que el modelo habría tenido, y no cuentan como en vivo.`;
+
+  let tipoTxt;
+  if (reconstruido === u.tipo.length) tipoTxt = '<strong>Reconstruido:</strong> se calculó después de conocerse el real; no es un pronóstico en vivo.';
+  else if (exAnte === u.tipo.length) tipoTxt = 'Se emitió antes de que empezara el día: las 48 medias horas son ex ante.';
+  else tipoTxt = `De sus 48 medias horas, ${plural(exAnte, 'todavía no empezaba', 'todavía no empezaban')} al emitirse; las otras ${nf0.format(enVivo + reconstruido)} ya habían empezado, pero su real aún no estaba publicado.`;
+  // La marca va en la media hora en que se emitió, si fue ese mismo día
+  const idxEmision = u.emitido_lima.slice(0, 10) === u.fecha ? horaAIdx(horaDe(u.emitido_lima)) : null;
+
+  const a24 = d.verificado.filter((v) => v.horizonte === '24h');
+  const diaMes = (iso) => `${partesFecha(iso).d} ${MESES_CORTOS[partesFecha(iso).m - 1]}`;
+  const filas = a24.map((v) => `<tr><th scope="row" class="mono">${esc(diaMes(v.fecha))}</th>`
+    + `<td><span class="etiqueta-tipo ${v.tipo === 'en_vivo' ? 'tipo-vivo' : 'tipo-reconstruido'}">${esc(TIPO_DIA[v.tipo])}</span></td>`
+    + `<td class="num mono">${nf1.format(v.mae_modelo)}</td>`
+    + `<td class="num mono">${nf1.format(v.mae_referencia)}</td>`
+    + `<td class="num mono">${nf0.format(v.cobertura_pct)} %</td></tr>`).join('');
+  const refsTabla = [...new Map(a24.map((v) => [v.tipo, v.referencia_nombre])).entries()]
+    .map(([tipo, ref]) => `${TIPO_DIA[tipo].toLowerCase()}, ${(TITULO_REF[ref] || ref).toLowerCase()}`).join('; ');
+
+  const grupo = (g, h) => d.resumen.find((r) => r.grupo === g && r.horizonte === h);
+  const linea = (r) => `error medio <span class="num">${nf1.format(r.mae_modelo)} MW</span>; la referencia simple (${esc(REF_CORTA[r.referencia_nombre] || r.referencia_nombre)}), <span class="num">${nf1.format(r.mae_referencia)} MW</span>; el rango 10–90 % cubrió el <span class="num">${nf0.format(r.cobertura_pct)} %</span> (promete 80 %)`;
+  const items = [];
+  const vivo = grupo('en_vivo', '24h');
+  const exAnteR = grupo('ex_ante_estricto', '24h');
+  const recon = grupo('reconstruido', '24h');
+  const una = grupo('reconstruido', '1h');
+  if (vivo) {
+    let t = `<li><strong>En vivo a 24 h</strong> (${plural(vivo.dias, 'día', 'días')}, ${nf0.format(vivo.periodos)} medias horas): ${linea(vivo)}.`;
+    if (exAnteR) t += ` Solo las ${nf0.format(exAnteR.periodos)} medias horas que todavía no empezaban al emitirse: <span class="num">${nf1.format(exAnteR.mae_modelo)} MW</span>.`;
+    items.push(`${t}</li>`);
+  } else {
+    items.push('<li><strong>En vivo a 24 h:</strong> todavía ningún día con su real. Cada día se verifica cuando el COES publica su anexo, a la mañana siguiente.</li>');
+  }
+  if (recon) items.push(`<li><strong>Reconstruido a 24 h</strong> (del ${esc(fechaCorta(recon.desde))} al ${esc(fechaCorta(recon.hasta))}, ${plural(recon.dias, 'día', 'días')}): ${linea(recon)}. Es el primer tramo posterior a todo lo evaluado antes, pero no cuenta como en vivo.</li>`);
+  if (una) items.push(`<li><strong>A 1 hora, siempre reconstruido</strong> (${plural(una.dias, 'día', 'días')}): ${linea(una)}. No puede emitirse en vivo: necesita la demanda de una hora antes, y el COES la publica al día siguiente junto con el real.</li>`);
+
+  cont.innerHTML = `<p class="lectura">${esc(lectura)}</p>
+    <p class="muted small">Cada mañana, cuando el COES publica la demanda del día anterior (hacia las 09:45), ${esc(d.modelo || 'el modelo')} pronostica a 24 h las 48 medias horas del día. El pronóstico queda guardado con su hora de emisión antes de conocerse el real y no se reescribe.</p>
+    <h3 class="diag-sub">Pronóstico del ${esc(fechaLarga(u.fecha))}</h3>
+    <p class="small">Emitido el ${esc(fechaDiaMes(u.emitido_lima))} a las ${esc(horaDe(u.emitido_lima))} (hora de Lima), con datos hasta el ${esc(fechaDiaMes(diaDatos))} a las 24:00. ${tipoTxt}</p>
+    <div id="gEnVivo" class="chart"></div>
+    <ul class="legend" aria-label="Leyenda">${itemLinea('ln-pronostico', 'Modelo')}${itemBanda('banda-pronostico', 'Rango 10–90 % (8 de cada 10)')}${hayReal ? itemLinea('ln-real', 'Real') : ''}</ul>
+    ${hayReal ? '' : '<p class="muted small">El real de este día llega mañana, con el anexo del COES.</p>'}
+    <h3 class="diag-sub">Lo ya verificado contra el real</h3>
+    <ul class="lista-confianza">${items.join('')}</ul>
+    ${a24.length ? `<details class="tabla-datos"><summary>Ver el error de cada día a 24 h</summary>
+      <div class="tabla-scroll" tabindex="0" role="region" aria-label="Error de cada día a 24 h"><table class="tabla">
+        <caption class="visually-hidden">Error medio en MW del modelo y de la referencia simple, y cobertura del rango 10–90 %, por día pronosticado a 24 h</caption>
+        <thead><tr><th scope="col">Día</th><th scope="col">Tipo</th><th scope="col" class="num">Modelo</th><th scope="col" class="num">Referencia</th><th scope="col" class="num">Cobertura</th></tr></thead>
+        <tbody>${filas}</tbody></table></div>
+      <p class="muted small">Error medio del día en MW. Referencia simple (la mejor en el acumulado de cada tipo): ${esc(refsTabla)}.</p>
+    </details>` : ''}
+    <p class="muted small">Modelo: ${esc(d.modelo || '—')}${d.version_pesos ? ` · pesos <span class="mono">${esc(d.version_pesos.slice(0, 12))}</span>` : ''}. Datos del IEOD del COES.</p>`;
+
+  const resumenGrafico = hayReal
+    ? ` El error medio del día fue ${nf1.format(mae(u.real, u.pronostico))} MW.`
+    : ' El real todavía no se publica.';
+  graficoLineas($('#gEnVivo'), {
+    n: u.fecha_hora.length,
+    series: [
+      { clase: 'ln-pronostico', valores: u.pronostico, nombre: 'Modelo', banda: { inf: u.inferior, sup: u.superior, clase: 'banda-pronostico', nombre: 'Rango 10–90 %' } },
+      { clase: 'ln-real', valores: u.real, nombre: 'Real', puente: true },
+    ],
+    marcador: idxEmision != null ? { i: idxEmision, txt: `Emitido ${horaDe(u.emitido_lima)}` } : null,
+    etiquetaX: (i) => (i % 12 === 0 ? idxAHora(i) : null),
+    etiquetaPunto: (i) => horaDe(u.fecha_hora[i]),
+    alto: 220,
+    aria: `Pronóstico en vivo a 24 h del ${fechaLarga(u.fecha)} con su rango 10–90 %.${resumenGrafico}`,
+  });
+}
+
 // ---- Rutas e inicio ------------------------------------------------------------------------
 
 function leerRuta() {
@@ -1758,7 +1875,9 @@ function conectarEventos() {
   });
   $('.nav-secciones').addEventListener('click', (ev) => {
     const b = ev.target.closest('[data-ir]');
-    if (b) irASeccion(b.dataset.ir);
+    if (!b) return;
+    irASeccion(b.dataset.ir);
+    if (b.dataset.ir === 'envivo') cargarEnVivo(); // por si la tubería emitió algo desde que se abrió el área
   });
   $('#tablaDia').addEventListener('toggle', pintarTablaDia);
 

@@ -95,6 +95,7 @@
         <button type="button" data-ir="curva">Curva</button>
         <button type="button" data-ir="escenarios">¿Y si…?</button>
         <button type="button" data-ir="diagnostico">Diagnóstico</button>
+        <button type="button" data-ir="envivo">En vivo</button>
       </nav>
 
       <div class="area-grid">
@@ -180,6 +181,12 @@
             <h2 id="tituloConfianza">¿Qué tan bueno es?</h2>
             <div id="barrasConfianza" class="barras-confianza"></div>
             <ul id="listaConfianza" class="lista-confianza"></ul>
+          </section>
+
+          <!-- En vivo: lo que registra cada día la tubería con el anexo del COES (GET /en-vivo/{area}) -->
+          <section id="envivo" class="panel envivo" aria-labelledby="tituloEnVivo" aria-busy="true" tabindex="-1">
+            <h2 id="tituloEnVivo">En vivo</h2>
+            <div id="envivoCuerpo"><p class="cargando-txt">Cargando el pronóstico en vivo…</p></div>
           </section>
         </div>
 
