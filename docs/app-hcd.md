@@ -341,7 +341,7 @@ Los dos modelos nuevos necesitan GPU, así que sus pronósticos se calculan apar
   compara, en las mismas filas, el base, el híbrido, Chronos-2 ajustado y el combinado.
 - El enlace de la página guarda el modelo (`modelo=combinado`), así que la demo se puede abrir ya en él.
 - La app sigue abriendo con el modelo base: es el único que responde a los escenarios, y el arnés de medición
-  compara contra él.
+  compara contra él. (Cambió en la iteración 4: ahora abre con el combinado.)
 
 Medición (`resultados/it3.json`, misma ruta que la iteración 2, modo rápido, con el modelo base): las cuatro
 tareas se cumplen con los mismos pasos (KLM de 16.2, 0, 5.3 y 2.7 s), axe sigue en 0 infracciones en 28 pantallas,
@@ -351,3 +351,103 @@ combinado elegido, en teléfono y escritorio, en claro y oscuro. No se midió co
 Error en la prueba de 2026 de cada opción, a 24 h (MAE en MW; Centro / Norte / Sur): base con clima y El Niño
 83.7 / 32.7 / 51.2; híbrido 75.6 / 28.7 / 49.9; combinado 71.9 / 27.9 / 44.6. El rango del 90 % del combinado
 cubrió el 91.1 / 89.6 / 91.8 % de los periodos de 2026.
+
+## Iteración 4: el combinado por defecto, de dónde sale el número, el error mes a mes y el pico
+
+Las ideas 1 a 3 de la lista priorizada del producto final: lo que más se parece a lo que publican los operadores
+(CAISO pone el pico arriba; NESO publica su error cada mes) y que ya se podía calcular con lo que hay.
+
+**1. El combinado por defecto, con su ficha a la vista.** `GET /modelos` lista primero el combinado (el de menor
+error en 2026) y la app abre con él. Para un día sin pronósticos precalculados del combinado (hoy, solo el 1 de
+enero de 2025: el primer origen guardado es de ese día) responde el modelo base y la respuesta lo dice en un aviso
+amarillo: «Para el miércoles 1 de enero de 2025 no hay pronósticos precalculados del modelo combinado (los hay del
+2 ene 2025 al 15 oct 2026): se muestra el modelo Base (XGBoost).» El backend hace lo mismo sin el parámetro
+`modelo`, y `Serie` y `Pronostico` dicen en `modelo` cuál respondió (pruebas en `test_pronosticador_real.py`).
+Bajo el número, «¿De dónde sale este número? · 85 % Chronos-2 ajustado + 15 % Híbrido» se despliega en la cuenta
+de esa media hora; en el caso de las tareas: 4,764 MW × 0.85 + 4,781 MW × 0.15 = 4,767 MW, el número mostrado.
+Los pesos salieron del código: viven en `modelos/sein/fundacionales/combinado.json`, junto a los modelos del
+híbrido, con su origen (notebook 04: el peso con menor MAE en la validación de 2025, de 0 a 1 cada 0.05, por área y
+horizonte; se aplican tal cual a 2026). `python -m app.backend.pronosticador_hibrido pesos` lo escribe desde la
+tabla del notebook 04 (`reportes/sein/fundacionales/tablas/pesos_combinacion.csv`); si falta, se usan los mismos
+valores por defecto.
+
+**2. El error y la cobertura mes a mes en 2026.** Una sección del diagnóstico, «Mes a mes en 2026», con el MAE de
+cada mes de los tres modelos y de la mejor referencia, a la anticipación elegida, y la cobertura del rango del
+modelo elegido frente a su meta del 90 % (`GET /seguimiento/{área}`). Son los mismos periodos que el error de 2026
+del resumen y del diagnóstico (orígenes desde enero de 2026, que ningún modelo vio). Cada gráfico lleva su
+conclusión calculada y una tabla.
+
+| Combinado, 2026 | Norte 1 h / 24 h | Centro 1 h / 24 h | Sur 1 h / 24 h |
+|---|---|---|---|
+| MAE, MW | 18.8 / 27.9 | **48.8 / 71.9** | 20.9 / 44.6 |
+| Cobertura del rango del 90 %, % | 91.6 / 89.6 | 89.5 / 91.1 | 90.9 / 91.8 |
+
+El MAE del Centro coincide con la tabla 5.5 del paper (48.83 y 71.92 MW). En el año, el rango cumple lo que promete
+en las tres áreas; **por meses no siempre**: en el Centro a 24 h quedó algo corto en marzo (85.9 %) y mayo
+(87.4 %), y la app lo dice. El combinado se equivocó menos que la referencia en los 10 meses en el Centro a 24 h
+(su peor mes, marzo: 86.1 MW frente a 178.1).
+
+**3. Máximo y mayor subida de las próximas 24 h.** Un panel nuevo, entre los controles y «¿Qué tan bueno es?»:
+para la hora de emisión elegida, el máximo pronosticado de las 24 h siguientes con su hora y su rango, y la mayor
+subida en una hora con la hora en que ocurre, marcada en texto como «rampa fuerte» o «subida habitual» (`GET
+/pico/{área}`). No es un pronóstico de varios pasos: el pronóstico a 24 h del proyecto es directo, y cada media
+hora de la ventana es el emitido 24 h antes de ella, el mismo que dibuja la curva; a la hora de emisión ya
+estaban todos emitidos. «Rampa fuerte» es superar el percentil 95 de la mayor subida horaria de cada día real de
+2016 a 2024 (Norte 173, Centro 496, Sur 179 MW/h; con todas las subidas, casi cualquier tarde lo superaría). Junto al
+pico va qué tan bien ubica el modelo el máximo de cada día de 2026, de `experimentos/sein/pico_2026.py`, que usa la
+misma función que la API y guarda `reportes/sein/app/pico_2026.csv`:
+
+| Hora del máximo a ±1 h del real, % de los 288 días (error del máximo, MW) | Norte | Centro | Sur |
+|---|---|---|---|
+| Combinado | 55.2 (28.3) | 61.5 (83.9) | 64.6 (46.8) |
+| Híbrido | 54.2 (28.3) | 56.9 (85.9) | 58.0 (56.4) |
+| Base, con clima y El Niño | 55.6 (32.3) | 54.9 (92.1) | 51.0 (55.8) |
+| Mejor referencia simple | 46.9 (39.0) | 56.9 (143.2) | 55.6 (49.6) |
+
+La hora del máximo es difícil: ningún modelo pasa del 65 % y el base ubica peor la hora que la referencia en el
+Centro y el Sur, aunque yerra menos el valor (salvo en el Sur). La app muestra la cifra del modelo y la de la
+referencia, para que no se lea de más.
+
+**Escenarios.** El combinado no usa el clima, así que «¿Y si…?» los calcula con el modelo base (con clima y El
+Niño) y lo dice en una nota. Así T3 no cambia de camino.
+
+### Medición
+
+Misma ruta que la iteración 2 (`versiones.mjs`, `it4`), modo rápido, contra el backend real; la tabla sale de
+`node tabla.mjs it3 it4`. Las cifras del caso de las tareas cambian porque cambió el modelo por defecto: T1 4,712
+→ 4,767 MW (rango 4,588–4,929, real 4,784), T2 33.6 → 31.1 MW frente a 65.9 de la referencia, T4 «Niño débil, 86.8»
+→ «Niño moderado, 80.6» (el diagnóstico del combinado); T3 sigue en 15 MW porque lo calcula el base.
+
+| | It. 3 | It. 4 |
+|---|---|---|
+| Modelo con que abre | Base (XGBoost) | Combinado |
+| T1 a T4: cumplidas y acciones (escritorio = móvil) | 4 de 4; 16 / 0 / 2 / 1 | 4 de 4; 16 / 0 / 2 / 1 |
+| Tiempo estimado de las 4 tareas (KLM) | 24.2 s | 24.2 s |
+| axe-core, infracciones en 28 pantallas | 0 | 0 |
+| axe-core con la ficha abierta, el seguimiento a 1 h y a 24 h y el día de respaldo (16 pantallas más) | — | 0 |
+| Número visible sin desplazarse / barras fijas (móvil) | sí / 8 % | sí / 8 % |
+| Tabulaciones hasta el horizonte / hasta «Diagnóstico» | 12 / 10 | **13** / 10 |
+| Peso de la vista del área / peticiones | 119 KB / 9 | **141 KB / 10** |
+| Hasta ver el número: red local / red lenta | 60 / 1230 ms | 66 / 1337 ms |
+
+| La respuesta con su ficha | El pico y la rampa | Mes a mes |
+|---|---|---|
+| ![La respuesta con la ficha abierta: 4,764 × 0.85 + 4,781 × 0.15 = 4,767 MW](img/app-hcd/it4-ficha.jpg) | ![Máximo y mayor subida de las próximas 24 h](img/app-hcd/it4-pico.jpg) | ![MAE por mes de los tres modelos y la referencia, y cobertura del rango](img/app-hcd/it4-seguimiento.jpg) |
+
+**Lo que empeoró, y por qué se acepta.** Una tabulación más hasta el horizonte (el desplegable de la ficha va antes
+de los controles; sigue lejos de las 18 de la base). 22 KB más: el JavaScript sin comprimir (18 KB), los estilos
+y la petición del pico; el servidor de la demo no comprime. La red lenta sube 9 %, dentro del ruido del
+instrumento (§5). No se midió con personas.
+
+**Pendientes.** La versión en `/salud` (commit y sha256 de los artefactos) y la fecha de corte a la vista; el
+combinado solo cubre hasta el 15 de octubre de 2026 porque hereda el último día del base con clima, aunque sus
+pronósticos guardados llegan al 22; el seguimiento móvil (7 y 30 días) en lugar de mensual; y probar la ficha y
+el panel del pico con operadores.
+
+Cómo repetirlo:
+
+```bash
+uv run python -m app.backend.pronosticador_hibrido pesos   # combinado.json desde la tabla del notebook 04
+uv run python -m experimentos.sein.pico_2026               # la tabla del pico, en reportes/sein/app/
+cd app/medicion && node medir.mjs --version it4 --etiqueta it4 --rapido && node tabla.mjs it3 it4
+```

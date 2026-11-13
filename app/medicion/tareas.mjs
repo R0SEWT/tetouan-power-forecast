@@ -33,9 +33,13 @@ export async function oraculos() {
   const u = p.pronostico.length - 1;
   const maeM = maeDe(serie.real, serie.pronostico);
   const maeR = maeDe(serie.real, serie.referencia);
-  const base = await api('/pronostico', { area, origen: `${fecha}T${CASO.hora}`, horizonte: '24h', variante: 'M3' });
+  // Los escenarios los calcula un modelo con clima: si el de por defecto usa solo la demanda, la app usa el base
+  const modelos = await api('/modelos').catch(() => []);
+  const conClima = modelos.find((m) => !Array.isArray(m.variantes) || m.variantes.includes('M3'));
+  const clima = modelos.length > 1 && conClima ? { modelo: conClima.id } : {};
+  const base = await api('/pronostico', { area, origen: `${fecha}T${CASO.hora}`, horizonte: '24h', variante: 'M3', ...clima });
   const esc = await api('/pronostico', {
-    area, origen: `${fecha}T${CASO.hora}`, horizonte: '24h', variante: 'M3', escenario: { delta_temp_c: 2 },
+    area, origen: `${fecha}T${CASO.hora}`, horizonte: '24h', variante: 'M3', escenario: { delta_temp_c: 2 }, ...clima,
   });
   const pico = base.pronostico.indexOf(Math.max(...base.pronostico));
   const cambio = esc.pronostico[pico] - base.pronostico[pico];

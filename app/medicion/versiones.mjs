@@ -93,6 +93,10 @@ VERSIONES.it2 = {
   },
 };
 
+// Iteración 4: el combinado por defecto, la ficha del número, el pico y el seguimiento mes a mes. Las tareas
+// siguen los mismos caminos que en la iteración 2 (el pico va en su propio panel y la ficha, plegada).
+VERSIONES.it4 = VERSIONES.it2;
+
 export function version(nombre) {
   const v = VERSIONES[nombre];
   if (!v) throw new Error(`Versión desconocida: ${nombre}. Hay: ${Object.keys(VERSIONES).join(', ')}`);
