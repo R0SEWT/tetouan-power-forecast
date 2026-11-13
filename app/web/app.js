@@ -722,7 +722,6 @@ function mostrarArea(id, q) {
   if (['M0', 'M3'].includes(q.get('variante'))) S.variante = q.get('variante');
   if (q.get('modelo') && S.modelos.some((m) => m.id === q.get('modelo')) && q.get('modelo') !== S.modelo) {
     S.modelo = q.get('modelo');
-    S.diag.clear();
     cargarResumen();
   }
   aplicarModelo();
@@ -1191,25 +1190,26 @@ async function cargarSensibilidad() {
 async function pintarDiagnostico() {
   const panel = $('#panel-diagnostico');
   const area = S.area;
-  if (!S.diag.has(area)) {
+  const clave = `${S.modelo || ''}|${area}`; // el diagnóstico es de un modelo y un área
+  if (!S.diag.has(clave)) {
     panel.innerHTML = '<p class="cargando-txt">Calculando el diagnóstico…</p>';
     const turno = ++S.turnos.diag;
     try {
       const q = hayVariosModelos() && S.modelo ? `?modelo=${encodeURIComponent(S.modelo)}` : '';
-      S.diag.set(area, await api(`/diagnostico/${encodeURIComponent(area)}${q}`));
+      S.diag.set(clave, await api(`/diagnostico/${encodeURIComponent(area)}${q}`));
     } catch (err) {
       if (turno === S.turnos.diag) manejarError(err, panel);
       return;
     }
-    if (turno !== S.turnos.diag || S.area !== area || S.tab !== 'diagnostico') return;
+    if (turno !== S.turnos.diag || S.area !== area || S.tab !== 'diagnostico' || clave !== `${S.modelo || ''}|${S.area}`) return;
   }
-  const d = S.diag.get(area);
+  const d = S.diag.get(clave);
   const prueba = S.salud && S.salud.modelo === 'prueba';
   panel.innerHTML = `
     <p class="muted small">Todo a 24 horas, con el error medio en MW (menos es mejor).${prueba ? ' <strong>Datos de prueba:</strong> los números son ilustrativos.' : ''}</p>
     <section class="diag-seccion">
       <h3>¿Con qué fase de El Niño se equivoca más?</h3>
-      <p class="muted small">Error medio de 2025 y 2026 según la fase de El Niño (2026 casi no tiene fase neutra).</p>
+      <p class="muted small">Error medio en la prueba de 2026 según la fase de El Niño.</p>
       <ul class="legend"><li><svg width="18" height="11" aria-hidden="true"><rect width="18" height="11" rx="3" class="barra-modelo"/></svg>Modelo</li><li><svg width="18" height="11" aria-hidden="true"><rect x="0.75" y="0.75" width="16.5" height="9.5" rx="3" class="barra-referencia"/></svg>Referencia simple</li></ul>
       <p id="lecRegimen" class="lectura"></p>
       <div id="gRegimen" class="chart"></div>
@@ -1380,11 +1380,18 @@ function enrutar() {
 // Las métricas de la ficha y de «¿qué tan bueno es?» son las del modelo elegido.
 async function cargarResumen() {
   if (!hayVariosModelos() || !S.modelo) return;
+  const pedido = S.modelo;
+  let resumen;
   try {
-    S.resumen = await api(`/resumen?modelo=${encodeURIComponent(S.modelo)}`);
+    resumen = await api(`/resumen?modelo=${encodeURIComponent(pedido)}`);
   } catch {
-    /* se conserva el resumen anterior */
+    return; // se conserva el resumen anterior
   }
+  if (pedido !== S.modelo) return; // mientras llegaba se eligió otro modelo
+  S.resumen = resumen;
+  pintarInicio();
+  pintarFicha();
+  if (S.area && S.serie) pintarConfianza();
 }
 
 async function cargarBase() {
@@ -1465,10 +1472,10 @@ function conectarEventos() {
   });
   $('#inModelo').addEventListener('change', (ev) => {
     S.modelo = ev.target.value;
-    S.diag.clear();
     aplicarModelo();
     cargarResumen();
     recargar();
+    if (S.tab === 'diagnostico') pintarDiagnostico();
   });
   $('#inHora').addEventListener('input', (ev) => elegirHora(Number(ev.target.value)));
   $('#momentos').addEventListener('click', (ev) => {
