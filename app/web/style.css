@@ -4,8 +4,9 @@
    ========================================================================== */
 
 :root {
-  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  /* Fuentes del sistema: nada que descargar de terceros */
+  --font-sans: system-ui, -apple-system, 'Segoe UI', Roboto, 'Noto Sans', Ubuntu, Cantarell, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, 'Cascadia Mono', 'Roboto Mono', 'DejaVu Sans Mono', Menlo, Consolas, monospace;
 
   /* Modo oscuro (por defecto) */
   --bg-app: #0e1117;
@@ -24,7 +25,7 @@
   --c-sur: #009e73;
   --c-pronostico: #d55e00;
   --c-referencia: #cc79a7;
-  --c-celeste: #56b4e9; /* Programación Diaria y escenario */
+  --c-celeste: #56b4e9; /* escenario */
   --c-real: var(--text-main);
   --c-hueco: #8e98ad;
   --aviso-bg: rgba(240, 228, 66, 0.12);
@@ -36,9 +37,9 @@
   --radius-lg: 20px;
   --radius-pill: 9999px;
 
-  --shadow-sheet: 0 -8px 24px rgba(0, 0, 0, 0.45);
   --shadow-card: 0 4px 14px rgba(0, 0, 0, 0.25);
-  --alto-hoja: 112px;
+  --c-bueno: #009e73;
+  --c-malo: #d55e00;
 
   color-scheme: dark;
 }
@@ -62,8 +63,9 @@
   --aviso-borde: rgba(178, 122, 0, 0.6);
   --error-bg: rgba(213, 94, 0, 0.1);
 
-  --shadow-sheet: 0 -8px 24px rgba(0, 0, 0, 0.12);
   --shadow-card: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --c-bueno: #007a5a;
+  --c-malo: #b34700;
 
   color-scheme: light;
 }
@@ -110,9 +112,51 @@ a {
   color: inherit;
 }
 
-:focus-visible {
+:focus-visible,
+input[type='date']:focus-within {
   outline: 2px solid var(--focus);
   outline-offset: 2px;
+}
+
+/* Enlace para saltar al pronóstico: aparece al recibir el foco */
+.saltar {
+  position: absolute;
+  left: 12px;
+  top: -60px;
+  z-index: 100;
+  min-height: 44px;
+  padding: 12px 14px;
+  border-radius: var(--radius-sm);
+  background: var(--text-main);
+  color: var(--bg-app);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.saltar:focus {
+  top: 12px;
+}
+
+#respuesta,
+#curva,
+#detalle {
+  scroll-margin-top: 72px;
+}
+
+#graficoDia {
+  min-height: 240px; /* la altura del gráfico: la curva no empuja lo de abajo al llegar */
+}
+
+#respuesta:focus,
+#curva:focus,
+#detalle:focus {
+  outline: none;
+}
+
+#respuesta:focus-visible,
+#curva:focus-visible,
+#detalle:focus-visible {
+  outline: 2px solid var(--focus);
 }
 
 [hidden] {
@@ -142,23 +186,25 @@ a {
   white-space: nowrap;
 }
 
+/* La app usa hasta 1240 px (proyector de la demo); el inicio limita su contenido a 760 px.
+   La cabecera no cambia de ancho al pasar de una vista a otra: no hay saltos. */
 .app {
   width: 100%;
-  max-width: 760px;
+  max-width: 1240px;
   margin: 0 auto;
   min-height: 100dvh;
 }
 
-.app.con-hoja {
-  padding-bottom: calc(var(--alto-hoja) + 16px + env(safe-area-inset-bottom));
+#vistaInicio {
+  max-width: 760px;
+  margin: 0 auto;
 }
 
 /* ==========================================================================
    Barra superior con chips
    ========================================================================== */
 .hud-top {
-  position: sticky;
-  top: 0;
+  position: relative;
   z-index: 50;
   display: flex;
   flex-direction: column;
@@ -639,90 +685,6 @@ input[type='range']::-moz-range-thumb {
   box-shadow: 0 1px 6px rgba(0, 0, 0, 0.25), inset 0 0 0 1px var(--border-strong);
 }
 
-/* ---- Tarjetas que se comparan ---- */
-.compare {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-}
-
-.cmp-card {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  min-width: 0;
-  padding: 12px;
-  border-radius: var(--radius-md);
-  border: 1.5px solid var(--border-subtle);
-  background: var(--bg-surface);
-}
-
-.cmp-card.ganador {
-  border-color: var(--text-main);
-}
-
-.cmp-head {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 12px;
-  font-weight: 700;
-}
-
-.cmp-head svg {
-  flex-shrink: 0;
-}
-
-.cmp-sub {
-  font-size: 11px;
-  color: var(--text-muted);
-  min-height: 2.6em;
-}
-
-.cmp-valor {
-  font-family: var(--font-mono);
-  font-variant-numeric: tabular-nums;
-  font-size: 22px;
-  font-weight: 700;
-  letter-spacing: -0.5px;
-}
-
-.cmp-valor small {
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--text-muted);
-  letter-spacing: 0;
-}
-
-.cmp-linea {
-  font-size: 12px;
-  color: var(--text-muted);
-}
-
-.cmp-linea .num {
-  color: var(--text-main);
-  font-weight: 600;
-}
-
-.badge-ganador {
-  align-self: flex-start;
-  padding: 2px 8px;
-  border-radius: var(--radius-pill);
-  border: 1px solid var(--text-main);
-  font-size: 10.5px;
-  font-weight: 700;
-}
-
-.cmp-frase {
-  grid-column: 1 / -1;
-  padding: 10px 12px;
-  border-radius: var(--radius-sm);
-  background: var(--bg-surface-elevated);
-  border: 1px solid var(--border-subtle);
-  font-size: 13.5px;
-  font-weight: 600;
-}
-
 /* ==========================================================================
    Gráficos en SVG
    ========================================================================== */
@@ -772,12 +734,6 @@ input[type='range']::-moz-range-thumb {
   stroke: var(--c-referencia);
   stroke-width: 2;
   stroke-dasharray: 6 4;
-}
-
-.ln-programacion {
-  stroke: var(--c-celeste);
-  stroke-width: 2;
-  stroke-dasharray: 1.5 4;
 }
 
 .ln-escenario {
@@ -981,53 +937,11 @@ input[type='range']::-moz-range-thumb {
 }
 
 /* ==========================================================================
-   Hoja inferior con pestañas
+   Pestañas de detalle (en la página, ya no en una hoja fija)
    ========================================================================== */
-.bottom-sheet {
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 60;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  max-width: 760px;
-  max-height: 80dvh;
-  margin: 0 auto;
-  padding-bottom: env(safe-area-inset-bottom);
-  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-  border: 1px solid var(--border-subtle);
-  border-bottom: none;
-  background: var(--bg-surface);
-  box-shadow: var(--shadow-sheet);
-}
-
-.sheet-handle {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 8px;
-  width: 100%;
-  min-height: 30px;
-  border: none;
-  background: transparent;
-  color: var(--text-muted);
-  font-size: 11px;
-  font-weight: 600;
-}
-
-.handle-pill {
-  width: 40px;
-  height: 4px;
-  border-radius: var(--radius-pill);
-  background: var(--border-strong);
-}
-
 .sheet-tabs {
   display: flex;
   gap: 4px;
-  margin: 0 16px 12px;
   padding: 3px;
   border-radius: var(--radius-md);
   border: 1px solid var(--border-subtle);
@@ -1042,7 +956,7 @@ input[type='range']::-moz-range-thumb {
   border-radius: var(--radius-sm);
   background: transparent;
   color: var(--text-muted);
-  font-size: 12.5px;
+  font-size: 13px;
   font-weight: 700;
   white-space: nowrap;
 }
@@ -1051,18 +965,6 @@ input[type='range']::-moz-range-thumb {
   background: var(--bg-surface-elevated);
   color: var(--text-main);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25), inset 0 -2px 0 var(--c-pronostico);
-}
-
-.sheet-body {
-  flex: 1;
-  min-height: 0;
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  padding: 0 16px 20px;
-}
-
-.bottom-sheet.collapsed .sheet-body {
-  display: none;
 }
 
 .tab-panel {
@@ -1153,6 +1055,386 @@ input[type='range']::-moz-range-thumb {
 }
 
 /* ==========================================================================
+   Vista del área: la respuesta primero
+   ========================================================================== */
+.area-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.col-principal,
+.col-detalle {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-width: 0;
+}
+
+.respuesta {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 16px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+  border-left: 4px solid var(--c-pronostico);
+  background: var(--bg-surface);
+  box-shadow: var(--shadow-card);
+}
+
+.resp-cabeza {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.resp-kicker {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.resp-estado {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.resp-estado:not(:empty)::before {
+  content: '';
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  margin-right: 6px;
+  border-radius: 50%;
+  background: var(--c-celeste);
+  animation: latido 1s ease-in-out infinite alternate;
+}
+
+@keyframes latido {
+  from { opacity: 0.3; }
+  to { opacity: 1; }
+}
+
+.resp-titulo {
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.resp-emision {
+  min-height: 2.9em; /* dos líneas reservadas */
+  font-size: 12.5px;
+}
+
+.resp-valor {
+  margin-top: 2px;
+  line-height: 1;
+}
+
+.resp-valor .num {
+  font-size: 44px;
+  font-weight: 700;
+  letter-spacing: -1px;
+}
+
+.resp-valor .unidad {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.resp-rango {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 8px;
+  font-size: 14px;
+}
+
+.resp-rango-txt {
+  font-weight: 600;
+}
+
+.resp-rango .num {
+  font-weight: 700;
+}
+
+.resp-rango-ayuda {
+  flex-basis: 100%;
+}
+
+.resp-datos {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 6px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.resp-datos dt {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.resp-datos dd {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.marca {
+  display: inline-block;
+  white-space: nowrap;
+  margin-top: 2px;
+  padding: 1px 7px;
+  border-radius: var(--radius-pill);
+  border: 1px solid currentColor;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.marca.dentro {
+  color: var(--c-bueno);
+}
+
+.marca.fuera {
+  color: var(--c-malo);
+}
+
+.resp-veredicto {
+  min-height: 3.6em;
+  padding: 8px 10px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-surface-elevated);
+  font-size: 13.5px;
+  font-weight: 600;
+}
+
+.resp-veredicto.bueno {
+  border-left: 3px solid var(--c-bueno);
+}
+
+.resp-veredicto.malo {
+  border-left: 3px solid var(--c-malo);
+}
+
+.respuesta.desactualizada .resp-valor,
+.respuesta.desactualizada .resp-rango,
+.respuesta.desactualizada .resp-datos,
+.respuesta.desactualizada .resp-veredicto {
+  opacity: 0.45;
+  transition: opacity 0.15s ease;
+}
+
+.field-help {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.field-aviso {
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  background: var(--aviso-bg);
+  border: 1px dashed var(--aviso-borde);
+  font-size: 12.5px;
+}
+
+select {
+  width: 100%;
+  min-height: 40px;
+  padding: 8px 10px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-input);
+  font-size: 14px;
+}
+
+.confianza h2 {
+  font-size: 15px;
+}
+
+.barras-confianza {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.barra-fila {
+  display: grid;
+  grid-template-columns: minmax(0, 13em) 1fr auto;
+  align-items: center;
+  gap: 8px;
+  font-size: 12.5px;
+}
+
+.barra-nombre {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.barra-pista {
+  height: 12px;
+  border-radius: var(--radius-pill);
+  background: var(--bg-input);
+  overflow: hidden;
+}
+
+.barra {
+  display: block;
+  height: 100%;
+  border-radius: var(--radius-pill);
+}
+
+.barra-modelo-h {
+  background: var(--c-pronostico);
+}
+
+.barra-referencia-h {
+  background: repeating-linear-gradient(90deg, var(--c-referencia) 0 6px, transparent 6px 9px);
+}
+
+.barra-valor {
+  font-weight: 700;
+}
+
+.lista-confianza {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-left: 18px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.lista-confianza strong {
+  color: var(--text-main);
+}
+
+.detalle {
+  gap: 14px;
+  /* Alto de una ventana: «¿Y si…?» y «Diagnóstico» siempre pueden quedar arriba al saltar,
+     aunque su contenido todavía esté cargando */
+  min-height: calc(100dvh - 72px);
+}
+
+/* Navegación de secciones: lo único pegajoso de la vista */
+.nav-secciones {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  display: flex;
+  gap: 4px;
+  margin: 0 -16px;
+  padding: 8px 16px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  background: var(--bg-app);
+  background: color-mix(in srgb, var(--bg-app) 92%, transparent);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.nav-secciones::-webkit-scrollbar {
+  display: none;
+}
+
+.nav-secciones button {
+  flex: 1 0 auto;
+  min-height: 36px;
+  padding: 6px 12px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-surface);
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.nav-secciones button:hover {
+  border-color: var(--border-strong);
+}
+
+.lectura {
+  padding: 8px 10px;
+  border-radius: var(--radius-sm);
+  border-left: 3px solid var(--c-celeste);
+  background: var(--bg-surface-elevated);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.tabla-datos summary {
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 6px 0;
+}
+
+.tabla-scroll {
+  max-height: 320px;
+  overflow: auto;
+  margin-top: 6px;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+}
+
+.tabla-scroll thead th {
+  position: sticky;
+  top: 0;
+  background: var(--bg-surface);
+}
+
+.tabla .fila-elegida {
+  background: var(--bg-surface-elevated);
+  font-weight: 700;
+}
+
+/* Pantallas táctiles: objetivos de al menos 44 px */
+@media (pointer: coarse) {
+  .moment-btn,
+  .option-btn,
+  .segmented button,
+  .sheet-tab,
+  .chip-btn,
+  .btn,
+  .nav-secciones button,
+  select,
+  input[type='date'],
+  .time-pill {
+    min-height: 44px;
+  }
+
+  .chip-btn.icon-only,
+  .btn-back {
+    width: 44px;
+    height: 44px;
+  }
+
+  input[type='range'] {
+    height: 44px;
+  }
+
+  .hud-brand {
+    min-height: 44px;
+  }
+
+  .tabla-datos summary {
+    padding: 12px 0; /* 44 px sin perder el triángulo del desplegable */
+  }
+}
+
+/* ==========================================================================
    Botones
    ========================================================================== */
 .btn {
@@ -1238,13 +1520,69 @@ input[type='range']::-moz-range-thumb {
     padding: 20px 24px;
   }
 
+  .nav-secciones {
+    margin: 0 -24px;
+    padding: 8px 24px;
+  }
+
+  .nav-secciones button {
+    flex: 0 0 auto;
+  }
+
   .hud-top {
     padding-left: 24px;
     padding-right: 24px;
   }
 
-  .cmp-valor {
-    font-size: 26px;
+  .area-list {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .area-list .area-btn {
+    align-items: flex-start;
+  }
+}
+
+@media (min-width: 960px) {
+  .hud-top {
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .hud-row {
+    display: contents;
+  }
+
+  .hud-brand {
+    order: 0;
+  }
+
+  .hud-chips {
+    order: 1;
+    flex: 1;
+    margin: 0;
+    padding: 0;
+  }
+
+  .hud-actions {
+    order: 2;
+  }
+
+  .area-grid {
+    display: grid;
+    grid-template-columns: minmax(360px, 420px) minmax(0, 1fr);
+    align-items: start;
+    gap: 16px;
+  }
+
+  .resp-valor .num {
+    font-size: 52px;
+  }
+
+  .vista-area .area-header p {
+    max-width: 70ch;
   }
 }
 
@@ -1253,4 +1591,149 @@ input[type='range']::-moz-range-thumb {
     transition: none !important;
     animation: none !important;
   }
+}
+
+/* Una opción que el modelo elegido no tiene (el híbrido no distingue clima ni El Niño) */
+.segmented button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* ==========================================================================
+   Iteración 4: el combinado por defecto, su ficha, el pico y el seguimiento
+   ========================================================================== */
+
+/* Día sin pronósticos precalculados del modelo elegido: responde su respaldo y se dice */
+.resp-aviso {
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  background: var(--aviso-bg);
+  border: 1px dashed var(--aviso-borde);
+  font-size: 12.5px;
+  font-weight: 600;
+}
+
+.resp-ficha {
+  font-size: 13px;
+}
+
+.resp-ficha summary {
+  cursor: pointer;
+  padding: 4px 0;
+  font-weight: 600;
+}
+
+.resp-ficha summary .muted {
+  font-weight: 500;
+}
+
+.resp-ficha-cuerpo {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-top: 6px;
+}
+
+.ficha-tabla {
+  max-height: none;
+  margin-top: 0;
+}
+
+.ficha-tabla tfoot th,
+.ficha-tabla tfoot td {
+  font-weight: 700;
+  border-top: 1px solid var(--border-strong);
+}
+
+.pico h2 {
+  font-size: 15px;
+}
+
+.pico-datos {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+.pico-datos dt {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.pico-datos dd {
+  font-size: 13.5px;
+}
+
+.pico-valor {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+}
+
+.pico-nota {
+  display: block;
+  font-size: 12.5px;
+  color: var(--text-muted);
+}
+
+.pico-acierto {
+  padding: 8px 10px;
+  border-radius: var(--radius-sm);
+  border-left: 3px solid var(--c-celeste);
+  background: var(--bg-surface-elevated);
+  font-size: 13px;
+}
+
+.diag-sub {
+  margin-top: 6px;
+  font-size: 14px;
+}
+
+/* Seguimiento mes a mes: los otros modelos con trazos propios, además del color */
+.ln-modelo-2 {
+  stroke: var(--c-celeste);
+  stroke-width: 2.2;
+  stroke-dasharray: 10 4;
+}
+
+.ln-modelo-3 {
+  stroke: var(--c-sur);
+  stroke-width: 2.2;
+  stroke-dasharray: 2 3;
+}
+
+.ln-meta {
+  stroke: var(--text-muted);
+  stroke-width: 1.6;
+  stroke-dasharray: 4 4;
+}
+
+@media (pointer: coarse) {
+  .resp-ficha summary {
+    padding: 12px 0; /* 44 px */
+  }
+}
+
+@media (min-width: 640px) {
+  .pico-datos {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 960px) {
+  .pico-datos {
+    grid-template-columns: 1fr;
+  }
+}
+
+.ficha-tabla td {
+  white-space: nowrap;
+}
+
+.pico.desactualizada #picoCuerpo {
+  opacity: 0.45;
+  transition: opacity 0.15s ease;
 }
