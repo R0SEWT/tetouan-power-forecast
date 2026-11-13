@@ -230,9 +230,10 @@ el nivel reciente ya lo captura la razón.
 **Partición con hueco.** Entre un tramo y el siguiente quedan H pasos sin usar (las filas cuyo objetivo cae en el
 tramo siguiente), para que ningún objetivo del entrenamiento se filtre en la validación ni en la prueba. En el
 SEIN, cada área queda con 154,791 periodos de entrenamiento (2016-2024), 17,518 de validación (2025) y 13,920 de
-prueba (1 de enero al 17 de octubre de 2026) a 1 hora, con 26 variables en M0 y 33 en M3.[^nb01-sein] La
-prueba termina el 17 de octubre (y no el 23) porque ERA5 llega con unos cinco días de rezago y las filas se
-exigen completas para todas las variantes. **Las filas de 2026 se apartan en la primera celda del notebook de
+prueba a 1 hora (del 1 de enero al 17 de octubre de 2026; a 24 horas, 13,871, hasta el 16 de octubre), con 26
+variables en M0 y 33 en M3.[^nb01-sein][^nb03-datos] La prueba termina el 17 de octubre a 1 hora y el 16 a 24
+horas (y no el 23) porque ERA5 llega con unos cinco días de rezago y las filas se exigen completas para todas las
+variantes. **Las filas de 2026 se apartan en la primera celda del notebook de
 modelado y no vuelven a aparecer hasta el notebook de la prueba.**
 
 **Reproducibilidad.** Las capas de datos siguen un esquema medallón (bronze: el archivo tal como lo sirve la
@@ -453,8 +454,8 @@ cambia la alerta de ENFEN (2 veces en 2025) es peor que cada semana.[^adap25]
 5. **El Niño y fallas:** el ICEN y el Niño 1+2 no mejoran a M0 en ningún horizonte.
 6. **"Sin efecto" también es un resultado.**
 
-**El modelo fijo frente a las referencias** (1 de enero al 17 de octubre de 2026; modelo entrenado hasta 2025 y
-sin tocar):[^fr26]
+**El modelo fijo frente a las referencias** (del 1 de enero al 17 de octubre de 2026 a 1 hora y al 16 de octubre
+a 24 horas; modelo entrenado hasta 2025 y sin tocar):[^fr26]
 
 | Horizonte | Área | Mejor referencia: MAE (MW) · MAPE | Random Forest (elegido): MAE · MAPE · mejora | Δ MAE, IC 95 % | XGBoost global: MAE · mejora |
 |---|---|---|---|---|---|
@@ -482,20 +483,22 @@ referencia queda en 0.09, 0.99 y 0.95 % de esas horas (1.6, 0.5 y 1.9 % a 24 hor
 **Ablación de exógenas en 2026** (modelo fijo; diferencia de MAE en MW con su intervalo; negativo = la variable
 ayuda):[^abl26]
 
-| Horizonte | Área | Clima (M1 − M0) | El Niño (M2 − M1) | Fallas (M3 − M2) | Todas (M3 − M0) |
-|---|---|---|---|---|---|
-| 1 h | Norte | −0.09 (−0.18 a 0.01) | −0.00 (−0.06 a 0.05) | −0.01 (−0.05 a 0.04) | −0.10 (−0.19 a 0.00) |
-| 1 h | Centro | **−0.46 (−0.71 a −0.20)** | −0.09 (−0.25 a 0.06) | 0.02 (−0.11 a 0.16) | **−0.53 (−0.78 a −0.27)** |
-| 1 h | Sur | 0.04 (−0.03 a 0.11) | −0.02 (−0.09 a 0.06) | −0.04 (−0.11 a 0.02) | −0.02 (−0.11 a 0.06) |
-| 24 h | Norte | **+0.42 (0.16 a 0.68)** | −0.03 (−0.19 a 0.09) | **−0.13 (−0.22 a −0.04)** | **+0.25 (0.03 a 0.48)** |
-| 24 h | Centro | **+1.35 (0.10 a 2.97)** | −0.01 (−0.48 a 0.44) | 0.14 (−0.20 a 0.48) | **+1.48 (0.24 a 3.03)** |
-| 24 h | Sur | 0.02 (−0.28 a 0.32) | **+0.83 (0.46 a 1.23)** | −0.08 (−0.31 a 0.16) | **+0.77 (0.32 a 1.25)** |
+| Horizonte | Área | Clima (M1 − M0) | El Niño (M2 − M1) | Fallas (M3 − M2) | Clima + El Niño (M2 − M0) | Todas (M3 − M0) |
+|---|---|---|---|---|---|---|
+| 1 h | Norte | −0.09 (−0.18 a 0.01) | −0.00 (−0.06 a 0.05) | −0.01 (−0.05 a 0.04) | −0.09 (−0.18 a 0.01) | −0.10 (−0.19 a 0.00) |
+| 1 h | Centro | **−0.46 (−0.71 a −0.20)** | −0.09 (−0.25 a 0.06) | 0.02 (−0.11 a 0.16) | **−0.55 (−0.82 a −0.30)** | **−0.53 (−0.78 a −0.27)** |
+| 1 h | Sur | 0.04 (−0.03 a 0.11) | −0.02 (−0.09 a 0.06) | −0.04 (−0.11 a 0.02) | 0.02 (−0.06 a 0.11) | −0.02 (−0.11 a 0.06) |
+| 24 h | Norte | **+0.42 (0.16 a 0.68)** | −0.03 (−0.19 a 0.09) | **−0.13 (−0.22 a −0.04)** | **+0.39 (0.14 a 0.62)** | **+0.25 (0.03 a 0.48)** |
+| 24 h | Centro | **+1.35 (0.10 a 2.97)** | −0.01 (−0.48 a 0.44) | 0.14 (−0.20 a 0.48) | **+1.34 (0.19 a 2.74)** | **+1.48 (0.24 a 3.03)** |
+| 24 h | Sur | 0.02 (−0.28 a 0.32) | **+0.83 (0.46 a 1.23)** | −0.08 (−0.31 a 0.16) | **+0.85 (0.44 a 1.30)** | **+0.77 (0.32 a 1.25)** |
 
 En negrita, los intervalos que no cruzan el cero. A 1 hora, el clima ayuda algo en el Centro (−0.46 MW sobre
 54 MW, menos del 1 %) y nada en las otras áreas. A 24 horas, **el clima empeora** el pronóstico en el Norte y el
 Centro, y El Niño empeora el Sur. Es el riesgo que se declaró con la hipótesis 4: temperaturas fuera del rango de
 entrenamiento, con las que los árboles no extrapolan, sumadas a un pronóstico de temperatura simulado con error.
-El efecto de las fallas no se interpreta (sección 4.4).
+Como el efecto de la variable de fallas no se interpreta (sección 4.4), el efecto de "las exógenas" se lee en la
+columna M2 − M0 (clima y El Niño, sin fallas): −0.55 MW en el Centro a 1 hora (IC −0.82 a −0.30), nada en el Norte
+ni el Sur, y +0.39, +1.34 y +0.85 MW a 24 horas en el Norte, el Centro y el Sur.
 
 **Experimento de adaptación en 2026** (41 reentrenamientos semanales; 4 por alerta de ENFEN):[^adap26]
 
@@ -514,8 +517,9 @@ El efecto de las fallas no se interpreta (sección 4.4).
 Diferencias de MAE en MW, con su intervalo del 95 %; en negrita, las que no cruzan el cero. Reentrenar cada
 semana baja el error a 1 hora en las tres áreas, ahora también en el Norte, donde en 2025 no se distinguía de
 cero; con exógenas (sin la variable de fallas) llega a −0.70 MW en el Centro, cerca del 1 % del error. A 24 horas,
-reentrenar sin exógenas no se distingue de no hacerlo, pero sí compensa parte del daño del clima (D − B en el
-Centro, −0.87 MW). Reentrenar solo con la alerta de ENFEN (4 veces) es peor que cada semana en el Centro y el Sur,
+reentrenar sin exógenas no se distingue de no hacerlo; con exógenas sí baja el error (M2: −0.16, −0.72 y −0.66 MW;
+D − B en el Centro, −0.87), pero solo compensa parte del daño del clima: el M2 reentrenado (29.2 / 78.8 / 48.5 MW
+en el Norte / Centro / Sur) sigue por encima del modelo fijo sin exógenas (29.0 / 78.1 / 48.3). Reentrenar solo con la alerta de ENFEN (4 veces) es peor que cada semana en el Centro y el Sur,
 y sumarla a la semanal no agrega nada (diferencias de 0.00 a 0.02 MW).
 
 **Las hipótesis, una por una:**[^hip26]
@@ -526,7 +530,7 @@ y sumarla a la semanal no agrega nada (diferencias de 0.00 a 0.02 MW).
 | 1b. En el Norte la mejora a 1 h baja respecto de 2025 (49 %) pero queda sobre 25 % | No | Subió: Norte 51.7 % |
 | 1c. A 24 h le gana en el Centro y el Norte | Sí | Norte 34.5 %, Centro 42.2 % (y Sur 11.9 %) |
 | 2. Reentrenar cada semana (C − A) en el Norte a 1 h: negativo y su intervalo no cruza el cero | Sí | −0.14 MW (IC −0.19 a −0.09) |
-| 3. M3 − M0 a 1 h no se distingue de cero en ninguna área | No | Centro −0.53 MW (IC −0.78 a −0.27), por el clima |
+| 3. M3 − M0 a 1 h no se distingue de cero en ninguna área | No | Centro −0.53 MW (IC −0.78 a −0.27), por el clima; sin la variable de fallas (M2 − M0), −0.55 (IC −0.82 a −0.30) |
 | 4. El clima ayuda a 24 h en el Centro | No, en sentido contrario | +1.35 MW (IC 0.10 a 2.97) |
 | 5. El Niño no mejora en ningún horizonte ni área | Sí | Ningún M2 − M1 con intervalo bajo cero |
 
@@ -597,7 +601,9 @@ Lo que un lector debe tener en cuenta antes de generalizar los resultados.
    (bootstrap de días); no dicen nada de otro Niño ni de otro año. A 24 horas, los errores de días vecinos siguen
    correlacionados y los intervalos pueden ser algo angostos.
 2. **Efectos chicos y muchas comparaciones.** Los efectos del reentrenamiento y de las exógenas son de alrededor
-   del 1 % del error (de 0.09 a 1.48 MW). En 2026 se calcularon 66 intervalos al 95 % sin corrección por
+   del 1 % del error: los que se distinguen de cero van de 0.09 MW (reentrenar en el Sur a 1 hora) a 1.48 MW (todas
+   las exógenas juntas a 24 horas en el Centro; el clima solo, 1.35), menos del 2 % del MAE de 78 MW del Centro a
+   24 horas. En 2026 se calcularon 66 intervalos al 95 % sin corrección por
    comparaciones múltiples: se esperan dos o tres "distinguibles" por azar. La conclusión robusta es el tamaño
    (pequeño), no cada signo.
 3. **El supuesto de colaboración COES-ENFEN es optimista.** A 1 hora, el "observado" es ERA5, un reanálisis en
@@ -612,14 +618,17 @@ Lo que un lector debe tener en cuenta antes de generalizar los resultados.
    la búsqueda de hiperparámetros se hizo solo en el Centro a 1 hora, con presupuestos distintos por algoritmo
    (15 y 30 combinaciones), y se reutilizó en las otras áreas y horizontes. Ninguna conclusión depende de cuál de
    los dos se elija; la app corre el XGBoost.
-6. **Hipótesis.** Se escribieron después de explorar los datos de 2026 (el crecimiento del Norte ya se conocía)
-   y antes de evaluar ningún modelo en ellos. El origen móvil de 2023-2025 usa hiperparámetros elegidos con datos
+6. **Hipótesis.** Se escribieron después de explorar los datos de 2026 (el crecimiento del Norte ya se conocía: el
+   texto original de la hipótesis 1 hablaba de "10 a 17 %", tomado del diseño de octubre; el análisis exploratorio
+   midió entre 4 y 17 % según el mes, que es la cifra de este paper) y antes de evaluar ningún modelo en ellos. El origen móvil de 2023-2025 usa hiperparámetros elegidos con datos
    hasta 2024: mide estabilidad, no es una prueba ciega.
-7. **Periodo y datos.** La prueba va del 1 de enero al 17 de octubre de 2026 (la recorta el rezago de ERA5); la
+7. **Periodo y datos.** La prueba va del 1 de enero al 17 de octubre de 2026 a 1 hora y al 16 de octubre a 24
+   horas (la recorta el rezago de ERA5); la
    demanda "en t" sale del IEOD validado, no del SCADA; los feriados son los nacionales; M4 (SAIDI) no se corrió.
    La corrida de 2026 se retomó tres veces desde una caché de predicciones por bloque, con cálculos deterministas.
 8. **Lo que no se hizo.** No se comparó con la Programación Diaria del COES ni se modeló el SEIN directo a 24 horas:
-   el modelo se mide contra referencias ingenuas, no contra el pronóstico oficial.
+   el modelo se mide contra referencias ingenuas, no contra el pronóstico oficial. Queda como trabajo futuro
+   (sección 7).
 9. **Tetuán y Ceuta.** En Tetuán, la unidad (kW) y la identidad de las zonas no tienen fuente primaria, la
    temperatura del dataset no coincide con fuentes externas, el modelo pierde en el Ramadán de la Zona 3 y su
    ventaja baja tras la transferencia del 25 de octubre. Ceuta se corrió sin ajuste de hiperparámetros, con una
@@ -644,10 +653,12 @@ Lo que un lector debe tener en cuenta antes de generalizar los resultados.
   mejor referencia en las tres áreas y los dos horizontes (51.7, 57.9 y 29.1 % a 1 hora; 34.5, 42.2 y 11.9 % a
   24 horas), más que en un año normal, y no se degrada a medida que El Niño se intensifica. Lo que sostiene el
   pronóstico es la metodología (la razón con la media de 24 horas y la vara exigente), no las exógenas ni el
-  reentrenamiento: reentrenar cada semana baja el error alrededor del 1 % a 1 hora y nada a 24 horas; el clima
-  ayuda menos del 1 % a 1 hora en el Centro y **empeora** el pronóstico a 24 horas con temperaturas nunca vistas;
-  El Niño no ayuda en ningún caso. Para el operador: modelo en razón, reentrenado cada semana, con el clima a
-  1 hora y sin exógenas a 24 horas.
+  reentrenamiento: reentrenar cada semana baja el error alrededor del 1 % a 1 hora; a 24 horas, sin exógenas, no
+  se distingue de no hacerlo, y con clima y El Niño (M2) baja el error en las tres áreas (−0.16, −0.72 y −0.66 MW)
+  sin llegar al nivel del modelo fijo sin exógenas; el clima ayuda menos del 1 % a 1 hora en el Centro y
+  **empeora** el pronóstico a 24 horas con temperaturas nunca vistas; El Niño no ayuda en ningún caso. Para el
+  operador: modelo en razón, reentrenado cada semana, con el clima a 1 hora y sin exógenas a 24 horas, donde el
+  fijo sin exógenas (29.0 / 78.1 / 48.3 MW) sigue por debajo del M2 reentrenado (29.2 / 78.8 / 48.5).[^adap26]
 
 **Lecciones aprendidas.**
 
@@ -673,6 +684,13 @@ Lo que un lector debe tener en cuenta antes de generalizar los resultados.
 6. **El cómputo se diseña.** Buscar hiperparámetros en un área y reutilizarlos, poner XGBoost en la GPU y dejar el
    Random Forest en la CPU (la versión en GPU no era reproducible), y guardar cada bloque apenas termina, fue lo
    que hizo posible una prueba de tres horas en Colab que se cayó tres veces.
+
+**Trabajo futuro.** Tres cosas que este trabajo no hizo y que un lector del COES pediría primero: (1) comparar el
+pronóstico a 24 horas con la Programación Diaria del COES, evaluada sobre el perímetro del portal y en igualdad de
+origen y horizonte, que es la vara oficial; (2) medir la sensibilidad del resultado a 24 horas al error del
+pronóstico de temperatura (1 y 2 °C, como preveía el diseño), para saber si el daño del clima depende del supuesto;
+y (3) construir una variable de fallas que sí separe la operación normal de una falla (solo eventos con
+interrupción de carga o potencia indisponible, por área) y repetir la ablación con ella.
 
 # 8. Bibliografía
 
@@ -746,6 +764,8 @@ Las tablas de 2025 son de la corrida del notebook 02 del SEIN del 4 de noviembre
 [^nb01-sein]: `notebooks/01_sein_datos_preparacion.ipynb`: auditoría (celda 6), participación por área (celda 8),
     deriva del pico (celda 10), fallas (celda 18), referencias por año (celda 22), partición (celda 24) y la
     celda de hallazgos (celda 26).
+[^nb03-datos]: `notebooks/03_sein_prueba_2026.ipynb`, celda 5: 13,920 filas de prueba a 1 h (del 1 de enero al 17
+    de octubre de 2026 a las 23:30) y 13,871 a 24 h (hasta el 16 de octubre a las 23:00).
 [^eda-tet]: `docs/estado-del-arte.md` (resumen y §3); `notebooks/01_datos_preparacion.ipynb`, celdas 44
     (hallazgos), 66 (validación cruzada temporal) y 72 (ablación); `docs/investigacion.md`, §2 y §3.
 [^spec-eval]: Spec, §8.5 "Regímenes y criterios".

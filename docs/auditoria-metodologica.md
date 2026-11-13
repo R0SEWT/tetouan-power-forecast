@@ -37,7 +37,10 @@ Los tres graves, en una línea cada uno:
   el paper debe presentar es M2 (clima y El Niño), que también se corrió en 2025 y 2026.
 - **G3.** La comparación con la Programación Diaria del COES (spec §8.2.1) y el SEIN modelado directo a 24 h no se
   hicieron. El objetivo específico 3 y el texto de la introducción de `docs/paper/estructura.md` todavía dicen
-  "y cómo queda frente al pronóstico oficial del COES": hay que quitarlo.
+  "y cómo queda frente al pronóstico oficial del COES": hay que quitarlo. **En el borrador del paper ya está
+  hecho:** el OE3 no lo menciona, §6.4 lo lista como "lo que no se hizo" y §7 lo declara como trabajo futuro. Lo
+  mismo con G2: la tabla de ablación de 2026 del paper lleva la columna M2 − M0 y el texto lee "las exógenas"
+  sobre M2.
 
 ## Tabla de hallazgos
 
@@ -49,7 +52,7 @@ Los tres graves, en una línea cada uno:
 | D1 | Supuesto COES-ENFEN | A declarar | A 1 h el "observado" es ERA5 (reanálisis con ~5 días de rezago); a 24 h el pronóstico simulado es la observada futura más N(0, 1.5 °C) por día; la spec prometía dos niveles (1 y 2 °C) |
 | D2 | Selección de modelo | A declarar | Empate RF/XGBoost (0.3 puntos, sin intervalo); búsqueda solo en el Centro a 1 h y presupuesto desigual; la app sirve el XGBoost global, no el "elegido" |
 | D3 | Hipótesis previas | A declarar | Se escribieron antes de correr el modelo en 2026, no antes de mirar los datos de 2026 (el crecimiento del Norte ya se conocía) |
-| D4 | Intervalos | A declarar | 66 intervalos al 95 % en 2026 sin corrección por comparaciones múltiples; los efectos "distinguibles" son de 0.1 a 1.4 MW (≤ 1.7 % del error) |
+| D4 | Intervalos | A declarar | 66 intervalos al 95 % en 2026 sin corrección por comparaciones múltiples; los efectos "distinguibles" van de 0.09 a 1.48 MW (menos del 2 % del error) |
 | D5 | Bootstrap por días | A declarar | Bloques de un día: a 24 h los errores de días vecinos siguen correlacionados; un solo año y un solo evento |
 | D6 | Origen móvil | A declarar | Los hiperparámetros se eligieron con CV sobre 2016-2024 y se usan para evaluar 2023-2025 (fuga leve de hiperparámetros, no de datos) |
 | D7 | Corrida 2026 con caché | A declarar | La caché se agregó a mitad de la corrida; la clave no incluye un hash de datos ni de código; el determinismo se afirma, no se demuestra |
@@ -137,7 +140,8 @@ hueco (notebook 01 del SEIN, celda 24).
 **D8 (a declarar).** La prueba termina el **17 de octubre a las 23:30 a 1 h** y el **16 de octubre a las 23:00
 a 24 h** (notebook 03, celda 5), aunque la demanda llega al 23 de octubre: `filas_comunes` exige filas completas
 para M0 a M3, y la temperatura de ERA5 llega con unos cinco días de rezago. Eso tiene dos consecuencias que el
-paper debe decir: (1) el periodo de prueba es "del 1 de enero al 17 de octubre de 2026" y (2) M0, que no usa el
+paper debe decir: (1) el periodo de prueba es "del 1 de enero al 17 de octubre de 2026 a 1 h y al 16 de octubre a
+24 h" y (2) M0, que no usa el
 clima, también se evalúa solo donde el clima existe (por diseño, para comparar variantes sobre las mismas filas).
 
 **M2 (menor).** La auditoría del silver (notebook 01 del SEIN, celda 6) reporta que en 2026 la suma Norte +
@@ -188,8 +192,9 @@ como "incertidumbre dentro de 2026".
 **D4 (a declarar).** En 2026 se calcularon 30 intervalos de ablación (5 contrastes × 3 áreas × 2 horizontes) y
 36 de adaptación (6 × 3 × 2), todos al 95 % y sin corrección por comparaciones múltiples
 (`ablacion.csv`, `efectos_adaptacion.csv`). Con 66 intervalos se esperan tres "distinguibles" por azar. Los
-efectos que sí se distinguen son chicos: el mayor es el clima a 24 h en el Centro, +1.35 MW (IC 0.10 a 2.97) sobre
-un error de 78 MW (1.7 %); el de reentrenar sin exógenas a 1 h va de −0.09 (Sur) a −0.43 MW (Centro). La lectura
+efectos que sí se distinguen son chicos: el mayor es el de todas las exógenas juntas a 24 h en el Centro, +1.48 MW
+(IC 0.24 a 3.03), y el mayor de un solo grupo, el clima, +1.35 (IC 0.10 a 2.97), sobre un MAE de 78 MW (menos del
+2 %); el de reentrenar sin exógenas a 1 h va de −0.09 (Sur) a −0.43 MW (Centro). La lectura
 honesta es "efectos de alrededor del 1 % del error, algunos distinguibles de cero dentro de 2026", no "el clima
 empeora el pronóstico" a secas.
 
@@ -361,7 +366,9 @@ el notebook 03 se escribió después (`8fa27ee`, 5-nov 21:02) y evalúa esas hip
 Resultado (`hipotesis.csv`): 1a sí, 1b no (la mejora del Norte subió a 51.7 % en vez de bajar), 1c sí, 2 sí,
 3 no (el clima sí ayuda algo a 1 h en el Centro), 4 no (el clima empeora a 24 h en el Centro), 5 sí.
 
-**D3 (a declarar).** Las hipótesis citan "el Norte, donde la demanda crece entre 10 y 17 % sobre el año anterior":
+**D3 (a declarar).** Las hipótesis citan "el Norte, donde la demanda crece entre 10 y 17 % sobre el año anterior"
+(esa cifra viene de la spec de octubre; el EDA del notebook 01, celda de hallazgos, midió después entre 4 y 17 %
+según el mes, que es la que usa el paper):
 el nivel de 2026 ya se conocía por la investigación (spec §1, README) y por el EDA del notebook 01 del SEIN, que
 mira la serie completa hasta octubre de 2026 (celdas 8 y 16). Lo que no se había visto era **cómo se comportaba el
 modelo** en 2026. El paper debe decir exactamente eso: "las hipótesis se escribieron después de explorar los datos
@@ -387,7 +394,8 @@ resultado, no como excusa.
   octubre, la ventaja en la Zona 1 baja de 51.2 a 39.2 % (celda 29). (5) Ridge empata casi con los árboles en la
   validación (48.2 frente a 49.0 %): el mérito está en las variables en razón, no en el algoritmo. (6) La
   comparación con el estado del arte (Tabla 1 de `docs/paper/estructura.md`) es contra la persistencia, porque es
-  lo único que los demás trabajos reportan; contra la mejor referencia la mejora es menor (45-56 %, no 73-75 %).
+  lo único que los demás trabajos reportan; contra la mejor referencia la mejora es menor (41-56 %, no 73-75 %:
+  44.8, 55.9 y 40.7 % en `prueba.csv`).
   Las dos cifras tienen que ir juntas. (7) La fila "Total (suma de las zonas), MAPE 1.42 frente a 6.48 %" de esa
   tabla sale de los archivos de predicciones del Drive y no la pude verificar en local: marcarla como "por
   verificar" hasta recalcularla.
@@ -457,7 +465,8 @@ Una lista corta, en el orden en que conviene decirlas:
 4. `fallas_en_curso` no evaluable; M2 como variante con exógenas (G2).
 5. Empate entre Random Forest y XGBoost; búsqueda solo en el Centro a 1 h; la app corre el XGBoost (D2).
 6. Las hipótesis se escribieron tras explorar los datos de 2026 y antes de evaluar modelos en ellos (D3).
-7. La prueba va del 1 de enero al 17 de octubre de 2026 (D8); el IEOD sustituye al SCADA (D9).
+7. La prueba va del 1 de enero al 17 de octubre de 2026 a 1 h y al 16 de octubre a 24 h (D8); el IEOD sustituye
+   al SCADA (D9).
 8. Sin comparación con la Programación Diaria del COES (G3).
 9. En Tetuán, unidad e identidad de zonas sin fuente primaria; Ramadán en la Zona 3; transferencia (D13).
 10. Ceuta como evidencia de apoyo, sin ajuste ni intervalos (D12).
