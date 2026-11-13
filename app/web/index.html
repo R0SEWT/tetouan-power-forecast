@@ -9,14 +9,11 @@
   <link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230e1117'/%3E%3Cpath d='M9 44 20 31l10 6 12-18 13 8' fill='none' stroke='%23D55E00' stroke-width='5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
 
-  <!-- Tipografías: Plus Jakarta Sans para el texto, JetBrains Mono para las cifras -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
+  <!-- Tipografías del sistema: sin peticiones a terceros, funciona sin internet en una sala de control -->
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <a class="saltar" href="#respuesta" id="saltar">Saltar al pronóstico</a>
   <div id="app" class="app">
 
     <!-- Barra superior con chips -->
@@ -76,10 +73,17 @@
         </div>
       </div>
 
+      <nav class="nav-secciones" aria-label="Secciones de esta área">
+        <button type="button" data-ir="respuesta">Pronóstico</button>
+        <button type="button" data-ir="curva">Curva</button>
+        <button type="button" data-ir="escenarios">¿Y si…?</button>
+        <button type="button" data-ir="diagnostico">Diagnóstico</button>
+      </nav>
+
       <div class="area-grid">
         <div class="col-principal">
           <!-- La respuesta: el número, su rango, lo real y qué tan bueno fue -->
-          <section id="respuesta" class="respuesta" aria-labelledby="respTitulo" aria-busy="true">
+          <section id="respuesta" class="respuesta" aria-labelledby="respTitulo" aria-busy="true" tabindex="-1">
             <div class="resp-cabeza">
               <p class="resp-kicker" id="respKicker">Pronóstico</p>
               <span id="respEstado" class="resp-estado" role="status"></span>
@@ -90,7 +94,8 @@
             <p class="resp-rango">
               <span class="resp-rango-txt">Rango probable</span>
               <span id="respRango" class="num">—</span>
-              <span class="muted small">9 de cada 10 veces la demanda cae aquí</span>
+              <span id="respMarca"></span>
+              <span class="muted small resp-rango-ayuda">9 de cada 10 veces la demanda cae aquí</span>
             </p>
             <dl class="resp-datos">
               <div><dt>Real</dt><dd id="respReal">—</dd></div>
@@ -102,23 +107,6 @@
 
           <section class="panel controles" aria-labelledby="tituloControles">
             <h2 id="tituloControles" class="visually-hidden">Qué pronóstico ver</h2>
-            <div class="control-row">
-              <label class="field field-grow">
-                <span class="field-label">Día</span>
-                <input type="date" id="inFecha" min="2025-01-01" max="2026-10-31" required aria-describedby="fechaLarga fechaAviso">
-                <span id="fechaLarga" class="field-help"></span>
-              </label>
-              <div class="field">
-                <span class="field-label" id="lblHora">Hora</span>
-                <output id="outHora" class="time-pill" for="inHora" aria-labelledby="lblHora">15:00</output>
-              </div>
-            </div>
-            <p id="fechaAviso" class="field-aviso" hidden></p>
-            <div>
-              <input type="range" id="inHora" min="0" max="47" step="1" value="30" aria-label="Hora del pronóstico" aria-valuetext="15:00">
-              <div class="slider-ticks" aria-hidden="true"><span>00:00</span><span>06:00</span><span>12:00</span><span>18:00</span><span>23:30</span></div>
-            </div>
-            <div id="momentos" class="moment-chips" role="group" aria-label="Ir a un momento del día"></div>
             <div class="control-row">
               <div class="field field-grow">
                 <span class="field-label" id="lblHorizonte">Con cuánta anticipación</span>
@@ -136,6 +124,24 @@
               </div>
             </div>
             <p id="ayudaVariante" class="field-help">«Con clima y El Niño» también usa las fallas en curso de la red.</p>
+            <div class="control-row">
+              <label class="field field-grow">
+                <span class="field-label">Día</span>
+                <input type="date" id="inFecha" min="2025-01-01" max="2026-10-31" required aria-describedby="fechaLarga fechaAviso">
+                <span id="fechaLarga" class="field-help"></span>
+              </label>
+              <div class="field">
+                <span class="field-label" id="lblHora">Hora</span>
+                <output id="outHora" class="time-pill" for="inHora" aria-labelledby="lblHora">15:00</output>
+              </div>
+            </div>
+            <p id="fechaAviso" class="field-aviso" hidden></p>
+            <div>
+              <input type="range" id="inHora" min="0" max="47" step="1" value="30" aria-label="Hora del pronóstico" aria-valuetext="15:00">
+              <div class="slider-ticks" aria-hidden="true"><span>00:00</span><span>06:00</span><span>12:00</span><span>18:00</span><span>23:30</span></div>
+            </div>
+            <div id="momentos" class="moment-chips" role="group" aria-label="Ir a un momento del día"></div>
+
             <label class="field" id="campoModelo">
               <span class="field-label">Modelo</span>
               <select id="inModelo"></select>
@@ -150,7 +156,7 @@
         </div>
 
         <div class="col-detalle">
-          <section class="panel" aria-labelledby="tituloCurva">
+          <section id="curva" class="panel" aria-labelledby="tituloCurva" tabindex="-1">
             <div class="panel-head">
               <h2 id="tituloCurva">La curva del día</h2>
               <span id="subCurva" class="muted small"></span>
@@ -159,9 +165,13 @@
             <ul id="leyendaDia" class="legend" aria-label="Leyenda"></ul>
             <p id="notaDatos" class="muted small" hidden></p>
             <p class="muted small">Cada punto del modelo se emitió con la anticipación elegida. Toca la curva para elegir la hora.</p>
+            <details id="tablaDia" class="tabla-datos">
+              <summary>Ver los datos del día en una tabla</summary>
+              <div id="tablaDiaCuerpo"></div>
+            </details>
           </section>
 
-          <section class="panel detalle" aria-label="Más detalle">
+          <section id="detalle" class="panel detalle" aria-label="Más detalle" tabindex="-1">
             <div class="sheet-tabs" role="tablist" aria-label="Más detalle">
               <button type="button" role="tab" class="sheet-tab" id="tab-operacion" aria-controls="panel-operacion" aria-selected="true" data-tab="operacion">Próximas horas</button>
               <button type="button" role="tab" class="sheet-tab" id="tab-escenarios" aria-controls="panel-escenarios" aria-selected="false" tabindex="-1" data-tab="escenarios">¿Y si…?</button>

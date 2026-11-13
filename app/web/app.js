@@ -627,7 +627,6 @@ function pintarInicio() {
 function mostrarInicio() {
   $('#vistaInicio').hidden = false;
   $('#vistaArea').hidden = true;
-  $('#app').classList.remove('app-ancha');
   document.title = 'Demanda del SEIN por área';
   window.scrollTo(0, 0);
 }
@@ -657,7 +656,8 @@ function indicePico() {
 function pintarMomentos() {
   const lista = [...MOMENTOS];
   const pico = indicePico();
-  if (pico != null) lista.push({ txt: 'Pico del día', idx: pico });
+  const conReal = S.serie && S.serie.real.some((v) => v != null);
+  if (pico != null) lista.push({ txt: conReal ? 'Máximo real del día' : 'Máximo pronosticado', idx: pico });
   $('#momentos').innerHTML = lista.map((mo) => (
     `<button type="button" class="moment-btn" data-idx="${mo.idx}" aria-pressed="${mo.idx === S.idx}">${esc(mo.txt)} <span class="mono">${idxAHora(mo.idx)}</span></button>`
   )).join('');
@@ -708,7 +708,6 @@ function mostrarArea(id, q) {
 
   $('#vistaInicio').hidden = true;
   $('#vistaArea').hidden = false;
-  $('#app').classList.add('app-ancha');
   if (cambioDeArea) window.scrollTo(0, 0);
 
   sincronizarControles();
@@ -733,6 +732,7 @@ function elegirHora(i) {
   escribirRuta();
   pintarRespuesta();
   pintarCurva();
+  pintarTablaDia();
   clearTimeout(esperaHora);
   esperaHora = setTimeout(() => {
     cargarPronostico();
@@ -764,6 +764,7 @@ async function cargarSerie() {
     pintarConfianza();
     pintarCurva();
     pintarMomentos();
+    pintarTablaDia();
   } catch (err) {
     if (turno !== S.turnos.serie) return;
     S.serie = null;
@@ -797,12 +798,14 @@ function pintarRespuesta() {
   $('#respEmision').textContent = `Emitido a las ${emision} · ${nombreModelo()}, ${S.variante === 'M3' ? 'con clima y El Niño' : 'solo con la demanda'}`;
   $('#respValor').textContent = mw(v);
   $('#respRango').textContent = iv ? `${mw(iv.inferior[i])} – ${mw(iv.superior[i])} MW` : 'no disponible';
+  $('#respMarca').innerHTML = '';
   if (real == null) {
     $('#respReal').textContent = 'sin dato';
     $('#respError').textContent = '—';
   } else {
     const dentro = iv && real >= iv.inferior[i] && real <= iv.superior[i];
-    $('#respReal').innerHTML = `<span class="num">${mw(real)} MW</span>${iv ? ` <span class="marca ${dentro ? 'dentro' : 'fuera'}">${dentro ? 'dentro del rango' : 'fuera del rango'}</span>` : ''}`;
+    $('#respReal').innerHTML = `<span class="num">${mw(real)} MW</span>`;
+    if (iv) $('#respMarca').innerHTML = `<span class="marca ${dentro ? 'dentro' : 'fuera'}">la real cayó ${dentro ? 'dentro' : 'fuera'}</span>`;
     $('#respError').innerHTML = `<span class="num">${mw(Math.abs(v - real))} MW</span> <span class="muted">(${pct((100 * Math.abs(v - real)) / real)})</span>`;
   }
   const maeModelo = mae(s.real, s.pronostico);
@@ -820,10 +823,10 @@ function pintarRespuesta() {
     ver.textContent = `Este día se equivocó lo mismo que la referencia simple, ${ref}.`;
   } else if (mejora > 0) {
     ver.classList.add('bueno');
-    ver.textContent = `Este día se equivocó ${pct(mejora)} menos que la referencia simple, ${ref} (${nf1.format(maeRef)} MW).`;
+    ver.textContent = `Este día se equivocó ${nf0.format(mejora)} % menos que la referencia simple, ${ref} (${nf1.format(maeRef)} MW).`;
   } else {
     ver.classList.add('malo');
-    ver.textContent = `Este día se equivocó ${pct(-mejora)} más que la referencia simple, ${ref} (${nf1.format(maeRef)} MW).`;
+    ver.textContent = `Este día se equivocó ${nf0.format(-mejora)} % más que la referencia simple, ${ref} (${nf1.format(maeRef)} MW).`;
   }
 }
 
@@ -908,6 +911,22 @@ function pintarCurva() {
   nota.hidden = !notas.length;
 }
 
+function pintarTablaDia() {
+  const det = $('#tablaDia');
+  const s = S.serie;
+  if (!det.open || !s) return;
+  const iv = s.intervalo;
+  const filas = s.fecha_hora.map((fh, i) => `<tr${i === S.idx ? ' class="fila-elegida"' : ''}><th scope="row" class="mono">${horaDe(fh)}</th>`
+    + `<td class="num mono">${mw(s.pronostico[i])}</td>`
+    + `<td class="num mono">${iv ? `${mw(iv.inferior[i])}–${mw(iv.superior[i])}` : '—'}</td>`
+    + `<td class="num mono">${s.real[i] == null ? 'sin dato' : mw(s.real[i])}</td>`
+    + `<td class="num mono">${mw(s.referencia[i])}</td></tr>`).join('');
+  $('#tablaDiaCuerpo').innerHTML = `<div class="tabla-scroll" tabindex="0" role="region" aria-label="Datos del día"><table class="tabla">`
+    + `<caption class="visually-hidden">Demanda del ${esc(fechaLarga(S.fecha))}, en MW, pronóstico a ${horizonteTxt()}</caption>`
+    + '<thead><tr><th scope="col">Hora</th><th scope="col" class="num">Modelo</th><th scope="col" class="num">Rango probable</th><th scope="col" class="num">Real</th><th scope="col" class="num">Referencia</th></tr></thead>'
+    + `<tbody>${filas}</tbody></table></div>`;
+}
+
 // ---- Pestañas de detalle ------------------------------------------------------------------
 
 function elegirTab(tab, foco = false) {
@@ -923,6 +942,18 @@ function elegirTab(tab, foco = false) {
   });
   pintarTab();
   requestAnimationFrame(redibujarGraficos);
+}
+
+function irASeccion(destino) {
+  if (destino === 'escenarios' || destino === 'diagnostico') {
+    elegirTab(destino);
+    destino = 'detalle';
+  }
+  const el = document.getElementById(destino);
+  if (!el) return;
+  const reducido = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  el.scrollIntoView({ block: 'start', behavior: reducido ? 'auto' : 'smooth' });
+  el.focus({ preventScroll: true });
 }
 
 function pintarTab() {
@@ -1143,21 +1174,25 @@ async function pintarDiagnostico() {
       <h3>¿Con qué fase de El Niño se equivoca más?</h3>
       <p class="muted small">Error medio de 2025 y 2026 según la fase de El Niño (2026 casi no tiene fase neutra).</p>
       <ul class="legend"><li><svg width="18" height="11" aria-hidden="true"><rect width="18" height="11" rx="3" class="barra-modelo"/></svg>Modelo</li><li><svg width="18" height="11" aria-hidden="true"><rect x="0.75" y="0.75" width="16.5" height="9.5" rx="3" class="barra-referencia"/></svg>Referencia simple</li></ul>
+      <p id="lecRegimen" class="lectura"></p>
       <div id="gRegimen" class="chart"></div>
     </section>
     <section class="diag-seccion">
       <h3>¿Cuánto aporta cada grupo de datos?</h3>
       <p class="muted small">Error en la prueba de 2026 al ir sumando datos al modelo, con su intervalo del 95 % (remuestreando días). La línea punteada es «solo demanda» (M0).</p>
+      <p id="lecAblacion" class="lectura"></p>
       <div id="gAblacion" class="chart"></div>
     </section>
     <section class="diag-seccion">
       <h3>¿Conviene reentrenar seguido o sumar datos de clima?</h3>
       <p class="muted small">Error en la prueba de 2026 según cada cuánto se reentrena. Punto lleno: con clima y El Niño; vacío: solo demanda.</p>
+      <p id="lecAdaptacion" class="lectura"></p>
       <div id="gAdaptacion" class="chart"></div>
     </section>
     <section class="diag-seccion">
       <h3>¿Qué datos pesan más?</h3>
       <p class="muted small">Cuántos MW sube el error al quitar cada grupo de datos. Un valor negativo quiere decir que quitarlo mejora.</p>
+      <p id="lecImportancias" class="lectura"></p>
       <div id="gImportancias" class="chart"></div>
     </section>
     <section class="diag-seccion">
@@ -1196,12 +1231,46 @@ async function pintarDiagnostico() {
     }],
   })), { aria: 'Importancia de cada grupo de variables.' });
 
+  pintarLecturas(d);
+
   const { real, predicho } = d.residuos;
   graficoDispersion($('#gDispersion'), real, predicho);
   const errores = predicho.map((p, i) => p - real[i]);
   graficoHistograma($('#gResiduos'), errores);
   const sub = errores.filter((e) => e < 0).length / errores.length;
   $('#txtResiduos').textContent = `El modelo subestimó la demanda en ${pct(100 * sub)} de las medias horas. Subestimar cuesta más: obliga a arrancar generación cara de urgencia.`;
+}
+
+// Una frase por gráfico: la conclusión, para quien no lee gráficos de error.
+function pintarLecturas(d) {
+  const nombreReg = (r) => REGIMEN[r] || r.replaceAll('_', ' ');
+  const regs = d.mae_por_regimen;
+  if (regs.length) {
+    const peor = regs.reduce((a, b) => (b.modelo > a.modelo ? b : a));
+    const gana = regs.filter((r) => r.modelo < r.referencia).length;
+    $('#lecRegimen').textContent = `Donde más se equivoca: ${nombreReg(peor.regimen)} (${nf1.format(peor.modelo)} MW). `
+      + (gana === regs.length ? `Le gana a la referencia simple en las ${regs.length} fases.` : `Le gana a la referencia simple en ${gana} de ${regs.length} fases.`);
+  }
+  const m0 = d.ablacion.find((a) => a.variante === 'M0');
+  const m3 = d.ablacion.find((a) => a.variante === 'M3');
+  if (m0 && m3) {
+    const solapan = m3.ic_inf <= m0.ic_sup && m0.ic_inf <= m3.ic_sup;
+    const dif = m0.mae - m3.mae;
+    $('#lecAblacion').textContent = `Con clima, El Niño y fallas (M3): ${nf1.format(m3.mae)} MW; solo demanda (M0): ${nf1.format(m0.mae)} MW. `
+      + (solapan ? 'Los intervalos se superponen: la diferencia no es concluyente.'
+        : `${dif > 0 ? 'Sumar esos datos baja' : 'Sumar esos datos sube'} el error ${nf1.format(Math.abs(dif))} MW.`);
+  }
+  if (d.adaptacion.length) {
+    const mejor = d.adaptacion.reduce((a, b) => (b.mae < a.mae ? b : a));
+    const fijo = d.adaptacion.find((a) => a.politica === 'fijo' && !a.exogenas);
+    $('#lecAdaptacion').textContent = `Lo mejor: ${(POLITICA[mejor.politica] || mejor.politica).toLowerCase()}, ${mejor.exogenas ? 'con clima y El Niño' : 'solo demanda'} (${nf1.format(mejor.mae)} MW)`
+      + (fijo && fijo !== mejor ? `, frente a ${nf1.format(fijo.mae)} MW sin reentrenar y solo con la demanda.` : '.');
+  }
+  if (d.importancias.length) {
+    const top = d.importancias.reduce((a, b) => (b.valor > a.valor ? b : a));
+    const nombre = VARIABLE[top.variable] || top.variable.replaceAll('_', ' ');
+    $('#lecImportancias').textContent = `Lo que más pesa: ${nombre.toLowerCase()} (el error sube ${nf1.format(top.valor)} MW si se quita).`;
+  }
 }
 
 // ---- Ficha técnica -------------------------------------------------------------------------
@@ -1257,19 +1326,16 @@ function enrutar() {
 }
 
 async function cargarBase() {
-  const [salud, areas, resumen] = await Promise.all([api('/salud'), api('/areas'), api('/resumen')]);
+  // /modelos es opcional: un backend anterior no lo tiene y entonces el único modelo es el de /salud
+  const [salud, areas, resumen, modelos] = await Promise.all([
+    api('/salud'), api('/areas'), api('/resumen'), api('/modelos').catch(() => []),
+  ]);
   S.salud = salud;
   S.areas = areas;
   S.resumen = resumen;
   const hasta = resumen.fechas_corte && resumen.fechas_corte.prueba_hasta;
   if (/^\d{4}-\d{2}-\d{2}$/.test(hasta || '')) FECHA_MAX = hasta;
-  // /modelos es opcional: si el backend no lo tiene, el único modelo es el de /salud
-  try {
-    const lista = await api('/modelos');
-    S.modelos = Array.isArray(lista) && lista.length ? lista : [];
-  } catch {
-    S.modelos = [];
-  }
+  S.modelos = Array.isArray(modelos) ? modelos : [];
   if (!S.modelos.length) S.modelos = [{ id: salud.modelo, nombre: salud.modelo }];
   if (!S.modelos.some((m) => m.id === S.modelo)) S.modelo = S.modelos[0].id;
   $('#inModelo').innerHTML = S.modelos.map((m) => `<option value="${esc(m.id)}">${esc(m.nombre)}</option>`).join('');
@@ -1294,6 +1360,20 @@ async function iniciar() {
 }
 
 function conectarEventos() {
+  $('#saltar').addEventListener('click', (ev) => {
+    ev.preventDefault(); // el hash es la ruta de la app
+    if (!$('#vistaArea').hidden) irASeccion('respuesta');
+    else {
+      const primera = $('#listaAreas a');
+      if (primera) primera.focus();
+    }
+  });
+  $('.nav-secciones').addEventListener('click', (ev) => {
+    const b = ev.target.closest('[data-ir]');
+    if (b) irASeccion(b.dataset.ir);
+  });
+  $('#tablaDia').addEventListener('toggle', pintarTablaDia);
+
   $('#btnTema').addEventListener('click', () => {
     const tema = document.documentElement.dataset.theme === 'light' ? 'dark' : 'light';
     aplicarTema(tema);
