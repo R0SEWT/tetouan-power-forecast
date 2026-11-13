@@ -536,3 +536,53 @@ node medir.mjs --version it4 --etiqueta it5 --rapido
 TPF_WEB=http://localhost:8081 node medir.mjs --version it4 --etiqueta it5-base-rend --solo rendimiento
 node medir.mjs --version it4 --etiqueta it5-rend --solo rendimiento
 ```
+
+## Iteración 6: servir comprimido
+
+La iteración 5 dejó medido de dónde salen los ~1.1 s hasta ver el número en red lenta: casi todo es bajar `app.js` y
+`style.css` sin comprimir, porque `python -m http.server` no comprime. No se tocó la página; cambió solo quién la sirve.
+
+**Qué cambió.** El backend comprime con gzip todas sus respuestas de más de 500 bytes (`GZipMiddleware`), incluidas las
+series, y además sirve `app/web` en su propio origen (`http://localhost:8000/`, con `StaticFiles` montado después de
+las rutas de la API, que tienen prioridad). `app/levantar.sh` sigue dando la web en `:8080`, pero con un servidor
+mínimo que comprime (`app/backend/web.py`, sin cargar los modelos) en lugar de `http.server`. La web no cambió: sigue
+buscando la API en `:8000` del mismo host, y `?api=` funciona igual.
+
+### Medición
+
+Mismo arnés, misma ruta (`it4`) y mismo caso, contra el backend real. La base es la rama tal como quedó en la
+iteración 5, servida con `http.server`; el tiempo hasta ver el número se midió con 8 cargas por versión (5 + 3).
+
+| | It. 5 (`http.server`) | It. 6 (gzip) |
+|---|---|---|
+| T1 a T4: cumplidas y acciones (escritorio = móvil) | 4 de 4; 16 / 0 / 2 / 1 (`it5.json`) | 4 de 4; 16 / 0 / 2 / 1 |
+| axe-core, infracciones en 28 pantallas | 0 (`it5.json`) | 0 |
+| **Hasta ver el número en red lenta, mediana (rango de las 8 cargas)** | **1,119 y 1,097 ms (1,088–1,163)** | **657 y 658 ms (648–669)** |
+| Hasta ver el número en red local | 72 y 70 ms | 66 y 65 ms |
+| Peso transferido de la vista del área / peticiones | 145 KB / 10 | 43 KB / 10 |
+| Script / estilos / HTML / API | 89 / 31 / 14 / 11 KB | 26 / 7 / 5 / 6 KB |
+
+El número aparece un 41 % antes en red lenta (unos 450 ms menos) y los rangos están lejos de tocarse; la página pesa un 70 %
+menos. En red local no cambia (comprimir cuesta lo que ahorra). Tareas, cifras, foco, tamaños y axe quedan igual.
+
+**Lo que no mejoró, o empeoró.** Abrir la web desde el mismo origen del backend (`TPF_WEB=http://localhost:8000`, 5
+cargas) es más lento que desde `:8080`: 750 ms (730–770). Con todo en un solo host, la precarga de cinco rutas más
+`app.js` y `style.css` pasa el límite de seis conexiones por host de HTTP/1.1 y una petición espera; con dos puertos
+son dos hosts. Por eso la demo sigue en `:8080` y el mismo origen queda como comodidad (un solo proceso, sin CORS). Los
+~650 ms que quedan son sobre todo latencia (150 ms por ida y vuelta: HTML, luego `app.js` y las rutas en paralelo),
+que la compresión no toca. No se midió con personas.
+
+**Pendientes.** La tabulación de más hasta el horizonte y probar el recorrido de demo con alguien que no conozca la app.
+
+Cómo repetirlo:
+
+```bash
+# Base: la rama de la iteración 5 con http.server en :8080 y la API en :8000
+cd app/medicion
+node medir.mjs --version it4 --etiqueta it6-base-rend --solo rendimiento
+node medir.mjs --version it4 --etiqueta it6-base-rend3 --solo rendimiento --rapido
+# Después: app/levantar.sh de esta iteración
+node medir.mjs --version it4 --etiqueta it6-rend --solo rendimiento
+node medir.mjs --version it4 --etiqueta it6 --rapido
+TPF_WEB=http://localhost:8000 node medir.mjs --version it4 --etiqueta it6-mismo-origen-rend --solo rendimiento
+```

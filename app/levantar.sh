@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# Levanta la app en local: backend FastAPI en :8000 y la web estática en :8080.
+# Levanta la app en local: backend FastAPI en :8000 y la web estática en :8080, las dos comprimidas con gzip.
+# El backend también sirve la web en su mismo origen: http://localhost:8000/ funciona igual.
 #   app/levantar.sh            # modelo real si encuentra los datos; si no, el simulado
 #   TPF_PRONOSTICADOR=prueba app/levantar.sh
 # Variables: TETOUAN_DATA (carpeta de datos), UV_PROJECT_ENVIRONMENT (venv), PUERTO_API, PUERTO_WEB.
@@ -15,7 +16,7 @@ cd "$raiz"
 uv run --no-sync --with fastapi --with xgboost --with uvicorn --with holidays \
   uvicorn app.backend.main:app --port "${PUERTO_API:-8000}" &
 api=$!
-python3 -m http.server "${PUERTO_WEB:-8080}" --directory "$raiz/app/web" &
+uv run --no-sync --with fastapi --with uvicorn uvicorn app.backend.web:app --port "${PUERTO_WEB:-8080}" --log-level warning &
 web=$!
 trap 'kill $api $web 2>/dev/null' EXIT INT TERM
 url="http://localhost:${PUERTO_WEB:-8080}"

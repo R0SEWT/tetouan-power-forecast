@@ -418,3 +418,58 @@ def test_frontend_sin_librerias_externas():
     assert all(u.startswith("https://fonts.") for u in externos), externos
     assert '<html lang="es"' in html
     json.loads((WEB / "manifest.json").read_text(encoding="utf-8"))
+
+
+# ---- Web servida por el backend, comprimida ------------------------------------------------------
+
+
+SERIE = ("/series/centro", {"fecha": "2025-07-14", "horizonte": "24h", "variante": "M0"})
+
+
+def test_api_comprimida_con_gzip(cliente):
+    r = cliente.get(SERIE[0], params=SERIE[1], headers={"Accept-Encoding": "gzip"})
+    assert r.status_code == 200
+    assert r.headers["content-encoding"] == "gzip"
+    assert len(r.json()["pronostico"]) == 48  # el cliente la descomprime
+
+
+def test_api_sin_gzip_si_no_se_acepta_o_es_corta(cliente):
+    r = cliente.get(SERIE[0], params=SERIE[1], headers={"Accept-Encoding": "identity"})
+    assert "content-encoding" not in r.headers
+    assert len(r.json()["pronostico"]) == 48
+    # Por debajo de 500 bytes no vale la pena comprimir.
+    assert "content-encoding" not in cliente.get("/salud", headers={"Accept-Encoding": "gzip"}).headers
+
+
+def test_backend_sirve_la_web_en_su_origen(cliente):
+    r = cliente.get("/", headers={"Accept-Encoding": "gzip"})
+    assert r.status_code == 200
+    assert r.text == (WEB / "index.html").read_text(encoding="utf-8")
+    js = cliente.get("/app.js", headers={"Accept-Encoding": "gzip"})
+    assert js.status_code == 200
+    assert js.headers["content-encoding"] == "gzip"
+    assert "javascript" in js.headers["content-type"]
+    assert js.content == (WEB / "app.js").read_bytes()
+
+
+def test_rutas_de_la_api_antes_que_los_archivos(cliente):
+    assert cliente.get("/salud").json()["estado"] == "ok"
+    assert cliente.get("/no-existe.js").status_code == 404
+    assert cliente.get("/docs").status_code == 200
+
+
+def test_sin_carpeta_web_solo_api(tmp_path):
+    c = TestClient(crear_app(PronosticadorDePrueba(), web=tmp_path / "no-hay"))
+    assert c.get("/").status_code == 404
+    assert c.get("/salud").status_code == 200
+
+
+def test_servidor_solo_web_comprime():
+    from app.backend.web import crear_web
+
+    c = TestClient(crear_web())
+    css = c.get("/style.css", headers={"Accept-Encoding": "gzip"})
+    assert css.status_code == 200
+    assert css.headers["content-encoding"] == "gzip"
+    assert css.content == (WEB / "style.css").read_bytes()
+    assert c.get("/").text == (WEB / "index.html").read_text(encoding="utf-8")

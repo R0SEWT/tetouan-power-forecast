@@ -5,6 +5,8 @@ Correr en local (desde la raíz del repo):
     uv sync --extra dev --extra app
     uv run uvicorn app.backend.main:app --reload
 
+Sirve también la web (``app/web``) en ``http://localhost:8000/``, y todo comprimido con gzip.
+
 Variables de entorno:
 - ``TPF_CORS_ORIGENES``: orígenes extra separados por comas, además de localhost y 127.0.0.1
   (por ejemplo la IP del celular en la red local o el dominio de Tailscale).
@@ -18,10 +20,12 @@ Variables de entorno:
 
 import os
 from datetime import date, datetime
+from pathlib import Path
 from typing import Annotated
 
 from fastapi import FastAPI, HTTPException, Query, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.gzip import GZipMiddleware
 
 from .contrato import (
     AREAS,
@@ -49,6 +53,7 @@ from .contrato import (
 )
 from .pico import pico_rampa
 from .pronosticador import Pronosticador, PronosticadorDePrueba
+from .web import GZIP_MINIMO, WEB, archivos_web
 
 ORIGENES_LOCALES = r"https?://(localhost|127\.0\.0\.1|\[::1\])(:\d+)?"
 
@@ -85,8 +90,16 @@ def _id(pronosticador: Pronosticador) -> str:
     return getattr(pronosticador, "id", pronosticador.modelo)
 
 
-def crear_app(pronosticador: Pronosticador | None = None, otros: list[Pronosticador] | None = None) -> FastAPI:
-    """Arma la API con el pronosticador dado (por defecto, el de prueba) y, si los hay, otros modelos elegibles."""
+def crear_app(
+    pronosticador: Pronosticador | None = None,
+    otros: list[Pronosticador] | None = None,
+    web: Path | None = WEB,
+) -> FastAPI:
+    """Arma la API con el pronosticador dado (por defecto, el de prueba) y, si los hay, otros modelos elegibles.
+
+    Las respuestas van comprimidas con gzip si el navegador lo acepta. Si ``web`` es una carpeta, la sirve en ``/``
+    (la web encuentra la API en el mismo origen); las rutas de la API tienen prioridad.
+    """
     app = FastAPI(
         title="Demanda por área del SEIN",
         description="Pronóstico a 1 h y a 24 h de la demanda de Norte, Centro y Sur.",
@@ -100,6 +113,7 @@ def crear_app(pronosticador: Pronosticador | None = None, otros: list[Pronostica
         allow_methods=["GET", "POST"],
         allow_headers=["Content-Type"],
     )
+    app.add_middleware(GZipMiddleware, minimum_size=GZIP_MINIMO)
     app.state.pronosticador = pronosticador or PronosticadorDePrueba()
     app.state.pronosticadores = {_id(p): p for p in [app.state.pronosticador, *(otros or [])]}
 
@@ -228,6 +242,9 @@ def crear_app(pronosticador: Pronosticador | None = None, otros: list[Pronostica
         acierto = p.acierto_pico(area, variante) if hasattr(p, "acierto_pico") else None
         return pico_rampa(resultado, umbral, acierto, modelo=_id(p))
 
+    # Al final, para que las rutas de la API vayan antes que los archivos.
+    if web is not None and web.is_dir():
+        app.mount("/", archivos_web(web), name="web")
     return app
 
 
