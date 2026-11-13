@@ -32,6 +32,7 @@ export async function nuevaPagina(navegador, vista = 'escritorio', tema = 'dark'
     locale: 'es-PE',
     timezoneId: 'America/Lima',
     colorScheme: tema,
+    reducedMotion: 'reduce', // desplazamientos instantáneos: lo que se mide no depende de una animación
   });
   await contexto.addInitScript((t) => {
     try { localStorage.setItem('tpf-tema', t === 'light' ? 'light' : 'dark'); } catch { /* nada */ }

@@ -44,9 +44,9 @@ export const VERSIONES = {
   },
 };
 
-// La versión rediseñada: las pestañas de detalle están en la página y la respuesta trae el rango.
+// Iteración 1: las pestañas de detalle están en la página y la respuesta trae el rango.
 const tab = (nombre) => (p) => p.getByRole('tab', { name: nombre });
-VERSIONES.nueva = {
+VERSIONES.it1 = {
   estados: {
     inicio: async () => {},
     area: async () => {},
@@ -67,6 +67,29 @@ VERSIONES.nueva = {
       { clic: (p) => p.getByRole('button', { name: '+2 °C' }) },
     ],
     t4: [{ clic: tab('Diagnóstico') }],
+  },
+};
+
+// Iteración 2: una barra de secciones pegajosa lleva a «¿Y si…?» y «Diagnóstico» con un toque.
+const seccion = (nombre) => (p) => p.getByRole('navigation', { name: 'Secciones de esta área' }).getByRole('button', { name: nombre });
+VERSIONES.it2 = {
+  estados: {
+    ...VERSIONES.it1.estados,
+    escenarios: async (p) => { await seccion('¿Y si…?')(p).click(); },
+    sensibilidad: async (p) => {
+      await p.getByRole('button', { name: '1 hora' }).click();
+      await seccion('¿Y si…?')(p).click();
+    },
+    diagnostico: async (p) => { await seccion('Diagnóstico')(p).click(); },
+  },
+  tareas: {
+    t1: VERSIONES.it1.tareas.t1,
+    t2: [{ revisar: true }],
+    t3: [
+      { clic: seccion('¿Y si…?') },
+      { clic: (p) => p.getByRole('button', { name: '+2 °C' }) },
+    ],
+    t4: [{ clic: seccion('Diagnóstico') }],
   },
 };
 
