@@ -24,7 +24,6 @@ const MESES = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', '
   'septiembre', 'octubre', 'noviembre', 'diciembre'];
 const MESES_CORTOS = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'set', 'oct', 'nov', 'dic'];
 const DIAS = ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'];
-const DIAS_CORTOS = ['dom', 'lun', 'mar', 'mié', 'jue', 'vie', 'sáb'];
 
 const INFO_AREA = {
   norte: { letra: 'N', fg: '#000', desc: 'Costa norte: Piura, Chiclayo y Trujillo. Lluvias con El Niño y carga minera e industrial.' },
@@ -33,11 +32,11 @@ const INFO_AREA = {
 };
 
 const NOMBRE_REF = {
-  persistencia: 'la persistencia (el último dato)',
+  persistencia: '«el último dato»',
   ayer: '«ayer a la misma hora»',
   semana_pasada: '«la semana pasada a la misma hora»',
 };
-const TITULO_REF = { persistencia: 'Persistencia', ayer: 'Ayer, misma hora', semana_pasada: 'Semana pasada' };
+const TITULO_REF = { persistencia: 'Último dato', ayer: 'Ayer, misma hora', semana_pasada: 'Semana pasada, misma hora' };
 const ESTADO_NINO = { neutro: 'neutro', debil: 'débil', moderado: 'moderado', fuerte: 'fuerte', extraordinario: 'extraordinario' };
 const REGIMEN = {
   neutro: 'Neutro', debil: 'Niño débil', moderado: 'Niño moderado', fuerte: 'Niño fuerte',
@@ -47,7 +46,7 @@ const VARIANTE = {
   M0: 'M0 · demanda y calendario', M1: 'M1 · + clima', M2: 'M2 · + El Niño', M3: 'M3 · + fallas',
   M4: 'M4 · + SAIDI', M3_sin_clima: 'M3 sin clima', M3_sin_nino: 'M3 sin El Niño', M3_sin_fallas: 'M3 sin fallas',
 };
-const POLITICA = { fijo: 'Fijo', semanal: 'Semanal', alerta_enfen: 'Alerta ENFEN' };
+const POLITICA = { fijo: 'Sin reentrenar', semanal: 'Reentreno semanal', alerta_enfen: 'Reentreno con alerta ENFEN' };
 const VARIABLE = { demanda_reciente: 'Demanda reciente', clima: 'Clima', nino: 'El Niño', fallas: 'Fallas', saidi: 'SAIDI' };
 const CORTE = {
   entrenamiento_hasta: 'Entrenamiento hasta', validacion_hasta: 'Validación hasta', prueba_hasta: 'Prueba hasta',
@@ -71,8 +70,9 @@ const S = {
   idx: 30,
   horizonte: '1h',
   variante: 'M3',
+  modelos: [],
+  modelo: null,
   tab: 'operacion',
-  hojaAbierta: false,
   escenario: { ...ESCENARIO_BASE },
   sensVar: 'temperatura',
   serie: null,
@@ -112,12 +112,22 @@ function partesFecha(iso) {
 
 function fechaCorta(iso) {
   const p = partesFecha(iso);
-  return `${DIAS_CORTOS[p.dow]} ${p.d} ${MESES_CORTOS[p.m - 1]} ${p.y}`;
+  return `${p.d} ${MESES_CORTOS[p.m - 1]} ${p.y}`;
+}
+
+function fechaDiaMes(iso) {
+  const p = partesFecha(iso);
+  return `${DIAS[p.dow]} ${p.d} de ${MESES[p.m - 1]}`;
 }
 
 function fechaLarga(iso) {
   const p = partesFecha(iso);
   return `${DIAS[p.dow]} ${p.d} de ${MESES[p.m - 1]} de ${p.y}`;
+}
+
+function sumarDias(iso, dias) {
+  const p = partesFecha(iso);
+  return new Date(Date.UTC(p.y, p.m - 1, p.d + dias)).toISOString().slice(0, 10);
 }
 
 function acotarFecha(iso) {
@@ -182,6 +192,10 @@ function mensajeDe(datos, estado) {
   return `Error ${estado}`;
 }
 
+// Preparado para elegir modelo: hoy el backend sirve uno solo y no recibe el parámetro.
+const hayVariosModelos = () => S.modelos.length > 1;
+const conModelo = (obj) => (hayVariosModelos() && S.modelo ? { ...obj, modelo: S.modelo } : obj);
+
 async function api(ruta, cuerpo) {
   const opciones = cuerpo
     ? { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(cuerpo) }
@@ -228,7 +242,7 @@ function manejarError(err, panel) {
     mostrarError(err);
     return;
   }
-  if (panel) panel.innerHTML = `<p class="vacio">${esc(err.message)}</p>`;
+  if (panel) panel.innerHTML = `<p class="vacio" role="alert">No se pudo calcular: ${esc(err.message)}</p>`;
 }
 
 // ---- Gráficos en SVG ------------------------------------------------------------------
@@ -396,7 +410,9 @@ function graficoLineas(el, o) {
     guia.setAttribute('visibility', 'visible');
     const filas = [...o.series].reverse().filter((s) => s.nombre).map((s) => {
       const v = s.valores[i];
-      return `<div class="fila"><span>${esc(s.nombre)}</span><span>${v == null ? 'sin dato' : esc(formatoY(v))}</span></div>`;
+      let fila = `<div class="fila"><span>${esc(s.nombre)}</span><span>${v == null ? 'sin dato' : esc(formatoY(v))}</span></div>`;
+      if (s.banda && s.banda.nombre) fila += `<div class="fila"><span>${esc(s.banda.nombre)}</span><span>${esc(formatoY(s.banda.inf[i]))}–${esc(formatoY(s.banda.sup[i]))}</span></div>`;
+      return fila;
     });
     globo.innerHTML = `<b>${esc(o.etiquetaPunto ? o.etiquetaPunto(i) : i)}</b>${filas.join('')}`;
     globo.hidden = false;
@@ -558,6 +574,10 @@ function itemLinea(clase, texto) {
   return `<li><svg width="26" height="10" viewBox="0 0 26 10" aria-hidden="true"><line x1="1" y1="5" x2="25" y2="5" class="linea ${clase}"/></svg>${esc(texto)}</li>`;
 }
 
+function itemBanda(clase, texto) {
+  return `<li><svg width="26" height="12" viewBox="0 0 26 12" aria-hidden="true"><rect x="1" y="1" width="24" height="10" rx="2" class="${clase}"/><line x1="1" y1="6" x2="25" y2="6" class="linea ln-pronostico"/></svg>${esc(texto)}</li>`;
+}
+
 const ITEM_HUECO = '<li><svg width="18" height="12" viewBox="0 0 18 12" aria-hidden="true"><rect x="0.5" y="0.5" width="17" height="11" fill="none" class="hueco-rect"/><line x1="3" y1="11" x2="9" y2="1" class="hueco-trama"/><line x1="9" y1="11" x2="15" y2="1" class="hueco-trama"/></svg>Sin datos</li>';
 const ITEM_PRELIMINAR = '<li><svg width="18" height="12" viewBox="0 0 18 12" aria-hidden="true"><rect x="0" y="7" width="18" height="5" class="prelim-rect"/></svg>Preliminar</li>';
 
@@ -595,7 +615,7 @@ function pintarInicio() {
     const info = INFO_AREA[a.id] || { letra: a.nombre[0], fg: '#000', desc: '' };
     const met = S.resumen && S.resumen.metricas_prueba[a.id];
     const metrica = met
-      ? `<span class="area-metric">Error medio en la prueba de 2026, a 24 h: <span class="num">${nf1.format(met.mae_mw)} MW</span> (<span class="num">${pct(met.mape_pct)}</span>). Mejor referencia: ${esc(NOMBRE_REF[met.mejor_referencia] || met.mejor_referencia)}.</span>`
+      ? `<span class="area-metric">En 2026, a 24 h, se equivocó en promedio <span class="num">${nf1.format(met.mae_mw)} MW</span> (<span class="num">${pct(met.mape_pct)}</span>). Referencia simple que debe superar: ${esc(NOMBRE_REF[met.mejor_referencia] || met.mejor_referencia)}.</span>`
       : '';
     return `<a class="area-btn" href="#/area/${encodeURIComponent(a.id)}" style="--area-color:${esc(a.color)};--area-fg:${info.fg}">`
       + `<span class="area-badge" aria-hidden="true">${esc(info.letra)}</span>`
@@ -607,9 +627,7 @@ function pintarInicio() {
 function mostrarInicio() {
   $('#vistaInicio').hidden = false;
   $('#vistaArea').hidden = true;
-  $('#hoja').hidden = true;
-  $('#chipArea').hidden = true;
-  $('#app').classList.remove('con-hoja');
+  $('#app').classList.remove('app-ancha');
   document.title = 'Demanda del SEIN por área';
   window.scrollTo(0, 0);
 }
@@ -620,6 +638,7 @@ function escribirRuta() {
   const q = new URLSearchParams({
     fecha: S.fecha, hora: idxAHora(S.idx), horizonte: S.horizonte, variante: S.variante,
   });
+  if (hayVariosModelos() && S.modelo) q.set('modelo', S.modelo);
   const destino = `#/area/${encodeURIComponent(S.area)}?${q}`;
   if (location.hash !== destino) history.replaceState(null, '', destino);
 }
@@ -646,6 +665,10 @@ function pintarMomentos() {
 
 function sincronizarControles() {
   $('#inFecha').value = S.fecha;
+  $('#inFecha').min = FECHA_MIN;
+  $('#inFecha').max = FECHA_MAX;
+  $('#fechaLarga').textContent = fechaLarga(S.fecha);
+  $('#inModelo').value = S.modelo || '';
   $('#inHora').value = String(S.idx);
   $('#inHora').setAttribute('aria-valuetext', idxAHora(S.idx));
   $('#outHora').textContent = idxAHora(S.idx);
@@ -667,6 +690,7 @@ function mostrarArea(id, q) {
   S.idx = horaAIdx(q.get('hora')) ?? (S.fecha === ahora.fecha ? ahora.idx : S.idx);
   if (['1h', '24h'].includes(q.get('horizonte'))) S.horizonte = q.get('horizonte');
   if (['M0', 'M3'].includes(q.get('variante'))) S.variante = q.get('variante');
+  if (q.get('modelo') && S.modelos.some((m) => m.id === q.get('modelo'))) S.modelo = q.get('modelo');
   if (cambioDeArea) {
     S.serie = null;
     S.pron = null;
@@ -680,16 +704,11 @@ function mostrarArea(id, q) {
   badge.style.setProperty('--area-fg', info.fg);
   $('#areaNombre').textContent = area.nombre;
   $('#areaDesc').textContent = info.desc;
-  const chip = $('#chipArea');
-  $('.dot', chip).style.background = area.color;
-  $('span:last-child', chip).textContent = `Área ${area.nombre}`;
-  chip.hidden = false;
   document.title = `${area.nombre} · Demanda del SEIN`;
 
   $('#vistaInicio').hidden = true;
   $('#vistaArea').hidden = false;
-  $('#hoja').hidden = false;
-  $('#app').classList.add('con-hoja');
+  $('#app').classList.add('app-ancha');
   if (cambioDeArea) window.scrollTo(0, 0);
 
   sincronizarControles();
@@ -712,7 +731,7 @@ function elegirHora(i) {
   S.idx = i;
   sincronizarControles();
   escribirRuta();
-  pintarTarjetas();
+  pintarRespuesta();
   pintarCurva();
   clearTimeout(esperaHora);
   esperaHora = setTimeout(() => {
@@ -721,85 +740,126 @@ function elegirHora(i) {
   }, 250);
 }
 
+// Mientras llega la serie nueva, lo que se ve es de la elección anterior: se marca como desactualizado.
+function marcarCargando(cargando) {
+  const resp = $('#respuesta');
+  resp.setAttribute('aria-busy', String(cargando));
+  resp.classList.toggle('desactualizada', cargando && Boolean(S.serie));
+  $('#graficoDia').setAttribute('aria-busy', String(cargando));
+  $('#graficoDia').classList.toggle('cargando', cargando);
+  $('#respEstado').textContent = cargando ? (S.serie ? 'Actualizando…' : 'Calculando…') : '';
+}
+
 async function cargarSerie() {
   const turno = ++S.turnos.serie;
-  const el = $('#graficoDia');
-  el.classList.add('cargando');
+  marcarCargando(true);
   try {
-    const q = new URLSearchParams({ fecha: S.fecha, horizonte: S.horizonte, variante: S.variante });
+    const q = new URLSearchParams(conModelo({ fecha: S.fecha, horizonte: S.horizonte, variante: S.variante }));
     const datos = await api(`/series/${encodeURIComponent(S.area)}?${q}`);
     if (turno !== S.turnos.serie) return;
     S.serie = datos;
     limpiarError();
-    pintarTarjetas();
+    marcarCargando(false);
+    pintarRespuesta();
+    pintarConfianza();
     pintarCurva();
     pintarMomentos();
   } catch (err) {
     if (turno !== S.turnos.serie) return;
     S.serie = null;
-    manejarError(err, el);
-  } finally {
-    if (turno === S.turnos.serie) el.classList.remove('cargando');
+    marcarCargando(false);
+    $('#respTitulo').textContent = 'No se pudo calcular el pronóstico';
+    $('#respVeredicto').textContent = err.estado === 0 ? 'Sin conexión con el backend.' : err.message;
+    manejarError(err, $('#graficoDia'));
   }
 }
 
-function pintarTarjeta(card, datos) {
-  $('[data-campo="sub"]', card).textContent = datos.sub;
-  $('[data-campo="valor"]', card).innerHTML = `${mw(datos.valor)} <small>MW</small>`;
-  $('[data-campo="error"]', card).innerHTML = datos.real == null
-    ? 'Sin dato real a esa hora'
-    : `Error a esa hora: <span class="num">${mw(Math.abs(datos.valor - datos.real))} MW</span>`;
-  $('[data-campo="dia"]', card).innerHTML = datos.maeDia == null
-    ? 'Sin datos reales en el día'
-    : `Error medio del día: <span class="num">${nf1.format(datos.maeDia)} MW</span>`;
-  card.classList.toggle('ganador', Boolean(datos.ganador));
-  const previo = $('.badge-ganador', card);
-  if (previo) previo.remove();
-  if (datos.ganador) card.insertAdjacentHTML('beforeend', '<span class="badge-ganador">Menor error del día</span>');
-}
+const horizonteTxt = () => (S.horizonte === '1h' ? '1 hora' : '24 horas');
+const nombreModelo = () => {
+  const m = S.modelos.find((x) => x.id === S.modelo);
+  return m ? m.nombre : (S.salud ? S.salud.modelo : 'modelo');
+};
 
-function pintarTarjetas() {
+// La respuesta: el pronóstico para la hora elegida, emitido con la anticipación elegida.
+function pintarRespuesta() {
   const s = S.serie;
   if (!s) return;
   const i = S.idx;
+  const v = s.pronostico[i];
+  const real = s.real[i];
+  const iv = s.intervalo;
+  const area = S.areas.find((a) => a.id === S.area);
+  const emision = S.horizonte === '1h'
+    ? `${idxAHora((i + 46) % 48)}${i < 2 ? ` del ${fechaDiaMes(sumarDias(S.fecha, -1))}` : ''}`
+    : `${idxAHora(i)} del ${fechaDiaMes(sumarDias(S.fecha, -1))}`;
+  $('#respKicker').textContent = `${area ? area.nombre : ''} · a ${horizonteTxt()}`;
+  $('#respTitulo').textContent = `Para las ${idxAHora(i)} del ${fechaLarga(S.fecha)}`;
+  $('#respEmision').textContent = `Emitido a las ${emision} · ${nombreModelo()}, ${S.variante === 'M3' ? 'con clima y El Niño' : 'solo con la demanda'}`;
+  $('#respValor').textContent = mw(v);
+  $('#respRango').textContent = iv ? `${mw(iv.inferior[i])} – ${mw(iv.superior[i])} MW` : 'no disponible';
+  if (real == null) {
+    $('#respReal').textContent = 'sin dato';
+    $('#respError').textContent = '—';
+  } else {
+    const dentro = iv && real >= iv.inferior[i] && real <= iv.superior[i];
+    $('#respReal').innerHTML = `<span class="num">${mw(real)} MW</span>${iv ? ` <span class="marca ${dentro ? 'dentro' : 'fuera'}">${dentro ? 'dentro del rango' : 'fuera del rango'}</span>` : ''}`;
+    $('#respError').innerHTML = `<span class="num">${mw(Math.abs(v - real))} MW</span> <span class="muted">(${pct((100 * Math.abs(v - real)) / real)})</span>`;
+  }
   const maeModelo = mae(s.real, s.pronostico);
   const maeRef = mae(s.real, s.referencia);
-  const hay = maeModelo != null && maeRef != null;
-  const nombreRef = s.referencia_nombre;
-  const antes = S.horizonte === '1h' ? '1 h' : '24 h';
-  $('[data-campo="titulo"]', $('#cardReferencia')).textContent = TITULO_REF[nombreRef] || 'Mejor referencia';
-  pintarTarjeta($('#cardModelo'), {
-    sub: `Para las ${idxAHora(i)}, emitido ${antes} antes · ${S.variante === 'M3' ? 'con exógenas' : 'solo demanda'}`,
-    valor: s.pronostico[i],
-    real: s.real[i],
-    maeDia: maeModelo,
-    ganador: hay && maeModelo < maeRef,
-  });
-  pintarTarjeta($('#cardReferencia'), {
-    sub: `La mejor referencia ingenua a ${antes}`,
-    valor: s.referencia[i],
-    real: s.real[i],
-    maeDia: maeRef,
-    ganador: hay && maeRef < maeModelo,
-  });
-
-  const partes = [];
-  if (s.real[i] != null) partes.push(`A las ${idxAHora(i)} la demanda real fue ${mw(s.real[i])} MW.`);
-  if (hay) {
-    const dif = maeModelo - maeRef;
-    if (Math.abs(dif) < 0.5) {
-      partes.push(`En el día, el modelo se equivocó lo mismo que ${NOMBRE_REF[nombreRef]}.`);
-    } else {
-      partes.push(`En el día, el modelo se equivocó ${mw(Math.abs(dif))} MW ${dif < 0 ? 'menos' : 'más'} que ${NOMBRE_REF[nombreRef]}.`);
-    }
-    if (s.programacion_diaria) {
-      const maeProg = mae(s.real, s.programacion_diaria);
-      if (maeProg != null) partes.push(`La Programación Diaria del COES se equivocó ${mw(maeProg)} MW en promedio.`);
-    }
-  } else {
-    partes.push('Este día todavía no tiene datos reales: no se puede medir el error.');
+  $('#respDia').innerHTML = maeModelo == null ? 'sin datos reales' : `<span class="num">${nf1.format(maeModelo)} MW</span>`;
+  const ver = $('#respVeredicto');
+  ver.className = 'resp-veredicto';
+  if (maeModelo == null || maeRef == null) {
+    ver.textContent = 'Este día no tiene datos reales: todavía no se puede medir el error.';
+    return;
   }
-  $('#cmpFrase').textContent = partes.join(' ');
+  const mejora = (100 * (maeRef - maeModelo)) / maeRef;
+  const ref = NOMBRE_REF[s.referencia_nombre] || 'la referencia simple';
+  if (Math.abs(maeRef - maeModelo) < 0.5) {
+    ver.textContent = `Este día se equivocó lo mismo que la referencia simple, ${ref}.`;
+  } else if (mejora > 0) {
+    ver.classList.add('bueno');
+    ver.textContent = `Este día se equivocó ${pct(mejora)} menos que la referencia simple, ${ref} (${nf1.format(maeRef)} MW).`;
+  } else {
+    ver.classList.add('malo');
+    ver.textContent = `Este día se equivocó ${pct(-mejora)} más que la referencia simple, ${ref} (${nf1.format(maeRef)} MW).`;
+  }
+}
+
+// Qué tan bueno es: el error del día frente a la referencia, la cobertura del rango y la prueba de 2026.
+function pintarConfianza() {
+  const s = S.serie;
+  if (!s) return;
+  const maeModelo = mae(s.real, s.pronostico);
+  const maeRef = mae(s.real, s.referencia);
+  const ref = TITULO_REF[s.referencia_nombre] || 'Referencia simple';
+  const barras = $('#barrasConfianza');
+  if (maeModelo != null && maeRef != null) {
+    const tope = Math.max(maeModelo, maeRef) || 1;
+    const fila = (nombre, valor, clase) => `<div class="barra-fila"><span class="barra-nombre">${esc(nombre)}</span>`
+      + `<span class="barra-pista"><span class="barra ${clase}" style="width:${((100 * valor) / tope).toFixed(1)}%"></span></span>`
+      + `<span class="barra-valor num">${nf1.format(valor)} MW</span></div>`;
+    barras.innerHTML = '<p class="muted small">Error medio de este día (menos es mejor)</p>'
+      + fila('Modelo', maeModelo, 'barra-modelo-h') + fila(`Referencia: ${ref.toLowerCase()}`, maeRef, 'barra-referencia-h');
+  } else {
+    barras.innerHTML = '<p class="muted small">Este día no tiene datos reales para medir el error.</p>';
+  }
+  const items = [];
+  if (s.intervalo) {
+    let dentro = 0;
+    let n = 0;
+    s.real.forEach((r, i) => {
+      if (r == null) return;
+      n += 1;
+      if (r >= s.intervalo.inferior[i] && r <= s.intervalo.superior[i]) dentro += 1;
+    });
+    if (n) items.push(`<li><strong>Rango probable:</strong> la demanda real cayó dentro en <span class="num">${dentro}</span> de <span class="num">${n}</span> medias horas del día (se espera alrededor de 9 de cada 10).</li>`);
+  }
+  const met = S.resumen && S.resumen.metricas_prueba[S.area];
+  if (met) items.push(`<li><strong>En toda la prueba de 2026</strong> (a 24 h, con clima y El Niño): error medio <span class="num">${nf1.format(met.mae_mw)} MW</span> (<span class="num">${pct(met.mape_pct)}</span>).</li>`);
+  items.push('<li><strong>Referencia simple:</strong> la mejor de tres reglas sin modelo (el último dato, ayer o la semana pasada a la misma hora). Es la vara mínima que el modelo debe superar.</li>');
+  $('#listaConfianza').innerHTML = items.join('');
 }
 
 function pintarCurva() {
@@ -807,10 +867,12 @@ function pintarCurva() {
   const el = $('#graficoDia');
   if (!s) return;
   const nombreRef = TITULO_REF[s.referencia_nombre] || 'Referencia';
-  const series = [{ clase: 'ln-referencia', valores: s.referencia, nombre: nombreRef }];
-  if (s.programacion_diaria) series.push({ clase: 'ln-programacion', valores: s.programacion_diaria, nombre: 'Programación COES' });
-  series.push({ clase: 'ln-pronostico', valores: s.pronostico, nombre: 'Modelo' });
-  series.push({ clase: 'ln-real', valores: s.real, nombre: 'Real', puente: true });
+  const banda = s.intervalo ? { inf: s.intervalo.inferior, sup: s.intervalo.superior, clase: 'banda-pronostico', nombre: 'Rango probable' } : null;
+  const series = [
+    { clase: 'ln-referencia', valores: s.referencia, nombre: `Referencia: ${nombreRef.toLowerCase()}` },
+    { clase: 'ln-pronostico', valores: s.pronostico, nombre: 'Modelo', banda },
+    { clase: 'ln-real', valores: s.real, nombre: 'Real', puente: true },
+  ];
   const pico = indicePico();
   const resumen = pico != null && s.real[pico] != null
     ? ` El máximo real fue ${mw(s.real[pico])} MW a las ${idxAHora(pico)}.`
@@ -823,14 +885,15 @@ function pintarCurva() {
     marcador: { i: S.idx, txt: idxAHora(S.idx) },
     etiquetaX: (i) => (i % 12 === 0 ? idxAHora(i) : null),
     etiquetaPunto: (i) => horaDe(s.fecha_hora[i]),
-    alto: 230,
+    alto: 240,
     alPulsar: elegirHora,
-    aria: `Curva del ${fechaLarga(S.fecha)}: demanda real, pronóstico a ${S.horizonte === '1h' ? '1 hora' : '24 horas'} y ${nombreRef.toLowerCase()}.${resumen}`,
+    aria: `Curva del ${fechaLarga(S.fecha)}: demanda real, pronóstico a ${horizonteTxt()} con su rango probable y la referencia simple (${nombreRef.toLowerCase()}).${resumen}`,
   });
-  $('#subCurva').textContent = `${fechaCorta(S.fecha)} · a ${S.horizonte === '1h' ? '1 hora' : '24 horas'}`;
+  $('#subCurva').textContent = `${fechaCorta(S.fecha)} · a ${horizonteTxt()}`;
 
-  let leyenda = itemLinea('ln-real', 'Real') + itemLinea('ln-pronostico', 'Modelo') + itemLinea('ln-referencia', nombreRef);
-  if (s.programacion_diaria) leyenda += itemLinea('ln-programacion', 'Programación Diaria del COES');
+  let leyenda = itemLinea('ln-real', 'Real') + itemLinea('ln-pronostico', 'Modelo');
+  if (banda) leyenda += itemBanda('banda-pronostico', 'Rango probable');
+  leyenda += itemLinea('ln-referencia', `Referencia: ${nombreRef.toLowerCase()}`);
   const hayHueco = s.hueco.some(Boolean);
   const hayPrelim = s.preliminar.some(Boolean);
   if (hayHueco) leyenda += ITEM_HUECO;
@@ -845,21 +908,9 @@ function pintarCurva() {
   nota.hidden = !notas.length;
 }
 
-// ---- Hoja inferior ----------------------------------------------------------------------
-
-function abrirHoja(abrir) {
-  S.hojaAbierta = abrir;
-  $('#hoja').classList.toggle('collapsed', !abrir);
-  $('#hojaAsa').setAttribute('aria-expanded', String(abrir));
-  $('#hojaAsaTxt').textContent = abrir ? 'Cerrar la hoja' : 'Abrir la hoja';
-  if (abrir) requestAnimationFrame(redibujarGraficos);
-}
+// ---- Pestañas de detalle ------------------------------------------------------------------
 
 function elegirTab(tab, foco = false) {
-  if (tab === S.tab && S.hojaAbierta) {
-    abrirHoja(false);
-    return;
-  }
   S.tab = tab;
   $$('.sheet-tab').forEach((b) => {
     const elegida = b.dataset.tab === tab;
@@ -870,8 +921,8 @@ function elegirTab(tab, foco = false) {
   $$('.tab-panel').forEach((p) => {
     p.hidden = p.id !== `panel-${tab}`;
   });
-  abrirHoja(true);
   pintarTab();
+  requestAnimationFrame(redibujarGraficos);
 }
 
 function pintarTab() {
@@ -886,9 +937,9 @@ async function cargarPronostico() {
   const panel = $('#panel-operacion');
   panel.classList.add('cargando');
   try {
-    const p = await api('/pronostico', {
+    const p = await api('/pronostico', conModelo({
       area: S.area, origen: origen(), horizonte: S.horizonte, variante: S.variante, escenario: ESCENARIO_BASE,
-    });
+    }));
     if (turno !== S.turnos.pron) return;
     S.pron = p;
     pintarOperacion();
@@ -901,9 +952,7 @@ async function cargarPronostico() {
 
 const NOTAS_OPERACION = `<ul class="lista-notas">
   <li><strong>Rango probable:</strong> la banda donde debería caer la demanda 9 de cada 10 veces.</li>
-  <li><strong>Mejor referencia:</strong> la mejor de las ingenuas (persistencia, ayer o la semana pasada a la misma hora) en la validación de 2025.</li>
-  <li><strong>A 24 h</strong> también se compara con la Programación Diaria del COES.</li>
-  <li><strong>Sin datos y preliminar:</strong> huecos del COES y datos aún no validados; se ven punteados en la curva.</li>
+  <li><strong>Referencia simple:</strong> la mejor de tres reglas sin modelo (el último dato, ayer o la semana pasada a la misma hora) en la validación de 2025.</li>
 </ul>`;
 
 function pintarOperacion() {
@@ -914,7 +963,7 @@ function pintarOperacion() {
     return;
   }
   const ventana = S.horizonte === '1h' ? 'la próxima hora' : 'las próximas 24 horas';
-  let html = `<h3>Desde las ${idxAHora(S.idx)} del ${esc(fechaCorta(S.fecha))}: ${ventana}</h3>`;
+  let html = `<h3>Si se emite a las ${idxAHora(S.idx)} del ${esc(fechaCorta(S.fecha))}: ${ventana}</h3>`;
   html += `<p class="frase" aria-live="polite">${esc(p.frase)}</p>`;
   if (S.horizonte === '1h') {
     html += '<table class="tabla"><thead><tr><th scope="col">Hora</th><th scope="col" class="num">Modelo</th><th scope="col" class="num">Rango probable</th><th scope="col" class="num">Real</th></tr></thead><tbody>';
@@ -926,7 +975,7 @@ function pintarOperacion() {
     html += '</tbody></table>';
   } else {
     html += '<div id="graficoOperacion" class="chart"></div>';
-    html += `<ul class="legend">${itemLinea('ln-real', 'Real')}${itemLinea('ln-pronostico', 'Modelo y rango probable')}${itemLinea('ln-referencia', 'Mejor referencia')}</ul>`;
+    html += `<ul class="legend">${itemLinea('ln-real', 'Real')}${itemLinea('ln-pronostico', 'Modelo')}${itemBanda('banda-pronostico', 'Rango probable')}${itemLinea('ln-referencia', 'Referencia simple')}</ul>`;
   }
   html += NOTAS_OPERACION;
   panel.innerHTML = html;
@@ -934,8 +983,8 @@ function pintarOperacion() {
     graficoLineas($('#graficoOperacion'), {
       n: p.fecha_hora.length,
       series: [
-        { clase: 'ln-referencia', valores: p.referencia, nombre: 'Referencia' },
-        { clase: 'ln-pronostico', valores: p.pronostico, nombre: 'Modelo', banda: { inf: p.intervalo.inferior, sup: p.intervalo.superior, clase: 'banda-pronostico' } },
+        { clase: 'ln-referencia', valores: p.referencia, nombre: 'Referencia simple' },
+        { clase: 'ln-pronostico', valores: p.pronostico, nombre: 'Modelo', banda: { inf: p.intervalo.inferior, sup: p.intervalo.superior, clase: 'banda-pronostico', nombre: 'Rango probable' } },
         { clase: 'ln-real', valores: p.real, nombre: 'Real', puente: true },
       ],
       etiquetaX: (j) => (j % 12 === 11 ? horaDe(p.fecha_hora[j]) : null),
@@ -963,18 +1012,18 @@ function pintarEscenarios() {
   }
   const e = S.escenario;
   const panel = $('#panel-escenarios');
-  let html = '<h3>¿Y si mañana…?</h3>';
-  html += `<p class="muted small">Escenarios a 24 h desde las ${idxAHora(S.idx)} del ${esc(fechaCorta(S.fecha))}. Supuesto: el COES recibe de ENFEN los pronósticos de clima y de El Niño.</p>`;
+  let html = '<h3>¿Y si mañana hace más calor, o El Niño se calma?</h3>';
+  html += `<p class="muted small">Cambia un supuesto y el modelo vuelve a calcular las próximas 24 h desde las ${idxAHora(S.idx)} del ${esc(fechaCorta(S.fecha))}. Supuesto del proyecto: el COES recibe de ENFEN los pronósticos de clima y de El Niño.</p>`;
   if (S.variante === 'M0') {
-    html += '<div class="nota aviso">La variante «Solo demanda» no usa clima, El Niño ni fallas: los escenarios no la cambian. <button type="button" class="btn" data-accion="usar-m3">Usar «Con exógenas»</button></div>';
+    html += '<div class="nota aviso">«Solo demanda» no usa clima, El Niño ni fallas: los escenarios no la cambian. <button type="button" class="btn" data-accion="usar-m3">Usar «Con clima y El Niño»</button></div>';
   }
-  html += grupoOpciones('lblTemp', 'Temperatura frente a la pronosticada', TEMPERATURAS.map((t) => (
+  html += grupoOpciones('lblTemp', 'Temperatura frente a la esperada', TEMPERATURAS.map((t) => (
     opcion('temp', t, `${t > 0 ? '+' : t < 0 ? '−' : '±'}${Math.abs(t)} °C`, e.delta_temp_c === t))));
   html += grupoOpciones('lblNino', 'El Niño', [
     opcion('nino', 'observado', 'Como se observó', e.nino === 'observado'),
     opcion('nino', 'neutro', 'Neutro', e.nino === 'neutro'),
   ]);
-  html += grupoOpciones('lblFalla', 'Falla en curso al emitir', [
+  html += grupoOpciones('lblFalla', 'Falla en la red al emitir', [
     opcion('falla', 'observada', 'Como se observó', e.falla === 'observada'),
     opcion('falla', 'ninguna', 'Sin falla', e.falla === 'ninguna'),
   ]);
@@ -989,7 +1038,7 @@ const esBase = (e) => e.delta_temp_c === 0 && e.nino === 'observado' && e.falla 
 
 async function cargarEscenario() {
   const turno = ++S.turnos.esc;
-  const pedido = { area: S.area, origen: origen(), horizonte: '24h', variante: S.variante };
+  const pedido = conModelo({ area: S.area, origen: origen(), horizonte: '24h', variante: S.variante });
   const base = esBase(S.escenario);
   try {
     const pedidos = [api('/pronostico', { ...pedido, escenario: ESCENARIO_BASE })];
@@ -1029,8 +1078,8 @@ function pintarSensibilidad() {
   panel.innerHTML = `
     <div class="nota"><strong>A 1 hora no hay escenarios.</strong> La demanda de la última media hora ya contiene el clima del momento: si hace más calor, ya se nota en la demanda reciente. Por eso aquí se muestra cómo responde el modelo, no un escenario. Para «¿y si mañana hace más calor?», usa el horizonte de 24 horas.
       <div style="margin-top:8px"><button type="button" class="btn" data-accion="ir-24h">Ver escenarios a 24 h</button></div></div>
-    <h3>Sensibilidad del modelo a 1 h</h3>
-    <p class="muted small">Cómo cambia el pronóstico de las ${objetivo} al mover una variable, con las demás fijas (dependencia parcial, variante con exógenas).</p>
+    <h3>¿Cuánto le importa al modelo la temperatura a 1 h?</h3>
+    <p class="muted small">Cómo cambia el pronóstico de las ${objetivo} al mover una variable y dejar todo lo demás igual (usa los datos con clima y El Niño).</p>
     ${grupoOpciones('lblSens', 'Variable', [
       opcion('sens', 'temperatura', 'Temperatura', S.sensVar === 'temperatura'),
       opcion('sens', 'icen', 'ICEN (El Niño)', S.sensVar === 'icen'),
@@ -1044,7 +1093,7 @@ async function cargarSensibilidad() {
   const turno = ++S.turnos.sens;
   const variable = S.sensVar;
   try {
-    const s = await api('/sensibilidad', { area: S.area, origen: origen(), variable });
+    const s = await api('/sensibilidad', conModelo({ area: S.area, origen: origen(), variable }));
     if (turno !== S.turnos.sens || !$('#graficoSens')) return;
     const temp = variable === 'temperatura';
     const fmtX = (v) => (temp ? `${nf1.format(v)} °C` : nf1.format(v));
@@ -1078,7 +1127,8 @@ async function pintarDiagnostico() {
     panel.innerHTML = '<p class="cargando-txt">Calculando el diagnóstico…</p>';
     const turno = ++S.turnos.diag;
     try {
-      S.diag.set(area, await api(`/diagnostico/${encodeURIComponent(area)}`));
+      const q = hayVariosModelos() && S.modelo ? `?modelo=${encodeURIComponent(S.modelo)}` : '';
+      S.diag.set(area, await api(`/diagnostico/${encodeURIComponent(area)}${q}`));
     } catch (err) {
       if (turno === S.turnos.diag) manejarError(err, panel);
       return;
@@ -1088,26 +1138,26 @@ async function pintarDiagnostico() {
   const d = S.diag.get(area);
   const prueba = S.salud && S.salud.modelo === 'prueba';
   panel.innerHTML = `
-    <p class="muted small">Todo a 24 horas.${prueba ? ' <strong>Datos de prueba:</strong> los números son ilustrativos.' : ''}</p>
+    <p class="muted small">Todo a 24 horas, con el error medio en MW (menos es mejor).${prueba ? ' <strong>Datos de prueba:</strong> los números son ilustrativos.' : ''}</p>
     <section class="diag-seccion">
-      <h3>Error por régimen de El Niño</h3>
-      <p class="muted small">MAE en MW de 2025 a 2026: 2026 casi no tiene régimen neutro.</p>
-      <ul class="legend"><li><svg width="18" height="11" aria-hidden="true"><rect width="18" height="11" rx="3" class="barra-modelo"/></svg>Modelo</li><li><svg width="18" height="11" aria-hidden="true"><rect x="0.75" y="0.75" width="16.5" height="9.5" rx="3" class="barra-referencia"/></svg>Mejor referencia</li></ul>
+      <h3>¿Con qué fase de El Niño se equivoca más?</h3>
+      <p class="muted small">Error medio de 2025 y 2026 según la fase de El Niño (2026 casi no tiene fase neutra).</p>
+      <ul class="legend"><li><svg width="18" height="11" aria-hidden="true"><rect width="18" height="11" rx="3" class="barra-modelo"/></svg>Modelo</li><li><svg width="18" height="11" aria-hidden="true"><rect x="0.75" y="0.75" width="16.5" height="9.5" rx="3" class="barra-referencia"/></svg>Referencia simple</li></ul>
       <div id="gRegimen" class="chart"></div>
     </section>
     <section class="diag-seccion">
-      <h3>¿Cuánto aporta cada grupo de variables?</h3>
-      <p class="muted small">Ablación en la prueba de 2026: MAE con su intervalo del 95 % (bootstrap por días). Menos es mejor; la línea punteada es M0.</p>
+      <h3>¿Cuánto aporta cada grupo de datos?</h3>
+      <p class="muted small">Error en la prueba de 2026 al ir sumando datos al modelo, con su intervalo del 95 % (remuestreando días). La línea punteada es «solo demanda» (M0).</p>
       <div id="gAblacion" class="chart"></div>
     </section>
     <section class="diag-seccion">
-      <h3>¿Reentrenar o sumar exógenas?</h3>
-      <p class="muted small">MAE en la prueba de 2026 según cada cuánto se reentrena. Punto lleno: con exógenas; vacío: sin exógenas.</p>
+      <h3>¿Conviene reentrenar seguido o sumar datos de clima?</h3>
+      <p class="muted small">Error en la prueba de 2026 según cada cuánto se reentrena. Punto lleno: con clima y El Niño; vacío: solo demanda.</p>
       <div id="gAdaptacion" class="chart"></div>
     </section>
     <section class="diag-seccion">
-      <h3>Qué variables pesan más</h3>
-      <p class="muted small">Cuántos MW sube el error al quitar cada grupo. Un valor negativo quiere decir que quitarlo mejora.</p>
+      <h3>¿Qué datos pesan más?</h3>
+      <p class="muted small">Cuántos MW sube el error al quitar cada grupo de datos. Un valor negativo quiere decir que quitarlo mejora.</p>
       <div id="gImportancias" class="chart"></div>
     </section>
     <section class="diag-seccion">
@@ -1124,7 +1174,7 @@ async function pintarDiagnostico() {
       { valor: r.modelo, clase: 'barra-modelo', texto: `modelo ${nf1.format(r.modelo)}` },
       { valor: r.referencia, clase: 'barra-referencia', texto: `ref. ${nf1.format(r.referencia)}` },
     ],
-  })), { aria: 'Error del modelo y de la mejor referencia por régimen de El Niño.' });
+  })), { aria: 'Error del modelo y de la referencia simple según la fase de El Niño.' });
 
   const m0 = d.ablacion.find((a) => a.variante === 'M0');
   graficoPuntos($('#gAblacion'), d.ablacion.map((a) => ({
@@ -1132,7 +1182,7 @@ async function pintarDiagnostico() {
   })), { ref: m0 ? { valor: m0.mae, txt: 'M0' } : null, aria: 'Error de cada variante de la ablación con su intervalo.' });
 
   graficoPuntos($('#gAdaptacion'), d.adaptacion.map((a) => ({
-    etiqueta: `${POLITICA[a.politica] || a.politica}, ${a.exogenas ? 'con' : 'sin'} exógenas`,
+    etiqueta: `${POLITICA[a.politica] || a.politica}, ${a.exogenas ? 'con clima y El Niño' : 'solo demanda'}`,
     valor: a.mae,
     hueco: !a.exogenas,
   })), { aria: 'Error según la política de reentrenamiento.' });
@@ -1169,12 +1219,12 @@ function pintarFicha() {
     nino = `El último ICEN publicado es ${r.regimen_nino.icen.toFixed(2)}, de ${MESES[m - 1]} de ${y}: régimen ${ESTADO_NINO[r.regimen_nino.estado] || r.regimen_nino.estado} según ENFEN. `;
   }
   $('#fichaCuerpo').innerHTML = `
-    <section><h3>Qué hace</h3><p>Pronostica la demanda eléctrica de las áreas Norte, Centro y Sur del SEIN cada 30 minutos, a 1 hora y a 24 horas. La compara con la mejor referencia ingenua y, a 24 h, con la Programación Diaria del COES.</p></section>
+    <section><h3>Qué hace</h3><p>Pronostica la demanda eléctrica de las áreas Norte, Centro y Sur del SEIN cada 30 minutos, a 1 hora y a 24 horas, con su rango probable. La compara con la referencia simple: la mejor de tres reglas sin modelo (el último dato, ayer o la semana pasada a la misma hora).</p></section>
     <section><h3>Modelo</h3><p>Modelo <span class="mono">${esc(s ? s.modelo : '—')}</span>, datos <span class="mono">${esc(s ? s.version_datos : '—')}</span>.${prueba ? ' Es el modelo de prueba: persistencia, ciclo diario y ruido sobre series sintéticas. Sirve para probar la app; sus números no son resultados.' : ''}</p></section>
     <section><h3>El Niño Costero</h3><p>${esc(nino)}Cada variable entra con su rezago real de publicación.</p></section>
     <section><h3>Fechas de corte</h3><table class="tabla"><tbody>${cortes}</tbody></table></section>
     <section><h3>Fuentes y licencias</h3><ul>
-      <li>COES: demanda por área (IEOD), Programación Diaria y eventos. Sin licencia publicada.</li>
+      <li>COES: demanda por área (IEOD) y eventos. Sin licencia publicada.</li>
       <li>ERA5 de Copernicus, vía Open-Meteo: temperatura. CC BY 4.0.</li>
       <li>IGP y ENFEN: ICEN.</li>
       <li>NOAA: Niño 1+2. Dominio público.</li>
@@ -1213,6 +1263,17 @@ async function cargarBase() {
   S.resumen = resumen;
   const hasta = resumen.fechas_corte && resumen.fechas_corte.prueba_hasta;
   if (/^\d{4}-\d{2}-\d{2}$/.test(hasta || '')) FECHA_MAX = hasta;
+  // /modelos es opcional: si el backend no lo tiene, el único modelo es el de /salud
+  try {
+    const lista = await api('/modelos');
+    S.modelos = Array.isArray(lista) && lista.length ? lista : [];
+  } catch {
+    S.modelos = [];
+  }
+  if (!S.modelos.length) S.modelos = [{ id: salud.modelo, nombre: salud.modelo }];
+  if (!S.modelos.some((m) => m.id === S.modelo)) S.modelo = S.modelos[0].id;
+  $('#inModelo').innerHTML = S.modelos.map((m) => `<option value="${esc(m.id)}">${esc(m.nombre)}</option>`).join('');
+  $('#campoModelo').classList.toggle('unico', S.modelos.length === 1);
   const prueba = salud.modelo === 'prueba';
   $('#chipPrueba').hidden = !prueba;
   $('#notaPruebaInicio').hidden = !prueba;
@@ -1250,9 +1311,18 @@ function conectarEventos() {
   });
 
   $('#inFecha').addEventListener('change', (ev) => {
-    const fecha = acotarFecha(ev.target.value);
+    const pedida = ev.target.value;
+    const fecha = acotarFecha(pedida);
     if (!fecha) return;
+    const aviso = $('#fechaAviso');
+    aviso.hidden = fecha === pedida;
+    if (fecha !== pedida) aviso.textContent = `Solo hay datos del ${fechaCorta(FECHA_MIN)} al ${fechaCorta(FECHA_MAX)}: se muestra el ${fechaCorta(fecha)}.`;
     S.fecha = fecha;
+    recargar();
+  });
+  $('#inModelo').addEventListener('change', (ev) => {
+    S.modelo = ev.target.value;
+    S.diag.clear();
     recargar();
   });
   $('#inHora').addEventListener('input', (ev) => elegirHora(Number(ev.target.value)));
@@ -1271,7 +1341,6 @@ function conectarEventos() {
     recargar();
   }));
 
-  $('#hojaAsa').addEventListener('click', () => abrirHoja(!S.hojaAbierta));
   $$('.sheet-tab').forEach((b) => b.addEventListener('click', () => elegirTab(b.dataset.tab)));
   $('.sheet-tabs').addEventListener('keydown', (ev) => {
     const tabs = $$('.sheet-tab');
@@ -1304,10 +1373,6 @@ function conectarEventos() {
       return;
     } else return;
     pintarEscenarios();
-  });
-
-  document.addEventListener('keydown', (ev) => {
-    if (ev.key === 'Escape' && S.hojaAbierta && !$('#dlgFicha').open) abrirHoja(false);
   });
 
   let esperaResize = null;

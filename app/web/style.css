@@ -24,7 +24,7 @@
   --c-sur: #009e73;
   --c-pronostico: #d55e00;
   --c-referencia: #cc79a7;
-  --c-celeste: #56b4e9; /* Programación Diaria y escenario */
+  --c-celeste: #56b4e9; /* escenario */
   --c-real: var(--text-main);
   --c-hueco: #8e98ad;
   --aviso-bg: rgba(240, 228, 66, 0.12);
@@ -36,9 +36,9 @@
   --radius-lg: 20px;
   --radius-pill: 9999px;
 
-  --shadow-sheet: 0 -8px 24px rgba(0, 0, 0, 0.45);
   --shadow-card: 0 4px 14px rgba(0, 0, 0, 0.25);
-  --alto-hoja: 112px;
+  --c-bueno: #009e73;
+  --c-malo: #d55e00;
 
   color-scheme: dark;
 }
@@ -62,8 +62,9 @@
   --aviso-borde: rgba(178, 122, 0, 0.6);
   --error-bg: rgba(213, 94, 0, 0.1);
 
-  --shadow-sheet: 0 -8px 24px rgba(0, 0, 0, 0.12);
   --shadow-card: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --c-bueno: #007a5a;
+  --c-malo: #b34700;
 
   color-scheme: light;
 }
@@ -149,8 +150,9 @@ a {
   min-height: 100dvh;
 }
 
-.app.con-hoja {
-  padding-bottom: calc(var(--alto-hoja) + 16px + env(safe-area-inset-bottom));
+/* La vista del área usa el ancho de la pantalla en escritorio (proyector de la demo) */
+.app.app-ancha {
+  max-width: 1240px;
 }
 
 /* ==========================================================================
@@ -639,90 +641,6 @@ input[type='range']::-moz-range-thumb {
   box-shadow: 0 1px 6px rgba(0, 0, 0, 0.25), inset 0 0 0 1px var(--border-strong);
 }
 
-/* ---- Tarjetas que se comparan ---- */
-.compare {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-}
-
-.cmp-card {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  min-width: 0;
-  padding: 12px;
-  border-radius: var(--radius-md);
-  border: 1.5px solid var(--border-subtle);
-  background: var(--bg-surface);
-}
-
-.cmp-card.ganador {
-  border-color: var(--text-main);
-}
-
-.cmp-head {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 12px;
-  font-weight: 700;
-}
-
-.cmp-head svg {
-  flex-shrink: 0;
-}
-
-.cmp-sub {
-  font-size: 11px;
-  color: var(--text-muted);
-  min-height: 2.6em;
-}
-
-.cmp-valor {
-  font-family: var(--font-mono);
-  font-variant-numeric: tabular-nums;
-  font-size: 22px;
-  font-weight: 700;
-  letter-spacing: -0.5px;
-}
-
-.cmp-valor small {
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--text-muted);
-  letter-spacing: 0;
-}
-
-.cmp-linea {
-  font-size: 12px;
-  color: var(--text-muted);
-}
-
-.cmp-linea .num {
-  color: var(--text-main);
-  font-weight: 600;
-}
-
-.badge-ganador {
-  align-self: flex-start;
-  padding: 2px 8px;
-  border-radius: var(--radius-pill);
-  border: 1px solid var(--text-main);
-  font-size: 10.5px;
-  font-weight: 700;
-}
-
-.cmp-frase {
-  grid-column: 1 / -1;
-  padding: 10px 12px;
-  border-radius: var(--radius-sm);
-  background: var(--bg-surface-elevated);
-  border: 1px solid var(--border-subtle);
-  font-size: 13.5px;
-  font-weight: 600;
-}
-
 /* ==========================================================================
    Gráficos en SVG
    ========================================================================== */
@@ -772,12 +690,6 @@ input[type='range']::-moz-range-thumb {
   stroke: var(--c-referencia);
   stroke-width: 2;
   stroke-dasharray: 6 4;
-}
-
-.ln-programacion {
-  stroke: var(--c-celeste);
-  stroke-width: 2;
-  stroke-dasharray: 1.5 4;
 }
 
 .ln-escenario {
@@ -981,53 +893,11 @@ input[type='range']::-moz-range-thumb {
 }
 
 /* ==========================================================================
-   Hoja inferior con pestañas
+   Pestañas de detalle (en la página, ya no en una hoja fija)
    ========================================================================== */
-.bottom-sheet {
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 60;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  max-width: 760px;
-  max-height: 80dvh;
-  margin: 0 auto;
-  padding-bottom: env(safe-area-inset-bottom);
-  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-  border: 1px solid var(--border-subtle);
-  border-bottom: none;
-  background: var(--bg-surface);
-  box-shadow: var(--shadow-sheet);
-}
-
-.sheet-handle {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 8px;
-  width: 100%;
-  min-height: 30px;
-  border: none;
-  background: transparent;
-  color: var(--text-muted);
-  font-size: 11px;
-  font-weight: 600;
-}
-
-.handle-pill {
-  width: 40px;
-  height: 4px;
-  border-radius: var(--radius-pill);
-  background: var(--border-strong);
-}
-
 .sheet-tabs {
   display: flex;
   gap: 4px;
-  margin: 0 16px 12px;
   padding: 3px;
   border-radius: var(--radius-md);
   border: 1px solid var(--border-subtle);
@@ -1042,7 +912,7 @@ input[type='range']::-moz-range-thumb {
   border-radius: var(--radius-sm);
   background: transparent;
   color: var(--text-muted);
-  font-size: 12.5px;
+  font-size: 13px;
   font-weight: 700;
   white-space: nowrap;
 }
@@ -1051,18 +921,6 @@ input[type='range']::-moz-range-thumb {
   background: var(--bg-surface-elevated);
   color: var(--text-main);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25), inset 0 -2px 0 var(--c-pronostico);
-}
-
-.sheet-body {
-  flex: 1;
-  min-height: 0;
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  padding: 0 16px 20px;
-}
-
-.bottom-sheet.collapsed .sheet-body {
-  display: none;
 }
 
 .tab-panel {
@@ -1150,6 +1008,269 @@ input[type='range']::-moz-range-thumb {
 .diag-seccion + .diag-seccion {
   border-top: 1px solid var(--border-subtle);
   padding-top: 14px;
+}
+
+/* ==========================================================================
+   Vista del área: la respuesta primero
+   ========================================================================== */
+.area-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.col-principal,
+.col-detalle {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-width: 0;
+}
+
+.respuesta {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 16px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+  border-left: 4px solid var(--c-pronostico);
+  background: var(--bg-surface);
+  box-shadow: var(--shadow-card);
+}
+
+.resp-cabeza {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.resp-kicker {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.resp-estado {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.resp-estado:not(:empty)::before {
+  content: '';
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  margin-right: 6px;
+  border-radius: 50%;
+  background: var(--c-celeste);
+  animation: latido 1s ease-in-out infinite alternate;
+}
+
+@keyframes latido {
+  from { opacity: 0.3; }
+  to { opacity: 1; }
+}
+
+.resp-titulo {
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.resp-emision {
+  font-size: 12.5px;
+}
+
+.resp-valor {
+  margin-top: 2px;
+  line-height: 1;
+}
+
+.resp-valor .num {
+  font-size: 44px;
+  font-weight: 700;
+  letter-spacing: -1px;
+}
+
+.resp-valor .unidad {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.resp-rango {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 8px;
+  font-size: 14px;
+}
+
+.resp-rango-txt {
+  font-weight: 600;
+}
+
+.resp-rango .num {
+  font-weight: 700;
+}
+
+.resp-datos {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 6px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.resp-datos dt {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.resp-datos dd {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.marca {
+  display: inline-block;
+  margin-top: 2px;
+  padding: 1px 7px;
+  border-radius: var(--radius-pill);
+  border: 1px solid currentColor;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.marca.dentro {
+  color: var(--c-bueno);
+}
+
+.marca.fuera {
+  color: var(--c-malo);
+}
+
+.resp-veredicto {
+  padding: 8px 10px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-surface-elevated);
+  font-size: 13.5px;
+  font-weight: 600;
+}
+
+.resp-veredicto.bueno {
+  border-left: 3px solid var(--c-bueno);
+}
+
+.resp-veredicto.malo {
+  border-left: 3px solid var(--c-malo);
+}
+
+.respuesta.desactualizada .resp-valor,
+.respuesta.desactualizada .resp-rango,
+.respuesta.desactualizada .resp-datos,
+.respuesta.desactualizada .resp-veredicto {
+  opacity: 0.45;
+  transition: opacity 0.15s ease;
+}
+
+.field-help {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.field-aviso {
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  background: var(--aviso-bg);
+  border: 1px dashed var(--aviso-borde);
+  font-size: 12.5px;
+}
+
+select {
+  width: 100%;
+  min-height: 40px;
+  padding: 8px 10px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-input);
+  font-size: 14px;
+}
+
+.confianza h2 {
+  font-size: 15px;
+}
+
+.barras-confianza {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.barra-fila {
+  display: grid;
+  grid-template-columns: minmax(0, 9.5em) 1fr auto;
+  align-items: center;
+  gap: 8px;
+  font-size: 12.5px;
+}
+
+.barra-nombre {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.barra-pista {
+  height: 12px;
+  border-radius: var(--radius-pill);
+  background: var(--bg-input);
+  overflow: hidden;
+}
+
+.barra {
+  display: block;
+  height: 100%;
+  border-radius: var(--radius-pill);
+}
+
+.barra-modelo-h {
+  background: var(--c-pronostico);
+}
+
+.barra-referencia-h {
+  background: repeating-linear-gradient(90deg, var(--c-referencia) 0 6px, transparent 6px 9px);
+}
+
+.barra-valor {
+  font-weight: 700;
+}
+
+.lista-confianza {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-left: 18px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.lista-confianza strong {
+  color: var(--text-main);
+}
+
+.detalle {
+  gap: 14px;
 }
 
 /* ==========================================================================
@@ -1243,8 +1364,30 @@ input[type='range']::-moz-range-thumb {
     padding-right: 24px;
   }
 
-  .cmp-valor {
-    font-size: 26px;
+  .area-list {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .area-list .area-btn {
+    align-items: flex-start;
+  }
+}
+
+@media (min-width: 960px) {
+  .area-grid {
+    display: grid;
+    grid-template-columns: minmax(360px, 420px) minmax(0, 1fr);
+    align-items: start;
+    gap: 16px;
+  }
+
+  .resp-valor .num {
+    font-size: 52px;
+  }
+
+  .vista-area .area-header p {
+    max-width: 70ch;
   }
 }
 
