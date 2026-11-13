@@ -339,18 +339,26 @@ class PronosticadorReal:
         filas = self._datos[horizonte][area].reindex(emision)
         nombre_ref = self._mejor_referencia(area, horizonte)
         referencia = _sin_nan(filas[nombre_ref].to_numpy(dtype=float))
-        pred = self._predicciones_area(area, horizonte, variante).reindex(emision).to_numpy()
+        pred = self._completar(self._predicciones_area(area, horizonte, variante).reindex(emision).to_numpy(),
+                               referencia)
         real = self._real_en(area, inicios)
         return Serie(
             fecha_hora=[_texto(x) for x in inicios],
             real=_con_nulos(real),
-            pronostico=_redondear(self._completar(pred, referencia)),
+            pronostico=_redondear(pred),
             referencia=_redondear(referencia),
             referencia_nombre=nombre_ref,
             programacion_diaria=None,  # la Programación Diaria del COES no está en las capas
             hueco=[bool(x) for x in np.isnan(real)],
             preliminar=[False] * DIA,  # el IEOD no marca datos preliminares
+            intervalo=self._intervalo(area, horizonte, variante, pred),
         )
+
+    def _intervalo(self, area: str, horizonte: Horizonte, variante: Variante, pred: np.ndarray) -> Intervalo:
+        """Rango del 90 %: los cuantiles 5 y 95 % del error relativo de la validación de 2025."""
+        bajo, alto = self._meta["intervalos"].get(f"{area}_{horizonte}_{variante}", [-0.03, 0.03])
+        return Intervalo(inferior=_redondear(pred * (1 + min(bajo, 0.0))),
+                         superior=_redondear(pred * (1 + max(alto, 0.0))))
 
     def _filas_desde_origen(self, area: str, origen: datetime, horizonte: Horizonte):
         pasos = PASOS[horizonte]
@@ -382,7 +390,6 @@ class PronosticadorReal:
         if not escenario.es_base and usa_exogenas:
             pred = self._completar(self._predecir_filas(horizonte, variante, self._aplicar_escenario(filas, escenario)),
                                    referencia)
-        bajo, alto = self._meta["intervalos"].get(f"{area}_{horizonte}_{variante}", [-0.03, 0.03])
         momentos = [x.to_pydatetime() for x in inicios]
         if escenario.es_base:
             frase = frase_base(momentos, list(pred), list(referencia), NOMBRE_REFERENCIA[nombre_ref], horizonte)
@@ -395,8 +402,7 @@ class PronosticadorReal:
             pronostico=_redondear(pred),
             referencia=_redondear(referencia),
             real=_con_nulos(self._real_en(area, inicios)),
-            intervalo=Intervalo(inferior=_redondear(pred * (1 + min(bajo, 0.0))),
-                                superior=_redondear(pred * (1 + max(alto, 0.0)))),
+            intervalo=self._intervalo(area, horizonte, variante, pred),
             frase=frase,
         )
 

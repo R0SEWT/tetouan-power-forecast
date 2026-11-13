@@ -41,6 +41,14 @@ def test_salud(cliente):
     assert r.json() == {"estado": "ok", "modelo": "prueba", "version_datos": "sin-datos"}
 
 
+def test_modelos_lista_el_que_se_sirve(cliente):
+    r = cliente.get("/modelos")
+    assert r.status_code == 200
+    modelos = r.json()
+    assert [m["id"] for m in modelos] == [cliente.get("/salud").json()["modelo"]]
+    assert all(m["nombre"] for m in modelos)
+
+
 def test_areas_con_la_paleta_de_wong(cliente):
     assert cliente.get("/areas").json() == [
         {"id": "norte", "nombre": "Norte", "color": "#E69F00"},
@@ -83,6 +91,24 @@ def test_series_tiene_48_periodos(cliente, horizonte, variante):
         assert s["programacion_diaria"] is None
     else:
         assert len(s["programacion_diaria"]) == 48
+
+
+@pytest.mark.parametrize("horizonte", ["1h", "24h"])
+def test_series_trae_el_rango_probable_de_cada_periodo(cliente, horizonte):
+    s = cliente.get("/series/norte", params={"fecha": "2025-07-14", "horizonte": horizonte}).json()
+    inferior, superior = s["intervalo"]["inferior"], s["intervalo"]["superior"]
+    assert len(inferior) == len(superior) == 48
+    assert all(a <= p <= b for a, p, b in zip(inferior, s["pronostico"], superior, strict=True))
+
+
+def test_el_rango_de_la_serie_es_el_del_pronostico_emitido_h_antes(cliente):
+    s = cliente.get("/series/centro", params={"fecha": "2026-03-10", "horizonte": "24h"}).json()
+    p = cliente.post("/pronostico", json=pedido(origen="2026-03-09T19:00", horizonte="24h")).json()
+    i = s["fecha_hora"].index("2026-03-10T19:00")
+    assert p["fecha_hora"][-1] == "2026-03-10T19:00"
+    assert s["pronostico"][i] == p["pronostico"][-1]
+    assert s["intervalo"]["inferior"][i] == p["intervalo"]["inferior"][-1]
+    assert s["intervalo"]["superior"][i] == p["intervalo"]["superior"][-1]
 
 
 def test_series_marca_los_huecos(cliente):

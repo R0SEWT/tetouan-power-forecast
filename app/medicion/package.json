@@ -1,0 +1,15 @@
+{
+  "name": "tpf-app-medicion",
+  "private": true,
+  "description": "Medición reproducible de la app: Lighthouse, axe, contraste y tareas con Playwright",
+  "type": "module",
+  "scripts": {
+    "medir": "node medir.mjs"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "4.10.2",
+    "lighthouse": "12.6.1",
+    "playwright": "1.55.0",
+    "chrome-launcher": "1.2.3"
+  }
+}

@@ -98,6 +98,8 @@ def test_series_de_un_dia(cliente, horizonte, variante):
     assert s["programacion_diaria"] is None
     assert s["referencia_nombre"] in {"persistencia", "ayer", "semana_pasada"}
     assert not any(s["hueco"])
+    inferior, superior = s["intervalo"]["inferior"], s["intervalo"]["superior"]
+    assert all(a <= p <= b for a, p, b in zip(inferior, s["pronostico"], superior, strict=True))
     mape = np.mean(np.abs(np.array(s["pronostico"]) / np.array(s["real"]) - 1))
     assert mape < 0.1  # pronostica la demanda, no otra cosa
 

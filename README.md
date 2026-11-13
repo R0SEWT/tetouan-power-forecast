@@ -185,7 +185,8 @@ uv run python -m app.backend.pronosticador_real entrenar
 TPF_PRONOSTICADOR=real uv run uvicorn app.backend.main:app
 ```
 
-y abrir `app/web/index.html` en el navegador: busca la API en el puerto 8000. Sin `TPF_PRONOSTICADOR=real`, la API
+y abrir `app/web/index.html` en el navegador: busca la API en el puerto 8000 (o correr `app/levantar.sh`, que levanta
+la API y la web en http://localhost:8080, con el modelo real si encuentra los datos). Sin `TPF_PRONOSTICADOR=real`, la API
 responde con datos de prueba sintéticos. Para los intervalos usa los errores fuera de muestra de 2025 del notebook 02
 (`reportes/sein/modelado/predicciones_validacion_*.csv`) y para la adaptación, la tabla del notebook 03
 (`reportes/sein/prueba_2026/adaptacion.csv`); los dos están en el Drive.
@@ -200,7 +201,7 @@ responde con datos de prueba sintéticos. Para los intervalos usa los errores fu
 |------|---------|
 | `notebooks/` | `00_*` arman las capas de cada caso en el Drive; después, un notebook por tramo de CRISP-DM: `01_datos_preparacion` y `02_modelado_evaluacion` (Tetuán), `01_sein_datos_preparacion`, `02_sein_modelado_evaluacion`, `03_sein_prueba_2026` y `04_sein_modelos_fundacionales` (SEIN). |
 | `src/tetouan_power_forecast/` | Código compartido por los notebooks y la app. Tetuán: `medallon`, `datos`, `perfiles`, `metricas`, `variables`, `modelos`, `evaluacion`. Ceuta: `ceuta`. SEIN: la ingesta del IEOD (`coes`), las exógenas (`exogenas`), el dataset por área con la regla de información (`variables_sein`), el modelado (`modelado_sein`: candidatos, dataset global, políticas de reentrenamiento y regímenes), la evaluación de los modelos fundacionales (`fundacionales`) y las tablas de áreas, empresas, subestaciones y feriados (`tablas`). |
-| `app/` | `backend/`: la API FastAPI y su contrato; `web/`: el frontend. |
+| `app/` | `backend/`: la API FastAPI y su contrato; `web/`: el frontend; `medicion/`: la medición de usabilidad y accesibilidad de la app (método y resultados en [`docs/app-hcd.md`](docs/app-hcd.md)); `levantar.sh`: levanta backend y web. |
 | `experimentos/` | Los scripts que respaldan las cifras: `historico/` (un solo año en Tetuán), `ceuta/` (validación externa) y `sein/` (línea base de 2025 y la corrida en Colab). |
 | `tests/` | Pruebas de `src/`, de los experimentos y del contrato de la app, con pytest. |
 | `docs/negocio.md` | Comprensión del negocio de Tetuán: decisión, objetivos, criterios de éxito, riesgos y plan. |

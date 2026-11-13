@@ -42,6 +42,14 @@ class Salud(BaseModel):
     version_datos: str
 
 
+class ModeloDisponible(BaseModel):
+    """Un modelo que el backend puede servir. Hoy hay uno; la app ya muestra el selector."""
+
+    id: str
+    nombre: str
+    descripcion: str = ""
+
+
 class Area(BaseModel):
     id: str
     nombre: str
@@ -82,6 +90,11 @@ class Resumen(BaseModel):
     version_datos: str
 
 
+class Intervalo(BaseModel):
+    inferior: list[float]
+    superior: list[float]
+
+
 class Serie(BaseModel):
     """Los 48 periodos de un día. El pronóstico de cada periodo se emitió H pasos antes."""
 
@@ -93,10 +106,16 @@ class Serie(BaseModel):
         description="Cuál es la mejor referencia (agregado al contrato: la app la nombra)"
     )
     programacion_diaria: list[float | None] | None = Field(
-        description="Programación Diaria del COES; solo a 24 h, null a 1 h"
+        description="Reservado para la Programación Diaria del COES. La app no lo muestra: el "
+        "proyecto no hizo esa comparación"
     )
     hueco: list[bool] = Field(description="True si no hay dato real en ese periodo")
     preliminar: list[bool] = Field(description="True si el COES marcó el dato como preliminar")
+    intervalo: Intervalo | None = Field(
+        default=None,
+        description="Rango probable (90 %) de cada periodo, emitido H pasos antes como el "
+        "pronóstico (agregado al contrato: la app lo muestra junto al número y en la curva)",
+    )
 
 
 class Escenario(BaseModel):
@@ -115,11 +134,6 @@ class PedidoPronostico(BaseModel):
     horizonte: Horizonte
     variante: Variante = "M3"
     escenario: Escenario = Field(default_factory=Escenario)
-
-
-class Intervalo(BaseModel):
-    inferior: list[float]
-    superior: list[float]
 
 
 class Pronostico(BaseModel):
