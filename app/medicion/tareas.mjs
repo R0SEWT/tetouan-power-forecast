@@ -106,6 +106,26 @@ async function desplazarHasta(pagina, ficha) {
   }, patron(ficha).source);
 }
 
+// Si el objetivo de un clic no está a la vista, la persona tiene que desplazarse antes:
+// se cuentan los gestos (0.8 de la ventana cada uno) y se lleva a la vista.
+async function gestosHasta(pagina, loc) {
+  await loc.waitFor({ state: 'attached' });
+  const caja = await loc.boundingBox();
+  const vh = pagina.viewportSize().height;
+  if (!caja) return 0;
+  const visible = caja.y >= 0 && caja.y + caja.height <= vh
+    && await loc.evaluate((el) => {
+      const r = el.getBoundingClientRect();
+      const arriba = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2);
+      return Boolean(arriba && (arriba === el || el.contains(arriba)));
+    });
+  if (visible) return 0;
+  const antes = await pagina.evaluate(() => scrollY);
+  await loc.evaluate((el) => el.scrollIntoView({ block: 'center', behavior: 'instant' }));
+  const delta = Math.abs((await pagina.evaluate(() => scrollY)) - antes);
+  return Math.max(1, Math.ceil(delta / (0.8 * vh)));
+}
+
 // Mira la pantalla y, si falta algo que está en la página, se desplaza hasta verlo (contando gestos).
 async function revisar(pagina, grupos, vistos, cuenta, esperar) {
   await esperar();
@@ -132,6 +152,7 @@ async function correrRuta(pagina, ruta, grupos, vistos, cuenta, esperar) {
     }
     if (paso.clic) {
       const loc = paso.clic(pagina).first();
+      cuenta.desplazamientos += await gestosHasta(pagina, loc);
       if (paso.foco) await loc.focus();
       else await loc.click();
       cuenta.clics += 1;

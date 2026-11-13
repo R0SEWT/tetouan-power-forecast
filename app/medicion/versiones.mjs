@@ -44,7 +44,32 @@ export const VERSIONES = {
   },
 };
 
-// La versión rediseñada usa nombres accesibles estables; se agrega aquí cuando existe.
+// La versión rediseñada: las pestañas de detalle están en la página y la respuesta trae el rango.
+const tab = (nombre) => (p) => p.getByRole('tab', { name: nombre });
+VERSIONES.nueva = {
+  estados: {
+    inicio: async () => {},
+    area: async () => {},
+    operacion: async (p) => { await tab('Próximas horas')(p).click(); },
+    escenarios: async (p) => { await tab('¿Y si…?')(p).click(); },
+    sensibilidad: async (p) => {
+      await p.getByRole('button', { name: '1 hora' }).click();
+      await tab('¿Y si…?')(p).click();
+    },
+    diagnostico: async (p) => { await tab('Diagnóstico')(p).click(); },
+    ficha: async (p) => { await p.locator('#btnFicha').click(); },
+  },
+  tareas: {
+    t1: VERSIONES.base.tareas.t1.slice(0, -1), // igual, sin abrir la hoja: el rango ya está junto al número
+    t2: [{ revisar: true }],
+    t3: [
+      { clic: tab('¿Y si…?') },
+      { clic: (p) => p.getByRole('button', { name: '+2 °C' }) },
+    ],
+    t4: [{ clic: tab('Diagnóstico') }],
+  },
+};
+
 export function version(nombre) {
   const v = VERSIONES[nombre];
   if (!v) throw new Error(`Versión desconocida: ${nombre}. Hay: ${Object.keys(VERSIONES).join(', ')}`);
