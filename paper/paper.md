@@ -625,8 +625,9 @@ Con la regla del notebook 02 (la mayor mejora media frente a la mejor referencia
 y horizontes), la combinación queda primera (40.7 % frente a 35.2 % del Random Forest; en 2026, 42.3 frente a
 37.9 %) y el Chronos-2 ajustado con calendario es el mejor modelo individual (40.0 %), a menos de un punto. En el
 Centro, la combinación reduce el error alrededor de 12 % a 1 hora y a 24 horas en 2025, y lo sostiene en 2026 (10
-y 8 %). **Los pesos de 2025 son dentro de muestra, así que sus diferencias de 2025 son optimistas; la cifra
-limpia es la de 2026.** Su intervalo 10-90 cubre entre 77 y 80 % de los periodos en 2025 y entre 77 y 81 % en
+y 8 %). **Los pesos de 2025 son dentro de muestra, así que sus diferencias de 2025 son optimistas; la de 2026
+queda fuera del entrenamiento y de la selección, pero sobre un año ya inspeccionado en el notebook 03.** Su
+intervalo 10-90 cubre entre 77 y 80 % de los periodos en 2025 y entre 77 y 81 % en
 2026. Mes a mes y por régimen de El Niño, su ventaja frente al Random Forest es parecida en los meses neutros y en
 los cálidos fuertes o extraordinarios: no se adapta mejor al cambio de nivel de 2026, que el objetivo en razón ya
 absorbía; es mejor en general. Los peores meses del zero-shot a 24 horas son abril y julio, los de Semana Santa y
@@ -668,6 +669,13 @@ horas en 2025). Una revisión del código línea por línea no encontró fugas: 
 diciembre de 2024 a las 23:30, sin conjunto de validación ni selección de checkpoint; en inferencia la única
 covariable futura es el feriado, que se conoce de antemano; y los 336 periodos interpolados son siete días enteros
 de 2017 a 2020 (los que faltan en el silver), ninguno dentro del contexto de un origen de 2025 o 2026.[^semillas]
+Como los errores de días consecutivos están correlacionados, el bootstrap por días puede quedar angosto; como
+comprobación adicional, todavía fuera del notebook 04, se remuestrearon semanas y meses enteros y la combinación
+sigue ganando al Random Forest en los doce casos (por semanas, en 2026: Norte −1.37 MW, IC −1.63 a −1.14; Centro
+−5.22, IC −6.18 a −4.40; Sur −1.55, IC −1.90 a −1.23 a 1 hora; −1.08, IC −1.91 a −0.36; −6.23, IC −9.32 a −3.43; y
+−3.71, IC −5.85 a −1.68 a 24 horas; por meses, Centro a 24 horas, IC −9.19 a −2.93).[^bloques] Por último, 2026 no
+entra en ningún ajuste ni elección, pero ya se había inspeccionado en el notebook 03: una prueba realmente intacta
+sería el periodo posterior al 22 de octubre de 2026.
 
 # 6. Visualización y análisis
 
@@ -774,8 +782,9 @@ Lo que un lector debe tener en cuenta antes de generalizar los resultados.
     no se puede descartar que series parecidas estén en el preentrenamiento de los modelos, las licencias difieren
     por modelo y el "XGBoost global base" de esa comparación no es el del notebook 03 (distinta ventana de
     entrenamiento). Los pesos de la combinación final se fijaron en 2025, así que sus cifras de 2025 son dentro de
-    muestra; la cifra limpia es la de 2026, donde su diferencia con el modelo elegido excluye el cero en los seis
-    casos.
+    muestra; la de 2026 queda fuera del entrenamiento y de la selección, pero sobre un año ya inspeccionado, y ahí
+    su diferencia con el modelo elegido excluye el cero en los seis casos. Una prueba realmente intacta sería el
+    periodo posterior al 22 de octubre de 2026 (trabajo futuro).
 
 # 7. Conclusiones y lecciones aprendidas
 
@@ -841,8 +850,8 @@ origen y horizonte, que es la vara oficial; (2) medir la sensibilidad del result
 pronóstico de temperatura (1 y 2 °C, como preveía el diseño), para saber si el daño del clima depende del supuesto;
 (3) construir una variable de fallas que sí separe la operación normal de una falla (solo eventos con
 interrupción de carga o potencia indisponible, por área) y repetir la ablación con ella; y (4) llevar la combinación
-con modelos fundacionales a una prueba ciega en el próximo año, con sus intervalos, contextos más largos (8,192
-periodos) y una licencia que permita el uso operativo.
+con modelos fundacionales a una prueba realmente intacta (el periodo posterior al 22 de octubre de 2026 y el
+próximo año), con contextos más largos (8,192 periodos) y una licencia que permita el uso operativo.
 
 # 8. Bibliografía
 
@@ -999,6 +1008,13 @@ Las tablas de 2025 son de la corrida del notebook 02 del SEIN del 4 de noviembre
     tres semillas calculado en local sobre las filas de la prueba de 2026 y los orígenes de 2025: 0.02 / 0.06 / 0.04
     MW a 1 h y 0.06 / 0.08 / 0.09 a 24 h en 2025 (Norte / Centro / Sur); 0.02 / 0.08 / 0.01 y 0.07 / 0.19 / 0.03 en
     2026. Los días faltantes del silver (uno en 2017, dos por año de 2018 a 2020): notebook 01 del SEIN, celda 6.
+[^bloques]: Comprobación adicional del 13-nov sobre `reportes/sein/fundacionales/combinacion_c2048.parquet`, aún
+    fuera del notebook 04: bootstrap pareado remuestreando semanas enteras (y, aparte, meses) en vez de días. Por
+    semanas, 2025: Norte −1.21 (IC −1.62 a −0.90), Centro −6.39 (−8.23 a −5.05), Sur −1.56 (−1.93 a −1.24) a 1 h;
+    −1.96 (−2.90 a −1.15), −10.85 (−15.42 a −6.92), −4.92 (−8.05 a −2.21) a 24 h. 2026: los del texto. Verificación
+    local de 2026 con el mismo esquema (semilla 0): Centro a 24 h, semanas −9.35 a −3.34 y meses −9.06 a −3.15; los
+    doce casos siguen excluyendo el cero. Los de 2025 no se reprodujeron en local (las predicciones de validación
+    del Random Forest están en el Drive).
 [^fm-otros]: MAE de 2026 a 1 h en el Centro calculados sobre las filas de la prueba desde
     `t0_c2048.parquet`, `toto2_c2048.parquet`, `timesfm3_c2048.parquet` y `tirex2_c2048.parquet` (51.8, 50.7, 53.2 y
     59.5 MW); el efecto de las covariables, desde `chronos2cov_c2048.parquet` frente a `chronos2_c2048.parquet`

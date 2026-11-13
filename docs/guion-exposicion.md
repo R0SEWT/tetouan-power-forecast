@@ -332,8 +332,9 @@ tabla «Las hipótesis, una por una». Efectos de 0.09 a 1.48 MW, alrededor del 
 Sur a 24 h, 56.7 → 51.8. En 2026: 54.1 → 48.8, 78.1 → 71.9 y 48.3 → 44.6, con intervalos que excluyen el cero en
 los seis casos (Centro a 24 h: −6.2 MW, IC −8.7 a −3.8). Simons zero-shot a 1 h en el Centro: 49.7. **Ojo:** no
 decir que fue una prueba ciega en 2026 ni que reemplaza al modelo del paper; es «la siguiente versión propuesta» y
-sus pesos se fijaron en 2025, así que las cifras de 2025 son optimistas (§6.4, punto 11). Si preguntan por la
-suerte de una semilla: el ajuste fino se repitió con tres semillas y el error cambia como mucho 0.2 MW (§5.5).
+sus pesos se fijaron en 2025, así que las cifras de 2025 son optimistas (§6.4, punto 11). Tampoco decir «prueba
+limpia» para 2026: queda fuera del entrenamiento y de la selección, pero ya se había inspeccionado. Si preguntan por
+la suerte de una semilla: el ajuste fino se repitió con tres semillas y el error cambia como mucho 0.2 MW (§5.5).
 
 **Si preguntan por el detalle:** la tabla completa está en la diapositiva de respaldo R7 y en el notebook 04.
 

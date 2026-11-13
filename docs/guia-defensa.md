@@ -15,7 +15,7 @@ Grupo 3 · Metodología para Data Science · UPC 2026-2
 
 1. Aprenderse la **hoja de cifras** (15 cifras). Es lo único que hay que memorizar.
 2. Leer la lista de **cosas que NO hay que afirmar**. Equivocarse ahí es peor que no saber una cifra.
-3. Leer las **25 preguntas**. No hay que memorizar las respuestas: basta con la idea y la cifra.
+3. Leer las **26 preguntas**. No hay que memorizar las respuestas: basta con la idea y la cifra.
 
 **Cómo responder cualquier pregunta:** la idea en una frase → la cifra que la respalda → el límite, si lo hay.
 
@@ -68,11 +68,11 @@ Según la auditoría metodológica. La columna de la derecha dice el hallazgo.
 | 13 | «Los intervalos muestran que funcionará en el próximo Niño» | «Los intervalos miden la incertidumbre dentro de 2026: un solo año y un solo evento» | D5 |
 | 14 | «Las horas de mayor demanda de 2026 o los días fuera de rango son reglas que el operador puede usar» | «Son cortes definidos con los propios datos de 2026, para describir dónde falla el modelo» | D10 |
 | 15 | «Usamos el SAIDI, los feriados regionales y los comunicados de ENFEN», o «la app reentrena en vivo» | «M4 (SAIDI) no se corrió; los feriados son los nacionales; la alerta sale de los cambios de categoría del ICEN publicado. La adaptación de la app sale de la tabla del notebook 03» | D14, §13 |
-| 16 | «Los modelos fundacionales pasaron la prueba ciega de 2026», «reemplazan a nuestro modelo» o citar las diferencias de 2025 de la combinación como si fueran limpias | «Es una extensión posterior a la prueba: se eligió con 2025 y 2026 solo la confirma. La combinación se propone como siguiente versión; sus pesos se fijaron en 2025 (dentro de muestra, cifras optimistas) y las de 2026 son las limpias; no está en la app ni fue parte de las hipótesis» | §6.4, punto 11; D16 |
+| 16 | «Los modelos fundacionales pasaron una prueba limpia (o intacta) en 2026», «reemplazan a nuestro modelo» o citar las diferencias de 2025 de la combinación como si no fueran optimistas | «Es una extensión posterior a la prueba: 2026 no entra en ningún ajuste ni elección (ajuste fino hasta 2024; pesos y variantes elegidos con 2025), pero ya se había inspeccionado en el notebook 03; una prueba intacta sería el periodo posterior al 22 de octubre de 2026. Las cifras de 2025 de la combinación son optimistas porque los pesos se eligieron ahí. No está en la app ni fue parte de las hipótesis» | §6.4, punto 11; D16 |
 
 ---
 
-## Las 25 preguntas más probables
+## Las 26 preguntas más probables
 
 ### A. Negocio y CRISP-DM
 
@@ -356,7 +356,8 @@ funciona? El modelo preentrenado aporta el patrón reciente de la serie; el XGBo
 cuesta? GPU para generar el pronóstico fundacional (y 26 minutos para ajustar Chronos-2); la app lo leería ya
 calculado. La temperatura como covariable no lo ayuda, igual que a nuestro modelo. Lo proponemos como siguiente
 versión, con tres cuidados: se eligió con un solo año y se confirmó en un año que ya habíamos usado, y los pesos de
-la combinación se fijaron en 2025, así que sus cifras de 2025 son optimistas y las limpias son las de 2026.
+la combinación se fijaron en 2025, así que sus cifras de 2025 son optimistas; las de 2026 quedan fuera del
+entrenamiento y de la selección, pero sobre un año que ya habíamos inspeccionado.
 
 *Respaldo:* §5.5, tabla de MAE (Centro, 2025): Random Forest 54.6 → combinación 48.2 MW a 1 h; 86.1 → 75.2 a 24 h;
 Sur a 24 h 56.7 → 51.8. En 2026: 54.1 → 48.8, 78.1 → 71.9 y 48.3 → 44.6. Diferencias con el Random Forest en 2026
@@ -370,3 +371,17 @@ es prueba ciega; pesos de 2025 dentro de muestra; posible contaminación del pre
 cambia el MAE como mucho 0.2 MW, frente a −10.5 MW de ventaja en el Centro a 24 h; el código se revisó y no hay
 fuga (solo ve datos hasta 2024; la única covariable futura es el feriado). *Ojo:* el
 «XGBoost global base» de esa tabla no es el XGBoost del notebook 03 (§5.5). Detalle: notebook 04 (PR #32).
+
+**26. ¿Los intervalos no son demasiado optimistas? Los errores de días seguidos están correlacionados.**
+
+Es cierto que lo están, y por eso el bootstrap remuestrea días enteros y no periodos sueltos; aun así, a 24 horas
+los días vecinos siguen correlacionados y el intervalo puede quedar algo angosto. Lo comprobamos remuestreando
+semanas enteras y, aparte, meses enteros: los intervalos se ensanchan, pero la combinación sigue ganándole al
+Random Forest en los doce casos, y lo mismo pasa con el resultado principal de 2026, cuyas diferencias con la
+referencia están muy lejos del cero. Y el límite de fondo no cambia: todos miden la incertidumbre dentro de un solo
+año.
+
+*Respaldo:* por semanas, Centro a 24 h en 2026: −6.23 MW, IC −9.32 a −3.43 (por días, −8.67 a −3.81); por meses,
+−9.19 a −2.93; Norte a 24 h en 2026, el caso más ajustado: −1.08, IC −1.91 a −0.36 (§5.5 del informe técnico, nota
+sobre bloques; §6.1, punto 1, del short paper). Es una comprobación adicional, todavía fuera del notebook 04.
+Resultado principal: Norte a 1 h, −21.6 MW, IC −22.1 a −21.1 (§5.4, tabla).

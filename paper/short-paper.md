@@ -301,7 +301,8 @@ modelo individual y le gana al Random Forest en todos los casos salvo el Norte a
 −1.65 a 0.12). El híbrido mejora en el Centro y el Norte pero empeora el Sur a 24 horas en 2026 (+1.54, IC 0.34 a
 2.79). La combinación le gana al Random Forest en los doce casos (tabla 6) y sube la mejora media frente a la mejor
 referencia de 35.2 a 40.7 % en 2025 y de 37.9 a 42.3 % en 2026. **Los pesos se fijaron en 2025: sus diferencias de
-2025 son optimistas y la cifra limpia es la de 2026.** Su ventaja es parecida en los meses neutros y en los de El
+2025 son optimistas; la de 2026 queda fuera del entrenamiento y de la selección, pero sobre un año ya
+inspeccionado.** Su ventaja es parecida en los meses neutros y en los de El
 Niño fuerte o extraordinario: no se adapta mejor al cambio de nivel, que la razón ya absorbía; es mejor en general.
 Su intervalo 10-90 cubre entre 77 y 81 % de los periodos.
 
@@ -362,8 +363,10 @@ queda a menudo por encima del cero y el ajustado por debajo, lo que justifica su
 
 ## 6.1 Limitaciones y amenazas a la validez
 
-1. **Un solo año y un solo evento en la prueba.** Los intervalos de 2026 miden la incertidumbre dentro de 2026 (y
-   a 24 horas pueden quedar algo angostos por la correlación entre días vecinos); no dicen nada de otro Niño.
+1. **Un solo año y un solo evento en la prueba.** Los intervalos de 2026 miden la incertidumbre dentro de 2026; no
+   dicen nada de otro Niño. Como los errores de días vecinos están correlacionados, el bootstrap por días puede
+   quedar angosto: como comprobación adicional, remuestreando semanas y meses enteros la combinación sigue ganando
+   al Random Forest en los doce casos (Centro a 24 horas en 2026: −6.23 MW, IC −9.32 a −3.43 por semanas).
 2. **Efectos chicos y muchas comparaciones.** Los efectos de exógenas y reentrenamiento van de 0.09 a 1.48 MW,
    menos del 2 % del error, con 66 intervalos al 95 % sin corrección: dos o tres "distinguibles" se esperan por
    azar. La conclusión robusta es el tamaño, no cada signo.
@@ -378,13 +381,14 @@ queda a menudo por encima del cero y el ajustado por debajo, lo que justifica su
    hiperparámetros elegidos con datos hasta 2024: mide estabilidad, no es una prueba ciega.
 7. **Datos y periodo.** La prueba va hasta el 17 de octubre (16 a 24 horas); el IEOD sustituye al SCADA; solo
    feriados nacionales; M4 (SAIDI) no se corrió. No se comparó con la Programación Diaria del COES, la vara oficial.
-8. **La extensión con fundacionales no es una prueba ciega** (2026 ya se había usado); la diferencia entre los
-   primeros puestos es de pocos puntos y los pesos de la combinación son de 2025; no se puede auditar qué vieron
-   los modelos al preentrenarse; las licencias difieren (Chronos-2 y Simons permiten cualquier uso; TimesFM 3.0 es
-   solo no comercial); hace falta GPU. El ajuste fino es robusto a la semilla: repetido con tres semillas, su MAE
-   cambia como mucho 0.19 MW, frente a una ventaja de −10.5 MW sobre el Random Forest en el Centro a 24 horas; una
-   revisión del código no encontró fugas (solo ve datos hasta 2024, sin selección de checkpoint; la única covariable
-   futura es el feriado).
+8. **La extensión con fundacionales no es una prueba intacta:** 2026 no entra en ningún ajuste ni elección (ajuste
+   fino hasta 2024; pesos y variantes elegidos con 2025), pero ya se había inspeccionado; una prueba intacta sería el
+   periodo posterior al 22 de octubre de 2026. Además, la diferencia entre los primeros puestos es de pocos puntos;
+   no se puede auditar qué vieron los modelos al preentrenarse; las licencias difieren (Chronos-2 y Simons permiten
+   cualquier uso; TimesFM 3.0 es solo no comercial); hace falta GPU. El ajuste fino es robusto a la semilla:
+   repetido con tres semillas, su MAE cambia como mucho 0.19 MW, frente a −10.5 MW de ventaja en el Centro a 24
+   horas; una revisión del código no encontró fugas (solo ve datos hasta 2024, sin selección de checkpoint; la única
+   covariable futura es el feriado).
 <!-- rango entre semillas: chronos2ftcal_c2048.parquet y las corridas _s2 y _s3 del 13-nov, calculado en local
 sobre las filas de 2025 y 2026; detalle en paper.md, nota [^semillas]. -->
 9. **Validez de constructo.** El MAE no refleja la asimetría entre subestimar y sobrestimar; por eso se reporta
@@ -414,8 +418,8 @@ y 544 kW). Cambiar de algoritmo movió 18 kW; cambiar el objetivo, más de 1,200
 conclusión:* contra la persistencia cualquier modelo parece bueno. (3) *"Sin efecto" es un resultado:* escribir las
 hipótesis antes y reportar intervalos obligó a decir que las exógenas casi no aportan. (4) *La disciplina temporal
 se programa y se prueba:* regla de información, huecos y bloques viven en funciones con tests. **Trabajo futuro:** comparar con la Programación Diaria del COES; medir la sensibilidad al error del pronóstico de
-temperatura (1 y 2 °C); una variable de fallas útil; y llevar la combinación con fundacionales a una prueba ciega
-el próximo año.
+temperatura (1 y 2 °C); una variable de fallas útil; y llevar la combinación con fundacionales a una prueba intacta
+(desde el 22 de octubre de 2026).
 <!-- entregables/Entregable6_MDS_Grupo03.ipynb, celda 93. -->
 
 # 8. Bibliografía

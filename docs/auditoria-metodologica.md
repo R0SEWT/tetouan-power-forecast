@@ -64,7 +64,7 @@ Los tres graves, en una línea cada uno:
 | D13 | Tetuán | A declarar | Unidad (kW) e identidad de las zonas sin fuente primaria; la temperatura del dataset no coincide con ERA5; el modelo pierde en el Ramadán de la Zona 3 (−7.4 %) y su ventaja baja tras la transferencia (51 → 39 % en la Zona 1) |
 | D14 | Variables no usadas | A declarar | Feriados con `holidays.PE` (nacionales), no la tabla curada de `docs/peru/tablas.md`; M4 (SAIDI) no se corrió; la alerta de ENFEN sale de cruces del ICEN, no de los comunicados |
 | D15 | Entregable 7 | A declarar (lección) | El grupo entregó la versión en nivel, que pierde contra "ayer"; la corregida (en razón) está en el repo |
-| D16 | Modelos fundacionales (extensión del 13-nov) | A declarar | Se hizo después de la prueba de 2026: elegido con 2025, 2026 solo confirma; los pesos de la combinación final son de 2025 (sus diferencias de 2025 son optimistas; las de 2026, limpias, excluyen el cero en los seis casos); posible contaminación del preentrenamiento; licencias distintas; el "XGBoost base" de esa comparación no es el del notebook 03 |
+| D16 | Modelos fundacionales (extensión del 13-nov) | A declarar | Se hizo después de la prueba de 2026: elegido con 2025, 2026 solo confirma; los pesos de la combinación final son de 2025 (sus diferencias de 2025 son optimistas; las de 2026 quedan fuera del entrenamiento y de la selección pero sobre un año ya inspeccionado, y excluyen el cero en los seis casos); posible contaminación del preentrenamiento; licencias distintas; el "XGBoost base" de esa comparación no es el del notebook 03 |
 | M1 | Tetuán, Ridge | Menor | `alpha` = 0.001 queda en el borde de la grilla |
 | M2 | Auditoría del silver | Menor | En 2026, N + C + S − SEIN llega a 47.6 MW ("a revisar antes de la prueba") y no se revisó; no afecta a los modelos por área |
 | M3 | Variables a 24 h | Menor | `Area_ayer` duplica `Area_t` a 24 h (ayer = persistencia) |
@@ -470,7 +470,8 @@ a fila; Δ frente al Random Forest en el Norte a 24 h −0.77, IC −1.65 a 0.12
 con pesos por horizonte y área fijados en 2025: 0.35 / 0.45 / 0.65 a 1 h y 0.70 / 0.85 / 0.95 a 24 h) se reprodujo
 en 2026 fila a fila (18.8 / 48.8 / 20.9 y 27.9 / 71.9 / 44.6) y en 2025 a 1 h; **sus cifras de 2025 son dentro de
 muestra** (los pesos se eligieron ahí). Sus intervalos frente al Random Forest (`tablas/comparacion.csv` del
-notebook 04) excluyen el cero en los doce casos; los de 2025 son optimistas por los pesos y los de 2026, limpios
+notebook 04) excluyen el cero en los doce casos; los de 2025 son optimistas por los pesos y los de 2026 quedan
+fuera del entrenamiento y de la selección, pero sobre un año ya inspeccionado en el notebook 03
 (Centro a 24 h: −6.23 MW, IC −8.67 a −3.81). El paper lo dice en §5.5, §6.4 y §7, y la guía de defensa pide citar
 los de 2026. (8) El contexto de 8,192 periodos casi no cambia el zero-shot (Simons, Centro a 24 h: 91.5 frente a
 92.9 MW en 2025). (9) **Robustez del ajuste fino, verificada:** el Chronos-2 ajustado con calendario se repitió con dos semillas más
@@ -480,7 +481,13 @@ otros once casos, frente a una ventaja de −10.5 MW sobre el Random Forest en e
 revisión del código reportada por la corrida (no la repetí): el ajuste solo ve datos hasta el 31-dic-2024 23:30, sin
 validación ni selección de checkpoint; en inferencia la única covariable futura es el feriado; los 336 periodos
 interpolados son los siete días que faltan en el silver (uno de 2017 y dos por año de 2018 a 2020, notebook 01,
-celda 6), ninguno en el contexto de un origen de 2025-2026. El paper lo dice en los límites de §5.5.
+celda 6), ninguno en el contexto de un origen de 2025-2026. El paper lo dice en los límites de §5.5. (10) **Bloques
+del bootstrap (D5), comprobado para la combinación:** remuestreando semanas y meses enteros en vez de días (cálculo
+de la corrida sobre `combinacion_c2048.parquet`, aún fuera del notebook 04), la combinación sigue ganando al Random
+Forest en los doce casos; reproducido en local para 2026 (Centro a 24 h: semanas −9.35 a −3.34, meses −9.06 a
+−3.15; la corrida reporta −9.32 a −3.43 y −9.19 a −2.93). Los de 2025 no se reprodujeron en local. (11) **Redacción
+de 2026:** no llamarlo "prueba limpia" ni "intacta"; 2026 no entra en ningún ajuste ni elección, pero ya se había
+inspeccionado; una prueba intacta sería el periodo posterior al 22-oct-2026 (trabajo futuro).
 
 ## Lo que se verificó y se sostiene (para la defensa)
 
