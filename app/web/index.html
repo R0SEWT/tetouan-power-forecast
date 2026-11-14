@@ -31,12 +31,11 @@
       const area = m ? m[2] : (() => { try { return localStorage.getItem('tpf-area') || 'centro'; } catch { return 'centro'; } })();
       const q = new URLSearchParams(m && m[3] ? m[3] : '');
       if (!m || m[1] === 'ahora') {
-        // «Ahora» de las tres áreas: la elegida primero (de ella sale el número)
+        // «Ahora» del área elegida (de ella sale el número); las otras dos, después del número (app.js)
         const extra = new URLSearchParams();
         if (q.get('fecha') && q.get('hora')) extra.set('origen', `${q.get('fecha')}T${q.get('hora')}`);
         if (q.get('modelo')) extra.set('modelo', q.get('modelo'));
-        const cola = extra.toString() ? `?${extra}` : '';
-        [area, ...['norte', 'centro', 'sur'].filter((a) => a !== area)].forEach((a) => rutas.push(`/ahora/${a}${cola}`));
+        rutas.push(`/ahora/${area}${extra.toString() ? `?${extra}` : ''}`);
       } else if (m[1] === 'area') {
         const s = new URLSearchParams();
         ['fecha', 'horizonte', 'variante', 'modelo'].forEach((k) => { if (q.get(k)) s.set(k, q.get(k)); });
@@ -80,23 +79,43 @@
 
     <!-- Ahora: la pantalla de entrada. Un solo gráfico de hoy y las próximas 24 h, con las cifras arriba -->
     <main id="vistaAhora" class="pantalla" hidden>
+      <!-- La pregunta del día, su respuesta y, debajo, el gráfico que la prueba -->
       <div class="contexto">
         <div class="contexto-titulo">
-          <div class="titulo-fila"><h1 id="principal" tabindex="-1">Ahora</h1><span id="chipRegimen" class="chip"><span id="chipRegimenTxt">El Niño costero: cargando</span></span><span id="chipPrueba" class="chip" hidden>Datos de prueba: series sintéticas</span></div>
+          <h1 id="principal" class="pregunta" tabindex="-1">Ahora</h1>
+          <div id="ahRespuesta" class="resp-dia" aria-live="polite"></div>
           <p id="ahModo" class="modo-linea"></p>
           <p id="ahDiaCompleto" class="dia-completo" aria-live="polite" hidden></p>
         </div>
-        <div class="cuando" role="group" aria-label="Qué momento ver">
-          <button type="button" id="ahHoy" class="btn-hoy" aria-pressed="true">Hoy</button>
-          <label class="campo"><span>Repasar un día</span><input type="date" id="ahFecha" aria-describedby="ahFechaLarga"></label>
-          <label class="campo"><span>A las</span><input type="time" id="ahHora" step="1800"></label>
-          <label class="interruptor" id="ahDespuesCampo" hidden><input type="checkbox" id="ahDespues"><span class="mk despues" aria-hidden="true"></span>Mostrar lo que pasó después</label>
-          <span id="ahFechaLarga" class="visually-hidden"></span>
+        <div class="mandos">
+          <nav id="ahAreas" class="seg areas-seg" aria-label="Área"></nav>
+          <div class="cuando" role="group" aria-label="Qué momento ver">
+            <div class="atajos">
+              <button type="button" id="ahHoy" class="btn-hoy" aria-pressed="true">Hoy</button>
+              <button type="button" class="btn-hoy" data-atajo="1" aria-pressed="false">Ayer</button>
+              <button type="button" class="btn-hoy" data-atajo="7" aria-pressed="false">Hace una semana</button>
+            </div>
+            <!-- Fecha y hora propias: siempre dd/mm/aaaa y 24 h, sin importar el idioma del navegador -->
+            <div class="campo campo-fecha"><label for="ahFecha">Ver otro día</label>
+              <span class="campo-con-boton">
+                <input type="text" id="ahFecha" inputmode="numeric" autocomplete="off" spellcheck="false" placeholder="dd/mm/aaaa" maxlength="10" aria-describedby="ahFechaLarga ahFechaAyuda">
+                <button type="button" id="ahCalendario" class="btn-calendario" aria-label="Elegir el día en un calendario" title="Calendario">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>
+                </button>
+                <input type="date" id="ahFechaNativa" class="fecha-nativa" tabindex="-1" aria-hidden="true">
+              </span>
+            </div>
+            <label class="campo campo-hora"><span>A las</span><input type="text" id="ahHora" inputmode="numeric" autocomplete="off" spellcheck="false" placeholder="hh:mm" maxlength="5" aria-describedby="ahFechaAyuda"></label>
+            <span id="ahFechaLarga" class="visually-hidden"></span>
+            <span id="ahFechaAyuda" class="ayuda-fecha" role="status">Escribe 10/03 o 1003; la hora, 19 o 1930</span>
+          </div>
         </div>
       </div>
       <p id="ahAviso" class="aviso-linea" role="status" hidden></p>
-      <section id="ahCifras" class="kpis" aria-label="Cifras de ahora" aria-busy="true"></section>
-      <nav id="ahAreas" class="areas" aria-label="Áreas"></nav>
+      <details id="ahTodas" class="todas">
+        <summary><span id="ahTodasTit">Todas las cifras de hoy</span> <span id="ahTodasQue" class="todas-que"></span></summary>
+        <section id="ahCifras" class="kpis" aria-label="Todas las cifras" aria-busy="true"></section>
+      </details>
       <div class="grid-principal">
         <div class="col-izq">
         <section class="card orden-grafico" aria-labelledby="ahGrafTitulo">
@@ -106,19 +125,23 @@
               <span class="it"><span class="mk real"></span>Real (COES)</span>
               <span class="it"><span class="mk pron"></span>Pronóstico</span>
               <span class="it"><span class="mk banda"></span><span id="ahLeyRango">Rango del 90 %</span></span>
-              <label><input type="checkbox" id="ahRef" checked><span class="mk ref"></span><span id="ahLeyRef">Referencia simple</span></label>
+              <label><input type="checkbox" id="ahRef" checked><span class="mk ref"></span><span id="ahLeyRef">Referencia</span></label>
+              <label id="ahDespuesCampo" hidden><input type="checkbox" id="ahDespues"><span class="mk despues" aria-hidden="true"></span>Mostrar lo que pasó después</label>
             </div>
           </div>
           <div class="card-b">
-            <div id="ahLienzo" class="chart lienzo" tabindex="0" role="group" aria-roledescription="gráfico" aria-describedby="ahGrafSub ahDesc" aria-busy="true"></div>
+            <div id="ahLienzo" class="chart lienzo" tabindex="0" role="slider" aria-describedby="ahGrafSub ahDesc" aria-busy="true"></div>
             <p id="ahGrafSub" class="sub"></p>
-            <p id="ahDesc" class="nota-pie"></p>
             <div class="pie-grafico">
-              <details class="datos" id="ahTablaDet"><summary>Ver los datos del gráfico en una tabla</summary><div id="ahTabla"></div></details>
+              <details class="datos" id="ahTablaDet"><summary>Ver los datos del gráfico en una tabla</summary><p id="ahDesc" class="nota-pie"></p><div id="ahTabla"></div></details>
               <span class="acciones-grafico"><button type="button" id="ahCsv" class="btn-enlace btn-chico">Descargar CSV</button></span>
             </div>
           </div>
         </section>
+        <!-- Debajo del gráfico, El Niño: entre la respuesta y el gráfico que la prueba no queda nada más que las cifras -->
+        <div class="bajo-grafico">
+          <div class="titulo-fila"><a id="chipRegimen" class="chip chip-enlace" href="#/confianza/centro?seccion=nino"><span id="chipRegimenTxt">El Niño costero: cargando</span></a><span id="chipPrueba" class="chip" hidden>Datos de prueba: series sintéticas</span></div>
+        </div>
         <section class="card orden-origen" aria-labelledby="ahOrigenTit">
           <div class="card-h"><h2 id="ahOrigenTit">¿De dónde sale el número?</h2></div>
           <div class="card-b" id="ahOrigen"></div>
@@ -138,193 +161,10 @@
       <p class="pie-nota" id="ahPie"></p>
     </main>
 
-    <!-- Confianza: el error al frente, con su meta, sus días fallidos y su contexto -->
-    <main id="vistaConfianza" class="pantalla" hidden>
-      <div class="conf-cab">
-        <nav class="seg" id="cfAreas" aria-label="Área"></nav>
-        <div class="seg" role="group" aria-label="Con cuánta anticipación">
-          <button type="button" data-cf-horizonte="1h" aria-pressed="false">A 1 hora</button>
-          <button type="button" data-cf-horizonte="24h" aria-pressed="true">A 24 horas</button>
-        </div>
-      </div>
-      <h1 id="cfTitular" class="titular" tabindex="-1">Calculando la confianza…</h1>
-      <p id="cfLead" class="lead"></p>
-      <section id="cfStats" class="stats" aria-label="Cifras de 2026"></section>
-      <div class="grid-conf">
-        <section class="card c8" aria-labelledby="cfMesTit">
-          <div class="card-h"><h2 id="cfMesTit">Error mes a mes en 2026</h2></div>
-          <div class="card-b" id="cfMes"><p class="cargando-bloque">Calculando…</p></div>
-        </section>
-        <section class="card c4" aria-labelledby="cfCobTit">
-          <div class="card-h"><h2 id="cfCobTit">¿El rango cumple lo que promete?</h2></div>
-          <div class="card-b" id="cfCob"><p class="cargando-bloque">Calculando…</p></div>
-        </section>
-        <section class="card c12" aria-labelledby="cfVivoTit" id="cfVivoCard">
-          <div class="card-h"><h2 id="cfVivoTit">El seguimiento en vivo</h2></div>
-          <div class="card-b" id="cfVivo"><p class="cargando-bloque">Cargando el registro en vivo…</p></div>
-        </section>
-        <section class="card c12" aria-labelledby="cfDiaTit">
-          <div class="card-h"><h2 id="cfDiaTit">Día a día: el error del pico</h2></div>
-          <div class="card-b" id="cfDia"><p class="cargando-bloque">Calculando…</p></div>
-        </section>
-        <section class="card c6" aria-labelledby="cfSesgoTit">
-          <div class="card-h"><h2 id="cfSesgoTit">¿Hacia dónde se equivoca?</h2></div>
-          <div class="card-b" id="cfSesgo"></div>
-        </section>
-        <section class="card c6" aria-labelledby="cfNinoTit">
-          <div class="card-h"><h2 id="cfNinoTit">Con El Niño</h2></div>
-          <div class="card-b" id="cfNino"><p class="cargando-bloque">Calculando…</p></div>
-        </section>
-        <section class="card c12 mundo" aria-labelledby="cfMundoTit">
-          <div class="card-h"><h2 id="cfMundoTit">Para poner la cifra en contexto</h2></div>
-          <div class="card-b" id="cfMundo"></div>
-        </section>
-      </div>
-      <p class="pie-nota" id="cfPie"></p>
-    </main>
+    <!-- Confianza y Detalle: su HTML, su código y sus estilos llegan al abrirlas (confianza.js, detalle.js) -->
+    <main id="vistaConfianza" class="pantalla" hidden></main>
 
-    <!-- Pantalla 2: Detalle del área. Orden: la respuesta, los controles, qué tan bueno es, la curva y el detalle -->
-    <main id="vistaArea" class="vista vista-area" hidden>
-      <div class="area-header">
-        <a href="#/" class="btn-back" id="detVolver" aria-label="Volver a «Ahora»">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
-        </a>
-        <span id="areaBadge" class="area-badge" aria-hidden="true"></span>
-        <div>
-          <h1 id="areaNombre">Área</h1>
-          <p id="areaDesc" class="muted">Elige la anticipación, los datos y el modelo; prueba escenarios y mira el diagnóstico completo.</p>
-        </div>
-      </div>
-
-      <nav class="nav-secciones" aria-label="Secciones de esta área">
-        <button type="button" data-ir="respuesta">Pronóstico</button>
-        <button type="button" data-ir="curva">Curva</button>
-        <button type="button" data-ir="escenarios">¿Y si…?</button>
-        <button type="button" data-ir="diagnostico">Diagnóstico</button>
-        <button type="button" data-ir="envivo">En vivo</button>
-      </nav>
-
-      <div class="area-grid">
-        <div class="col-principal">
-          <!-- La respuesta: el número, su rango, lo real y qué tan bueno fue -->
-          <section id="respuesta" class="respuesta" aria-labelledby="respTitulo" aria-busy="true" tabindex="-1">
-            <div class="resp-cabeza">
-              <p class="resp-kicker" id="respKicker">Pronóstico</p>
-              <span id="respEstado" class="resp-estado" role="status"></span>
-            </div>
-            <h2 id="respTitulo" class="resp-titulo">Calculando el pronóstico…</h2>
-            <p id="respEmision" class="resp-emision muted"></p>
-            <p id="respAviso" class="resp-aviso" hidden></p>
-            <p class="resp-valor"><span id="respValor" class="num">—</span> <span class="unidad">MW</span></p>
-            <p class="resp-rango">
-              <span class="resp-rango-txt">Rango probable</span>
-              <span id="respRango" class="num">—</span>
-              <span id="respMarca"></span>
-              <span class="muted small resp-rango-ayuda">9 de cada 10 veces la demanda cae aquí</span>
-            </p>
-            <dl class="resp-datos">
-              <div><dt>Real</dt><dd id="respReal">—</dd></div>
-              <div><dt>Error a esa hora</dt><dd id="respError">—</dd></div>
-              <div><dt>Error medio del día</dt><dd id="respDia">—</dd></div>
-            </dl>
-            <p id="respVeredicto" class="resp-veredicto" aria-live="polite"></p>
-            <details id="respFicha" class="resp-ficha">
-              <summary><span class="resp-ficha-titulo">¿De dónde sale este número?</span> <span id="respFichaResumen" class="muted"></span></summary>
-              <div id="respFichaCuerpo" class="resp-ficha-cuerpo"></div>
-            </details>
-          </section>
-
-          <section class="panel controles" aria-labelledby="tituloControles">
-            <h2 id="tituloControles" class="visually-hidden">Qué pronóstico ver</h2>
-            <div class="control-row">
-              <div class="field field-grow">
-                <span class="field-label" id="lblHorizonte">Con cuánta anticipación</span>
-                <div class="segmented" role="group" aria-labelledby="lblHorizonte">
-                  <button type="button" data-horizonte="1h" aria-pressed="true">1 hora</button>
-                  <button type="button" data-horizonte="24h" aria-pressed="false">24 horas</button>
-                </div>
-              </div>
-              <div class="field field-grow">
-                <span class="field-label" id="lblVariante">Datos que usa</span>
-                <div class="segmented" role="group" aria-labelledby="lblVariante" aria-describedby="ayudaVariante">
-                  <button type="button" data-variante="M0" aria-pressed="false">Solo demanda</button>
-                  <button type="button" data-variante="M3" aria-pressed="true">Con clima y El Niño</button>
-                </div>
-              </div>
-            </div>
-            <p id="ayudaVariante" class="field-help">«Con clima y El Niño» también usa las fallas en curso de la red.</p>
-            <div class="control-row">
-              <label class="field field-grow">
-                <span class="field-label">Día</span>
-                <input type="date" id="inFecha" min="2025-01-01" max="2026-10-31" required aria-describedby="fechaLarga fechaAviso">
-                <span id="fechaLarga" class="field-help"></span>
-              </label>
-              <div class="field">
-                <span class="field-label" id="lblHora">Hora</span>
-                <output id="outHora" class="time-pill" for="inHora" aria-labelledby="lblHora">15:00</output>
-              </div>
-            </div>
-            <p id="fechaAviso" class="field-aviso" hidden></p>
-            <div>
-              <input type="range" id="inHora" min="0" max="47" step="1" value="30" aria-label="Hora del pronóstico" aria-valuetext="15:00">
-              <div class="slider-ticks" aria-hidden="true"><span>00:00</span><span>06:00</span><span>12:00</span><span>18:00</span><span>23:30</span></div>
-            </div>
-            <div id="momentos" class="moment-chips" role="group" aria-label="Ir a un momento del día"></div>
-
-            <label class="field" id="campoModelo">
-              <span class="field-label">Modelo</span>
-              <select id="inModelo" aria-describedby="ayudaModelo"></select>
-            </label>
-            <p id="ayudaModelo" class="field-help" hidden></p>
-          </section>
-
-          <section id="pico" class="panel pico" aria-labelledby="tituloPico" aria-busy="true">
-            <h2 id="tituloPico">Máximo y mayor subida de las próximas 24 h</h2>
-            <div id="picoCuerpo"><p class="cargando-txt">Calculando…</p></div>
-          </section>
-
-          <section id="confianza" class="panel confianza" aria-labelledby="tituloConfianza">
-            <h2 id="tituloConfianza">¿Qué tan bueno es?</h2>
-            <div id="barrasConfianza" class="barras-confianza"></div>
-            <ul id="listaConfianza" class="lista-confianza"></ul>
-          </section>
-
-          <!-- En vivo: lo que registra cada día la tubería con el anexo del COES (GET /en-vivo/{area}) -->
-          <section id="envivo" class="panel envivo" aria-labelledby="tituloEnVivo" aria-busy="true" tabindex="-1">
-            <h2 id="tituloEnVivo">En vivo</h2>
-            <div id="envivoCuerpo"><p class="cargando-txt">Cargando el pronóstico en vivo…</p></div>
-          </section>
-        </div>
-
-        <div class="col-detalle">
-          <section id="curva" class="panel" aria-labelledby="tituloCurva" tabindex="-1">
-            <div class="panel-head">
-              <h2 id="tituloCurva">La curva del día</h2>
-              <span id="subCurva" class="muted small"></span>
-            </div>
-            <div id="graficoDia" class="chart" aria-busy="true"></div>
-            <ul id="leyendaDia" class="legend" aria-label="Leyenda"></ul>
-            <p id="notaDatos" class="muted small" hidden></p>
-            <p class="muted small">Cada punto del modelo se emitió con la anticipación elegida. Toca la curva para elegir la hora.</p>
-            <details id="tablaDia" class="tabla-datos">
-              <summary>Ver los datos del día en una tabla</summary>
-              <div id="tablaDiaCuerpo"></div>
-            </details>
-          </section>
-
-          <section id="detalle" class="panel detalle" aria-label="Más detalle" tabindex="-1">
-            <div class="sheet-tabs" role="tablist" aria-label="Más detalle">
-              <button type="button" role="tab" class="sheet-tab" id="tab-operacion" aria-controls="panel-operacion" aria-selected="true" data-tab="operacion">Próximas horas</button>
-              <button type="button" role="tab" class="sheet-tab" id="tab-escenarios" aria-controls="panel-escenarios" aria-selected="false" tabindex="-1" data-tab="escenarios">¿Y si…?</button>
-              <button type="button" role="tab" class="sheet-tab" id="tab-diagnostico" aria-controls="panel-diagnostico" aria-selected="false" tabindex="-1" data-tab="diagnostico">Diagnóstico</button>
-            </div>
-            <div role="tabpanel" id="panel-operacion" class="tab-panel" aria-labelledby="tab-operacion" tabindex="0"></div>
-            <div role="tabpanel" id="panel-escenarios" class="tab-panel" aria-labelledby="tab-escenarios" tabindex="0" hidden></div>
-            <div role="tabpanel" id="panel-diagnostico" class="tab-panel" aria-labelledby="tab-diagnostico" tabindex="0" hidden></div>
-          </section>
-        </div>
-      </div>
-    </main>
+    <main id="vistaArea" class="vista vista-area" hidden></main>
 
     <!-- Ficha técnica -->
     <dialog id="dlgFicha" class="modal" aria-labelledby="tituloFicha">

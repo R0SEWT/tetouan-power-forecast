@@ -1,0 +1,59 @@
+{
+  "t1": {
+    "nombre": "Otro día y hora",
+    "alinea": "T1",
+    "consigna": "Quieres ver cuánta electricidad se había pronosticado para Lima y el centro del país el viernes 20 de marzo de 2026 a las 8 de la noche, y cuánto se usó de verdad.",
+    "aciertos": [
+      "ver otro dia",
+      "repasar un dia",
+      "fecha",
+      "calendario",
+      "\\b\\d{1,2}/\\d{1,2}/\\d{4}\\b"
+    ],
+    "aceptables": [
+      "^detalle$",
+      "\\ba las\\b",
+      "\\b\\d{1,2}:\\d{2}\\s*(am|pm)\\b"
+    ]
+  },
+  "t2": {
+    "nombre": "¿Se puede confiar?",
+    "alinea": "T2",
+    "consigna": "Quieres saber si puedes fiarte de este pronóstico: cuánto se equivoca normalmente y si lo hace mejor que una referencia simple.",
+    "aciertos": [
+      "^confianza$",
+      "ver la confianza"
+    ],
+    "aceptables": [
+      "mostrar lo que paso despues",
+      "lo que dijimos ayer",
+      "todas las cifras"
+    ]
+  },
+  "t3": {
+    "nombre": "¿Y si hace más calor?",
+    "alinea": "T3",
+    "consigna": "Quieres saber cuánto cambiaría la demanda de electricidad si hiciera 2 °C más de calor.",
+    "aciertos": [
+      "y si hace mas calor",
+      "^y si"
+    ],
+    "aceptables": [
+      "^detalle$"
+    ]
+  },
+  "t4": {
+    "nombre": "¿Cuándo se equivoca más?",
+    "alinea": "T4",
+    "consigna": "Quieres saber en qué situación de El Niño (el calentamiento del mar frente a la costa) se equivoca más el pronóstico.",
+    "aciertos": [
+      "^confianza$",
+      "ver la confianza",
+      "diagnostico",
+      "nino costero.*equivoca"
+    ],
+    "aceptables": [
+      "^detalle$"
+    ]
+  }
+}
