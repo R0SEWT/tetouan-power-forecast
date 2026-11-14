@@ -657,12 +657,13 @@ function pintarAhora() {
   pintarAreasAhora();
   pintarCifras(d);
   const viejo = desfasado(d);
-  const dReal = capital(diaNum(d.ahora));
-  const dPron = diaNum(diaPron(d));
+  // Días de esta semana, sin número: el eje ya dice «jue 12» y «vie 13», y el título de arriba, qué día es hoy
+  const dReal = capital(DIAS[partesFecha(d.ahora).dow]);
+  const dPron = DIAS[partesFecha(diaPron(d)).dow];
   $('#ahTodasTit').textContent = viejo ? 'Todas las cifras del último pronóstico' : vivo ? 'Todas las cifras de hoy' : 'Todas las cifras de ese día';
   $('#ahGrafTitulo').textContent = viejo ? `${dReal} (real) y ${dPron} (pronóstico)` : vivo ? 'Ayer y hoy' : 'Ese día y las 24 h siguientes';
   $('#ahGrafSub').textContent = viejo
-    ? `${nombreArea(A.area)}. A la izquierda, lo real del ${diaNum(d.ahora)} y lo que se había pronosticado; a la derecha, lo pronosticado para el ${dPron}, cuyo real el COES todavía no publica. Toca o arrastra el gráfico para leer cada hora.`
+    ? `${nombreArea(A.area)}. A la izquierda, lo real del ${dReal.toLowerCase()} y lo que se había pronosticado; a la derecha, lo pronosticado para el ${dPron}, cuyo real el COES todavía no publica. Toca o arrastra el gráfico para leer cada hora.`
     : vivo
     ? `${nombreArea(A.area)}. A la izquierda, lo real de ayer y lo que se había pronosticado; desde la línea punteada no hay dato real todavía. «Ahora» marca la hora de Lima. Toca o arrastra el gráfico para leer cada hora.`
     : `${nombreArea(A.area)}. A la izquierda de las ${horaDe(d.origen)}, lo real y lo que se pronosticó un día antes; a la derecha, lo que ya estaba pronosticado a las ${horaDe(d.origen)}. Toca o arrastra el gráfico para elegir otra hora.`;
