@@ -635,9 +635,9 @@
     "reps": 1
    },
    "momento_ok": {
-    "media": 0.2,
-    "min": 0.2,
-    "max": 0.2,
+    "media": 1.0,
+    "min": 1.0,
+    "max": 1.0,
     "n": 5,
     "reps": 1
    },
@@ -800,17 +800,17 @@
     },
     {
      "paso": "sabe qué momento muestra",
-     "quedan": 1,
+     "quedan": 5,
      "de": 5
     },
     {
      "paso": "acierta el primer clic en 3 de 4 tareas",
-     "quedan": 1,
+     "quedan": 5,
      "de": 5
     },
     {
      "paso": "volvería mañana (sí o tal vez)",
-     "quedan": 1,
+     "quedan": 4,
      "de": 5
     }
    ]
@@ -872,17 +872,6 @@
   ]
  },
  "tropiezos": [
-  {
-   "pantalla": "hoy",
-   "paso": "momento",
-   "tipo": "confunde el momento",
-   "objetivo": "dia_pasado",
-   "severidad": 3,
-   "frecuencia": 0.8,
-   "personas": 4,
-   "puntaje": 2.4,
-   "evidencia": "Habla de un día pasado. Aunque arriba dice hoy sábado 14, dice clarito «Último dato real · jue 12, 23:30» (jueves 12 a las 23:30) y el pronóstico …"
-  },
   {
    "pantalla": "repaso-1030",
    "paso": "palabra",
@@ -2607,14 +2596,6 @@
       "objetivo": "sesgo / subestima",
       "severidad": 1,
       "evidencia": "sesgo / subestima"
-     },
-     {
-      "pantalla": "hoy",
-      "paso": "momento",
-      "tipo": "confunde el momento",
-      "objetivo": "dia_pasado",
-      "severidad": 3,
-      "evidencia": "Habla de un día pasado. Aunque arriba dice hoy sábado 14, dice clarito «Último dato real · jue 12, 23:30» (jueves 12 a las 23:30) y el pronóstico …"
      }
     ],
     "confusion": 1,
@@ -2634,7 +2615,7 @@
     ],
     "comprende": true,
     "mira_primero": "titulo",
-    "momento_ok": false,
+    "momento_ok": true,
     "lectura_cifra": true,
     "lectura_completa": true,
     "clics": {
@@ -2831,14 +2812,6 @@
       "objetivo": "Chronos-2 / modelo fundacional",
       "severidad": 1,
       "evidencia": "Chronos-2 / modelo fundacional"
-     },
-     {
-      "pantalla": "hoy",
-      "paso": "momento",
-      "tipo": "confunde el momento",
-      "objetivo": "dia_pasado",
-      "severidad": 3,
-      "evidencia": "Habla de un día pasado. Aunque el encabezado pregunte por hoy sábado 14, el último dato real que muestra es del jueves 12 a las 23:30 y el …"
      }
     ],
     "confusion": 0,
@@ -2852,7 +2825,7 @@
     ],
     "comprende": true,
     "mira_primero": "linea_ahora",
-    "momento_ok": false,
+    "momento_ok": true,
     "lectura_cifra": true,
     "lectura_completa": true,
     "clics": {
@@ -2935,14 +2908,6 @@
       "objetivo": "IEOD",
       "severidad": 1,
       "evidencia": "IEOD"
-     },
-     {
-      "pantalla": "hoy",
-      "paso": "momento",
-      "tipo": "confunde el momento",
-      "objetivo": "dia_pasado",
-      "severidad": 3,
-      "evidencia": "Habla de un día pasado: muestra el último dato real del jueves 12 de noviembre a las 23:30 (4,456 MW) y el gráfico proyecta el viernes 13. Aunque …"
      }
     ],
     "confusion": 0,
@@ -2956,7 +2921,7 @@
     ],
     "comprende": true,
     "mira_primero": "linea_ahora",
-    "momento_ok": false,
+    "momento_ok": true,
     "lectura_cifra": true,
     "lectura_completa": true,
     "clics": {
@@ -3047,14 +3012,6 @@
       "objetivo": "SEIN",
       "severidad": 1,
       "evidencia": "SEIN"
-     },
-     {
-      "pantalla": "hoy",
-      "paso": "momento",
-      "tipo": "confunde el momento",
-      "objetivo": "dia_pasado",
-      "severidad": 3,
-      "evidencia": "Habla de un día pasado: el último dato real que muestra es del jueves 12 de noviembre a las 23:30 (datos del COES al 12/11, 24:00) y el …"
      }
     ],
     "confusion": 1,
@@ -3069,7 +3026,7 @@
     ],
     "comprende": true,
     "mira_primero": "linea_ahora",
-    "momento_ok": false,
+    "momento_ok": true,
     "lectura_cifra": true,
     "lectura_completa": true,
     "clics": {

@@ -7,7 +7,7 @@ Capturas de 2026-11-14 04:48 (Lima). Sesiones válidas: 14; fallidas: 0. Entre p
 | Medida | entrada-1030 | entrada-1900 | entrada-hoy |
 |---|---|---|---|
 | Dice qué es | 100 % | 100 % | 100 % |
-| Sabe qué momento muestra | 100 % | 100 % | 20 % |
+| Sabe qué momento muestra | 100 % | 100 % | 100 % |
 | Lee la cifra del momento | 100 % | 100 % | 100 % |
 | Lee cifra, pronóstico y rango | 100 % | 100 % | 100 % |
 | Lo primero que mira es la cifra o la respuesta | 0 % | 0 % | 0 % |
@@ -35,7 +35,7 @@ Mira primero: línea de «ahora» (4).
 Le importó: los datos para descargar (25 %), rendición de cuentas (acertó, cuánto se equivoca) (25 %), la cifra de ahora (25 %).
 Acuerdo entre repeticiones: {'comprende': None, 'lectura_cifra': None, 'clic_t1': None, 'clic_t2': None, 'clic_t3': None, 'clic_t4': None}.
 
-**Embudo, entrada-hoy:** abre la pantalla 5/5 → dice qué es 5/5 → lee la cifra del momento 5/5 → sabe qué momento muestra 1/5 → acierta el primer clic en 3 de 4 tareas 1/5 → volvería mañana (sí o tal vez) 1/5.
+**Embudo, entrada-hoy:** abre la pantalla 5/5 → dice qué es 5/5 → lee la cifra del momento 5/5 → sabe qué momento muestra 5/5 → acierta el primer clic en 3 de 4 tareas 5/5 → volvería mañana (sí o tal vez) 4/5.
 Términos más citados: Chronos-2 / modelo fundacional (80 %), IEOD (80 %), COES (40 %), SEIN (40 %), CSV (20 %), MW / megavatios (20 %).
 Dudas por zona: título (5), «Lo que dijimos ayer» (4), respuesta a la pregunta (1), «De dónde sale» (pie) (1), «¿Qué tan bueno es?» (1), marca (1).
 Mira primero: línea de «ahora» (4), título (1).
@@ -53,7 +53,6 @@ Acuerdo entre repeticiones: {'comprende': None, 'lectura_cifra': None, 'clic_t1'
 
 | Pantalla | Paso | Tipo | Objetivo | Sev. | Frec. | Personas | Evidencia |
 |---|---|---|---|---|---|---|---|
-| hoy | momento | confunde el momento | dia_pasado | 3 | 80 % | 4 | Habla de un día pasado. Aunque arriba dice hoy sábado 14, dice clarito «Último dato real · jue 12, 23:30» (jueves 12 a las 23:30) y el pronóstico … |
 | repaso-1030 | palabra | palabra | Simons (componente del modelo) | 1 | 100 % | 5 | Simons (componente del modelo) |
 | repaso-1900 | palabra | palabra | Chronos-2 / modelo fundacional | 1 | 100 % | 4 | Chronos-2 / modelo fundacional |
 | repaso-1900 | palabra | palabra | Simons (componente del modelo) | 1 | 100 % | 4 | Simons (componente del modelo) |
@@ -73,3 +72,4 @@ Acuerdo entre repeticiones: {'comprende': None, 'lectura_cifra': None, 'clic_t1'
 | repaso-1030 | duda | duda | #ahOrigenTit | 1 | 40 % | 2 | La fórmula muestra 'Chronos-2 ajustado' y 'Híbrido (XGBoost + Simons)'. En la carrera vemos sistemas de potencia y curvas de carga, pero no nos enseñan qué son  |
 | hoy | palabra | palabra | COES | 1 | 40 % | 2 | COES |
 | hoy | palabra | palabra | SEIN | 1 | 40 % | 2 | SEIN |
+| repaso-1900 | duda | duda | respuesta a la pregunta | 1 | 25 % | 1 | No sé qué significa COES ni qué es un megavatio o MW; en mi recibo de luz solo veo kWh y soles. |

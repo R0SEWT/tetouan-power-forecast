@@ -7,7 +7,7 @@ Capturas de 2026-11-14 04:52 (Lima). Sesiones válidas: 12; fallidas: 0. Entre p
 | Medida | entrada-1030 | entrada-1900 | entrada-hoy |
 |---|---|---|---|
 | Dice qué es | 100 % | 100 % | 100 % |
-| Sabe qué momento muestra | 100 % | 100 % | 20 % |
+| Sabe qué momento muestra | 100 % | 100 % | 100 % |
 | Lee la cifra del momento | 100 % | 100 % | 100 % |
 | Lee cifra, pronóstico y rango | 100 % | 100 % | 100 % |
 | Lo primero que mira es la cifra o la respuesta | 0 % | 0 % | 0 % |
@@ -35,7 +35,7 @@ Mira primero: línea de «ahora» (2).
 Le importó: los datos para descargar (50 %).
 Acuerdo entre repeticiones: {'comprende': None, 'lectura_cifra': None, 'clic_t1': None, 'clic_t2': None, 'clic_t3': None, 'clic_t4': None}.
 
-**Embudo, entrada-hoy:** abre la pantalla 5/5 → dice qué es 5/5 → lee la cifra del momento 5/5 → sabe qué momento muestra 1/5 → acierta el primer clic en 3 de 4 tareas 1/5 → volvería mañana (sí o tal vez) 1/5.
+**Embudo, entrada-hoy:** abre la pantalla 5/5 → dice qué es 5/5 → lee la cifra del momento 5/5 → sabe qué momento muestra 5/5 → acierta el primer clic en 3 de 4 tareas 5/5 → volvería mañana (sí o tal vez) 4/5.
 Términos más citados: Chronos-2 / modelo fundacional (80 %), COES (40 %), SEIN (40 %), CSV (20 %), MW / megavatios (20 %), sesgo / subestima (20 %).
 Dudas por zona: título (4), #ahAcierto (3), «¿Qué tan bueno es?» (2), respuesta a la pregunta (1), respuesta a la pregunta (1), controles de fecha y hora (1).
 Mira primero: línea de «ahora» (4), título (1).
@@ -53,7 +53,6 @@ Acuerdo entre repeticiones: {'comprende': None, 'lectura_cifra': None, 'clic_t1'
 
 | Pantalla | Paso | Tipo | Objetivo | Sev. | Frec. | Personas | Evidencia |
 |---|---|---|---|---|---|---|---|
-| hoy | momento | confunde el momento | dia_pasado | 3 | 80 % | 4 | Habla de un día pasado. Aunque el título arriba pregunta por 'hoy, sábado 14', el último dato real que muestra es del jueves 12 a las 23:30 (4,456 … |
 | repaso-1030 | palabra | palabra | Simons (componente del modelo) | 1 | 100 % | 5 | Simons (componente del modelo) |
 | repaso-1900 | palabra | palabra | Chronos-2 / modelo fundacional | 1 | 100 % | 2 | Chronos-2 / modelo fundacional |
 | repaso-1900 | palabra | palabra | IEOD | 1 | 100 % | 2 | IEOD |
@@ -73,3 +72,4 @@ Acuerdo entre repeticiones: {'comprende': None, 'lectura_cifra': None, 'clic_t1'
 | repaso-1900 | palabra | palabra | CSV | 1 | 50 % | 1 | CSV |
 | repaso-1900 | palabra | palabra | MW / megavatios | 1 | 50 % | 1 | MW / megavatios |
 | repaso-1900 | palabra | palabra | modelo / híbrido / XGBoost | 1 | 50 % | 1 | modelo / híbrido / XGBoost |
+| repaso-1900 | duda | duda | controles de fecha y hora | 1 | 50 % | 1 | Me confundió que la pestaña activa seleccionada sea «Ahora» mientras la pastilla de la derecha dice «Repaso · 10/03/2026, 19:00»; no me quedó claro al instante  |

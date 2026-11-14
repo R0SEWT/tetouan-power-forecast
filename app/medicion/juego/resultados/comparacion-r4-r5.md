@@ -19,7 +19,7 @@ Capturas: 2026-11-14 04:52 y 2026-11-14 05:00. Sesiones válidas: 12 y 6. Entre 
 | entrada-1030: marcadores de confusión | 0.4 (0.4–0.4) | 2.0 (2.0–2.0) | +1.6 | sin repeticiones |
 | entrada-1030: términos no entendidos por sesión | 4.2 (4.2–4.2) | 8.0 (8.0–8.0) | +3.8 | sin repeticiones |
 | entrada-hoy: dice qué es | 100 % | 100 % | +0 pts | sin repeticiones |
-| entrada-hoy: sabe qué momento muestra | 20 % | 0 % | -20 pts | sin repeticiones |
+| entrada-hoy: sabe qué momento muestra | 100 % | 100 % | +0 pts | sin repeticiones |
 | entrada-hoy: lee la cifra del momento | 100 % | 100 % | +0 pts | sin repeticiones |
 | entrada-hoy: lee cifra, pronóstico y rango | 100 % | 100 % | +0 pts | sin repeticiones |
 | entrada-hoy: lo primero que mira es la cifra o la respuesta | 0 % | 0 % | +0 pts | sin repeticiones |

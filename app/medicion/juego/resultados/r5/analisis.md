@@ -7,7 +7,7 @@ Capturas de 2026-11-14 05:00 (Lima). Sesiones válidas: 6; fallidas: 0. Entre pa
 | Medida | entrada-1030 | entrada-hoy |
 |---|---|---|
 | Dice qué es | 100 % | 100 % |
-| Sabe qué momento muestra | 100 % | 0 % |
+| Sabe qué momento muestra | 100 % | 100 % |
 | Lee la cifra del momento | 100 % | 100 % |
 | Lee cifra, pronóstico y rango | 100 % | 100 % |
 | Lo primero que mira es la cifra o la respuesta | 0 % | 0 % |
@@ -28,7 +28,7 @@ Mira primero: línea de «ahora» (1).
 Le importó: .
 Acuerdo entre repeticiones: {'comprende': None, 'lectura_cifra': None, 'clic_t1': None, 'clic_t2': None, 'clic_t3': None, 'clic_t4': None}.
 
-**Embudo, entrada-hoy:** abre la pantalla 5/5 → dice qué es 5/5 → lee la cifra del momento 5/5 → sabe qué momento muestra 0/5 → acierta el primer clic en 3 de 4 tareas 0/5 → volvería mañana (sí o tal vez) 0/5.
+**Embudo, entrada-hoy:** abre la pantalla 5/5 → dice qué es 5/5 → lee la cifra del momento 5/5 → sabe qué momento muestra 5/5 → acierta el primer clic en 3 de 4 tareas 5/5 → volvería mañana (sí o tal vez) 4/5.
 Términos más citados: Chronos-2 / modelo fundacional (80 %), COES (40 %), IEOD (40 %), CSV (20 %), MW / megavatios (20 %), SEIN (20 %).
 Dudas por zona: título (4), «Lo que dijimos ayer» (3), «¿Qué tan bueno es?» (2), #ahLeyRango (1), #ahAcierto (1), estado de los datos (1).
 Mira primero: línea de «ahora» (5).
@@ -46,7 +46,6 @@ Acuerdo entre repeticiones: {'comprende': None, 'lectura_cifra': None, 'clic_t1'
 
 | Pantalla | Paso | Tipo | Objetivo | Sev. | Frec. | Personas | Evidencia |
 |---|---|---|---|---|---|---|---|
-| hoy | momento | confunde el momento | dia_pasado | 3 | 100 % | 5 | Habla de un día pasado. Aunque hoy es sábado 14 de noviembre de 2026, la aplicación avisa que el pronóstico de hoy sale hacia las 10:00. El último … |
 | repaso-1030 | duda | duda | respuesta a la pregunta | 1 | 100 % | 1 | No entiendo qué es el COES ni qué significa MW. En mi recibo de luz solo veo kWh y soles, así que no sé si 4,910 es mucho … |
 | repaso-1030 | duda | duda | controles de fecha y hora | 1 | 100 % | 1 | Mi sobrino me dijo que aquí se veía cuánta luz usa Lima, así que pensé que vería lo de ahorita en vivo, pero me sale una fecha vieja … |
 | repaso-1030 | duda | duda | #ahLeyRango | 1 | 100 % | 1 | No entiendo qué significa que caiga ahí 9 de cada 10 veces ni cómo se lee esa sombra celeste en el dibujo. |
@@ -66,3 +65,4 @@ Acuerdo entre repeticiones: {'comprende': None, 'lectura_cifra': None, 'clic_t1'
 | hoy | palabra | palabra | COES | 1 | 40 % | 2 | COES |
 | hoy | palabra | palabra | IEOD | 1 | 40 % | 2 | IEOD |
 | hoy | duda | duda | #ahLeyRango | 1 | 20 % | 1 | No entiendo qué es eso del rango del 80 % ni cómo es que cae 8 de cada 10 veces en una curva de luz. |
+| hoy | palabra | palabra | CSV | 1 | 20 % | 1 | CSV |

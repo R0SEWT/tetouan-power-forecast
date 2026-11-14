@@ -219,6 +219,15 @@ IMPORTO = {
 # Lo primero que mira es la cifra del momento o la respuesta a la pregunta (el hito de la pantalla)
 ZONAS_CIFRA = {"cifra_ahora", "respuesta", "#ahRespuesta"}
 ESPERADO_MOMENTO = {"hoy": "hoy_en_vivo", "repaso-1030": "dia_pasado", "repaso-1900": "dia_pasado"}
+
+
+def momento_esperado(nombre: str, momento: str | None, capturado: str | None) -> set[str]:
+    """Las respuestas correctas a «¿qué momento muestra?». De madrugada, la entrada en vivo muestra días pasados (el
+    momento del oráculo es de antes del día de la captura): decir que es un día pasado también es correcto."""
+    esperado = {ESPERADO_MOMENTO[nombre]}
+    if nombre == "hoy" and momento and capturado and momento[:10] < capturado[:10]:
+        esperado.add("dia_pasado")
+    return esperado
 CLIC_2C = r"\+\s*2\s*(°|o|grados)?\s*c?\b"
 # Marcadores de confusión en la voz alta (codificación clásica del protocolo de pensar en voz alta)
 CONFUSION = (r"no entiendo|no entendi|no se (que|si|donde|cual|por que)|confund|me pierdo|perdid|no queda claro|"
@@ -230,7 +239,7 @@ def recorte(texto: str, palabras: int = 28) -> str:
     return " ".join(p[:palabras]) + (" …" if len(p) > palabras else "")
 
 
-def codificar(registro: dict, pantalla: dict, oraculos: dict, tareas: dict) -> dict:
+def codificar(registro: dict, pantalla: dict, oraculos: dict, tareas: dict, capturado: str | None = None) -> dict:
     r = registro["respuesta"]
     nombre = registro["pantalla"]
     c = {"sesion": registro["sesion"], "pantalla": nombre, "persona": registro["persona"],
@@ -256,7 +265,8 @@ def codificar(registro: dict, pantalla: dict, oraculos: dict, tareas: dict) -> d
         if not c["comprende"]:
             tropiezo("qué es", "no entiende qué es", "primera impresión", 3, r.get("que_es", ""))
         c["mira_primero"] = zona_de(r.get("mira_primero", {}).get("texto", ""), pantalla)
-        c["momento_ok"] = r.get("momento", {}).get("tipo") == ESPERADO_MOMENTO[nombre]
+        esperado = momento_esperado(nombre, oraculos["lectura"][nombre].get("momento"), capturado)
+        c["momento_ok"] = r.get("momento", {}).get("tipo") in esperado
         if not c["momento_ok"]:
             tropiezo("momento", "confunde el momento", r.get("momento", {}).get("tipo", "?"), 3,
                      r.get("momento", {}).get("texto", ""))
@@ -501,7 +511,8 @@ def cargar(etiqueta: str, modo: str = "imagen") -> tuple[dict, dict]:
         if "respuesta" not in reg:
             fallidas += 1
             continue
-        por_sesion[reg["sesion"]].append(codificar(reg, pantallas[reg["pantalla"]], manifiesto["oraculos"], tareas))
+        por_sesion[reg["sesion"]].append(codificar(reg, pantallas[reg["pantalla"]], manifiesto["oraculos"], tareas,
+                                                     manifiesto.get("capturado_lima")))
     return manifiesto, {"por_sesion": dict(por_sesion), "fallidas": fallidas, "tareas": tareas}
 
 

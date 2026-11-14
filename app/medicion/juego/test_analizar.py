@@ -82,3 +82,11 @@ def test_horas_y_fechas_no_son_cantidades():
     assert not a.calza("A las 15:30 cambia 999 MW", [15.0])
     assert a.calza("+15 MW a las 11:00; a las 15:30, +25 MW", [15.0])
     assert not a.calza("el 10 de marzo, 03/10/2026", [10.0, 3.0])
+
+
+def test_de_madrugada_un_dia_pasado_tambien_es_correcto():
+    # La entrada en vivo a las 05:00 del sábado muestra el jueves y el viernes: las dos lecturas valen
+    assert a.momento_esperado("hoy", "2026-11-12T23:30", "2026-11-14 05:00") == {"hoy_en_vivo", "dia_pasado"}
+    # De día, el momento es de hoy: solo «hoy, en vivo»
+    assert a.momento_esperado("hoy", "2026-11-14T15:00", "2026-11-14 15:10") == {"hoy_en_vivo"}
+    assert a.momento_esperado("repaso-1900", "2026-03-10T19:00", "2026-11-14 05:00") == {"dia_pasado"}
