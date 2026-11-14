@@ -27,6 +27,7 @@ const MESES_CORTOS = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 's
 const TITULO_CURVA = 'Curva, pronóstico de la demanda eléctrica del Perú';
 const DIAS = ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'];
 
+const ZONA_AREA = { norte: 'el norte del país', centro: 'Lima y el centro del país', sur: 'el sur del país' };
 const INFO_AREA = {
   norte: { letra: 'N', fg: '#000', desc: 'Costa norte: Piura, Chiclayo y Trujillo. Lluvias con El Niño y carga minera e industrial.' },
   centro: { letra: 'C', fg: '#fff', desc: 'Lima y el centro: Electroandes, minería e industria. El calor del verano pesa en Lima.' },
@@ -702,7 +703,7 @@ function pintarRegimen() {
   }
   const [y, m] = r.mes.split('-').map(Number);
   const estado = ESTADO_NINO[r.estado] || r.estado;
-  $('#chipRegimenTxt').textContent = `El Niño costero: ${estado} · ICEN ${r.icen.toFixed(2)} (${MESES_CORTOS[m - 1]}-${y})`;
+  $('#chipRegimenTxt').textContent = `El Niño costero: ${estado}`;
   chip.title = `Último ICEN publicado: ${r.icen} en ${MESES[m - 1]} de ${y}, régimen ${estado} según ENFEN. El ICEN sale con meses de rezago.`;
   chip.hidden = false;
 }
@@ -2001,12 +2002,13 @@ function pintarAhora() {
   const vivo = d.modo === 'en_vivo';
   const fin = finTxt(d.datos_hasta);
   const nombreModeloAhora = d.modelo_nombre.replace(/\s*\(.*\)\s*$/, '');
-  $('#principal').textContent = vivo
-    ? `${nombreArea(A.area)} · hoy, ${fechaDiaMes(d.ahora)}`
-    : `${nombreArea(A.area)} · ${fechaLarga(d.origen)}`;
+  const preg = preguntaDelDia(d);
+  // Arriba de la pregunta, de qué zona habla: el nombre del área y qué parte del país es
+  $('#principal').innerHTML = `<span class="pregunta-area">${esc(nombreArea(A.area))} · ${esc(ZONA_AREA[A.area] || 'Perú')}</span>${esc(preg.q)}`;
+  $('#ahRespuesta').innerHTML = preg.html;
   $('#ahModo').innerHTML = vivo
-    ? `<b>Son las ${esc(horaDe(d.ahora))}.</b> Lo real llega hasta el ${esc(fin.largo)}: el COES publica cada día la demanda del día anterior, hacia las 09:45. Todo lo que sigue es pronóstico, emitido hoy a las ${esc(horaDe(d.emitido_en || d.ahora))}.`
-    : `<b>Repaso de un día del historial.</b> Así se veía a las ${esc(horaDe(d.origen))}: lo real llega hasta esa hora y lo que sigue es lo que el modelo ya había pronosticado.`;
+    ? `Lo real llega con un día de retraso: el COES publica cada mañana la demanda del día anterior. Lo demás es pronóstico, emitido ${emitidoTxt(d.emitido_en || d.ahora)}.`
+    : `<b>Repaso de un día del historial.</b> Así se veía a las ${esc(horaDe(d.origen))}: lo real llega hasta esa hora y lo que sigue es lo que ya se había pronosticado.`;
   pintarEstado(vivo
     ? { modo: 'vivo', texto: `Hoy · datos del COES al ${fin.corto}`, corto: ['COES', fin.corto.replace(', ', ' ')], titulo: `Pronóstico de hoy. Datos reales del COES hasta el ${fin.largo}; el resto es pronóstico.` }
     : { modo: 'repaso', texto: `Repaso · ${fechaNumerica(d.origen)}, ${horaDe(d.origen)}`, corto: ['Repaso', `${fechaNumerica(d.origen).replace(/\/20(\d\d)$/, '/$1')} ${horaDe(d.origen)}`], titulo: `Repaso del ${fechaLarga(d.origen)}, ${horaDe(d.origen)}` });
@@ -2028,6 +2030,7 @@ function pintarAhora() {
 
   pintarAreasAhora();
   pintarCifras(d);
+  $('#ahTodasTit').textContent = vivo ? 'Todas las cifras de hoy' : 'Todas las cifras de ese día';
   $('#ahGrafTitulo').textContent = vivo ? 'Ayer y hoy' : 'Ese día y las 24 h siguientes';
   $('#ahGrafSub').textContent = vivo
     ? `${nombreArea(A.area)}. A la izquierda, lo real de ayer y lo que se había pronosticado; desde la línea punteada no hay dato real todavía. «Ahora» marca la hora de Lima.`
@@ -2048,39 +2051,79 @@ function pintarAhora() {
   actualizarNav();
 }
 
-function sparkline(d) {
-  const W = 96;
-  const H = 30;
-  const n = d.fecha_hora.length;
-  const vals = [...d.pronostico, ...d.real.filter((v) => v != null)];
-  const lo = Math.min(...vals);
-  const hi = Math.max(...vals);
-  const x = (i) => (i / (n - 1)) * W;
-  const y = (v) => 2 + (1 - (v - lo) / (hi - lo || 1)) * (H - 4);
-  const real = d.real.slice(0, d.i_origen + 1).map((v, i) => (v == null ? '' : `${i ? 'L' : 'M'}${x(i).toFixed(1)},${y(v).toFixed(1)}`)).join('');
-  const pron = d.pronostico.map((v, i) => (i < d.i_origen ? '' : `${i === d.i_origen ? 'M' : 'L'}${x(i).toFixed(1)},${y(v).toFixed(1)}`)).join('');
-  return `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" aria-hidden="true" focusable="false">`
-    + `<line x1="${x(d.i_ahora).toFixed(1)}" x2="${x(d.i_ahora).toFixed(1)}" y1="0" y2="${H}" class="g-eje"/>`
-    + `<path d="${real}" class="sp-real"/><path d="${pron}" class="sp-pron"/></svg>`;
-}
-
 function pintarAreasAhora() {
   const lista = S.areas.length ? S.areas : AREAS_RESPALDO;
   const repaso = A.fecha ? { fecha: A.fecha, hora: A.hora } : null;
-  $('#ahAreas').innerHTML = lista.map((a) => {
-    const d = A.datos.get(a.id);
-    const info = INFO_AREA[a.id] || { letra: a.nombre[0] };
-    const actual = a.id === A.area;
-    let cuerpo = `<span class="v">${A.sinDatos ? 'Sin datos por ahora' : 'Calculando…'}</span>`;
-    if (d) {
-      const vivo = d.modo === 'en_vivo';
-      cuerpo = `<span class="v">Ahora <b>${mw(d.cifra_ahora.valor)}</b><span class="unidad"> MW${d.cifra_ahora.fuente === 'real' ? '' : ' (pron.)'}</span></span>`
-        + `<span class="v pico-area">${vivo ? 'Pico de hoy' : 'Pico 24 h'}: <b>${mw(d.pico.valor)}</b> MW · ${esc(diaCorto(d.pico.fecha_hora))} ${esc(horaDe(d.pico.fecha_hora))}</span>`
-        + sparkline(d);
+  $('#ahAreas').innerHTML = lista.map((a) => `<a href="${rutaAhora(a.id, repaso, { modelo: A.modelo })}"${a.id === A.area ? ' aria-current="page"' : ''}>${esc(a.nombre)}</a>`).join('');
+}
+
+const cambioPct = (a, b) => Math.round((100 * Math.abs(a - b)) / b);
+const emitidoTxt = (fh) => {
+  const dia = fh.slice(0, 10);
+  const cuando = dia === hoyLima() ? 'hoy' : dia === sumarDias(hoyLima(), -1) ? 'ayer' : `el ${esc(fechaDiaMes(fh))}`;
+  return `${cuando} a las ${esc(horaDe(fh))}`;
+};
+
+// La pregunta del día: el pico si está por llegar; si no, el resto del día; en un repaso, si se acertó
+function preguntaDelDia(d) {
+  const vivo = d.modo === 'en_vivo';
+  const c = d.cifra_ahora;
+  const real = c.fuente === 'real';
+  const cifra = (k, sw, sub) => `<div class="r-ahora"><p class="k"><span class="sw ${sw}" aria-hidden="true"></span>${k}</p>`
+    + `<p class="n">${mw(c.valor)}<small>MW</small></p><p class="d">${sub}</p></div>`;
+  if (!vivo) {
+    const ay = d.ayer && d.ayer.fecha_hora === c.fecha_hora ? d.ayer : null;
+    const dia = d.origen.slice(0, 10);
+    const escenario = dia >= FECHA_MIN && dia <= FECHA_MAX
+      ? ` <a class="kpi-enlace" href="${rutaDetalle(A.area, { fecha: dia, hora: horaDe(d.origen) }, 'escenarios')}">¿Y si hace más calor?</a>` : '';
+    let frase = real ? `Fueron <b>${mw(c.valor)} MW</b>, dato del COES.` : `Se pronosticaban <b>${mw(c.valor)} MW</b>, entre ${mw(c.inferior)} y ${mw(c.superior)}.`;
+    if (ay && real) {
+      frase = `Un día antes se pronosticó <b>${mw(ay.pronostico)} MW</b>, con un rango de ${mw(ay.inferior)} a ${mw(ay.superior)}: `
+        + `lo real cayó ${ay.dentro ? 'dentro' : 'fuera'}.`;
     }
-    return `<a class="area" href="${rutaAhora(a.id, repaso, { modelo: A.modelo })}"${actual ? ' aria-current="true"' : ''}>`
-      + `<span class="nom"><em aria-hidden="true">${esc(info.letra)}</em>${esc(a.nombre)}</span>${cuerpo}</a>`;
-  }).join('');
+    return {
+      q: `¿Acertamos el ${fechaLarga(d.origen)} a las ${horaDe(d.origen)}?`,
+      html: cifra(`${real ? 'Fue' : 'Pronóstico'} · ${esc(horaDe(c.fecha_hora))}`, real ? 'real' : 'pron', real ? 'Dato del COES' : 'Pronóstico')
+        + `<p class="r-frase">${frase}${escenario}</p>`,
+    };
+  }
+  if (real) {
+    return {
+      q: '¿Cuánta electricidad se usará hoy?',
+      html: cifra(`Último dato real · ${esc(horaDe(c.fecha_hora))}`, 'real', 'Dato del COES')
+        + '<p class="r-frase">El pronóstico de hoy se publica hacia las 10:00, cuando el COES dé la demanda de ayer.</p>',
+    };
+  }
+  const ahora = cifra(`Ahora · ${esc(horaDe(c.fecha_hora))}`, 'pron', 'Pronóstico; el dato real llega mañana');
+  const p = d.pico;
+  if (p.fecha_hora > d.ahora) {
+    return {
+      q: '¿A qué hora se usará más electricidad hoy?',
+      html: `${ahora}<p class="r-frase">A las ${esc(horaDe(p.fecha_hora))}, con unos <b>${mw(p.valor)} MW</b>: ${cambioPct(p.valor, c.valor)} % más que ahora.</p>`,
+    };
+  }
+  const hoy = d.ahora.slice(0, 10);
+  const resto = [];
+  for (let i = d.i_ahora + 1; i < d.fecha_hora.length && d.fecha_hora[i].startsWith(hoy); i += 1) resto.push(i);
+  if (!resto.length) {
+    return {
+      q: '¿Cuánta electricidad se usa ahora?',
+      html: `${ahora}<p class="r-frase">El pronóstico de mañana se publica hacia las 10:00, cuando el COES dé la demanda de hoy.</p>`,
+    };
+  }
+  const hora = Number(horaDe(d.ahora).slice(0, 2));
+  const q = `¿Cuánta electricidad se usará ${hora >= 18 ? 'esta noche' : 'el resto del día'}?`;
+  const iMax = resto.reduce((a, i) => (d.pronostico[i] > d.pronostico[a] ? i : a), resto[0]);
+  if (d.pronostico[iMax] > c.valor * 1.01) {
+    return { q, html: `${ahora}<p class="r-frase">Subirá hasta unos <b>${mw(d.pronostico[iMax])} MW</b> a las ${esc(horaDe(d.fecha_hora[iMax]))}: ${cambioPct(d.pronostico[iMax], c.valor)} % más que ahora.</p>` };
+  }
+  const iFin = resto[resto.length - 1];
+  const v = d.pronostico[iFin];
+  const pct = cambioPct(v, c.valor);
+  return {
+    q,
+    html: `${ahora}<p class="r-frase">${pct < 1 ? `Se mantendrá cerca de <b>${mw(v)} MW</b> hasta las ${esc(horaDe(d.fecha_hora[iFin]))}.` : `Irá bajando: unos <b>${mw(v)} MW</b> a las ${esc(horaDe(d.fecha_hora[iFin]))}, ${pct} % menos que ahora.`}</p>`,
+  };
 }
 
 function kpiHtml({ clase = '', sw = 'pron', k, n, d, unidad = 'MW' }) {
@@ -2092,11 +2135,9 @@ function pintarCifras(d) {
   const vivo = d.modo === 'en_vivo';
   const c = d.cifra_ahora;
   const html = [];
-  // La cifra del presente va al frente y es la más grande. Una cifra sin dato no ocupa una tarjeta: en vivo,
-  // «mañana a esta hora» se emite mañana (lo dice el párrafo de arriba) y a las 23:00 no hay «en 1 hora».
+  // Todas las cifras, a un toque; sin tarjetas vacías
   const dijimos = d.ayer && d.ayer.fecha_hora === c.fecha_hora ? `. Se pronosticó ${mw(d.ayer.pronostico)} (${rangoTxt(d.ayer.inferior, d.ayer.superior)}): ${d.ayer.dentro ? 'dentro' : 'fuera'} del rango` : '';
   html.push(kpiHtml({
-    clase: 'kpi-ahora',
     sw: c.fuente === 'real' ? 'real' : 'pron',
     k: `Ahora · ${esc(horaDe(c.fecha_hora))}`,
     n: mw(c.valor),
@@ -2112,14 +2153,11 @@ function pintarCifras(d) {
   }
   const p = d.pico;
   const yaPaso = vivo && p.fecha_hora < d.ahora;
-  const dia = d.origen.slice(0, 10);
-  const escenario = !vivo && dia >= FECHA_MIN && dia <= FECHA_MAX
-    ? ` <a class="kpi-enlace" href="${rutaDetalle(A.area, { fecha: dia, hora: horaDe(d.origen) }, 'escenarios')}">¿Y si hace más calor?</a>` : '';
   html.push(kpiHtml({
     clase: `kpi-pico${yaPaso ? ' kpi-pasado' : ''}`,
     k: vivo ? `Pico de hoy${yaPaso ? ' <span class="kpi-paso">ya pasó</span>' : ''}` : 'Pico de las próximas 24 h',
     n: mw(p.valor),
-    d: `${yaPaso ? `Fue a las ${esc(horaDe(p.fecha_hora))}, según el pronóstico` : `${esc(fechaDiaMes(p.fecha_hora))}, ${esc(horaDe(p.fecha_hora))}`} · rango ${rangoTxt(p.inferior, p.superior)}${escenario}`,
+    d: `${yaPaso ? `Fue a las ${esc(horaDe(p.fecha_hora))}, según el pronóstico` : `${esc(fechaDiaMes(p.fecha_hora))}, ${esc(horaDe(p.fecha_hora))}`} · rango ${rangoTxt(p.inferior, p.superior)}`,
   }));
   if (d.manana) {
     html.push(kpiHtml({
@@ -2139,9 +2177,9 @@ function pintarCifras(d) {
         + (r.umbral_mw != null ? ` (umbral ${mw(r.umbral_mw)})` : ''),
     }));
   }
-  const cifras = $('#ahCifras');
-  cifras.innerHTML = html.join('');
-  cifras.dataset.n = String(html.length);
+  $('#ahCifras').innerHTML = html.join('');
+  const nombres = ['ahora', d.en_1h && 'en 1 hora', vivo ? 'el pico de hoy' : 'el pico', d.manana && 'mañana a esta hora', d.rampa && 'la mayor subida'].filter(Boolean);
+  $('#ahTodasQue').textContent = `${nombres.slice(0, -1).join(', ')} y ${nombres[nombres.length - 1]}`;
 }
 
 // El gráfico principal: lo real hasta el último dato, el pronóstico fino (pasado) y grueso (futuro), su rango,

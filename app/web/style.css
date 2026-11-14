@@ -2005,85 +2005,14 @@ a {
   font-size: 14px;
 }
 
-/* ---- Ahora: tarjetas de área ---- */
-.areas {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
-  margin-bottom: 12px;
-}
-
-.area {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: 2px 12px;
-  align-items: center;
-  min-height: 88px;
-  padding: 12px 16px;
-  border-radius: var(--r-l);
-  border: 1px solid var(--line);
-  background: var(--surface);
-  box-shadow: var(--sombra);
-  color: var(--ink);
-  text-decoration: none;
-}
-
-.area:hover {
-  border-color: var(--axis);
-}
-
-.area[aria-current='true'] {
-  border-color: var(--pron);
-  box-shadow: 0 0 0 1px var(--pron) inset;
-}
-
-.area .nom {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-weight: 700;
-}
-
-.area .nom em {
-  display: inline-grid;
-  place-items: center;
-  width: 22px;
-  height: 22px;
-  border-radius: 6px;
-  background: var(--surface-3);
-  font-size: 12px;
-  font-style: normal;
-}
-
-.area .v {
-  font-size: 14px;
-  color: var(--ink-2);
-  font-variant-numeric: tabular-nums;
-}
-
-.area .v b {
-  color: var(--ink);
-  font-size: 16px;
-}
-
-.area svg {
-  grid-row: 1 / 4;
-  grid-column: 2;
-}
-
 /* ---- Ahora: la fila de cifras ---- */
-/* La cifra del presente ocupa dos columnas y es la más grande; las demás (3 a 4, según haya dato) se reparten el
-   resto en la misma fila. Una cifra sin dato no deja una tarjeta vacía. */
+/* Todas las cifras, en una fila de 3 a 5 */
 .kpis {
   display: grid;
   grid-auto-flow: column;
   grid-auto-columns: minmax(0, 1fr);
   gap: 12px;
   margin-bottom: 16px;
-}
-
-.kpi-ahora {
-  grid-column: span 2;
 }
 
 .kpi {
@@ -2143,19 +2072,6 @@ a {
   color: var(--ink-2);
 }
 
-.kpi.kpi-ahora {
-  border-color: color-mix(in srgb, var(--pron) 50%, var(--line));
-}
-
-.kpi.kpi-ahora .n {
-  font-size: 56px;
-}
-
-.kpi.kpi-ahora .k {
-  font-size: 14px;
-  color: var(--ink-2);
-}
-
 /* El pico que ya pasó se dice en la etiqueta y su cifra se apaga: no compite con la de ahora */
 .kpi.kpi-pico .k {
   flex-wrap: wrap;
@@ -2186,7 +2102,7 @@ a {
 }
 
 .desactualizada .kpi .n,
-.desactualizada .area .v,
+.desactualizada .resp-dia,
 .desactualizada .lienzo {
   opacity: 0.55;
 }
@@ -2194,7 +2110,7 @@ a {
 /* ---- Ahora: gráfico principal y lateral ---- */
 .grid-principal {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 340px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 16px;
   align-items: start;
 }
@@ -2511,11 +2427,6 @@ table.t thead th {
   background: var(--surface-2);
   color: var(--ink-2);
   font-weight: 600;
-}
-
-.lado {
-  display: grid;
-  gap: 16px;
 }
 
 .dijimos {
@@ -3039,10 +2950,6 @@ table.cmp tr.nuestro td {
     grid-template-columns: minmax(0, 1fr);
   }
 
-  .lado {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
   .c8,
   .c6,
   .c4 {
@@ -3136,34 +3043,6 @@ table.cmp tr.nuestro td {
     height: 44px;
   }
 
-  .areas {
-    gap: 8px;
-  }
-
-  .area {
-    grid-template-columns: minmax(0, 1fr);
-    min-height: 0;
-    padding: 8px 10px;
-    gap: 0;
-  }
-
-  .area svg,
-  .area .pico-area {
-    display: none;
-  }
-
-  .area .nom em {
-    display: none;
-  }
-
-  .area .v {
-    font-size: 12px;
-  }
-
-  .area .v b {
-    font-size: 15px;
-  }
-
   .kpis {
     grid-auto-flow: row;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -3176,14 +3055,6 @@ table.cmp tr.nuestro td {
 
   .kpi .n {
     font-size: 24px;
-  }
-
-  .kpi.kpi-ahora .n {
-    font-size: 40px;
-  }
-
-  .lado {
-    grid-template-columns: minmax(0, 1fr);
   }
 
   .card-h {
@@ -3292,18 +3163,6 @@ table.cmp tr.nuestro td {
   }
 }
 
-.sp-real {
-  fill: none;
-  stroke: var(--real);
-  stroke-width: 1.5;
-}
-
-.sp-pron {
-  fill: none;
-  stroke: var(--pron);
-  stroke-width: 1.5;
-}
-
 table.t tr.fila-elegida th,
 table.t tr.fila-elegida td {
   background: var(--info-bg);
@@ -3318,39 +3177,25 @@ table.t tr.fila-elegida td {
   #btnFicha {
     display: none;
   }
-
-  .area .unidad {
-    display: none;
-  }
-
-  .area .v {
-    white-space: nowrap;
-  }
 }
 
-.col-izq {
-  display: grid;
-  gap: 16px;
-  min-width: 0;
+/* El gráfico a todo el ancho y, debajo, lo que dijimos ayer, qué tan bueno es y de dónde sale el número */
+.col-izq,
+.lado {
+  display: contents;
 }
 
-@media (max-width: 1100px) {
-  .col-izq,
-  .lado {
-    display: contents;
-  }
+.orden-grafico {
+  grid-column: 1 / -1;
+  order: 1;
+}
 
-  .orden-grafico {
-    order: 1;
-  }
+.lado > .card {
+  order: 2;
+}
 
-  .lado > .card {
-    order: 2;
-  }
-
-  .orden-origen {
-    order: 3;
-  }
+.orden-origen {
+  order: 3;
 }
 
 @media (min-width: 761px) {
@@ -3481,20 +3326,6 @@ table.t tr.fila-elegida td {
     padding-top: 20px;
   }
 
-  .area {
-    min-height: 0;
-    padding: 8px 14px;
-  }
-
-  .area .v {
-    font-size: 13px;
-    line-height: 1.35;
-  }
-
-  .area .v b {
-    font-size: 15px;
-  }
-
   .kpi {
     padding: 10px 14px 12px;
   }
@@ -3502,17 +3333,9 @@ table.t tr.fila-elegida td {
   .kpi .n {
     font-size: 26px;
   }
-
-  .kpi.kpi-ahora .n {
-    font-size: 56px;
-  }
 }
 
 @media (min-width: 761px) {
-  .area {
-    gap: 0 12px;
-  }
-
   .kpi .d {
     line-height: 1.35;
   }
@@ -3630,3 +3453,220 @@ input[type='time']:focus-within,
     display: none;
   }
 }
+
+/* ---- Ahora: la pregunta del día ---- */
+#ahModo {
+  color: var(--ink);
+}
+
+.pregunta-area {
+  display: block;
+  margin-bottom: 2px;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--pron-texto);
+}
+
+.pregunta {
+  max-width: 40ch;
+  font-size: 32px;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+
+.resp-dia {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 8px 28px;
+  margin: 12px 0 10px;
+}
+
+.r-ahora .k {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink-2);
+}
+
+.r-ahora .sw {
+  flex: none;
+  width: 14px;
+  height: 3px;
+  border-radius: 2px;
+}
+
+.r-ahora .n {
+  font-size: 56px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.r-ahora .n small {
+  margin-left: 4px;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--ink-2);
+  letter-spacing: 0;
+}
+
+.r-ahora .d {
+  font-size: 13px;
+  color: var(--ink-2);
+}
+
+.r-frase {
+  flex: 1 1 260px;
+  max-width: 36ch;
+  padding-bottom: 6px;
+  font-size: 18px;
+  line-height: 1.35;
+  color: var(--ink);
+}
+
+.mandos {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 12px;
+}
+
+.todas {
+  margin-bottom: 16px;
+}
+
+.todas summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 2px 8px;
+  width: fit-content;
+  min-height: 44px;
+  padding: 11px 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-m);
+  background: var(--surface);
+  color: var(--pron-texto);
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.todas-que {
+  display: none;
+}
+
+.todas[open] .kpis {
+  margin: 12px 0 0;
+}
+
+@media (min-width: 1600px) {
+  .r-ahora .n {
+    font-size: 72px;
+  }
+
+  .pregunta {
+    font-size: 40px;
+  }
+
+  .r-frase {
+    font-size: 20px;
+  }
+
+  #ahModo {
+    font-size: 16px;
+  }
+}
+
+/* Celular: pregunta, respuesta, gráfico, cifras, área y fecha */
+@media (max-width: 760px) {
+  #vistaAhora {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  #vistaAhora .contexto,
+  #vistaAhora .grid-principal {
+    display: contents;
+  }
+
+  .contexto-titulo {
+    display: contents;
+  }
+
+  .contexto-titulo > * {
+    order: 1;
+  }
+
+  .contexto-titulo > .titulo-fila {
+    order: 4;
+  }
+
+  #ahAviso {
+    order: 2;
+  }
+
+  .orden-grafico {
+    order: 3;
+  }
+
+  .todas {
+    order: 4;
+    margin: 0;
+  }
+
+  .mandos {
+    order: 5;
+    align-items: stretch;
+  }
+
+  .lado > .card {
+    order: 6;
+  }
+
+  .orden-origen {
+    order: 7;
+  }
+
+  #ahPie {
+    order: 8;
+  }
+
+  .pregunta {
+    font-size: 24px;
+  }
+
+  .resp-dia {
+    margin: 8px 0 6px;
+  }
+
+  .r-ahora .n {
+    font-size: 40px;
+  }
+
+  .r-frase {
+    font-size: 16px;
+  }
+
+  .areas-seg {
+    display: flex;
+  }
+
+  .areas-seg a {
+    flex: 1;
+    justify-content: center;
+  }
+
+  .todas summary {
+    width: auto;
+  }
+}
+

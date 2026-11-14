@@ -80,23 +80,31 @@
 
     <!-- Ahora: la pantalla de entrada. Un solo gráfico de hoy y las próximas 24 h, con las cifras arriba -->
     <main id="vistaAhora" class="pantalla" hidden>
+      <!-- La pregunta del día, su respuesta y, debajo, el gráfico que la prueba -->
       <div class="contexto">
         <div class="contexto-titulo">
-          <div class="titulo-fila"><h1 id="principal" tabindex="-1">Ahora</h1><span id="chipRegimen" class="chip"><span id="chipRegimenTxt">El Niño costero: cargando</span></span><span id="chipPrueba" class="chip" hidden>Datos de prueba: series sintéticas</span></div>
+          <h1 id="principal" class="pregunta" tabindex="-1">Ahora</h1>
+          <div id="ahRespuesta" class="resp-dia" aria-live="polite"></div>
           <p id="ahModo" class="modo-linea"></p>
+          <div class="titulo-fila"><span id="chipRegimen" class="chip"><span id="chipRegimenTxt">El Niño costero: cargando</span></span><span id="chipPrueba" class="chip" hidden>Datos de prueba: series sintéticas</span></div>
           <p id="ahDiaCompleto" class="dia-completo" aria-live="polite" hidden></p>
         </div>
-        <div class="cuando" role="group" aria-label="Qué momento ver">
-          <button type="button" id="ahHoy" class="btn-hoy" aria-pressed="true">Hoy</button>
-          <label class="campo"><span>Repasar un día</span><input type="date" id="ahFecha" aria-describedby="ahFechaLarga"></label>
-          <label class="campo"><span>A las</span><input type="time" id="ahHora" step="1800"></label>
-          <label class="interruptor" id="ahDespuesCampo" hidden><input type="checkbox" id="ahDespues"><span class="mk despues" aria-hidden="true"></span>Mostrar lo que pasó después</label>
-          <span id="ahFechaLarga" class="visually-hidden"></span>
+        <div class="mandos">
+          <nav id="ahAreas" class="seg areas-seg" aria-label="Área"></nav>
+          <div class="cuando" role="group" aria-label="Qué momento ver">
+            <button type="button" id="ahHoy" class="btn-hoy" aria-pressed="true">Hoy</button>
+            <label class="campo"><span>Repasar un día</span><input type="date" id="ahFecha" aria-describedby="ahFechaLarga"></label>
+            <label class="campo"><span>A las</span><input type="time" id="ahHora" step="1800"></label>
+            <label class="interruptor" id="ahDespuesCampo" hidden><input type="checkbox" id="ahDespues"><span class="mk despues" aria-hidden="true"></span>Mostrar lo que pasó después</label>
+            <span id="ahFechaLarga" class="visually-hidden"></span>
+          </div>
         </div>
       </div>
       <p id="ahAviso" class="aviso-linea" role="status" hidden></p>
-      <section id="ahCifras" class="kpis" aria-label="Cifras de ahora" aria-busy="true"></section>
-      <nav id="ahAreas" class="areas" aria-label="Áreas"></nav>
+      <details id="ahTodas" class="todas">
+        <summary><span id="ahTodasTit">Todas las cifras de hoy</span> <span id="ahTodasQue" class="todas-que"></span></summary>
+        <section id="ahCifras" class="kpis" aria-label="Todas las cifras" aria-busy="true"></section>
+      </details>
       <div class="grid-principal">
         <div class="col-izq">
         <section class="card orden-grafico" aria-labelledby="ahGrafTitulo">
@@ -112,9 +120,8 @@
           <div class="card-b">
             <div id="ahLienzo" class="chart lienzo" tabindex="0" role="group" aria-roledescription="gráfico" aria-describedby="ahGrafSub ahDesc" aria-busy="true"></div>
             <p id="ahGrafSub" class="sub"></p>
-            <p id="ahDesc" class="nota-pie"></p>
             <div class="pie-grafico">
-              <details class="datos" id="ahTablaDet"><summary>Ver los datos del gráfico en una tabla</summary><div id="ahTabla"></div></details>
+              <details class="datos" id="ahTablaDet"><summary>Ver los datos del gráfico en una tabla</summary><p id="ahDesc" class="nota-pie"></p><div id="ahTabla"></div></details>
               <span class="acciones-grafico"><button type="button" id="ahCsv" class="btn-enlace btn-chico">Descargar CSV</button></span>
             </div>
           </div>
