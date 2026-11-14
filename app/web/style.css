@@ -2120,7 +2120,7 @@ input[type='time']:focus-within,
 }
 
 .pregunta {
-  max-width: 40ch;
+  max-width: 50ch;
 }
 
 .resp-dia {

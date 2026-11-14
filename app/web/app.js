@@ -674,7 +674,7 @@ function pintarAhora() {
   const nativa = $('#ahFechaNativa');
   if (tramos.length) nativa.min = tramos.map((t) => t[0]).sort()[0];
   nativa.max = hoyLima();
-  const dia = vivo ? d.ahora.slice(0, 10) : d.origen.slice(0, 10);
+  const dia = vivo ? hoyLima() : d.origen.slice(0, 10);
   nativa.value = dia;
   if (document.activeElement !== fecha) fecha.value = fechaNumerica(dia);
   fecha.removeAttribute('aria-invalid');
@@ -700,7 +700,7 @@ function pintarAhora() {
     ? `${nombreArea(A.area)}. A la izquierda, lo real del ${diaNum(d.ahora)} y lo que se había pronosticado; a la derecha, lo pronosticado para el ${dPron}, cuyo real el COES todavía no publica. Toca o arrastra el gráfico para leer cada hora.`
     : vivo
     ? `${nombreArea(A.area)}. A la izquierda, lo real de ayer y lo que se había pronosticado; desde la línea punteada no hay dato real todavía. «Ahora» marca la hora de Lima. Toca o arrastra el gráfico para leer cada hora.`
-    : `${nombreArea(A.area)}. A la izquierda de «Ahora», lo real y lo que se pronosticó un día antes; a la derecha, lo que ya estaba pronosticado a las ${horaDe(d.origen)}. Toca o arrastra el gráfico para elegir otra hora.`;
+    : `${nombreArea(A.area)}. A la izquierda de las ${horaDe(d.origen)}, lo real y lo que se pronosticó un día antes; a la derecha, lo que ya estaba pronosticado a las ${horaDe(d.origen)}. Toca o arrastra el gráfico para elegir otra hora.`;
   $('#ahLeyRango').textContent = `Rango del ${d.nivel_rango_pct} % (cae ahí ${d.nivel_rango_pct / 10} de cada 10 veces)`;
   $('#ahLeyRef').textContent = `Referencia (${(REF_CORTA[d.referencia_nombre] || 'simple')})`;
   $('#ahDespuesCampo').hidden = vivo;
@@ -762,9 +762,9 @@ function preguntaDelDia(d) {
       ? `Mientras, abajo, lo que se pronosticó para ese ${esc(DIAS[partesFecha(diaPron(d)).dow])}.`
       : 'Mientras, abajo, el último que se emitió.';
     return {
-      q: `¿Cuánta electricidad se usará hoy, ${diaNum(hoy)}?`,
+      q: `Hoy, ${diaNum(hoy)}: el pronóstico sale hacia las 10:00`,
       html: cifra(`Último dato real · ${esc(diaCorto(c.fecha_hora))}, ${esc(horaDe(c.fecha_hora))}`, 'real', 'Dato del COES, en megavatios (MW)')
-        + `<p class="r-frase">El pronóstico de hoy sale hacia las 10:00, cuando el COES publique la demanda del ${esc(diaNum(sinReal))}. ${queSeVe}</p>`,
+        + `<p class="r-frase">Sale cuando el COES publique la demanda del ${esc(diaNum(sinReal))}. ${queSeVe}</p>`,
       sinAviso: true,
     };
   }
@@ -922,7 +922,7 @@ function graficoAhora(el, d) {
     const fh = d.fecha_hora[i];
     const medianoche = horaDe(fh) === '00:00';
     if (medianoche && i > 0 && !(ia !== io && Math.abs(i - io) <= 1)) s += `<line class="g-eje" x1="${x(i).toFixed(1)}" x2="${x(i).toFixed(1)}" y1="${m.t}" y2="${H - m.b}"/>`;
-    if (i % paso || Math.abs(x(i) - x(ia)) < 52) continue;
+    if (i % paso || Math.abs(x(i) - x(ia)) < (desfasado(d) ? 102 : 52)) continue;
     s += `<line class="g-eje" x1="${x(i).toFixed(1)}" x2="${x(i).toFixed(1)}" y1="${H - m.b}" y2="${H - m.b + 4}"/>`;
     s += `<text class="g-texto g-hora-eje" x="${x(i).toFixed(1)}" y="${H - m.b + 17}" text-anchor="middle">${esc(medianoche ? diaCorto(fh) : horaDe(fh))}</text>`;
   }
@@ -1272,7 +1272,7 @@ function pintarAyer(d) {
   const fuente = y.fuente === 'historial'
     ? `Historial · modelo ${esc(d.modelo_nombre.replace(/\s*\(.*\)\s*$/, '').toLowerCase())}`
     : y.fuente === 'reconstruido'
-      ? 'Registro en vivo · reconstruido: se calculó después de conocerse el real, con los datos que habría tenido'
+      ? 'Reconstruido: se calculó después de conocerse el real, con los datos que habría tenido'
       : 'Registro en vivo · emitido antes de conocerse el real';
   cont.innerHTML = `<p class="sub">Para las ${esc(horaDe(y.fecha_hora))} ${hoy ? 'de hoy' : `del ${esc(fechaDiaMes(y.fecha_hora))}`}, emitido el ${esc(fechaDiaMes(y.emitido))} a las ${esc(horaDe(y.emitido))} (24 h antes).</p>`
     + `<dl class="dijimos"><div><dt><span class="sw pron" aria-hidden="true"></span>Dijimos</dt><dd>${mw(y.pronostico)}<small>MW</small></dd></div>`
