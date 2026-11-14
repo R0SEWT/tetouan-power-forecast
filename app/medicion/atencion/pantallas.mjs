@@ -10,14 +10,14 @@ const CASO = 'centro?fecha=2026-03-10&hora=19:00';
 
 const AOI_AHORA = [
   { n: 'cifra_ahora', s: '#ahCifras .kpi:nth-child(1) :is(.k,.n)' },
-  { n: 'pico_24h', s: '#ahCifras .kpi.dest :is(.k,.n)' },
+  { n: 'pico_24h', s: '#ahCifras :is(.kpi.dest, .kpi-pico) :is(.k,.n)' }, // .dest hasta el PR 2, .kpi-pico desde entonces
   { n: 'linea_ahora', s: '#ahLienzo :is(.g-ahora,.g-pastilla,.g-pastilla-texto)', modo: 'caja' },
   { n: 'estado_datos', s: '#estadoDatos', modo: 'caja' },
   { n: 'dijimos_ayer', s: '#ahAyerTit, #ahAyer .dijimos, #ahAyer .veredicto', modo: 'caja' },
   { n: 'titulo', s: '#principal' },
   { n: 'que_es', s: '.cab-marca', modo: 'caja' },
   { n: 'modo', s: '#ahModo' },
-  { n: 'otras_cifras', s: '#ahCifras .kpi:not(:nth-child(1)):not(.dest) :is(.k,.n)' },
+  { n: 'otras_cifras', s: '#ahCifras .kpi:not(:nth-child(1)):not(.dest):not(.kpi-pico) :is(.k,.n)' },
   { n: 'grafico', s: '#ahLienzo svg', modo: 'caja' },
   { n: 'areas', s: '#ahAreas', modo: 'caja' },
   { n: 'cuando', s: '.cuando', modo: 'caja' },
