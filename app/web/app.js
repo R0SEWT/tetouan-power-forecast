@@ -1539,6 +1539,11 @@ function conectarEventos() {
       return;
     }
     if (ev.key === 'Escape') {
+      // También cancela un arrastre en curso: soltar después no fija nada
+      if (arrastre) {
+        if (lienzo.hasPointerCapture(arrastre.id)) lienzo.releasePointerCapture(arrastre.id);
+        arrastre = null;
+      }
       volverHora();
       return;
     }
