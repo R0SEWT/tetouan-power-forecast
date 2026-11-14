@@ -1,6 +1,6 @@
 {
-  "name": "Demanda del SEIN por área",
-  "short_name": "Demanda SEIN",
+  "name": "Curva · Pronóstico de la demanda eléctrica del Perú",
+  "short_name": "Curva",
   "description": "Pronóstico de la demanda eléctrica de las áreas Norte, Centro y Sur del SEIN, a 1 hora y a 24 horas.",
   "lang": "es",
   "dir": "ltr",

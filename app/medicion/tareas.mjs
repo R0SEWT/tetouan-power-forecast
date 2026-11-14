@@ -112,17 +112,19 @@ async function desplazarHasta(pagina, ficha) {
 
 // Si el objetivo de un clic no está a la vista, la persona tiene que desplazarse antes:
 // se cuentan los gestos (0.8 de la ventana cada uno) y se lleva a la vista.
-async function gestosHasta(pagina, loc) {
+// Un toque en un punto del elemento (una hora del gráfico, desde el PR 5) solo necesita ese punto a la vista.
+async function gestosHasta(pagina, loc, punto = null) {
   await loc.waitFor({ state: 'attached' });
   const caja = await loc.boundingBox();
   const vh = pagina.viewportSize().height;
   if (!caja) return 0;
-  const visible = caja.y >= 0 && caja.y + caja.height <= vh
-    && await loc.evaluate((el) => {
+  const [y0, y1] = punto ? [caja.y + punto.y, caja.y + punto.y] : [caja.y, caja.y + caja.height];
+  const visible = y0 >= 0 && y1 <= vh
+    && await loc.evaluate((el, pt) => {
       const r = el.getBoundingClientRect();
-      const arriba = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2);
+      const arriba = document.elementFromPoint(pt ? r.left + pt.x : r.left + r.width / 2, pt ? r.top + pt.y : r.top + r.height / 2);
       return Boolean(arriba && (arriba === el || el.contains(arriba)));
-    });
+    }, punto);
   if (visible) return 0;
   const antes = await pagina.evaluate(() => scrollY);
   await loc.evaluate((el) => el.scrollIntoView({ block: 'center', behavior: 'instant' }));
@@ -156,8 +158,10 @@ async function correrRuta(pagina, ruta, grupos, vistos, cuenta, esperar) {
     }
     if (paso.clic) {
       const loc = paso.clic(pagina).first();
-      cuenta.desplazamientos += await gestosHasta(pagina, loc);
+      const posicion = paso.posicion ? await paso.posicion(pagina) : null; // tocar el gráfico en una hora (PR 5)
+      cuenta.desplazamientos += await gestosHasta(pagina, loc, posicion);
       if (paso.foco) await loc.focus();
+      else if (posicion) await loc.click({ position: posicion });
       else await loc.click();
       cuenta.clics += 1;
     } else if (paso.escribir) {

@@ -1,0 +1,1629 @@
+{
+ "etiqueta": "r3",
+ "modo": "imagen",
+ "capturado_lima": "2026-11-14 04:50",
+ "sesiones_validas": 17,
+ "sesiones_fallidas": 0,
+ "por_pantalla": {
+  "escenario-2c": {
+   "sesiones": 7,
+   "dudas_por_sesion": {
+    "media": 2.857,
+    "min": 2.8,
+    "max": 3.0,
+    "n": 7,
+    "reps": 2
+   },
+   "terminos_por_sesion": {
+    "media": 3.429,
+    "min": 3.0,
+    "max": 4.5,
+    "n": 7,
+    "reps": 2
+   },
+   "confusion_por_sesion": {
+    "media": 1.714,
+    "min": 1.6,
+    "max": 2.0,
+    "n": 7,
+    "reps": 2
+   },
+   "seguridad": {
+    "media": 3.571,
+    "min": 3.5,
+    "max": 3.6,
+    "n": 7,
+    "reps": 2
+   },
+   "dudas_zonas": [
+    [
+     "pico",
+     7
+    ],
+    [
+     "#panel-escenarios",
+     6
+    ],
+    [
+     "secciones",
+     6
+    ],
+    [
+     "panel_controles",
+     1
+    ]
+   ],
+   "terminos_top": [
+    [
+     "Chronos-2 / modelo fundacional",
+     0.86
+    ],
+    [
+     "modelo / híbrido / XGBoost",
+     0.86
+    ],
+    [
+     "ENFEN",
+     0.71
+    ],
+    [
+     "COES",
+     0.43
+    ],
+    [
+     "MW / megavatios",
+     0.29
+    ],
+    [
+     "escenario / supuesto",
+     0.14
+    ],
+    [
+     "rampa / mayor subida",
+     0.14
+    ]
+   ],
+   "t3_lectura_ok": {
+    "media": 1.0,
+    "min": 1.0,
+    "max": 1.0,
+    "n": 7,
+    "reps": 2
+   },
+   "acuerdo_t3_lectura_ok": 1.0
+  },
+  "escenarios": {
+   "sesiones": 10,
+   "dudas_por_sesion": {
+    "media": 2.3,
+    "min": 2.2,
+    "max": 2.4,
+    "n": 10,
+    "reps": 2
+   },
+   "terminos_por_sesion": {
+    "media": 2.7,
+    "min": 2.6,
+    "max": 2.8,
+    "n": 10,
+    "reps": 2
+   },
+   "confusion_por_sesion": {
+    "media": 0.9,
+    "min": 0.8,
+    "max": 1.0,
+    "n": 10,
+    "reps": 2
+   },
+   "seguridad": {
+    "media": 4.9,
+    "min": 4.8,
+    "max": 5.0,
+    "n": 10,
+    "reps": 2
+   },
+   "dudas_zonas": [
+    [
+     "secciones",
+     9
+    ],
+    [
+     "panel_controles",
+     7
+    ],
+    [
+     "#panel-escenarios",
+     6
+    ],
+    [
+     "pico",
+     1
+    ]
+   ],
+   "terminos_top": [
+    [
+     "Chronos-2 / modelo fundacional",
+     0.8
+    ],
+    [
+     "modelo / híbrido / XGBoost",
+     0.8
+    ],
+    [
+     "ENFEN",
+     0.5
+    ],
+    [
+     "COES",
+     0.4
+    ],
+    [
+     "MW / megavatios",
+     0.2
+    ]
+   ],
+   "t3_clic_ok": {
+    "media": 1.0,
+    "min": 1.0,
+    "max": 1.0,
+    "n": 10,
+    "reps": 2
+   },
+   "acuerdo_t3_clic_ok": 1.0
+  }
+ },
+ "embudos_tareas": {
+  "t1": [
+   {
+    "paso": "primer clic desde hoy",
+    "quedan": 0,
+    "de": 0
+   },
+   {
+    "paso": "lee lo pronosticado, el rango y lo real (repaso 19:00)",
+    "quedan": 0,
+    "de": 0
+   }
+  ],
+  "t2": [
+   {
+    "paso": "primer clic desde hoy",
+    "quedan": 0,
+    "de": 0
+   },
+   {
+    "paso": "lee el error y la comparación (Confianza)",
+    "quedan": 0,
+    "de": 0
+   }
+  ],
+  "t3": [
+   {
+    "paso": "primer clic desde el repaso de las 19:00",
+    "quedan": 0,
+    "de": 0
+   },
+   {
+    "paso": "toca +2 °C",
+    "quedan": 0,
+    "de": 0
+   },
+   {
+    "paso": "lee el cambio",
+    "quedan": 0,
+    "de": 0
+   }
+  ],
+  "t4": [
+   {
+    "paso": "primer clic desde hoy",
+    "quedan": 0,
+    "de": 0
+   },
+   {
+    "paso": "lee el régimen con más error (Confianza)",
+    "quedan": 0,
+    "de": 0
+   }
+  ]
+ },
+ "tropiezos": [
+  {
+   "pantalla": "escenario-2c",
+   "paso": "duda",
+   "tipo": "duda",
+   "objetivo": "pico",
+   "severidad": 1,
+   "frecuencia": 1.0,
+   "personas": 5,
+   "puntaje": 1.0,
+   "evidencia": "El recuadro azul dice que con +2 °C la mayor demanda es 4,934 MW a las 11:00, pero este bloque a la izquierda muestra 4,977 MW a las …"
+  },
+  {
+   "pantalla": "escenario-2c",
+   "paso": "duda",
+   "tipo": "duda",
+   "objetivo": "#panel-escenarios",
+   "severidad": 1,
+   "frecuencia": 0.857,
+   "personas": 5,
+   "puntaje": 0.857,
+   "evidencia": "Me confunde porque me da dos aumentos distintos: dice «15 MW más» a las 11:00 y luego dice «+25 MW» a las 15:30. No sé cuál es el …"
+  },
+  {
+   "pantalla": "escenario-2c",
+   "paso": "palabra",
+   "tipo": "palabra",
+   "objetivo": "Chronos-2 / modelo fundacional",
+   "severidad": 1,
+   "frecuencia": 0.857,
+   "personas": 4,
+   "puntaje": 0.857,
+   "evidencia": "Chronos-2 / modelo fundacional"
+  },
+  {
+   "pantalla": "escenario-2c",
+   "paso": "palabra",
+   "tipo": "palabra",
+   "objetivo": "modelo / híbrido / XGBoost",
+   "severidad": 1,
+   "frecuencia": 0.857,
+   "personas": 4,
+   "puntaje": 0.857,
+   "evidencia": "modelo / híbrido / XGBoost"
+  },
+  {
+   "pantalla": "escenarios",
+   "paso": "palabra",
+   "tipo": "palabra",
+   "objetivo": "Chronos-2 / modelo fundacional",
+   "severidad": 1,
+   "frecuencia": 0.8,
+   "personas": 4,
+   "puntaje": 0.8,
+   "evidencia": "Chronos-2 / modelo fundacional"
+  },
+  {
+   "pantalla": "escenarios",
+   "paso": "palabra",
+   "tipo": "palabra",
+   "objetivo": "modelo / híbrido / XGBoost",
+   "severidad": 1,
+   "frecuencia": 0.8,
+   "personas": 4,
+   "puntaje": 0.8,
+   "evidencia": "modelo / híbrido / XGBoost"
+  },
+  {
+   "pantalla": "escenario-2c",
+   "paso": "duda",
+   "tipo": "duda",
+   "objetivo": "secciones",
+   "severidad": 1,
+   "frecuencia": 0.714,
+   "personas": 4,
+   "puntaje": 0.714,
+   "evidencia": "Me confunde que la simulación use un modelo distinto al que tengo seleccionado en el menú de la izquierda (Combinado)."
+  },
+  {
+   "pantalla": "escenario-2c",
+   "paso": "palabra",
+   "tipo": "palabra",
+   "objetivo": "ENFEN",
+   "severidad": 1,
+   "frecuencia": 0.714,
+   "personas": 3,
+   "puntaje": 0.714,
+   "evidencia": "ENFEN"
+  },
+  {
+   "pantalla": "escenarios",
+   "paso": "duda",
+   "tipo": "duda",
+   "objetivo": "secciones",
+   "severidad": 1,
+   "frecuencia": 0.6,
+   "personas": 4,
+   "puntaje": 0.6,
+   "evidencia": "Me confunde que los controles de la columna izquierda sigan visibles si en realidad no afectan a esta simulación de calor."
+  },
+  {
+   "pantalla": "escenarios",
+   "paso": "duda",
+   "tipo": "duda",
+   "objetivo": "panel_controles",
+   "severidad": 1,
+   "frecuencia": 0.6,
+   "personas": 4,
+   "puntaje": 0.6,
+   "evidencia": "Me hizo dudar ver seleccionado «Solo demanda» en el panel izquierdo; pensé si primero debía cambiarlo a «Con clima y El Niño» para que tome en cuenta la …"
+  },
+  {
+   "pantalla": "escenarios",
+   "paso": "duda",
+   "tipo": "duda",
+   "objetivo": "#panel-escenarios",
+   "severidad": 1,
+   "frecuencia": 0.5,
+   "personas": 4,
+   "puntaje": 0.5,
+   "evidencia": "Aquí me dice que el pico es 4,919 MW a las 11:00, pero en la columna izquierda dice que el pico es 4,977 MW a las 14:30. No …"
+  },
+  {
+   "pantalla": "escenarios",
+   "paso": "palabra",
+   "tipo": "palabra",
+   "objetivo": "ENFEN",
+   "severidad": 1,
+   "frecuencia": 0.5,
+   "personas": 3,
+   "puntaje": 0.5,
+   "evidencia": "ENFEN"
+  },
+  {
+   "pantalla": "escenario-2c",
+   "paso": "palabra",
+   "tipo": "palabra",
+   "objetivo": "COES",
+   "severidad": 1,
+   "frecuencia": 0.429,
+   "personas": 2,
+   "puntaje": 0.429,
+   "evidencia": "COES"
+  },
+  {
+   "pantalla": "escenarios",
+   "paso": "palabra",
+   "tipo": "palabra",
+   "objetivo": "COES",
+   "severidad": 1,
+   "frecuencia": 0.4,
+   "personas": 2,
+   "puntaje": 0.4,
+   "evidencia": "COES"
+  },
+  {
+   "pantalla": "escenario-2c",
+   "paso": "palabra",
+   "tipo": "palabra",
+   "objetivo": "MW / megavatios",
+   "severidad": 1,
+   "frecuencia": 0.286,
+   "personas": 1,
+   "puntaje": 0.286,
+   "evidencia": "MW / megavatios"
+  },
+  {
+   "pantalla": "escenarios",
+   "paso": "palabra",
+   "tipo": "palabra",
+   "objetivo": "MW / megavatios",
+   "severidad": 1,
+   "frecuencia": 0.2,
+   "personas": 1,
+   "puntaje": 0.2,
+   "evidencia": "MW / megavatios"
+  },
+  {
+   "pantalla": "escenario-2c",
+   "paso": "palabra",
+   "tipo": "palabra",
+   "objetivo": "escenario / supuesto",
+   "severidad": 1,
+   "frecuencia": 0.143,
+   "personas": 1,
+   "puntaje": 0.143,
+   "evidencia": "escenario / supuesto"
+  },
+  {
+   "pantalla": "escenario-2c",
+   "paso": "duda",
+   "tipo": "duda",
+   "objetivo": "panel_controles",
+   "severidad": 1,
+   "frecuencia": 0.143,
+   "personas": 1,
+   "puntaje": 0.143,
+   "evidencia": "Hay demasiados cálculos, porcentajes y números técnicos juntos. Me canso y me pierdo por completo."
+  },
+  {
+   "pantalla": "escenario-2c",
+   "paso": "palabra",
+   "tipo": "palabra",
+   "objetivo": "rampa / mayor subida",
+   "severidad": 1,
+   "frecuencia": 0.143,
+   "personas": 1,
+   "puntaje": 0.143,
+   "evidencia": "rampa / mayor subida"
+  },
+  {
+   "pantalla": "escenarios",
+   "paso": "duda",
+   "tipo": "duda",
+   "objetivo": "pico",
+   "severidad": 1,
+   "frecuencia": 0.1,
+   "personas": 1,
+   "puntaje": 0.1,
+   "evidencia": "En la primera vista el recuadro azul dice que la hora de mayor demanda es 4,919 MW a las 11:00, y aquí me muestra 4,977 MW a las …"
+  }
+ ],
+ "codigos": {
+  "escenario-2c": [
+   {
+    "sesion": "escenario-2c",
+    "pantalla": "escenario-2c",
+    "persona": "ciudadana",
+    "repeticion": 1,
+    "tropiezos": [
+     {
+      "pantalla": "escenario-2c",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "#panel-escenarios",
+      "severidad": 1,
+      "evidencia": "Me confunde porque da dos valores de cambio: 15 MW a las 11:00 y +25 MW a las 15:30. No sé cuál es el cambio que vale ni …"
+     },
+     {
+      "pantalla": "escenario-2c",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "secciones",
+      "severidad": 1,
+      "evidencia": "No entiendo qué es XGBoost ni por qué me habla de otros modelos si yo solo quería ver el calor."
+     },
+     {
+      "pantalla": "escenario-2c",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "pico",
+      "severidad": 1,
+      "evidencia": "Aquí dice que la hora pico es a las 14:30, pero en la pantalla de arriba decía que la hora de mayor demanda era a las 11:00 con …"
+     },
+     {
+      "pantalla": "escenario-2c",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "COES",
+      "severidad": 1,
+      "evidencia": "COES"
+     },
+     {
+      "pantalla": "escenario-2c",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "Chronos-2 / modelo fundacional",
+      "severidad": 1,
+      "evidencia": "Chronos-2 / modelo fundacional"
+     },
+     {
+      "pantalla": "escenario-2c",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "ENFEN",
+      "severidad": 1,
+      "evidencia": "ENFEN"
+     },
+     {
+      "pantalla": "escenario-2c",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "MW / megavatios",
+      "severidad": 1,
+      "evidencia": "MW / megavatios"
+     },
+     {
+      "pantalla": "escenario-2c",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "escenario / supuesto",
+      "severidad": 1,
+      "evidencia": "escenario / supuesto"
+     },
+     {
+      "pantalla": "escenario-2c",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "modelo / híbrido / XGBoost",
+      "severidad": 1,
+      "evidencia": "modelo / híbrido / XGBoost"
+     }
+    ],
+    "confusion": 2,
+    "dudas": [
+     "#panel-escenarios",
+     "secciones",
+     "pico"
+    ],
+    "terminos": [
+     "COES",
+     "Chronos-2 / modelo fundacional",
+     "ENFEN",
+     "MW / megavatios",
+     "escenario / supuesto",
+     "modelo / híbrido / XGBoost"
+    ],
+    "t3_lectura_ok": true,
+    "seguridad": 2
+   },
+   {
+    "sesion": "escenario-2c",
+    "pantalla": "escenario-2c",
+    "persona": "ciudadana",
+    "repeticion": 2,
+    "tropiezos": [
+     {
+      "pantalla": "escenario-2c",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "#panel-escenarios",
+      "severidad": 1,
+      "evidencia": "Me confunde porque me da dos aumentos distintos: dice «15 MW más» a las 11:00 y luego dice «+25 MW» a las 15:30. No sé cuál es el …"
+     },
+     {
+      "pantalla": "escenario-2c",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "secciones",
+      "severidad": 1,
+      "evidencia": "No entiendo qué es XGBoost ni a qué se refiere con modelos; solo quería ver cuánta luz se usa."
+     },
+     {
+      "pantalla": "escenario-2c",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "secciones",
+      "severidad": 1,
+      "evidencia": "No sé qué cosas son COES ni ENFEN."
+     },
+     {
+      "pantalla": "escenario-2c",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "pico",
+      "severidad": 1,
+      "evidencia": "Arriba decía que el pico era a las 11:00 con 4,934 MW, pero aquí abajo pone otra hora de pico (14:30) y otro número (4,977 MW). No entiendo …"
+     },
+     {
+      "pantalla": "escenario-2c",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "panel_controles",
+      "severidad": 1,
+      "evidencia": "Hay demasiados cálculos, porcentajes y números técnicos juntos. Me canso y me pierdo por completo."
+     },
+     {
+      "pantalla": "escenario-2c",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "COES",
+      "severidad": 1,
+      "evidencia": "COES"
+     },
+     {
+      "pantalla": "escenario-2c",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "Chronos-2 / modelo fundacional",
+      "severidad": 1,
+      "evidencia": "Chronos-2 / modelo fundacional"
+     },
+     {
+      "pantalla": "escenario-2c",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "ENFEN",
+      "severidad": 1,
+      "evidencia": "ENFEN"
+     },
+     {
+      "pantalla": "escenario-2c",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "MW / megavatios",
+      "severidad": 1,
+      "evidencia": "MW / megavatios"
+     },
+     {
+      "pantalla": "escenario-2c",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "modelo / híbrido / XGBoost",
+      "severidad": 1,
+      "evidencia": "modelo / híbrido / XGBoost"
+     },
+     {
+      "pantalla": "escenario-2c",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "rampa / mayor subida",
+      "severidad": 1,
+      "evidencia": "rampa / mayor subida"
+     }
+    ],
+    "confusion": 3,
+    "dudas": [
+     "#panel-escenarios",
+     "secciones",
+     "secciones",
+     "pico",
+     "panel_controles"
+    ],
+    "terminos": [
+     "COES",
+     "Chronos-2 / modelo fundacional",
+     "ENFEN",
+     "MW / megavatios",
+     "modelo / híbrido / XGBoost",
+     "rampa / mayor subida"
+    ],
+    "t3_lectura_ok": true,
+    "seguridad": 2
+   },
+   {
+    "sesion": "escenario-2c",
+    "pantalla": "escenario-2c",
+    "persona": "estudiante",
+    "repeticion": 1,
+    "tropiezos": [
+     {
+      "pantalla": "escenario-2c",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "#panel-escenarios",
+      "severidad": 1,
+      "evidencia": "Me da dos valores distintos de cambio: 15 MW a las 11:00 y +25 MW a las 15:30. No me queda claro cuál es la cifra que debería …"
+     },
+     {
+      "pantalla": "escenario-2c",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "pico",
+      "severidad": 1,
+      "evidencia": "En el recuadro azul de la derecha dice que la hora de mayor demanda es a las 11:00 con 4,934 MW, pero aquí en la izquierda dice que …"
+     },
+     {
+      "pantalla": "escenario-2c",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "secciones",
+      "severidad": 1,
+      "evidencia": "No entiendo por qué los controles y datos de la columna izquierda muestran cosas de otra pestaña y no lo que estoy calculando en la derecha."
+     },
+     {
+      "pantalla": "escenario-2c",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "Chronos-2 / modelo fundacional",
+      "severidad": 1,
+      "evidencia": "Chronos-2 / modelo fundacional"
+     },
+     {
+      "pantalla": "escenario-2c",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "ENFEN",
+      "severidad": 1,
+      "evidencia": "ENFEN"
+     },
+     {
+      "pantalla": "escenario-2c",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "modelo / híbrido / XGBoost",
+      "severidad": 1,
+      "evidencia": "modelo / híbrido / XGBoost"
+     }
+    ],
+    "confusion": 1,
+    "dudas": [
+     "#panel-escenarios",
+     "pico",
+     "secciones"
+    ],
+    "terminos": [
+     "Chronos-2 / modelo fundacional",
+     "ENFEN",
+     "modelo / híbrido / XGBoost"
+    ],
+    "t3_lectura_ok": true,
+    "seguridad": 4
+   },
+   {
+    "sesion": "escenario-2c",
+    "pantalla": "escenario-2c",
+    "persona": "estudiante",
+    "repeticion": 2,
+    "tropiezos": [
+     {
+      "pantalla": "escenario-2c",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "pico",
+      "severidad": 1,
+      "evidencia": "El recuadro azul dice que con +2 °C la mayor demanda es 4,934 MW a las 11:00, pero este bloque a la izquierda muestra 4,977 MW a las …"
+     },
+     {
+      "pantalla": "escenario-2c",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "Chronos-2 / modelo fundacional",
+      "severidad": 1,
+      "evidencia": "Chronos-2 / modelo fundacional"
+     },
+     {
+      "pantalla": "escenario-2c",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "ENFEN",
+      "severidad": 1,
+      "evidencia": "ENFEN"
+     },
+     {
+      "pantalla": "escenario-2c",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "modelo / híbrido / XGBoost",
+      "severidad": 1,
+      "evidencia": "modelo / híbrido / XGBoost"
+     }
+    ],
+    "confusion": 1,
+    "dudas": [
+     "pico"
+    ],
+    "terminos": [
+     "Chronos-2 / modelo fundacional",
+     "ENFEN",
+     "modelo / híbrido / XGBoost"
+    ],
+    "t3_lectura_ok": true,
+    "seguridad": 5
+   },
+   {
+    "sesion": "escenario-2c",
+    "pantalla": "escenario-2c",
+    "persona": "operadora",
+    "repeticion": 1,
+    "tropiezos": [
+     {
+      "pantalla": "escenario-2c",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "#panel-escenarios",
+      "severidad": 1,
+      "evidencia": "Me da dos cifras distintas de variación (15 MW a las 11:00 y +25 MW a las 15:30), y califica las 11:00 como hora de mayor demanda cuando …"
+     },
+     {
+      "pantalla": "escenario-2c",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "pico",
+      "severidad": 1,
+      "evidencia": "En el panel izquierdo indica que el pico es 4,977 MW a las 14:30, lo cual contradice el recuadro central que señalaba las 11:00 con 4,934 MW."
+     },
+     {
+      "pantalla": "escenario-2c",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "Chronos-2 / modelo fundacional",
+      "severidad": 1,
+      "evidencia": "Chronos-2 / modelo fundacional"
+     },
+     {
+      "pantalla": "escenario-2c",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "modelo / híbrido / XGBoost",
+      "severidad": 1,
+      "evidencia": "modelo / híbrido / XGBoost"
+     }
+    ],
+    "confusion": 0,
+    "dudas": [
+     "#panel-escenarios",
+     "pico"
+    ],
+    "terminos": [
+     "Chronos-2 / modelo fundacional",
+     "modelo / híbrido / XGBoost"
+    ],
+    "t3_lectura_ok": true,
+    "seguridad": 4
+   },
+   {
+    "sesion": "escenario-2c",
+    "pantalla": "escenario-2c",
+    "persona": "periodista",
+    "repeticion": 1,
+    "tropiezos": [
+     {
+      "pantalla": "escenario-2c",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "#panel-escenarios",
+      "severidad": 1,
+      "evidencia": "Me da dos cifras y dos horas distintas (15 MW a las 11:00 vs 25 MW a las 15:30); no sé cuál es la cifra principal que debo …"
+     },
+     {
+      "pantalla": "escenario-2c",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "pico",
+      "severidad": 1,
+      "evidencia": "En el panel izquierdo dice que el pico es a las 14:30 (4,977 MW), pero en el recuadro del escenario decía que la hora de mayor demanda era …"
+     },
+     {
+      "pantalla": "escenario-2c",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "secciones",
+      "severidad": 1,
+      "evidencia": "Me confunde que la simulación use un modelo distinto al que tengo seleccionado en el menú de la izquierda (Combinado)."
+     },
+     {
+      "pantalla": "escenario-2c",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "Chronos-2 / modelo fundacional",
+      "severidad": 1,
+      "evidencia": "Chronos-2 / modelo fundacional"
+     },
+     {
+      "pantalla": "escenario-2c",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "modelo / híbrido / XGBoost",
+      "severidad": 1,
+      "evidencia": "modelo / híbrido / XGBoost"
+     }
+    ],
+    "confusion": 2,
+    "dudas": [
+     "#panel-escenarios",
+     "pico",
+     "secciones"
+    ],
+    "terminos": [
+     "Chronos-2 / modelo fundacional",
+     "modelo / híbrido / XGBoost"
+    ],
+    "t3_lectura_ok": true,
+    "seguridad": 4
+   },
+   {
+    "sesion": "escenario-2c",
+    "pantalla": "escenario-2c",
+    "persona": "profesora",
+    "repeticion": 1,
+    "tropiezos": [
+     {
+      "pantalla": "escenario-2c",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "#panel-escenarios",
+      "severidad": 1,
+      "evidencia": "Me da dos respuestas posibles para el cambio de demanda: 15 MW más a las 11:00 (hora pico) o +25 MW a las 15:30 (mayor cambio puntual), sin …"
+     },
+     {
+      "pantalla": "escenario-2c",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "secciones",
+      "severidad": 1,
+      "evidencia": "El panel izquierdo muestra controles seleccionados (Combinado, Solo demanda) que este texto dice que no aplican a esta pestaña. Me desorienta ver controles activos que corresponden a otra …"
+     },
+     {
+      "pantalla": "escenario-2c",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "pico",
+      "severidad": 1,
+      "evidencia": "En el panel lateral indica que el pico es a las 14:30 con 4,977 MW, mientras que el recuadro de la vista 1 afirma que la hora de …"
+     },
+     {
+      "pantalla": "escenario-2c",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "COES",
+      "severidad": 1,
+      "evidencia": "COES"
+     },
+     {
+      "pantalla": "escenario-2c",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "ENFEN",
+      "severidad": 1,
+      "evidencia": "ENFEN"
+     }
+    ],
+    "confusion": 3,
+    "dudas": [
+     "#panel-escenarios",
+     "secciones",
+     "pico"
+    ],
+    "terminos": [
+     "COES",
+     "ENFEN"
+    ],
+    "t3_lectura_ok": true,
+    "seguridad": 4
+   }
+  ],
+  "escenarios": [
+   {
+    "sesion": "escenarios",
+    "pantalla": "escenarios",
+    "persona": "ciudadana",
+    "repeticion": 1,
+    "tropiezos": [
+     {
+      "pantalla": "escenarios",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "secciones",
+      "severidad": 1,
+      "evidencia": "No sé qué es el COES ni qué es ENFEN, parecen nombres raros de oficinas."
+     },
+     {
+      "pantalla": "escenarios",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "#panel-escenarios",
+      "severidad": 1,
+      "evidencia": "No entiendo qué significa XGBoost ni a qué se refiere con modelo base."
+     },
+     {
+      "pantalla": "escenarios",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "panel_controles",
+      "severidad": 1,
+      "evidencia": "Hay demasiados números, porcentajes y símbolos juntos; me cansa la vista y no entiendo qué me quiere explicar."
+     },
+     {
+      "pantalla": "escenarios",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "COES",
+      "severidad": 1,
+      "evidencia": "COES"
+     },
+     {
+      "pantalla": "escenarios",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "Chronos-2 / modelo fundacional",
+      "severidad": 1,
+      "evidencia": "Chronos-2 / modelo fundacional"
+     },
+     {
+      "pantalla": "escenarios",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "ENFEN",
+      "severidad": 1,
+      "evidencia": "ENFEN"
+     },
+     {
+      "pantalla": "escenarios",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "MW / megavatios",
+      "severidad": 1,
+      "evidencia": "MW / megavatios"
+     },
+     {
+      "pantalla": "escenarios",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "modelo / híbrido / XGBoost",
+      "severidad": 1,
+      "evidencia": "modelo / híbrido / XGBoost"
+     }
+    ],
+    "confusion": 1,
+    "dudas": [
+     "secciones",
+     "#panel-escenarios",
+     "panel_controles"
+    ],
+    "terminos": [
+     "COES",
+     "Chronos-2 / modelo fundacional",
+     "ENFEN",
+     "MW / megavatios",
+     "modelo / híbrido / XGBoost"
+    ],
+    "clic": {
+     "tipo": "control",
+     "etiqueta": "+2 °C",
+     "zona": "#panel-escenarios",
+     "vista": "vista-1.png",
+     "resultado": "acierto"
+    },
+    "t3_clic_ok": true,
+    "seguridad": 5
+   },
+   {
+    "sesion": "escenarios",
+    "pantalla": "escenarios",
+    "persona": "ciudadana",
+    "repeticion": 2,
+    "tropiezos": [
+     {
+      "pantalla": "escenarios",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "secciones",
+      "severidad": 1,
+      "evidencia": "Habla de «modelo Base (XGBoost)» y no entiendo qué es eso ni si tengo que mover algo ahí."
+     },
+     {
+      "pantalla": "escenarios",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "panel_controles",
+      "severidad": 1,
+      "evidencia": "Dice «Combinado (recomendado)» y menciona «Chronos-2»; no sé qué significa ni cuál debería escoger."
+     },
+     {
+      "pantalla": "escenarios",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "panel_controles",
+      "severidad": 1,
+      "evidencia": "Son demasiados números, porcentajes y siglas juntos; me pierdo y no entiendo qué me están queriendo decir."
+     },
+     {
+      "pantalla": "escenarios",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "COES",
+      "severidad": 1,
+      "evidencia": "COES"
+     },
+     {
+      "pantalla": "escenarios",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "Chronos-2 / modelo fundacional",
+      "severidad": 1,
+      "evidencia": "Chronos-2 / modelo fundacional"
+     },
+     {
+      "pantalla": "escenarios",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "ENFEN",
+      "severidad": 1,
+      "evidencia": "ENFEN"
+     },
+     {
+      "pantalla": "escenarios",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "MW / megavatios",
+      "severidad": 1,
+      "evidencia": "MW / megavatios"
+     },
+     {
+      "pantalla": "escenarios",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "modelo / híbrido / XGBoost",
+      "severidad": 1,
+      "evidencia": "modelo / híbrido / XGBoost"
+     }
+    ],
+    "confusion": 3,
+    "dudas": [
+     "secciones",
+     "panel_controles",
+     "panel_controles"
+    ],
+    "terminos": [
+     "COES",
+     "Chronos-2 / modelo fundacional",
+     "ENFEN",
+     "MW / megavatios",
+     "modelo / híbrido / XGBoost"
+    ],
+    "clic": {
+     "tipo": "control",
+     "etiqueta": "+2 °C",
+     "zona": "#panel-escenarios",
+     "vista": "vista-1.png",
+     "resultado": "acierto"
+    },
+    "t3_clic_ok": true,
+    "seguridad": 4
+   },
+   {
+    "sesion": "escenarios",
+    "pantalla": "escenarios",
+    "persona": "estudiante",
+    "repeticion": 1,
+    "tropiezos": [
+     {
+      "pantalla": "escenarios",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "panel_controles",
+      "severidad": 1,
+      "evidencia": "Me hizo dudar ver seleccionado «Solo demanda» en el panel izquierdo; pensé si primero debía cambiarlo a «Con clima y El Niño» para que tome en cuenta la …"
+     },
+     {
+      "pantalla": "escenarios",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "Chronos-2 / modelo fundacional",
+      "severidad": 1,
+      "evidencia": "Chronos-2 / modelo fundacional"
+     },
+     {
+      "pantalla": "escenarios",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "modelo / híbrido / XGBoost",
+      "severidad": 1,
+      "evidencia": "modelo / híbrido / XGBoost"
+     }
+    ],
+    "confusion": 1,
+    "dudas": [
+     "panel_controles"
+    ],
+    "terminos": [
+     "Chronos-2 / modelo fundacional",
+     "modelo / híbrido / XGBoost"
+    ],
+    "clic": {
+     "tipo": "control",
+     "etiqueta": "+2 °C",
+     "zona": "#panel-escenarios",
+     "vista": "vista-1.png",
+     "resultado": "acierto"
+    },
+    "t3_clic_ok": true,
+    "seguridad": 5
+   },
+   {
+    "sesion": "escenarios",
+    "pantalla": "escenarios",
+    "persona": "estudiante",
+    "repeticion": 2,
+    "tropiezos": [
+     {
+      "pantalla": "escenarios",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "panel_controles",
+      "severidad": 1,
+      "evidencia": "En la barra lateral aparece seleccionado «Solo demanda», pero abajo una nota dice que en «¿Y si...?» sí usa clima y que esa opción pertenece a «Próximas horas». …"
+     },
+     {
+      "pantalla": "escenarios",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "Chronos-2 / modelo fundacional",
+      "severidad": 1,
+      "evidencia": "Chronos-2 / modelo fundacional"
+     },
+     {
+      "pantalla": "escenarios",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "ENFEN",
+      "severidad": 1,
+      "evidencia": "ENFEN"
+     },
+     {
+      "pantalla": "escenarios",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "modelo / híbrido / XGBoost",
+      "severidad": 1,
+      "evidencia": "modelo / híbrido / XGBoost"
+     }
+    ],
+    "confusion": 0,
+    "dudas": [
+     "panel_controles"
+    ],
+    "terminos": [
+     "Chronos-2 / modelo fundacional",
+     "ENFEN",
+     "modelo / híbrido / XGBoost"
+    ],
+    "clic": {
+     "tipo": "control",
+     "etiqueta": "+2 °C",
+     "zona": "#panel-escenarios",
+     "vista": "vista-1.png",
+     "resultado": "acierto"
+    },
+    "t3_clic_ok": true,
+    "seguridad": 5
+   },
+   {
+    "sesion": "escenarios",
+    "pantalla": "escenarios",
+    "persona": "operadora",
+    "repeticion": 1,
+    "tropiezos": [
+     {
+      "pantalla": "escenarios",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "panel_controles",
+      "severidad": 1,
+      "evidencia": "A la izquierda está marcado «Solo demanda», pero a la derecha dice que sí calcula con clima. Me hace dudar si debo cambiar algo en el panel izquierdo …"
+     },
+     {
+      "pantalla": "escenarios",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "pico",
+      "severidad": 1,
+      "evidencia": "En la primera vista el recuadro azul dice que la hora de mayor demanda es 4,919 MW a las 11:00, y aquí me muestra 4,977 MW a las …"
+     },
+     {
+      "pantalla": "escenarios",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "Chronos-2 / modelo fundacional",
+      "severidad": 1,
+      "evidencia": "Chronos-2 / modelo fundacional"
+     },
+     {
+      "pantalla": "escenarios",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "modelo / híbrido / XGBoost",
+      "severidad": 1,
+      "evidencia": "modelo / híbrido / XGBoost"
+     }
+    ],
+    "confusion": 1,
+    "dudas": [
+     "panel_controles",
+     "pico"
+    ],
+    "terminos": [
+     "Chronos-2 / modelo fundacional",
+     "modelo / híbrido / XGBoost"
+    ],
+    "clic": {
+     "tipo": "control",
+     "etiqueta": "+2 °C",
+     "zona": "#panel-escenarios",
+     "vista": "vista-1.png",
+     "resultado": "acierto"
+    },
+    "t3_clic_ok": true,
+    "seguridad": 5
+   },
+   {
+    "sesion": "escenarios",
+    "pantalla": "escenarios",
+    "persona": "operadora",
+    "repeticion": 2,
+    "tropiezos": [
+     {
+      "pantalla": "escenarios",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "#panel-escenarios",
+      "severidad": 1,
+      "evidencia": "En el centro de control una falla en la red es una avería eléctrica (línea o subestación), pero aquí no me queda claro si se refieren a eso …"
+     },
+     {
+      "pantalla": "escenarios",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "secciones",
+      "severidad": 1,
+      "evidencia": "A la izquierda tengo seleccionados «Solo demanda» y «Combinado», pero el aviso me dice que esos controles son de otra pantalla y que aquí manda otro modelo. Confunde …"
+     },
+     {
+      "pantalla": "escenarios",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "Chronos-2 / modelo fundacional",
+      "severidad": 1,
+      "evidencia": "Chronos-2 / modelo fundacional"
+     },
+     {
+      "pantalla": "escenarios",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "modelo / híbrido / XGBoost",
+      "severidad": 1,
+      "evidencia": "modelo / híbrido / XGBoost"
+     }
+    ],
+    "confusion": 0,
+    "dudas": [
+     "#panel-escenarios",
+     "secciones"
+    ],
+    "terminos": [
+     "Chronos-2 / modelo fundacional",
+     "modelo / híbrido / XGBoost"
+    ],
+    "clic": {
+     "tipo": "control",
+     "etiqueta": "+2 °C",
+     "zona": "#panel-escenarios",
+     "vista": "vista-1.png",
+     "resultado": "acierto"
+    },
+    "t3_clic_ok": true,
+    "seguridad": 5
+   },
+   {
+    "sesion": "escenarios",
+    "pantalla": "escenarios",
+    "persona": "periodista",
+    "repeticion": 1,
+    "tropiezos": [
+     {
+      "pantalla": "escenarios",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "#panel-escenarios",
+      "severidad": 1,
+      "evidencia": "El texto central indica que el pico de demanda es de 4,919 MW a las 11:00, pero en la columna izquierda (vista-2) dice que el pico es 4,977 …"
+     },
+     {
+      "pantalla": "escenarios",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "panel_controles",
+      "severidad": 1,
+      "evidencia": "En la barra lateral izquierda aparece seleccionado «Solo demanda», pero el recuadro explicativo dice que aquí sí se usa clima y El Niño. Me hace dudar si debo …"
+     },
+     {
+      "pantalla": "escenarios",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "Chronos-2 / modelo fundacional",
+      "severidad": 1,
+      "evidencia": "Chronos-2 / modelo fundacional"
+     },
+     {
+      "pantalla": "escenarios",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "modelo / híbrido / XGBoost",
+      "severidad": 1,
+      "evidencia": "modelo / híbrido / XGBoost"
+     }
+    ],
+    "confusion": 0,
+    "dudas": [
+     "#panel-escenarios",
+     "panel_controles"
+    ],
+    "terminos": [
+     "Chronos-2 / modelo fundacional",
+     "modelo / híbrido / XGBoost"
+    ],
+    "clic": {
+     "tipo": "control",
+     "etiqueta": "+2 °C",
+     "zona": "#panel-escenarios",
+     "vista": "vista-1.png",
+     "resultado": "acierto"
+    },
+    "t3_clic_ok": true,
+    "seguridad": 5
+   },
+   {
+    "sesion": "escenarios",
+    "pantalla": "escenarios",
+    "persona": "periodista",
+    "repeticion": 2,
+    "tropiezos": [
+     {
+      "pantalla": "escenarios",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "secciones",
+      "severidad": 1,
+      "evidencia": "Me confunde que los controles de la columna izquierda sigan visibles si en realidad no afectan a esta simulación de calor."
+     },
+     {
+      "pantalla": "escenarios",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "#panel-escenarios",
+      "severidad": 1,
+      "evidencia": "Aquí me dice que el pico es 4,919 MW a las 11:00, pero en la columna izquierda dice que el pico es 4,977 MW a las 14:30. No …"
+     },
+     {
+      "pantalla": "escenarios",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "#panel-escenarios",
+      "severidad": 1,
+      "evidencia": "No me queda claro si se refiere a una caída en el tendido eléctrico del país o a un problema técnico al emitir los datos del pronóstico."
+     },
+     {
+      "pantalla": "escenarios",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "Chronos-2 / modelo fundacional",
+      "severidad": 1,
+      "evidencia": "Chronos-2 / modelo fundacional"
+     },
+     {
+      "pantalla": "escenarios",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "modelo / híbrido / XGBoost",
+      "severidad": 1,
+      "evidencia": "modelo / híbrido / XGBoost"
+     }
+    ],
+    "confusion": 0,
+    "dudas": [
+     "secciones",
+     "#panel-escenarios",
+     "#panel-escenarios"
+    ],
+    "terminos": [
+     "Chronos-2 / modelo fundacional",
+     "modelo / híbrido / XGBoost"
+    ],
+    "clic": {
+     "tipo": "control",
+     "etiqueta": "+2 °C",
+     "zona": "#panel-escenarios",
+     "vista": "vista-1.png",
+     "resultado": "acierto"
+    },
+    "t3_clic_ok": true,
+    "seguridad": 5
+   },
+   {
+    "sesion": "escenarios",
+    "pantalla": "escenarios",
+    "persona": "profesora",
+    "repeticion": 1,
+    "tropiezos": [
+     {
+      "pantalla": "escenarios",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "secciones",
+      "severidad": 1,
+      "evidencia": "No sé qué significan las siglas COES ni ENFEN al no conocer las instituciones del sector peruano."
+     },
+     {
+      "pantalla": "escenarios",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "secciones",
+      "severidad": 1,
+      "evidencia": "Los selectores de la columna izquierda muestran 'Solo demanda' y 'Combinado', lo que contradice lo que dice este texto sobre el modelo en uso y confunde sobre qué …"
+     },
+     {
+      "pantalla": "escenarios",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "#panel-escenarios",
+      "severidad": 1,
+      "evidencia": "No entiendo a qué tipo de falla técnica o del sistema eléctrico se refiere 'al emitir'."
+     },
+     {
+      "pantalla": "escenarios",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "COES",
+      "severidad": 1,
+      "evidencia": "COES"
+     },
+     {
+      "pantalla": "escenarios",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "ENFEN",
+      "severidad": 1,
+      "evidencia": "ENFEN"
+     }
+    ],
+    "confusion": 1,
+    "dudas": [
+     "secciones",
+     "secciones",
+     "#panel-escenarios"
+    ],
+    "terminos": [
+     "COES",
+     "ENFEN"
+    ],
+    "clic": {
+     "tipo": "control",
+     "etiqueta": "+2 °C",
+     "zona": "#panel-escenarios",
+     "vista": "vista-1.png",
+     "resultado": "acierto"
+    },
+    "t3_clic_ok": true,
+    "seguridad": 5
+   },
+   {
+    "sesion": "escenarios",
+    "pantalla": "escenarios",
+    "persona": "profesora",
+    "repeticion": 2,
+    "tropiezos": [
+     {
+      "pantalla": "escenarios",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "secciones",
+      "severidad": 1,
+      "evidencia": "El panel de la izquierda muestra controles activos («Solo demanda» y «Combinado») que contradicen lo que se está simulando aquí, indicando que pertenecen a otra vista."
+     },
+     {
+      "pantalla": "escenarios",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "secciones",
+      "severidad": 1,
+      "evidencia": "No sé qué significan ni a qué entidades corresponden las siglas COES y ENFEN dentro del contexto peruano."
+     },
+     {
+      "pantalla": "escenarios",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "secciones",
+      "severidad": 1,
+      "evidencia": "La información de pico y error del panel lateral refiere al modelo combinado, mientras que el escenario simulado utiliza XGBoost, generando confusión sobre qué modelo estoy evaluando."
+     },
+     {
+      "pantalla": "escenarios",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "COES",
+      "severidad": 1,
+      "evidencia": "COES"
+     },
+     {
+      "pantalla": "escenarios",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "ENFEN",
+      "severidad": 1,
+      "evidencia": "ENFEN"
+     }
+    ],
+    "confusion": 2,
+    "dudas": [
+     "secciones",
+     "secciones",
+     "secciones"
+    ],
+    "terminos": [
+     "COES",
+     "ENFEN"
+    ],
+    "clic": {
+     "tipo": "control",
+     "etiqueta": "+2 °C",
+     "zona": "#panel-escenarios",
+     "vista": "vista-1.png",
+     "resultado": "acierto"
+    },
+    "t3_clic_ok": true,
+    "seguridad": 5
+   }
+  ]
+ }
+}
