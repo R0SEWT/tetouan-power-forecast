@@ -22,7 +22,8 @@
   --ring: rgba(14, 23, 38, 0.1);
   --pron: #2a78d6;
   --pron-texto: #1f63b8;
-  --pron-band: rgba(42, 120, 214, 0.16);
+  --pron-band: rgba(42, 120, 214, 0.38); /* la banda del gráfico: 1.63:1 contra el fondo del futuro (antes 1.22:1) */
+  --pron-linea: var(--pron-texto); /* la línea del pronóstico sobre esa banda: 3.42:1 (antes 3.41:1) */
   --pron-band-2: rgba(42, 120, 214, 0.28);
   --ref: #d65a24;
   --real: var(--ink);
@@ -89,6 +90,7 @@
   --pron: #4a93ea;
   --pron-texto: #7db3f2;
   --pron-band: rgba(74, 147, 234, 0.2);
+  --pron-linea: var(--pron);
   --pron-band-2: rgba(74, 147, 234, 0.34);
   --ref: #e0703d;
   --real-fill: rgba(238, 242, 246, 0.07);
@@ -1070,7 +1072,7 @@ a {
 }
 
 .mk.pron {
-  border-color: var(--pron);
+  border-color: var(--pron-linea);
 }
 
 .mk.ref {
@@ -1147,6 +1149,10 @@ a {
   fill: var(--pron-band);
 }
 
+.g-banda.pasada {
+  fill-opacity: 0.5;
+}
+
 .g-real-relleno {
   fill: var(--real-fill);
 }
@@ -1159,7 +1165,7 @@ a {
 }
 
 .lienzo .ln-pronostico {
-  stroke: var(--pron);
+  stroke: var(--pron-linea);
   stroke-width: 2.6;
   stroke-linejoin: round;
   fill: none;
@@ -1188,7 +1194,65 @@ a {
 
 .g-ahora {
   stroke: var(--ink);
-  stroke-width: 1.5;
+  stroke-width: 2.5;
+}
+
+/* El hito de «ahora»: halo alrededor del punto y su valor en una pastilla (tinta si es real, azul si es pronóstico) */
+.g-ahora-halo {
+  fill: var(--pron-linea);
+  fill-opacity: 0.2;
+}
+
+.g-ahora-halo.real {
+  fill: var(--ink);
+}
+
+.g-ahora-punto {
+  stroke-width: 2.5;
+}
+
+.g-ahora-valor {
+  fill: var(--pron-linea);
+}
+
+.g-ahora-valor.real {
+  fill: var(--ink);
+}
+
+.g-ahora-valor-texto {
+  fill: var(--surface);
+  font-size: 15px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Lo real y lo pronosticado, rotulados sobre sus líneas en su propio color */
+.g-rotulo {
+  font-size: 13px;
+  font-weight: 700;
+  paint-order: stroke;
+  stroke: var(--surface);
+  stroke-width: 4px;
+  stroke-linejoin: round;
+}
+
+.g-rotulo.real {
+  fill: var(--ink);
+}
+
+.g-rotulo.pron {
+  fill: var(--pron-linea);
+}
+
+.g-rotulo-resto {
+  fill: var(--ink-2);
+  font-weight: 600;
+}
+
+/* El conector del rótulo de la rampa */
+.g-conector {
+  stroke: var(--ink-2);
+  stroke-width: 1;
 }
 
 .g-corte {
@@ -1203,12 +1267,12 @@ a {
 
 .g-pastilla-texto {
   fill: var(--surface);
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 700;
 }
 
 .g-punto {
-  fill: var(--pron);
+  fill: var(--pron-linea);
   stroke: var(--surface);
   stroke-width: 2;
 }
@@ -1700,6 +1764,28 @@ table.t tr.fila-elegida td {
   order: 3;
 }
 
+.bajo-grafico {
+  grid-column: 1 / -1;
+  order: 1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 8px 16px;
+}
+
+.bajo-grafico .titulo-fila {
+  min-height: 44px;
+  align-items: center;
+}
+
+.bajo-grafico .todas {
+  margin: 0;
+}
+
+.bajo-grafico .todas[open] {
+  flex-basis: 100%;
+}
+
 @media (max-width: 760px) {
   .estado {
     max-width: none;
@@ -2011,10 +2097,6 @@ input[type='time']:focus-within,
   color: var(--ink);
 }
 
-#ahDespuesCampo {
-  margin-bottom: 8px;
-}
-
 .mandos {
   display: flex;
   flex-direction: column;
@@ -2096,6 +2178,10 @@ input[type='time']:focus-within,
 
   .orden-grafico {
     order: 3;
+  }
+
+  .bajo-grafico {
+    order: 4;
   }
 
   .todas {

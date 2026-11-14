@@ -805,8 +805,13 @@ function graficoAhora(el, d) {
   };
   let s = `<svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" aria-hidden="true" focusable="false">`;
   s += `<rect class="g-futuro" x="${x(io).toFixed(1)}" y="${m.t - 22}" width="${(x(N) - x(io)).toFixed(1)}" height="${H - m.b - m.t + 22}"/>`;
-  const rotulo = movil ? 'Pronóstico' : (vivo ? 'Pronóstico: el real todavía no se publica' : 'Próximas 24 horas (pronóstico)');
-  s += `<text class="g-texto medio" x="${(x(io) + 8).toFixed(1)}" y="${m.t - 8}">${esc(rotulo)}</text>`;
+  // Arriba de cada tramo, qué es: lo real (del COES) a la izquierda y el pronóstico desde el último dato real
+  const resto = movil ? '' : (vivo ? ': el real todavía no se publica' : ' de las próximas 24 horas');
+  s += `<text class="g-rotulo pron" x="${(x(io) + 8).toFixed(1)}" y="${m.t - 8}">Pronóstico<tspan class="g-rotulo-resto">${esc(resto)}</tspan></text>`;
+  // …y hasta cuándo hay dato real, si cabe
+  const hasta = vivo ? finTxt(d.datos_hasta).corto : horaDe(d.origen);
+  const reales = [`Real (COES) hasta ${vivo ? 'el' : 'las'} ${hasta}`, 'Real (COES)', 'Real'].find((t) => movil ? t === 'Real' : t.length * 7.4 + 30 < x(io) - m.l);
+  if (io > 0 && reales) s += `<text class="g-rotulo real" x="${(m.l + 14).toFixed(1)}" y="${m.t - 8}">${esc(reales)}</text>`;
   marcas(lo, hi, movil ? 3 : 4).filter((t) => y(t) >= m.t - 2 && y(t) <= H - m.b + 1).forEach((t) => {
     s += `<line class="g-rejilla" x1="${m.l}" x2="${W - m.r}" y1="${y(t).toFixed(1)}" y2="${y(t).toFixed(1)}"/>`;
     s += `<text class="g-texto" x="${m.l - 8}" y="${(y(t) + 4).toFixed(1)}" text-anchor="end">${mw(t)}</text>`;
@@ -823,9 +828,15 @@ function graficoAhora(el, d) {
     s += `<line class="g-eje" x1="${x(i).toFixed(1)}" x2="${x(i).toFixed(1)}" y1="${H - m.b}" y2="${H - m.b + 4}"/>`;
     s += `<text class="g-texto" x="${x(i).toFixed(1)}" y="${H - m.b + 17}" text-anchor="middle">${esc(medianoche ? diaCorto(fh) : horaDe(fh))}</text>`;
   }
-  const banda = d.superior.map((v, i) => `${i ? 'L' : 'M'}${p(i, v)}`).join('')
-    + d.inferior.map((v, i) => [i, v]).reverse().map(([i, v]) => `L${p(i, v)}`).join('');
-  s += `<path class="g-banda" d="${banda}Z"/>`;
+  // La banda del rango: plena en lo que viene; más tenue en lo que ya pasó, donde manda lo real
+  const banda = (a, b) => {
+    let t = '';
+    for (let i = a; i <= b; i += 1) t += `${i > a ? 'L' : 'M'}${p(i, d.superior[i])}`;
+    for (let i = b; i >= a; i -= 1) t += `L${p(i, d.inferior[i])}`;
+    return `${t}Z`;
+  };
+  if (io > 0) s += `<path class="g-banda pasada" d="${banda(0, io)}"/>`;
+  s += `<path class="g-banda" d="${banda(io, N)}"/>`;
   if (A.ref) s += `<path class="ln-referencia" d="${linea(d.referencia, 0, N)}"/>`;
   const real = linea(d.real, 0, io);
   if (real) s += `<path class="g-real-relleno" d="${real}L${x(io).toFixed(1)},${H - m.b}L${x(0).toFixed(1)},${H - m.b}Z"/>`;
@@ -833,35 +844,87 @@ function graficoAhora(el, d) {
   if (real) s += `<path class="ln-real" d="${real}"/>`;
   s += `<path class="ln-pronostico" d="${linea(d.pronostico, io, N)}"/>`;
   if (despues) s += `<path class="ln-despues" d="${linea(d.real_despues.map((v, i) => (i === io ? d.real[io] : v)), io, N)}"/>`;
+  // Lo que ya ocupa un rótulo (cajas x0, y0, x1, y1): el que llega después busca otro lugar o no se dibuja
+  const ocupado = [];
+  const cajaTexto = (tx, ty, texto, ancla, px = 6.8) => {
+    const w = texto.length * px;
+    const x0 = ancla === 'end' ? tx - w : ancla === 'middle' ? tx - w / 2 : tx;
+    return [x0 - 3, ty - 13, x0 + w + 3, ty + 4];
+  };
+  const libre = (c) => c[0] >= m.l - 2 && c[2] <= W - m.r + 2 && c[1] >= m.t - 24 && c[3] <= H - m.b
+    && !ocupado.some((o) => c[0] < o[2] && c[2] > o[0] && c[1] < o[3] && c[3] > o[1]);
+  // El hito de «ahora»: su valor en una pastilla junto al punto (arriba; si no cabe, abajo)
+  const vAhora = d.real[ia] != null ? d.real[ia] : d.pronostico[ia];
+  const textoAhora = `${mw(vAhora)} MW`;
+  const anchoValor = textoAhora.length * 8.6 + 18;
+  // A la izquierda del punto (sobre lo real); si no cabe, a la derecha. Pegada al halo: se lee como parte del punto
+  const izqValor = x(ia) - 16 - anchoValor >= m.l + 4;
+  const vx = izqValor ? x(ia) - 16 - anchoValor : x(ia) + 16;
+  const vy = Math.min(Math.max(y(vAhora) - 14, m.t - 18), H - m.b - 30);
+  if (!movil) ocupado.push([vx - 4, vy - 4, vx + anchoValor + 4, vy + 32]);
+  ocupado.push([x(ia) - 14, y(vAhora) - 14, x(ia) + 14, y(vAhora) + 14],
+    [x(ia) - 3, m.t - 22, x(ia) + 3, H - m.b]); // ningún rótulo cruza la línea de «ahora»
+  if (ia !== io) ocupado.push(cajaTexto(x(io) - 6, H - m.b - 8, 'Último dato real', 'end'));
+  ocupado.push(cajaTexto(x(io) + 8, m.t - 8, movil ? 'Pronóstico' : 'Pronóstico: el real todavía no se publica', 'start', 7.2),
+    cajaTexto(m.l + 14, m.t - 8, 'Real (COES) hasta el 00/00, 24:00', 'start', 7.4));
   const r = d.rampa;
   const ir = r ? d.fecha_hora.indexOf(r.desde) : -1;
+  let rotuloRampa = '';
   if (ir >= 0 && ir + 2 <= N) {
     const tramo = `M${p(ir, d.pronostico[ir])}L${p(ir + 1, d.pronostico[ir + 1])}L${p(ir + 2, d.pronostico[ir + 2])}`;
     s += `<path class="g-rampa-fondo" d="${tramo}"/><path class="g-rampa${r.fuerte ? ' fuerte' : ''}" d="${tramo}"/>`;
     if (!movil) {
-      s += `<text class="g-texto medio" x="${(x(ir + 1) - 10).toFixed(1)}" y="${(y(d.pronostico[ir + 1]) + 4).toFixed(1)}" text-anchor="end">+${mw(r.subida_mw)} MW en 1 h${r.fuerte ? ' · rampa fuerte' : ''}</text>`;
+      // El rótulo, apartado del tramo y unido a él con un conector: se lee qué subida es sin tapar la curva
+      const texto = `+${mw(r.subida_mw)} MW en 1 h${r.fuerte ? ' · rampa fuerte' : ''}`;
+      const mx = x(ir + 1);
+      const my = y(d.pronostico[ir + 1]);
+      const opciones = [[-30, -26, 'end'], [30, 30, 'start'], [-30, 30, 'end'], [-12, 4, 'end']];
+      for (const [dx, dy, ancla] of opciones) {
+        const c = cajaTexto(mx + dx, my + dy, texto, ancla, 6.4);
+        if (!libre(c)) continue;
+        ocupado.push(c);
+        const cx = ancla === 'end' ? c[2] - 1 : c[0] + 1;
+        const cy = dy < 0 ? c[3] - 2 : c[1] + 2;
+        const fin = (k) => (dy < 0 ? -k : k);
+        if (Math.abs(dx) > 12) rotuloRampa += `<line class="g-conector" x1="${cx.toFixed(1)}" y1="${cy.toFixed(1)}" x2="${(mx + (dx < 0 ? -3 : 3)).toFixed(1)}" y2="${(my + fin(3)).toFixed(1)}"/>`;
+        rotuloRampa += `<text class="g-texto medio g-rotulo-rampa" x="${(mx + dx).toFixed(1)}" y="${(my + dy).toFixed(1)}" text-anchor="${ancla}">${texto}</text>`;
+        break;
+      }
     }
   }
-  if (ia !== io) {
+  if (Math.abs(ia - io) > 1) {
     s += `<line class="g-corte" x1="${x(io).toFixed(1)}" x2="${x(io).toFixed(1)}" y1="${m.t - 22}" y2="${H - m.b}"/>`;
     if (!movil) s += `<text class="g-texto medio" x="${(x(io) - 6).toFixed(1)}" y="${H - m.b - 8}" text-anchor="end">Último dato real</text>`;
   }
-  s += `<line class="g-ahora" x1="${x(ia).toFixed(1)}" x2="${x(ia).toFixed(1)}" y1="${m.t - 22}" y2="${H - m.b}"/>`;
-  const anchoPastilla = 76;
-  const gx = Math.min(Math.max(x(ia) - anchoPastilla / 2, m.l), W - m.r - anchoPastilla);
-  s += `<rect class="g-pastilla" x="${gx.toFixed(1)}" y="${H - m.b + 4}" width="${anchoPastilla}" height="20" rx="10"/>`;
-  s += `<text class="g-pastilla-texto" x="${(gx + anchoPastilla / 2).toFixed(1)}" y="${H - m.b + 18}" text-anchor="middle">Ahora ${esc(horaDe(d.ahora))}</text>`;
-  const vAhora = d.real[ia] != null ? d.real[ia] : d.pronostico[ia];
-  s += `<circle class="g-punto${d.real[ia] != null ? ' real' : ''}" cx="${x(ia).toFixed(1)}" cy="${y(vAhora).toFixed(1)}" r="5"/>`;
   const anotar = (i, v, texto) => {
     const izq = x(i) + 12 + texto.length * 6.8 > W - 2; // si el rótulo no cabe a la derecha, va a la izquierda
-    return `<circle class="g-punto" cx="${x(i).toFixed(1)}" cy="${y(v).toFixed(1)}" r="5"/>`
-      + `<text class="g-texto fuerte" x="${(x(i) + (izq ? -9 : 9)).toFixed(1)}" y="${(y(v) - 10).toFixed(1)}" text-anchor="${izq ? 'end' : 'start'}">${esc(texto)}</text>`;
+    const tx = x(i) + (izq ? -9 : 9);
+    const punto = `<circle class="g-punto" cx="${x(i).toFixed(1)}" cy="${y(v).toFixed(1)}" r="5"/>`;
+    // Arriba del punto; si pisa otro rótulo, abajo; si tampoco cabe, queda el punto solo
+    const ancla = izq ? 'end' : 'start';
+    const ty = [y(v) - 10, y(v) + 20, y(v) - 26].find((t) => libre(cajaTexto(tx, t, texto, ancla)));
+    if (ty == null) return punto;
+    ocupado.push(cajaTexto(tx, ty, texto, ancla));
+    return `${punto}<text class="g-texto fuerte" x="${tx.toFixed(1)}" y="${ty.toFixed(1)}" text-anchor="${ancla}">${esc(texto)}</text>`;
   };
   const ip = d.fecha_hora.indexOf(d.pico.fecha_hora);
-  if (ip >= 0) s += anotar(ip, d.pico.valor, `Pico ${mw(d.pico.valor)} · ${horaDe(d.pico.fecha_hora)}`);
+  if (ip >= 0) s += anotar(ip, d.pico.valor, movil ? `Pico ${mw(d.pico.valor)}` : `Pico ${mw(d.pico.valor)} · ${horaDe(d.pico.fecha_hora)}`);
   const im = d.manana ? d.fecha_hora.indexOf(d.manana.fecha_hora) : -1;
   if (!movil && im >= 0 && Math.abs(im - ip) > 10) s += anotar(im, d.manana.valor, `Mañana ${horaDe(d.manana.fecha_hora)}: ${mw(d.manana.valor)}`);
+  s += rotuloRampa;
+  // El hito de «ahora»: la línea, un halo alrededor del punto, su valor y la pastilla con la hora en el eje
+  s += `<line class="g-ahora" x1="${x(ia).toFixed(1)}" x2="${x(ia).toFixed(1)}" y1="${m.t - 22}" y2="${H - m.b}"/>`;
+  const anchoPastilla = 84;
+  const gx = Math.min(Math.max(x(ia) - anchoPastilla / 2, m.l), W - m.r - anchoPastilla);
+  s += `<rect class="g-pastilla" x="${gx.toFixed(1)}" y="${H - m.b + 4}" width="${anchoPastilla}" height="22" rx="11"/>`;
+  s += `<text class="g-pastilla-texto" x="${(gx + anchoPastilla / 2).toFixed(1)}" y="${H - m.b + 19}" text-anchor="middle">${vivo ? 'Ahora' : 'A las'} ${esc(horaDe(d.ahora))}</text>`;
+  const esReal = d.real[ia] != null;
+  s += `<circle class="g-ahora-halo${esReal ? ' real' : ''}" cx="${x(ia).toFixed(1)}" cy="${y(vAhora).toFixed(1)}" r="12"/>`;
+  s += `<circle class="g-punto g-ahora-punto${esReal ? ' real' : ''}" cx="${x(ia).toFixed(1)}" cy="${y(vAhora).toFixed(1)}" r="6"/>`;
+  if (!movil) {
+    s += `<rect class="g-ahora-valor${esReal ? ' real' : ''}" x="${vx.toFixed(1)}" y="${vy.toFixed(1)}" width="${anchoValor.toFixed(1)}" height="28" rx="7"/>`;
+    s += `<text class="g-ahora-valor-texto" x="${(vx + anchoValor / 2).toFixed(1)}" y="${(vy + 20).toFixed(1)}" text-anchor="middle">${textoAhora}</text>`;
+  }
   s += `<line class="g-cruz" x1="0" x2="0" y1="${m.t - 22}" y2="${H - m.b}" visibility="hidden"/>`;
   s += '<circle class="g-punto g-cursor" cx="0" cy="0" r="4" visibility="hidden"/>';
   s += '</svg>';

@@ -84,9 +84,7 @@
         <div class="contexto-titulo">
           <h1 id="principal" class="pregunta" tabindex="-1">Ahora</h1>
           <div id="ahRespuesta" class="resp-dia" aria-live="polite"></div>
-          <label class="interruptor" id="ahDespuesCampo" hidden><input type="checkbox" id="ahDespues"><span class="mk despues" aria-hidden="true"></span>Mostrar lo que pasó después</label>
           <p id="ahModo" class="modo-linea"></p>
-          <div class="titulo-fila"><span id="chipRegimen" class="chip"><span id="chipRegimenTxt">El Niño costero: cargando</span></span><span id="chipPrueba" class="chip" hidden>Datos de prueba: series sintéticas</span></div>
           <p id="ahDiaCompleto" class="dia-completo" aria-live="polite" hidden></p>
         </div>
         <div class="mandos">
@@ -114,6 +112,7 @@
               <span class="it"><span class="mk pron"></span>Pronóstico</span>
               <span class="it"><span class="mk banda"></span><span id="ahLeyRango">Rango del 90 %</span></span>
               <label><input type="checkbox" id="ahRef" checked><span class="mk ref"></span><span id="ahLeyRef">Referencia</span></label>
+              <label id="ahDespuesCampo" hidden><input type="checkbox" id="ahDespues"><span class="mk despues" aria-hidden="true"></span>Mostrar lo que pasó después</label>
             </div>
           </div>
           <div class="card-b">
@@ -125,6 +124,10 @@
             </div>
           </div>
         </section>
+        <!-- Debajo del gráfico, El Niño: entre la respuesta y el gráfico que la prueba no queda nada más que las cifras -->
+        <div class="bajo-grafico">
+          <div class="titulo-fila"><span id="chipRegimen" class="chip"><span id="chipRegimenTxt">El Niño costero: cargando</span></span><span id="chipPrueba" class="chip" hidden>Datos de prueba: series sintéticas</span></div>
+        </div>
         <section class="card orden-origen" aria-labelledby="ahOrigenTit">
           <div class="card-h"><h2 id="ahOrigenTit">¿De dónde sale el número?</h2></div>
           <div class="card-b" id="ahOrigen"></div>
