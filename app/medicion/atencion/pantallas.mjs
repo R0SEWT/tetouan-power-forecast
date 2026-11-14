@@ -9,7 +9,8 @@ export const URL_RAIZ = `${WEB}/${Q}`;
 const CASO = 'centro?fecha=2026-03-10&hora=19:00';
 
 const AOI_AHORA = [
-  { n: 'cifra_ahora', s: '#ahCifras .kpi:nth-child(1) :is(.k,.n)' },
+  // La cifra de ahora: la primera tarjeta de cifras hasta el PR 2; desde el PR 3, la de la respuesta a la pregunta del día
+  { n: 'cifra_ahora', s: ':is(#ahCifras .kpi:nth-child(1), #ahRespuesta .r-ahora) :is(.k,.n)' },
   { n: 'pico_24h', s: '#ahCifras :is(.kpi.dest, .kpi-pico) :is(.k,.n)' }, // .dest hasta el PR 2, .kpi-pico desde entonces
   { n: 'linea_ahora', s: '#ahLienzo :is(.g-ahora,.g-pastilla,.g-pastilla-texto)', modo: 'caja' },
   { n: 'estado_datos', s: '#estadoDatos', modo: 'caja' },
@@ -22,13 +23,17 @@ const AOI_AHORA = [
   { n: 'areas', s: '#ahAreas', modo: 'caja' },
   { n: 'cuando', s: '.cuando', modo: 'caja' },
   { n: 'regimen', s: '#chipRegimen', modo: 'caja' },
+  { n: 'respuesta', s: '#ahRespuesta .r-frase' }, // la frase que responde la pregunta del día (PR 3)
 ];
+
+const LISTO_AHORA = ':is(#ahRespuesta .r-ahora, #ahCifras .kpi)';
 
 export const PANTALLAS = {
   // La primera apertura: la URL raíz, sin parámetros (en vivo, a la hora del reloj de Lima).
-  inicio: { url: () => URL_RAIZ, listo: '#ahCifras .kpi', aoi: AOI_AHORA },
+  // Lista cuando se ve la cifra de ahora: la primera tarjeta hasta el PR 2, la respuesta desde el PR 3
+  inicio: { url: () => URL_RAIZ, listo: LISTO_AHORA, aoi: AOI_AHORA },
   // «Ahora» en repaso, el caso fijo de las tareas: reproducible día tras día.
-  ahora: { url: () => `${URL_RAIZ}#/ahora/${CASO}`, listo: '#ahCifras .kpi', aoi: AOI_AHORA },
+  ahora: { url: () => `${URL_RAIZ}#/ahora/${CASO}`, listo: LISTO_AHORA, aoi: AOI_AHORA },
   confianza: {
     url: () => `${URL_RAIZ}#/confianza/centro`,
     listo: '#cfStats .stat',

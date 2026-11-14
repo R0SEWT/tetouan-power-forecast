@@ -28,6 +28,8 @@ function recolectar(aoiConfig) {
   const R = (r) => [r.left, r.top, r.right, r.bottom].map((v) => Math.round(v));
   const visibleEstilo = (e) => {
     if (e.closest('[hidden]')) return false;
+    // Lo que está dentro de un <details> cerrado (content-visibility: hidden) conserva sus cajas, pero no se pinta
+    if (e.checkVisibility && !e.checkVisibility()) return false;
     const c = getComputedStyle(e);
     return c.display !== 'none' && c.visibility !== 'hidden' && Number(c.opacity) > 0;
   };
