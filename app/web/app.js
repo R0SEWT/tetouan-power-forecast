@@ -23,7 +23,7 @@ const ESCENARIO_BASE = Object.freeze({ delta_temp_c: 0, nino: 'observado', falla
 const MESES = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto',
   'septiembre', 'octubre', 'noviembre', 'diciembre'];
 const MESES_CORTOS = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'set', 'oct', 'nov', 'dic'];
-// Qué es Curva, dicho también en la pestaña del navegador (la cabecera lo dice con las mismas palabras).
+// Qué es Curva, también en la pestaña
 const TITULO_CURVA = 'Curva, pronóstico de la demanda eléctrica del Perú';
 const DIAS = ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'];
 
@@ -1823,7 +1823,7 @@ function pintarEstado({ modo, texto, titulo, corto }) {
   const e = $('#estadoDatos');
   e.hidden = false;
   e.classList.toggle('repaso', modo === 'repaso');
-  // En el celular, la versión corta va en dos líneas (qué y hasta cuándo) para dejarle sitio a la marca
+  // La versión corta, en dos líneas (qué y hasta cuándo)
   const corta = (Array.isArray(corto) ? corto : [corto || texto]).map((t) => `<span>${esc(t)}</span>`).join(' ');
   $('#estadoTxt').innerHTML = `<span class="larga">${esc(texto)}</span><span class="corta">${corta}</span>`;
   e.title = titulo || texto;

@@ -1642,7 +1642,7 @@ a {
   flex: none;
 }
 
-/* Qué es Curva, en todas las vistas: el nombre y lo que hace en palabras llanas (debajo, o al lado si cabe) */
+/* Qué es Curva, en todas las vistas */
 .marca-txt {
   display: flex;
   flex-direction: column;
@@ -3243,8 +3243,7 @@ table.cmp tr.nuestro td {
 
 }
 
-/* En escritorio y proyector, la marca en una línea («Curva  Pronóstico de…»); en el proyector (1920 px) crece con la
-   pantalla: a 13–14 px se pierde en una sala */
+/* La marca en una línea; más grande en el proyector */
 @media (min-width: 1200px) {
   .marca-txt {
     flex-direction: row;
@@ -3272,7 +3271,7 @@ table.cmp tr.nuestro td {
   }
 }
 
-/* En los teléfonos más angostos (320 px) cede el ícono, no lo que dice qué es Curva */
+/* A 320 px cede el ícono */
 @media (max-width: 359px) {
   .cab-marca svg {
     display: none;
@@ -3590,8 +3589,7 @@ input[type='time']:focus-within,
   }
 }
 
-/* Hasta 1100 px el estado de los datos va en su versión corta y en dos líneas («COES» sobre «12/11 24:00») y no se
-   recorta: lo que cede es la marca. Con la marca completa, la larga se recortaba («12/11, 2…») */
+/* Hasta 1100 px, el estado corto en dos líneas: no se recorta, cede la marca */
 @media (max-width: 1100px) {
   .cab-der {
     flex: none;
@@ -3620,7 +3618,7 @@ input[type='time']:focus-within,
   }
 }
 
-/* Bajo los 1000 px tampoco cabe la marca en una línea al lado de la navegación: va en dos (sin «del Perú») */
+/* Bajo 1000 px, la marca en dos líneas */
 @media (min-width: 761px) and (max-width: 1000px) {
   .marca-sub {
     max-width: 13em;
