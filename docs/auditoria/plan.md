@@ -17,7 +17,7 @@ o con capturas de `inicio` hechas en la misma media hora.
 
 | # | PR | Línea | Medición clave: base → umbral | Decisión del dueño | Estado y resultado medido |
 |---|---|---|---|---|---|
-| 1 | **Qué es Curva**, dicho en la cabecera y el título en las cuatro vistas | L1 Orientación | Prueba de 5 s, «¿Qué es esto?»: responde en 1 de 4 vistas (al límite, 5.2 %) → 4 de 4 | — | **Hecho** (#40): 1 de 4 → **4 de 4** (claro; cumple). Oscuro 0 → 3 de 4. Guardas iguales |
+| 1 | **Qué es Curva**, dicho en la cabecera y el título en las cuatro vistas | L1 Orientación | Prueba de 5 s, «¿Qué es esto?»: responde en 1 de 4 vistas (al límite, 5.2 %) → 4 de 4 | — | **Hecho** (#40): 1 de 4 → **4 de 4** (claro; cumple). Oscuro 0 → 2 de 4. Guardas iguales |
 | 2 | **Una cifra del presente al frente**: «Ahora» como cifra destacada, el pico de hoy sin opacarla (y marcado si ya pasó), sin tarjeta vacía en vivo | L2 Jerarquía | Atención a 3 s en la cifra de ahora, escritorio: 1.2 % → ≥ 5 %; «¿cuánta demanda hay ahora?»: 0 de 4 vistas → ≥ 3 de 4; tarjetas vacías: 1 → 0 | — | Pendiente |
 | 3 | **La pregunta del día** (concepto B) | L1 Orientación | Prueba de 5 s: 4 / 3 de 6 (escritorio / móvil) → ≥ 5 de 6 en las cuatro vistas; cifras a la vista: 56 / 33 → ≤ 12 | — | Pendiente |
 | 4 | **Palabras**: cada término explicado donde aparece y un nombre por concepto | L1 Orientación | Términos a la vista sin definir en la pantalla: 9 / 7 → 0 en «Ahora» y «Confianza»; conceptos con más de un nombre entre pantallas: 5 → 0 | — | Pendiente |
