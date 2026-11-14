@@ -3531,6 +3531,10 @@ input[type='time']:focus-within,
   color: var(--ink);
 }
 
+#ahDespuesCampo {
+  margin-bottom: 8px;
+}
+
 .mandos {
   display: flex;
   flex-direction: column;
@@ -3573,7 +3577,7 @@ input[type='time']:focus-within,
   }
 
   .pregunta {
-    font-size: 40px;
+    font-size: 36px;
   }
 
   .r-frase {

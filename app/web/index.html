@@ -85,6 +85,7 @@
         <div class="contexto-titulo">
           <h1 id="principal" class="pregunta" tabindex="-1">Ahora</h1>
           <div id="ahRespuesta" class="resp-dia" aria-live="polite"></div>
+          <label class="interruptor" id="ahDespuesCampo" hidden><input type="checkbox" id="ahDespues"><span class="mk despues" aria-hidden="true"></span>Mostrar lo que pasó después</label>
           <p id="ahModo" class="modo-linea"></p>
           <div class="titulo-fila"><span id="chipRegimen" class="chip"><span id="chipRegimenTxt">El Niño costero: cargando</span></span><span id="chipPrueba" class="chip" hidden>Datos de prueba: series sintéticas</span></div>
           <p id="ahDiaCompleto" class="dia-completo" aria-live="polite" hidden></p>
@@ -95,7 +96,6 @@
             <button type="button" id="ahHoy" class="btn-hoy" aria-pressed="true">Hoy</button>
             <label class="campo"><span>Repasar un día</span><input type="date" id="ahFecha" aria-describedby="ahFechaLarga"></label>
             <label class="campo"><span>A las</span><input type="time" id="ahHora" step="1800"></label>
-            <label class="interruptor" id="ahDespuesCampo" hidden><input type="checkbox" id="ahDespues"><span class="mk despues" aria-hidden="true"></span>Mostrar lo que pasó después</label>
             <span id="ahFechaLarga" class="visually-hidden"></span>
           </div>
         </div>
