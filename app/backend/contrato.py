@@ -377,3 +377,143 @@ class EnVivo(BaseModel):
     dias_en_vivo: int = Field(default=0, description="Días con pronóstico a 24 h emitido en vivo (verificados o no)")
     primer_dia_en_vivo: str | None = None
     dias_reconstruidos: int = Field(default=0, description="Días con pronóstico a 24 h reconstruido")
+
+
+# ---- «Ahora» y «Confianza»: las dos pantallas de entrada -----------------------------------------------------------
+
+ModoAhora = Literal["en_vivo", "repaso"]
+FuenteCifra = Literal["real", "pronostico_1h", "pronostico_24h"]
+FuenteAyer = Literal["historial", "en_vivo", "ex_ante_estricto", "reconstruido"]
+
+
+class CifraAhora(BaseModel):
+    """Una cifra de la fila de arriba: el valor de un periodo, de dónde sale y su rango si es un pronóstico."""
+
+    fecha_hora: str = Field(description="Inicio del periodo")
+    valor: float
+    fuente: FuenteCifra = Field(description="«real» si es el dato del COES; si no, el pronóstico y su horizonte")
+    inferior: float | None = None
+    superior: float | None = None
+
+
+class AyerParaEstaHora(BaseModel):
+    """Lo que se dijo 24 h antes para un periodo que ya tiene real: la rendición de cuentas diaria."""
+
+    fecha_hora: str = Field(description="Inicio del periodo")
+    emitido: str = Field(description="Desde qué origen se emitió (AAAA-MM-DDTHH:MM, hora de Lima, inicio del último periodo conocido)")
+    pronostico: float
+    inferior: float
+    superior: float
+    real: float
+    diferencia: float = Field(description="Pronóstico − real, en MW: positivo si sobrestimó")
+    dentro: bool = Field(description="Si el real cayó dentro del rango")
+    fuente: FuenteAyer = Field(
+        description="«historial» si sale de los pronósticos precalculados; si no, el tipo del registro en vivo"
+    )
+    componentes: list[Componente] | None = Field(
+        default=None, description="Si el modelo es una mezcla, el valor y el peso de cada pieza en ese periodo"
+    )
+
+
+class ErrorTramo(BaseModel):
+    """Error medio de un tramo de la ventana (MW), del pronóstico a 24 h y de la mejor referencia."""
+
+    desde: str
+    hasta: str
+    periodos: int
+    mae_modelo: float
+    mae_referencia: float | None = None
+
+
+class Ahora(BaseModel):
+    """La pantalla de entrada de un área: hoy y las próximas 24 h en un solo gráfico, con las cifras de arriba.
+
+    La ventana va de las 00:00 del día de ``origen`` hasta 24 h después de ``origen``. ``origen`` es el inicio del
+    último periodo con dato real (lo que se sabía); el pronóstico de cada periodo es el directo a 24 h, emitido 24 h
+    antes de ese periodo, así que todo lo que sigue a ``origen`` ya estaba emitido en ``origen`` (como ``/pico``).
+
+    - ``repaso``: un momento del historial; ``ahora`` es ``origen``. ``real_despues`` trae lo que pasó después, para
+      mostrarlo solo si se pide.
+    - ``en_vivo``: el último pronóstico del registro diario. El COES publica la demanda al día siguiente, así que
+      ``origen`` es el fin de ayer y ``ahora`` es la hora de Lima, ya dentro del pronóstico.
+    """
+
+    area: str
+    modo: ModoAhora
+    modelo: str = Field(description="Id del modelo (o del registro en vivo) que respondió")
+    modelo_nombre: str
+    nivel_rango_pct: int = Field(description="Qué parte de las veces el rango promete contener el real (90 u 80)")
+    origen: str = Field(description="Inicio del último periodo con dato real")
+    datos_hasta: str = Field(description="Fin del último periodo con dato real (origen + 30 min)")
+    ahora: str = Field(description="El periodo marcado como «ahora»: el origen en repaso, la hora de Lima en vivo")
+    emitido_en: str | None = Field(default=None, description="En vivo: cuándo se emitió el pronóstico, hora de Lima")
+    referencia_nombre: Referencia
+    fecha_hora: list[str] = Field(description="Inicio de cada periodo de la ventana")
+    real: list[float | None] = Field(description="Hasta el origen; nulo después")
+    real_despues: list[float | None] | None = Field(
+        default=None, description="Repaso: el real posterior al origen (nulo antes); en vivo no existe todavía"
+    )
+    pronostico: list[float]
+    inferior: list[float]
+    superior: list[float]
+    referencia: list[float | None]
+    tipo: list[TipoEnVivo] | None = Field(default=None, description="Registro en vivo: el tipo de cada periodo")
+    i_origen: int
+    i_ahora: int
+    cifra_ahora: CifraAhora
+    en_1h: CifraAhora | None = None
+    pico: Pico
+    rampa: Rampa | None = None
+    manana: CifraAhora | None = Field(default=None, description="24 h después de «ahora»; nula si aún no se emite")
+    manana_motivo: str | None = None
+    ayer: AyerParaEstaHora | None = None
+    error_hasta_origen: ErrorTramo | None = Field(default=None, description="Del día del origen, hasta el origen")
+    error_dia: ErrorTramo | None = Field(
+        default=None, description="Repaso: el día del origen completo (se conoce porque ya pasó)"
+    )
+    avisos: list[str] = Field(default_factory=list)
+    dias_disponibles: list[list[str]] = Field(
+        default_factory=list, description="Tramos de días con datos para el repaso: [[desde, hasta], ...]"
+    )
+
+
+class DiaPico(BaseModel):
+    """El pico de un día: el real frente al pronosticado a 24 h, con signo, y una causa probable si el calendario la da."""
+
+    fecha: str
+    pico_real: float
+    hora_real: str = Field(description="HH:MM, inicio del periodo")
+    pico_pronostico: float
+    hora_pronostico: str
+    error_pct: float = Field(description="(pronóstico − real) / real × 100: positivo si sobrestimó")
+    causa_probable: str | None = Field(
+        default=None, description="Solo lo que se infiere del calendario (feriados de Perú); nunca un hecho registrado"
+    )
+
+
+class Sesgo(BaseModel):
+    """Hacia dónde se equivoca, con todas las medias horas (no una muestra)."""
+
+    periodos: int
+    subestima_pct: float = Field(description="% de medias horas con pronóstico por debajo del real")
+    sesgo_mw: float = Field(description="Media de pronóstico − real")
+
+
+class Confianza(BaseModel):
+    """Lo que hace falta para decidir si fiarse: el error de 2026 mes a mes, la cobertura, el sesgo y los días fallidos.
+
+    ``seguimiento`` es el mismo de ``GET /seguimiento``. MAPE, WAPE y sesgo usan todas las medias horas de 2026 con
+    real (los días de la serie del modelo). El día a día compara el pico real con el pronosticado a 24 h, como PJM.
+    """
+
+    area: str
+    horizonte: Horizonte
+    modelo: str
+    seguimiento: Seguimiento
+    mape_pct: float = Field(description="Media de |error| / real × 100")
+    wape_pct: float = Field(description="Σ|error| / Σ real × 100 (la forma en que la CNMC mide a REE)")
+    sesgo: Sesgo
+    umbral_pico_pct: float = 3.0
+    dias: list[DiaPico] = Field(description="Cada día de 2026 con sus 48 periodos reales, a 24 h")
+    dias_en_vivo: list[DiaPico] = Field(default_factory=list, description="Lo mismo, con el registro en vivo")
+    acierto: AciertoPico | None = None

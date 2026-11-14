@@ -8,7 +8,8 @@ const ETIQUETAS_WCAG = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'];
 
 export async function abrirEstado(navegador, nombreVersion, estado, vista, tema) {
   const { contexto, pagina } = await nuevaPagina(navegador, vista, tema);
-  await pagina.goto(estado === 'inicio' ? `${WEB}/` : URL_AREA);
+  const v = version(nombreVersion);
+  await pagina.goto((v.url && v.url(estado)) || (estado === 'inicio' ? `${WEB}/` : URL_AREA));
   await pagina.waitForLoadState('networkidle');
   await version(nombreVersion).estados[estado](pagina);
   await pagina.waitForLoadState('networkidle').catch(() => {});
@@ -52,6 +53,7 @@ export async function medirAxe(navegador, nombreVersion) {
 // (WCAG 2.4.11) o sin indicador visible (2.4.7), y cuántas pulsaciones hasta controles clave.
 export async function medirFoco(navegador, nombreVersion, vista) {
   const { contexto, pagina } = await abrirEstado(navegador, nombreVersion, 'area', vista, 'dark');
+  const objetivos = version(nombreVersion).foco || { horizonte: /24 horas/, diagnostico: /Diagn[oó]stico/ };
   await pagina.evaluate(() => { document.activeElement && document.activeElement.blur(); window.scrollTo(0, 0); });
   const vistos = [];
   let hastaHorizonte = null;
@@ -83,9 +85,10 @@ export async function medirFoco(navegador, nombreVersion, vista) {
     if (!info) continue;
     if (vistos.length && info.clave === vistos[0].clave) break; // dio la vuelta
     vistos.push(info);
-    if (hastaHorizonte == null && /24 horas/.test(info.nombre)) hastaHorizonte = i;
+    const texto = `${info.nombre} ${info.clave}`;
+    if (hastaHorizonte == null && objetivos.horizonte.test(texto)) hastaHorizonte = i;
     if (hastaDiagnostico == null && info.flechas != null) hastaDiagnostico = i + info.flechas;
-    else if (hastaDiagnostico == null && /Diagn[oó]stico/.test(info.nombre)) hastaDiagnostico = i;
+    else if (hastaDiagnostico == null && objetivos.diagnostico.test(texto)) hastaDiagnostico = i;
   }
   await contexto.close();
   return {

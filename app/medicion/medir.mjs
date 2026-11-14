@@ -29,7 +29,7 @@ const r = { etiqueta, version: nombreVersion, fecha: new Date().toISOString(), m
 const navegador = await abrirNavegador();
 try {
   if (quiere('tareas')) { console.log('· tareas'); r.tareas = await medirTareas(navegador, nombreVersion, rapido ? 1 : 3); }
-  if (quiere('rendimiento')) { console.log('· rendimiento'); r.rendimiento = await medirRendimiento(navegador, fichaPronostico, rapido ? 3 : 5); }
+  if (quiere('rendimiento')) { console.log('· rendimiento'); r.rendimiento = await medirRendimiento(navegador, fichaPronostico, rapido ? 3 : 5, nombreVersion); }
   if (quiere('axe')) { console.log('· axe'); r.axe = await medirAxe(navegador, nombreVersion); }
   if (quiere('foco')) {
     console.log('· foco');

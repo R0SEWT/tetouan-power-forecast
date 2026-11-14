@@ -586,3 +586,163 @@ node medir.mjs --version it4 --etiqueta it6-rend --solo rendimiento
 node medir.mjs --version it4 --etiqueta it6 --rapido
 TPF_WEB=http://localhost:8000 node medir.mjs --version it4 --etiqueta it6-mismo-origen-rend --solo rendimiento
 ```
+
+## Iteración 8: «Ahora» y «Confianza», las pantallas de entrada
+
+La vara de esta iteración no es «bueno para un curso», sino **mejor que lo que hoy ofrece el COES**, con las mejores
+referencias de afuera (CAISO, REE, RTE para la pantalla del día; PJM, ISO-NE, NESO y la CNMC para el error). La app
+tenía casi todas las piezas, pero las presentaba como un informe largo: sin «ahora» en el gráfico, con el pico en
+prosa y con el error escondido en la tercera pestaña del diagnóstico. Ahora hay tres pantallas, con la cabecera
+`Curva · [Ahora | Confianza | Detalle] · estado de los datos · tema`:
+
+**1. «Ahora» (la entrada, `#/` o `#/ahora/{área}`).** Un solo gráfico de hoy y las próximas 24 h, con lo real hasta
+el último dato, el pronóstico (fino antes de «ahora», grueso después), el rango, la referencia, la línea y la pastilla
+de «ahora» y, anotados sobre la curva, el pico y la mayor subida (los mismos de `/pico`: una prueba lo verifica en 3
+áreas × 10 orígenes al azar). Arriba, cinco cifras: ahora, en 1 hora, pico de las próximas 24 h con su hora, mañana a
+esta hora y mayor subida. Al lado, **«Lo que dijimos ayer para esta hora»**: lo que se dijo, lo que fue, la
+diferencia y si cayó dentro del rango, con ícono y texto y con su fuente (historial del modelo, o registro en vivo
+con su etiqueta «en vivo» o «reconstruido»). Las tres áreas van como tarjetas con su cifra y una minicurva.
+
+**«Ahora» no finge tiempo real.** El COES publica la demanda de cada día a la mañana siguiente, así que:
+
+- **Hoy** (el registro de la tubería diaria): la cabecera dice «Hoy · datos del COES al 12/11, 24:00», y la pantalla,
+  «Son las 18:00. Lo real llega hasta el jueves 12 a las 24:00 […] Todo lo que sigue es pronóstico, emitido hoy a las
+  10:34». El gráfico es ayer (real) y hoy (pronóstico), con una línea punteada en el último dato real y la de «ahora»
+  en la hora de Lima. «Mañana a esta hora» queda vacía y dice por qué: se emite mañana hacia las 10:00. Lo que dijimos
+  se mide para ayer a esta hora, que ya tiene real.
+- **Repaso** (un día del historial): la cabecera dice «Repaso · 10/03/2026, 19:00» y la pantalla muestra lo que se
+  sabía a esa hora; lo real posterior y el error del día completo aparecen solo al marcar «Mostrar lo que pasó
+  después». Los días del tramo en vivo (23-oct → 12-nov) también se pueden repasar, con el registro; un día sin datos
+  (16 → 22-oct) lo dice en una frase y con los tramos que sí hay.
+
+**2. «Confianza» (`#/confianza/{área}`).** El error al frente, como lo publican PJM e ISO-NE: un titular calculado
+(«En 2026 se equivocó menos que la referencia los 10 meses»), cinco cifras (error, frente a la referencia, cobertura
+con semáforo contra su meta, acierto de la hora del pico y la fase de El Niño donde más yerra), el mes a mes contra la
+referencia, la cobertura contra la meta del 90 % (banda verde de 85 a 95 %), **el seguimiento en vivo** (días
+reconstruidos y en vivo, MAE por tipo y cobertura del rango del 80 %), **el día a día del pico** con los días sobre
+3 % y su causa probable, el sesgo con **todas** las medias horas (no la muestra de 240 del diagnóstico) y un bloque
+de contexto internacional con cada cifra enlazada a su fuente y la frase «no es una comparación de igual a igual».
+
+**Lo que queda corto se muestra.** En el tramo 23-oct → 12-nov, el rango del 80 % del registro en vivo cubrió el
+73.2 % en el Centro y el 74.3 % en el Norte (84.5 % en el Sur): la pantalla lo marca en rojo, lo dice en el titular de
+la sección y en el párrafo de arriba, y recuerda que Elia tiene el mismo problema con su banda del 80 % (74–79 %).
+
+| A 24 h, 2026 (combinado) | Norte | Centro | Sur |
+|---|---|---|---|
+| MAE, MW (referencia) | 27.9 (44.2) | 71.9 (135.4) | 44.6 (54.9) |
+| WAPE / MAPE, % | 2.44 / 2.50 | 1.64 / 1.66 | 2.46 / 2.49 |
+| Cobertura del rango del 90 %, % | 89.6 | 91.1 | 91.8 |
+| Subestimó, % de las 13,824 medias horas (sesgo, MW) | 50.7 (+0.8) | 51.0 (−0.2) | 50.3 (+5.7) |
+| Días con el error del pico sobre 3 % (subestimaciones) | 73 (56) | 42 (34) | 78 (41) |
+| …con una causa probable en el calendario | 8 | 4 | 7 |
+| En vivo, 23-oct → 12-nov (reconstruido): cobertura del rango del 80 %, % | 74.3 | 73.2 | 84.5 |
+
+El sesgo del Centro con todas las medias horas es 51.0 %, no el 52.9 % que daba la muestra del diagnóstico. La
+causa probable sale solo del calendario de feriados de Perú (feriado, fin de semana largo o el día siguiente) y se
+dice «causa probable, según el calendario»; el resto de los días dice «sin registrar». En el registro en vivo, el
+domingo 1 y el lunes 2 de noviembre (Todos los Santos) son los días sobre 3 % del Centro.
+
+**3. «Detalle»** es la vista anterior, sin cambios de contenido: modelo, ficha del número, anticipación, escenarios,
+diagnóstico completo y la sección en vivo. Se llega desde la cabecera y desde los enlaces de «Ahora» («¿Y si hace
+más calor?», «Diagnóstico completo», «Otro modelo u horizonte»), que abren el mismo momento.
+
+**Identidad.** Los tokens de la revisión de diseño en claro y oscuro (el tema sigue al sistema hasta que se elige),
+una sola tipografía del sistema con dígitos tabulares en tablas y ejes (la monoespaciada desapareció también del
+detalle), un color por entidad (tinta para lo real, azul para el pronóstico, naranja para la referencia; el naranja
+ya no marca el modelo), estados siempre con ícono y texto, y errores en lenguaje llano: con la API caída, «No pudimos
+conectar con el servidor de datos» con «Reintentar», sin comandos ni rutas; si el navegador tiene una copia de «Hoy»,
+se muestra diciendo de cuándo es. En el celular, una barra inferior con las tres pantallas, las tres áreas en una
+fila y las tres primeras cifras en la primera pantalla. El CSV del gráfico trae el pronóstico, su rango y su error,
+no la serie real del COES, que no tiene una licencia publicada.
+
+**API.** `GET /ahora/{área}` (sin `origen`, en vivo; con `origen`, repaso; `ahora=` fija la hora de Lima para
+pruebas) y `GET /confianza/{área}?horizonte=`. Once pruebas nuevas en `tests/test_app_ahora.py`: la ventana y las
+cifras contra `/series`, `/pronostico` y `/pico`; el modo en vivo con el registro sintético de `test_en_vivo.py`
+(último real, hora de Lima, tipo de cada periodo, mañana nula, aviso si el COES se atrasa); el repaso del tramo en
+vivo; los errores en español llano; el día a día del pico contra la serie de un día; y las causas del calendario.
+
+### Medición
+
+Mismo arnés, en modo rápido, contra el backend real (combinado), el 13 de noviembre de 2026. La base es `develop`
+tal como estaba (la iteración 7, con la sección en vivo), servida desde su commit en otro puerto con el mismo
+servidor comprimido. La nueva ruta (`versiones.mjs`, `it8`) abre el caso en «Ahora» en repaso; el arnés ahora acepta
+un enlace por estado y por tarea. `node tabla.mjs it8-base it8`:
+
+| | Métrica | Antes (it. 7) | It. 8 | Objetivo | Cumple |
+|---|---|---|---|---|---|
+| Tareas | T1 pronóstico con rango y real: cifras vistas (escritorio / móvil) | 4/4 / 4/4 | 4/4 / 4/4 | 4/4 | sí |
+| | T1 acciones (escritorio / móvil) | 16 / 16 | 15 / 15 | ≤ base | sí |
+| | T2 ¿se puede confiar?: acciones (escritorio / móvil) | 0 / 0 | 1 / 1 | ≤ base | **no** |
+| | T3 efecto de +2 °C: acciones (escritorio / móvil) | 2 / 2 | 2 / 2 | ≤ base | sí |
+| | T4 diagnóstico de El Niño: acciones (escritorio / móvil) | 1 / 1 | 1 / 2 | ≤ base | **no** (móvil) |
+| | Tiempo estimado (KLM) de las 4 tareas, s (escritorio / móvil) | 24.2 / 24.2 | **17.8 / 18.8** | ≤ base | sí |
+| Jerarquía | Número pronosticado visible sin desplazarse (móvil / escritorio) | sí / sí | sí / sí | sí / sí | sí |
+| | Tamaño del número pronosticado, px (móvil / escritorio) | 44 / 52 | 28 / 28 | ≥ 32 / 40 | **no** |
+| | Ventana ocupada por barras fijas, % (móvil / escritorio) | 8 / 7 | 7 / 8 | ≤ 10 | sí |
+| Accesibilidad | axe-core WCAG 2.2 AA: infracciones (nodos) | 0 (0) en 32 pantallas | 0 (0) en 40 pantallas | 0 | sí |
+| | Objetivos táctiles de menos de 44 px (móvil) | 0 de 30 | 0 de 22 | 0 | sí |
+| | Tabulaciones hasta el control clave / hasta el diagnóstico | 14 / 10 | 9 / 4 | < base | sí (otro control) |
+| | Elementos con foco sin indicador visible / tapados | 0 / 0 | 0 / 0 | 0 / 0 | sí |
+| Color | Contraste mínimo de las series contra el fondo | 3.87:1 | 3.93:1 | ≥ 3:1 | sí |
+| | ΔE mínimo entre series con daltonismo simulado (oscuro / claro) | 33.3 / 27.7 | 46.5 / 51.5 | ≥ 20 | sí |
+| Rendimiento | Peso de la vista, KB transferidos / peticiones | 48 / 11 | 76 / 11 | ≤ base | **no** |
+| | Hasta ver el número, ms: red local / red lenta y CPU ×4 (mediana de 3) | 74 / 706 | 128 / 829 | ≤ base | **no** |
+| | Peticiones a terceros | 0 | 0 | 0 | sí |
+| Honestidad | Menciones visibles a la Programación Diaria del COES | 0 | 0 | 0 | sí |
+
+Además, contra los criterios de la revisión de diseño: en 1366 × 768, desde el enlace del caso y sin desplazarse,
+se ven las cinco cifras, la pastilla «Ahora», la banda, el pico anotado y la mayor subida, y «lo que dijimos ayer»
+con su veredicto ([captura](img/app-hcd/it8-area-proyector-claro.jpg)); el gráfico empieza en la primera pantalla y
+media del celular; 0 px de desborde a 320 y 375 px; y las cifras del caso coinciden con las del prototipo (4,784 ahora,
+4,711 en 1 hora, pico 4,977 a las 14:30, 4,765 mañana, +414 MW desde las 07:30, dijimos 4,767 con 4,588–4,929).
+
+**Lo que no mejoró, y por qué.**
+
+- **T2 pasa de 0 a 1 acción.** A propósito: el error del día completo usa datos posteriores a «ahora», y en repaso la
+  pantalla no los muestra sin pedirlo («Mostrar lo que pasó después»). Lo que se sabía a esa hora (el error hasta las
+  19:00, el de 2026 y el veredicto de la hora) sí está a la vista sin tocar nada.
+- **T4 en el celular, 1 → 2 acciones.** La fase de El Niño está en la quinta cifra de «Confianza», que en el celular
+  queda en la tercera fila: un gesto de desplazamiento.
+- **El tamaño del número pronosticado baja de 44–52 a 28 px.** La métrica busca 4,767, el pronóstico; en «Ahora», en
+  repaso, la cifra grande es lo real de esa hora (4,784), porque ya se conocía, y el pronóstico va en la rendición de
+  cuentas («Dijimos 4,767 · Fue 4,784», 28 px) y bajo la cifra de ahora. En vivo, la cifra grande sí es el pronóstico.
+- **Más peso y más tiempo hasta el número en red lenta (706 → 829 ms, mediana de 3 cargas).** El script casi se duplicó
+  (26 → 49 KB comprimido: ahora son tres pantallas) y se piden las tres áreas para sus tarjetas. Se recuperó parte
+  (1,313 ms en la primera medición) precargando `/salud` y pintando «Ahora» sin esperar los datos de arranque. Partir
+  el script (cargar «Detalle» solo al abrirlo) es lo siguiente. En red local, 74 → 128 ms.
+- **Las tabulaciones cambian de sentido:** en «Ahora» no hay selector de horizonte; se cuentan hasta el día y hasta
+  «Confianza».
+- **Lighthouse no se corrió** (modo rápido en las dos versiones), y nada se probó con personas.
+
+### Límites y pendientes
+
+- **El modelo de «Hoy» no es el del historial.** El registro en vivo es Chronos-2 ajustado con feriados (sin la mezcla
+  del combinado, que necesita Simons) y su rango es del 80 %, no del 90 %. Cada bloque dice de qué modelo y de qué
+  rango habla; sumar el combinado a la tubería es lo pendiente que ya anota `experimentos/en_vivo/README.md`.
+- **«En 1 hora» en vivo es el pronóstico a 24 h** de esa media hora: el de 1 h necesita la demanda de una hora antes, que
+  llega al día siguiente.
+- **La causa probable solo viene del calendario.** No conoce los días no laborables decretados sobre la marcha, ni
+  lluvias, fallas o cargas mineras; un analista tendría que anotarlas.
+- **Lo que no se llevó del prototipo:** el modo Operador/Público, «Modelo y datos» como página (sigue siendo la ficha
+  en un diálogo), la tabla de modelos comparados en «Confianza» (está en el diagnóstico del detalle) y la descarga en
+  cada gráfico (solo el principal tiene CSV).
+- **El control de fecha sigue el idioma del navegador** (mm/dd en uno en inglés); el título dice la fecha completa.
+- Sin pruebas con personas ni con lectores de pantalla reales.
+
+| Antes: el área (proyector, oscuro) | Después: «Ahora» en repaso (proyector, claro) |
+|---|---|
+| ![La vista del área antes](img/app-hcd/it8-base-area-escritorio.jpg) | ![«Ahora» en el proyector](img/app-hcd/it8-area-proyector-claro.jpg) |
+
+| «Ahora», hoy (escritorio) | «Ahora», celular | «Confianza» (escritorio, oscuro) | Sin conexión (celular) |
+|---|---|---|---|
+| ![](img/app-hcd/it8-inicio-escritorio-claro.jpg) | ![](img/app-hcd/it8-area-movil.jpg) | ![](img/app-hcd/it8-confianza-escritorio.jpg) | ![](img/app-hcd/it8-sin_api-movil-claro.jpg) |
+
+Cómo repetirlo:
+
+```bash
+git archive 7ea7207 app | tar -x -C /tmp/base   # la base, servida en :8081 con app/backend/web.py
+TPF_WEB=http://localhost:8081 node medir.mjs --version it7 --etiqueta it8-base --rapido
+node medir.mjs --version it8 --etiqueta it8 --rapido
+node tabla.mjs it8-base it8
+node capturas.mjs --version it8 --etiqueta it8
+```

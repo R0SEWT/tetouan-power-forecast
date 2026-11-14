@@ -308,17 +308,24 @@ async function api(ruta, cuerpo) {
 function mostrarError(err) {
   const b = $('#bannerError');
   if (err.estado === 0) {
-    b.innerHTML = `<strong>No hay conexión con el backend</strong> en <code>${esc(API)}</code>. `
-      + 'Levántalo desde la raíz del repo con <code>uv run uvicorn app.backend.main:app --reload</code>.'
-      + '<br><button class="btn" type="button" id="btnReintentar">Reintentar</button>';
+    b.innerHTML = '<strong>No pudimos conectar con el servidor de datos.</strong> Puede ser la conexión o que el servicio '
+      + 'esté detenido. Lo que se ve puede no estar al día. <button class="btn" type="button" id="btnReintentar">Reintentar</button>';
     $('#btnReintentar').addEventListener('click', () => {
       b.hidden = true;
       iniciar();
     });
   } else {
-    b.innerHTML = `<strong>El backend respondió con un error (${err.estado}).</strong> ${esc(err.message)}`;
+    b.innerHTML = `<strong>No pudimos traer estos datos.</strong> ${esc(textoError(err))}`;
   }
   b.hidden = false;
+}
+
+// El detalle del servidor ya viene en español llano; una validación de parámetros no, y se traduce.
+function textoError(err) {
+  if (err.estado === 0) return 'Sin conexión con el servidor de datos.';
+  if (err.estado === 422 && /should|field|pattern|valid/i.test(err.message)) return 'La fecha o la hora no son válidas.';
+  if (err.estado === 404 && /not found/i.test(err.message)) return 'Esta versión del servidor todavía no ofrece esta información.';
+  return err.message;
 }
 
 function limpiarError() {
@@ -331,7 +338,7 @@ function manejarError(err, panel) {
     mostrarError(err);
     return;
   }
-  if (panel) panel.innerHTML = `<p class="vacio" role="alert">No se pudo calcular: ${esc(err.message)}</p>`;
+  if (panel) panel.innerHTML = `<p class="vacio" role="alert">No pudimos calcularlo. ${esc(textoError(err))}</p>`;
 }
 
 // ---- Gráficos en SVG ------------------------------------------------------------------
@@ -678,46 +685,24 @@ function aplicarTema(tema) {
   $('#iconoLuna').hidden = claro;
   $('#iconoSol').hidden = !claro;
   $('#btnTema').setAttribute('aria-label', claro ? 'Cambiar a modo oscuro' : 'Cambiar a modo claro');
-  $('meta[name="theme-color"]').setAttribute('content', claro ? '#f4f6f9' : '#0e1117');
+  $('meta[name="theme-color"]').setAttribute('content', claro ? '#f4f6f8' : '#0b0f14');
 }
 
-// ---- Inicio --------------------------------------------------------------------------
+// ---- El Niño costero ------------------------------------------------------------------
 
+// «El Niño costero: extraordinario · ICEN 3.38 (jul-2026)»: con el mes y el año del último ICEN publicado
 function pintarRegimen() {
   const r = S.resumen && S.resumen.regimen_nino;
-  if (!r) return;
+  const chip = $('#chipRegimen');
+  if (!r) {
+    chip.hidden = true; // sin dato no se queda en «cargando»
+    return;
+  }
   const [y, m] = r.mes.split('-').map(Number);
   const estado = ESTADO_NINO[r.estado] || r.estado;
-  const texto = r.estado === 'neutro'
-    ? `El Niño Costero: neutro · ICEN ${r.icen.toFixed(2)}`
-    : `El Niño ${estado} · ICEN ${r.icen.toFixed(2)} · ${MESES_CORTOS[m - 1]}`;
-  $('#chipRegimenTxt').textContent = texto;
-  $('#chipRegimen').setAttribute(
-    'aria-label',
-    `Régimen de El Niño Costero: ${estado}, ICEN ${r.icen} en ${MESES[m - 1]} de ${y}. Abre la ficha técnica.`,
-  );
-}
-
-function pintarInicio() {
-  if (!S.areas.length) return;
-  $('#listaAreas').innerHTML = S.areas.map((a) => {
-    const info = INFO_AREA[a.id] || { letra: a.nombre[0], fg: '#000', desc: '' };
-    const met = S.resumen && S.resumen.metricas_prueba[a.id];
-    const metrica = met
-      ? `<span class="area-metric">En 2026, a 24 h, se equivocó en promedio <span class="num">${nf1.format(met.mae_mw)} MW</span> (<span class="num">${pct(met.mape_pct)}</span>). Referencia simple que debe superar: ${esc(NOMBRE_REF[met.mejor_referencia] || met.mejor_referencia)}.</span>`
-      : '';
-    return `<a class="area-btn" href="#/area/${encodeURIComponent(a.id)}" style="--area-color:${esc(a.color)};--area-fg:${info.fg}">`
-      + `<span class="area-badge" aria-hidden="true">${esc(info.letra)}</span>`
-      + `<span class="area-body"><span class="area-name">${esc(a.nombre)}</span><span class="area-desc">${esc(info.desc)}</span>${metrica}</span>`
-      + '<svg class="area-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></a>';
-  }).join('');
-}
-
-function mostrarInicio() {
-  $('#vistaInicio').hidden = false;
-  $('#vistaArea').hidden = true;
-  document.title = 'Demanda del SEIN por área';
-  window.scrollTo(0, 0);
+  $('#chipRegimenTxt').textContent = `El Niño costero: ${estado} · ICEN ${r.icen.toFixed(2)} (${MESES_CORTOS[m - 1]}-${y})`;
+  chip.title = `Último ICEN publicado: ${r.icen} en ${MESES[m - 1]} de ${y}, régimen ${estado} según ENFEN. El ICEN sale con meses de rezago.`;
+  chip.hidden = false;
 }
 
 // ---- Detalle del área -------------------------------------------------------------------
@@ -729,6 +714,10 @@ function escribirRuta() {
   if (hayVariosModelos() && S.modelo) q.set('modelo', S.modelo);
   const destino = `#/area/${encodeURIComponent(S.area)}?${q}`;
   if (location.hash !== destino) history.replaceState(null, '', destino);
+  pintarEstado({ modo: 'repaso', texto: `Repaso · ${fechaNumerica(S.fecha)}, ${idxAHora(S.idx)}`,
+    corto: `Repaso ${fechaNumerica(S.fecha).replace(/\/20(\d\d)$/, '/$1')} ${idxAHora(S.idx)}`,
+    titulo: `Detalle de un día del historial: ${fechaLarga(S.fecha)}, ${idxAHora(S.idx)}` });
+  actualizarNav();
 }
 
 function indicePico() {
@@ -795,15 +784,11 @@ function mostrarArea(id, q) {
   const info = INFO_AREA[id] || { letra: area.nombre[0], fg: '#000', desc: '' };
   const badge = $('#areaBadge');
   badge.textContent = info.letra;
-  badge.style.setProperty('--area-color', area.color);
-  badge.style.setProperty('--area-fg', info.fg);
-  $('#areaNombre').textContent = area.nombre;
-  $('#areaDesc').textContent = info.desc;
-  document.title = `${area.nombre} · Demanda del SEIN`;
+  $('#areaNombre').textContent = `${area.nombre}: detalle del pronóstico`;
+  document.title = `${area.nombre}, detalle · Curva`;
 
-  $('#vistaInicio').hidden = true;
-  $('#vistaArea').hidden = false;
-  if (cambioDeArea) window.scrollTo(0, 0);
+  mostrarVista('detalle');
+  if (cambioDeArea || llega) window.scrollTo(0, 0);
 
   sincronizarControles();
   escribirRuta();
@@ -812,6 +797,11 @@ function mostrarArea(id, q) {
   cargarPico();
   pintarTab();
   if (cambioDeArea || llega) cargarEnVivo();
+  actualizarNav();
+  const seccion = q.get('seccion');
+  if (['escenarios', 'diagnostico', 'envivo', 'curva'].includes(seccion)) {
+    requestAnimationFrame(() => irASeccion(seccion));
+  }
 }
 
 function recargar() {
@@ -875,7 +865,7 @@ async function cargarSerie() {
     S.serie = null;
     marcarCargando(false);
     $('#respTitulo').textContent = 'No se pudo calcular el pronóstico';
-    $('#respVeredicto').textContent = err.estado === 0 ? 'Sin conexión con el backend.' : err.message;
+    $('#respVeredicto').textContent = textoError(err);
     manejarError(err, $('#graficoDia'));
   }
 }
@@ -1698,7 +1688,7 @@ async function cargarEnVivo() {
   } catch (err) {
     if (turno !== S.turnos.vivo) return;
     panel.setAttribute('aria-busy', 'false');
-    if (err.estado === 404) cont.innerHTML = '<p class="vacio">Este backend no tiene la sección en vivo.</p>';
+    if (err.estado === 404) cont.innerHTML = '<p class="vacio">Esta versión del servidor todavía no ofrece el pronóstico en vivo.</p>';
     else manejarError(err, cont);
     return;
   }
@@ -1795,21 +1785,1057 @@ function pintarEnVivo(d) {
   });
 }
 
+// ---- Producto: cabecera, vistas y navegación ---------------------------------------------------------------
+
+const ORDEN_AREAS = ['norte', 'centro', 'sur'];
+const AREAS_RESPALDO = [{ id: 'norte', nombre: 'Norte' }, { id: 'centro', nombre: 'Centro' }, { id: 'sur', nombre: 'Sur' }];
+const ICONO = {
+  bien: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m8 12 3 3 5-6"/></svg>',
+  ojo: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 2 21h20L12 3z"/><path d="M12 10v5"/><path d="M12 18h.01"/></svg>',
+  mal: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6M9 9l6 6"/></svg>',
+  info: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>',
+};
+const TIPO_TXT = {
+  ex_ante_estricto: 'Emitido antes de que empezara la media hora',
+  en_vivo: 'Emitido con la media hora ya empezada, antes de su real',
+  reconstruido: 'Reconstruido: calculado después de conocerse el real',
+};
+const rangoTxt = (a, b) => `${mw(a)}\u00a0–\u00a0${mw(b)}`;
+const firmado = (x) => `${x >= 0 ? '+' : '−'}${mw(Math.abs(x))}`;
+const nombreArea = (id) => (S.areas.find((a) => a.id === id) || AREAS_RESPALDO.find((a) => a.id === id) || { nombre: id }).nombre;
+const DIAS_CORTOS = ['dom', 'lun', 'mar', 'mié', 'jue', 'vie', 'sáb'];
+const diaCorto = (fh) => `${DIAS_CORTOS[partesFecha(fh).dow]} ${partesFecha(fh).d}`;
+const fechaNum = (iso) => fechaNumerica(iso).slice(0, 5); // «12/11»
+const capital = (t) => t.charAt(0).toUpperCase() + t.slice(1);
+
+// El fin de un periodo como se dice: «2026-11-13T00:00» es el jueves 12 a las 24:00.
+function finTxt(fh) {
+  if (horaDe(fh) === '00:00') {
+    const ayer = sumarDias(fh.slice(0, 10), -1);
+    return { corto: `${fechaNum(ayer)}, 24:00`, largo: `${fechaDiaMes(ayer)} a las 24:00` };
+  }
+  return { corto: `${fechaNum(fh)}, ${horaDe(fh)}`, largo: `${fechaDiaMes(fh)} a las ${horaDe(fh)}` };
+}
+
+function pintarEstado({ modo, texto, titulo, corto }) {
+  const e = $('#estadoDatos');
+  e.hidden = false;
+  e.classList.toggle('repaso', modo === 'repaso');
+  $('#estadoTxt').innerHTML = `<span class="larga">${esc(texto)}</span><span class="corta">${esc(corto || texto)}</span>`;
+  e.title = titulo || texto;
+  e.setAttribute('aria-label', titulo || texto);
+}
+
+function mostrarVista(nombre) {
+  S.vista = nombre;
+  $('#vistaAhora').hidden = nombre !== 'ahora';
+  $('#vistaConfianza').hidden = nombre !== 'confianza';
+  $('#vistaArea').hidden = nombre !== 'detalle';
+  actualizarNav();
+}
+
+// Los enlaces de la cabecera llevan el área (y, si se repasa un día, ese momento) a la otra pantalla.
+function actualizarNav() {
+  const area = S.vista === 'detalle' ? S.area : S.vista === 'confianza' ? C.area : A.area;
+  const a = area || 'centro';
+  const repaso = S.vista === 'detalle' ? { fecha: S.fecha, hora: idxAHora(S.idx) } : (A.fecha ? { fecha: A.fecha, hora: A.hora } : null);
+  $$('#navPantallas a').forEach((enlace) => {
+    const v = enlace.dataset.nav;
+    if (v === 'ahora') enlace.href = rutaAhora(a, repaso);
+    if (v === 'confianza') enlace.href = `#/confianza/${encodeURIComponent(a)}`;
+    if (v === 'detalle') enlace.href = rutaDetalle(a, repaso);
+    if (v === S.vista) enlace.setAttribute('aria-current', 'page');
+    else enlace.removeAttribute('aria-current');
+  });
+  const volver = $('#detVolver');
+  if (volver) volver.href = rutaAhora(a, S.vista === 'detalle' ? repaso : null);
+}
+
+function rutaAhora(area, repaso = null, extra = {}) {
+  const q = new URLSearchParams();
+  if (repaso && repaso.fecha) {
+    q.set('fecha', repaso.fecha);
+    q.set('hora', repaso.hora || '19:00');
+  }
+  Object.entries(extra).forEach(([k, v]) => { if (v) q.set(k, v); });
+  return `#/ahora/${encodeURIComponent(area)}${q.toString() ? `?${q}` : ''}`;
+}
+
+// El detalle abre en el mismo momento si es un día del historial del modelo; si no, en su último día.
+function rutaDetalle(area, repaso = null, seccion = null) {
+  const q = new URLSearchParams();
+  if (repaso && repaso.fecha && repaso.fecha >= FECHA_MIN && repaso.fecha <= FECHA_MAX) {
+    q.set('fecha', repaso.fecha);
+    q.set('hora', repaso.hora);
+    q.set('horizonte', '24h');
+    q.set('variante', S.variante || 'M3');
+  }
+  if (hayVariosModelos() && S.modelo) q.set('modelo', S.modelo);
+  if (seccion) q.set('seccion', seccion);
+  return `#/area/${encodeURIComponent(area)}${q.toString() ? `?${q}` : ''}`;
+}
+
+const hoyLima = () => ahoraEnLima().fecha;
+function horaValida(t) {
+  const i = horaAIdx(t);
+  return i == null ? null : idxAHora(i);
+}
+
+// ---- Ahora --------------------------------------------------------------------------------------------------
+
+const A = { area: 'centro', fecha: null, hora: null, modelo: null, datos: new Map(), turno: 0, ref: true, despues: false,
+  dias: null, extra: new Map() };
+
+function consultaAhora() {
+  const q = new URLSearchParams();
+  if (A.fecha) q.set('origen', `${A.fecha}T${A.hora}`);
+  if (A.modelo) q.set('modelo', A.modelo);
+  return q.toString() ? `?${q}` : '';
+}
+
+function mostrarAhora(area, q) {
+  const cambio = A.area !== area;
+  A.area = area;
+  const fecha = esFecha(q.get('fecha')) ? q.get('fecha') : null;
+  A.fecha = fecha && fecha !== hoyLima() ? fecha : null;
+  A.hora = A.fecha ? (horaValida(q.get('hora')) || idxAHora(ahoraEnLima().idx)) : null;
+  A.modelo = q.get('modelo') && (!S.modelos.length || modeloPorId(q.get('modelo'))) ? q.get('modelo') : null;
+  const llega = $('#vistaAhora').hidden;
+  mostrarVista('ahora');
+  document.title = `${nombreArea(area)} · Ahora · Curva`;
+  if (llega || cambio) window.scrollTo(0, 0);
+  cargarAhora();
+}
+
+function irAhora(repaso) {
+  history.replaceState(null, '', rutaAhora(A.area, repaso, { modelo: A.modelo }));
+  mostrarAhora(A.area, new URLSearchParams(location.hash.split('?')[1] || ''));
+}
+
+async function cargarAhora() {
+  const turno = ++A.turno;
+  const consulta = consultaAhora();
+  const vista = $('#vistaAhora');
+  vista.classList.toggle('desactualizada', A.datos.size > 0);
+  $('#ahCifras').setAttribute('aria-busy', 'true');
+  $('#ahLienzo').setAttribute('aria-busy', 'true');
+  if (!A.datos.size) {
+    $('#ahCifras').innerHTML = '<p class="cargando-bloque">Calculando el pronóstico…</p>';
+    pintarAreasAhora();
+  }
+  const areas = [A.area, ...ORDEN_AREAS.filter((a) => a !== A.area)];
+  const pedidos = areas.map((a) => api(`/ahora/${encodeURIComponent(a)}${consulta}`));
+  pedidos.forEach((pr, k) => pr.then((d) => {
+    if (turno !== A.turno || k === 0) return;
+    A.datos.set(areas[k], d);
+    pintarAreasAhora();
+  }).catch(() => {}));
+  let d;
+  try {
+    d = await pedidos[0];
+  } catch (err) {
+    if (turno !== A.turno) return;
+    vista.classList.remove('desactualizada');
+    $('#ahCifras').setAttribute('aria-busy', 'false');
+    $('#ahLienzo').setAttribute('aria-busy', 'false');
+    if (err.estado === 0) {
+      mostrarError(err);
+      const copia = leerCopiaAhora(consulta);
+      if (copia) {
+        A.datos.set(A.area, copia.d);
+        pintarAhora();
+        const cuando = new Date(copia.guardado);
+        const txt = `${String(cuando.getDate()).padStart(2, '0')}/${String(cuando.getMonth() + 1).padStart(2, '0')}, ${String(cuando.getHours()).padStart(2, '0')}:${String(cuando.getMinutes()).padStart(2, '0')}`;
+        $('#ahAviso').innerHTML = `${ICONO.ojo}<span>Sin conexión con el servidor de datos: se muestra la última copia guardada en este navegador, consultada el ${esc(txt)}.</span>`;
+        $('#ahAviso').hidden = false;
+        pintarEstado({ modo: 'repaso', texto: `Sin conexión · copia del ${txt}`, corto: `Copia del ${txt}`, titulo: 'Sin conexión: última copia guardada' });
+        return;
+      }
+      pintarEstado({ modo: 'repaso', texto: 'Sin conexión con los datos', corto: 'Sin conexión' });
+      A.sinDatos = true;
+      pintarAreasAhora();
+      $('#vistaAhora .grid-principal').hidden = !A.datos.has(A.area);
+    }
+    const motivo = err.estado === 422 && A.dias ? `No hay datos para repasar el ${fechaNumerica(A.fecha)}. ${textoDias(A.dias)}` : textoError(err);
+    $('#ahAviso').innerHTML = `${ICONO.ojo}<span>${esc(motivo)}</span>`;
+    $('#ahAviso').hidden = false;
+    if (!A.datos.has(A.area)) $('#ahCifras').innerHTML = '<p class="vacio">No pudimos traer el pronóstico de esta área.</p>';
+    return;
+  }
+  if (turno !== A.turno) return;
+  limpiarError();
+  A.sinDatos = false;
+  $('#vistaAhora .grid-principal').hidden = false;
+  A.datos.set(A.area, d);
+  A.dias = d.dias_disponibles;
+  if (!consulta) guardar(`tpf-copia|${A.area}`, JSON.stringify({ d, guardado: Date.now() })); // solo «hoy»: el repaso no cambia
+  vista.classList.remove('desactualizada');
+  $('#ahCifras').setAttribute('aria-busy', 'false');
+  $('#ahLienzo').setAttribute('aria-busy', 'false');
+  pintarAhora();
+  cargarExtraAhora(d, turno);
+}
+
+function leerCopiaAhora(consulta) {
+  try {
+    if (consulta) return null;
+    const c = JSON.parse(leer(`tpf-copia|${A.area}`) || 'null');
+    return c && c.d && c.d.fecha_hora ? c : null;
+  } catch {
+    return null;
+  }
+}
+
+function textoDias(tramos) {
+  if (!tramos || !tramos.length) return '';
+  return `Hay datos ${tramos.map(([a, b]) => `del ${fechaCorta(a)} al ${fechaCorta(b)}`).join(' y ')}, y el pronóstico de hoy.`;
+}
+
+function pintarAhora() {
+  const d = A.datos.get(A.area);
+  if (!d) return;
+  const vivo = d.modo === 'en_vivo';
+  const fin = finTxt(d.datos_hasta);
+  const nombreModeloAhora = d.modelo_nombre.replace(/\s*\(.*\)\s*$/, '');
+  $('#principal').textContent = vivo
+    ? `${nombreArea(A.area)} · hoy, ${fechaDiaMes(d.ahora)}`
+    : `${nombreArea(A.area)} · ${fechaLarga(d.origen)}`;
+  $('#ahModo').innerHTML = vivo
+    ? `<b>Son las ${esc(horaDe(d.ahora))}.</b> Lo real llega hasta el ${esc(fin.largo)}: el COES publica cada día la demanda del día anterior, hacia las 09:45. Todo lo que sigue es pronóstico, emitido hoy a las ${esc(horaDe(d.emitido_en || d.ahora))}.`
+    : `<b>Repaso de un día del historial.</b> Así se veía a las ${esc(horaDe(d.origen))}: lo real llega hasta esa hora y lo que sigue es lo que el modelo ya había pronosticado.`;
+  pintarEstado(vivo
+    ? { modo: 'vivo', texto: `Hoy · datos del COES al ${fin.corto}`, corto: `COES ${fin.corto.replace(', ', ' ')}`, titulo: `Pronóstico de hoy. Datos reales del COES hasta el ${fin.largo}; el resto es pronóstico.` }
+    : { modo: 'repaso', texto: `Repaso · ${fechaNumerica(d.origen)}, ${horaDe(d.origen)}`, corto: `Repaso ${fechaNumerica(d.origen).replace(/\/20(\d\d)$/, '/$1')} ${horaDe(d.origen)}`, titulo: `Repaso del ${fechaLarga(d.origen)}, ${horaDe(d.origen)}` });
+
+  // Controles: «Hoy» o un día del historial, y la hora (solo al repasar)
+  $('#ahHoy').setAttribute('aria-pressed', String(vivo));
+  const fecha = $('#ahFecha');
+  const tramos = d.dias_disponibles || [];
+  if (tramos.length) fecha.min = tramos.map((t) => t[0]).sort()[0];
+  fecha.max = hoyLima();
+  fecha.value = vivo ? d.ahora.slice(0, 10) : d.origen.slice(0, 10);
+  $('#ahFechaLarga').textContent = vivo ? 'Hoy' : `${fechaLarga(d.origen)} (${fechaNumerica(d.origen)})`;
+  const hora = $('#ahHora');
+  hora.value = horaDe(d.ahora);
+  hora.closest('.campo').hidden = vivo;
+  const avisos = [...(d.avisos || [])];
+  $('#ahAviso').innerHTML = avisos.map((t) => `${ICONO.ojo}<span>${esc(t)}</span>`).join('');
+  $('#ahAviso').hidden = !avisos.length;
+
+  pintarAreasAhora();
+  pintarCifras(d);
+  $('#ahGrafTitulo').textContent = vivo ? 'Ayer y hoy' : 'Ese día y las 24 h siguientes';
+  $('#ahGrafSub').textContent = vivo
+    ? `${nombreArea(A.area)}. A la izquierda, lo real de ayer y lo que se había pronosticado; desde la línea punteada no hay dato real todavía. «Ahora» marca la hora de Lima.`
+    : `${nombreArea(A.area)}. A la izquierda de «Ahora», lo real y lo que se pronosticó un día antes; a la derecha, lo que ya estaba pronosticado a las ${horaDe(d.origen)}.`;
+  $('#ahLeyRango').textContent = `Rango del ${d.nivel_rango_pct} %`;
+  $('#ahLeyRef').textContent = `Referencia (${(REF_CORTA[d.referencia_nombre] || 'simple')})`;
+  $('#ahDespuesCampo').hidden = vivo;
+  $('#ahDespues').checked = A.despues;
+  pintarDiaCompleto(d);
+  $('#ahRef').checked = A.ref;
+  graficoAhora($('#ahLienzo'), d);
+  $('#ahDesc').textContent = descripcionAhora(d);
+  if ($('#ahTablaDet').open) pintarTablaAhora(d);
+  pintarAyer(d);
+  pintarBueno(d);
+  pintarOrigen(d);
+  $('#ahPie').textContent = `Curva es un pronóstico abierto hecho con los datos públicos del COES (IEOD); no sirve para operar el sistema eléctrico. ${vivo ? `Pronóstico en vivo de ${nombreModeloAhora}, emitido cada mañana con la demanda del día anterior.` : `Pronósticos del modelo ${nombreModeloAhora.toLowerCase()}.`} El CSV trae el pronóstico, su rango y su error, no la serie real del COES, que no tiene una licencia publicada.`;
+  actualizarNav();
+}
+
+function sparkline(d) {
+  const W = 96;
+  const H = 30;
+  const n = d.fecha_hora.length;
+  const vals = [...d.pronostico, ...d.real.filter((v) => v != null)];
+  const lo = Math.min(...vals);
+  const hi = Math.max(...vals);
+  const x = (i) => (i / (n - 1)) * W;
+  const y = (v) => 2 + (1 - (v - lo) / (hi - lo || 1)) * (H - 4);
+  const real = d.real.slice(0, d.i_origen + 1).map((v, i) => (v == null ? '' : `${i ? 'L' : 'M'}${x(i).toFixed(1)},${y(v).toFixed(1)}`)).join('');
+  const pron = d.pronostico.map((v, i) => (i < d.i_origen ? '' : `${i === d.i_origen ? 'M' : 'L'}${x(i).toFixed(1)},${y(v).toFixed(1)}`)).join('');
+  return `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" aria-hidden="true" focusable="false">`
+    + `<line x1="${x(d.i_ahora).toFixed(1)}" x2="${x(d.i_ahora).toFixed(1)}" y1="0" y2="${H}" class="g-eje"/>`
+    + `<path d="${real}" class="sp-real"/><path d="${pron}" class="sp-pron"/></svg>`;
+}
+
+function pintarAreasAhora() {
+  const lista = S.areas.length ? S.areas : AREAS_RESPALDO;
+  const repaso = A.fecha ? { fecha: A.fecha, hora: A.hora } : null;
+  $('#ahAreas').innerHTML = lista.map((a) => {
+    const d = A.datos.get(a.id);
+    const info = INFO_AREA[a.id] || { letra: a.nombre[0] };
+    const actual = a.id === A.area;
+    let cuerpo = `<span class="v">${A.sinDatos ? 'Sin datos por ahora' : 'Calculando…'}</span>`;
+    if (d) {
+      const vivo = d.modo === 'en_vivo';
+      cuerpo = `<span class="v">Ahora <b>${mw(d.cifra_ahora.valor)}</b><span class="unidad"> MW${d.cifra_ahora.fuente === 'real' ? '' : ' (pron.)'}</span></span>`
+        + `<span class="v pico-area">${vivo ? 'Pico de hoy' : 'Pico 24 h'}: <b>${mw(d.pico.valor)}</b> MW · ${esc(diaCorto(d.pico.fecha_hora))} ${esc(horaDe(d.pico.fecha_hora))}</span>`
+        + sparkline(d);
+    }
+    return `<a class="area" href="${rutaAhora(a.id, repaso, { modelo: A.modelo })}"${actual ? ' aria-current="true"' : ''}>`
+      + `<span class="nom"><em aria-hidden="true">${esc(info.letra)}</em>${esc(a.nombre)}</span>${cuerpo}</a>`;
+  }).join('');
+}
+
+function kpiHtml({ clase = '', sw = 'pron', k, n, d, unidad = 'MW' }) {
+  return `<div class="kpi ${clase}"><p class="k">${sw ? `<span class="sw ${sw}" aria-hidden="true"></span>` : ''}${k}</p>`
+    + `<p class="n">${n}${unidad ? `<small>${unidad}</small>` : ''}</p><p class="d">${d}</p></div>`;
+}
+
+function pintarCifras(d) {
+  const vivo = d.modo === 'en_vivo';
+  const c = d.cifra_ahora;
+  const html = [];
+  const dijimos = d.ayer && d.ayer.fecha_hora === c.fecha_hora ? `. Se pronosticó ${mw(d.ayer.pronostico)} (${rangoTxt(d.ayer.inferior, d.ayer.superior)}): ${d.ayer.dentro ? 'dentro' : 'fuera'} del rango` : '';
+  html.push(kpiHtml({
+    sw: c.fuente === 'real' ? 'real' : 'pron',
+    k: `Ahora · ${esc(horaDe(c.fecha_hora))}`,
+    n: mw(c.valor),
+    d: c.fuente === 'real' ? `Dato del COES${dijimos}` : `Pronóstico, rango ${rangoTxt(c.inferior, c.superior)} · el real llega mañana`,
+  }));
+  const u = d.en_1h;
+  html.push(u ? kpiHtml({
+    k: `En 1 hora · ${esc(horaDe(u.fecha_hora))}`,
+    n: mw(u.valor),
+    d: `Rango ${rangoTxt(u.inferior, u.superior)}${u.fuente === 'pronostico_1h' ? ' · a\u00a01\u00a0h' : ''}`,
+  }) : kpiHtml({ clase: 'kpi-vacio', k: 'En 1 hora', n: '—', d: 'Sin pronóstico para esa hora', unidad: '' }));
+  const p = d.pico;
+  const yaPaso = vivo && p.fecha_hora < d.ahora;
+  const dia = d.origen.slice(0, 10);
+  const escenario = !vivo && dia >= FECHA_MIN && dia <= FECHA_MAX
+    ? ` <a class="kpi-enlace" href="${rutaDetalle(A.area, { fecha: dia, hora: horaDe(d.origen) }, 'escenarios')}">¿Y si hace más calor?</a>` : '';
+  html.push(kpiHtml({
+    clase: 'dest',
+    k: vivo ? 'Pico de hoy' : 'Pico de las próximas 24 h',
+    n: mw(p.valor),
+    d: `${esc(fechaDiaMes(p.fecha_hora))}, ${esc(horaDe(p.fecha_hora))} · rango ${rangoTxt(p.inferior, p.superior)}${yaPaso ? ' · según el pronóstico, ya pasó' : ''}${escenario}`,
+  }));
+  html.push(d.manana ? kpiHtml({
+    k: 'Mañana a esta hora',
+    n: mw(d.manana.valor),
+    d: `${firmado(d.manana.valor - c.valor)} MW frente a ahora`,
+  }) : kpiHtml({ clase: 'kpi-vacio', k: 'Mañana a esta hora', n: '—', unidad: '', d: d.modo === 'en_vivo' ? 'Se emite mañana hacia las 10:00, cuando el COES publique la demanda de hoy' : esc(d.manana_motivo || 'Todavía no se emite') }));
+  const r = d.rampa;
+  html.push(r ? kpiHtml({
+    sw: null,
+    k: 'Mayor subida en 1 hora',
+    n: `+${mw(r.subida_mw)}`,
+    d: `${esc(horaDe(r.desde))}–${esc(horaDe(r.hasta))} ${esc(diaCorto(r.hasta))} · `
+      + (r.fuerte ? `<span class="marca-estado fuerte">${ICONO.ojo}rampa fuerte</span>` : 'habitual')
+      + (r.umbral_mw != null ? ` (umbral ${mw(r.umbral_mw)})` : ''),
+  }) : kpiHtml({ sw: null, clase: 'kpi-vacio', k: 'Mayor subida en 1 hora', n: '—', unidad: '', d: 'La demanda no sube en ninguna hora de la ventana' }));
+  $('#ahCifras').innerHTML = html.join('');
+}
+
+// El gráfico principal: lo real hasta el último dato, el pronóstico fino (pasado) y grueso (futuro), su rango,
+// la referencia, «ahora», y anotados sobre la curva el pico, la mayor subida y mañana a esta hora.
+function graficoAhora(el, d) {
+  el._dibujar = () => graficoAhora(el, d);
+  const W = Math.max(280, Math.round(el.clientWidth || 600));
+  const movil = W < 560;
+  const H = movil ? 260 : (innerHeight < 800 ? 270 : (innerHeight < 900 ? 300 : 330));
+  const m = { l: movil ? 42 : 52, r: movil ? 10 : 18, t: 32, b: 34 };
+  const n = d.fecha_hora.length;
+  const N = n - 1;
+  const io = d.i_origen;
+  const ia = d.i_ahora;
+  const vivo = d.modo === 'en_vivo';
+  const despues = !vivo && A.despues && d.real_despues;
+  const vals = [];
+  for (let i = 0; i < n; i += 1) {
+    vals.push(d.inferior[i], d.superior[i]);
+    if (d.real[i] != null) vals.push(d.real[i]);
+    if (despues && d.real_despues[i] != null) vals.push(d.real_despues[i]);
+    if (A.ref && d.referencia[i] != null) vals.push(d.referencia[i]);
+  }
+  let lo = Math.min(...vals);
+  let hi = Math.max(...vals);
+  const pad = (hi - lo) * 0.08 || 10;
+  lo -= pad;
+  hi += pad * 1.8;
+  const x = (i) => m.l + (i / N) * (W - m.l - m.r);
+  const y = (v) => m.t + (1 - (v - lo) / (hi - lo)) * (H - m.t - m.b);
+  const p = (i, v) => `${x(i).toFixed(1)},${y(v).toFixed(1)}`;
+  const linea = (vals2, desde, hasta) => {
+    let s = '';
+    let abierto = false;
+    for (let i = desde; i <= hasta; i += 1) {
+      const v = vals2[i];
+      if (v == null) { abierto = false; continue; }
+      s += `${abierto ? 'L' : 'M'}${p(i, v)}`;
+      abierto = true;
+    }
+    return s;
+  };
+  let s = `<svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" aria-hidden="true" focusable="false">`;
+  s += `<rect class="g-futuro" x="${x(io).toFixed(1)}" y="${m.t - 22}" width="${(x(N) - x(io)).toFixed(1)}" height="${H - m.b - m.t + 22}"/>`;
+  const rotulo = movil ? 'Pronóstico' : (vivo ? 'Pronóstico: el real todavía no se publica' : 'Próximas 24 horas (pronóstico)');
+  s += `<text class="g-texto medio" x="${(x(io) + 8).toFixed(1)}" y="${m.t - 8}">${esc(rotulo)}</text>`;
+  marcas(lo, hi, movil ? 3 : 4).filter((t) => y(t) >= m.t - 2 && y(t) <= H - m.b + 1).forEach((t) => {
+    s += `<line class="g-rejilla" x1="${m.l}" x2="${W - m.r}" y1="${y(t).toFixed(1)}" y2="${y(t).toFixed(1)}"/>`;
+    s += `<text class="g-texto" x="${m.l - 8}" y="${(y(t) + 4).toFixed(1)}" text-anchor="end">${mw(t)}</text>`;
+  });
+  s += `<text class="g-texto" x="${m.l - 8}" y="${m.t - 8}" text-anchor="end">MW</text>`;
+  s += `<line class="g-eje" x1="${m.l}" x2="${W - m.r}" y1="${H - m.b}" y2="${H - m.b}"/>`;
+  // Rótulos de hora cada 3, 6 o 12 h: los que quepan con al menos 48 px entre uno y otro
+  const paso = [6, 12, 24].find((k) => (k * (W - m.l - m.r)) / N >= 48) || 24;
+  for (let i = 0; i <= N; i += 1) {
+    const fh = d.fecha_hora[i];
+    const medianoche = horaDe(fh) === '00:00';
+    if (medianoche && i > 0 && !(ia !== io && Math.abs(i - io) <= 1)) s += `<line class="g-eje" x1="${x(i).toFixed(1)}" x2="${x(i).toFixed(1)}" y1="${m.t}" y2="${H - m.b}"/>`;
+    if (i % paso || Math.abs(x(i) - x(ia)) < 52) continue;
+    s += `<line class="g-eje" x1="${x(i).toFixed(1)}" x2="${x(i).toFixed(1)}" y1="${H - m.b}" y2="${H - m.b + 4}"/>`;
+    s += `<text class="g-texto" x="${x(i).toFixed(1)}" y="${H - m.b + 17}" text-anchor="middle">${esc(medianoche ? diaCorto(fh) : horaDe(fh))}</text>`;
+  }
+  const banda = d.superior.map((v, i) => `${i ? 'L' : 'M'}${p(i, v)}`).join('')
+    + d.inferior.map((v, i) => [i, v]).reverse().map(([i, v]) => `L${p(i, v)}`).join('');
+  s += `<path class="g-banda" d="${banda}Z"/>`;
+  if (A.ref) s += `<path class="ln-referencia" d="${linea(d.referencia, 0, N)}"/>`;
+  const real = linea(d.real, 0, io);
+  if (real) s += `<path class="g-real-relleno" d="${real}L${x(io).toFixed(1)},${H - m.b}L${x(0).toFixed(1)},${H - m.b}Z"/>`;
+  s += `<path class="ln-pronostico fina" d="${linea(d.pronostico, 0, io)}"/>`;
+  if (real) s += `<path class="ln-real" d="${real}"/>`;
+  s += `<path class="ln-pronostico" d="${linea(d.pronostico, io, N)}"/>`;
+  if (despues) s += `<path class="ln-despues" d="${linea(d.real_despues.map((v, i) => (i === io ? d.real[io] : v)), io, N)}"/>`;
+  const r = d.rampa;
+  const ir = r ? d.fecha_hora.indexOf(r.desde) : -1;
+  if (ir >= 0 && ir + 2 <= N) {
+    const tramo = `M${p(ir, d.pronostico[ir])}L${p(ir + 1, d.pronostico[ir + 1])}L${p(ir + 2, d.pronostico[ir + 2])}`;
+    s += `<path class="g-rampa-fondo" d="${tramo}"/><path class="g-rampa${r.fuerte ? ' fuerte' : ''}" d="${tramo}"/>`;
+    if (!movil) {
+      s += `<text class="g-texto medio" x="${(x(ir + 1) - 10).toFixed(1)}" y="${(y(d.pronostico[ir + 1]) + 4).toFixed(1)}" text-anchor="end">+${mw(r.subida_mw)} MW en 1 h${r.fuerte ? ' · rampa fuerte' : ''}</text>`;
+    }
+  }
+  if (ia !== io) {
+    s += `<line class="g-corte" x1="${x(io).toFixed(1)}" x2="${x(io).toFixed(1)}" y1="${m.t - 22}" y2="${H - m.b}"/>`;
+    if (!movil) s += `<text class="g-texto medio" x="${(x(io) - 6).toFixed(1)}" y="${H - m.b - 8}" text-anchor="end">Último dato real</text>`;
+  }
+  s += `<line class="g-ahora" x1="${x(ia).toFixed(1)}" x2="${x(ia).toFixed(1)}" y1="${m.t - 22}" y2="${H - m.b}"/>`;
+  const anchoPastilla = 76;
+  const gx = Math.min(Math.max(x(ia) - anchoPastilla / 2, m.l), W - m.r - anchoPastilla);
+  s += `<rect class="g-pastilla" x="${gx.toFixed(1)}" y="${H - m.b + 4}" width="${anchoPastilla}" height="20" rx="10"/>`;
+  s += `<text class="g-pastilla-texto" x="${(gx + anchoPastilla / 2).toFixed(1)}" y="${H - m.b + 18}" text-anchor="middle">Ahora ${esc(horaDe(d.ahora))}</text>`;
+  const vAhora = d.real[ia] != null ? d.real[ia] : d.pronostico[ia];
+  s += `<circle class="g-punto${d.real[ia] != null ? ' real' : ''}" cx="${x(ia).toFixed(1)}" cy="${y(vAhora).toFixed(1)}" r="5"/>`;
+  const anotar = (i, v, texto) => {
+    const izq = x(i) + 12 + texto.length * 6.8 > W - 2; // si el rótulo no cabe a la derecha, va a la izquierda
+    return `<circle class="g-punto" cx="${x(i).toFixed(1)}" cy="${y(v).toFixed(1)}" r="5"/>`
+      + `<text class="g-texto fuerte" x="${(x(i) + (izq ? -9 : 9)).toFixed(1)}" y="${(y(v) - 10).toFixed(1)}" text-anchor="${izq ? 'end' : 'start'}">${esc(texto)}</text>`;
+  };
+  const ip = d.fecha_hora.indexOf(d.pico.fecha_hora);
+  if (ip >= 0) s += anotar(ip, d.pico.valor, `Pico ${mw(d.pico.valor)} · ${horaDe(d.pico.fecha_hora)}`);
+  const im = d.manana ? d.fecha_hora.indexOf(d.manana.fecha_hora) : -1;
+  if (!movil && im >= 0 && Math.abs(im - ip) > 10) s += anotar(im, d.manana.valor, `Mañana ${horaDe(d.manana.fecha_hora)}: ${mw(d.manana.valor)}`);
+  s += `<line class="g-cruz" x1="0" x2="0" y1="${m.t - 22}" y2="${H - m.b}" visibility="hidden"/>`;
+  s += '<circle class="g-punto g-cursor" cx="0" cy="0" r="4" visibility="hidden"/>';
+  s += '</svg>';
+  el.innerHTML = `${s}<div class="tip" hidden></div>`;
+  el._g = { x, y, N, m, W, d, despues };
+  el.setAttribute('aria-label', `Gráfico de la demanda del ${nombreArea(A.area)}. Usa las flechas para recorrerlo.`);
+}
+
+function tipAhora(i) {
+  const el = $('#ahLienzo');
+  const g = el._g;
+  if (!g) return;
+  const d = g.d;
+  const k = Math.max(0, Math.min(g.N, i));
+  el._i = k;
+  const cruz = $('.g-cruz', el);
+  const cursor = $('.g-cursor', el);
+  cruz.setAttribute('x1', g.x(k));
+  cruz.setAttribute('x2', g.x(k));
+  cruz.setAttribute('visibility', 'visible');
+  cursor.setAttribute('cx', g.x(k));
+  cursor.setAttribute('cy', g.y(d.pronostico[k]));
+  cursor.setAttribute('visibility', 'visible');
+  const fh = d.fecha_hora[k];
+  const futuro = k > d.i_origen;
+  const real = !futuro ? d.real[k] : (g.despues ? d.real_despues[k] : null);
+  const error = real != null ? d.pronostico[k] - real : null;
+  const emision = d.tipo ? TIPO_TXT[d.tipo[k]] || '' : `Emitido el ${fechaDiaMes(sumarDias(fh.slice(0, 10), -1))} a las ${horaDe(fh)} (24 h antes)`;
+  const fila = (sw, nombre, valor) => `<tr><td>${sw ? `<span class="sw ${sw}"></span>` : ''}${esc(nombre)}</td><td>${valor}</td></tr>`;
+  const tip = $('.tip', el);
+  tip.innerHTML = `<b>${esc(capital(diaCorto(fh)))}, ${esc(horaDe(fh))}</b><div class="muted">${esc(emision)}</div><table>`
+    + (real != null ? fila('real', futuro ? 'Real (lo que pasó después)' : 'Real', `${mw(real)} MW`) : '')
+    + fila('pron', 'Pronóstico', `${mw(d.pronostico[k])} MW`)
+    + fila('banda', `Rango del ${d.nivel_rango_pct} %`, `${mw(d.inferior[k])}–${mw(d.superior[k])}`)
+    + (A.ref && d.referencia[k] != null ? fila('ref', 'Referencia', `${mw(d.referencia[k])} MW`) : '')
+    + (error != null ? fila(null, 'Error', `${firmado(error)} MW`) : '')
+    + '</table>';
+  tip.hidden = false;
+  const ancho = tip.offsetWidth || 190;
+  let izq = g.x(k) + 14;
+  if (izq + ancho > el.clientWidth) izq = Math.max(4, g.x(k) - ancho - 14);
+  tip.style.left = `${izq}px`;
+}
+
+function ocultarTipAhora() {
+  const el = $('#ahLienzo');
+  if (!el._g) return;
+  $('.tip', el).hidden = true;
+  $('.g-cruz', el).setAttribute('visibility', 'hidden');
+  $('.g-cursor', el).setAttribute('visibility', 'hidden');
+}
+
+function descripcionAhora(d) {
+  const a = nombreArea(A.area);
+  const ini = d.fecha_hora[0];
+  const fin = d.fecha_hora[d.fecha_hora.length - 1];
+  const c = d.cifra_ahora;
+  let t = `Demanda del ${a} desde el ${fechaDiaMes(ini)} a las 00:00 hasta el ${fechaDiaMes(fin)} a las ${horaDe(fin)}. `;
+  if (c.fuente === 'real') {
+    const dentro = d.ayer && d.ayer.fecha_hora === c.fecha_hora ? (d.ayer.dentro ? ', dentro del rango que se pronosticó' : ', fuera del rango que se pronosticó') : '';
+    t += `Ahora (${horaDe(c.fecha_hora)}) la demanda es ${mw(c.valor)} MW${dentro}. `;
+  } else {
+    t += `Lo real llega hasta el ${finTxt(d.datos_hasta).largo}. Ahora (${horaDe(c.fecha_hora)}) se pronostican ${mw(c.valor)} MW, entre ${mw(c.inferior)} y ${mw(c.superior)}. `;
+  }
+  t += `El pico ${d.modo === 'en_vivo' ? 'de hoy' : 'de las próximas 24 horas'} sería ${mw(d.pico.valor)} MW el ${fechaDiaMes(d.pico.fecha_hora)} a las ${horaDe(d.pico.fecha_hora)}`;
+  if (d.rampa) t += `; la mayor subida, ${mw(d.rampa.subida_mw)} MW en una hora desde las ${horaDe(d.rampa.desde)}${d.rampa.fuerte ? ' (rampa fuerte)' : ''}`;
+  return `${t}.`;
+}
+
+function pintarTablaAhora(d) {
+  const filas = d.fecha_hora.map((fh, i) => {
+    const real = i <= d.i_origen ? d.real[i] : (A.despues && d.real_despues ? d.real_despues[i] : null);
+    return `<tr${i === d.i_ahora ? ' class="fila-elegida"' : ''}><th scope="row">${esc(diaCorto(fh))} ${esc(horaDe(fh))}</th>`
+      + `<td>${real == null ? '—' : mw(real)}</td><td>${mw(d.pronostico[i])}</td><td>${mw(d.inferior[i])}–${mw(d.superior[i])}</td>`
+      + `<td>${d.referencia[i] == null ? '—' : mw(d.referencia[i])}</td></tr>`;
+  }).join('');
+  $('#ahTabla').innerHTML = '<div class="tabla-scroll" tabindex="0" role="region" aria-label="Datos del gráfico"><table class="t">'
+    + `<caption class="visually-hidden">Demanda del ${esc(nombreArea(A.area))} en MW: real, pronóstico a 24 h, rango del ${d.nivel_rango_pct} % y referencia</caption>`
+    + `<thead><tr><th scope="col">Hora</th><th scope="col">Real</th><th scope="col">Pronóstico</th><th scope="col">Rango ${d.nivel_rango_pct} %</th><th scope="col">Referencia</th></tr></thead>`
+    + `<tbody>${filas}</tbody></table></div>`;
+}
+
+function descargarCsvAhora() {
+  const d = A.datos.get(A.area);
+  if (!d) return;
+  const filas = [['inicio_periodo', 'pronostico_mw', `rango_${d.nivel_rango_pct}_inferior_mw`, `rango_${d.nivel_rango_pct}_superior_mw`, 'error_mw']];
+  d.fecha_hora.forEach((fh, i) => {
+    const real = i <= d.i_origen ? d.real[i] : (d.real_despues ? d.real_despues[i] : null);
+    filas.push([fh, d.pronostico[i], d.inferior[i], d.superior[i], real == null ? '' : (d.pronostico[i] - real).toFixed(1)]);
+  });
+  const cabeza = `# Curva · ${nombreArea(A.area)} · ${d.modelo_nombre} · último dato real hasta ${d.datos_hasta} (hora de Lima)\n`
+    + '# pronostico_mw: pronóstico directo a 24 h, emitido 24 h antes de cada periodo; error_mw = pronóstico − real\n';
+  const blob = new Blob([cabeza + filas.map((f) => f.join(',')).join('\n')], { type: 'text/csv;charset=utf-8' });
+  const enlace = document.createElement('a');
+  enlace.href = URL.createObjectURL(blob);
+  enlace.download = `curva-${A.area}-${d.origen.replace(':', '')}.csv`;
+  document.body.append(enlace);
+  enlace.click();
+  enlace.remove();
+  setTimeout(() => URL.revokeObjectURL(enlace.href), 1000);
+}
+
+// Al mostrar lo que pasó después, también cómo le fue en el día completo (en repaso ya pasó)
+function pintarDiaCompleto(d) {
+  const p = $('#ahDiaCompleto');
+  const f = d.error_dia;
+  p.hidden = !(d.modo === 'repaso' && A.despues && f);
+  if (p.hidden) return;
+  const ref = NOMBRE_REF[d.referencia_nombre] || 'la referencia simple';
+  p.innerHTML = `El día completo: el modelo se equivocó <b>${nf1.format(f.mae_modelo)} MW</b> en promedio; repetir ${esc(ref)}, `
+    + `<b>${f.mae_referencia == null ? '—' : `${nf1.format(f.mae_referencia)} MW`}</b>. ${frasesMejora(f.mae_modelo, f.mae_referencia, 'la referencia')}`;
+}
+
+function pintarAyer(d) {
+  const y = d.ayer;
+  const cont = $('#ahAyer');
+  const hoy = y && y.fecha_hora.slice(0, 10) === d.ahora.slice(0, 10);
+  $('#ahAyerTit').textContent = hoy || !y ? 'Lo que dijimos ayer para esta hora' : 'Lo que dijimos para ayer a esta hora';
+  if (!y) {
+    cont.innerHTML = '<p class="sub">Todavía no hay un pronóstico verificado contra el real para esta hora.</p>';
+    return;
+  }
+  const dif = y.diferencia;
+  const porc = (100 * Math.abs(dif)) / y.real;
+  const fuente = y.fuente === 'historial'
+    ? `Historial · modelo ${esc(d.modelo_nombre.replace(/\s*\(.*\)\s*$/, '').toLowerCase())}`
+    : y.fuente === 'reconstruido'
+      ? 'Registro en vivo · reconstruido: se calculó después de conocerse el real, con los datos que habría tenido'
+      : 'Registro en vivo · emitido antes de conocerse el real';
+  cont.innerHTML = `<p class="sub">Para las ${esc(horaDe(y.fecha_hora))} ${hoy ? 'de hoy' : `del ${esc(fechaDiaMes(y.fecha_hora))}`}, emitido el ${esc(fechaDiaMes(y.emitido))} a las ${esc(horaDe(y.emitido))} (24 h antes).</p>`
+    + `<dl class="dijimos"><div><dt><span class="sw pron" aria-hidden="true"></span>Dijimos</dt><dd>${mw(y.pronostico)}<small>MW</small></dd></div>`
+    + `<div><dt><span class="sw real" aria-hidden="true"></span>Fue</dt><dd>${mw(y.real)}<small>MW</small></dd></div></dl>`
+    + `<dl class="pares"><dt>Diferencia</dt><dd>${firmado(dif)} MW (${nf1.format(porc)} %)</dd><dt>Rango del ${d.nivel_rango_pct} %</dt><dd>${mw(y.inferior)} – ${mw(y.superior)} MW</dd></dl>`
+    + `<div class="veredicto ${y.dentro ? 'bien' : 'ojo'}">${y.dentro ? ICONO.bien : ICONO.ojo}<span>Lo real cayó ${y.dentro ? 'dentro' : 'fuera'} del rango. ${Math.abs(dif) < 0.5 ? 'Acertó.' : `${dif > 0 ? 'Sobrestimó' : 'Subestimó'} por ${mw(Math.abs(dif))} MW.`}</span></div>`
+    + `<p class="nota-pie"><span class="etiqueta-fuente">${fuente}</span></p>`;
+}
+
+function barrasCmp(modelo, referencia) {
+  const tope = Math.max(modelo, referencia || 0) || 1;
+  const fila = (nombre, v, clase) => `<div class="barra-cmp"><span>${nombre}</span><span class="pista"><i class="${clase}" style="width:${((100 * v) / tope).toFixed(1)}%"></i></span><b>${nf1.format(v)} MW</b></div>`;
+  return fila('Modelo', modelo, 'i-pron') + (referencia != null ? fila('Referencia', referencia, 'i-ref') : '');
+}
+
+function frasesMejora(modelo, referencia, nombreRef) {
+  if (referencia == null || !referencia) return '';
+  const mejora = (100 * (referencia - modelo)) / referencia;
+  if (Math.abs(mejora) < 1) return `Se equivocó lo mismo que repetir ${nombreRef}.`;
+  return `Se equivocó <b>${nf0.format(Math.abs(mejora))} % ${mejora > 0 ? 'menos' : 'más'}</b> que repetir ${nombreRef}.`;
+}
+
+// Cobertura del rango frente a lo que promete: el semáforo de ISO-NE aplicado a la meta del rango.
+function veredictoCobertura(cubrio, meta) {
+  const dif = cubrio - meta;
+  if (Math.abs(dif) <= 2) return { clase: 'bien', texto: 'cumple lo que promete' };
+  if (dif < -5) return { clase: 'mal', texto: 'queda corto', porque: 'el rango es más angosto de lo que debería' };
+  if (dif < 0) return { clase: 'ojo', texto: 'queda algo corto' };
+  if (dif > 5) return { clase: 'ojo', texto: 'es más ancho de lo necesario' };
+  return { clase: 'ojo', texto: 'cubre algo más de lo que promete' };
+}
+
+function pintarBueno(d) {
+  const cont = $('#ahBueno');
+  const vivo = d.modo === 'en_vivo';
+  const nombreRef = NOMBRE_REF[d.referencia_nombre] || 'la referencia simple';
+  const bloques = [];
+  const e = d.error_hasta_origen;
+  if (e) {
+    const titulo = vivo ? 'Ayer, el día completo' : `Ese día, hasta las ${horaDe(d.origen)}`;
+    bloques.push(`<div class="bloque"><h3>${esc(titulo)}</h3>${barrasCmp(e.mae_modelo, e.mae_referencia)}<p class="sub">${frasesMejora(e.mae_modelo, e.mae_referencia, nombreRef)}</p></div>`);
+  }
+  if (!vivo && A.despues && d.error_dia) {
+    const f = d.error_dia;
+    bloques.push(`<div class="bloque"><h3>El día completo (ya pasó)</h3>${barrasCmp(f.mae_modelo, f.mae_referencia)}</div>`);
+  } else if (!vivo && d.error_dia && bloques.length) {
+    bloques[bloques.length - 1] = bloques[bloques.length - 1].replace(/<\/div>$/, '<p class="nota-pie">Marca «Mostrar lo que pasó después» para ver el error del día completo.</p></div>');
+  }
+  const extra = A.extra.get(`${A.area}|${d.modelo}`);
+  if (extra && extra.tipo === 'seguimiento') {
+    const t = extra.datos.total;
+    const v = veredictoCobertura(t.cobertura_pct, extra.datos.meta_cobertura_pct);
+    bloques.push(`<div class="bloque"><h3>En 2026, a 24 horas</h3>${barrasCmp(t.mae_modelo, t.mae_referencia)}`
+      + `<p class="sub">${frasesMejora(t.mae_modelo, t.mae_referencia, NOMBRE_REF[extra.datos.referencia_nombre] || nombreRef)} Su rango del 90 % cubrió el <b>${nf1.format(t.cobertura_pct)} %</b> de las medias horas: ${esc(v.texto)}.</p></div>`);
+  } else if (extra && extra.tipo === 'vivo') {
+    const r = extra.datos.resumen.find((x) => x.horizonte === '24h' && x.grupo === 'en_vivo') || extra.datos.resumen.find((x) => x.horizonte === '24h');
+    if (r) {
+      const v = veredictoCobertura(r.cobertura_pct, extra.datos.nivel_rango_pct);
+      bloques.push(`<div class="bloque"><h3>Desde el ${esc(fechaDiaMes(r.desde))}, ${r.grupo === 'en_vivo' ? 'en vivo' : 'reconstruido'}</h3>${barrasCmp(r.mae_modelo, r.mae_referencia)}`
+        + `<div class="veredicto ${v.clase}">${ICONO[v.clase]}<span>Su rango del ${extra.datos.nivel_rango_pct} % cubrió el ${nf1.format(r.cobertura_pct)} % de las medias horas: ${esc(v.texto)}${v.porque ? `; ${esc(v.porque)}` : ''}.</span></div></div>`);
+    }
+  }
+  bloques.push(`<p class="enlaces"><a class="btn-enlace" href="#/confianza/${encodeURIComponent(A.area)}">Ver la confianza mes a mes →</a></p>`);
+  cont.innerHTML = bloques.join('');
+}
+
+async function cargarExtraAhora(d, turno) {
+  const clave = `${A.area}|${d.modelo}`;
+  if (A.extra.has(clave) && !d.modelo.startsWith('en_vivo:')) return;
+  try {
+    if (d.modelo.startsWith('en_vivo:')) {
+      A.extra.set(clave, { tipo: 'vivo', datos: await api(`/en-vivo/${encodeURIComponent(A.area)}`) });
+    } else {
+      const q = new URLSearchParams({ horizonte: '24h', variante: 'M3' });
+      if (hayVariosModelos()) q.set('modelo', d.modelo);
+      A.extra.set(clave, { tipo: 'seguimiento', datos: await api(`/seguimiento/${encodeURIComponent(A.area)}?${q}`) });
+    }
+  } catch {
+    return; // el bloque de 2026 es complementario: sin él, la tarjeta sigue con lo del día
+  }
+  if (turno === A.turno && A.datos.get(A.area) === d) pintarBueno(d);
+}
+
+function pintarOrigen(d) {
+  const cont = $('#ahOrigen');
+  const y = d.ayer;
+  const repaso = A.fecha ? { fecha: A.fecha, hora: A.hora } : null;
+  let html;
+  if (d.modelo.startsWith('en_vivo:')) {
+    html = `<p class="sub">${esc(d.modelo_nombre)}: un modelo fundacional de series de tiempo, ajustado a la demanda del SEIN con datos hasta 2024 y con los feriados de Perú. Cada mañana, con la demanda de ayer que publica el COES, pronostica las 48 medias horas de hoy. Queda registrado con su hora de emisión antes de conocerse el real y no se reescribe.</p>`;
+  } else if (y && y.componentes && y.componentes.length) {
+    const suma = y.componentes.reduce((t, c) => t + c.peso * (c.valores[0] || 0), 0);
+    html = `<p class="sub">Modelo <b>${esc(d.modelo_nombre.replace(/\s*\(.*\)\s*$/, '').toLowerCase())}</b>: el de menor error en 2026. Lo que se dijo para las ${esc(horaDe(y.fecha_hora))}:</p>`
+      + `<div class="formula">${y.componentes.map((c) => `${mw(c.valores[0])} × ${c.peso.toFixed(2)} <span class="muted">(${esc(c.nombre)})</span>`).join('<br>+ ')}<br>= <b>${mw(suma)} MW</b></div>`
+      + '<p class="nota-pie">Pesos fijados con la validación de 2025 y aplicados tal cual a 2026. Usa solo la demanda y el calendario; no usa el clima.</p>';
+  } else {
+    const m = modeloPorId(d.modelo);
+    html = `<p class="sub">Modelo <b>${esc(d.modelo_nombre)}</b>. ${esc((m && m.descripcion) || '')}</p>`;
+  }
+  html += '<p class="enlaces">'
+    + (repaso && repaso.fecha >= FECHA_MIN && repaso.fecha <= FECHA_MAX ? `<a class="btn-enlace" href="${rutaDetalle(A.area, repaso, 'escenarios')}">¿Y si hace más calor? →</a>` : '')
+    + `<a class="btn-enlace" href="${rutaDetalle(A.area, repaso, 'diagnostico')}">Diagnóstico completo</a>`
+    + `<a class="btn-enlace" href="${rutaDetalle(A.area, repaso)}">${repaso && repaso.fecha <= FECHA_MAX ? 'Otro modelo u horizonte' : 'Explorar el historial con otro modelo'}</a>`
+    + '<button type="button" class="btn-enlace" data-accion="ficha">Ficha técnica: modelo y datos</button></p>';
+  cont.innerHTML = html;
+}
+
+// ---- Confianza ---------------------------------------------------------------------------------------------
+
+const C = { area: 'centro', horizonte: '24h', mes: null, turno: 0, datos: null };
+
+function mostrarConfianza(area, q) {
+  C.area = area;
+  if (['1h', '24h'].includes(q.get('horizonte'))) C.horizonte = q.get('horizonte');
+  C.mes = /^\d{4}-\d{2}$/.test(q.get('mes') || '') ? q.get('mes') : (A.fecha && A.fecha.startsWith('2026') ? A.fecha.slice(0, 7) : C.mes);
+  const llega = $('#vistaConfianza').hidden;
+  mostrarVista('confianza');
+  document.title = `${nombreArea(area)} · Confianza · Curva`;
+  if (llega) window.scrollTo(0, 0);
+  $('#cfAreas').innerHTML = (S.areas.length ? S.areas : AREAS_RESPALDO).map((a) => `<a href="#/confianza/${encodeURIComponent(a.id)}?horizonte=${C.horizonte}"${a.id === area ? ' aria-current="page"' : ''}>${esc(a.nombre)}</a>`).join('');
+  $$('[data-cf-horizonte]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.cfHorizonte === C.horizonte)));
+  cargarConfianza();
+}
+
+async function cargarConfianza() {
+  const turno = ++C.turno;
+  const { area, horizonte } = C;
+  const m = hayVariosModelos() && S.modelo ? S.modelo : null;
+  $('#cfTitular').textContent = 'Calculando la confianza…';
+  $('#vistaConfianza').classList.add('desactualizada');
+  const q = new URLSearchParams({ horizonte, variante: 'M3' });
+  if (m) q.set('modelo', m);
+  const diagClave = `${S.modelo || ''}|${area}`;
+  const [conf, vivo, diag] = await Promise.allSettled([
+    api(`/confianza/${encodeURIComponent(area)}?${q}`), // sin caché aquí: su parte en vivo crece cada mañana (el backend cachea el historial)
+    api(`/en-vivo/${encodeURIComponent(area)}`),
+    S.diag.has(diagClave) ? Promise.resolve(S.diag.get(diagClave)) : api(`/diagnostico/${encodeURIComponent(area)}${m ? `?modelo=${encodeURIComponent(m)}` : ''}`),
+  ]);
+  if (turno !== C.turno) return;
+  $('#vistaConfianza').classList.remove('desactualizada');
+  if (conf.status === 'rejected') {
+    // Nada de la selección anterior queda a la vista: se vacían todas las secciones
+    C.datos = null;
+    if (conf.reason.estado === 0) mostrarError(conf.reason);
+    $('#cfTitular').textContent = 'No pudimos calcular la confianza de esta área';
+    $('#cfLead').textContent = textoError(conf.reason);
+    $('#cfStats').innerHTML = '';
+    ['#cfMes', '#cfCob', '#cfVivo', '#cfDia', '#cfSesgo', '#cfNino'].forEach((s) => { $(s).innerHTML = '<p class="vacio">Sin datos por ahora.</p>'; });
+    $('#cfMundo').innerHTML = '';
+    return;
+  }
+  limpiarError();
+  if (diag.status === 'fulfilled') S.diag.set(diagClave, diag.value);
+  C.datos = { conf: conf.value, vivo: vivo.status === 'fulfilled' ? vivo.value : null, diag: diag.status === 'fulfilled' ? diag.value : null };
+  const u = C.datos.vivo && C.datos.vivo.ultimo;
+  if (u) {
+    const fin = finTxt(u.datos_hasta);
+    pintarEstado({ modo: 'vivo', texto: `Datos del COES al ${fin.corto}`, corto: `COES ${fin.corto.replace(', ', ' ')}`, titulo: `Datos reales del COES hasta el ${fin.largo}` });
+  } else {
+    pintarEstado({ modo: 'repaso', texto: 'Prueba de 2026', titulo: 'El error medido en la prueba de 2026' });
+  }
+  pintarConfianzaPantalla();
+}
+
+function pintarConfianzaPantalla() {
+  const { conf, vivo, diag } = C.datos;
+  const seg = conf.seguimiento;
+  const area = nombreArea(C.area);
+  const h = C.horizonte === '1h' ? '1 hora' : '24 horas';
+  const nombreRef = NOMBRE_REF[seg.referencia_nombre] || 'la referencia simple';
+  const n = seg.meses.length;
+  const ganados = seg.meses.filter((x) => x.mae_modelo < x.mae_referencia).length;
+  const t = seg.total;
+  const mejora = (100 * (t.mae_referencia - t.mae_modelo)) / t.mae_referencia;
+  const meta = seg.meta_cobertura_pct;
+  const bajos = seg.meses.filter((x) => x.cobertura_pct < meta - 2);
+  const vCob = veredictoCobertura(t.cobertura_pct, meta);
+  const rVivo = vivo && vivo.resumen ? (vivo.resumen.find((x) => x.horizonte === '24h' && x.grupo === 'en_vivo') || vivo.resumen.find((x) => x.horizonte === '24h')) : null;
+  $('#cfTitular').textContent = ganados === n
+    ? `En 2026 se equivocó menos que la referencia los ${n} meses.`
+    : `En 2026 le ganó a la referencia en ${ganados} de ${n} meses.`;
+  let lead = `${esc(area)}, a ${h}: error medio de <b>${nf1.format(t.mae_modelo)} MW</b> (${nf1.format(conf.mape_pct)} % de la demanda), ${nf0.format(Math.abs(mejora))} % ${mejora >= 0 ? 'menos' : 'más'} que repetir ${esc(nombreRef)}. `
+    + `El rango del ${nf0.format(meta)} % cubrió el <b>${nf1.format(t.cobertura_pct)} %</b> en el año${bajos.length ? `, pero quedó corto en ${esc(bajos.map((x) => mesLargo(x.mes)).join(', '))}` : ''}. `;
+  if (rVivo) {
+    const vv = veredictoCobertura(rVivo.cobertura_pct, vivo.nivel_rango_pct);
+    lead += `En vivo, desde el ${esc(fechaDiaMes(rVivo.desde))}, el rango del ${vivo.nivel_rango_pct} % cubrió el <b>${nf1.format(rVivo.cobertura_pct)} %</b>: ${esc(vv.texto)}. `;
+  }
+  lead += 'Todo se mide con pronósticos que el modelo no vio al entrenar; 2026 sí se usó para elegir el modelo.';
+  $('#cfLead').innerHTML = lead;
+
+  const ac = conf.acierto;
+  $('#cfStats').innerHTML = [
+    `<div class="stat"><p class="k">Error medio 2026</p><p class="n">${nf1.format(t.mae_modelo)}<small> MW</small></p><p class="d">${nf1.format(conf.mape_pct)} % de la demanda (MAPE)</p></div>`,
+    `<div class="stat"><p class="k">Frente a la referencia</p><p class="n">${mejora >= 0 ? '−' : '+'}${nf0.format(Math.abs(mejora))}<small> %</small></p><p class="d">${nf1.format(t.mae_referencia)} MW la referencia</p></div>`,
+    `<div class="stat"><p class="k">Cobertura del rango</p><p class="n">${nf1.format(t.cobertura_pct)}<small> %</small></p><p class="d">meta ${nf0.format(meta)} %</p><p class="estado-meta ${vCob.clase}">${ICONO[vCob.clase]}${esc(capital(vCob.texto))}</p></div>`,
+    ac ? `<div class="stat"><p class="k">Hora del pico (±1 h)</p><p class="n">${nf1.format(ac.pct_hora)}<small> %</small></p><p class="d">de ${nf0.format(ac.dias)} días; referencia ${nf1.format(ac.pct_hora_referencia)} %</p></div>`
+      : `<div class="stat"><p class="k">Medias horas medidas</p><p class="n">${nf0.format(t.periodos)}</p><p class="d">de 2026</p></div>`,
+    statNino(diag),
+  ].join('');
+
+  pintarMesAMes(seg, conf);
+  pintarCoberturaConf(seg);
+  pintarVivoConf(vivo, conf);
+  pintarDiaADia(conf);
+  pintarSesgoConf(conf);
+  pintarNinoConf(diag);
+  pintarMundo(conf);
+  $('#cfPie').textContent = `Modelo: ${(modeloPorId(conf.modelo) || { nombre: conf.modelo }).nombre}. Prueba de 2026: del 1 de enero al ${fechaCorta((S.resumen && S.resumen.fechas_corte.prueba_hasta) || '2026-10-15')}, con todas las medias horas que tienen dato real. El registro en vivo usa otro modelo (${(vivo && vivo.modelo) || 'Chronos-2 ajustado'}): sus cifras van aparte.`;
+}
+
+function statNino(diag) {
+  const regs = diag && diag.mae_por_regimen;
+  if (!regs || !regs.length) return '';
+  const peor = regs.reduce((a, b) => (b.modelo > a.modelo ? b : a));
+  const gana = regs.filter((r) => r.modelo < r.referencia).length;
+  return `<div class="stat"><p class="k">Con El Niño, donde más yerra</p><p class="n">${nf1.format(peor.modelo)}<small> MW</small></p>`
+    + `<p class="d">${esc(REGIMEN[peor.regimen] || peor.regimen)} · le gana a la referencia en ${gana === regs.length ? `las ${regs.length}` : `${gana} de ${regs.length}`} fases</p></div>`;
+}
+
+function pintarMesAMes(seg, conf) {
+  const cont = $('#cfMes');
+  const meses = seg.meses;
+  const ganados = meses.filter((x) => x.mae_modelo < x.mae_referencia).length;
+  const peor = meses.reduce((a, b) => (b.mae_modelo > a.mae_modelo ? b : a));
+  const hasta = S.resumen && S.resumen.fechas_corte.prueba_hasta;
+  const ultimo = meses[meses.length - 1].mes;
+  const parcial = hasta && hasta.slice(0, 7) === ultimo && Number(hasta.slice(8, 10)) < 28 ? ` ${capital(mesLargo(ultimo))} llega hasta el día ${Number(hasta.slice(8, 10))}.` : '';
+  cont.innerHTML = `<p class="sub">Error medio absoluto en MW (menos es mejor), a ${C.horizonte === '1h' ? '1 hora' : '24 horas'}. Solo pronósticos que el modelo no vio al entrenar.</p>`
+    + `<div class="leyenda"><span class="it"><span class="mk pron"></span>Modelo</span><span class="it"><span class="mk ref" style="border-top-style:solid"></span>Referencia: ${esc((TITULO_REF[seg.referencia_nombre] || '').toLowerCase())}</span></div>`
+    + '<div id="cfMesG" class="chart lienzo" style="min-height:220px"></div>'
+    + `<p class="sub">Le ganó a la referencia en <b>${ganados} de ${meses.length}</b> meses. Peor mes: ${esc(mesLargo(peor.mes))} (${nf1.format(peor.mae_modelo)} MW).${esc(parcial)}</p>`
+    + `<details class="datos"><summary>Ver la tabla mes a mes</summary><div class="tabla-scroll" tabindex="0" role="region" aria-label="Error mes a mes"><table class="t"><caption class="visually-hidden">Error medio y cobertura por mes de 2026</caption><thead><tr><th scope="col">Mes</th><th scope="col">Modelo (MW)</th><th scope="col">Referencia (MW)</th><th scope="col">¿Le ganó?</th><th scope="col">Cobertura</th><th scope="col">Medias horas</th></tr></thead><tbody>`
+    + meses.map((x) => `<tr><th scope="row">${esc(capital(mesLargo(x.mes)))}</th><td>${nf1.format(x.mae_modelo)}</td><td>${nf1.format(x.mae_referencia)}</td><td>${x.mae_modelo < x.mae_referencia ? 'sí' : 'no'}</td><td>${nf1.format(x.cobertura_pct)} %</td><td>${nf0.format(x.periodos)}</td></tr>`).join('')
+    + `<tr><th scope="row">2026</th><td><b>${nf1.format(seg.total.mae_modelo)}</b></td><td><b>${nf1.format(seg.total.mae_referencia)}</b></td><td></td><td><b>${nf1.format(seg.total.cobertura_pct)} %</b></td><td>${nf0.format(seg.total.periodos)}</td></tr></tbody></table></div></details>`;
+  barrasMeses($('#cfMesG'), meses);
+  void conf;
+}
+
+function barrasMeses(el, meses) {
+  el._dibujar = () => barrasMeses(el, meses);
+  const W = Math.max(280, el.clientWidth || 600);
+  const H = W < 560 ? 200 : 230;
+  const m = { l: 44, r: 8, t: 14, b: 28 };
+  const tope = Math.max(...meses.map((x) => Math.max(x.mae_referencia, x.mae_modelo))) * 1.1;
+  const y = (v) => m.t + (1 - v / tope) * (H - m.t - m.b);
+  const bw = (W - m.l - m.r) / meses.length;
+  let s = `<svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="Error medio por mes de 2026, modelo frente a la referencia">`;
+  marcas(0, tope, 4).forEach((v) => {
+    s += `<line class="${v === 0 ? 'g-eje' : 'g-rejilla'}" x1="${m.l}" x2="${W - m.r}" y1="${y(v).toFixed(1)}" y2="${y(v).toFixed(1)}"/>`;
+    s += `<text class="g-texto" x="${m.l - 6}" y="${(y(v) + 4).toFixed(1)}" text-anchor="end">${mw(v)}</text>`;
+  });
+  s += `<text class="g-texto" x="${m.l - 6}" y="10" text-anchor="end">MW</text>`;
+  meses.forEach((x, j) => {
+    const cx = m.l + j * bw + bw / 2;
+    const w = Math.min(14, (bw - 10) / 2);
+    s += `<rect class="g-barra-modelo" x="${(cx - w - 1).toFixed(1)}" y="${y(x.mae_modelo).toFixed(1)}" width="${w.toFixed(1)}" height="${(y(0) - y(x.mae_modelo)).toFixed(1)}" rx="3"/>`;
+    s += `<rect class="g-barra-ref" x="${(cx + 1).toFixed(1)}" y="${y(x.mae_referencia).toFixed(1)}" width="${w.toFixed(1)}" height="${(y(0) - y(x.mae_referencia)).toFixed(1)}" rx="3"/>`;
+    s += `<text class="g-texto" x="${cx.toFixed(1)}" y="${H - m.b + 16}" text-anchor="middle">${esc(mesCorto(x.mes))}</text>`;
+  });
+  el.innerHTML = `${s}</svg>`;
+}
+
+function pintarCoberturaConf(seg) {
+  const cont = $('#cfCob');
+  const meta = seg.meta_cobertura_pct;
+  const t = seg.total.cobertura_pct;
+  const v = veredictoCobertura(t, meta);
+  const fuera = seg.meses.filter((x) => Math.abs(x.cobertura_pct - meta) > 5);
+  const cortos = seg.meses.filter((x) => x.cobertura_pct < meta - 2).map((x) => mesLargo(x.mes));
+  const anchos = seg.meses.filter((x) => x.cobertura_pct > meta + 5).map((x) => mesLargo(x.mes));
+  cont.innerHTML = `<p class="sub">Parte de las medias horas en que lo real cayó dentro del rango del ${nf0.format(meta)} %. Banda verde: de ${nf0.format(meta - 5)} a ${nf0.format(meta + 5)} %.</p>`
+    + '<div id="cfCobG" class="chart lienzo" style="min-height:200px"></div>'
+    + `<div class="veredicto ${v.clase}">${ICONO[v.clase]}<span>En el año cubrió el ${nf1.format(t)} %: ${esc(v.texto)}${v.porque ? `; ${esc(v.porque)}` : ''}.${cortos.length ? ` Quedó corto en ${esc(cortos.join(', '))}.` : ''}${anchos.length ? ` Fue más ancho de lo necesario en ${esc(anchos.join(', '))}.` : ''}</span></div>`
+    + `<p class="nota-pie">Puntos destacados: ${fuera.length ? 'meses a más de 5 puntos de la meta' : 'ninguno: todos los meses quedan a 5 puntos de la meta o menos'}.</p>`;
+  lineaCobertura($('#cfCobG'), seg.meses, meta);
+}
+
+function lineaCobertura(el, meses, meta) {
+  el._dibujar = () => lineaCobertura(el, meses, meta);
+  const W = Math.max(240, el.clientWidth || 320);
+  const H = 200;
+  const m = { l: 38, r: 8, t: 10, b: 26 };
+  const lo = Math.min(meta - 10, ...meses.map((x) => x.cobertura_pct)) - 1;
+  const hi = Math.min(100, Math.max(meta + 10, ...meses.map((x) => x.cobertura_pct)) + 1);
+  const y = (v) => m.t + (1 - (v - lo) / (hi - lo)) * (H - m.t - m.b);
+  const x = (j) => m.l + (j + 0.5) * ((W - m.l - m.r) / meses.length);
+  let s = `<svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="Cobertura del rango por mes frente a la meta del ${meta} %">`;
+  s += `<rect class="g-meta-zona" x="${m.l}" y="${y(meta + 5).toFixed(1)}" width="${W - m.l - m.r}" height="${(y(meta - 5) - y(meta + 5)).toFixed(1)}"/>`;
+  marcas(lo, hi, 4).forEach((v) => {
+    s += `<line class="g-rejilla" x1="${m.l}" x2="${W - m.r}" y1="${y(v).toFixed(1)}" y2="${y(v).toFixed(1)}"/>`;
+    s += `<text class="g-texto" x="${m.l - 6}" y="${(y(v) + 4).toFixed(1)}" text-anchor="end">${nf0.format(v)} %</text>`;
+  });
+  s += `<line class="g-meta" x1="${m.l}" x2="${W - m.r}" y1="${y(meta).toFixed(1)}" y2="${y(meta).toFixed(1)}"/>`;
+  s += `<text class="g-texto fuerte" x="${W - m.r}" y="${(y(meta) - 5).toFixed(1)}" text-anchor="end">meta ${nf0.format(meta)} %</text>`;
+  s += `<path class="g-linea-pron" d="${meses.map((k, j) => `${j ? 'L' : 'M'}${x(j).toFixed(1)},${y(k.cobertura_pct).toFixed(1)}`).join('')}"/>`;
+  meses.forEach((k, j) => {
+    const fuera = Math.abs(k.cobertura_pct - meta) > 5;
+    s += `<circle class="${fuera ? 'g-punto-ojo' : 'g-punto'}" cx="${x(j).toFixed(1)}" cy="${y(k.cobertura_pct).toFixed(1)}" r="${fuera ? 5 : 3.5}"/>`;
+    s += `<text class="g-texto" x="${x(j).toFixed(1)}" y="${H - m.b + 15}" text-anchor="middle">${esc(mesCorto(k.mes).charAt(0).toUpperCase())}</text>`;
+  });
+  el.innerHTML = `${s}</svg>`;
+}
+
+function tarjetaDia(k) {
+  const sobre = k.error_pct > 0;
+  const causa = k.causa_probable
+    ? `<span class="causa">Causa probable, según el calendario: ${esc(k.causa_probable)}.</span>`
+    : '<span class="causa sin">Causa: sin registrar (el calendario no la explica).</span>';
+  return `<li class="dia"><div class="f"><span>${esc(capital(DIAS[partesFecha(k.fecha).dow]))} ${partesFecha(k.fecha).d} ${esc(MESES_CORTOS[partesFecha(k.fecha).m - 1])}</span>`
+    + `<span class="e ${sobre ? 'sobre' : 'bajo'}">${sobre ? 'Sobrestimó' : 'Subestimó'} ${nf1.format(Math.abs(k.error_pct))} %</span></div>`
+    + `<p>Pico real ${mw(k.pico_real)} MW a las ${esc(k.hora_real)}; se pronosticó ${mw(k.pico_pronostico)} MW a las ${esc(k.hora_pronostico)}.</p>${causa}</li>`;
+}
+
+function pintarVivoConf(vivo, conf) {
+  const cont = $('#cfVivo');
+  if (!vivo || !vivo.resumen || !vivo.resumen.length) {
+    cont.innerHTML = '<p class="sub">Todavía no hay pronósticos en vivo verificados para esta área.</p>';
+    return;
+  }
+  const g = (grupo, h) => vivo.resumen.find((r) => r.grupo === grupo && r.horizonte === h);
+  const caja = (titulo, r, nota) => {
+    if (!r) return `<div class="vivo-tipo"><span class="muted">${esc(titulo)}</span><b>—</b><span class="muted">${esc(nota)}</span></div>`;
+    const v = veredictoCobertura(r.cobertura_pct, vivo.nivel_rango_pct);
+    return `<div class="vivo-tipo"><span class="muted">${esc(titulo)} · ${plural(r.dias, 'día', 'días')}</span><b>${nf1.format(r.mae_modelo)} MW</b>`
+      + `<span>frente a ${nf1.format(r.mae_referencia)} MW de repetir ${esc(REF_CORTA[r.referencia_nombre] || r.referencia_nombre)}</span>`
+      + `<p class="estado-meta ${v.clase}" style="margin-top:6px">${ICONO[v.clase]}Rango del ${vivo.nivel_rango_pct} %: cubrió ${nf1.format(r.cobertura_pct)} %, ${esc(v.texto)}</p></div>`;
+  };
+  const vivo24 = g('en_vivo', '24h');
+  const recon24 = g('reconstruido', '24h');
+  const principal = vivo24 || recon24;
+  const v = principal ? veredictoCobertura(principal.cobertura_pct, vivo.nivel_rango_pct) : null;
+  const malos = (conf.dias_en_vivo || []).filter((k) => Math.abs(k.error_pct) > conf.umbral_pico_pct);
+  const inicio = [recon24 && recon24.desde, vivo24 && vivo24.desde, vivo.primer_dia_en_vivo].filter(Boolean).sort()[0];
+  let html = `<p class="sub">Desde el ${esc(fechaDiaMes(inicio || ''))}, ${esc(vivo.modelo || 'el modelo')} pronostica cada día con la demanda del día anterior que publica el COES. `
+    + `Lleva ${plural(vivo.dias_reconstruidos, 'día reconstruido', 'días reconstruidos')} (calculados después de conocerse el real, con los datos que habría tenido: no cuentan como en vivo) y ${plural(vivo.dias_en_vivo, 'día en vivo', 'días en vivo')}${vivo.primer_dia_en_vivo ? `, desde el ${esc(fechaDiaMes(vivo.primer_dia_en_vivo))}` : ''}: emitidos antes de su real, cada uno se verifica a la mañana siguiente.</p>`;
+  html += `<div class="vivo-tipos">${caja('En vivo a 24 h', vivo24, 'Todavía ningún día con su real')}${caja('Reconstruido a 24 h', recon24, 'Sin días reconstruidos')}${caja('A 1 hora, siempre reconstruido', g('reconstruido', '1h'), 'Sin datos')}</div>`;
+  if (v && v.clase !== 'bien') {
+    html += `<div class="veredicto ${v.clase}" style="margin-top:12px">${ICONO[v.clase]}<span>El rango del ${vivo.nivel_rango_pct} % ${esc(v.texto)}. Entre el ${esc(fechaDiaMes(principal.desde))} y el ${esc(fechaDiaMes(principal.hasta))} cubrió el ${nf1.format(principal.cobertura_pct)} % de las medias horas a 24 h, cuando debería cubrir ${vivo.nivel_rango_pct / 10} de cada 10. Elia, en Bélgica, tiene el mismo problema con su banda del 80 %: cubrió entre 74 % y 79 % en 2024-2026.</span></div>`;
+  }
+  html += malos.length
+    ? `<h3 class="sub" style="margin-top:16px"><b>${plural(malos.length, 'día pasó', 'días pasaron')} el ${nf0.format(conf.umbral_pico_pct)} % en el pico con el registro en vivo</b></h3><ul class="dias">${malos.map(tarjetaDia).join('')}</ul>`
+    : `<p class="sub" style="margin-top:12px">Ningún día del registro en vivo pasó el ${nf0.format(conf.umbral_pico_pct)} % en el pico.</p>`;
+  html += `<p class="enlaces"><a class="btn-enlace" href="${rutaDetalle(C.area, null, 'envivo')}">Ver el error de cada día en vivo</a></p>`;
+  cont.innerHTML = html;
+}
+
+function pintarDiaADia(conf) {
+  const cont = $('#cfDia');
+  const dias = conf.dias;
+  if (!dias.length) {
+    cont.innerHTML = '<p class="sub">No hay días completos con real para medir el pico.</p>';
+    return;
+  }
+  const u = conf.umbral_pico_pct;
+  const meses = [...new Set(dias.map((k) => k.fecha.slice(0, 7)))];
+  if (!meses.includes(C.mes)) C.mes = meses[meses.length - 1];
+  const malos = dias.filter((k) => Math.abs(k.error_pct) > u);
+  const sub = malos.filter((k) => k.error_pct < 0).length;
+  const delMes = dias.filter((k) => k.fecha.startsWith(C.mes));
+  const malosMes = delMes.filter((k) => Math.abs(k.error_pct) > u);
+  const subMes = malosMes.filter((k) => k.error_pct < 0).length;
+  cont.innerHTML = `<p class="sub">El pico pronosticado a 24 h frente al pico real de cada día. Arriba, sobrestimó; abajo, subestimó (lo más costoso: obliga a arrancar generación cara de urgencia). Líneas en ±${nf0.format(u)} %, como en el informe de PJM.</p>`
+    + `<p class="sub">En todo 2026, <b>${malos.length} de ${dias.length} días</b> pasaron el ${nf0.format(u)} %: ${sub} subestimaciones y ${malos.length - sub} sobrestimaciones.</p>`
+    + `<div class="meses-seg" role="group" aria-label="Mes">${meses.map((mes) => {
+      const nm = dias.filter((k) => k.fecha.startsWith(mes) && Math.abs(k.error_pct) > u).length;
+      return `<button type="button" data-cf-mes="${mes}" aria-pressed="${mes === C.mes}" aria-label="${esc(capital(mesLargo(mes)))}: ${plural(nm, 'día', 'días')} sobre el ${nf0.format(u)} %">${esc(capital(mesCorto(mes)))}${nm ? `<span class="n" aria-hidden="true">${nm}</span>` : ''}</button>`;
+    }).join('')}</div>`
+    + '<div id="cfDiaG" class="chart lienzo" style="min-height:200px"></div>'
+    + `<p class="leyenda-dias"><span><i style="background:var(--crit)"></i>Subestimó más de ${nf0.format(u)} %</span><span><i style="background:var(--warn-mark)"></i>Sobrestimó más de ${nf0.format(u)} %</span><span><i style="background:var(--surface-3)"></i>Fin de semana</span></p>`
+    + `<h3 class="sub" style="margin-top:16px"><b>${capital(mesLargo(C.mes))}: ${malosMes.length ? `${plural(malosMes.length, 'día pasó', 'días pasaron')} el ${nf0.format(u)} % en el pico${subMes ? ` (${subMes} subestimaciones)` : ''}` : `ningún día pasó el ${nf0.format(u)} % en el pico`}</b></h3>`
+    + (malosMes.length ? `<ul class="dias">${malosMes.map(tarjetaDia).join('')}</ul>` : '')
+    + `<details class="datos"><summary>Ver los ${malos.length} días de 2026 sobre el ${nf0.format(u)} %</summary><div class="tabla-scroll" tabindex="0" role="region" aria-label="Días con el error del pico sobre el umbral"><table class="t"><caption class="visually-hidden">Días de 2026 con el error del pico sobre el ${u} %</caption><thead><tr><th scope="col">Día</th><th scope="col">Pico real</th><th scope="col">Pronosticado</th><th scope="col">Error</th><th scope="col">Causa probable</th></tr></thead><tbody>`
+    + malos.map((k) => `<tr><th scope="row">${esc(fechaNumerica(k.fecha))}</th><td>${mw(k.pico_real)} · ${esc(k.hora_real)}</td><td>${mw(k.pico_pronostico)} · ${esc(k.hora_pronostico)}</td><td>${k.error_pct > 0 ? '+' : '−'}${nf1.format(Math.abs(k.error_pct))} %</td><td style="text-align:left">${esc(k.causa_probable || 'sin registrar')}</td></tr>`).join('')
+    + '</tbody></table></div></details>';
+  barrasDias($('#cfDiaG'), delMes, u);
+}
+
+function barrasDias(el, dias, u) {
+  el._dibujar = () => barrasDias(el, dias, u);
+  const W = Math.max(280, el.clientWidth || 600);
+  const movil = W < 560;
+  const H = movil ? 190 : 220;
+  const m = { l: 40, r: 8, t: 12, b: 26 };
+  const lim = Math.max(6, Math.ceil(Math.max(...dias.map((k) => Math.abs(k.error_pct))) + 0.5));
+  const y = (v) => m.t + (1 - (v + lim) / (2 * lim)) * (H - m.t - m.b);
+  const bw = (W - m.l - m.r) / Math.max(dias.length, 1);
+  let s = `<svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="Error del pico de cada día de ${mesLargo(C.mes)}, en porcentaje">`;
+  dias.forEach((k, j) => {
+    const dow = partesFecha(k.fecha).dow;
+    if (dow === 0 || dow === 6) s += `<rect class="g-fin-semana" x="${(m.l + j * bw).toFixed(1)}" y="${m.t}" width="${bw.toFixed(1)}" height="${H - m.t - m.b}"/>`;
+  });
+  [-lim, -u, 0, u, lim].forEach((v) => {
+    s += `<line class="${v === 0 ? 'g-eje' : Math.abs(v) === u ? 'g-umbral' : 'g-rejilla'}" x1="${m.l}" x2="${W - m.r}" y1="${y(v).toFixed(1)}" y2="${y(v).toFixed(1)}"/>`;
+    s += `<text class="g-texto" x="${m.l - 6}" y="${(y(v) + 4).toFixed(1)}" text-anchor="end">${v > 0 ? '+' : v < 0 ? '−' : ''}${Math.abs(v)} %</text>`;
+  });
+  dias.forEach((k, j) => {
+    const fuera = Math.abs(k.error_pct) > u;
+    const x0 = m.l + j * bw + Math.max(1, bw * 0.18);
+    const w = Math.max(3, bw * 0.64);
+    const y1 = y(Math.max(0, k.error_pct));
+    const y2 = y(Math.min(0, k.error_pct));
+    s += `<rect class="g-dia${fuera ? (k.error_pct > 0 ? ' sobre' : ' bajo') : ''}" x="${x0.toFixed(1)}" y="${y1.toFixed(1)}" width="${w.toFixed(1)}" height="${Math.max(1, y2 - y1).toFixed(1)}" rx="2"><title>${esc(fechaNumerica(k.fecha))}: ${k.error_pct > 0 ? '+' : ''}${nf1.format(k.error_pct)} %</title></rect>`;
+    const d = partesFecha(k.fecha).d;
+    if (!movil || d % 5 === 0 || d === 1) s += `<text class="g-texto" x="${(m.l + j * bw + bw / 2).toFixed(1)}" y="${H - m.b + 15}" text-anchor="middle">${d}</text>`;
+  });
+  el.innerHTML = `${s}</svg>`;
+}
+
+function pintarSesgoConf(conf) {
+  const sg = conf.sesgo;
+  const sub = sg.subestima_pct;
+  const equilibrado = Math.abs(sub - 50) <= 5;
+  $('#cfSesgo').innerHTML = '<p class="sub">Subestimar cuesta más: obliga a arrancar generación cara de urgencia. Lo ideal es quedar cerca de la mitad.</p>'
+    + `<div class="medidor" role="img" aria-label="Subestimó en ${nf1.format(sub)} % de las medias horas; la zona equilibrada va de 45 a 55 %"><span class="zona"></span><span class="aguja" style="left:${Math.max(0, Math.min(100, sub))}%"></span></div>`
+    + '<div class="medidor-eje"><span>Siempre sobrestima</span><span>50 %</span><span>Siempre subestima</span></div>'
+    + `<p class="sub"><b>Subestimó en ${nf1.format(sub)} %</b> de las ${nf0.format(sg.periodos)} medias horas de 2026 (todas, no una muestra), con un sesgo medio de ${sg.sesgo_mw >= 0 ? '+' : '−'}${nf1.format(Math.abs(sg.sesgo_mw))} MW (pronóstico − real). ${equilibrado ? 'Está en la zona equilibrada (45–55 %).' : 'Está fuera de la zona equilibrada (45–55 %).'}</p>`;
+}
+
+function pintarNinoConf(diag) {
+  const cont = $('#cfNino');
+  if (!diag || !diag.mae_por_regimen || !diag.mae_por_regimen.length) {
+    cont.innerHTML = '<p class="sub">El error por fase de El Niño no está disponible para este modelo.</p>';
+    return;
+  }
+  const regs = diag.mae_por_regimen;
+  const tope = Math.max(...regs.map((r) => Math.max(r.modelo, r.referencia)));
+  const peor = regs.reduce((a, b) => (b.modelo > a.modelo ? b : a));
+  const gana = regs.filter((r) => r.modelo < r.referencia).length;
+  cont.innerHTML = '<p class="sub">Error medio a 24 h en 2026 según la fase de El Niño costero del mes pronosticado.</p>'
+    + regs.map((r) => `<div class="barra-cmp"><span>${esc(REGIMEN[r.regimen] || r.regimen)}</span><span class="pista"><i class="i-pron" style="width:${((100 * r.modelo) / tope).toFixed(1)}%"></i></span><b>${nf1.format(r.modelo)} MW</b></div>`).join('')
+    + `<p class="sub">Donde más se equivoca: <b>${esc(REGIMEN[peor.regimen] || peor.regimen)}</b> (${nf1.format(peor.modelo)} MW). ${gana === regs.length ? `Le gana a la referencia en las ${regs.length} fases.` : `Le gana a la referencia en ${gana} de ${regs.length} fases.`}</p>`;
+}
+
+// Cifras citables de otros operadores, cada una con su fuente. No es una comparación de igual a igual.
+const MUNDO = [
+  { quien: 'REE (España peninsular)', que: 'Pronóstico diario, publicado el día anterior: suma de errores absolutos horarios entre la demanda del año. Lo audita el regulador (CNMC).', periodo: '2024', valor: '1.60 %', fuente: 'https://www.cnmc.es/sites/default/files/6336322.pdf', nombre: 'CNMC, RAP/DE/012/25' },
+  { quien: 'REE (España peninsular)', que: 'El mismo indicador, auditado por la CNMC', periodo: '2025', valor: '1.69 %', fuente: 'https://www.cnmc.es/sites/default/files/6915601.pdf', nombre: 'CNMC, RAP/DE/016/26' },
+  { quien: 'Elia (Bélgica, unos 9 GW de demanda media)', que: 'Pronóstico del día siguiente (18:00), error ponderado (WAPE). Su banda P10–P90 (80 %) cubrió 75.5 %. Cálculo propio con sus datos abiertos.', periodo: '2025', valor: '3.04 %', fuente: 'https://opendata.elia.be/explore/dataset/ods001/', nombre: 'Elia, datos abiertos ods001' },
+  { quien: 'PJM (Estados Unidos)', que: 'Día siguiente, error medio horario (MAPE); publica cada mes los días que pasaron el 3 % en el pico, con su causa.', periodo: 'ene-2026', valor: '1.73 %', fuente: 'https://www.pjm.com/-/media/DotCom/committees-groups/committees/oc/2026/20260205/20260205-item-07---system-operations-report.pdf', nombre: 'PJM, informe de operación, feb-2026' },
+  { quien: 'ISO-NE (Nueva Inglaterra)', que: 'Día siguiente (10:00), todas las horas (MAPE), contra una meta de 2.0 % con semáforo: ese tramo no la cumplió.', periodo: 'ene–may 2025', valor: '2.49 %', fuente: 'https://www.iso-ne.com/static-assets/documents/100024/june-2025-coo-report.pdf', nombre: 'ISO-NE, informe COO, jun-2025' },
+  { quien: 'NESO (Gran Bretaña, unos 26 GW)', que: 'Día siguiente, cada 30 min (MAPE). Cálculo propio con su archivo de desempeño.', periodo: '2025', valor: '2.69 %', fuente: 'https://www.neso.energy/data-portal/day-ahead-half-hourly-demand-forecast-performance', nombre: 'NESO, portal de datos' },
+];
+
+function pintarMundo(conf) {
+  const area = nombreArea(C.area);
+  const hasta = S.resumen && S.resumen.fechas_corte.prueba_hasta;
+  const filas = MUNDO.map((f) => `<tr><td>${esc(f.quien)}</td><td>${esc(f.que)} <a href="${f.fuente}" rel="noopener" target="_blank">${esc(f.nombre)}</a></td><td>${esc(f.periodo)}</td><td class="n">${esc(f.valor)}</td></tr>`).join('');
+  const nuestro = `<tr class="nuestro"><td><b>Este modelo · ${esc(area)}</b></td><td>${C.horizonte === '1h' ? '1 hora' : '24 horas'} exactas, cada 30 min, sin clima pronosticado. WAPE (como REE y Elia) y MAPE (como PJM, ISO-NE y NESO).</td><td>2026 (ene–${hasta ? esc(fechaCorta(hasta).replace(/ \d{4}$/, '')) : 'oct'})</td><td class="n">WAPE ${nf2(conf.wape_pct)} %<br>MAPE ${nf2(conf.mape_pct)} %</td></tr>`;
+  $('#cfMundo').innerHTML = `<div class="veredicto ojo">${ICONO.info}<span>No es una comparación de igual a igual: cambian la métrica, el horizonte y el tamaño del sistema (un área del SEIN es mucho más chica y ruidosa que un país), y 2026 ya se usó para elegir el modelo. Sirve para saber en qué orden de magnitud se mueven los operadores que publican su error.</span></div>`
+    + `<div class="tabla-scroll" tabindex="0" role="region" aria-label="Error de otros operadores" style="max-height:none;margin-top:12px"><table class="cmp"><caption class="visually-hidden">Error del pronóstico que publican otros operadores y el de este modelo</caption><thead><tr><th scope="col">Quién</th><th scope="col">Qué se mide y fuente</th><th scope="col">Periodo</th><th scope="col" style="text-align:right">Error</th></tr></thead><tbody>${filas}${nuestro}</tbody></table></div>`
+    + '<p class="nota-pie">Fuentes consultadas el 13 de noviembre de 2026. No encontramos que el COES publique el error de su pronóstico ni de su programa.</p>';
+}
+
+const nf2 = (x) => new Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(x);
+
 // ---- Rutas e inicio ------------------------------------------------------------------------
 
+// #/ y #/ahora/{área}: «Ahora» (en vivo o, con fecha y hora, en repaso); #/confianza/{área}; #/area/{área}: el detalle.
 function leerRuta() {
   const h = location.hash.replace(/^#/, '') || '/';
   const [camino, consulta] = h.split('?');
   const partes = camino.split('/').filter(Boolean);
   const q = new URLSearchParams(consulta || '');
-  if (partes[0] === 'area' && partes[1]) return { vista: 'area', area: decodeURIComponent(partes[1]), q };
-  return { vista: 'inicio', q };
+  if (['ahora', 'confianza', 'area'].includes(partes[0]) && partes[1]) {
+    return { vista: partes[0], area: decodeURIComponent(partes[1]), q };
+  }
+  return { vista: 'ahora', area: leer('tpf-area') || 'centro', q, raiz: true };
 }
 
 function enrutar() {
   const r = leerRuta();
+  const lista = S.areas.length ? S.areas : AREAS_RESPALDO;
+  if (!lista.some((a) => a.id === r.area)) r.area = 'centro';
+  guardar('tpf-area', r.area);
   if (r.vista === 'area' && S.areas.length) mostrarArea(r.area, r.q);
-  else mostrarInicio();
+  else if (r.vista === 'confianza') mostrarConfianza(r.area, r.q);
+  else {
+    if (r.raiz || r.vista === 'area') history.replaceState(null, '', rutaAhora(r.area));
+    mostrarAhora(r.area, r.raiz ? new URLSearchParams() : r.q);
+  }
 }
 
 // Las métricas de la ficha y de «¿qué tan bueno es?» son las del modelo elegido.
@@ -1824,7 +2850,6 @@ async function cargarResumen() {
   }
   if (pedido !== S.modelo) return; // mientras llegaba se eligió otro modelo
   S.resumen = resumen;
-  pintarInicio();
   pintarFicha();
   if (S.area && S.serie) pintarConfianza();
 }
@@ -1845,33 +2870,31 @@ async function cargarBase() {
   $('#inModelo').innerHTML = S.modelos.map((m) => `<option value="${esc(m.id)}">${esc(m.nombre)}</option>`).join('');
   $('#campoModelo').classList.toggle('unico', S.modelos.length === 1);
   aplicarModelo();
-  const prueba = salud.modelo === 'prueba';
-  $('#chipPrueba').hidden = !prueba;
-  $('#notaPruebaInicio').hidden = !prueba;
+  $('#chipPrueba').hidden = salud.modelo !== 'prueba';
   pintarRegimen();
-  pintarInicio();
   pintarFicha();
 }
 
 async function iniciar() {
+  const base = cargarBase();
+  const ahoraPrimero = leerRuta().vista === 'ahora';
+  if (ahoraPrimero) enrutar(); // el número sale de /ahora: no espera a /salud, /areas, /resumen ni /modelos
   try {
-    await cargarBase();
+    await base;
     limpiarError();
   } catch (err) {
     mostrarError(err);
-    $('#listaAreas').innerHTML = '<p class="vacio">No se pudieron cargar las áreas.</p>';
+    pintarRegimen();
   }
-  enrutar();
+  if (!ahoraPrimero) enrutar();
+  else if (S.vista === 'ahora' && A.datos.has(A.area)) pintarAhora(); // nombres, rangos de fechas y enlaces
 }
 
 function conectarEventos() {
   $('#saltar').addEventListener('click', (ev) => {
     ev.preventDefault(); // el hash es la ruta de la app
-    if (!$('#vistaArea').hidden) irASeccion('respuesta');
-    else {
-      const primera = $('#listaAreas a');
-      if (primera) primera.focus();
-    }
+    if (S.vista === 'detalle') irASeccion('respuesta');
+    else (S.vista === 'confianza' ? $('#cfTitular') : $('#principal')).focus();
   });
   $('.nav-secciones').addEventListener('click', (ev) => {
     const b = ev.target.closest('[data-ir]');
@@ -1891,7 +2914,6 @@ function conectarEventos() {
   const ficha = $('#dlgFicha');
   const abrirFicha = () => (typeof ficha.showModal === 'function' ? ficha.showModal() : ficha.setAttribute('open', ''));
   $('#btnFicha').addEventListener('click', abrirFicha);
-  $('#chipRegimen').addEventListener('click', abrirFicha);
   $('#btnCerrarFicha').addEventListener('click', () => ficha.close());
   ficha.addEventListener('click', (ev) => {
     if (ev.target === ficha) ficha.close(); // clic en el fondo
@@ -1963,6 +2985,85 @@ function conectarEventos() {
     pintarEscenarios();
   });
 
+  // Ahora
+  $('#ahHoy').addEventListener('click', () => irAhora(null));
+  $('#ahFecha').addEventListener('change', (ev) => {
+    const f = ev.target.value;
+    if (!esFecha(f)) return;
+    if (f >= hoyLima()) irAhora(null);
+    else irAhora({ fecha: f, hora: A.hora || horaValida($('#ahHora').value) || idxAHora(ahoraEnLima().idx) });
+  });
+  $('#ahHora').addEventListener('change', (ev) => {
+    const h = horaValida(ev.target.value);
+    if (h && A.fecha) irAhora({ fecha: A.fecha, hora: h });
+  });
+  $('#ahRef').addEventListener('change', (ev) => {
+    A.ref = ev.target.checked;
+    const d = A.datos.get(A.area);
+    if (d) graficoAhora($('#ahLienzo'), d);
+  });
+  $('#ahDespues').addEventListener('change', (ev) => {
+    A.despues = ev.target.checked;
+    const d = A.datos.get(A.area);
+    if (!d) return;
+    graficoAhora($('#ahLienzo'), d);
+    pintarDiaCompleto(d);
+    pintarBueno(d);
+    if ($('#ahTablaDet').open) pintarTablaAhora(d);
+  });
+  $('#ahCsv').addEventListener('click', descargarCsvAhora);
+  $('#ahOrigen').addEventListener('click', (ev) => {
+    if (ev.target.closest('[data-accion="ficha"]')) $('#btnFicha').click();
+  });
+  $('#ahTablaDet').addEventListener('toggle', () => {
+    const d = A.datos.get(A.area);
+    if (d && $('#ahTablaDet').open) pintarTablaAhora(d);
+  });
+  const lienzo = $('#ahLienzo');
+  const indiceLienzo = (ev) => {
+    const g = lienzo._g;
+    const r = lienzo.getBoundingClientRect();
+    return Math.round(((ev.clientX - r.left - g.m.l) / (g.W - g.m.l - g.m.r)) * g.N);
+  };
+  lienzo.addEventListener('pointermove', (ev) => { if (lienzo._g) tipAhora(indiceLienzo(ev)); });
+  lienzo.addEventListener('pointerleave', ocultarTipAhora);
+  lienzo.addEventListener('focus', () => { if (lienzo._g) tipAhora(lienzo._g.d.i_ahora); });
+  lienzo.addEventListener('blur', ocultarTipAhora);
+  lienzo.addEventListener('keydown', (ev) => {
+    if (!lienzo._g) return;
+    const actual = lienzo._i ?? lienzo._g.d.i_ahora;
+    const pasos = { ArrowRight: 1, ArrowLeft: -1, PageUp: -12, PageDown: 12 };
+    let i = null;
+    if (ev.key in pasos) i = actual + pasos[ev.key];
+    if (ev.key === 'Home') i = 0;
+    if (ev.key === 'End') i = lienzo._g.N;
+    if (i == null) return;
+    ev.preventDefault();
+    tipAhora(i);
+  });
+
+  // Confianza
+  $$('[data-cf-horizonte]').forEach((b) => b.addEventListener('click', () => {
+    if (C.horizonte === b.dataset.cfHorizonte) return;
+    C.horizonte = b.dataset.cfHorizonte;
+    history.replaceState(null, '', `#/confianza/${encodeURIComponent(C.area)}?horizonte=${C.horizonte}`);
+    mostrarConfianza(C.area, new URLSearchParams({ horizonte: C.horizonte }));
+  }));
+  $('#cfDia').addEventListener('click', (ev) => {
+    const b = ev.target.closest('[data-cf-mes]');
+    if (!b || !C.datos) return;
+    C.mes = b.dataset.cfMes;
+    pintarDiaADia(C.datos.conf);
+    const elegido = $(`[data-cf-mes="${C.mes}"]`);
+    if (elegido) elegido.focus();
+  });
+
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (ev) => {
+    if (leer('tpf-tema')) return; // la elección guardada manda
+    aplicarTema(ev.matches ? 'dark' : 'light');
+    redibujarGraficos();
+  });
+
   let esperaResize = null;
   window.addEventListener('resize', () => {
     clearTimeout(esperaResize);
@@ -1971,6 +3072,6 @@ function conectarEventos() {
   window.addEventListener('hashchange', enrutar);
 }
 
-aplicarTema(leer('tpf-tema') === 'light' ? 'light' : 'dark');
+aplicarTema(document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light');
 conectarEventos();
 iniciar();
