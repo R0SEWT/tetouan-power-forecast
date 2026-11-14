@@ -61,7 +61,7 @@ el modo en vivo y conviene medirlo de madrugada y de día.
 cuando el pronóstico acierta o recordatorios para volver. Para Rosa, que quiere saber si «la luz va a alcanzar», la
 respuesta no es un juego sino el nivel Ciudadano del concepto C ([`onboarding.md`](onboarding.md)), decisión del dueño.
 
-### Estado tras la ronda RITE del PR 9 (14-nov, madrugada)
+### Estado tras la ronda RITE (#49, 14-nov, madrugada)
 
 Un ciclo RITE sobre la punta de la serie (`hcd/08-selector-fecha` con este método), con el modelo del evaluador fijado
 en `jugar.py`, 5 personas y 2 repeticiones mientras hubo cuota (las rondas 2, 4 y 5 quedaron con una repetición: el

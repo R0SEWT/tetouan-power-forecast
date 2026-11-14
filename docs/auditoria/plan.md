@@ -40,7 +40,7 @@ ellos va una segunda tanda, también apilada: el 14 (#44, adelantado porque el p
 pronóstico?», pero no el 3 % de atención en el punto de «ahora» (llega a 0.4–0.6 %; se propone revisar ese umbral). Desde el PR 7 el arnés de atención mide también el repaso de un día a media mañana (`ahora_dia`: 10-mar,
 10:30), además de la entrada en vivo y el repaso de las 19:00. Las cuatro mediciones clave cumplen su umbral con el mismo arnés (medidas de noche y de madrugada; falta repetirlas de día, con el pronóstico del día publicado). El peso de «Ahora» quedó en 78 KB (76 en la base): lo justifican la pregunta del día y las definiciones, y lo devuelve el PR 14. Al arnés se le agregó el desvío de la API a otro puerto (`comun.mjs`), la AOI de la respuesta y un arreglo: lo que hay dentro de un `<details>` cerrado ya no cuenta como AOI. Tras el PR 3 se pidió una segunda opinión de diseño (agy); lo adoptado y lo descartado, con cifras, está en #43.
 
-**Ronda RITE (PR 9 de la serie, 14-nov, apilado sobre #48):** con el playtest sintético de
+**Ronda RITE (#49, 14-nov, apilado sobre #48):** con el playtest sintético de
 [`plan-juego.md`](plan-juego.md), seis rondas sobre la punta. Se quedan: «¿Y si hace más calor?» también en vivo y el
 chip de El Niño como enlace a «Confianza» (primer clic de T3 desde hoy y de T4 desde las tres entradas 0 → 100 %), la
 madrugada honesta (explica qué día es hoy y hasta cuándo hay real 0 → 5 de 5), «Detalle» dice qué modelo calcula los
