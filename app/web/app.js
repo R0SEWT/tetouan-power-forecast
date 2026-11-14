@@ -809,7 +809,8 @@ function graficoAhora(el, d) {
   const resto = movil ? '' : (vivo ? ': el real todavía no se publica' : ' de las próximas 24 horas');
   s += `<text class="g-rotulo pron" x="${(x(io) + 8).toFixed(1)}" y="${m.t - 8}">Pronóstico<tspan class="g-rotulo-resto">${esc(resto)}</tspan></text>`;
   // …y hasta cuándo hay dato real, si cabe
-  const hasta = vivo ? finTxt(d.datos_hasta).corto : horaDe(d.origen);
+  // Hasta dónde llega lo real: el fin del último periodo con dato (en un repaso de las 19:00, las 19:30)
+  const hasta = vivo ? finTxt(d.datos_hasta).corto : finTxt(d.datos_hasta).corto.slice(7);
   const reales = [`Real (COES) hasta ${vivo ? 'el' : 'las'} ${hasta}`, 'Real (COES)', 'Real'].find((t) => movil ? t === 'Real' : t.length * 7.4 + 30 < x(io) - m.l);
   if (io > 0 && reales) s += `<text class="g-rotulo real" x="${(m.l + 14).toFixed(1)}" y="${m.t - 8}">${esc(reales)}</text>`;
   marcas(lo, hi, movil ? 3 : 4).filter((t) => y(t) >= m.t - 2 && y(t) <= H - m.b + 1).forEach((t) => {
