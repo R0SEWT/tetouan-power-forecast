@@ -470,7 +470,7 @@ def agrupar_tropiezos(codigos: list[dict], minimo: int = 2) -> list[dict]:
     for (pant, paso, tipo, objetivo), casos in grupos.items():
         sev = max(t["severidad"] for _, _, t in casos)
         frec = len(casos) / por_pantalla[pant]
-        evidencias = sorted({t["evidencia"] for _, _, t in casos if t["evidencia"]}, key=len)
+        evidencias = sorted({t["evidencia"] for _, _, t in casos if t["evidencia"]}, key=lambda e: (len(e), e))
         salida.append({"pantalla": pant, "paso": paso, "tipo": tipo, "objetivo": objetivo, "severidad": sev,
                        "frecuencia": round(frec, 3), "personas": len({p for p, _, _ in casos}),
                        "puntaje": round(frec * sev, 3),
@@ -487,8 +487,9 @@ def cargar(etiqueta: str, modo: str = "imagen") -> tuple[dict, dict]:
     tareas = json.loads((AQUI / "tareas.json").read_text())
     por_sesion = defaultdict(list)
     fallidas = 0
-    for archivo in sorted((base / "crudo" / modo).glob("*/*.json")):
-        reg = json.loads(archivo.read_text())
+    archivo = base / f"respuestas-{modo}.jsonl"
+    for linea in archivo.read_text().splitlines() if archivo.exists() else []:
+        reg = json.loads(linea)
         if "respuesta" not in reg:
             fallidas += 1
             continue
@@ -661,7 +662,7 @@ def comparar(a: dict, b: dict) -> str:
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     ap.add_argument("etiquetas", nargs="+", help="una etiqueta, o dos para comparar (antes después)")
-    ap.add_argument("--modo", default="imagen", help="carpeta de crudo/: imagen, texto o imagen-argon")
+    ap.add_argument("--modo", default="imagen", help="la corrida (respuestas-<modo>.jsonl): imagen, texto o imagen-argon")
     a = ap.parse_args()
     analisis = []
     for e in a.etiquetas:

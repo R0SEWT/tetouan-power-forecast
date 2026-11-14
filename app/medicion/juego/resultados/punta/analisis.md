@@ -63,14 +63,14 @@ Acuerdo entre repeticiones: {'comprende': 0.8, 'lectura_cifra': 1.0, 'clic_t1': 
 | Pantalla | Paso | Tipo | Objetivo | Sev. | Frec. | Personas | Evidencia |
 |---|---|---|---|---|---|---|---|
 | hoy | t3 primer clic | no sabe qué tocar | — | 4 | 100 % | 5 | No existe en la pantalla ningún botón, control interactivo ni mención a simulaciones o sensibilidad a la temperatura. |
-| hoy | t4 primer clic | toca algo que no es control | El Niño costero (calentamiento del mar f | 3 | 100 % | 5 | Es el único elemento de la interfaz que menciona a El Niño, así que tocaría ahí para ver si despliega estadísticas por estado del mar, aunque parece solo … |
+| hoy | t4 primer clic | toca algo que no es control | El Niño costero (calentamiento del mar f | 3 | 100 % | 5 | Es el único elemento de la pantalla que menciona a El Niño, aunque parece una etiqueta fija y no tengo certeza de si permite abrir estadísticas por evento. |
 | repaso-1900 | t4 primer clic | toca algo que no es control | El Niño costero (calentamiento del mar f | 3 | 93 % | 5 | Es el único elemento de la pantalla que menciona a El Niño; tocaría ahí para ver si despliega opciones o datos por evento, aunque dudo si es interactivo. |
 | repaso-1030 | t4 primer clic | toca algo que no es control | El Niño costero (calentamiento del mar f | 3 | 60 % | 4 | Tiene aspecto de filtro o botón y es el único sitio que menciona a El Niño; tocaría ahí para ver si se despliegan otros escenarios o datos de … |
 | repaso-1030 | t4 primer clic | no sabe qué tocar | — | 4 | 40 % | 3 | No veo ninguna opción ni gráfico para comparar el error según las fases de El Niño. Veo una etiqueta que dice 'extraordinario', pero parece solo un texto descri |
 | confianza | palabra | palabra | PJM / Elia (referencias externas) | 1 | 100 % | 5 | PJM / Elia (referencias externas) |
 | repaso-1030 | palabra | palabra | Simons (componente del modelo) | 1 | 100 % | 5 | Simons (componente del modelo) |
 | repaso-1900 | palabra | palabra | Simons (componente del modelo) | 1 | 100 % | 5 | Simons (componente del modelo) |
-| escenario-2c | duda | duda | panel de controles de «Detalle» | 1 | 100 % | 5 | En el panel izquierdo dice que está seleccionado el modelo Combinado, pero este texto dice que ese modelo no cambia con el clima y que calcula los escenarios … |
+| escenario-2c | duda | duda | panel de controles de «Detalle» | 1 | 100 % | 5 | El selector de la izquierda indica que está activo el modelo Combinado, pero el recuadro amarillo dice que ese modelo no responde al clima y que el escenario … |
 | escenarios | duda | duda | panel de controles de «Detalle» | 1 | 100 % | 5 | Me confunde que a la izquierda diga que usa «Solo demanda» y que este aviso diga que el clima no lo mueve, pero igual me ofrezca cambiar la … |
 | confianza | duda | duda | error por día | 1 | 93 % | 5 | No sé qué es PJM ni qué relación tiene con nuestro sistema eléctrico. |
 | confianza | duda | duda | cobertura | 1 | 87 % | 5 | No sé quién o qué es Elia ni por qué meten a Bélgica si estoy viendo datos de demanda del Perú. |

@@ -1200,7 +1200,7 @@
    "frecuencia": 1.0,
    "personas": 5,
    "puntaje": 3.0,
-   "evidencia": "Es el único elemento de la interfaz que menciona a El Niño, así que tocaría ahí para ver si despliega estadísticas por estado del mar, aunque parece solo …"
+   "evidencia": "Es el único elemento de la pantalla que menciona a El Niño, aunque parece una etiqueta fija y no tengo certeza de si permite abrir estadísticas por evento."
   },
   {
    "pantalla": "repaso-1900",
@@ -1277,7 +1277,7 @@
    "frecuencia": 1.0,
    "personas": 5,
    "puntaje": 1.0,
-   "evidencia": "En el panel izquierdo dice que está seleccionado el modelo Combinado, pero este texto dice que ese modelo no cambia con el clima y que calcula los escenarios …"
+   "evidencia": "El selector de la izquierda indica que está activo el modelo Combinado, pero el recuadro amarillo dice que ese modelo no responde al clima y que el escenario …"
   },
   {
    "pantalla": "escenarios",

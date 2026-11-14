@@ -15,8 +15,9 @@ Sesiones (las de «entrada» son la primera apertura; las demás, el paso siguie
     uv run --no-sync python app/medicion/juego/jugar.py punta --repeticiones 3 --paralelo 5
     uv run --no-sync python app/medicion/juego/jugar.py punta --modo texto --sesiones entrada-hoy --repeticiones 1
 
-Las respuestas quedan en ``app/medicion/juego/resultados/<etiqueta>/crudo/<modo>/<sesión>/<persona>-r<N>.json``
-(``--carpeta`` cambia ``<modo>``, p. ej. para guardar aparte la corrida de otro modelo).
+Cada respuesta se guarda al llegar en ``app/medicion/juego/tmp/<etiqueta>/crudo/<modo>/<sesión>/<persona>-r<N>.json``
+(fuera de git) y, al terminar, todas se juntan en ``resultados/<etiqueta>/respuestas-<modo>.jsonl`` (versionado, una
+línea por sesión). ``--carpeta`` cambia ``<modo>``, p. ej. para guardar aparte la corrida de otro modelo.
 Una sesión que ya tiene respuesta no se repite (se puede cortar y retomar).
 """
 
@@ -34,7 +35,7 @@ from pathlib import Path
 
 AQUI = Path(__file__).resolve().parent
 # El modelo del evaluador, fijado para que las corridas sean comparables. La línea base se jugó con este; una primera
-# corrida con otro modelo (que se quedó sin cuota) queda en crudo/imagen-argon como control entre modelos.
+# corrida con otro modelo (que se quedó sin cuota) queda en respuestas-imagen-argon.jsonl como control entre modelos.
 MODELO = "gemini-3.8-flash-medium"
 
 SESIONES = {
@@ -261,6 +262,30 @@ def jugar_una(etiqueta: str, sesion: str, persona: dict, rep: int, modo: str, mo
     return registro
 
 
+def leer_respuestas(etiqueta: str, corrida: str) -> list[dict]:
+    """Las respuestas válidas ya juntadas de una corrida (``respuestas-<corrida>.jsonl``)."""
+    archivo = AQUI / "resultados" / etiqueta / f"respuestas-{corrida}.jsonl"
+    if not archivo.exists():
+        return []
+    return [json.loads(linea) for linea in archivo.read_text().splitlines() if linea.strip()]
+
+
+def juntar(etiqueta: str, corrida: str) -> int:
+    """Junta en el JSONL versionado las respuestas válidas de tmp/ con las que ya estaban; devuelve cuántas hay."""
+    def clave(r: dict) -> tuple:
+        return r["sesion"], r["persona"], r["repeticion"]
+
+    todas = {clave(r): r for r in leer_respuestas(etiqueta, corrida)}
+    for archivo in (AQUI / "tmp" / etiqueta / "crudo" / corrida).glob("*/*.json"):
+        r = json.loads(archivo.read_text())
+        if "respuesta" in r:
+            todas[clave(r)] = r
+    destino = AQUI / "resultados" / etiqueta / f"respuestas-{corrida}.jsonl"
+    destino.parent.mkdir(parents=True, exist_ok=True)
+    destino.write_text("".join(json.dumps(todas[k], ensure_ascii=False) + "\n" for k in sorted(todas)))
+    return len(todas)
+
+
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     ap.add_argument("etiqueta")
@@ -270,20 +295,23 @@ def main() -> None:
     ap.add_argument("--paralelo", type=int, default=5)
     ap.add_argument("--modo", choices=["imagen", "texto"], default="imagen")
     ap.add_argument("--modelo", default=MODELO, help="modelo del evaluador ('' = el que use por defecto)")
-    ap.add_argument("--carpeta", default="", help="carpeta de crudo/ (por defecto, la del modo)")
+    ap.add_argument("--carpeta", default="", help="nombre de la corrida (por defecto, el del modo)")
     a = ap.parse_args()
     personas = json.loads((AQUI / "personas.json").read_text())
     if a.personas:
         personas = [p for p in personas if p["id"] in a.personas.split(",")]
     tareas = json.loads((AQUI / "tareas.json").read_text())
     sesiones = a.sesiones.split(",") if a.sesiones else list(SESIONES)
-    base = AQUI / "resultados" / a.etiqueta / "crudo" / (a.carpeta or a.modo)
+    corrida = a.carpeta or a.modo
+    base = AQUI / "tmp" / a.etiqueta / "crudo" / corrida
+    hechas = {(r["sesion"], r["persona"], r["repeticion"]) for r in leer_respuestas(a.etiqueta, corrida)}
     trabajos = []
     for rep in range(1, a.repeticiones + 1):
         for s in sesiones:
             for p in personas:
                 destino = base / s / f"{p['id']}-r{rep}.json"
-                if destino.exists() and "respuesta" in json.loads(destino.read_text()):
+                ya = destino.exists() and "respuesta" in json.loads(destino.read_text())
+                if ya or (s, p["id"], rep) in hechas:
                     continue
                 trabajos.append((s, p, rep, destino))
     print(f"{len(trabajos)} sesiones por jugar ({a.etiqueta}, {a.modo}, modelo {a.modelo or 'por defecto'})")
@@ -300,6 +328,7 @@ def main() -> None:
                 print("El evaluador se quedó sin cuota: se cancelan las sesiones pendientes.", flush=True)
                 for pendiente in futuros:
                     pendiente.cancel()
+    print(f"{juntar(a.etiqueta, corrida)} respuestas en resultados/{a.etiqueta}/respuestas-{corrida}.jsonl")
 
 
 if __name__ == "__main__":

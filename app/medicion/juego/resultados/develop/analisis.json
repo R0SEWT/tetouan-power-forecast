@@ -1197,7 +1197,7 @@
    "frecuencia": 1.0,
    "personas": 5,
    "puntaje": 4.0,
-   "evidencia": "No existe ningún control, botón ni gráfico sobre temperatura, clima o grados centígrados en ninguna parte de la pantalla."
+   "evidencia": "No veo ninguna parte donde hable de temperatura, calor o grados centígrados en toda la pantalla, así que no sé qué tocar."
   },
   {
    "pantalla": "hoy",
@@ -1373,7 +1373,7 @@
    "frecuencia": 0.867,
    "personas": 5,
    "puntaje": 0.867,
-   "evidencia": "Me da dos horas distintas y dos aumentos diferentes (15 MW a las 11:00 y +25 MW a las 15:30). No sé cuál de los dos cambios es …"
+   "evidencia": "Tengo dos cifras de cambio y dudo sobre cuál llevar al titular: si los 15 MW de las 11:00 (pico de demanda) o los 25 MW de las …"
   },
   {
    "pantalla": "repaso-1900",
@@ -1681,7 +1681,7 @@
    "frecuencia": 0.4,
    "personas": 5,
    "puntaje": 0.4,
-   "evidencia": "No sé qué es COES; deduzco que es la entidad que mide la demanda real, pero el sistema no lo aclara."
+   "evidencia": "No entiendo de dónde sale el 'umbral 497' ni bajo qué parámetro se califica la subida como habitual."
   },
   {
    "pantalla": "repaso-1030",

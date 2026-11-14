@@ -62,7 +62,7 @@ Acuerdo entre repeticiones: {'comprende': 0.8, 'lectura_cifra': 1.0, 'clic_t1': 
 
 | Pantalla | Paso | Tipo | Objetivo | Sev. | Frec. | Personas | Evidencia |
 |---|---|---|---|---|---|---|---|
-| hoy | t3 primer clic | no sabe qué tocar | — | 4 | 100 % | 5 | No existe ningún control, botón ni gráfico sobre temperatura, clima o grados centígrados en ninguna parte de la pantalla. |
+| hoy | t3 primer clic | no sabe qué tocar | — | 4 | 100 % | 5 | No veo ninguna parte donde hable de temperatura, calor o grados centígrados en toda la pantalla, así que no sé qué tocar. |
 | hoy | t4 primer clic | toca algo que no es control | El Niño costero: extraordinario · ICEN 3 | 3 | 100 % | 5 | Es el único elemento de la pantalla donde se menciona a El Niño. Probaría tocar esa etiqueta para ver si desglosa el error según eventos de El Niño, … |
 | repaso-1900 | t4 primer clic | toca algo que no es control | El Niño costero: extraordinario · ICEN 3 | 3 | 80 % | 5 | Tocaría esa pastilla gris porque es el único sitio donde leo las palabras 'El Niño', aunque parece solo un texto y no sé si se puede presionar ni … |
 | repaso-1030 | t4 primer clic | toca algo que no es control | El Niño costero: extraordinario · ICEN 3 | 3 | 67 % | 5 | Es el único elemento que menciona a El Niño en la pantalla, aunque parece una etiqueta informativa y no sé si permite filtrar o ver el error. |
@@ -78,7 +78,7 @@ Acuerdo entre repeticiones: {'comprende': 0.8, 'lectura_cifra': 1.0, 'clic_t1': 
 | repaso-1900 | duda | duda | chip de El Niño | 1 | 93 % | 5 | No conozco qué es el ICEN ni por qué indica julio de 2026 si la fecha mostrada es marzo de 2026, ni si es un botón o solo … |
 | repaso-1900 | palabra | palabra | El Niño costero / ICEN | 1 | 93 % | 5 | El Niño costero / ICEN |
 | hoy | duda | duda | chip de El Niño | 1 | 87 % | 5 | No sé qué significa ICEN 3.38 ni qué tiene que ver El Niño con la luz, ni por qué pone jul-2026 si la fecha dice noviembre. |
-| escenario-2c | duda | duda | panel de escenarios | 1 | 87 % | 5 | Me da dos horas distintas y dos aumentos diferentes (15 MW a las 11:00 y +25 MW a las 15:30). No sé cuál de los dos cambios es … |
+| escenario-2c | duda | duda | panel de escenarios | 1 | 87 % | 5 | Tengo dos cifras de cambio y dudo sobre cuál llevar al titular: si los 15 MW de las 11:00 (pico de demanda) o los 25 MW de las … |
 | repaso-1900 | t4 primer clic | no sabe qué tocar | — | 4 | 20 % | 3 | Aquí me pierdo. Arriba veo una etiqueta gris que dice 'El Niño costero: extraordinario', pero no parece un botón y no veo nada que me diga en qué … |
 | confianza | duda | duda | cobertura | 1 | 80 % | 5 | No entiendo qué tiene que ver Bélgica o quién es Elia si esto se supone que es sobre la luz en Lima. |
 | confianza | palabra | palabra | Chronos-2 / modelo fundacional | 1 | 80 % | 4 | Chronos-2 / modelo fundacional |
