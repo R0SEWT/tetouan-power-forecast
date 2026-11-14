@@ -1245,8 +1245,11 @@ async function iniciar() {
   // Un enlace directo a «Confianza» o «Detalle»: su código baja junto con los datos de arranque, no después
   if (!ahoraPrimero) {
     const nombre = ruta.vista === 'area' ? 'detalle' : 'confianza';
-    esqueletoPantalla(nombre);
-    cargarPantalla(nombre).catch(() => {});
+    // Al reintentar tras un corte, una pantalla que ya está armada no se vacía: solo se vuelven a pedir sus datos
+    if (!LISTAS.has(nombre)) {
+      esqueletoPantalla(nombre);
+      cargarPantalla(nombre).catch(() => {});
+    }
   }
   if (ahoraPrimero) enrutar(); // el número sale de /ahora: no espera a /salud, /areas, /resumen ni /modelos
   try {
