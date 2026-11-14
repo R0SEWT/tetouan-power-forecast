@@ -453,6 +453,69 @@ function rutaDetalle(area, repaso = null, seccion = null) {
 }
 
 const hoyLima = () => ahoraEnLima().fecha;
+
+// «10/03», «1003», «10/3/26» o «10032026» → «2026-03-10». Sin año, el último 10 de marzo que ya pasó.
+function leerFecha(texto) {
+  const t = (texto || '').trim();
+  let d;
+  let m;
+  let y = null;
+  if (t.includes('/') || t.includes('-') || t.includes('.')) {
+    const partes = t.split(/[/.-]/).filter(Boolean).map(Number);
+    if (partes.length < 2 || partes.some((x) => !Number.isInteger(x))) return null;
+    if (partes[0] > 31) [y, m, d] = partes; // también se entiende 2026-03-10
+    else [d, m, y = null] = partes;
+  } else {
+    const c = t.replace(/\D/g, '');
+    if (![4, 6, 8].includes(c.length)) return null;
+    d = Number(c.slice(0, 2));
+    m = Number(c.slice(2, 4));
+    if (c.length > 4) y = Number(c.slice(4));
+  }
+  if (y != null && y < 100) y += 2000;
+  else if (y != null && (y < 1000 || y > 9999)) return null; // un año de 3 cifras todavía se está escribiendo
+  const hoy = hoyLima();
+  const iso = (a) => `${a}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+  const valida = (a) => {
+    const f = new Date(Date.UTC(a, m - 1, d));
+    return f.getUTCFullYear() === a && f.getUTCMonth() === m - 1 && f.getUTCDate() === d;
+  };
+  if (y == null) {
+    // El último que ya pasó: este año o, si todavía no llega (o no existe, como un 29/02), uno de los anteriores
+    for (let a = Number(hoy.slice(0, 4)); a > Number(hoy.slice(0, 4)) - 8; a -= 1) {
+      if (valida(a) && iso(a) <= hoy) return iso(a);
+    }
+    return null;
+  }
+  return valida(y) ? iso(y) : null;
+}
+
+// «19» → «19:00», «1930» → «19:30», «7:30» → «07:30»; la media hora que empieza a esa hora
+function leerHora(texto) {
+  const t = (texto || '').trim();
+  let h;
+  let mi = 0;
+  if (t.includes(':')) [h, mi] = t.split(':').map(Number);
+  else {
+    const c = t.replace(/\D/g, '');
+    if (!c || c.length > 4) return null;
+    if (c.length <= 2) h = Number(c);
+    else {
+      h = Number(c.slice(0, c.length - 2));
+      mi = Number(c.slice(-2));
+    }
+  }
+  if (!Number.isInteger(h) || !Number.isInteger(mi) || h < 0 || h > 23 || mi < 0 || mi > 59) return null;
+  return `${String(h).padStart(2, '0')}:${mi >= 30 ? '30' : '00'}`;
+}
+
+// Mientras se escribe la fecha, las barras se ponen solas: 1003 → 10/03, 10032026 → 10/03/2026
+function formatearFecha(texto) {
+  const propias = [...texto].some((ch, i) => /[/.-]/.test(ch) && !(ch === '/' && (i === 2 || i === 5)));
+  if (propias || /[^\d/]/.test(texto)) return texto; // «1/3», «10/3/25» o «2026-03-10»: como lo escribió
+  const c = texto.replace(/\D/g, '').slice(0, 8);
+  return [c.slice(0, 2), c.slice(2, 4), c.slice(4)].filter(Boolean).join('/');
+}
 function horaValida(t) {
   const i = horaAIdx(t);
   return i == null ? null : idxAHora(i);
@@ -596,12 +659,18 @@ function pintarAhora() {
   $('#ahHoy').setAttribute('aria-pressed', String(vivo));
   const fecha = $('#ahFecha');
   const tramos = d.dias_disponibles || [];
-  if (tramos.length) fecha.min = tramos.map((t) => t[0]).sort()[0];
-  fecha.max = hoyLima();
-  fecha.value = vivo ? d.ahora.slice(0, 10) : d.origen.slice(0, 10);
+  const nativa = $('#ahFechaNativa');
+  if (tramos.length) nativa.min = tramos.map((t) => t[0]).sort()[0];
+  nativa.max = hoyLima();
+  const dia = vivo ? d.ahora.slice(0, 10) : d.origen.slice(0, 10);
+  nativa.value = dia;
+  if (document.activeElement !== fecha) fecha.value = fechaNumerica(dia);
+  fecha.removeAttribute('aria-invalid');
+  $$('[data-atajo]').forEach((b) => b.setAttribute('aria-pressed', String(!vivo && dia === sumarDias(hoyLima(), -Number(b.dataset.atajo)))));
   $('#ahFechaLarga').textContent = vivo ? 'Hoy' : `${fechaLarga(d.origen)} (${fechaNumerica(d.origen)})`;
   const hora = $('#ahHora');
-  hora.value = horaDe(d.ahora);
+  if (document.activeElement !== hora) hora.value = horaDe(d.ahora);
+  hora.removeAttribute('aria-invalid');
   hora.closest('.campo').hidden = vivo;
   // Si la respuesta ya explica que el pronóstico del día no llegó, el aviso no lo repite con otra hora
   const avisos = (d.avisos || []).filter((t) => !(A.sinAviso && /^Todavía no llega la demanda/.test(t)));
@@ -1451,16 +1520,116 @@ function conectarEventos() {
 
   // Ahora
   $('#ahHoy').addEventListener('click', () => irAhora(null));
-  $('#ahFecha').addEventListener('change', (ev) => {
-    const f = ev.target.value;
-    if (!esFecha(f)) return;
-    if (f >= hoyLima()) irAhora(null);
-    else irAhora({ fecha: f, hora: A.hora || horaValida($('#ahHora').value) || idxAHora(ahoraEnLima().idx) });
+  // La fecha se fija apenas lo escrito es un día (10/03 ya lo es; si sigue el año, se vuelve a fijar), con Intro o
+  // al salir del campo. La hora igual: 19 ya es 19:00 y 1930, 19:30. Lo que no se entiende se marca y no se fija.
+  const ayuda = $('#ahFechaAyuda');
+  const AYUDA = ayuda.textContent;
+  const avisar = (texto) => {
+    ayuda.textContent = texto || AYUDA;
+    ayuda.classList.toggle('error', Boolean(texto));
+  };
+  // Un día fuera del historial o futuro no se pide: se dice por qué, junto al campo
+  const problemaFecha = (f) => {
+    const hoy = hoyLima();
+    if (f > hoy) return `El ${fechaNumerica(f)} todavía no llega: hay datos hasta hoy.`;
+    const d = A.datos.get(A.area);
+    const tramos = (d && d.dias_disponibles) || [];
+    const desde = tramos.length ? tramos.map((t) => t[0]).sort()[0] : null;
+    if (desde && f < desde) return `No hay datos del ${fechaNumerica(f)}: el historial empieza el ${fechaNumerica(desde)}.`;
+    return null;
+  };
+  const irAFecha = (f) => {
+    if (!f) return;
+    const problema = problemaFecha(f);
+    marcar(campoFecha, !problema);
+    avisar(problema);
+    if (problema) return;
+    if (f === hoyLima()) irAhora(null);
+    else if (f !== A.fecha) irAhora({ fecha: f, hora: A.hora || leerHora($('#ahHora').value) || idxAHora(ahoraEnLima().idx) });
+  };
+  const irAHora = (h) => { if (h && A.fecha && h !== A.hora) irAhora({ fecha: A.fecha, hora: h }); };
+  const campoFecha = $('#ahFecha');
+  const campoHora = $('#ahHora');
+  const marcar = (campo, ok) => (ok ? campo.removeAttribute('aria-invalid') : campo.setAttribute('aria-invalid', 'true'));
+  campoFecha.addEventListener('input', () => {
+    if (campoFecha.selectionStart === campoFecha.value.length) campoFecha.value = formatearFecha(campoFecha.value);
+    marcar(campoFecha, true);
+    avisar(null);
+    // 10/03 ya es un día (el último 10 de marzo que pasó), 10/03/2026 y 2026-03-10 también; 10/03/2 todavía no
+    if (/^\d{2}\/\d{2}(\/\d{4})?$|^\d{4}-\d{2}-\d{2}$/.test(campoFecha.value)) irAFecha(leerFecha(campoFecha.value));
   });
-  $('#ahHora').addEventListener('change', (ev) => {
-    const h = horaValida(ev.target.value);
-    if (h && A.fecha) irAhora({ fecha: A.fecha, hora: h });
+  const fijarFecha = () => {
+    const f = leerFecha(campoFecha.value);
+    const vacio = !campoFecha.value.trim();
+    marcar(campoFecha, Boolean(f) || vacio);
+    if (!f && !vacio) avisar(`No entiendo «${campoFecha.value}»: escribe el día como 10/03 o 10/03/2026.`);
+    if (f) irAFecha(f);
+  };
+  let esperaDia = null;
+  campoFecha.addEventListener('keydown', (ev) => {
+    if (ev.key === 'Enter') {
+      ev.preventDefault();
+      fijarFecha();
+    }
+    if (ev.key === 'ArrowUp' || ev.key === 'ArrowDown') {
+      // Flechas: un día más o menos
+      ev.preventDefault();
+      const base = leerFecha(campoFecha.value) || A.fecha || hoyLima();
+      campoFecha.value = fechaNumerica(sumarDias(base, ev.key === 'ArrowUp' ? 1 : -1));
+      clearTimeout(esperaDia);
+      esperaDia = setTimeout(fijarFecha, 500);
+    }
   });
+  campoFecha.addEventListener('change', fijarFecha);
+  campoFecha.addEventListener('blur', () => {
+    const d = A.datos.get(A.area);
+    if (d && campoFecha.getAttribute('aria-invalid') !== 'true') campoFecha.value = fechaNumerica(A.fecha || d.ahora.slice(0, 10));
+  });
+  campoHora.addEventListener('input', () => {
+    const c = campoHora.value.replace(/[^\d:]/g, '');
+    campoHora.value = c;
+    marcar(campoHora, true);
+    const digitos = c.replace(/\D/g, '');
+    if ((digitos.length === 4 || (digitos.length === 2 && !c.includes(':'))) && leerHora(c)) irAHora(leerHora(c));
+  });
+  const fijarHoraCampo = () => {
+    const h = leerHora(campoHora.value);
+    marcar(campoHora, Boolean(h));
+    if (!h) avisar(`No entiendo «${campoHora.value}»: escribe la hora como 19 o 19:30 (de 00:00 a 23:30).`);
+    else avisar(null);
+    if (h) {
+      campoHora.value = h;
+      irAHora(h);
+    }
+  };
+  let esperaFlecha = null;
+  campoHora.addEventListener('keydown', (ev) => {
+    if (ev.key === 'Enter') {
+      ev.preventDefault();
+      fijarHoraCampo();
+    }
+    if (ev.key === 'ArrowUp' || ev.key === 'ArrowDown') {
+      // Flechas: media hora más o menos, como un reloj de 24 h
+      ev.preventDefault();
+      const i = horaAIdx(leerHora(campoHora.value) || A.hora || '00:00') ?? 0;
+      campoHora.value = idxAHora((i + (ev.key === 'ArrowUp' ? 1 : 47)) % 48);
+      clearTimeout(esperaFlecha);
+      esperaFlecha = setTimeout(fijarHoraCampo, 500);
+    }
+  });
+  campoHora.addEventListener('change', fijarHoraCampo);
+  campoHora.addEventListener('blur', () => { if (A.hora && campoHora.getAttribute('aria-invalid') !== 'true') campoHora.value = A.hora; });
+  // El calendario: el del navegador, pero lo que queda escrito en el campo es dd/mm/aaaa
+  $('#ahCalendario').addEventListener('click', () => {
+    const n = $('#ahFechaNativa');
+    try {
+      n.showPicker();
+    } catch {
+      campoFecha.focus(); // sin calendario nativo: se escribe
+    }
+  });
+  $('#ahFechaNativa').addEventListener('change', (ev) => { if (esFecha(ev.target.value)) irAFecha(ev.target.value); });
+  $$('[data-atajo]').forEach((b) => b.addEventListener('click', () => irAFecha(sumarDias(hoyLima(), -Number(b.dataset.atajo)))));
   $('#ahRef').addEventListener('change', (ev) => {
     A.ref = ev.target.checked;
     const d = A.datos.get(A.area);
