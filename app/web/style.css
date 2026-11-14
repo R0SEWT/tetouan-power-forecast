@@ -3257,10 +3257,6 @@ table.cmp tr.nuestro td {
 }
 
 @media (min-width: 1600px) {
-  .kpi.kpi-ahora .n {
-    font-size: 72px;
-  }
-
   .cab-marca svg {
     width: 34px;
     height: 34px;
