@@ -3080,11 +3080,6 @@ table.cmp tr.nuestro td {
     display: none;
   }
 
-  /* El estado de los datos no se recorta: lo que cede es la segunda línea de la marca */
-  .cab-der {
-    flex: none;
-  }
-
   .nav {
     position: fixed;
     left: 0;
@@ -3321,21 +3316,6 @@ table.t tr.fila-elegida td {
 }
 
 @media (max-width: 760px) {
-  .estado .larga {
-    display: none;
-  }
-
-  .estado .corta {
-    display: inline-flex;
-    flex-direction: column;
-    line-height: 1.15;
-  }
-
-  .estado .corta span:first-child {
-    font-weight: 700;
-    color: var(--ink);
-  }
-
   #btnFicha {
     display: none;
   }
@@ -3383,10 +3363,6 @@ table.t tr.fila-elegida td {
 @media (max-width: 760px) {
   .estado {
     max-width: none;
-    height: auto;
-    min-height: 36px;
-    padding: 2px 12px 2px 10px;
-    border-radius: var(--r-l);
   }
 }
 
@@ -3614,9 +3590,9 @@ input[type='time']:focus-within,
   }
 }
 
-/* Entre el celular y el escritorio (761–1100 px) el estado de los datos va en su versión corta y en dos líneas,
-   como en el celular: con la marca completa, la larga se recortaba («12/11, 2…») */
-@media (min-width: 761px) and (max-width: 1100px) {
+/* Hasta 1100 px el estado de los datos va en su versión corta y en dos líneas («COES» sobre «12/11 24:00») y no se
+   recorta: lo que cede es la marca. Con la marca completa, la larga se recortaba («12/11, 2…») */
+@media (max-width: 1100px) {
   .cab-der {
     flex: none;
   }
