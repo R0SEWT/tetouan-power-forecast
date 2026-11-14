@@ -3471,9 +3471,6 @@ input[type='time']:focus-within,
 
 .pregunta {
   max-width: 40ch;
-  font-size: 32px;
-  line-height: 1.2;
-  letter-spacing: -0.01em;
 }
 
 .resp-dia {
@@ -3576,10 +3573,6 @@ input[type='time']:focus-within,
     font-size: 72px;
   }
 
-  .pregunta {
-    font-size: 36px;
-  }
-
   .r-frase {
     font-size: 20px;
   }
@@ -3642,10 +3635,6 @@ input[type='time']:focus-within,
 
   #ahPie {
     order: 8;
-  }
-
-  .pregunta {
-    font-size: 24px;
   }
 
   .resp-dia {
