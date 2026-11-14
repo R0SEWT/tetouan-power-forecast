@@ -47,7 +47,8 @@ def main():
         except OSError:
             fuente = ImageFont.load_default()
         for n in nombres:
-            ims = [Image.open(RAIZ / "resultados" / "tmp" / "atencion" / e / "mapas" / f"{n}.jpg") for e in (a.antes, a.despues)]
+            sufijo = "" if a.duracion == "3s" else f"-{a.duracion}"  # el mismo mapa que la tabla
+            ims = [Image.open(RAIZ / "resultados" / "tmp" / "atencion" / e / "mapas" / f"{n}{sufijo}.jpg") for e in (a.antes, a.despues)]
             k = 0.5 if ims[0].width > 800 else 0.8
             ims = [im.resize((int(im.width * k), int(im.height * k)), Image.LANCZOS) for im in ims]
             hoja = Image.new("RGB", (ims[0].width + ims[1].width + 12, max(i.height for i in ims) + 32), (24, 26, 26))

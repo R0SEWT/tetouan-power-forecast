@@ -295,7 +295,7 @@ def entrenar(dur, Head):
 
 # ---------- 4. validación del port numpy ----------
 
-def validar(hm, Head):
+def validar(hm):
     import torch
     import torch.nn.functional as F
     from huggingface_hub import hf_hub_download
@@ -328,8 +328,6 @@ def validar(hm, Head):
     filas = [r for r in filas_ueyes() if r["Train/Test"] == "Test"]
     random.Random(1).shuffle(filas)
     casos = []
-    media = torch.tensor([0.485, 0.456, 0.406]).view(3, 1, 1)
-    desv = torch.tensor([0.229, 0.224, 0.225]).view(3, 1, 1)
     for r, tam in zip(filas[:12], [None, (1366, 768), (1024, 768), (375, 812)] * 3):
         im = Image.open(f"ueyesdata/images/{r['Image Name']}").convert("RGB")
         if tam:
@@ -345,7 +343,6 @@ def validar(hm, Head):
         casos.append({"img": r["Image Name"], "rejilla": [gh, gw], "dif_rasgos_max": round(float(np.abs(ft.numpy() - fn).max()), 4),
                       "dif_rasgos_media": round(float(np.abs(ft.numpy() - fn).mean()), 6), "cc_mapa": round(float(a @ b / np.linalg.norm(a) / np.linalg.norm(b)), 6),
                       "dif_mapa_max_rel": round(float(np.abs(lt - ln).max() / lt.max()), 6)})
-        _ = media, desv
     return {"dif_pesos_timm_vs_hf": dif_pesos, "dif_interp_pos": dif_interp, "casos": casos,
             "cc_mapa_min": min(c["cc_mapa"] for c in casos)}
 
@@ -372,7 +369,7 @@ def main():
         hm = Head()
         hm.load_state_dict(torch.load("cabeza_ueyes_3s.pt"))
         hm.eval()
-        met["validacion"] = validar(hm, Head)
+        met["validacion"] = validar(hm)
         escribir_json("metricas.json", met)
         estado(etapa="validado", cc_mapa_min=met["validacion"]["cc_mapa_min"])
     estado(etapa="fin")

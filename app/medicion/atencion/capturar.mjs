@@ -57,9 +57,17 @@ function recolectar(aoiConfig) {
     const tapan = new Set();
     for (const e of els) {
       const usaCaja = modo === 'caja' || e instanceof SVGElement || e.querySelector('svg,img,canvas,video');
-      const r = usaCaja ? e.getBoundingClientRect() : cajaTexto(e);
-      if (r.width <= 1 || r.height <= 1) continue;
-      cajas.push(R(r));
+      let r = usaCaja ? e.getBoundingClientRect() : cajaTexto(e);
+      if (e instanceof SVGGeometryElement) {
+        // Una <line> vertical tiene caja geométrica de ancho 0: se suma el trazo pintado, al menos 1 px por lado.
+        const t = Math.max(1, (parseFloat(getComputedStyle(e).strokeWidth) || 0) / 2);
+        r = new DOMRect(r.left - t, r.top - t, r.width + 2 * t, r.height + 2 * t);
+        if (r.width <= 1 || r.height <= 1) continue;
+        cajas.push([Math.floor(r.left), Math.floor(r.top), Math.ceil(r.right), Math.ceil(r.bottom)]);
+      } else {
+        if (r.width <= 1 || r.height <= 1) continue;
+        cajas.push(R(r));
+      }
       fijos.forEach((f, i) => { if (!f.el.contains(e) && !e.contains(f.el)) tapan.add(i); });
     }
     aoi[n] = { cajas, tapan: [...tapan], existe: els.length > 0 };

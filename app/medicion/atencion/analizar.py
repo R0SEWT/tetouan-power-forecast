@@ -201,7 +201,9 @@ def analizar_captura(c, im, mapas, dir_mapas):
         total = area_cajas(a["cajas"])
         r["aoi"][n] = {"existe": a["existe"], "a_la_vista": round(float(crudas[n].sum()) / total, 3) if total else 0.0,
                        "arriba_px": min((b[1] for b in a["cajas"]), default=None)}
-    superponer(im, mapas["3s"], c, exclusivas, {k: v["cuota"] for k, v in r["atencion"]["3s"].items()}, dir_mapas / f"{c['nombre']}.jpg")
+    for d, sal in mapas.items():  # el de 3 s sin sufijo (láminas y PR); los otros, para comparar.py --duracion
+        sufijo = "" if d == "3s" else f"-{d}"
+        superponer(im, sal, c, exclusivas, {k: v["cuota"] for k, v in r["atencion"][d].items()}, dir_mapas / f"{c['nombre']}{sufijo}.jpg")
 
     # Lo que compite en la primera pantalla
     vis = [t for t in c["textos"] if t["visible"]]
