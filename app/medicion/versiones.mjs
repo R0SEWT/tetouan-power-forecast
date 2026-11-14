@@ -6,6 +6,8 @@
 //   { teclas: (p) => locator, tecla, veces } n pulsaciones (con el foco ya puesto por el paso anterior)
 //   { revisar: true }                        mira la pantalla (acumula lo visto), sin costo
 
+import { WEB } from './comun.mjs';
+
 const tabBase = (nombre) => (p) => p.locator(`.sheet-tab[data-tab=${nombre}]`);
 
 export const VERSIONES = {
@@ -108,6 +110,67 @@ VERSIONES.it7 = {
     },
   },
   tareas: VERSIONES.it2.tareas,
+};
+
+// Iteración 8: «Ahora» y «Confianza» son las pantallas de entrada. El caso se abre en «Ahora», en repaso (el
+// 10 de marzo de 2026 a las 19:00); el detalle anterior queda en «Detalle». Cada versión puede decir desde qué enlace
+// arranca cada estado (`url`) y cada tarea (`inicio`); si no lo dice, se usan los de siempre (comun.mjs).
+const URL_AHORA = `${WEB}/#/ahora/centro?fecha=2026-03-10&hora=19:00`;
+const URL_DETALLE = `${WEB}/#/area/centro?fecha=2026-03-10&hora=19:00&horizonte=24h&variante=M3`;
+const navegar = (nombre) => (p) => p.getByRole('navigation', { name: 'Pantallas' }).getByRole('link', { name: nombre });
+const confianzaLista = async (p) => p.waitForFunction(() => !/Calculando/.test(document.querySelector('#cfTitular').textContent));
+VERSIONES.it8 = {
+  url: (estado) => ({
+    inicio: `${WEB}/`,
+    area: URL_AHORA,
+    despues: URL_AHORA,
+    confianza: URL_AHORA,
+    confianza_1h: URL_AHORA,
+    sin_api: URL_AHORA,
+    detalle: URL_DETALLE,
+    escenarios: URL_DETALLE,
+    diagnostico: URL_DETALLE,
+    ficha: URL_AHORA,
+  })[estado],
+  inicio: (tarea) => (tarea === 't1' ? `${WEB}/` : URL_AHORA),
+  // Recorrido de foco: en «Ahora» no hay selector de horizonte; los controles clave son el día y «Confianza»
+  foco: { horizonte: /ahFecha/, diagnostico: /Confianza/ },
+  estados: {
+    inicio: async () => {},
+    area: async () => {},
+    despues: async (p) => { await p.getByLabel('Mostrar lo que pasó después').check(); },
+    confianza: async (p) => { await navegar('Confianza')(p).click(); await confianzaLista(p); },
+    confianza_1h: async (p) => {
+      await navegar('Confianza')(p).click();
+      await confianzaLista(p);
+      await p.getByRole('button', { name: 'A 1 hora' }).click();
+      await confianzaLista(p);
+    },
+    sin_api: async (p) => {
+      await p.route(/:8000\//, (r) => r.abort());
+      await p.reload();
+      await p.waitForTimeout(800);
+    },
+    detalle: async () => {},
+    escenarios: async (p) => { await seccion('¿Y si…?')(p).click(); },
+    diagnostico: async (p) => { await seccion('Diagnóstico')(p).click(); },
+    ficha: async (p) => { await p.getByRole('button', { name: 'Ficha técnica: modelo y datos' }).click(); },
+  },
+  tareas: {
+    // Desde la entrada («Ahora», en vivo): escribir el día y la hora. Lo que se dijo, su rango y lo real quedan a la vista.
+    t1: [
+      { escribir: (p) => p.locator('#ahFecha'), texto: '2026-03-10' },
+      { escribir: (p) => p.locator('#ahHora'), texto: '19:00' },
+      { revisar: true },
+    ],
+    // El error del día completo se ve al pedir lo que pasó después: la pantalla no muestra el futuro sin pedirlo.
+    t2: [{ clic: (p) => p.getByLabel('Mostrar lo que pasó después') }],
+    t3: [
+      { clic: (p) => p.getByRole('link', { name: '¿Y si hace más calor?' }) },
+      { clic: (p) => p.getByRole('button', { name: '+2 °C' }) },
+    ],
+    t4: [{ clic: navegar('Confianza') }],
+  },
 };
 
 export function version(nombre) {

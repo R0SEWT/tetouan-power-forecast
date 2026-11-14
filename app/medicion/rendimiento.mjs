@@ -1,10 +1,11 @@
 // Peso de la página, peticiones, terceros y tiempos hasta el primer gráfico y hasta la respuesta
 // (el número pronosticado en pantalla), en red local y en una red lenta simulada.
 import { mediana, nuevaPagina, rango, URL_AREA, WEB } from './comun.mjs';
+import { version } from './versiones.mjs';
 
 const RED_LENTA = { offline: false, latency: 150, downloadThroughput: (1.6 * 1024 * 1024) / 8, uploadThroughput: (750 * 1024) / 8 };
 
-async function unaCarga(navegador, ficha, lenta) {
+async function unaCarga(navegador, ficha, lenta, url = URL_AREA) {
   const { contexto, pagina } = await nuevaPagina(navegador, 'movil');
   const cdp = await contexto.newCDPSession(pagina);
   await cdp.send('Network.enable');
@@ -30,13 +31,13 @@ async function unaCarga(navegador, ficha, lenta) {
       peticiones.push({ url: req.url(), tipo: req.resourceType(), bytes: s.responseBodySize + s.responseHeadersSize });
     } catch { /* nada */ }
   });
-  await pagina.goto(URL_AREA);
+  await pagina.goto(url);
   await pagina.waitForFunction(() => window.__marcas && window.__marcas.grafico && window.__marcas.respuesta, null, { timeout: 60000 }).catch(() => {});
   await pagina.waitForLoadState('networkidle').catch(() => {});
   const marcas = await pagina.evaluate(() => window.__marcas);
   await contexto.close();
   const origen = new URL(WEB).host;
-  const api = new URL(URL_AREA).hostname;
+  const api = new URL(url).hostname;
   return {
     grafico_ms: marcas.grafico ? Math.round(marcas.grafico) : null,
     respuesta_ms: marcas.respuesta ? Math.round(marcas.respuesta) : null,
@@ -47,11 +48,13 @@ async function unaCarga(navegador, ficha, lenta) {
   };
 }
 
-export async function medirRendimiento(navegador, ficha, repeticiones = 5) {
+export async function medirRendimiento(navegador, ficha, repeticiones = 5, nombreVersion = null) {
+  const v = nombreVersion ? version(nombreVersion) : {};
+  const url = (v.url && v.url('area')) || URL_AREA;
   const salida = {};
   for (const [nombre, lenta] of [['local', false], ['red_lenta', true]]) {
     const corridas = [];
-    for (let i = 0; i < repeticiones; i += 1) corridas.push(await unaCarga(navegador, ficha, lenta));
+    for (let i = 0; i < repeticiones; i += 1) corridas.push(await unaCarga(navegador, ficha, lenta, url));
     salida[nombre] = {
       grafico_ms: mediana(corridas.map((c) => c.grafico_ms)),
       grafico_rango_ms: rango(corridas.map((c) => c.grafico_ms)),

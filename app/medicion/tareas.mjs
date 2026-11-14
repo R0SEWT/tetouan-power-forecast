@@ -176,8 +176,9 @@ async function correrRuta(pagina, ruta, grupos, vistos, cuenta, esperar) {
 export async function medirTarea(navegador, nombreVersion, clave, oraculo, vista) {
   const { contexto, pagina } = await nuevaPagina(navegador, vista);
   const esperar = vigilarRed(pagina);
-  const ruta = version(nombreVersion).tareas[clave];
-  const inicio = clave === 't1' ? `${WEB}/` : URL_AREA;
+  const v = version(nombreVersion);
+  const ruta = v.tareas[clave];
+  const inicio = (v.inicio && v.inicio(clave)) || (clave === 't1' ? `${WEB}/` : URL_AREA);
   await pagina.goto(inicio);
   await esperar(500);
   const vistos = new Set();
