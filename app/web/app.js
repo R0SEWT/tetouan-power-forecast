@@ -2465,7 +2465,7 @@ function pintarOrigen(d) {
 
 // ---- Confianza ---------------------------------------------------------------------------------------------
 
-const C = { area: 'centro', horizonte: '24h', mes: null, turno: 0, cache: new Map(), datos: null };
+const C = { area: 'centro', horizonte: '24h', mes: null, turno: 0, datos: null };
 
 function mostrarConfianza(area, q) {
   C.area = area;
@@ -2484,28 +2484,30 @@ async function cargarConfianza() {
   const turno = ++C.turno;
   const { area, horizonte } = C;
   const m = hayVariosModelos() && S.modelo ? S.modelo : null;
-  const clave = `${m}|${area}|${horizonte}`;
   $('#cfTitular').textContent = 'Calculando la confianza…';
   $('#vistaConfianza').classList.add('desactualizada');
   const q = new URLSearchParams({ horizonte, variante: 'M3' });
   if (m) q.set('modelo', m);
   const diagClave = `${S.modelo || ''}|${area}`;
   const [conf, vivo, diag] = await Promise.allSettled([
-    C.cache.has(clave) ? Promise.resolve(C.cache.get(clave)) : api(`/confianza/${encodeURIComponent(area)}?${q}`),
+    api(`/confianza/${encodeURIComponent(area)}?${q}`), // sin caché aquí: su parte en vivo crece cada mañana (el backend cachea el historial)
     api(`/en-vivo/${encodeURIComponent(area)}`),
     S.diag.has(diagClave) ? Promise.resolve(S.diag.get(diagClave)) : api(`/diagnostico/${encodeURIComponent(area)}${m ? `?modelo=${encodeURIComponent(m)}` : ''}`),
   ]);
   if (turno !== C.turno) return;
   $('#vistaConfianza').classList.remove('desactualizada');
   if (conf.status === 'rejected') {
+    // Nada de la selección anterior queda a la vista: se vacían todas las secciones
+    C.datos = null;
     if (conf.reason.estado === 0) mostrarError(conf.reason);
     $('#cfTitular').textContent = 'No pudimos calcular la confianza de esta área';
     $('#cfLead').textContent = textoError(conf.reason);
-    ['#cfMes', '#cfCob', '#cfDia'].forEach((s) => { $(s).innerHTML = '<p class="vacio">Sin datos por ahora.</p>'; });
+    $('#cfStats').innerHTML = '';
+    ['#cfMes', '#cfCob', '#cfVivo', '#cfDia', '#cfSesgo', '#cfNino'].forEach((s) => { $(s).innerHTML = '<p class="vacio">Sin datos por ahora.</p>'; });
+    $('#cfMundo').innerHTML = '';
     return;
   }
   limpiarError();
-  C.cache.set(clave, conf.value);
   if (diag.status === 'fulfilled') S.diag.set(diagClave, diag.value);
   C.datos = { conf: conf.value, vivo: vivo.status === 'fulfilled' ? vivo.value : null, diag: diag.status === 'fulfilled' ? diag.value : null };
   const u = C.datos.vivo && C.datos.vivo.ultimo;
