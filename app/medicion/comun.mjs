@@ -4,6 +4,10 @@ import { chromium } from 'playwright';
 
 export const WEB = process.env.TPF_WEB || 'http://localhost:8080';
 export const API = process.env.TPF_API || 'http://localhost:8000';
+// La web busca la API en el puerto 8000 de su mismo host. Si el arnés corre con la API en otro puerto (la app del
+// dueño puede estar abierta en :8000), esas peticiones se desvían a TPF_API sin tocar la web ni sus enlaces; una
+// ruta de la página (como la de «sin API», que corta :8000) manda sobre este desvío.
+const DESVIO_API = /^https?:\/\/(localhost|127\.0\.0\.1):8000\/?$/.test(API) ? null : API.replace(/\/+$/, '');
 
 // El caso de las tareas: Centro, martes 10 de marzo de 2026 (prueba, El Niño extraordinario), 19:00.
 export const CASO = { area: 'centro', fecha: '2026-03-10', hora: '19:00', idx: 38, horizonte: '24h', variante: 'M3' };
@@ -37,6 +41,9 @@ export async function nuevaPagina(navegador, vista = 'escritorio', tema = 'dark'
   await contexto.addInitScript((t) => {
     try { localStorage.setItem('tpf-tema', t === 'light' ? 'light' : 'dark'); } catch { /* nada */ }
   }, tema);
+  if (DESVIO_API) {
+    await contexto.route(/^http:\/\/(localhost|127\.0\.0\.1):8000\//, (r) => r.continue({ url: r.request().url().replace(/^http:\/\/[^/]+/, DESVIO_API) }));
+  }
   const pagina = await contexto.newPage();
   return { contexto, pagina };
 }
