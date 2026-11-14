@@ -2092,45 +2092,56 @@ function pintarCifras(d) {
   const vivo = d.modo === 'en_vivo';
   const c = d.cifra_ahora;
   const html = [];
+  // La cifra del presente va al frente y es la más grande. Una cifra sin dato no ocupa una tarjeta: en vivo,
+  // «mañana a esta hora» se emite mañana (lo dice el párrafo de arriba) y a las 23:00 no hay «en 1 hora».
   const dijimos = d.ayer && d.ayer.fecha_hora === c.fecha_hora ? `. Se pronosticó ${mw(d.ayer.pronostico)} (${rangoTxt(d.ayer.inferior, d.ayer.superior)}): ${d.ayer.dentro ? 'dentro' : 'fuera'} del rango` : '';
   html.push(kpiHtml({
+    clase: 'kpi-ahora',
     sw: c.fuente === 'real' ? 'real' : 'pron',
     k: `Ahora · ${esc(horaDe(c.fecha_hora))}`,
     n: mw(c.valor),
     d: c.fuente === 'real' ? `Dato del COES${dijimos}` : `Pronóstico, rango ${rangoTxt(c.inferior, c.superior)} · el real llega mañana`,
   }));
   const u = d.en_1h;
-  html.push(u ? kpiHtml({
-    k: `En 1 hora · ${esc(horaDe(u.fecha_hora))}`,
-    n: mw(u.valor),
-    d: `Rango ${rangoTxt(u.inferior, u.superior)}${u.fuente === 'pronostico_1h' ? ' · a\u00a01\u00a0h' : ''}`,
-  }) : kpiHtml({ clase: 'kpi-vacio', k: 'En 1 hora', n: '—', d: 'Sin pronóstico para esa hora', unidad: '' }));
+  if (u) {
+    html.push(kpiHtml({
+      k: `En 1 hora · ${esc(horaDe(u.fecha_hora))}`,
+      n: mw(u.valor),
+      d: `Rango ${rangoTxt(u.inferior, u.superior)}${u.fuente === 'pronostico_1h' ? ' · a 1 h' : ''}`,
+    }));
+  }
   const p = d.pico;
   const yaPaso = vivo && p.fecha_hora < d.ahora;
   const dia = d.origen.slice(0, 10);
   const escenario = !vivo && dia >= FECHA_MIN && dia <= FECHA_MAX
     ? ` <a class="kpi-enlace" href="${rutaDetalle(A.area, { fecha: dia, hora: horaDe(d.origen) }, 'escenarios')}">¿Y si hace más calor?</a>` : '';
   html.push(kpiHtml({
-    clase: 'dest',
-    k: vivo ? 'Pico de hoy' : 'Pico de las próximas 24 h',
+    clase: `kpi-pico${yaPaso ? ' kpi-pasado' : ''}`,
+    k: vivo ? `Pico de hoy${yaPaso ? ' <span class="kpi-paso">ya pasó</span>' : ''}` : 'Pico de las próximas 24 h',
     n: mw(p.valor),
-    d: `${esc(fechaDiaMes(p.fecha_hora))}, ${esc(horaDe(p.fecha_hora))} · rango ${rangoTxt(p.inferior, p.superior)}${yaPaso ? ' · según el pronóstico, ya pasó' : ''}${escenario}`,
+    d: `${yaPaso ? `Fue a las ${esc(horaDe(p.fecha_hora))}, según el pronóstico` : `${esc(fechaDiaMes(p.fecha_hora))}, ${esc(horaDe(p.fecha_hora))}`} · rango ${rangoTxt(p.inferior, p.superior)}${escenario}`,
   }));
-  html.push(d.manana ? kpiHtml({
-    k: 'Mañana a esta hora',
-    n: mw(d.manana.valor),
-    d: `${firmado(d.manana.valor - c.valor)} MW frente a ahora`,
-  }) : kpiHtml({ clase: 'kpi-vacio', k: 'Mañana a esta hora', n: '—', unidad: '', d: d.modo === 'en_vivo' ? 'Se emite mañana hacia las 10:00, cuando el COES publique la demanda de hoy' : esc(d.manana_motivo || 'Todavía no se emite') }));
+  if (d.manana) {
+    html.push(kpiHtml({
+      k: 'Mañana a esta hora',
+      n: mw(d.manana.valor),
+      d: `${firmado(d.manana.valor - c.valor)} MW frente a ahora`,
+    }));
+  }
   const r = d.rampa;
-  html.push(r ? kpiHtml({
-    sw: null,
-    k: 'Mayor subida en 1 hora',
-    n: `+${mw(r.subida_mw)}`,
-    d: `${esc(horaDe(r.desde))}–${esc(horaDe(r.hasta))} ${esc(diaCorto(r.hasta))} · `
-      + (r.fuerte ? `<span class="marca-estado fuerte">${ICONO.ojo}rampa fuerte</span>` : 'habitual')
-      + (r.umbral_mw != null ? ` (umbral ${mw(r.umbral_mw)})` : ''),
-  }) : kpiHtml({ sw: null, clase: 'kpi-vacio', k: 'Mayor subida en 1 hora', n: '—', unidad: '', d: 'La demanda no sube en ninguna hora de la ventana' }));
-  $('#ahCifras').innerHTML = html.join('');
+  if (r) {
+    html.push(kpiHtml({
+      sw: null,
+      k: 'Mayor subida en 1 hora',
+      n: `+${mw(r.subida_mw)}`,
+      d: `${esc(horaDe(r.desde))}–${esc(horaDe(r.hasta))} ${esc(diaCorto(r.hasta))} · `
+        + (r.fuerte ? `<span class="marca-estado fuerte">${ICONO.ojo}rampa fuerte</span>` : 'habitual')
+        + (r.umbral_mw != null ? ` (umbral ${mw(r.umbral_mw)})` : ''),
+    }));
+  }
+  const cifras = $('#ahCifras');
+  cifras.innerHTML = html.join('');
+  cifras.dataset.n = String(html.length);
 }
 
 // El gráfico principal: lo real hasta el último dato, el pronóstico fino (pasado) y grueso (futuro), su rango,
