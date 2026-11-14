@@ -1,0 +1,2696 @@
+{
+ "etiqueta": "r4",
+ "modo": "imagen",
+ "capturado_lima": "2026-11-14 04:52",
+ "sesiones_validas": 12,
+ "sesiones_fallidas": 0,
+ "por_pantalla": {
+  "entrada-1030": {
+   "sesiones": 5,
+   "dudas_por_sesion": {
+    "media": 2.6,
+    "min": 2.6,
+    "max": 2.6,
+    "n": 5,
+    "reps": 1
+   },
+   "terminos_por_sesion": {
+    "media": 4.2,
+    "min": 4.2,
+    "max": 4.2,
+    "n": 5,
+    "reps": 1
+   },
+   "confusion_por_sesion": {
+    "media": 0.4,
+    "min": 0.4,
+    "max": 0.4,
+    "n": 5,
+    "reps": 1
+   },
+   "seguridad": {
+    "media": 5.0,
+    "min": 5.0,
+    "max": 5.0,
+    "n": 5,
+    "reps": 1
+   },
+   "dudas_zonas": [
+    [
+     "cuando",
+     3
+    ],
+    [
+     "respuesta",
+     2
+    ],
+    [
+     "#ahOrigen",
+     2
+    ],
+    [
+     "#ahRespuesta",
+     1
+    ],
+    [
+     "#ahGrafSub",
+     1
+    ],
+    [
+     "#ahLeyenda",
+     1
+    ]
+   ],
+   "terminos_top": [
+    [
+     "Simons (componente del modelo)",
+     1.0
+    ],
+    [
+     "Chronos-2 / modelo fundacional",
+     0.8
+    ],
+    [
+     "IEOD",
+     0.8
+    ],
+    [
+     "modelo / híbrido / XGBoost",
+     0.8
+    ],
+    [
+     "COES",
+     0.4
+    ],
+    [
+     "CSV",
+     0.2
+    ],
+    [
+     "MW / megavatios",
+     0.2
+    ]
+   ],
+   "comprende": {
+    "media": 1.0,
+    "min": 1.0,
+    "max": 1.0,
+    "n": 5,
+    "reps": 1
+   },
+   "momento_ok": {
+    "media": 1.0,
+    "min": 1.0,
+    "max": 1.0,
+    "n": 5,
+    "reps": 1
+   },
+   "lectura_cifra": {
+    "media": 1.0,
+    "min": 1.0,
+    "max": 1.0,
+    "n": 5,
+    "reps": 1
+   },
+   "lectura_completa": {
+    "media": 1.0,
+    "min": 1.0,
+    "max": 1.0,
+    "n": 5,
+    "reps": 1
+   },
+   "primer_clic": {
+    "t1": {
+     "media": 1.0,
+     "min": 1.0,
+     "max": 1.0,
+     "n": 5,
+     "reps": 1
+    },
+    "t2": {
+     "media": 1.0,
+     "min": 1.0,
+     "max": 1.0,
+     "n": 5,
+     "reps": 1
+    },
+    "t3": {
+     "media": 1.0,
+     "min": 1.0,
+     "max": 1.0,
+     "n": 5,
+     "reps": 1
+    },
+    "t4": {
+     "media": 1.0,
+     "min": 1.0,
+     "max": 1.0,
+     "n": 5,
+     "reps": 1
+    }
+   },
+   "primer_clic_estricto": {
+    "t1": {
+     "media": 1.0,
+     "min": 1.0,
+     "max": 1.0,
+     "n": 5,
+     "reps": 1
+    },
+    "t2": {
+     "media": 1.0,
+     "min": 1.0,
+     "max": 1.0,
+     "n": 5,
+     "reps": 1
+    },
+    "t3": {
+     "media": 1.0,
+     "min": 1.0,
+     "max": 1.0,
+     "n": 5,
+     "reps": 1
+    },
+    "t4": {
+     "media": 1.0,
+     "min": 1.0,
+     "max": 1.0,
+     "n": 5,
+     "reps": 1
+    }
+   },
+   "primer_clic_medio": {
+    "media": 1.0,
+    "min": 1.0,
+    "max": 1.0,
+    "n": 5,
+    "reps": 1
+   },
+   "no_es_control": [],
+   "mira_primero": [
+    [
+     "linea_ahora",
+     4
+    ],
+    [
+     "cuando",
+     1
+    ]
+   ],
+   "mira_primero_cifra": {
+    "media": 0.0,
+    "min": 0.0,
+    "max": 0.0,
+    "n": 5,
+    "reps": 1
+   },
+   "volveria": {
+    "no": 1,
+    "si": 3,
+    "tal_vez": 1
+   },
+   "importo": [
+    [
+     "rendición de cuentas (acertó, cuánto se equivoca)",
+     0.4
+    ],
+    [
+     "la cifra de ahora",
+     0.4
+    ],
+    [
+     "los datos para descargar",
+     0.2
+    ],
+    [
+     "el pico y la hora de más consumo",
+     0.2
+    ]
+   ],
+   "volveria_si_o_tal_vez": {
+    "media": 0.8,
+    "min": 0.8,
+    "max": 0.8,
+    "n": 5,
+    "reps": 1
+   },
+   "acuerdo_entre_repeticiones": {
+    "comprende": null,
+    "lectura_cifra": null,
+    "clic_t1": null,
+    "clic_t2": null,
+    "clic_t3": null,
+    "clic_t4": null
+   },
+   "embudo": [
+    {
+     "paso": "abre la pantalla",
+     "quedan": 5,
+     "de": 5
+    },
+    {
+     "paso": "dice qué es",
+     "quedan": 5,
+     "de": 5
+    },
+    {
+     "paso": "lee la cifra del momento",
+     "quedan": 5,
+     "de": 5
+    },
+    {
+     "paso": "sabe qué momento muestra",
+     "quedan": 5,
+     "de": 5
+    },
+    {
+     "paso": "acierta el primer clic en 3 de 4 tareas",
+     "quedan": 5,
+     "de": 5
+    },
+    {
+     "paso": "volvería mañana (sí o tal vez)",
+     "quedan": 4,
+     "de": 5
+    }
+   ]
+  },
+  "entrada-1900": {
+   "sesiones": 2,
+   "dudas_por_sesion": {
+    "media": 3.0,
+    "min": 3.0,
+    "max": 3.0,
+    "n": 2,
+    "reps": 1
+   },
+   "terminos_por_sesion": {
+    "media": 5.0,
+    "min": 5.0,
+    "max": 5.0,
+    "n": 2,
+    "reps": 1
+   },
+   "confusion_por_sesion": {
+    "media": 1.5,
+    "min": 1.5,
+    "max": 1.5,
+    "n": 2,
+    "reps": 1
+   },
+   "seguridad": {
+    "media": 5.0,
+    "min": 5.0,
+    "max": 5.0,
+    "n": 2,
+    "reps": 1
+   },
+   "dudas_zonas": [
+    [
+     "linea_ahora",
+     1
+    ],
+    [
+     "#ahRespuesta",
+     1
+    ],
+    [
+     "respuesta",
+     1
+    ],
+    [
+     "#ahGrafTitulo",
+     1
+    ],
+    [
+     "cuando",
+     1
+    ],
+    [
+     "#ahOrigen",
+     1
+    ]
+   ],
+   "terminos_top": [
+    [
+     "Chronos-2 / modelo fundacional",
+     1.0
+    ],
+    [
+     "IEOD",
+     1.0
+    ],
+    [
+     "Simons (componente del modelo)",
+     1.0
+    ],
+    [
+     "COES",
+     0.5
+    ],
+    [
+     "CSV",
+     0.5
+    ],
+    [
+     "MW / megavatios",
+     0.5
+    ],
+    [
+     "modelo / híbrido / XGBoost",
+     0.5
+    ]
+   ],
+   "comprende": {
+    "media": 1.0,
+    "min": 1.0,
+    "max": 1.0,
+    "n": 2,
+    "reps": 1
+   },
+   "momento_ok": {
+    "media": 1.0,
+    "min": 1.0,
+    "max": 1.0,
+    "n": 2,
+    "reps": 1
+   },
+   "lectura_cifra": {
+    "media": 1.0,
+    "min": 1.0,
+    "max": 1.0,
+    "n": 2,
+    "reps": 1
+   },
+   "lectura_completa": {
+    "media": 1.0,
+    "min": 1.0,
+    "max": 1.0,
+    "n": 2,
+    "reps": 1
+   },
+   "primer_clic": {
+    "t1": {
+     "media": 1.0,
+     "min": 1.0,
+     "max": 1.0,
+     "n": 2,
+     "reps": 1
+    },
+    "t2": {
+     "media": 1.0,
+     "min": 1.0,
+     "max": 1.0,
+     "n": 2,
+     "reps": 1
+    },
+    "t3": {
+     "media": 1.0,
+     "min": 1.0,
+     "max": 1.0,
+     "n": 2,
+     "reps": 1
+    },
+    "t4": {
+     "media": 1.0,
+     "min": 1.0,
+     "max": 1.0,
+     "n": 2,
+     "reps": 1
+    }
+   },
+   "primer_clic_estricto": {
+    "t1": {
+     "media": 1.0,
+     "min": 1.0,
+     "max": 1.0,
+     "n": 2,
+     "reps": 1
+    },
+    "t2": {
+     "media": 1.0,
+     "min": 1.0,
+     "max": 1.0,
+     "n": 2,
+     "reps": 1
+    },
+    "t3": {
+     "media": 1.0,
+     "min": 1.0,
+     "max": 1.0,
+     "n": 2,
+     "reps": 1
+    },
+    "t4": {
+     "media": 1.0,
+     "min": 1.0,
+     "max": 1.0,
+     "n": 2,
+     "reps": 1
+    }
+   },
+   "primer_clic_medio": {
+    "media": 1.0,
+    "min": 1.0,
+    "max": 1.0,
+    "n": 2,
+    "reps": 1
+   },
+   "no_es_control": [],
+   "mira_primero": [
+    [
+     "linea_ahora",
+     2
+    ]
+   ],
+   "mira_primero_cifra": {
+    "media": 0.0,
+    "min": 0.0,
+    "max": 0.0,
+    "n": 2,
+    "reps": 1
+   },
+   "volveria": {
+    "no": 1,
+    "si": 1
+   },
+   "importo": [
+    [
+     "los datos para descargar",
+     0.5
+    ]
+   ],
+   "volveria_si_o_tal_vez": {
+    "media": 0.5,
+    "min": 0.5,
+    "max": 0.5,
+    "n": 2,
+    "reps": 1
+   },
+   "acuerdo_entre_repeticiones": {
+    "comprende": null,
+    "lectura_cifra": null,
+    "clic_t1": null,
+    "clic_t2": null,
+    "clic_t3": null,
+    "clic_t4": null
+   },
+   "embudo": [
+    {
+     "paso": "abre la pantalla",
+     "quedan": 2,
+     "de": 2
+    },
+    {
+     "paso": "dice qué es",
+     "quedan": 2,
+     "de": 2
+    },
+    {
+     "paso": "lee la cifra del momento",
+     "quedan": 2,
+     "de": 2
+    },
+    {
+     "paso": "sabe qué momento muestra",
+     "quedan": 2,
+     "de": 2
+    },
+    {
+     "paso": "acierta el primer clic en 3 de 4 tareas",
+     "quedan": 2,
+     "de": 2
+    },
+    {
+     "paso": "volvería mañana (sí o tal vez)",
+     "quedan": 1,
+     "de": 2
+    }
+   ]
+  },
+  "entrada-hoy": {
+   "sesiones": 5,
+   "dudas_por_sesion": {
+    "media": 2.6,
+    "min": 2.6,
+    "max": 2.6,
+    "n": 5,
+    "reps": 1
+   },
+   "terminos_por_sesion": {
+    "media": 2.2,
+    "min": 2.2,
+    "max": 2.2,
+    "n": 5,
+    "reps": 1
+   },
+   "confusion_por_sesion": {
+    "media": 0.6,
+    "min": 0.6,
+    "max": 0.6,
+    "n": 5,
+    "reps": 1
+   },
+   "seguridad": {
+    "media": 5.0,
+    "min": 5.0,
+    "max": 5.0,
+    "n": 5,
+    "reps": 1
+   },
+   "dudas_zonas": [
+    [
+     "titulo",
+     4
+    ],
+    [
+     "#ahAcierto",
+     3
+    ],
+    [
+     "#ahBueno",
+     2
+    ],
+    [
+     "#ahRespuesta",
+     1
+    ],
+    [
+     "respuesta",
+     1
+    ],
+    [
+     "cuando",
+     1
+    ]
+   ],
+   "terminos_top": [
+    [
+     "Chronos-2 / modelo fundacional",
+     0.8
+    ],
+    [
+     "COES",
+     0.4
+    ],
+    [
+     "SEIN",
+     0.4
+    ],
+    [
+     "CSV",
+     0.2
+    ],
+    [
+     "MW / megavatios",
+     0.2
+    ],
+    [
+     "sesgo / subestima",
+     0.2
+    ]
+   ],
+   "comprende": {
+    "media": 1.0,
+    "min": 1.0,
+    "max": 1.0,
+    "n": 5,
+    "reps": 1
+   },
+   "momento_ok": {
+    "media": 1.0,
+    "min": 1.0,
+    "max": 1.0,
+    "n": 5,
+    "reps": 1
+   },
+   "lectura_cifra": {
+    "media": 1.0,
+    "min": 1.0,
+    "max": 1.0,
+    "n": 5,
+    "reps": 1
+   },
+   "lectura_completa": {
+    "media": 1.0,
+    "min": 1.0,
+    "max": 1.0,
+    "n": 5,
+    "reps": 1
+   },
+   "primer_clic": {
+    "t1": {
+     "media": 1.0,
+     "min": 1.0,
+     "max": 1.0,
+     "n": 5,
+     "reps": 1
+    },
+    "t2": {
+     "media": 1.0,
+     "min": 1.0,
+     "max": 1.0,
+     "n": 5,
+     "reps": 1
+    },
+    "t3": {
+     "media": 1.0,
+     "min": 1.0,
+     "max": 1.0,
+     "n": 5,
+     "reps": 1
+    },
+    "t4": {
+     "media": 1.0,
+     "min": 1.0,
+     "max": 1.0,
+     "n": 5,
+     "reps": 1
+    }
+   },
+   "primer_clic_estricto": {
+    "t1": {
+     "media": 1.0,
+     "min": 1.0,
+     "max": 1.0,
+     "n": 5,
+     "reps": 1
+    },
+    "t2": {
+     "media": 1.0,
+     "min": 1.0,
+     "max": 1.0,
+     "n": 5,
+     "reps": 1
+    },
+    "t3": {
+     "media": 1.0,
+     "min": 1.0,
+     "max": 1.0,
+     "n": 5,
+     "reps": 1
+    },
+    "t4": {
+     "media": 1.0,
+     "min": 1.0,
+     "max": 1.0,
+     "n": 5,
+     "reps": 1
+    }
+   },
+   "primer_clic_medio": {
+    "media": 1.0,
+    "min": 1.0,
+    "max": 1.0,
+    "n": 5,
+    "reps": 1
+   },
+   "no_es_control": [],
+   "mira_primero": [
+    [
+     "linea_ahora",
+     4
+    ],
+    [
+     "titulo",
+     1
+    ]
+   ],
+   "mira_primero_cifra": {
+    "media": 0.0,
+    "min": 0.0,
+    "max": 0.0,
+    "n": 5,
+    "reps": 1
+   },
+   "volveria": {
+    "no": 1,
+    "si": 3,
+    "tal_vez": 1
+   },
+   "importo": [
+    [
+     "rendición de cuentas (acertó, cuánto se equivoca)",
+     0.4
+    ],
+    [
+     "los datos para descargar",
+     0.2
+    ],
+    [
+     "el pico y la hora de más consumo",
+     0.2
+    ],
+    [
+     "la cifra de ahora",
+     0.2
+    ]
+   ],
+   "volveria_si_o_tal_vez": {
+    "media": 0.8,
+    "min": 0.8,
+    "max": 0.8,
+    "n": 5,
+    "reps": 1
+   },
+   "acuerdo_entre_repeticiones": {
+    "comprende": null,
+    "lectura_cifra": null,
+    "clic_t1": null,
+    "clic_t2": null,
+    "clic_t3": null,
+    "clic_t4": null
+   },
+   "embudo": [
+    {
+     "paso": "abre la pantalla",
+     "quedan": 5,
+     "de": 5
+    },
+    {
+     "paso": "dice qué es",
+     "quedan": 5,
+     "de": 5
+    },
+    {
+     "paso": "lee la cifra del momento",
+     "quedan": 5,
+     "de": 5
+    },
+    {
+     "paso": "sabe qué momento muestra",
+     "quedan": 5,
+     "de": 5
+    },
+    {
+     "paso": "acierta el primer clic en 3 de 4 tareas",
+     "quedan": 5,
+     "de": 5
+    },
+    {
+     "paso": "volvería mañana (sí o tal vez)",
+     "quedan": 4,
+     "de": 5
+    }
+   ]
+  }
+ },
+ "embudos_tareas": {
+  "t1": [
+   {
+    "paso": "primer clic desde hoy",
+    "quedan": 2,
+    "de": 2
+   },
+   {
+    "paso": "lee lo pronosticado, el rango y lo real (repaso 19:00)",
+    "quedan": 2,
+    "de": 2
+   }
+  ],
+  "t2": [
+   {
+    "paso": "primer clic desde hoy",
+    "quedan": 0,
+    "de": 0
+   },
+   {
+    "paso": "lee el error y la comparación (Confianza)",
+    "quedan": 0,
+    "de": 0
+   }
+  ],
+  "t3": [
+   {
+    "paso": "primer clic desde el repaso de las 19:00",
+    "quedan": 0,
+    "de": 0
+   },
+   {
+    "paso": "toca +2 °C",
+    "quedan": 0,
+    "de": 0
+   },
+   {
+    "paso": "lee el cambio",
+    "quedan": 0,
+    "de": 0
+   }
+  ],
+  "t4": [
+   {
+    "paso": "primer clic desde hoy",
+    "quedan": 0,
+    "de": 0
+   },
+   {
+    "paso": "lee el régimen con más error (Confianza)",
+    "quedan": 0,
+    "de": 0
+   }
+  ]
+ },
+ "tropiezos": [
+  {
+   "pantalla": "repaso-1030",
+   "paso": "palabra",
+   "tipo": "palabra",
+   "objetivo": "Simons (componente del modelo)",
+   "severidad": 1,
+   "frecuencia": 1.0,
+   "personas": 5,
+   "puntaje": 1.0,
+   "evidencia": "Simons (componente del modelo)"
+  },
+  {
+   "pantalla": "repaso-1900",
+   "paso": "palabra",
+   "tipo": "palabra",
+   "objetivo": "Chronos-2 / modelo fundacional",
+   "severidad": 1,
+   "frecuencia": 1.0,
+   "personas": 2,
+   "puntaje": 1.0,
+   "evidencia": "Chronos-2 / modelo fundacional"
+  },
+  {
+   "pantalla": "repaso-1900",
+   "paso": "palabra",
+   "tipo": "palabra",
+   "objetivo": "IEOD",
+   "severidad": 1,
+   "frecuencia": 1.0,
+   "personas": 2,
+   "puntaje": 1.0,
+   "evidencia": "IEOD"
+  },
+  {
+   "pantalla": "repaso-1900",
+   "paso": "palabra",
+   "tipo": "palabra",
+   "objetivo": "Simons (componente del modelo)",
+   "severidad": 1,
+   "frecuencia": 1.0,
+   "personas": 2,
+   "puntaje": 1.0,
+   "evidencia": "Simons (componente del modelo)"
+  },
+  {
+   "pantalla": "repaso-1030",
+   "paso": "palabra",
+   "tipo": "palabra",
+   "objetivo": "Chronos-2 / modelo fundacional",
+   "severidad": 1,
+   "frecuencia": 0.8,
+   "personas": 4,
+   "puntaje": 0.8,
+   "evidencia": "Chronos-2 / modelo fundacional"
+  },
+  {
+   "pantalla": "repaso-1030",
+   "paso": "palabra",
+   "tipo": "palabra",
+   "objetivo": "IEOD",
+   "severidad": 1,
+   "frecuencia": 0.8,
+   "personas": 4,
+   "puntaje": 0.8,
+   "evidencia": "IEOD"
+  },
+  {
+   "pantalla": "repaso-1030",
+   "paso": "palabra",
+   "tipo": "palabra",
+   "objetivo": "modelo / híbrido / XGBoost",
+   "severidad": 1,
+   "frecuencia": 0.8,
+   "personas": 4,
+   "puntaje": 0.8,
+   "evidencia": "modelo / híbrido / XGBoost"
+  },
+  {
+   "pantalla": "hoy",
+   "paso": "palabra",
+   "tipo": "palabra",
+   "objetivo": "Chronos-2 / modelo fundacional",
+   "severidad": 1,
+   "frecuencia": 0.8,
+   "personas": 4,
+   "puntaje": 0.8,
+   "evidencia": "Chronos-2 / modelo fundacional"
+  },
+  {
+   "pantalla": "hoy",
+   "paso": "duda",
+   "tipo": "duda",
+   "objetivo": "titulo",
+   "severidad": 1,
+   "frecuencia": 0.8,
+   "personas": 4,
+   "puntaje": 0.8,
+   "evidencia": "El titular me habla de hoy sábado 14, pero el texto aclara que el pronóstico de hoy recién sale a las 10:00 y lo que se muestra abajo …"
+  },
+  {
+   "pantalla": "repaso-1030",
+   "paso": "duda",
+   "tipo": "duda",
+   "objetivo": "cuando",
+   "severidad": 1,
+   "frecuencia": 0.6,
+   "personas": 3,
+   "puntaje": 0.6,
+   "evidencia": "La pantalla indica que la hora consultada es las 10:30, pero en el gráfico aparece una línea con la etiqueta 'Real (COES) hasta las 11:00', lo que confunde …"
+  },
+  {
+   "pantalla": "hoy",
+   "paso": "duda",
+   "tipo": "duda",
+   "objetivo": "#ahAcierto",
+   "severidad": 1,
+   "frecuencia": 0.6,
+   "personas": 3,
+   "puntaje": 0.6,
+   "evidencia": "No entiendo bien a qué se refiere con que el pronóstico se 'reconstruyó después'; si ya sabían el dato real, me hace dudar de si es un pronóstico …"
+  },
+  {
+   "pantalla": "repaso-1900",
+   "paso": "duda",
+   "tipo": "duda",
+   "objetivo": "linea_ahora",
+   "severidad": 1,
+   "frecuencia": 0.5,
+   "personas": 1,
+   "puntaje": 0.5,
+   "evidencia": "No sé qué es MW ni qué significa esa cantidad tan grande; en mi casa solo conozco los kWh de mi recibo de luz."
+  },
+  {
+   "pantalla": "repaso-1900",
+   "paso": "duda",
+   "tipo": "duda",
+   "objetivo": "#ahRespuesta",
+   "severidad": 1,
+   "frecuencia": 0.5,
+   "personas": 1,
+   "puntaje": 0.5,
+   "evidencia": "No sé qué empresa o entidad es el COES ni qué cosa son megavatios."
+  },
+  {
+   "pantalla": "repaso-1900",
+   "paso": "duda",
+   "tipo": "duda",
+   "objetivo": "respuesta",
+   "severidad": 1,
+   "frecuencia": 0.5,
+   "personas": 1,
+   "puntaje": 0.5,
+   "evidencia": "Parece una fórmula matemática de universidad con palabras en inglés y números raros que no entiendo nada."
+  },
+  {
+   "pantalla": "repaso-1900",
+   "paso": "duda",
+   "tipo": "duda",
+   "objetivo": "#ahGrafTitulo",
+   "severidad": 1,
+   "frecuencia": 0.5,
+   "personas": 1,
+   "puntaje": 0.5,
+   "evidencia": "El gráfico tiene muchas curvas y líneas de colores que se cruzan y me marean, no sé cuál línea debo mirar."
+  },
+  {
+   "pantalla": "repaso-1900",
+   "paso": "palabra",
+   "tipo": "palabra",
+   "objetivo": "COES",
+   "severidad": 1,
+   "frecuencia": 0.5,
+   "personas": 1,
+   "puntaje": 0.5,
+   "evidencia": "COES"
+  },
+  {
+   "pantalla": "repaso-1900",
+   "paso": "palabra",
+   "tipo": "palabra",
+   "objetivo": "CSV",
+   "severidad": 1,
+   "frecuencia": 0.5,
+   "personas": 1,
+   "puntaje": 0.5,
+   "evidencia": "CSV"
+  },
+  {
+   "pantalla": "repaso-1900",
+   "paso": "palabra",
+   "tipo": "palabra",
+   "objetivo": "MW / megavatios",
+   "severidad": 1,
+   "frecuencia": 0.5,
+   "personas": 1,
+   "puntaje": 0.5,
+   "evidencia": "MW / megavatios"
+  },
+  {
+   "pantalla": "repaso-1900",
+   "paso": "palabra",
+   "tipo": "palabra",
+   "objetivo": "modelo / híbrido / XGBoost",
+   "severidad": 1,
+   "frecuencia": 0.5,
+   "personas": 1,
+   "puntaje": 0.5,
+   "evidencia": "modelo / híbrido / XGBoost"
+  },
+  {
+   "pantalla": "repaso-1900",
+   "paso": "duda",
+   "tipo": "duda",
+   "objetivo": "cuando",
+   "severidad": 1,
+   "frecuencia": 0.5,
+   "personas": 1,
+   "puntaje": 0.5,
+   "evidencia": "Me confundió que la pestaña activa seleccionada sea «Ahora» mientras la pastilla de la derecha dice «Repaso · 10/03/2026, 19:00»; no me quedó claro al instante si la …"
+  },
+  {
+   "pantalla": "repaso-1900",
+   "paso": "duda",
+   "tipo": "duda",
+   "objetivo": "#ahOrigen",
+   "severidad": 1,
+   "frecuencia": 0.5,
+   "personas": 1,
+   "puntaje": 0.5,
+   "evidencia": "En la fórmula de la tarjeta de dónde sale el número no conozco qué modelos son Chronos-2 ni Simons, ya que en el curso de potencia no vemos …"
+  },
+  {
+   "pantalla": "repaso-1030",
+   "paso": "duda",
+   "tipo": "duda",
+   "objetivo": "respuesta",
+   "severidad": 1,
+   "frecuencia": 0.4,
+   "personas": 2,
+   "puntaje": 0.4,
+   "evidencia": "La fórmula mete modelos y nombres de algoritmos que no conozco ni me enseñaron en la carrera, y no entiendo de dónde salen los factores 0.85 y 0.15."
+  },
+  {
+   "pantalla": "repaso-1030",
+   "paso": "palabra",
+   "tipo": "palabra",
+   "objetivo": "COES",
+   "severidad": 1,
+   "frecuencia": 0.4,
+   "personas": 2,
+   "puntaje": 0.4,
+   "evidencia": "COES"
+  },
+  {
+   "pantalla": "repaso-1030",
+   "paso": "duda",
+   "tipo": "duda",
+   "objetivo": "#ahOrigen",
+   "severidad": 1,
+   "frecuencia": 0.4,
+   "personas": 2,
+   "puntaje": 0.4,
+   "evidencia": "Dice que el modelo no usa el clima, pero en la misma pantalla hay enlaces que preguntan '¿Y si hace más calor?' y un banner sobre El Niño …"
+  },
+  {
+   "pantalla": "hoy",
+   "paso": "duda",
+   "tipo": "duda",
+   "objetivo": "#ahBueno",
+   "severidad": 1,
+   "frecuencia": 0.4,
+   "personas": 2,
+   "puntaje": 0.4,
+   "evidencia": "La alerta roja dice que el rango 'queda corto' y que es más angosto de lo debido, lo cual me hace dudar de qué tan confiable es el …"
+  },
+  {
+   "pantalla": "hoy",
+   "paso": "palabra",
+   "tipo": "palabra",
+   "objetivo": "COES",
+   "severidad": 1,
+   "frecuencia": 0.4,
+   "personas": 2,
+   "puntaje": 0.4,
+   "evidencia": "COES"
+  },
+  {
+   "pantalla": "hoy",
+   "paso": "palabra",
+   "tipo": "palabra",
+   "objetivo": "SEIN",
+   "severidad": 1,
+   "frecuencia": 0.4,
+   "personas": 2,
+   "puntaje": 0.4,
+   "evidencia": "SEIN"
+  },
+  {
+   "pantalla": "repaso-1030",
+   "paso": "duda",
+   "tipo": "duda",
+   "objetivo": "#ahRespuesta",
+   "severidad": 1,
+   "frecuencia": 0.2,
+   "personas": 1,
+   "puntaje": 0.2,
+   "evidencia": "No sé qué es COES ni qué significa megavatios o MW; en mi casa y en mi recibo solo veo kWh, así que no sé si esa cantidad …"
+  },
+  {
+   "pantalla": "repaso-1030",
+   "paso": "duda",
+   "tipo": "duda",
+   "objetivo": "#ahGrafSub",
+   "severidad": 1,
+   "frecuencia": 0.2,
+   "personas": 1,
+   "puntaje": 0.2,
+   "evidencia": "El gráfico tiene muchas curvas azules, celestes y números amontonados que me marean, y no sé cómo se arrastra eso."
+  },
+  {
+   "pantalla": "repaso-1030",
+   "paso": "palabra",
+   "tipo": "palabra",
+   "objetivo": "CSV",
+   "severidad": 1,
+   "frecuencia": 0.2,
+   "personas": 1,
+   "puntaje": 0.2,
+   "evidencia": "CSV"
+  },
+  {
+   "pantalla": "repaso-1030",
+   "paso": "palabra",
+   "tipo": "palabra",
+   "objetivo": "MW / megavatios",
+   "severidad": 1,
+   "frecuencia": 0.2,
+   "personas": 1,
+   "puntaje": 0.2,
+   "evidencia": "MW / megavatios"
+  },
+  {
+   "pantalla": "repaso-1030",
+   "paso": "duda",
+   "tipo": "duda",
+   "objetivo": "#ahLeyenda",
+   "severidad": 1,
+   "frecuencia": 0.2,
+   "personas": 1,
+   "puntaje": 0.2,
+   "evidencia": "En la tarjeta '¿Qué tan bueno es?' dice 'Pronóstico 41.6 MW' y 'Referencia 66.9 MW', pero no explica qué métrica de error representa (si es error medio absoluto, …"
+  },
+  {
+   "pantalla": "repaso-1030",
+   "paso": "duda",
+   "tipo": "duda",
+   "objetivo": "#ahPie",
+   "severidad": 1,
+   "frecuencia": 0.2,
+   "personas": 1,
+   "puntaje": 0.2,
+   "evidencia": "El aviso al pie dice que no sirve para operar el sistema eléctrico, lo cual me desconcierta porque soy operadora y mi compañero me pasó el enlace justamente …"
+  },
+  {
+   "pantalla": "repaso-1030",
+   "paso": "duda",
+   "tipo": "duda",
+   "objetivo": "#navPantallas",
+   "severidad": 1,
+   "frecuencia": 0.2,
+   "personas": 1,
+   "puntaje": 0.2,
+   "evidencia": "En el menú superior está seleccionada la opción 'Ahora', pero toda la pantalla me muestra un 'Repaso' del 10 de marzo de 2026 en lugar de la demanda …"
+  },
+  {
+   "pantalla": "repaso-1030",
+   "paso": "duda",
+   "tipo": "duda",
+   "objetivo": "grafico",
+   "severidad": 1,
+   "frecuencia": 0.2,
+   "personas": 1,
+   "puntaje": 0.2,
+   "evidencia": "Aparece un segmento con línea negra continua para el día siguiente, cuando supuestamente los datos reales solo llegaban hasta la mañana del martes."
+  },
+  {
+   "pantalla": "hoy",
+   "paso": "duda",
+   "tipo": "duda",
+   "objetivo": "#ahRespuesta",
+   "severidad": 1,
+   "frecuencia": 0.2,
+   "personas": 1,
+   "puntaje": 0.2,
+   "evidencia": "No sé qué significa MW ni qué es el COES. Yo solo entiendo los kWh que vienen en mi recibo de luz."
+  },
+  {
+   "pantalla": "hoy",
+   "paso": "duda",
+   "tipo": "duda",
+   "objetivo": "respuesta",
+   "severidad": 1,
+   "frecuencia": 0.2,
+   "personas": 1,
+   "puntaje": 0.2,
+   "evidencia": "Me marea qué día estoy viendo: el título dice 'hoy, sábado 14', pero el texto dice que el pronóstico sale a las 10:00 y que abajo está lo …"
+  },
+  {
+   "pantalla": "hoy",
+   "paso": "palabra",
+   "tipo": "palabra",
+   "objetivo": "CSV",
+   "severidad": 1,
+   "frecuencia": 0.2,
+   "personas": 1,
+   "puntaje": 0.2,
+   "evidencia": "CSV"
+  },
+  {
+   "pantalla": "hoy",
+   "paso": "palabra",
+   "tipo": "palabra",
+   "objetivo": "MW / megavatios",
+   "severidad": 1,
+   "frecuencia": 0.2,
+   "personas": 1,
+   "puntaje": 0.2,
+   "evidencia": "MW / megavatios"
+  },
+  {
+   "pantalla": "hoy",
+   "paso": "palabra",
+   "tipo": "palabra",
+   "objetivo": "sesgo / subestima",
+   "severidad": 1,
+   "frecuencia": 0.2,
+   "personas": 1,
+   "puntaje": 0.2,
+   "evidencia": "sesgo / subestima"
+  },
+  {
+   "pantalla": "hoy",
+   "paso": "duda",
+   "tipo": "duda",
+   "objetivo": "cuando",
+   "severidad": 1,
+   "frecuencia": 0.2,
+   "personas": 1,
+   "puntaje": 0.2,
+   "evidencia": "El botón 'Hoy' está marcado arriba, pero en la casilla de fecha dice '12/11/2026'. No me queda claro de inmediato qué fecha manda."
+  },
+  {
+   "pantalla": "hoy",
+   "paso": "duda",
+   "tipo": "duda",
+   "objetivo": "#ahAyer",
+   "severidad": 1,
+   "frecuencia": 0.2,
+   "personas": 1,
+   "puntaje": 0.2,
+   "evidencia": "Me confunde la mezcla de 'en vivo' con 'reconstruido': si se calculó después de conocer el valor real, es una reconstrucción retrospectiva (backtest), no un registro en vivo."
+  }
+ ],
+ "codigos": {
+  "entrada-1030": [
+   {
+    "sesion": "entrada-1030",
+    "pantalla": "repaso-1030",
+    "persona": "ciudadana",
+    "repeticion": 1,
+    "tropiezos": [
+     {
+      "pantalla": "repaso-1030",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "#ahRespuesta",
+      "severidad": 1,
+      "evidencia": "No sé qué es COES ni qué significa megavatios o MW; en mi casa y en mi recibo solo veo kWh, así que no sé si esa cantidad …"
+     },
+     {
+      "pantalla": "repaso-1030",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "#ahGrafSub",
+      "severidad": 1,
+      "evidencia": "El gráfico tiene muchas curvas azules, celestes y números amontonados que me marean, y no sé cómo se arrastra eso."
+     },
+     {
+      "pantalla": "repaso-1030",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "respuesta",
+      "severidad": 1,
+      "evidencia": "Es una fórmula matemática larguísima con multiplicaciones y palabras en inglés que parecen para científicos o ingenieros; me pierdo por completo."
+     },
+     {
+      "pantalla": "repaso-1030",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "COES",
+      "severidad": 1,
+      "evidencia": "COES"
+     },
+     {
+      "pantalla": "repaso-1030",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "CSV",
+      "severidad": 1,
+      "evidencia": "CSV"
+     },
+     {
+      "pantalla": "repaso-1030",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "Chronos-2 / modelo fundacional",
+      "severidad": 1,
+      "evidencia": "Chronos-2 / modelo fundacional"
+     },
+     {
+      "pantalla": "repaso-1030",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "IEOD",
+      "severidad": 1,
+      "evidencia": "IEOD"
+     },
+     {
+      "pantalla": "repaso-1030",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "MW / megavatios",
+      "severidad": 1,
+      "evidencia": "MW / megavatios"
+     },
+     {
+      "pantalla": "repaso-1030",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "Simons (componente del modelo)",
+      "severidad": 1,
+      "evidencia": "Simons (componente del modelo)"
+     },
+     {
+      "pantalla": "repaso-1030",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "modelo / híbrido / XGBoost",
+      "severidad": 1,
+      "evidencia": "modelo / híbrido / XGBoost"
+     }
+    ],
+    "confusion": 0,
+    "dudas": [
+     "#ahRespuesta",
+     "#ahGrafSub",
+     "respuesta"
+    ],
+    "terminos": [
+     "COES",
+     "CSV",
+     "Chronos-2 / modelo fundacional",
+     "IEOD",
+     "MW / megavatios",
+     "Simons (componente del modelo)",
+     "modelo / híbrido / XGBoost"
+    ],
+    "comprende": true,
+    "mira_primero": "linea_ahora",
+    "momento_ok": true,
+    "lectura_cifra": true,
+    "lectura_completa": true,
+    "clics": {
+     "t1": {
+      "tipo": "control",
+      "etiqueta": "Ver otro día",
+      "zona": "cuando",
+      "vista": "vista-1.png",
+      "resultado": "acierto",
+      "seguridad": 4
+     },
+     "t2": {
+      "tipo": "control",
+      "etiqueta": "Confianza",
+      "zona": "#navPantallas",
+      "vista": "vista-1.png",
+      "resultado": "acierto",
+      "seguridad": 4
+     },
+     "t3": {
+      "tipo": "control",
+      "etiqueta": "¿Y si hace más calor?",
+      "zona": "respuesta",
+      "vista": "vista-1.png",
+      "resultado": "acierto",
+      "seguridad": 5
+     },
+     "t4": {
+      "tipo": "control",
+      "etiqueta": "El Niño costero (calentamiento del mar frente a la costa): extraordinario · ¿cuándo se equivoca más? →",
+      "zona": "regimen",
+      "vista": "vista-2.png",
+      "resultado": "acierto",
+      "seguridad": 5
+     }
+    },
+    "volveria": "no",
+    "le_importo": "Solo me dio curiosidad lo de si hace más calor, porque en verano a veces se va la luz en las galerías de Gamarra.",
+    "importo": [],
+    "por_que_volveria": "No volvería porque tiene demasiados números, gráficos y fórmulas enredadas que me cansan y no me dicen si me va a subir la luz o si habrá apagones.",
+    "seguridad": 5
+   },
+   {
+    "sesion": "entrada-1030",
+    "pantalla": "repaso-1030",
+    "persona": "estudiante",
+    "repeticion": 1,
+    "tropiezos": [
+     {
+      "pantalla": "repaso-1030",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "cuando",
+      "severidad": 1,
+      "evidencia": "Arriba dice que la hora es 10:30, pero en el gráfico la etiqueta negra dice 'Real (COES) hasta las 11:00'. No me queda claro si el dato real …"
+     },
+     {
+      "pantalla": "repaso-1030",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "#ahLeyenda",
+      "severidad": 1,
+      "evidencia": "En la tarjeta '¿Qué tan bueno es?' dice 'Pronóstico 41.6 MW' y 'Referencia 66.9 MW', pero no explica qué métrica de error representa (si es error medio absoluto, …"
+     },
+     {
+      "pantalla": "repaso-1030",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "respuesta",
+      "severidad": 1,
+      "evidencia": "La fórmula mete modelos y nombres de algoritmos que no conozco ni me enseñaron en la carrera, y no entiendo de dónde salen los factores 0.85 y 0.15."
+     },
+     {
+      "pantalla": "repaso-1030",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "Chronos-2 / modelo fundacional",
+      "severidad": 1,
+      "evidencia": "Chronos-2 / modelo fundacional"
+     },
+     {
+      "pantalla": "repaso-1030",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "IEOD",
+      "severidad": 1,
+      "evidencia": "IEOD"
+     },
+     {
+      "pantalla": "repaso-1030",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "Simons (componente del modelo)",
+      "severidad": 1,
+      "evidencia": "Simons (componente del modelo)"
+     },
+     {
+      "pantalla": "repaso-1030",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "modelo / híbrido / XGBoost",
+      "severidad": 1,
+      "evidencia": "modelo / híbrido / XGBoost"
+     }
+    ],
+    "confusion": 1,
+    "dudas": [
+     "cuando",
+     "#ahLeyenda",
+     "respuesta"
+    ],
+    "terminos": [
+     "Chronos-2 / modelo fundacional",
+     "IEOD",
+     "Simons (componente del modelo)",
+     "modelo / híbrido / XGBoost"
+    ],
+    "comprende": true,
+    "mira_primero": "linea_ahora",
+    "momento_ok": true,
+    "lectura_cifra": true,
+    "lectura_completa": true,
+    "clics": {
+     "t1": {
+      "tipo": "control",
+      "etiqueta": "Ver otro día",
+      "zona": "cuando",
+      "vista": "vista-1.png",
+      "resultado": "acierto",
+      "seguridad": 5
+     },
+     "t2": {
+      "tipo": "control",
+      "etiqueta": "Confianza",
+      "zona": "#navPantallas",
+      "vista": "vista-1.png",
+      "resultado": "acierto",
+      "seguridad": 5
+     },
+     "t3": {
+      "tipo": "control",
+      "etiqueta": "¿Y si hace más calor?",
+      "zona": "respuesta",
+      "vista": "vista-1.png",
+      "resultado": "acierto",
+      "seguridad": 5
+     },
+     "t4": {
+      "tipo": "control",
+      "etiqueta": "El Niño costero (calentamiento del mar frente a la costa): extraordinario · ¿cuándo se equivoca más? →",
+      "zona": "regimen",
+      "vista": "vista-2.png",
+      "resultado": "acierto",
+      "seguridad": 5
+     }
+    },
+    "volveria": "si",
+    "le_importo": "Poder ver la curva de carga horaria y el botón para descargar los datos en CSV para mi trabajo de potencia.",
+    "importo": [
+     "los datos para descargar"
+    ],
+    "por_que_volveria": "Porque me da la curva de carga y los datos de demanda comparados con el pronóstico listos para bajar en CSV sin tener que pelear con la web del COES.",
+    "seguridad": 5
+   },
+   {
+    "sesion": "entrada-1030",
+    "pantalla": "repaso-1030",
+    "persona": "operadora",
+    "repeticion": 1,
+    "tropiezos": [
+     {
+      "pantalla": "repaso-1030",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "#ahPie",
+      "severidad": 1,
+      "evidencia": "El aviso al pie dice que no sirve para operar el sistema eléctrico, lo cual me desconcierta porque soy operadora y mi compañero me pasó el enlace justamente …"
+     },
+     {
+      "pantalla": "repaso-1030",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "#navPantallas",
+      "severidad": 1,
+      "evidencia": "En el menú superior está seleccionada la opción 'Ahora', pero toda la pantalla me muestra un 'Repaso' del 10 de marzo de 2026 en lugar de la demanda …"
+     },
+     {
+      "pantalla": "repaso-1030",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "#ahOrigen",
+      "severidad": 1,
+      "evidencia": "Pone una fórmula matemática y nombres de modelos que no conozco ni me dicen nada para la operación diaria."
+     },
+     {
+      "pantalla": "repaso-1030",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "Chronos-2 / modelo fundacional",
+      "severidad": 1,
+      "evidencia": "Chronos-2 / modelo fundacional"
+     },
+     {
+      "pantalla": "repaso-1030",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "Simons (componente del modelo)",
+      "severidad": 1,
+      "evidencia": "Simons (componente del modelo)"
+     },
+     {
+      "pantalla": "repaso-1030",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "modelo / híbrido / XGBoost",
+      "severidad": 1,
+      "evidencia": "modelo / híbrido / XGBoost"
+     }
+    ],
+    "confusion": 1,
+    "dudas": [
+     "#ahPie",
+     "#navPantallas",
+     "#ahOrigen"
+    ],
+    "terminos": [
+     "Chronos-2 / modelo fundacional",
+     "Simons (componente del modelo)",
+     "modelo / híbrido / XGBoost"
+    ],
+    "comprende": true,
+    "mira_primero": "linea_ahora",
+    "momento_ok": true,
+    "lectura_cifra": true,
+    "lectura_completa": true,
+    "clics": {
+     "t1": {
+      "tipo": "control",
+      "etiqueta": "Ver otro día",
+      "zona": "cuando",
+      "vista": "vista-1.png",
+      "resultado": "acierto",
+      "seguridad": 5
+     },
+     "t2": {
+      "tipo": "control",
+      "etiqueta": "Confianza",
+      "zona": "#navPantallas",
+      "vista": "vista-1.png",
+      "resultado": "acierto",
+      "seguridad": 5
+     },
+     "t3": {
+      "tipo": "control",
+      "etiqueta": "¿Y si hace más calor?",
+      "zona": "respuesta",
+      "vista": "vista-1.png",
+      "resultado": "acierto",
+      "seguridad": 5
+     },
+     "t4": {
+      "tipo": "control",
+      "etiqueta": "El Niño costero (calentamiento del mar frente a la costa): extraordinario · ¿cuándo se equivoca más? →",
+      "zona": "regimen",
+      "vista": "vista-2.png",
+      "resultado": "acierto",
+      "seguridad": 5
+     }
+    },
+    "volveria": "tal_vez",
+    "le_importo": "Me sirvió ver la cifra clara del pronóstico en MW junto a lo real del COES y con su rango de variación.",
+    "importo": [
+     "rendición de cuentas (acertó, cuánto se equivoca)",
+     "la cifra de ahora"
+    ],
+    "por_que_volveria": "Volvería si me muestra la demanda en vivo de mi turno de hoy para vigilar la punta de la noche y ver su margen de error, tomándolo solo como referencia por la advertencia del pie.",
+    "seguridad": 5
+   },
+   {
+    "sesion": "entrada-1030",
+    "pantalla": "repaso-1030",
+    "persona": "periodista",
+    "repeticion": 1,
+    "tropiezos": [
+     {
+      "pantalla": "repaso-1030",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "#ahOrigen",
+      "severidad": 1,
+      "evidencia": "Dice que el modelo no usa el clima, pero en la misma pantalla hay enlaces que preguntan '¿Y si hace más calor?' y un banner sobre El Niño …"
+     },
+     {
+      "pantalla": "repaso-1030",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "cuando",
+      "severidad": 1,
+      "evidencia": "La pantalla indica que la hora consultada es las 10:30, pero en el gráfico aparece una línea con la etiqueta 'Real (COES) hasta las 11:00', lo que confunde …"
+     },
+     {
+      "pantalla": "repaso-1030",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "Chronos-2 / modelo fundacional",
+      "severidad": 1,
+      "evidencia": "Chronos-2 / modelo fundacional"
+     },
+     {
+      "pantalla": "repaso-1030",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "IEOD",
+      "severidad": 1,
+      "evidencia": "IEOD"
+     },
+     {
+      "pantalla": "repaso-1030",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "Simons (componente del modelo)",
+      "severidad": 1,
+      "evidencia": "Simons (componente del modelo)"
+     },
+     {
+      "pantalla": "repaso-1030",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "modelo / híbrido / XGBoost",
+      "severidad": 1,
+      "evidencia": "modelo / híbrido / XGBoost"
+     }
+    ],
+    "confusion": 0,
+    "dudas": [
+     "#ahOrigen",
+     "cuando"
+    ],
+    "terminos": [
+     "Chronos-2 / modelo fundacional",
+     "IEOD",
+     "Simons (componente del modelo)",
+     "modelo / híbrido / XGBoost"
+    ],
+    "comprende": true,
+    "mira_primero": "linea_ahora",
+    "momento_ok": true,
+    "lectura_cifra": true,
+    "lectura_completa": true,
+    "clics": {
+     "t1": {
+      "tipo": "control",
+      "etiqueta": "Ver otro día",
+      "zona": "cuando",
+      "vista": "vista-1.png",
+      "resultado": "acierto",
+      "seguridad": 5
+     },
+     "t2": {
+      "tipo": "control",
+      "etiqueta": "Confianza",
+      "zona": "#navPantallas",
+      "vista": "vista-1.png",
+      "resultado": "acierto",
+      "seguridad": 5
+     },
+     "t3": {
+      "tipo": "control",
+      "etiqueta": "¿Y si hace más calor?",
+      "zona": "respuesta",
+      "vista": "vista-1.png",
+      "resultado": "acierto",
+      "seguridad": 5
+     },
+     "t4": {
+      "tipo": "control",
+      "etiqueta": "El Niño costero (calentamiento del mar frente a la costa): extraordinario · ¿cuándo se equivoca más? →",
+      "zona": "regimen",
+      "vista": "vista-2.png",
+      "resultado": "acierto",
+      "seguridad": 5
+     }
+    },
+    "volveria": "si",
+    "le_importo": "Me sirvió tener la cifra precisa del consumo real (4,910 MW) frente a lo pronosticado (4,916 MW) y ver proyectado el pico de la tarde para citarlo en mi nota.",
+    "importo": [
+     "el pico y la hora de más consumo",
+     "la cifra de ahora"
+    ],
+    "por_que_volveria": "Volvería porque ofrece datos oficiales del COES, permite contrastar pronósticos con la realidad y cuenta con herramientas para analizar el impacto del calor y El Niño en el consumo eléctrico.",
+    "seguridad": 5
+   },
+   {
+    "sesion": "entrada-1030",
+    "pantalla": "repaso-1030",
+    "persona": "profesora",
+    "repeticion": 1,
+    "tropiezos": [
+     {
+      "pantalla": "repaso-1030",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "cuando",
+      "severidad": 1,
+      "evidencia": "El título y los selectores indican que estamos a las 10:30, pero sobre la línea vertical del gráfico dice 'Real (COES) hasta las 11:00'. Me genera confusión sobre …"
+     },
+     {
+      "pantalla": "repaso-1030",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "grafico",
+      "severidad": 1,
+      "evidencia": "Aparece un segmento con línea negra continua para el día siguiente, cuando supuestamente los datos reales solo llegaban hasta la mañana del martes."
+     },
+     {
+      "pantalla": "repaso-1030",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "COES",
+      "severidad": 1,
+      "evidencia": "COES"
+     },
+     {
+      "pantalla": "repaso-1030",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "IEOD",
+      "severidad": 1,
+      "evidencia": "IEOD"
+     },
+     {
+      "pantalla": "repaso-1030",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "Simons (componente del modelo)",
+      "severidad": 1,
+      "evidencia": "Simons (componente del modelo)"
+     }
+    ],
+    "confusion": 0,
+    "dudas": [
+     "cuando",
+     "grafico"
+    ],
+    "terminos": [
+     "COES",
+     "IEOD",
+     "Simons (componente del modelo)"
+    ],
+    "comprende": true,
+    "mira_primero": "cuando",
+    "momento_ok": true,
+    "lectura_cifra": true,
+    "lectura_completa": true,
+    "clics": {
+     "t1": {
+      "tipo": "control",
+      "etiqueta": "Ver otro día",
+      "zona": "cuando",
+      "vista": "vista-1.png",
+      "resultado": "acierto",
+      "seguridad": 5
+     },
+     "t2": {
+      "tipo": "control",
+      "etiqueta": "Confianza",
+      "zona": "#navPantallas",
+      "vista": "vista-1.png",
+      "resultado": "acierto",
+      "seguridad": 5
+     },
+     "t3": {
+      "tipo": "control",
+      "etiqueta": "¿Y si hace más calor?",
+      "zona": "respuesta",
+      "vista": "vista-1.png",
+      "resultado": "acierto",
+      "seguridad": 5
+     },
+     "t4": {
+      "tipo": "control",
+      "etiqueta": "El Niño costero (calentamiento del mar frente a la costa): extraordinario · ¿cuándo se equivoca más? →",
+      "zona": "regimen",
+      "vista": "vista-2.png",
+      "resultado": "acierto",
+      "seguridad": 5
+     }
+    },
+    "volveria": "si",
+    "le_importo": "Me importó mucho que muestren con transparencia el intervalo de predicción del 90 % y su cobertura empírica real comparada con una referencia simple.",
+    "importo": [
+     "rendición de cuentas (acertó, cuánto se equivoca)"
+    ],
+    "por_que_volveria": "Porque como estadística valoro que una herramienta sea honesta con la incertidumbre, evalúe la calibración empírica de sus intervalos y compare contra una referencia simple.",
+    "seguridad": 5
+   }
+  ],
+  "entrada-1900": [
+   {
+    "sesion": "entrada-1900",
+    "pantalla": "repaso-1900",
+    "persona": "ciudadana",
+    "repeticion": 1,
+    "tropiezos": [
+     {
+      "pantalla": "repaso-1900",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "linea_ahora",
+      "severidad": 1,
+      "evidencia": "No sé qué es MW ni qué significa esa cantidad tan grande; en mi casa solo conozco los kWh de mi recibo de luz."
+     },
+     {
+      "pantalla": "repaso-1900",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "#ahRespuesta",
+      "severidad": 1,
+      "evidencia": "No sé qué empresa o entidad es el COES ni qué cosa son megavatios."
+     },
+     {
+      "pantalla": "repaso-1900",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "respuesta",
+      "severidad": 1,
+      "evidencia": "Parece una fórmula matemática de universidad con palabras en inglés y números raros que no entiendo nada."
+     },
+     {
+      "pantalla": "repaso-1900",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "#ahGrafTitulo",
+      "severidad": 1,
+      "evidencia": "El gráfico tiene muchas curvas y líneas de colores que se cruzan y me marean, no sé cuál línea debo mirar."
+     },
+     {
+      "pantalla": "repaso-1900",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "COES",
+      "severidad": 1,
+      "evidencia": "COES"
+     },
+     {
+      "pantalla": "repaso-1900",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "CSV",
+      "severidad": 1,
+      "evidencia": "CSV"
+     },
+     {
+      "pantalla": "repaso-1900",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "Chronos-2 / modelo fundacional",
+      "severidad": 1,
+      "evidencia": "Chronos-2 / modelo fundacional"
+     },
+     {
+      "pantalla": "repaso-1900",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "IEOD",
+      "severidad": 1,
+      "evidencia": "IEOD"
+     },
+     {
+      "pantalla": "repaso-1900",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "MW / megavatios",
+      "severidad": 1,
+      "evidencia": "MW / megavatios"
+     },
+     {
+      "pantalla": "repaso-1900",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "Simons (componente del modelo)",
+      "severidad": 1,
+      "evidencia": "Simons (componente del modelo)"
+     },
+     {
+      "pantalla": "repaso-1900",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "modelo / híbrido / XGBoost",
+      "severidad": 1,
+      "evidencia": "modelo / híbrido / XGBoost"
+     }
+    ],
+    "confusion": 3,
+    "dudas": [
+     "linea_ahora",
+     "#ahRespuesta",
+     "respuesta",
+     "#ahGrafTitulo"
+    ],
+    "terminos": [
+     "COES",
+     "CSV",
+     "Chronos-2 / modelo fundacional",
+     "IEOD",
+     "MW / megavatios",
+     "Simons (componente del modelo)",
+     "modelo / híbrido / XGBoost"
+    ],
+    "comprende": true,
+    "mira_primero": "linea_ahora",
+    "momento_ok": true,
+    "lectura_cifra": true,
+    "lectura_completa": true,
+    "clics": {
+     "t1": {
+      "tipo": "control",
+      "etiqueta": "Ver otro día",
+      "zona": "cuando",
+      "vista": "vista-1.png",
+      "resultado": "acierto",
+      "seguridad": 5
+     },
+     "t2": {
+      "tipo": "control",
+      "etiqueta": "Confianza",
+      "zona": "#navPantallas",
+      "vista": "vista-1.png",
+      "resultado": "acierto",
+      "seguridad": 4
+     },
+     "t3": {
+      "tipo": "control",
+      "etiqueta": "¿Y si hace más calor?",
+      "zona": "respuesta",
+      "vista": "vista-1.png",
+      "resultado": "acierto",
+      "seguridad": 5
+     },
+     "t4": {
+      "tipo": "control",
+      "etiqueta": "El Niño costero (calentamiento del mar frente a la costa): extraordinario · ¿cuándo se equivoca más? →",
+      "zona": "regimen",
+      "vista": "vista-2.png",
+      "resultado": "acierto",
+      "seguridad": 5
+     }
+    },
+    "volveria": "no",
+    "le_importo": "Saber si la electricidad puede fallar o si se puede ir la luz cuando hace más calor en verano.",
+    "importo": [],
+    "por_que_volveria": "No volvería porque tiene demasiados números y cosas técnicas difíciles que no me sirven para mi negocio de ropa ni me avisan si se va a cortar la luz en mi puesto.",
+    "seguridad": 5
+   },
+   {
+    "sesion": "entrada-1900",
+    "pantalla": "repaso-1900",
+    "persona": "estudiante",
+    "repeticion": 1,
+    "tropiezos": [
+     {
+      "pantalla": "repaso-1900",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "cuando",
+      "severidad": 1,
+      "evidencia": "Me confundió que la pestaña activa seleccionada sea «Ahora» mientras la pastilla de la derecha dice «Repaso · 10/03/2026, 19:00»; no me quedó claro al instante si la …"
+     },
+     {
+      "pantalla": "repaso-1900",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "#ahOrigen",
+      "severidad": 1,
+      "evidencia": "En la fórmula de la tarjeta de dónde sale el número no conozco qué modelos son Chronos-2 ni Simons, ya que en el curso de potencia no vemos …"
+     },
+     {
+      "pantalla": "repaso-1900",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "Chronos-2 / modelo fundacional",
+      "severidad": 1,
+      "evidencia": "Chronos-2 / modelo fundacional"
+     },
+     {
+      "pantalla": "repaso-1900",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "IEOD",
+      "severidad": 1,
+      "evidencia": "IEOD"
+     },
+     {
+      "pantalla": "repaso-1900",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "Simons (componente del modelo)",
+      "severidad": 1,
+      "evidencia": "Simons (componente del modelo)"
+     }
+    ],
+    "confusion": 0,
+    "dudas": [
+     "cuando",
+     "#ahOrigen"
+    ],
+    "terminos": [
+     "Chronos-2 / modelo fundacional",
+     "IEOD",
+     "Simons (componente del modelo)"
+    ],
+    "comprende": true,
+    "mira_primero": "linea_ahora",
+    "momento_ok": true,
+    "lectura_cifra": true,
+    "lectura_completa": true,
+    "clics": {
+     "t1": {
+      "tipo": "control",
+      "etiqueta": "Ver otro día",
+      "zona": "cuando",
+      "vista": "vista-1.png",
+      "resultado": "acierto",
+      "seguridad": 5
+     },
+     "t2": {
+      "tipo": "control",
+      "etiqueta": "Confianza",
+      "zona": "#navPantallas",
+      "vista": "vista-1.png",
+      "resultado": "acierto",
+      "seguridad": 5
+     },
+     "t3": {
+      "tipo": "control",
+      "etiqueta": "¿Y si hace más calor?",
+      "zona": "respuesta",
+      "vista": "vista-1.png",
+      "resultado": "acierto",
+      "seguridad": 5
+     },
+     "t4": {
+      "tipo": "control",
+      "etiqueta": "El Niño costero (calentamiento del mar frente a la costa): extraordinario · ¿cuándo se equivoca más? →",
+      "zona": "regimen",
+      "vista": "vista-2.png",
+      "resultado": "acierto",
+      "seguridad": 5
+     }
+    },
+    "volveria": "si",
+    "le_importo": "Tener el botón «Descargar CSV» con los datos de demanda y pronóstico listos para usar en mi trabajo de sistemas de potencia.",
+    "importo": [
+     "los datos para descargar"
+    ],
+    "por_que_volveria": "Porque me ahorra entrar a buscar y limpiar datos en la web del COES, dándome la curva de carga y la descarga en CSV directamente.",
+    "seguridad": 5
+   }
+  ],
+  "entrada-hoy": [
+   {
+    "sesion": "entrada-hoy",
+    "pantalla": "hoy",
+    "persona": "ciudadana",
+    "repeticion": 1,
+    "tropiezos": [
+     {
+      "pantalla": "hoy",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "#ahRespuesta",
+      "severidad": 1,
+      "evidencia": "No sé qué significa MW ni qué es el COES. Yo solo entiendo los kWh que vienen en mi recibo de luz."
+     },
+     {
+      "pantalla": "hoy",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "respuesta",
+      "severidad": 1,
+      "evidencia": "Me marea qué día estoy viendo: el título dice 'hoy, sábado 14', pero el texto dice que el pronóstico sale a las 10:00 y que abajo está lo …"
+     },
+     {
+      "pantalla": "hoy",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "#ahBueno",
+      "severidad": 1,
+      "evidencia": "Muchos números y porcentajes enredados. No sé qué son medias horas ni qué significa que el rango quede corto."
+     },
+     {
+      "pantalla": "hoy",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "COES",
+      "severidad": 1,
+      "evidencia": "COES"
+     },
+     {
+      "pantalla": "hoy",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "CSV",
+      "severidad": 1,
+      "evidencia": "CSV"
+     },
+     {
+      "pantalla": "hoy",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "Chronos-2 / modelo fundacional",
+      "severidad": 1,
+      "evidencia": "Chronos-2 / modelo fundacional"
+     },
+     {
+      "pantalla": "hoy",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "MW / megavatios",
+      "severidad": 1,
+      "evidencia": "MW / megavatios"
+     },
+     {
+      "pantalla": "hoy",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "SEIN",
+      "severidad": 1,
+      "evidencia": "SEIN"
+     },
+     {
+      "pantalla": "hoy",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "sesgo / subestima",
+      "severidad": 1,
+      "evidencia": "sesgo / subestima"
+     }
+    ],
+    "confusion": 0,
+    "dudas": [
+     "#ahRespuesta",
+     "respuesta",
+     "#ahBueno"
+    ],
+    "terminos": [
+     "COES",
+     "CSV",
+     "Chronos-2 / modelo fundacional",
+     "MW / megavatios",
+     "SEIN",
+     "sesgo / subestima"
+    ],
+    "comprende": true,
+    "mira_primero": "titulo",
+    "momento_ok": true,
+    "lectura_cifra": true,
+    "lectura_completa": true,
+    "clics": {
+     "t1": {
+      "tipo": "control",
+      "etiqueta": "Ver otro día",
+      "zona": "cuando",
+      "vista": "vista-1.png",
+      "resultado": "acierto",
+      "seguridad": 4
+     },
+     "t2": {
+      "tipo": "control",
+      "etiqueta": "Confianza",
+      "zona": "#navPantallas",
+      "vista": "vista-1.png",
+      "resultado": "acierto",
+      "seguridad": 4
+     },
+     "t3": {
+      "tipo": "control",
+      "etiqueta": "¿Y si hace más calor?",
+      "zona": "respuesta",
+      "vista": "vista-1.png",
+      "resultado": "acierto",
+      "seguridad": 5
+     },
+     "t4": {
+      "tipo": "control",
+      "etiqueta": "El Niño costero (calentamiento del mar frente a la costa): extraordinario · ¿cuándo se equivoca más? →",
+      "zona": "regimen",
+      "vista": "vista-2.png",
+      "resultado": "acierto",
+      "seguridad": 5
+     }
+    },
+    "volveria": "no",
+    "le_importo": "Me llamó la atención lo del calor y El Niño costero, porque en verano cuando hace mucho calor a veces se nos va la luz en las galerías de Gamarra.",
+    "importo": [],
+    "por_que_volveria": "No volvería porque tiene demasiados números, siglas y gráficos que no entiendo; solo volvería si me avisara clarito si van a cortar la luz en mi zona o si va a subir el precio en mi recibo.",
+    "seguridad": 5
+   },
+   {
+    "sesion": "entrada-hoy",
+    "pantalla": "hoy",
+    "persona": "estudiante",
+    "repeticion": 1,
+    "tropiezos": [
+     {
+      "pantalla": "hoy",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "titulo",
+      "severidad": 1,
+      "evidencia": "El titular habla de hoy sábado 14, pero el número gigante de 4,456 MW es del jueves 12 a las 23:30. Me confundió al inicio porque pensé que …"
+     },
+     {
+      "pantalla": "hoy",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "#ahAcierto",
+      "severidad": 1,
+      "evidencia": "No entiendo bien a qué se refiere con que el pronóstico se 'reconstruyó después'; si ya sabían el dato real, me hace dudar de si es un pronóstico …"
+     },
+     {
+      "pantalla": "hoy",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "Chronos-2 / modelo fundacional",
+      "severidad": 1,
+      "evidencia": "Chronos-2 / modelo fundacional"
+     }
+    ],
+    "confusion": 0,
+    "dudas": [
+     "titulo",
+     "#ahAcierto"
+    ],
+    "terminos": [
+     "Chronos-2 / modelo fundacional"
+    ],
+    "comprende": true,
+    "mira_primero": "linea_ahora",
+    "momento_ok": true,
+    "lectura_cifra": true,
+    "lectura_completa": true,
+    "clics": {
+     "t1": {
+      "tipo": "control",
+      "etiqueta": "Ver otro día",
+      "zona": "cuando",
+      "vista": "vista-1.png",
+      "resultado": "acierto",
+      "seguridad": 5
+     },
+     "t2": {
+      "tipo": "control",
+      "etiqueta": "Confianza",
+      "zona": "#navPantallas",
+      "vista": "vista-1.png",
+      "resultado": "acierto",
+      "seguridad": 5
+     },
+     "t3": {
+      "tipo": "control",
+      "etiqueta": "¿Y si hace más calor?",
+      "zona": "respuesta",
+      "vista": "vista-1.png",
+      "resultado": "acierto",
+      "seguridad": 5
+     },
+     "t4": {
+      "tipo": "control",
+      "etiqueta": "El Niño costero (calentamiento del mar frente a la costa): extraordinario · ¿cuándo se equivoca más? →",
+      "zona": "regimen",
+      "vista": "vista-2.png",
+      "resultado": "acierto",
+      "seguridad": 5
+     }
+    },
+    "volveria": "si",
+    "le_importo": "El botón de 'Descargar CSV' con los datos horarios de la curva de demanda real y pronosticada para usarlos en mi trabajo de sistemas de potencia.",
+    "importo": [
+     "los datos para descargar"
+    ],
+    "por_que_volveria": "Para descargar los datos del COES en CSV y revisar si pasadas las 10:00 ya publicaron el pronóstico actualizado del día para avanzar mi trabajo de la universidad.",
+    "seguridad": 5
+   },
+   {
+    "sesion": "entrada-hoy",
+    "pantalla": "hoy",
+    "persona": "operadora",
+    "repeticion": 1,
+    "tropiezos": [
+     {
+      "pantalla": "hoy",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "titulo",
+      "severidad": 1,
+      "evidencia": "Me confunde que el título hable de hoy sábado 14 y esté marcado el botón 'Hoy', pero la cifra gigante sea del jueves 12 a las 23:30."
+     },
+     {
+      "pantalla": "hoy",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "#ahAcierto",
+      "severidad": 1,
+      "evidencia": "No me queda claro qué implica que sea 'reconstruido después'; me hace dudar si fue una predicción real emitida a ciegas o calculada a posteriori."
+     },
+     {
+      "pantalla": "hoy",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "Chronos-2 / modelo fundacional",
+      "severidad": 1,
+      "evidencia": "Chronos-2 / modelo fundacional"
+     }
+    ],
+    "confusion": 2,
+    "dudas": [
+     "titulo",
+     "#ahAcierto"
+    ],
+    "terminos": [
+     "Chronos-2 / modelo fundacional"
+    ],
+    "comprende": true,
+    "mira_primero": "linea_ahora",
+    "momento_ok": true,
+    "lectura_cifra": true,
+    "lectura_completa": true,
+    "clics": {
+     "t1": {
+      "tipo": "control",
+      "etiqueta": "Ver otro día",
+      "zona": "cuando",
+      "vista": "vista-1.png",
+      "resultado": "acierto",
+      "seguridad": 4
+     },
+     "t2": {
+      "tipo": "control",
+      "etiqueta": "Confianza",
+      "zona": "#navPantallas",
+      "vista": "vista-1.png",
+      "resultado": "acierto",
+      "seguridad": 5
+     },
+     "t3": {
+      "tipo": "control",
+      "etiqueta": "¿Y si hace más calor?",
+      "zona": "respuesta",
+      "vista": "vista-1.png",
+      "resultado": "acierto",
+      "seguridad": 5
+     },
+     "t4": {
+      "tipo": "control",
+      "etiqueta": "El Niño costero (calentamiento del mar frente a la costa): extraordinario · ¿cuándo se equivoca más? →",
+      "zona": "regimen",
+      "vista": "vista-2.png",
+      "resultado": "acierto",
+      "seguridad": 5
+     }
+    },
+    "volveria": "tal_vez",
+    "le_importo": "Me sirvió que muestren con total transparencia el error exacto (-73 MW) y avisen si el rango del 80 % se quedó corto.",
+    "importo": [
+     "rendición de cuentas (acertó, cuánto se equivoca)"
+    ],
+    "por_que_volveria": "Volvería si entro al turno de la tarde para revisar la punta de la noche con el pronóstico de las 10:00, pero temprano no me sirve porque todavía no está listo el día.",
+    "seguridad": 5
+   },
+   {
+    "sesion": "entrada-hoy",
+    "pantalla": "hoy",
+    "persona": "periodista",
+    "repeticion": 1,
+    "tropiezos": [
+     {
+      "pantalla": "hoy",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "titulo",
+      "severidad": 1,
+      "evidencia": "El titular me habla de hoy sábado 14, pero el texto aclara que el pronóstico de hoy recién sale a las 10:00 y lo que se muestra abajo …"
+     },
+     {
+      "pantalla": "hoy",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "#ahAcierto",
+      "severidad": 1,
+      "evidencia": "No entiendo bien qué significa que un pronóstico se haya 'reconstruido después'. Me hace dudar si fue un pronóstico emitido antes o una simulación posterior sabiendo ya lo …"
+     },
+     {
+      "pantalla": "hoy",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "#ahBueno",
+      "severidad": 1,
+      "evidencia": "La alerta roja dice que el rango 'queda corto' y que es más angosto de lo debido, lo cual me hace dudar de qué tan confiable es el …"
+     },
+     {
+      "pantalla": "hoy",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "Chronos-2 / modelo fundacional",
+      "severidad": 1,
+      "evidencia": "Chronos-2 / modelo fundacional"
+     }
+    ],
+    "confusion": 0,
+    "dudas": [
+     "titulo",
+     "#ahAcierto",
+     "#ahBueno"
+    ],
+    "terminos": [
+     "Chronos-2 / modelo fundacional"
+    ],
+    "comprende": true,
+    "mira_primero": "linea_ahora",
+    "momento_ok": true,
+    "lectura_cifra": true,
+    "lectura_completa": true,
+    "clics": {
+     "t1": {
+      "tipo": "control",
+      "etiqueta": "Ver otro día",
+      "zona": "cuando",
+      "vista": "vista-1.png",
+      "resultado": "acierto",
+      "seguridad": 5
+     },
+     "t2": {
+      "tipo": "control",
+      "etiqueta": "Confianza",
+      "zona": "#navPantallas",
+      "vista": "vista-1.png",
+      "resultado": "acierto",
+      "seguridad": 5
+     },
+     "t3": {
+      "tipo": "control",
+      "etiqueta": "¿Y si hace más calor?",
+      "zona": "respuesta",
+      "vista": "vista-1.png",
+      "resultado": "acierto",
+      "seguridad": 5
+     },
+     "t4": {
+      "tipo": "control",
+      "etiqueta": "El Niño costero (calentamiento del mar frente a la costa): extraordinario · ¿cuándo se equivoca más? →",
+      "zona": "regimen",
+      "vista": "vista-2.png",
+      "resultado": "acierto",
+      "seguridad": 5
+     }
+    },
+    "volveria": "si",
+    "le_importo": "Me sirvió ver la conexión directa entre la demanda eléctrica y el calor con el enlace '¿Y si hace más calor?' y la alerta sobre El Niño costero, junto con la cifra del pico de consumo.",
+    "importo": [
+     "el pico y la hora de más consumo",
+     "la cifra de ahora"
+    ],
+    "por_que_volveria": "Volvería hacia las 10:00 para ver si ya cargaron el pronóstico real de hoy sábado y poder citar los datos actualizados de demanda y calor en mi artículo.",
+    "seguridad": 5
+   },
+   {
+    "sesion": "entrada-hoy",
+    "pantalla": "hoy",
+    "persona": "profesora",
+    "repeticion": 1,
+    "tropiezos": [
+     {
+      "pantalla": "hoy",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "titulo",
+      "severidad": 1,
+      "evidencia": "El título pregunta por hoy sábado 14, pero al lado el último dato real es del jueves 12 a las 23:30 y el gráfico muestra jueves 12 y …"
+     },
+     {
+      "pantalla": "hoy",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "cuando",
+      "severidad": 1,
+      "evidencia": "El botón 'Hoy' está marcado arriba, pero en la casilla de fecha dice '12/11/2026'. No me queda claro de inmediato qué fecha manda."
+     },
+     {
+      "pantalla": "hoy",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "#ahAyer",
+      "severidad": 1,
+      "evidencia": "Me confunde la mezcla de 'en vivo' con 'reconstruido': si se calculó después de conocer el valor real, es una reconstrucción retrospectiva (backtest), no un registro en vivo."
+     },
+     {
+      "pantalla": "hoy",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "COES",
+      "severidad": 1,
+      "evidencia": "COES"
+     },
+     {
+      "pantalla": "hoy",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "SEIN",
+      "severidad": 1,
+      "evidencia": "SEIN"
+     }
+    ],
+    "confusion": 1,
+    "dudas": [
+     "titulo",
+     "cuando",
+     "#ahAyer"
+    ],
+    "terminos": [
+     "COES",
+     "SEIN"
+    ],
+    "comprende": true,
+    "mira_primero": "linea_ahora",
+    "momento_ok": true,
+    "lectura_cifra": true,
+    "lectura_completa": true,
+    "clics": {
+     "t1": {
+      "tipo": "control",
+      "etiqueta": "Ver otro día",
+      "zona": "cuando",
+      "vista": "vista-1.png",
+      "resultado": "acierto",
+      "seguridad": 5
+     },
+     "t2": {
+      "tipo": "control",
+      "etiqueta": "Confianza",
+      "zona": "#navPantallas",
+      "vista": "vista-1.png",
+      "resultado": "acierto",
+      "seguridad": 5
+     },
+     "t3": {
+      "tipo": "control",
+      "etiqueta": "¿Y si hace más calor?",
+      "zona": "respuesta",
+      "vista": "vista-1.png",
+      "resultado": "acierto",
+      "seguridad": 5
+     },
+     "t4": {
+      "tipo": "control",
+      "etiqueta": "El Niño costero (calentamiento del mar frente a la costa): extraordinario · ¿cuándo se equivoca más? →",
+      "zona": "regimen",
+      "vista": "vista-2.png",
+      "resultado": "acierto",
+      "seguridad": 5
+     }
+    },
+    "volveria": "si",
+    "le_importo": "Me importó la honestidad con la que tratan la incertidumbre y que reconozcan con claridad que el intervalo de predicción del 80 % quedó corto al cubrir solo el 73.2 % de los casos.",
+    "importo": [
+     "rendición de cuentas (acertó, cuánto se equivoca)"
+    ],
+    "por_que_volveria": "Porque aprecio el rigor y la honestidad en el manejo de intervalos de predicción, y me da curiosidad ver cómo se actualiza el pronóstico a las 10:00 cuando publiquen los datos reales.",
+    "seguridad": 5
+   }
+  ]
+ }
+}
