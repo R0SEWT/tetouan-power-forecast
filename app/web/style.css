@@ -1303,6 +1303,42 @@ a {
   stroke: var(--muted);
 }
 
+/* Elegir la hora en el gráfico: el gesto horizontal es del gráfico y el vertical sigue desplazando la página */
+.lienzo {
+  touch-action: pan-y;
+  cursor: crosshair;
+  -webkit-user-select: none;
+  user-select: none; /* arrastrar no selecciona los textos del gráfico */
+}
+
+.lienzo.elige-hora {
+  cursor: col-resize;
+}
+
+.lienzo.elige-hora .g-cruz {
+  stroke: var(--ink);
+  stroke-width: 1.5;
+  stroke-dasharray: 4 3;
+}
+
+.g-cursor-pastilla {
+  fill: var(--ink-2);
+}
+
+.lienzo.siguiendo .g-hora-eje {
+  opacity: 0.25;
+}
+
+/* La respuesta mientras se elige otra hora: la cifra ya es la de esa hora; la frase, de la hora fijada, se atenúa */
+.resp-dia.siguiendo .r-frase {
+  opacity: 0.4;
+}
+
+.r-dia {
+  color: var(--muted);
+  font-weight: 600;
+}
+
 .tip {
   position: absolute;
   top: 8px;

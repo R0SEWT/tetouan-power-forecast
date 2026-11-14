@@ -584,6 +584,7 @@ function pintarAhora() {
   // Arriba de la pregunta, de qué zona habla: el nombre del área y qué parte del país es
   $('#principal').innerHTML = `<span class="pregunta-area">${esc(nombreArea(A.area))} · ${esc(ZONA_AREA[A.area] || 'Perú')}</span>${esc(preg.q)}`;
   $('#ahRespuesta').innerHTML = preg.html;
+  $('#ahRespuesta').classList.remove('siguiendo'); // la cifra vuelve a ser la de la hora fijada
   $('#ahModo').innerHTML = vivo
     ? `Lo real llega con un día de retraso: el COES, el operador del sistema eléctrico, publica cada mañana la demanda del día anterior. Lo demás es pronóstico, emitido ${emitidoTxt(d.emitido_en || d.ahora)}.`
     : `<b>Repaso de un día del historial.</b> Así se veía a las ${esc(horaDe(d.origen))}: lo real (del COES, el operador del sistema eléctrico) llega hasta esa hora y lo que sigue es lo que ya se había pronosticado.`;
@@ -612,8 +613,8 @@ function pintarAhora() {
   $('#ahTodasTit').textContent = vivo ? 'Todas las cifras de hoy' : 'Todas las cifras de ese día';
   $('#ahGrafTitulo').textContent = vivo ? 'Ayer y hoy' : 'Ese día y las 24 h siguientes';
   $('#ahGrafSub').textContent = vivo
-    ? `${nombreArea(A.area)}. A la izquierda, lo real de ayer y lo que se había pronosticado; desde la línea punteada no hay dato real todavía. «Ahora» marca la hora de Lima.`
-    : `${nombreArea(A.area)}. A la izquierda de «Ahora», lo real y lo que se pronosticó un día antes; a la derecha, lo que ya estaba pronosticado a las ${horaDe(d.origen)}.`;
+    ? `${nombreArea(A.area)}. A la izquierda, lo real de ayer y lo que se había pronosticado; desde la línea punteada no hay dato real todavía. «Ahora» marca la hora de Lima. Toca o arrastra el gráfico para leer cada hora.`
+    : `${nombreArea(A.area)}. A la izquierda de «Ahora», lo real y lo que se pronosticó un día antes; a la derecha, lo que ya estaba pronosticado a las ${horaDe(d.origen)}. Toca o arrastra el gráfico para elegir otra hora.`;
   $('#ahLeyRango').textContent = `Rango del ${d.nivel_rango_pct} % (cae ahí ${d.nivel_rango_pct / 10} de cada 10 veces)`;
   $('#ahLeyRef').textContent = `Referencia (${(REF_CORTA[d.referencia_nombre] || 'simple')})`;
   $('#ahDespuesCampo').hidden = vivo;
@@ -827,7 +828,7 @@ function graficoAhora(el, d) {
     if (medianoche && i > 0 && !(ia !== io && Math.abs(i - io) <= 1)) s += `<line class="g-eje" x1="${x(i).toFixed(1)}" x2="${x(i).toFixed(1)}" y1="${m.t}" y2="${H - m.b}"/>`;
     if (i % paso || Math.abs(x(i) - x(ia)) < 52) continue;
     s += `<line class="g-eje" x1="${x(i).toFixed(1)}" x2="${x(i).toFixed(1)}" y1="${H - m.b}" y2="${H - m.b + 4}"/>`;
-    s += `<text class="g-texto" x="${x(i).toFixed(1)}" y="${H - m.b + 17}" text-anchor="middle">${esc(medianoche ? diaCorto(fh) : horaDe(fh))}</text>`;
+    s += `<text class="g-texto g-hora-eje" x="${x(i).toFixed(1)}" y="${H - m.b + 17}" text-anchor="middle">${esc(medianoche ? diaCorto(fh) : horaDe(fh))}</text>`;
   }
   // La banda del rango: plena en lo que viene; más tenue en lo que ya pasó, donde manda lo real
   const banda = (a, b) => {
@@ -915,10 +916,10 @@ function graficoAhora(el, d) {
   s += rotuloRampa;
   // El hito de «ahora»: la línea, un halo alrededor del punto, su valor y la pastilla con la hora en el eje
   s += `<line class="g-ahora" x1="${x(ia).toFixed(1)}" x2="${x(ia).toFixed(1)}" y1="${m.t - 22}" y2="${H - m.b}"/>`;
-  const anchoPastilla = 84;
+  const anchoPastilla = vivo ? 84 : 104;
   const gx = Math.min(Math.max(x(ia) - anchoPastilla / 2, m.l), W - m.r - anchoPastilla);
   s += `<rect class="g-pastilla" x="${gx.toFixed(1)}" y="${H - m.b + 4}" width="${anchoPastilla}" height="22" rx="11"/>`;
-  s += `<text class="g-pastilla-texto" x="${(gx + anchoPastilla / 2).toFixed(1)}" y="${H - m.b + 19}" text-anchor="middle">${vivo ? 'Ahora' : 'A las'} ${esc(horaDe(d.ahora))}</text>`;
+  s += `<text class="g-pastilla-texto" x="${(gx + anchoPastilla / 2).toFixed(1)}" y="${H - m.b + 19}" text-anchor="middle">${vivo ? `Ahora ${esc(horaDe(d.ahora))}` : `‹ A las ${esc(horaDe(d.ahora))} ›`}</text>`;
   const esReal = d.real[ia] != null;
   s += `<circle class="g-ahora-halo${esReal ? ' real' : ''}" cx="${x(ia).toFixed(1)}" cy="${y(vAhora).toFixed(1)}" r="12"/>`;
   s += `<circle class="g-punto g-ahora-punto${esReal ? ' real' : ''}" cx="${x(ia).toFixed(1)}" cy="${y(vAhora).toFixed(1)}" r="6"/>`;
@@ -928,13 +929,112 @@ function graficoAhora(el, d) {
   }
   s += `<line class="g-cruz" x1="0" x2="0" y1="${m.t - 22}" y2="${H - m.b}" visibility="hidden"/>`;
   s += '<circle class="g-punto g-cursor" cx="0" cy="0" r="4" visibility="hidden"/>';
+  s += '<g class="g-cursor-hora" visibility="hidden"><rect class="g-pastilla g-cursor-pastilla" width="56" height="22" rx="11"/>'
+    + '<text class="g-pastilla-texto" text-anchor="middle"></text></g>';
   s += '</svg>';
   el.innerHTML = `${s}<div class="tip" hidden></div>`;
-  el._g = { x, y, N, m, W, d, despues };
-  el.setAttribute('aria-label', `Gráfico de la demanda del ${nombreArea(A.area)}. Usa las flechas para recorrerlo.`);
+  el._g = { x, y, N, m, W, H, d, despues };
+  el._i = null;
+  // Un control de hora: tocar, arrastrar o las flechas eligen la hora; en un repaso, soltar la fija
+  el.classList.toggle('elige-hora', !vivo);
+  el.classList.remove('siguiendo');
+  el.setAttribute('aria-label', vivo
+    ? `Gráfico de la demanda del ${nombreArea(A.area)}: recorre las horas con las flechas.`
+    : `Gráfico de la demanda del ${nombreArea(A.area)}: elige la hora con las flechas y fíjala con Intro; Escape la deja como estaba.`);
+  el.setAttribute('aria-valuemin', '0');
+  el.setAttribute('aria-valuemax', String(N));
+  el.setAttribute('aria-valuenow', String(ia));
+  el.setAttribute('aria-valuetext', textoHora(d, ia));
 }
 
-function tipAhora(i) {
+// Lo que se sabe de la hora i del gráfico «como se veía a esa hora»: lo real si ya se conocía (o se conoció después,
+// en un repaso), si no el pronóstico con su rango
+function valorEn(d, i) {
+  const real = d.real[i] != null ? d.real[i] : (d.modo === 'repaso' && d.real_despues ? d.real_despues[i] : null);
+  return real != null ? { real: true, valor: real } : { real: false, valor: d.pronostico[i], inf: d.inferior[i], sup: d.superior[i] };
+}
+
+function textoHora(d, i) {
+  const fh = d.fecha_hora[i];
+  const v = valorEn(d, i);
+  return `${capital(diaCorto(fh))}, ${horaDe(fh)}: ${v.real ? `real ${mw(v.valor)} MW` : `pronóstico ${mw(v.valor)} MW, entre ${mw(v.inf)} y ${mw(v.sup)}`}`;
+}
+
+// Mientras se elige otra hora en un repaso, la cifra grande y la línea siguen al dedo; la frase se atenúa hasta soltar
+function seguirHora(i) {
+  const el = $('#ahLienzo');
+  const g = el._g;
+  if (!g) return;
+  const d = g.d;
+  const k = Math.max(0, Math.min(g.N, i));
+  tipAhora(k, d.modo === 'repaso');
+  el.setAttribute('aria-valuenow', String(k));
+  el.setAttribute('aria-valuetext', textoHora(d, k));
+  if (d.modo !== 'repaso') return;
+  const fh = d.fecha_hora[k];
+  const v = valorEn(d, k);
+  const resp = $('#ahRespuesta');
+  const caja = $('.r-ahora', resp);
+  if (!caja) return;
+  resp.classList.toggle('siguiendo', k !== d.i_ahora);
+  $('#principal').innerHTML = `<span class="pregunta-area">${esc(nombreArea(A.area))} · ${esc(ZONA_AREA[A.area] || 'Perú')}</span>`
+    + `¿Acertamos el ${esc(fechaLarga(fh))} a las ${esc(horaDe(fh))}?`;
+  $('.k', caja).innerHTML = `<span class="sw ${v.real ? 'real' : 'pron'}" aria-hidden="true"></span>${v.real ? 'Fue' : 'Pronóstico'} · ${esc(horaDe(fh))}`
+    + `${fh.slice(0, 10) !== d.origen.slice(0, 10) ? ` <span class="r-dia">${esc(diaCorto(fh))}</span>` : ''}`;
+  $('.n', caja).innerHTML = `${mw(v.valor)}<small>MW</small>`;
+  const cur = $('.g-cursor-hora', el);
+  const gx = Math.min(Math.max(g.x(k) - 28, g.m.l), g.W - g.m.r - 56);
+  $('rect', cur).setAttribute('x', gx.toFixed(1));
+  $('rect', cur).setAttribute('y', String(g.H - g.m.b + 4));
+  $('text', cur).setAttribute('x', (gx + 28).toFixed(1));
+  $('text', cur).setAttribute('y', String(g.H - g.m.b + 19));
+  $('text', cur).textContent = horaDe(fh);
+  cur.setAttribute('visibility', k !== d.i_ahora ? 'visible' : 'hidden');
+  el.classList.toggle('siguiendo', k !== d.i_ahora); // las horas del eje se apagan: manda la elegida
+}
+
+// Soltar en un repaso fija la hora: el repaso pasa a esa hora (la misma ruta que el campo «A las»)
+function fijarHora(i) {
+  const g = $('#ahLienzo')._g;
+  if (!g || g.d.modo !== 'repaso') return;
+  const k = Math.max(0, Math.min(g.N, i));
+  if (k === g.d.i_ahora) {
+    volverHora();
+    return;
+  }
+  const fh = g.d.fecha_hora[k];
+  const dia = fh.slice(0, 10);
+  const hay = (g.d.dias_disponibles || []).some(([a, b]) => dia >= a && dia <= b) || dia >= hoyLima();
+  if (!hay) {
+    volverHora();
+    $('#ahAviso').innerHTML = `${ICONO.ojo}<span>No hay datos para repasar el ${esc(fechaNumerica(dia))}: se queda la hora que estaba.</span>`;
+    $('#ahAviso').hidden = false;
+    return;
+  }
+  irAhora({ fecha: dia, hora: horaDe(fh) });
+}
+
+// Se soltó fuera, se canceló o se apretó Escape: todo vuelve a la hora fijada
+function volverHora() {
+  const el = $('#ahLienzo');
+  const g = el._g;
+  if (!g) return;
+  const d = g.d;
+  $('#ahRespuesta').classList.remove('siguiendo');
+  if (d.modo === 'repaso') {
+    const preg = preguntaDelDia(d);
+    $('#ahRespuesta').innerHTML = preg.html;
+    $('#principal').innerHTML = `<span class="pregunta-area">${esc(nombreArea(A.area))} · ${esc(ZONA_AREA[A.area] || 'Perú')}</span>${esc(preg.q)}`;
+  }
+  $('.g-cursor-hora', el).setAttribute('visibility', 'hidden');
+  el._i = null;
+  el.classList.remove('siguiendo');
+  el.setAttribute('aria-valuenow', String(d.i_ahora));
+  el.setAttribute('aria-valuetext', textoHora(d, d.i_ahora));
+  ocultarTipAhora();
+}
+
+function tipAhora(i, conDespues = false) {
   const el = $('#ahLienzo');
   const g = el._g;
   if (!g) return;
@@ -951,7 +1051,8 @@ function tipAhora(i) {
   cursor.setAttribute('visibility', 'visible');
   const fh = d.fecha_hora[k];
   const futuro = k > d.i_origen;
-  const real = !futuro ? d.real[k] : (g.despues ? d.real_despues[k] : null);
+  // Al elegir otra hora en un repaso, también lo real de después: es lo que se verá al soltar
+  const real = !futuro ? d.real[k] : ((g.despues || conDespues) && d.real_despues ? d.real_despues[k] : null);
   const error = real != null ? d.pronostico[k] - real : null;
   const emision = d.tipo ? TIPO_TXT[d.tipo[k]] || '' : `Emitido el ${fechaDiaMes(sumarDias(fh.slice(0, 10), -1))} a las ${horaDe(fh)} (24 h antes)`;
   const fila = (sw, nombre, valor) => `<tr><td>${sw ? `<span class="sw ${sw}"></span>` : ''}${esc(nombre)}</td><td>${valor}</td></tr>`;
@@ -1388,21 +1489,62 @@ function conectarEventos() {
     const r = lienzo.getBoundingClientRect();
     return Math.round(((ev.clientX - r.left - g.m.l) / (g.W - g.m.l - g.m.r)) * g.N);
   };
-  lienzo.addEventListener('pointermove', (ev) => { if (lienzo._g) tipAhora(indiceLienzo(ev)); });
-  lienzo.addEventListener('pointerleave', ocultarTipAhora);
-  lienzo.addEventListener('focus', () => { if (lienzo._g) tipAhora(lienzo._g.d.i_ahora); });
-  lienzo.addEventListener('blur', ocultarTipAhora);
+  // Tocar o arrastrar: la cifra y la línea siguen al dedo; al soltar, en un repaso, queda fijada esa hora. En vivo,
+  // la lectura de la hora queda a la vista hasta tocar en otro lado (con el dedo no hay «pasar por encima»).
+  let arrastre = null;
+  lienzo.addEventListener('pointerdown', (ev) => {
+    if (!lienzo._g || (ev.pointerType === 'mouse' && ev.button !== 0)) return;
+    arrastre = { id: ev.pointerId, i: indiceLienzo(ev) };
+    lienzo.setPointerCapture(ev.pointerId);
+    seguirHora(arrastre.i);
+  });
+  lienzo.addEventListener('pointermove', (ev) => {
+    if (!lienzo._g) return;
+    if (arrastre && ev.pointerId === arrastre.id) {
+      arrastre.i = indiceLienzo(ev);
+      seguirHora(arrastre.i);
+    } else if (!arrastre && ev.pointerType === 'mouse') tipAhora(indiceLienzo(ev));
+  });
+  lienzo.addEventListener('pointerup', (ev) => {
+    if (!arrastre || ev.pointerId !== arrastre.id) return;
+    const { i } = arrastre;
+    arrastre = null;
+    const r = lienzo.getBoundingClientRect();
+    const fuera = ev.clientX < r.left - 8 || ev.clientX > r.right + 8 || ev.clientY < r.top - 40 || ev.clientY > r.bottom + 40;
+    if (fuera) volverHora(); // soltar lejos del gráfico es arrepentirse
+    else fijarHora(i);
+  });
+  lienzo.addEventListener('pointercancel', () => {
+    arrastre = null;
+    volverHora();
+  });
+  lienzo.addEventListener('pointerleave', (ev) => { if (!arrastre && ev.pointerType === 'mouse') ocultarTipAhora(); });
+  document.addEventListener('pointerdown', (ev) => { if (!lienzo.contains(ev.target)) ocultarTipAhora(); });
+  lienzo.addEventListener('focus', () => { if (lienzo._g) tipAhora(lienzo._i ?? lienzo._g.d.i_ahora); });
+  lienzo.addEventListener('blur', () => { if (!arrastre) volverHora(); }); // salir con Tab no fija nada
+  // Teclado y lector de pantalla: flechas (media hora), Re Pág / Av Pág (6 horas), Inicio y Fin; Intro fija la hora y
+  // Escape vuelve a la fijada
   lienzo.addEventListener('keydown', (ev) => {
     if (!lienzo._g) return;
-    const actual = lienzo._i ?? lienzo._g.d.i_ahora;
-    const pasos = { ArrowRight: 1, ArrowLeft: -1, PageUp: -12, PageDown: 12 };
+    const g = lienzo._g;
+    const actual = lienzo._i ?? g.d.i_ahora;
+    const pasos = { ArrowRight: 1, ArrowUp: 1, ArrowLeft: -1, ArrowDown: -1, PageUp: -12, PageDown: 12 };
     let i = null;
     if (ev.key in pasos) i = actual + pasos[ev.key];
     if (ev.key === 'Home') i = 0;
-    if (ev.key === 'End') i = lienzo._g.N;
+    if (ev.key === 'End') i = g.N;
+    if (ev.key === 'Enter') {
+      ev.preventDefault();
+      fijarHora(actual);
+      return;
+    }
+    if (ev.key === 'Escape') {
+      volverHora();
+      return;
+    }
     if (i == null) return;
     ev.preventDefault();
-    tipAhora(i);
+    seguirHora(i);
   });
 
   window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (ev) => {

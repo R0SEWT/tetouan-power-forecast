@@ -177,6 +177,40 @@ VERSIONES.it8 = {
   },
 };
 
+// PR 5: tocar el gráfico de «Ahora» fija la hora. La posición de una hora sale de la escala del propio gráfico.
+const enElGrafico = (hora) => async (p) => p.evaluate((h) => {
+  const el = document.querySelector('#ahLienzo');
+  const g = el._g;
+  const dia = g.d.origen.slice(0, 10);
+  const i = g.d.fecha_hora.findIndex((f) => f === `${dia}T${h}`);
+  return { x: g.x(i), y: g.m.t + 40 };
+}, hora);
+const tocarHora = (hora) => ({ clic: (p) => p.locator('#ahLienzo'), posicion: enElGrafico(hora) });
+const URL_AHORA_1030 = `${WEB}/#/ahora/centro?fecha=2026-03-10&hora=10:30`;
+VERSIONES.pr05 = {
+  ...VERSIONES.it8,
+  // T1 completa: el día se escribe (es el PR 6) y la hora se toca en el gráfico
+  tareas: {
+    ...VERSIONES.it8.tareas,
+    t1: [
+      { escribir: (p) => p.locator('#ahFecha'), texto: '2026-03-10' },
+      tocarHora('19:00'),
+      { revisar: true },
+    ],
+  },
+};
+// T1 en el mismo día: el caso abierto a las 10:30 y la tarea pide las 19:00 (lo que mide el PR 5)
+VERSIONES['it8-hora'] = {
+  ...VERSIONES.it8,
+  inicio: (tarea) => (tarea === 't1' ? URL_AHORA_1030 : VERSIONES.it8.inicio(tarea)),
+  tareas: { ...VERSIONES.it8.tareas, t1: [{ escribir: (p) => p.locator('#ahHora'), texto: '19:00' }, { revisar: true }] },
+};
+VERSIONES['pr05-hora'] = {
+  ...VERSIONES.pr05,
+  inicio: VERSIONES['it8-hora'].inicio,
+  tareas: { ...VERSIONES.pr05.tareas, t1: [tocarHora('19:00'), { revisar: true }] },
+};
+
 export function version(nombre) {
   const v = VERSIONES[nombre];
   if (!v) throw new Error(`Versión desconocida: ${nombre}. Hay: ${Object.keys(VERSIONES).join(', ')}`);
