@@ -871,6 +871,22 @@ function pintarTab() {
   if (S.tab === 'operacion') pintarOperacion();
   else if (S.tab === 'escenarios') pintarEscenarios();
   else pintarDiagnostico();
+  marcarModeloEscenario();
+}
+
+// En «¿Y si…?», si el modelo elegido usa solo la demanda, los escenarios los calcula otro: el panel lo dice en lugar
+// de seguir marcando «Solo demanda» y el modelo elegido como si fueran los que calculan
+function marcarModeloEscenario() {
+  const otro = S.tab === 'escenarios' && S.horizonte === '24h' && soloDemanda() && !usaSoloDemanda(modeloConClima());
+  const panel = $('.panel.controles');
+  if (!panel) return;
+  panel.classList.toggle('esc-otro-modelo', otro);
+  $('#ayudaVariante').hidden = otro;
+  const nota = $('#notaEscModelo');
+  nota.hidden = !otro;
+  nota.innerHTML = otro
+    ? `En «¿Y si…?» calcula el modelo <b>${esc(modeloConClima().nombre)}</b>, con clima y El Niño. «Datos que usa» y «Qué modelo usa» son los de «Próximas horas».`
+    : '';
 }
 
 // Operación: lo que el modelo espera desde el origen elegido.
@@ -957,7 +973,7 @@ function pintarEscenarios() {
   let html = '<h3>¿Y si mañana hace más calor, o El Niño se calma?</h3>';
   html += `<p class="muted small">Cambia un supuesto y el modelo vuelve a calcular las próximas 24 h desde las ${idxAHora(S.idx)} del ${esc(fechaCorta(S.fecha))}. Supuesto del proyecto: el COES recibe de ENFEN los pronósticos de clima y de El Niño.</p>`;
   if (soloDemanda() && !usaSoloDemanda(modeloConClima())) {
-    html += `<div class="nota aviso">El modelo ${esc(nombreCorto(modeloEfectivo()))} usa solo la demanda, así que el clima y El Niño no lo mueven. Estos escenarios los calcula el modelo ${esc(modeloConClima().nombre)}, con clima y El Niño.</div>`;
+    html += `<div class="nota info">Estos escenarios los calcula el modelo <b>${esc(modeloConClima().nombre)}</b>, que sí usa clima y El Niño. El ${esc(nombreCorto(modeloEfectivo()))}, el de «Próximas horas», solo usa la demanda: el calor no lo movería.</div>`;
   } else if (soloDemanda()) {
     html += `<div class="nota aviso">${esc(nombreModelo())} usa solo la demanda: los escenarios de clima y de El Niño no lo cambian.</div>`;
   } else if (S.variante === 'M0' && !usaSoloDemanda(modeloActual())) {
@@ -1531,6 +1547,7 @@ const HTML_DETALLE = `
           </div>
         </div>
         <p id="ayudaVariante" class="field-help">«Con clima y El Niño» también usa las fallas en curso de la red.</p>
+        <p id="notaEscModelo" class="field-help nota-esc" hidden></p>
         <div class="control-row">
           <label class="field field-grow">
             <span class="field-label">Día</span>

@@ -787,6 +787,22 @@ a {
   font-weight: 600;
 }
 
+.chip-enlace {
+  color: var(--pron-texto);
+  text-decoration: none;
+}
+
+.chip-enlace:hover {
+  border-color: var(--axis);
+  text-decoration: underline;
+}
+
+@media (pointer: coarse) {
+  .chip-enlace {
+    min-height: 44px;
+  }
+}
+
 .veredicto {
   display: flex;
   gap: 10px;
@@ -2075,7 +2091,7 @@ input[type='time']:focus-within,
 }
 
 .pregunta {
-  max-width: 40ch;
+  max-width: 50ch;
 }
 
 .resp-dia {

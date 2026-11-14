@@ -1,0 +1,3554 @@
+{
+ "etiqueta": "rite-antes",
+ "fecha_capturas": "2026-11-14T10:25:52.135Z",
+ "modelo": "CC 0.69 en el test oficial de UEyes (sesgo central 0.435)",
+ "capturas": {
+  "inicio-escritorio-light": {
+   "atencion": {
+    "1s": {
+     "cifra_ahora": {
+      "cuota": 0.0798,
+      "area": 0.0148,
+      "lift": 5.41
+     },
+     "pico_24h": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "linea_ahora": {
+      "cuota": 0.0049,
+      "area": 0.0062,
+      "lift": 0.79
+     },
+     "estado_datos": {
+      "cuota": 0.0015,
+      "area": 0.0074,
+      "lift": 0.21
+     },
+     "dijimos_ayer": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "titulo": {
+      "cuota": 0.1338,
+      "area": 0.0205,
+      "lift": 6.52
+     },
+     "que_es": {
+      "cuota": 0.0981,
+      "area": 0.019,
+      "lift": 5.15
+     },
+     "modo": {
+      "cuota": 0.047,
+      "area": 0.028,
+      "lift": 1.68
+     },
+     "otras_cifras": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "rotulos": {
+      "cuota": 0.0074,
+      "area": 0.008,
+      "lift": 0.93
+     },
+     "grafico": {
+      "cuota": 0.1123,
+      "area": 0.29,
+      "lift": 0.39
+     },
+     "areas": {
+      "cuota": 0.0017,
+      "area": 0.0077,
+      "lift": 0.22
+     },
+     "cuando": {
+      "cuota": 0.0103,
+      "area": 0.0374,
+      "lift": 0.28
+     },
+     "regimen": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "respuesta": {
+      "cuota": 0.0709,
+      "area": 0.0313,
+      "lift": 2.27
+     },
+     "fijo": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "controles": {
+      "cuota": 0.0313,
+      "area": 0.027,
+      "lift": 1.16
+     },
+     "texto": {
+      "cuota": 0.0182,
+      "area": 0.0535,
+      "lift": 0.34
+     },
+     "resto": {
+      "cuota": 0.3827,
+      "area": 0.4491,
+      "lift": 0.85
+     }
+    },
+    "3s": {
+     "cifra_ahora": {
+      "cuota": 0.1043,
+      "area": 0.0148,
+      "lift": 7.07
+     },
+     "pico_24h": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "linea_ahora": {
+      "cuota": 0.0043,
+      "area": 0.0062,
+      "lift": 0.7
+     },
+     "estado_datos": {
+      "cuota": 0.0029,
+      "area": 0.0074,
+      "lift": 0.39
+     },
+     "dijimos_ayer": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "titulo": {
+      "cuota": 0.1496,
+      "area": 0.0205,
+      "lift": 7.29
+     },
+     "que_es": {
+      "cuota": 0.1031,
+      "area": 0.019,
+      "lift": 5.42
+     },
+     "modo": {
+      "cuota": 0.0398,
+      "area": 0.028,
+      "lift": 1.42
+     },
+     "otras_cifras": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "rotulos": {
+      "cuota": 0.0073,
+      "area": 0.008,
+      "lift": 0.92
+     },
+     "grafico": {
+      "cuota": 0.1065,
+      "area": 0.29,
+      "lift": 0.37
+     },
+     "areas": {
+      "cuota": 0.0036,
+      "area": 0.0077,
+      "lift": 0.47
+     },
+     "cuando": {
+      "cuota": 0.0131,
+      "area": 0.0374,
+      "lift": 0.35
+     },
+     "regimen": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "respuesta": {
+      "cuota": 0.0602,
+      "area": 0.0313,
+      "lift": 1.92
+     },
+     "fijo": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "controles": {
+      "cuota": 0.0282,
+      "area": 0.027,
+      "lift": 1.05
+     },
+     "texto": {
+      "cuota": 0.0174,
+      "area": 0.0535,
+      "lift": 0.32
+     },
+     "resto": {
+      "cuota": 0.3597,
+      "area": 0.4491,
+      "lift": 0.8
+     }
+    },
+    "7s": {
+     "cifra_ahora": {
+      "cuota": 0.0628,
+      "area": 0.0148,
+      "lift": 4.26
+     },
+     "pico_24h": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "linea_ahora": {
+      "cuota": 0.0086,
+      "area": 0.0062,
+      "lift": 1.38
+     },
+     "estado_datos": {
+      "cuota": 0.0039,
+      "area": 0.0074,
+      "lift": 0.53
+     },
+     "dijimos_ayer": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "titulo": {
+      "cuota": 0.0967,
+      "area": 0.0205,
+      "lift": 4.71
+     },
+     "que_es": {
+      "cuota": 0.0563,
+      "area": 0.019,
+      "lift": 2.96
+     },
+     "modo": {
+      "cuota": 0.0278,
+      "area": 0.028,
+      "lift": 0.99
+     },
+     "otras_cifras": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "rotulos": {
+      "cuota": 0.016,
+      "area": 0.008,
+      "lift": 2.01
+     },
+     "grafico": {
+      "cuota": 0.2497,
+      "area": 0.29,
+      "lift": 0.86
+     },
+     "areas": {
+      "cuota": 0.0067,
+      "area": 0.0077,
+      "lift": 0.86
+     },
+     "cuando": {
+      "cuota": 0.0206,
+      "area": 0.0374,
+      "lift": 0.55
+     },
+     "regimen": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "respuesta": {
+      "cuota": 0.0681,
+      "area": 0.0313,
+      "lift": 2.17
+     },
+     "fijo": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "controles": {
+      "cuota": 0.0269,
+      "area": 0.027,
+      "lift": 1.0
+     },
+     "texto": {
+      "cuota": 0.0249,
+      "area": 0.0535,
+      "lift": 0.47
+     },
+     "resto": {
+      "cuota": 0.3309,
+      "area": 0.4491,
+      "lift": 0.74
+     }
+    }
+   },
+   "aoi": {
+    "cifra_ahora": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 143
+    },
+    "pico_24h": {
+     "existe": false,
+     "a_la_vista": 0.0,
+     "arriba_px": null
+    },
+    "linea_ahora": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 429
+    },
+    "estado_datos": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 14
+    },
+    "dijimos_ayer": {
+     "existe": true,
+     "a_la_vista": 0.0,
+     "arriba_px": 927
+    },
+    "titulo": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 80
+    },
+    "que_es": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 8
+    },
+    "modo": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 251
+    },
+    "otras_cifras": {
+     "existe": false,
+     "a_la_vista": 0.0,
+     "arriba_px": null
+    },
+    "rotulos": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 431
+    },
+    "grafico": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 421
+    },
+    "areas": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 105
+    },
+    "cuando": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 159
+    },
+    "regimen": {
+     "existe": true,
+     "a_la_vista": 0.0,
+     "arriba_px": 858
+    },
+    "respuesta": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 138
+    }
+   },
+   "primera_pantalla": {
+    "controles": 16,
+    "controles_lista": [
+     "Curva, pronóstico de la demanda eléctric",
+     "Ahora",
+     "Confianza",
+     "Detalle",
+     "Modelo y datos: la ficha técnica",
+     "Cambiar a modo oscuro",
+     "Norte",
+     "Centro",
+     "Sur",
+     "Hoy",
+     "Ayer",
+     "Hace una semana",
+     "Ver otro día",
+     "Elegir el día en un calendario",
+     "Todas las cifras de hoy",
+     "Referencia (semana pasada)"
+    ],
+    "cifras": {
+     "magnitudes": 4,
+     "horas": 4,
+     "fechas": 1,
+     "en_el_grafico": 10
+    },
+    "palabras": 252,
+    "pantallas_de_alto": 1.9
+   },
+   "terminos": [
+    {
+     "termino": "COES",
+     "definido_en_pantalla": true,
+     "definido_a_la_vista": true
+    },
+    {
+     "termino": "MW",
+     "definido_en_pantalla": true,
+     "definido_a_la_vista": true
+    },
+    {
+     "termino": "rango del N %",
+     "definido_en_pantalla": true,
+     "definido_a_la_vista": true
+    },
+    {
+     "termino": "referencia",
+     "definido_en_pantalla": true,
+     "definido_a_la_vista": false
+    }
+   ],
+   "prueba_5s": [
+    {
+     "pregunta": "¿Qué es esto?",
+     "a_la_vista": true,
+     "cuota_7s": 0.056,
+     "responde": true
+    },
+    {
+     "pregunta": "¿De qué zona habla?",
+     "a_la_vista": true,
+     "cuota_7s": 0.097,
+     "responde": true
+    },
+    {
+     "pregunta": "¿Cuánta demanda hay ahora?",
+     "a_la_vista": true,
+     "cuota_7s": 0.063,
+     "responde": true
+    },
+    {
+     "pregunta": "¿Es real o pronóstico, y hasta cuándo hay datos?",
+     "a_la_vista": true,
+     "cuota_7s": 0.048,
+     "responde": false
+    },
+    {
+     "pregunta": "¿Viene más o menos demanda?",
+     "a_la_vista": true,
+     "cuota_7s": 0.25,
+     "responde": true
+    },
+    {
+     "pregunta": "¿Qué puedo hacer aquí?",
+     "a_la_vista": true,
+     "cuota_7s": 0.019,
+     "responde": true,
+     "control_mas_mirado": "Todas las cifras de hoy"
+    }
+   ],
+   "controles_mas_mirados": [
+    {
+     "control": "Curva, pronóstico de la demanda eléctric",
+     "cuota_3s": 0.103,
+     "lift": 5.42
+    },
+    {
+     "control": "Todas las cifras de hoy",
+     "cuota_3s": 0.019,
+     "lift": 2.28
+    },
+    {
+     "control": "Ahora",
+     "cuota_3s": 0.004,
+     "lift": 1.52
+    },
+    {
+     "control": "Confianza",
+     "cuota_3s": 0.003,
+     "lift": 0.8
+    },
+    {
+     "control": "Ver otro día",
+     "cuota_3s": 0.003,
+     "lift": 0.42
+    }
+   ],
+   "primer_clic": [
+    {
+     "tarea": "T1 pronóstico de un día pasado (10-mar, 19:00)",
+     "predicho": "Elegir el día en un calendario",
+     "por": "palabras",
+     "acierta": false,
+     "destino_a_la_vista": true,
+     "destino_olor": 1
+    },
+    {
+     "tarea": "T2 ¿me puedo fiar del número?",
+     "predicho": "Confianza",
+     "por": "palabras",
+     "acierta": true,
+     "destino_a_la_vista": true,
+     "destino_olor": 1
+    },
+    {
+     "tarea": "T3 ¿y si hace 2 °C más?",
+     "predicho": "Curva, pronóstico de la demanda eléctric",
+     "por": "atención",
+     "acierta": false,
+     "destino_a_la_vista": true,
+     "destino_olor": 0
+    },
+    {
+     "tarea": "T4 ¿con qué fase de El Niño yerra más?",
+     "predicho": "Curva, pronóstico de la demanda eléctric",
+     "por": "atención",
+     "acierta": false,
+     "destino_a_la_vista": true,
+     "destino_olor": 0
+    },
+    {
+     "tarea": "T5 ver la demanda del Sur",
+     "predicho": "Sur",
+     "por": "palabras",
+     "acierta": true,
+     "destino_a_la_vista": true,
+     "destino_olor": 1
+    },
+    {
+     "tarea": "T6 descargar los datos",
+     "predicho": "Modelo y datos: la ficha técnica",
+     "por": "palabras",
+     "acierta": false,
+     "destino_a_la_vista": false,
+     "destino_olor": 0
+    }
+   ],
+   "lectura": {
+    "bloques": 9,
+    "ch_linea_mediana": 43,
+    "ch_linea_max": 113,
+    "sobre_80": [
+     "p#ahModo.modo-linea 90",
+     "p#ahGrafSub.sub 100",
+     "p#ahPie.pie-nota 113"
+    ],
+    "bajo_25": [
+     "p.enlaces 14"
+    ]
+   },
+   "color": {
+    "tokens": 27,
+    "usados": 21,
+    "fuera_del_sistema": {},
+    "mezclas_derivadas": 1
+   },
+   "tipografia": {
+    "tamanos": [
+     11.0,
+     12.0,
+     13.0,
+     14.0,
+     15.0,
+     16.0,
+     18.0,
+     20.0,
+     28.0,
+     56.0
+    ],
+    "n_tamanos": 10,
+    "familias": [
+     "system-ui"
+    ]
+   },
+   "desborde": {
+    "horizontal_px": 0,
+    "elementos": []
+   },
+   "orientacion": {
+    "pantalla_marcada": [
+     "Ahora",
+     "Centro"
+    ],
+    "estado_datos": "Hoy · datos del COES al 12/11, 24:00COES 12/11 24:00"
+   }
+  },
+  "inicio-movil-light": {
+   "atencion": {
+    "1s": {
+     "cifra_ahora": {
+      "cuota": 0.1856,
+      "area": 0.0333,
+      "lift": 5.57
+     },
+     "pico_24h": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "linea_ahora": {
+      "cuota": 0.0007,
+      "area": 0.0035,
+      "lift": 0.19
+     },
+     "estado_datos": {
+      "cuota": 0.0065,
+      "area": 0.0125,
+      "lift": 0.52
+     },
+     "dijimos_ayer": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "titulo": {
+      "cuota": 0.1519,
+      "area": 0.0529,
+      "lift": 2.87
+     },
+     "que_es": {
+      "cuota": 0.0972,
+      "area": 0.0291,
+      "lift": 3.34
+     },
+     "modo": {
+      "cuota": 0.0555,
+      "area": 0.0856,
+      "lift": 0.65
+     },
+     "otras_cifras": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "rotulos": {
+      "cuota": 0.0017,
+      "area": 0.0057,
+      "lift": 0.3
+     },
+     "grafico": {
+      "cuota": 0.0301,
+      "area": 0.1541,
+      "lift": 0.2
+     },
+     "areas": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "cuando": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "regimen": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "respuesta": {
+      "cuota": 0.1109,
+      "area": 0.0859,
+      "lift": 1.29
+     },
+     "fijo": {
+      "cuota": 0.0038,
+      "area": 0.0653,
+      "lift": 0.06
+     },
+     "controles": {
+      "cuota": 0.0124,
+      "area": 0.037,
+      "lift": 0.33
+     },
+     "texto": {
+      "cuota": 0.0436,
+      "area": 0.0372,
+      "lift": 1.17
+     },
+     "resto": {
+      "cuota": 0.3001,
+      "area": 0.3978,
+      "lift": 0.75
+     }
+    },
+    "3s": {
+     "cifra_ahora": {
+      "cuota": 0.1603,
+      "area": 0.0333,
+      "lift": 4.81
+     },
+     "pico_24h": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "linea_ahora": {
+      "cuota": 0.0005,
+      "area": 0.0035,
+      "lift": 0.15
+     },
+     "estado_datos": {
+      "cuota": 0.0197,
+      "area": 0.0125,
+      "lift": 1.57
+     },
+     "dijimos_ayer": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "titulo": {
+      "cuota": 0.1927,
+      "area": 0.0529,
+      "lift": 3.64
+     },
+     "que_es": {
+      "cuota": 0.1344,
+      "area": 0.0291,
+      "lift": 4.63
+     },
+     "modo": {
+      "cuota": 0.0334,
+      "area": 0.0856,
+      "lift": 0.39
+     },
+     "otras_cifras": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "rotulos": {
+      "cuota": 0.0015,
+      "area": 0.0057,
+      "lift": 0.25
+     },
+     "grafico": {
+      "cuota": 0.0208,
+      "area": 0.1541,
+      "lift": 0.14
+     },
+     "areas": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "cuando": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "regimen": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "respuesta": {
+      "cuota": 0.0756,
+      "area": 0.0859,
+      "lift": 0.88
+     },
+     "fijo": {
+      "cuota": 0.0021,
+      "area": 0.0653,
+      "lift": 0.03
+     },
+     "controles": {
+      "cuota": 0.0097,
+      "area": 0.037,
+      "lift": 0.26
+     },
+     "texto": {
+      "cuota": 0.0355,
+      "area": 0.0372,
+      "lift": 0.96
+     },
+     "resto": {
+      "cuota": 0.3136,
+      "area": 0.3978,
+      "lift": 0.79
+     }
+    },
+    "7s": {
+     "cifra_ahora": {
+      "cuota": 0.1012,
+      "area": 0.0333,
+      "lift": 3.04
+     },
+     "pico_24h": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "linea_ahora": {
+      "cuota": 0.002,
+      "area": 0.0035,
+      "lift": 0.56
+     },
+     "estado_datos": {
+      "cuota": 0.0157,
+      "area": 0.0125,
+      "lift": 1.25
+     },
+     "dijimos_ayer": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "titulo": {
+      "cuota": 0.1329,
+      "area": 0.0529,
+      "lift": 2.51
+     },
+     "que_es": {
+      "cuota": 0.0744,
+      "area": 0.0291,
+      "lift": 2.56
+     },
+     "modo": {
+      "cuota": 0.0709,
+      "area": 0.0856,
+      "lift": 0.83
+     },
+     "otras_cifras": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "rotulos": {
+      "cuota": 0.0068,
+      "area": 0.0057,
+      "lift": 1.19
+     },
+     "grafico": {
+      "cuota": 0.0906,
+      "area": 0.1541,
+      "lift": 0.59
+     },
+     "areas": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "cuando": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "regimen": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "respuesta": {
+      "cuota": 0.0963,
+      "area": 0.0859,
+      "lift": 1.12
+     },
+     "fijo": {
+      "cuota": 0.0094,
+      "area": 0.0653,
+      "lift": 0.14
+     },
+     "controles": {
+      "cuota": 0.029,
+      "area": 0.037,
+      "lift": 0.78
+     },
+     "texto": {
+      "cuota": 0.0561,
+      "area": 0.0372,
+      "lift": 1.51
+     },
+     "resto": {
+      "cuota": 0.3148,
+      "area": 0.3978,
+      "lift": 0.79
+     }
+    }
+   },
+   "aoi": {
+    "cifra_ahora": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 138
+    },
+    "pico_24h": {
+     "existe": false,
+     "a_la_vista": 0.0,
+     "arriba_px": null
+    },
+    "linea_ahora": {
+     "existe": true,
+     "a_la_vista": 0.291,
+     "arriba_px": 607
+    },
+    "estado_datos": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 10
+    },
+    "dijimos_ayer": {
+     "existe": true,
+     "a_la_vista": 0.0,
+     "arriba_px": 1441
+    },
+    "titulo": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 72
+    },
+    "que_es": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 3
+    },
+    "modo": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 341
+    },
+    "otras_cifras": {
+     "existe": false,
+     "a_la_vista": 0.0,
+     "arriba_px": null
+    },
+    "rotulos": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 608
+    },
+    "grafico": {
+     "existe": true,
+     "a_la_vista": 0.619,
+     "arriba_px": 598
+    },
+    "areas": {
+     "existe": true,
+     "a_la_vista": 0.0,
+     "arriba_px": 1213
+    },
+    "cuando": {
+     "existe": true,
+     "a_la_vista": 0.0,
+     "arriba_px": 1275
+    },
+    "regimen": {
+     "existe": true,
+     "a_la_vista": 0.0,
+     "arriba_px": 1159
+    },
+    "respuesta": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 226
+    }
+   },
+   "primera_pantalla": {
+    "controles": 6,
+    "controles_lista": [
+     "Curva, pronóstico de la demanda eléctric",
+     "Ahora",
+     "Confianza",
+     "Detalle",
+     "Cambiar a modo oscuro",
+     "Referencia (semana pasada)"
+    ],
+    "cifras": {
+     "magnitudes": 4,
+     "horas": 4,
+     "fechas": 1,
+     "en_el_grafico": 1
+    },
+    "palabras": 121,
+    "pantallas_de_alto": 3.61
+   },
+   "terminos": [
+    {
+     "termino": "COES",
+     "definido_en_pantalla": true,
+     "definido_a_la_vista": true
+    },
+    {
+     "termino": "MW",
+     "definido_en_pantalla": true,
+     "definido_a_la_vista": true
+    },
+    {
+     "termino": "rango del N %",
+     "definido_en_pantalla": true,
+     "definido_a_la_vista": true
+    },
+    {
+     "termino": "referencia",
+     "definido_en_pantalla": true,
+     "definido_a_la_vista": false
+    }
+   ],
+   "prueba_5s": [
+    {
+     "pregunta": "¿Qué es esto?",
+     "a_la_vista": true,
+     "cuota_7s": 0.074,
+     "responde": true
+    },
+    {
+     "pregunta": "¿De qué zona habla?",
+     "a_la_vista": true,
+     "cuota_7s": 0.133,
+     "responde": true
+    },
+    {
+     "pregunta": "¿Cuánta demanda hay ahora?",
+     "a_la_vista": true,
+     "cuota_7s": 0.101,
+     "responde": true
+    },
+    {
+     "pregunta": "¿Es real o pronóstico, y hasta cuándo hay datos?",
+     "a_la_vista": true,
+     "cuota_7s": 0.093,
+     "responde": true
+    },
+    {
+     "pregunta": "¿Viene más o menos demanda?",
+     "a_la_vista": true,
+     "cuota_7s": 0.091,
+     "responde": true
+    },
+    {
+     "pregunta": "¿Qué puedo hacer aquí?",
+     "a_la_vista": true,
+     "cuota_7s": 0.008,
+     "responde": false,
+     "control_mas_mirado": "Referencia (semana pasada)"
+    }
+   ],
+   "controles_mas_mirados": [
+    {
+     "control": "Curva, pronóstico de la demanda eléctric",
+     "cuota_3s": 0.134,
+     "lift": 4.63
+    },
+    {
+     "control": "Referencia (semana pasada)",
+     "cuota_3s": 0.008,
+     "lift": 0.27
+    },
+    {
+     "control": "Cambiar a modo oscuro",
+     "cuota_3s": 0.001,
+     "lift": 0.23
+    },
+    {
+     "control": "Confianza",
+     "cuota_3s": 0.001,
+     "lift": 0.05
+    },
+    {
+     "control": "Ahora",
+     "cuota_3s": 0.001,
+     "lift": 0.03
+    }
+   ],
+   "primer_clic": [
+    {
+     "tarea": "T1 pronóstico de un día pasado (10-mar, 19:00)",
+     "predicho": "Curva, pronóstico de la demanda eléctric",
+     "por": "palabras",
+     "acierta": false,
+     "destino_a_la_vista": false,
+     "destino_olor": 0
+    },
+    {
+     "tarea": "T2 ¿me puedo fiar del número?",
+     "predicho": "Confianza",
+     "por": "palabras",
+     "acierta": true,
+     "destino_a_la_vista": true,
+     "destino_olor": 1
+    },
+    {
+     "tarea": "T3 ¿y si hace 2 °C más?",
+     "predicho": "Curva, pronóstico de la demanda eléctric",
+     "por": "atención",
+     "acierta": false,
+     "destino_a_la_vista": true,
+     "destino_olor": 0
+    },
+    {
+     "tarea": "T4 ¿con qué fase de El Niño yerra más?",
+     "predicho": "Curva, pronóstico de la demanda eléctric",
+     "por": "atención",
+     "acierta": false,
+     "destino_a_la_vista": true,
+     "destino_olor": 0
+    },
+    {
+     "tarea": "T5 ver la demanda del Sur",
+     "predicho": "Curva, pronóstico de la demanda eléctric",
+     "por": "atención",
+     "acierta": false,
+     "destino_a_la_vista": false,
+     "destino_olor": 0
+    },
+    {
+     "tarea": "T6 descargar los datos",
+     "predicho": "Curva, pronóstico de la demanda eléctric",
+     "por": "atención",
+     "acierta": false,
+     "destino_a_la_vista": false,
+     "destino_olor": 0
+    }
+   ],
+   "lectura": {
+    "bloques": 9,
+    "ch_linea_mediana": 40,
+    "ch_linea_max": 57,
+    "sobre_80": [],
+    "bajo_25": [
+     "p.enlaces 14"
+    ]
+   },
+   "color": {
+    "tokens": 27,
+    "usados": 20,
+    "fuera_del_sistema": {},
+    "mezclas_derivadas": 0
+   },
+   "tipografia": {
+    "tamanos": [
+     11.0,
+     12.0,
+     13.0,
+     14.0,
+     16.0,
+     18.0,
+     20.0,
+     28.0,
+     40.0
+    ],
+    "n_tamanos": 9,
+    "familias": [
+     "system-ui"
+    ]
+   },
+   "desborde": {
+    "horizontal_px": 0,
+    "elementos": []
+   },
+   "orientacion": {
+    "pantalla_marcada": [
+     "Ahora"
+    ],
+    "estado_datos": "Hoy · datos del COES al 12/11, 24:00COES 12/11 24:00"
+   }
+  },
+  "ahora-escritorio-light": {
+   "atencion": {
+    "1s": {
+     "cifra_ahora": {
+      "cuota": 0.0736,
+      "area": 0.0138,
+      "lift": 5.34
+     },
+     "pico_24h": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "linea_ahora": {
+      "cuota": 0.0069,
+      "area": 0.0065,
+      "lift": 1.06
+     },
+     "estado_datos": {
+      "cuota": 0.0009,
+      "area": 0.0059,
+      "lift": 0.15
+     },
+     "dijimos_ayer": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "titulo": {
+      "cuota": 0.1778,
+      "area": 0.0314,
+      "lift": 5.66
+     },
+     "que_es": {
+      "cuota": 0.0871,
+      "area": 0.019,
+      "lift": 4.58
+     },
+     "modo": {
+      "cuota": 0.0473,
+      "area": 0.0278,
+      "lift": 1.7
+     },
+     "otras_cifras": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "rotulos": {
+      "cuota": 0.0068,
+      "area": 0.0069,
+      "lift": 0.98
+     },
+     "grafico": {
+      "cuota": 0.1066,
+      "area": 0.2908,
+      "lift": 0.37
+     },
+     "areas": {
+      "cuota": 0.0013,
+      "area": 0.0077,
+      "lift": 0.17
+     },
+     "cuando": {
+      "cuota": 0.0087,
+      "area": 0.0377,
+      "lift": 0.23
+     },
+     "regimen": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "respuesta": {
+      "cuota": 0.0629,
+      "area": 0.0243,
+      "lift": 2.59
+     },
+     "fijo": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "controles": {
+      "cuota": 0.0276,
+      "area": 0.0344,
+      "lift": 0.8
+     },
+     "texto": {
+      "cuota": 0.0246,
+      "area": 0.0405,
+      "lift": 0.61
+     },
+     "resto": {
+      "cuota": 0.3679,
+      "area": 0.4532,
+      "lift": 0.81
+     }
+    },
+    "3s": {
+     "cifra_ahora": {
+      "cuota": 0.0888,
+      "area": 0.0138,
+      "lift": 6.44
+     },
+     "pico_24h": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "linea_ahora": {
+      "cuota": 0.0052,
+      "area": 0.0065,
+      "lift": 0.8
+     },
+     "estado_datos": {
+      "cuota": 0.0019,
+      "area": 0.0059,
+      "lift": 0.31
+     },
+     "dijimos_ayer": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "titulo": {
+      "cuota": 0.1979,
+      "area": 0.0314,
+      "lift": 6.3
+     },
+     "que_es": {
+      "cuota": 0.0879,
+      "area": 0.019,
+      "lift": 4.61
+     },
+     "modo": {
+      "cuota": 0.0446,
+      "area": 0.0278,
+      "lift": 1.6
+     },
+     "otras_cifras": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "rotulos": {
+      "cuota": 0.006,
+      "area": 0.0069,
+      "lift": 0.87
+     },
+     "grafico": {
+      "cuota": 0.0911,
+      "area": 0.2908,
+      "lift": 0.31
+     },
+     "areas": {
+      "cuota": 0.003,
+      "area": 0.0077,
+      "lift": 0.38
+     },
+     "cuando": {
+      "cuota": 0.0117,
+      "area": 0.0377,
+      "lift": 0.31
+     },
+     "regimen": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "respuesta": {
+      "cuota": 0.0687,
+      "area": 0.0243,
+      "lift": 2.83
+     },
+     "fijo": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "controles": {
+      "cuota": 0.0277,
+      "area": 0.0344,
+      "lift": 0.8
+     },
+     "texto": {
+      "cuota": 0.0205,
+      "area": 0.0405,
+      "lift": 0.51
+     },
+     "resto": {
+      "cuota": 0.345,
+      "area": 0.4532,
+      "lift": 0.76
+     }
+    },
+    "7s": {
+     "cifra_ahora": {
+      "cuota": 0.0615,
+      "area": 0.0138,
+      "lift": 4.46
+     },
+     "pico_24h": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "linea_ahora": {
+      "cuota": 0.01,
+      "area": 0.0065,
+      "lift": 1.54
+     },
+     "estado_datos": {
+      "cuota": 0.0025,
+      "area": 0.0059,
+      "lift": 0.42
+     },
+     "dijimos_ayer": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "titulo": {
+      "cuota": 0.1318,
+      "area": 0.0314,
+      "lift": 4.19
+     },
+     "que_es": {
+      "cuota": 0.0527,
+      "area": 0.019,
+      "lift": 2.77
+     },
+     "modo": {
+      "cuota": 0.0388,
+      "area": 0.0278,
+      "lift": 1.4
+     },
+     "otras_cifras": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "rotulos": {
+      "cuota": 0.0117,
+      "area": 0.0069,
+      "lift": 1.7
+     },
+     "grafico": {
+      "cuota": 0.1936,
+      "area": 0.2908,
+      "lift": 0.67
+     },
+     "areas": {
+      "cuota": 0.0062,
+      "area": 0.0077,
+      "lift": 0.8
+     },
+     "cuando": {
+      "cuota": 0.0239,
+      "area": 0.0377,
+      "lift": 0.63
+     },
+     "regimen": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "respuesta": {
+      "cuota": 0.0744,
+      "area": 0.0243,
+      "lift": 3.06
+     },
+     "fijo": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "controles": {
+      "cuota": 0.0346,
+      "area": 0.0344,
+      "lift": 1.01
+     },
+     "texto": {
+      "cuota": 0.0301,
+      "area": 0.0405,
+      "lift": 0.74
+     },
+     "resto": {
+      "cuota": 0.328,
+      "area": 0.4532,
+      "lift": 0.72
+     }
+    }
+   },
+   "aoi": {
+    "cifra_ahora": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 163
+    },
+    "pico_24h": {
+     "existe": false,
+     "a_la_vista": 0.0,
+     "arriba_px": null
+    },
+    "linea_ahora": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 449
+    },
+    "estado_datos": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 14
+    },
+    "dijimos_ayer": {
+     "existe": true,
+     "a_la_vista": 0.0,
+     "arriba_px": 927
+    },
+    "titulo": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 80
+    },
+    "que_es": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 8
+    },
+    "modo": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 270
+    },
+    "otras_cifras": {
+     "existe": false,
+     "a_la_vista": 0.0,
+     "arriba_px": null
+    },
+    "rotulos": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 450
+    },
+    "grafico": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 440
+    },
+    "areas": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 124
+    },
+    "cuando": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 178
+    },
+    "regimen": {
+     "existe": true,
+     "a_la_vista": 0.0,
+     "arriba_px": 858
+    },
+    "respuesta": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 182
+    }
+   },
+   "primera_pantalla": {
+    "controles": 19,
+    "controles_lista": [
+     "Curva, pronóstico de la demanda eléctric",
+     "Ahora",
+     "Confianza",
+     "Detalle",
+     "Modelo y datos: la ficha técnica",
+     "Cambiar a modo oscuro",
+     "¿Y si hace más calor?",
+     "Norte",
+     "Centro",
+     "Sur",
+     "Hoy",
+     "Ayer",
+     "Hace una semana",
+     "Ver otro día",
+     "Elegir el día en un calendario",
+     "A las",
+     "Todas las cifras de ese día",
+     "Referencia (semana pasada)",
+     "Mostrar lo que pasó después"
+    ],
+    "cifras": {
+     "magnitudes": 12,
+     "horas": 5,
+     "fechas": 2,
+     "en_el_grafico": 9
+    },
+    "palabras": 264,
+    "pantallas_de_alto": 1.95
+   },
+   "terminos": [
+    {
+     "termino": "COES",
+     "definido_en_pantalla": true,
+     "definido_a_la_vista": true
+    },
+    {
+     "termino": "MW",
+     "definido_en_pantalla": true,
+     "definido_a_la_vista": true
+    },
+    {
+     "termino": "rango del N %",
+     "definido_en_pantalla": true,
+     "definido_a_la_vista": true
+    },
+    {
+     "termino": "referencia",
+     "definido_en_pantalla": true,
+     "definido_a_la_vista": false
+    },
+    {
+     "termino": "repaso",
+     "definido_en_pantalla": true,
+     "definido_a_la_vista": true
+    }
+   ],
+   "prueba_5s": [
+    {
+     "pregunta": "¿Qué es esto?",
+     "a_la_vista": true,
+     "cuota_7s": 0.053,
+     "responde": true
+    },
+    {
+     "pregunta": "¿De qué zona habla?",
+     "a_la_vista": true,
+     "cuota_7s": 0.132,
+     "responde": true
+    },
+    {
+     "pregunta": "¿Cuánta demanda hay ahora?",
+     "a_la_vista": true,
+     "cuota_7s": 0.061,
+     "responde": true
+    },
+    {
+     "pregunta": "¿Es real o pronóstico, y hasta cuándo hay datos?",
+     "a_la_vista": true,
+     "cuota_7s": 0.053,
+     "responde": true
+    },
+    {
+     "pregunta": "¿Viene más o menos demanda?",
+     "a_la_vista": true,
+     "cuota_7s": 0.194,
+     "responde": true
+    },
+    {
+     "pregunta": "¿Qué puedo hacer aquí?",
+     "a_la_vista": true,
+     "cuota_7s": 0.019,
+     "responde": true,
+     "control_mas_mirado": "Todas las cifras de ese día"
+    }
+   ],
+   "controles_mas_mirados": [
+    {
+     "control": "Curva, pronóstico de la demanda eléctric",
+     "cuota_3s": 0.088,
+     "lift": 4.61
+    },
+    {
+     "control": "Todas las cifras de ese día",
+     "cuota_3s": 0.019,
+     "lift": 2.17
+    },
+    {
+     "control": "¿Y si hace más calor?",
+     "cuota_3s": 0.009,
+     "lift": 2.16
+    },
+    {
+     "control": "Ahora",
+     "cuota_3s": 0.003,
+     "lift": 0.95
+    },
+    {
+     "control": "Ver otro día",
+     "cuota_3s": 0.002,
+     "lift": 0.37
+    }
+   ],
+   "primer_clic": [
+    {
+     "tarea": "T1 pronóstico de un día pasado (10-mar, 19:00)",
+     "predicho": "Elegir el día en un calendario",
+     "por": "palabras",
+     "acierta": false,
+     "destino_a_la_vista": true,
+     "destino_olor": 1
+    },
+    {
+     "tarea": "T2 ¿me puedo fiar del número?",
+     "predicho": "Confianza",
+     "por": "palabras",
+     "acierta": true,
+     "destino_a_la_vista": true,
+     "destino_olor": 1
+    },
+    {
+     "tarea": "T3 ¿y si hace 2 °C más?",
+     "predicho": "¿Y si hace más calor?",
+     "por": "palabras",
+     "acierta": true,
+     "destino_a_la_vista": true,
+     "destino_olor": 1
+    },
+    {
+     "tarea": "T4 ¿con qué fase de El Niño yerra más?",
+     "predicho": "Curva, pronóstico de la demanda eléctric",
+     "por": "atención",
+     "acierta": false,
+     "destino_a_la_vista": true,
+     "destino_olor": 0
+    },
+    {
+     "tarea": "T5 ver la demanda del Sur",
+     "predicho": "Sur",
+     "por": "palabras",
+     "acierta": true,
+     "destino_a_la_vista": true,
+     "destino_olor": 1
+    },
+    {
+     "tarea": "T6 descargar los datos",
+     "predicho": "Modelo y datos: la ficha técnica",
+     "por": "palabras",
+     "acierta": false,
+     "destino_a_la_vista": false,
+     "destino_olor": 0
+    }
+   ],
+   "lectura": {
+    "bloques": 10,
+    "ch_linea_mediana": 41.5,
+    "ch_linea_max": 133,
+    "sobre_80": [
+     "p#ahModo.modo-linea 91",
+     "p#ahPie.pie-nota 133"
+    ],
+    "bajo_25": [
+     "p.enlaces 12"
+    ]
+   },
+   "color": {
+    "tokens": 27,
+    "usados": 20,
+    "fuera_del_sistema": {},
+    "mezclas_derivadas": 1
+   },
+   "tipografia": {
+    "tamanos": [
+     11.0,
+     12.0,
+     13.0,
+     14.0,
+     15.0,
+     16.0,
+     18.0,
+     20.0,
+     28.0,
+     56.0
+    ],
+    "n_tamanos": 10,
+    "familias": [
+     "system-ui"
+    ]
+   },
+   "desborde": {
+    "horizontal_px": 0,
+    "elementos": []
+   },
+   "orientacion": {
+    "pantalla_marcada": [
+     "Ahora",
+     "Centro"
+    ],
+    "estado_datos": "Repaso · 10/03/2026, 19:00Repaso 10/03/26 19:00"
+   }
+  },
+  "ahora-movil-light": {
+   "atencion": {
+    "1s": {
+     "cifra_ahora": {
+      "cuota": 0.1216,
+      "area": 0.0287,
+      "lift": 4.24
+     },
+     "pico_24h": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "linea_ahora": {
+      "cuota": 0.0003,
+      "area": 0.0016,
+      "lift": 0.16
+     },
+     "estado_datos": {
+      "cuota": 0.0099,
+      "area": 0.0147,
+      "lift": 0.68
+     },
+     "dijimos_ayer": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "titulo": {
+      "cuota": 0.2138,
+      "area": 0.0811,
+      "lift": 2.64
+     },
+     "que_es": {
+      "cuota": 0.082,
+      "area": 0.0261,
+      "lift": 3.14
+     },
+     "modo": {
+      "cuota": 0.0551,
+      "area": 0.0851,
+      "lift": 0.65
+     },
+     "otras_cifras": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "rotulos": {
+      "cuota": 0.0009,
+      "area": 0.0057,
+      "lift": 0.15
+     },
+     "grafico": {
+      "cuota": 0.01,
+      "area": 0.0809,
+      "lift": 0.12
+     },
+     "areas": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "cuando": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "regimen": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "respuesta": {
+      "cuota": 0.1424,
+      "area": 0.091,
+      "lift": 1.56
+     },
+     "fijo": {
+      "cuota": 0.0029,
+      "area": 0.0653,
+      "lift": 0.05
+     },
+     "controles": {
+      "cuota": 0.0163,
+      "area": 0.0683,
+      "lift": 0.24
+     },
+     "texto": {
+      "cuota": 0.05,
+      "area": 0.0469,
+      "lift": 1.07
+     },
+     "resto": {
+      "cuota": 0.2948,
+      "area": 0.4045,
+      "lift": 0.73
+     }
+    },
+    "3s": {
+     "cifra_ahora": {
+      "cuota": 0.1177,
+      "area": 0.0287,
+      "lift": 4.1
+     },
+     "pico_24h": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "linea_ahora": {
+      "cuota": 0.0002,
+      "area": 0.0016,
+      "lift": 0.14
+     },
+     "estado_datos": {
+      "cuota": 0.0246,
+      "area": 0.0147,
+      "lift": 1.68
+     },
+     "dijimos_ayer": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "titulo": {
+      "cuota": 0.2366,
+      "area": 0.0811,
+      "lift": 2.92
+     },
+     "que_es": {
+      "cuota": 0.1131,
+      "area": 0.0261,
+      "lift": 4.33
+     },
+     "modo": {
+      "cuota": 0.0353,
+      "area": 0.0851,
+      "lift": 0.41
+     },
+     "otras_cifras": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "rotulos": {
+      "cuota": 0.0008,
+      "area": 0.0057,
+      "lift": 0.14
+     },
+     "grafico": {
+      "cuota": 0.0076,
+      "area": 0.0809,
+      "lift": 0.09
+     },
+     "areas": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "cuando": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "regimen": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "respuesta": {
+      "cuota": 0.1158,
+      "area": 0.091,
+      "lift": 1.27
+     },
+     "fijo": {
+      "cuota": 0.0022,
+      "area": 0.0653,
+      "lift": 0.03
+     },
+     "controles": {
+      "cuota": 0.0116,
+      "area": 0.0683,
+      "lift": 0.17
+     },
+     "texto": {
+      "cuota": 0.039,
+      "area": 0.0469,
+      "lift": 0.83
+     },
+     "resto": {
+      "cuota": 0.2954,
+      "area": 0.4045,
+      "lift": 0.73
+     }
+    },
+    "7s": {
+     "cifra_ahora": {
+      "cuota": 0.0761,
+      "area": 0.0287,
+      "lift": 2.65
+     },
+     "pico_24h": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "linea_ahora": {
+      "cuota": 0.0009,
+      "area": 0.0016,
+      "lift": 0.57
+     },
+     "estado_datos": {
+      "cuota": 0.0177,
+      "area": 0.0147,
+      "lift": 1.2
+     },
+     "dijimos_ayer": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "titulo": {
+      "cuota": 0.1613,
+      "area": 0.0811,
+      "lift": 1.99
+     },
+     "que_es": {
+      "cuota": 0.0611,
+      "area": 0.0261,
+      "lift": 2.34
+     },
+     "modo": {
+      "cuota": 0.0792,
+      "area": 0.0851,
+      "lift": 0.93
+     },
+     "otras_cifras": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "rotulos": {
+      "cuota": 0.0044,
+      "area": 0.0057,
+      "lift": 0.76
+     },
+     "grafico": {
+      "cuota": 0.0389,
+      "area": 0.0809,
+      "lift": 0.48
+     },
+     "areas": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "cuando": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "regimen": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "respuesta": {
+      "cuota": 0.1257,
+      "area": 0.091,
+      "lift": 1.38
+     },
+     "fijo": {
+      "cuota": 0.0103,
+      "area": 0.0653,
+      "lift": 0.16
+     },
+     "controles": {
+      "cuota": 0.0451,
+      "area": 0.0683,
+      "lift": 0.66
+     },
+     "texto": {
+      "cuota": 0.0697,
+      "area": 0.0469,
+      "lift": 1.49
+     },
+     "resto": {
+      "cuota": 0.3097,
+      "area": 0.4045,
+      "lift": 0.77
+     }
+    }
+   },
+   "aoi": {
+    "cifra_ahora": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 163
+    },
+    "pico_24h": {
+     "existe": false,
+     "a_la_vista": 0.0,
+     "arriba_px": null
+    },
+    "linea_ahora": {
+     "existe": true,
+     "a_la_vista": 0.126,
+     "arriba_px": 680
+    },
+    "estado_datos": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 10
+    },
+    "dijimos_ayer": {
+     "existe": true,
+     "a_la_vista": 0.0,
+     "arriba_px": 1494
+    },
+    "titulo": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 72
+    },
+    "que_es": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 3
+    },
+    "modo": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 367
+    },
+    "otras_cifras": {
+     "existe": false,
+     "a_la_vista": 0.0,
+     "arriba_px": null
+    },
+    "rotulos": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 682
+    },
+    "grafico": {
+     "existe": true,
+     "a_la_vista": 0.335,
+     "arriba_px": 672
+    },
+    "areas": {
+     "existe": true,
+     "a_la_vista": 0.0,
+     "arriba_px": 1267
+    },
+    "cuando": {
+     "existe": true,
+     "a_la_vista": 0.0,
+     "arriba_px": 1329
+    },
+    "regimen": {
+     "existe": true,
+     "a_la_vista": 0.0,
+     "arriba_px": 1212
+    },
+    "respuesta": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 251
+    }
+   },
+   "primera_pantalla": {
+    "controles": 8,
+    "controles_lista": [
+     "Curva, pronóstico de la demanda eléctric",
+     "Ahora",
+     "Confianza",
+     "Detalle",
+     "Cambiar a modo oscuro",
+     "¿Y si hace más calor?",
+     "Referencia (semana pasada)",
+     "Mostrar lo que pasó después"
+    ],
+    "cifras": {
+     "magnitudes": 10,
+     "horas": 4,
+     "fechas": 1,
+     "en_el_grafico": 2
+    },
+    "palabras": 145,
+    "pantallas_de_alto": 3.71
+   },
+   "terminos": [
+    {
+     "termino": "COES",
+     "definido_en_pantalla": true,
+     "definido_a_la_vista": true
+    },
+    {
+     "termino": "MW",
+     "definido_en_pantalla": true,
+     "definido_a_la_vista": true
+    },
+    {
+     "termino": "rango del N %",
+     "definido_en_pantalla": true,
+     "definido_a_la_vista": true
+    },
+    {
+     "termino": "referencia",
+     "definido_en_pantalla": true,
+     "definido_a_la_vista": false
+    },
+    {
+     "termino": "repaso",
+     "definido_en_pantalla": true,
+     "definido_a_la_vista": true
+    }
+   ],
+   "prueba_5s": [
+    {
+     "pregunta": "¿Qué es esto?",
+     "a_la_vista": true,
+     "cuota_7s": 0.061,
+     "responde": true
+    },
+    {
+     "pregunta": "¿De qué zona habla?",
+     "a_la_vista": true,
+     "cuota_7s": 0.161,
+     "responde": true
+    },
+    {
+     "pregunta": "¿Cuánta demanda hay ahora?",
+     "a_la_vista": true,
+     "cuota_7s": 0.076,
+     "responde": true
+    },
+    {
+     "pregunta": "¿Es real o pronóstico, y hasta cuándo hay datos?",
+     "a_la_vista": true,
+     "cuota_7s": 0.101,
+     "responde": true
+    },
+    {
+     "pregunta": "¿Viene más o menos demanda?",
+     "a_la_vista": true,
+     "cuota_7s": 0.039,
+     "responde": false
+    },
+    {
+     "pregunta": "¿Qué puedo hacer aquí?",
+     "a_la_vista": true,
+     "cuota_7s": 0.034,
+     "responde": true,
+     "control_mas_mirado": "¿Y si hace más calor?"
+    }
+   ],
+   "controles_mas_mirados": [
+    {
+     "control": "Curva, pronóstico de la demanda eléctric",
+     "cuota_3s": 0.113,
+     "lift": 4.33
+    },
+    {
+     "control": "¿Y si hace más calor?",
+     "cuota_3s": 0.034,
+     "lift": 1.42
+    },
+    {
+     "control": "Referencia (semana pasada)",
+     "cuota_3s": 0.006,
+     "lift": 0.2
+    },
+    {
+     "control": "Mostrar lo que pasó después",
+     "cuota_3s": 0.004,
+     "lift": 0.14
+    },
+    {
+     "control": "Cambiar a modo oscuro",
+     "cuota_3s": 0.001,
+     "lift": 0.19
+    }
+   ],
+   "primer_clic": [
+    {
+     "tarea": "T1 pronóstico de un día pasado (10-mar, 19:00)",
+     "predicho": "Curva, pronóstico de la demanda eléctric",
+     "por": "palabras",
+     "acierta": false,
+     "destino_a_la_vista": false,
+     "destino_olor": 0
+    },
+    {
+     "tarea": "T2 ¿me puedo fiar del número?",
+     "predicho": "Confianza",
+     "por": "palabras",
+     "acierta": true,
+     "destino_a_la_vista": true,
+     "destino_olor": 1
+    },
+    {
+     "tarea": "T3 ¿y si hace 2 °C más?",
+     "predicho": "¿Y si hace más calor?",
+     "por": "palabras",
+     "acierta": true,
+     "destino_a_la_vista": true,
+     "destino_olor": 1
+    },
+    {
+     "tarea": "T4 ¿con qué fase de El Niño yerra más?",
+     "predicho": "Curva, pronóstico de la demanda eléctric",
+     "por": "atención",
+     "acierta": false,
+     "destino_a_la_vista": true,
+     "destino_olor": 0
+    },
+    {
+     "tarea": "T5 ver la demanda del Sur",
+     "predicho": "Curva, pronóstico de la demanda eléctric",
+     "por": "atención",
+     "acierta": false,
+     "destino_a_la_vista": false,
+     "destino_olor": 0
+    },
+    {
+     "tarea": "T6 descargar los datos",
+     "predicho": "Curva, pronóstico de la demanda eléctric",
+     "por": "atención",
+     "acierta": false,
+     "destino_a_la_vista": false,
+     "destino_olor": 0
+    }
+   ],
+   "lectura": {
+    "bloques": 11,
+    "ch_linea_mediana": 38,
+    "ch_linea_max": 53,
+    "sobre_80": [],
+    "bajo_25": [
+     "p.enlaces 12"
+    ]
+   },
+   "color": {
+    "tokens": 27,
+    "usados": 19,
+    "fuera_del_sistema": {},
+    "mezclas_derivadas": 0
+   },
+   "tipografia": {
+    "tamanos": [
+     11.0,
+     12.0,
+     13.0,
+     14.0,
+     16.0,
+     18.0,
+     20.0,
+     28.0,
+     40.0
+    ],
+    "n_tamanos": 9,
+    "familias": [
+     "system-ui"
+    ]
+   },
+   "desborde": {
+    "horizontal_px": 0,
+    "elementos": []
+   },
+   "orientacion": {
+    "pantalla_marcada": [
+     "Ahora"
+    ],
+    "estado_datos": "Repaso · 10/03/2026, 19:00Repaso 10/03/26 19:00"
+   }
+  },
+  "ahora_dia-escritorio-light": {
+   "atencion": {
+    "1s": {
+     "cifra_ahora": {
+      "cuota": 0.0713,
+      "area": 0.0138,
+      "lift": 5.17
+     },
+     "pico_24h": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "linea_ahora": {
+      "cuota": 0.0058,
+      "area": 0.0065,
+      "lift": 0.9
+     },
+     "estado_datos": {
+      "cuota": 0.0009,
+      "area": 0.0059,
+      "lift": 0.15
+     },
+     "dijimos_ayer": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "titulo": {
+      "cuota": 0.1789,
+      "area": 0.0314,
+      "lift": 5.69
+     },
+     "que_es": {
+      "cuota": 0.0894,
+      "area": 0.019,
+      "lift": 4.7
+     },
+     "modo": {
+      "cuota": 0.0475,
+      "area": 0.0278,
+      "lift": 1.71
+     },
+     "otras_cifras": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "rotulos": {
+      "cuota": 0.0078,
+      "area": 0.0069,
+      "lift": 1.13
+     },
+     "grafico": {
+      "cuota": 0.0952,
+      "area": 0.2908,
+      "lift": 0.33
+     },
+     "areas": {
+      "cuota": 0.0014,
+      "area": 0.0077,
+      "lift": 0.18
+     },
+     "cuando": {
+      "cuota": 0.009,
+      "area": 0.0377,
+      "lift": 0.24
+     },
+     "regimen": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "respuesta": {
+      "cuota": 0.0652,
+      "area": 0.0243,
+      "lift": 2.68
+     },
+     "fijo": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "controles": {
+      "cuota": 0.0262,
+      "area": 0.0344,
+      "lift": 0.76
+     },
+     "texto": {
+      "cuota": 0.0251,
+      "area": 0.0405,
+      "lift": 0.62
+     },
+     "resto": {
+      "cuota": 0.3764,
+      "area": 0.4532,
+      "lift": 0.83
+     }
+    },
+    "3s": {
+     "cifra_ahora": {
+      "cuota": 0.0938,
+      "area": 0.0138,
+      "lift": 6.8
+     },
+     "pico_24h": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "linea_ahora": {
+      "cuota": 0.0037,
+      "area": 0.0065,
+      "lift": 0.57
+     },
+     "estado_datos": {
+      "cuota": 0.0019,
+      "area": 0.0059,
+      "lift": 0.31
+     },
+     "dijimos_ayer": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "titulo": {
+      "cuota": 0.1954,
+      "area": 0.0314,
+      "lift": 6.22
+     },
+     "que_es": {
+      "cuota": 0.0868,
+      "area": 0.019,
+      "lift": 4.56
+     },
+     "modo": {
+      "cuota": 0.0447,
+      "area": 0.0278,
+      "lift": 1.61
+     },
+     "otras_cifras": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "rotulos": {
+      "cuota": 0.0085,
+      "area": 0.0069,
+      "lift": 1.23
+     },
+     "grafico": {
+      "cuota": 0.0893,
+      "area": 0.2908,
+      "lift": 0.31
+     },
+     "areas": {
+      "cuota": 0.0032,
+      "area": 0.0077,
+      "lift": 0.41
+     },
+     "cuando": {
+      "cuota": 0.0125,
+      "area": 0.0377,
+      "lift": 0.33
+     },
+     "regimen": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "respuesta": {
+      "cuota": 0.067,
+      "area": 0.0243,
+      "lift": 2.76
+     },
+     "fijo": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "controles": {
+      "cuota": 0.0259,
+      "area": 0.0344,
+      "lift": 0.75
+     },
+     "texto": {
+      "cuota": 0.0217,
+      "area": 0.0405,
+      "lift": 0.53
+     },
+     "resto": {
+      "cuota": 0.3458,
+      "area": 0.4532,
+      "lift": 0.76
+     }
+    },
+    "7s": {
+     "cifra_ahora": {
+      "cuota": 0.0609,
+      "area": 0.0138,
+      "lift": 4.42
+     },
+     "pico_24h": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "linea_ahora": {
+      "cuota": 0.008,
+      "area": 0.0065,
+      "lift": 1.24
+     },
+     "estado_datos": {
+      "cuota": 0.0025,
+      "area": 0.0059,
+      "lift": 0.43
+     },
+     "dijimos_ayer": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "titulo": {
+      "cuota": 0.1287,
+      "area": 0.0314,
+      "lift": 4.1
+     },
+     "que_es": {
+      "cuota": 0.0521,
+      "area": 0.019,
+      "lift": 2.74
+     },
+     "modo": {
+      "cuota": 0.04,
+      "area": 0.0278,
+      "lift": 1.44
+     },
+     "otras_cifras": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "rotulos": {
+      "cuota": 0.0148,
+      "area": 0.0069,
+      "lift": 2.13
+     },
+     "grafico": {
+      "cuota": 0.1953,
+      "area": 0.2908,
+      "lift": 0.67
+     },
+     "areas": {
+      "cuota": 0.0064,
+      "area": 0.0077,
+      "lift": 0.83
+     },
+     "cuando": {
+      "cuota": 0.0249,
+      "area": 0.0377,
+      "lift": 0.66
+     },
+     "regimen": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "respuesta": {
+      "cuota": 0.0709,
+      "area": 0.0243,
+      "lift": 2.92
+     },
+     "fijo": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "controles": {
+      "cuota": 0.0323,
+      "area": 0.0344,
+      "lift": 0.94
+     },
+     "texto": {
+      "cuota": 0.0316,
+      "area": 0.0405,
+      "lift": 0.78
+     },
+     "resto": {
+      "cuota": 0.3316,
+      "area": 0.4532,
+      "lift": 0.73
+     }
+    }
+   },
+   "aoi": {
+    "cifra_ahora": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 163
+    },
+    "pico_24h": {
+     "existe": false,
+     "a_la_vista": 0.0,
+     "arriba_px": null
+    },
+    "linea_ahora": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 449
+    },
+    "estado_datos": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 14
+    },
+    "dijimos_ayer": {
+     "existe": true,
+     "a_la_vista": 0.0,
+     "arriba_px": 927
+    },
+    "titulo": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 80
+    },
+    "que_es": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 8
+    },
+    "modo": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 270
+    },
+    "otras_cifras": {
+     "existe": false,
+     "a_la_vista": 0.0,
+     "arriba_px": null
+    },
+    "rotulos": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 450
+    },
+    "grafico": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 440
+    },
+    "areas": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 124
+    },
+    "cuando": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 178
+    },
+    "regimen": {
+     "existe": true,
+     "a_la_vista": 0.0,
+     "arriba_px": 858
+    },
+    "respuesta": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 182
+    }
+   },
+   "primera_pantalla": {
+    "controles": 19,
+    "controles_lista": [
+     "Curva, pronóstico de la demanda eléctric",
+     "Ahora",
+     "Confianza",
+     "Detalle",
+     "Modelo y datos: la ficha técnica",
+     "Cambiar a modo oscuro",
+     "¿Y si hace más calor?",
+     "Norte",
+     "Centro",
+     "Sur",
+     "Hoy",
+     "Ayer",
+     "Hace una semana",
+     "Ver otro día",
+     "Elegir el día en un calendario",
+     "A las",
+     "Todas las cifras de ese día",
+     "Referencia (semana pasada)",
+     "Mostrar lo que pasó después"
+    ],
+    "cifras": {
+     "magnitudes": 12,
+     "horas": 5,
+     "fechas": 2,
+     "en_el_grafico": 10
+    },
+    "palabras": 263,
+    "pantallas_de_alto": 1.95
+   },
+   "terminos": [
+    {
+     "termino": "COES",
+     "definido_en_pantalla": true,
+     "definido_a_la_vista": true
+    },
+    {
+     "termino": "MW",
+     "definido_en_pantalla": true,
+     "definido_a_la_vista": true
+    },
+    {
+     "termino": "rango del N %",
+     "definido_en_pantalla": true,
+     "definido_a_la_vista": true
+    },
+    {
+     "termino": "referencia",
+     "definido_en_pantalla": true,
+     "definido_a_la_vista": false
+    },
+    {
+     "termino": "repaso",
+     "definido_en_pantalla": true,
+     "definido_a_la_vista": true
+    }
+   ],
+   "prueba_5s": [
+    {
+     "pregunta": "¿Qué es esto?",
+     "a_la_vista": true,
+     "cuota_7s": 0.052,
+     "responde": true
+    },
+    {
+     "pregunta": "¿De qué zona habla?",
+     "a_la_vista": true,
+     "cuota_7s": 0.129,
+     "responde": true
+    },
+    {
+     "pregunta": "¿Cuánta demanda hay ahora?",
+     "a_la_vista": true,
+     "cuota_7s": 0.061,
+     "responde": true
+    },
+    {
+     "pregunta": "¿Es real o pronóstico, y hasta cuándo hay datos?",
+     "a_la_vista": true,
+     "cuota_7s": 0.057,
+     "responde": true
+    },
+    {
+     "pregunta": "¿Viene más o menos demanda?",
+     "a_la_vista": true,
+     "cuota_7s": 0.195,
+     "responde": true
+    },
+    {
+     "pregunta": "¿Qué puedo hacer aquí?",
+     "a_la_vista": true,
+     "cuota_7s": 0.018,
+     "responde": true,
+     "control_mas_mirado": "Todas las cifras de ese día"
+    }
+   ],
+   "controles_mas_mirados": [
+    {
+     "control": "Curva, pronóstico de la demanda eléctric",
+     "cuota_3s": 0.087,
+     "lift": 4.56
+    },
+    {
+     "control": "Todas las cifras de ese día",
+     "cuota_3s": 0.018,
+     "lift": 2.01
+    },
+    {
+     "control": "¿Y si hace más calor?",
+     "cuota_3s": 0.009,
+     "lift": 2.16
+    },
+    {
+     "control": "Ahora",
+     "cuota_3s": 0.003,
+     "lift": 0.98
+    },
+    {
+     "control": "Ver otro día",
+     "cuota_3s": 0.002,
+     "lift": 0.39
+    }
+   ],
+   "primer_clic": [
+    {
+     "tarea": "T1 pronóstico de un día pasado (10-mar, 19:00)",
+     "predicho": "Elegir el día en un calendario",
+     "por": "palabras",
+     "acierta": false,
+     "destino_a_la_vista": true,
+     "destino_olor": 1
+    },
+    {
+     "tarea": "T2 ¿me puedo fiar del número?",
+     "predicho": "Confianza",
+     "por": "palabras",
+     "acierta": true,
+     "destino_a_la_vista": true,
+     "destino_olor": 1
+    },
+    {
+     "tarea": "T3 ¿y si hace 2 °C más?",
+     "predicho": "¿Y si hace más calor?",
+     "por": "palabras",
+     "acierta": true,
+     "destino_a_la_vista": true,
+     "destino_olor": 1
+    },
+    {
+     "tarea": "T4 ¿con qué fase de El Niño yerra más?",
+     "predicho": "Curva, pronóstico de la demanda eléctric",
+     "por": "atención",
+     "acierta": false,
+     "destino_a_la_vista": true,
+     "destino_olor": 0
+    },
+    {
+     "tarea": "T5 ver la demanda del Sur",
+     "predicho": "Sur",
+     "por": "palabras",
+     "acierta": true,
+     "destino_a_la_vista": true,
+     "destino_olor": 1
+    },
+    {
+     "tarea": "T6 descargar los datos",
+     "predicho": "Modelo y datos: la ficha técnica",
+     "por": "palabras",
+     "acierta": false,
+     "destino_a_la_vista": false,
+     "destino_olor": 0
+    }
+   ],
+   "lectura": {
+    "bloques": 10,
+    "ch_linea_mediana": 41.5,
+    "ch_linea_max": 133,
+    "sobre_80": [
+     "p#ahModo.modo-linea 91",
+     "p#ahPie.pie-nota 133"
+    ],
+    "bajo_25": [
+     "p.enlaces 12"
+    ]
+   },
+   "color": {
+    "tokens": 27,
+    "usados": 20,
+    "fuera_del_sistema": {},
+    "mezclas_derivadas": 1
+   },
+   "tipografia": {
+    "tamanos": [
+     11.0,
+     12.0,
+     13.0,
+     14.0,
+     15.0,
+     16.0,
+     18.0,
+     20.0,
+     28.0,
+     56.0
+    ],
+    "n_tamanos": 10,
+    "familias": [
+     "system-ui"
+    ]
+   },
+   "desborde": {
+    "horizontal_px": 0,
+    "elementos": []
+   },
+   "orientacion": {
+    "pantalla_marcada": [
+     "Ahora",
+     "Centro"
+    ],
+    "estado_datos": "Repaso · 10/03/2026, 10:30Repaso 10/03/26 10:30"
+   }
+  },
+  "ahora_dia-movil-light": {
+   "atencion": {
+    "1s": {
+     "cifra_ahora": {
+      "cuota": 0.1274,
+      "area": 0.0287,
+      "lift": 4.44
+     },
+     "pico_24h": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "linea_ahora": {
+      "cuota": 0.0004,
+      "area": 0.0028,
+      "lift": 0.14
+     },
+     "estado_datos": {
+      "cuota": 0.0096,
+      "area": 0.0147,
+      "lift": 0.65
+     },
+     "dijimos_ayer": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "titulo": {
+      "cuota": 0.2105,
+      "area": 0.0811,
+      "lift": 2.6
+     },
+     "que_es": {
+      "cuota": 0.0816,
+      "area": 0.0261,
+      "lift": 3.12
+     },
+     "modo": {
+      "cuota": 0.0553,
+      "area": 0.0851,
+      "lift": 0.65
+     },
+     "otras_cifras": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "rotulos": {
+      "cuota": 0.0011,
+      "area": 0.0057,
+      "lift": 0.19
+     },
+     "grafico": {
+      "cuota": 0.0092,
+      "area": 0.0798,
+      "lift": 0.11
+     },
+     "areas": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "cuando": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "regimen": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "respuesta": {
+      "cuota": 0.1409,
+      "area": 0.091,
+      "lift": 1.55
+     },
+     "fijo": {
+      "cuota": 0.0029,
+      "area": 0.0653,
+      "lift": 0.04
+     },
+     "controles": {
+      "cuota": 0.0167,
+      "area": 0.0683,
+      "lift": 0.24
+     },
+     "texto": {
+      "cuota": 0.0495,
+      "area": 0.0469,
+      "lift": 1.06
+     },
+     "resto": {
+      "cuota": 0.295,
+      "area": 0.4045,
+      "lift": 0.73
+     }
+    },
+    "3s": {
+     "cifra_ahora": {
+      "cuota": 0.111,
+      "area": 0.0287,
+      "lift": 3.87
+     },
+     "pico_24h": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "linea_ahora": {
+      "cuota": 0.0005,
+      "area": 0.0028,
+      "lift": 0.17
+     },
+     "estado_datos": {
+      "cuota": 0.025,
+      "area": 0.0147,
+      "lift": 1.7
+     },
+     "dijimos_ayer": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "titulo": {
+      "cuota": 0.2413,
+      "area": 0.0811,
+      "lift": 2.97
+     },
+     "que_es": {
+      "cuota": 0.1152,
+      "area": 0.0261,
+      "lift": 4.41
+     },
+     "modo": {
+      "cuota": 0.0362,
+      "area": 0.0851,
+      "lift": 0.42
+     },
+     "otras_cifras": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "rotulos": {
+      "cuota": 0.0011,
+      "area": 0.0057,
+      "lift": 0.19
+     },
+     "grafico": {
+      "cuota": 0.0079,
+      "area": 0.0798,
+      "lift": 0.1
+     },
+     "areas": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "cuando": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "regimen": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "respuesta": {
+      "cuota": 0.1108,
+      "area": 0.091,
+      "lift": 1.22
+     },
+     "fijo": {
+      "cuota": 0.0025,
+      "area": 0.0653,
+      "lift": 0.04
+     },
+     "controles": {
+      "cuota": 0.0128,
+      "area": 0.0683,
+      "lift": 0.19
+     },
+     "texto": {
+      "cuota": 0.0382,
+      "area": 0.0469,
+      "lift": 0.81
+     },
+     "resto": {
+      "cuota": 0.2978,
+      "area": 0.4045,
+      "lift": 0.74
+     }
+    },
+    "7s": {
+     "cifra_ahora": {
+      "cuota": 0.0735,
+      "area": 0.0287,
+      "lift": 2.56
+     },
+     "pico_24h": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "linea_ahora": {
+      "cuota": 0.0011,
+      "area": 0.0028,
+      "lift": 0.4
+     },
+     "estado_datos": {
+      "cuota": 0.0185,
+      "area": 0.0147,
+      "lift": 1.26
+     },
+     "dijimos_ayer": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "titulo": {
+      "cuota": 0.1674,
+      "area": 0.0811,
+      "lift": 2.06
+     },
+     "que_es": {
+      "cuota": 0.0637,
+      "area": 0.0261,
+      "lift": 2.44
+     },
+     "modo": {
+      "cuota": 0.0799,
+      "area": 0.0851,
+      "lift": 0.94
+     },
+     "otras_cifras": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "rotulos": {
+      "cuota": 0.0053,
+      "area": 0.0057,
+      "lift": 0.93
+     },
+     "grafico": {
+      "cuota": 0.0292,
+      "area": 0.0798,
+      "lift": 0.37
+     },
+     "areas": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "cuando": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "regimen": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "respuesta": {
+      "cuota": 0.1215,
+      "area": 0.091,
+      "lift": 1.33
+     },
+     "fijo": {
+      "cuota": 0.0091,
+      "area": 0.0653,
+      "lift": 0.14
+     },
+     "controles": {
+      "cuota": 0.0481,
+      "area": 0.0683,
+      "lift": 0.7
+     },
+     "texto": {
+      "cuota": 0.0702,
+      "area": 0.0469,
+      "lift": 1.5
+     },
+     "resto": {
+      "cuota": 0.3123,
+      "area": 0.4045,
+      "lift": 0.77
+     }
+    }
+   },
+   "aoi": {
+    "cifra_ahora": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 163
+    },
+    "pico_24h": {
+     "existe": false,
+     "a_la_vista": 0.0,
+     "arriba_px": null
+    },
+    "linea_ahora": {
+     "existe": true,
+     "a_la_vista": 0.202,
+     "arriba_px": 680
+    },
+    "estado_datos": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 10
+    },
+    "dijimos_ayer": {
+     "existe": true,
+     "a_la_vista": 0.0,
+     "arriba_px": 1494
+    },
+    "titulo": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 72
+    },
+    "que_es": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 3
+    },
+    "modo": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 367
+    },
+    "otras_cifras": {
+     "existe": false,
+     "a_la_vista": 0.0,
+     "arriba_px": null
+    },
+    "rotulos": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 682
+    },
+    "grafico": {
+     "existe": true,
+     "a_la_vista": 0.335,
+     "arriba_px": 672
+    },
+    "areas": {
+     "existe": true,
+     "a_la_vista": 0.0,
+     "arriba_px": 1267
+    },
+    "cuando": {
+     "existe": true,
+     "a_la_vista": 0.0,
+     "arriba_px": 1329
+    },
+    "regimen": {
+     "existe": true,
+     "a_la_vista": 0.0,
+     "arriba_px": 1212
+    },
+    "respuesta": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 251
+    }
+   },
+   "primera_pantalla": {
+    "controles": 8,
+    "controles_lista": [
+     "Curva, pronóstico de la demanda eléctric",
+     "Ahora",
+     "Confianza",
+     "Detalle",
+     "Cambiar a modo oscuro",
+     "¿Y si hace más calor?",
+     "Referencia (semana pasada)",
+     "Mostrar lo que pasó después"
+    ],
+    "cifras": {
+     "magnitudes": 10,
+     "horas": 4,
+     "fechas": 1,
+     "en_el_grafico": 2
+    },
+    "palabras": 145,
+    "pantallas_de_alto": 3.71
+   },
+   "terminos": [
+    {
+     "termino": "COES",
+     "definido_en_pantalla": true,
+     "definido_a_la_vista": true
+    },
+    {
+     "termino": "MW",
+     "definido_en_pantalla": true,
+     "definido_a_la_vista": true
+    },
+    {
+     "termino": "rango del N %",
+     "definido_en_pantalla": true,
+     "definido_a_la_vista": true
+    },
+    {
+     "termino": "referencia",
+     "definido_en_pantalla": true,
+     "definido_a_la_vista": false
+    },
+    {
+     "termino": "repaso",
+     "definido_en_pantalla": true,
+     "definido_a_la_vista": true
+    }
+   ],
+   "prueba_5s": [
+    {
+     "pregunta": "¿Qué es esto?",
+     "a_la_vista": true,
+     "cuota_7s": 0.064,
+     "responde": true
+    },
+    {
+     "pregunta": "¿De qué zona habla?",
+     "a_la_vista": true,
+     "cuota_7s": 0.167,
+     "responde": true
+    },
+    {
+     "pregunta": "¿Cuánta demanda hay ahora?",
+     "a_la_vista": true,
+     "cuota_7s": 0.074,
+     "responde": true
+    },
+    {
+     "pregunta": "¿Es real o pronóstico, y hasta cuándo hay datos?",
+     "a_la_vista": true,
+     "cuota_7s": 0.104,
+     "responde": true
+    },
+    {
+     "pregunta": "¿Viene más o menos demanda?",
+     "a_la_vista": true,
+     "cuota_7s": 0.029,
+     "responde": false
+    },
+    {
+     "pregunta": "¿Qué puedo hacer aquí?",
+     "a_la_vista": true,
+     "cuota_7s": 0.034,
+     "responde": true,
+     "control_mas_mirado": "¿Y si hace más calor?"
+    }
+   ],
+   "controles_mas_mirados": [
+    {
+     "control": "Curva, pronóstico de la demanda eléctric",
+     "cuota_3s": 0.115,
+     "lift": 4.41
+    },
+    {
+     "control": "¿Y si hace más calor?",
+     "cuota_3s": 0.034,
+     "lift": 1.42
+    },
+    {
+     "control": "Referencia (semana pasada)",
+     "cuota_3s": 0.007,
+     "lift": 0.22
+    },
+    {
+     "control": "Mostrar lo que pasó después",
+     "cuota_3s": 0.005,
+     "lift": 0.16
+    },
+    {
+     "control": "Cambiar a modo oscuro",
+     "cuota_3s": 0.001,
+     "lift": 0.2
+    }
+   ],
+   "primer_clic": [
+    {
+     "tarea": "T1 pronóstico de un día pasado (10-mar, 19:00)",
+     "predicho": "Curva, pronóstico de la demanda eléctric",
+     "por": "palabras",
+     "acierta": false,
+     "destino_a_la_vista": false,
+     "destino_olor": 0
+    },
+    {
+     "tarea": "T2 ¿me puedo fiar del número?",
+     "predicho": "Confianza",
+     "por": "palabras",
+     "acierta": true,
+     "destino_a_la_vista": true,
+     "destino_olor": 1
+    },
+    {
+     "tarea": "T3 ¿y si hace 2 °C más?",
+     "predicho": "¿Y si hace más calor?",
+     "por": "palabras",
+     "acierta": true,
+     "destino_a_la_vista": true,
+     "destino_olor": 1
+    },
+    {
+     "tarea": "T4 ¿con qué fase de El Niño yerra más?",
+     "predicho": "Curva, pronóstico de la demanda eléctric",
+     "por": "atención",
+     "acierta": false,
+     "destino_a_la_vista": true,
+     "destino_olor": 0
+    },
+    {
+     "tarea": "T5 ver la demanda del Sur",
+     "predicho": "Curva, pronóstico de la demanda eléctric",
+     "por": "atención",
+     "acierta": false,
+     "destino_a_la_vista": false,
+     "destino_olor": 0
+    },
+    {
+     "tarea": "T6 descargar los datos",
+     "predicho": "Curva, pronóstico de la demanda eléctric",
+     "por": "atención",
+     "acierta": false,
+     "destino_a_la_vista": false,
+     "destino_olor": 0
+    }
+   ],
+   "lectura": {
+    "bloques": 11,
+    "ch_linea_mediana": 38,
+    "ch_linea_max": 53,
+    "sobre_80": [],
+    "bajo_25": [
+     "p.enlaces 12"
+    ]
+   },
+   "color": {
+    "tokens": 27,
+    "usados": 19,
+    "fuera_del_sistema": {},
+    "mezclas_derivadas": 0
+   },
+   "tipografia": {
+    "tamanos": [
+     11.0,
+     12.0,
+     13.0,
+     14.0,
+     16.0,
+     18.0,
+     20.0,
+     28.0,
+     40.0
+    ],
+    "n_tamanos": 9,
+    "familias": [
+     "system-ui"
+    ]
+   },
+   "desborde": {
+    "horizontal_px": 0,
+    "elementos": []
+   },
+   "orientacion": {
+    "pantalla_marcada": [
+     "Ahora"
+    ],
+    "estado_datos": "Repaso · 10/03/2026, 10:30Repaso 10/03/26 10:30"
+   }
+  }
+ },
+ "consistencia": {
+  "escritorio-light": {},
+  "movil-light": {}
+ },
+ "vocabulario": {
+  "inicio": {
+   "el pronóstico": [
+    "Pronóstico"
+   ],
+   "el rango": [
+    "Rango del N %"
+   ],
+   "la referencia": [
+    "Referencia (…)"
+   ],
+   "el máximo del día": [],
+   "el error": []
+  },
+  "ahora": {
+   "el pronóstico": [
+    "Pronóstico"
+   ],
+   "el rango": [
+    "Rango del N %"
+   ],
+   "la referencia": [
+    "Referencia (…)"
+   ],
+   "el máximo del día": [],
+   "el error": []
+  },
+  "ahora_dia": {
+   "el pronóstico": [
+    "Pronóstico"
+   ],
+   "el rango": [
+    "Rango del N %"
+   ],
+   "la referencia": [
+    "Referencia (…)"
+   ],
+   "el máximo del día": [],
+   "el error": []
+  }
+ }
+}

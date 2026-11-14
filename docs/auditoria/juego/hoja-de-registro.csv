@@ -1,0 +1,11 @@
+sesion,participante,perfil,dispositivo,ronda,version,bloque,tarea,paso,pantalla,primer_clic_texto,resultado_clic,segundos_al_primer_clic,lectura_copiada,lectura_correcta,completo_sin_ayuda,segundos_tarea,facilidad_1a7,duda_donde,duda_que,palabras_no_entendidas,tipo_tropiezo,severidad_1a4,cita_breve,notas
+1,P1,ciudadano,laptop,1,punta,5s,,,hoy,,,,,,,,,,,,,,,
+1,P1,ciudadano,laptop,1,punta,primer_clic,t1,1,hoy,,,,,,,,,,,,,,,
+1,P1,ciudadano,laptop,1,punta,primer_clic,t2,1,hoy,,,,,,,,,,,,,,,
+1,P1,ciudadano,laptop,1,punta,primer_clic,t3,1,repaso-1900,,,,,,,,,,,,,,,
+1,P1,ciudadano,laptop,1,punta,primer_clic,t4,1,hoy,,,,,,,,,,,,,,,
+1,P1,ciudadano,laptop,1,punta,tarea,t1,,hoy,,,,,,,,,,,,,,,
+1,P1,ciudadano,laptop,1,punta,tarea,t2,,hoy,,,,,,,,,,,,,,,
+1,P1,ciudadano,laptop,1,punta,tarea,t3,,repaso-1900,,,,,,,,,,,,,,,
+1,P1,ciudadano,laptop,1,punta,tarea,t4,,hoy,,,,,,,,,,,,,,,
+1,P1,ciudadano,laptop,1,punta,cierre,,,,,,,,,,,,,,,,,,
