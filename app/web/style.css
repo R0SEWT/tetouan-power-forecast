@@ -22,7 +22,8 @@
   --ring: rgba(14, 23, 38, 0.1);
   --pron: #2a78d6;
   --pron-texto: #1f63b8;
-  --pron-band: rgba(42, 120, 214, 0.16);
+  --pron-band: rgba(42, 120, 214, 0.38); /* la banda del gráfico: 1.63:1 contra el fondo del futuro (antes 1.22:1) */
+  --pron-linea: var(--pron-texto); /* la línea del pronóstico sobre esa banda: 3.42:1 (antes 3.41:1) */
   --pron-band-2: rgba(42, 120, 214, 0.28);
   --ref: #d65a24;
   --real: var(--ink);
@@ -89,6 +90,7 @@
   --pron: #4a93ea;
   --pron-texto: #7db3f2;
   --pron-band: rgba(74, 147, 234, 0.2);
+  --pron-linea: var(--pron);
   --pron-band-2: rgba(74, 147, 234, 0.34);
   --ref: #e0703d;
   --real-fill: rgba(238, 242, 246, 0.07);
@@ -785,6 +787,22 @@ a {
   font-weight: 600;
 }
 
+.chip-enlace {
+  color: var(--pron-texto);
+  text-decoration: none;
+}
+
+.chip-enlace:hover {
+  border-color: var(--axis);
+  text-decoration: underline;
+}
+
+@media (pointer: coarse) {
+  .chip-enlace {
+    min-height: 44px;
+  }
+}
+
 .veredicto {
   display: flex;
   gap: 10px;
@@ -1070,7 +1088,7 @@ a {
 }
 
 .mk.pron {
-  border-color: var(--pron);
+  border-color: var(--pron-linea);
 }
 
 .mk.ref {
@@ -1147,6 +1165,10 @@ a {
   fill: var(--pron-band);
 }
 
+.g-banda.pasada {
+  fill-opacity: 0.5;
+}
+
 .g-real-relleno {
   fill: var(--real-fill);
 }
@@ -1159,7 +1181,7 @@ a {
 }
 
 .lienzo .ln-pronostico {
-  stroke: var(--pron);
+  stroke: var(--pron-linea);
   stroke-width: 2.6;
   stroke-linejoin: round;
   fill: none;
@@ -1188,7 +1210,65 @@ a {
 
 .g-ahora {
   stroke: var(--ink);
-  stroke-width: 1.5;
+  stroke-width: 2.5;
+}
+
+/* El hito de «ahora»: halo alrededor del punto y su valor en una pastilla (tinta si es real, azul si es pronóstico) */
+.g-ahora-halo {
+  fill: var(--pron-linea);
+  fill-opacity: 0.2;
+}
+
+.g-ahora-halo.real {
+  fill: var(--ink);
+}
+
+.g-ahora-punto {
+  stroke-width: 2.5;
+}
+
+.g-ahora-valor {
+  fill: var(--pron-linea);
+}
+
+.g-ahora-valor.real {
+  fill: var(--ink);
+}
+
+.g-ahora-valor-texto {
+  fill: var(--surface);
+  font-size: 15px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Lo real y lo pronosticado, rotulados sobre sus líneas en su propio color */
+.g-rotulo {
+  font-size: 13px;
+  font-weight: 700;
+  paint-order: stroke;
+  stroke: var(--surface);
+  stroke-width: 4px;
+  stroke-linejoin: round;
+}
+
+.g-rotulo.real {
+  fill: var(--ink);
+}
+
+.g-rotulo.pron {
+  fill: var(--pron-linea);
+}
+
+.g-rotulo-resto {
+  fill: var(--ink-2);
+  font-weight: 600;
+}
+
+/* El conector del rótulo de la rampa */
+.g-conector {
+  stroke: var(--ink-2);
+  stroke-width: 1;
 }
 
 .g-corte {
@@ -1203,12 +1283,12 @@ a {
 
 .g-pastilla-texto {
   fill: var(--surface);
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 700;
 }
 
 .g-punto {
-  fill: var(--pron);
+  fill: var(--pron-linea);
   stroke: var(--surface);
   stroke-width: 2;
 }
@@ -1237,6 +1317,42 @@ a {
 
 .g-cruz {
   stroke: var(--muted);
+}
+
+/* Elegir la hora en el gráfico: el gesto horizontal es del gráfico y el vertical sigue desplazando la página */
+.lienzo {
+  touch-action: pan-y;
+  cursor: crosshair;
+  -webkit-user-select: none;
+  user-select: none; /* arrastrar no selecciona los textos del gráfico */
+}
+
+.lienzo.elige-hora {
+  cursor: col-resize;
+}
+
+.lienzo.elige-hora .g-cruz {
+  stroke: var(--ink);
+  stroke-width: 1.5;
+  stroke-dasharray: 4 3;
+}
+
+.g-cursor-pastilla {
+  fill: var(--ink-2);
+}
+
+.lienzo.siguiendo .g-hora-eje {
+  opacity: 0.25;
+}
+
+/* La respuesta mientras se elige otra hora: la cifra ya es la de esa hora; la frase, de la hora fijada, se atenúa */
+.resp-dia.siguiendo .r-frase {
+  opacity: 0.4;
+}
+
+.r-dia {
+  color: var(--muted);
+  font-weight: 600;
 }
 
 .tip {
@@ -1700,6 +1816,28 @@ table.t tr.fila-elegida td {
   order: 3;
 }
 
+.bajo-grafico {
+  grid-column: 1 / -1;
+  order: 1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 8px 16px;
+}
+
+.bajo-grafico .titulo-fila {
+  min-height: 44px;
+  align-items: center;
+}
+
+.bajo-grafico .todas {
+  margin: 0;
+}
+
+.bajo-grafico .todas[open] {
+  flex-basis: 100%;
+}
+
 @media (max-width: 760px) {
   .estado {
     max-width: none;
@@ -1953,7 +2091,7 @@ input[type='time']:focus-within,
 }
 
 .pregunta {
-  max-width: 40ch;
+  max-width: 50ch;
 }
 
 .resp-dia {
@@ -2009,10 +2147,6 @@ input[type='time']:focus-within,
   font-size: 18px;
   line-height: 1.35;
   color: var(--ink);
-}
-
-#ahDespuesCampo {
-  margin-bottom: 8px;
 }
 
 .mandos {
@@ -2098,6 +2232,10 @@ input[type='time']:focus-within,
     order: 3;
   }
 
+  .bajo-grafico {
+    order: 4;
+  }
+
   .todas {
     order: 4;
     margin: 0;
@@ -2146,3 +2284,122 @@ input[type='time']:focus-within,
   }
 }
 
+
+/* ---- Ahora: el selector propio de fecha y hora (dd/mm/aaaa, 24 h) y sus atajos ---- */
+/* Atajos en su fila y, debajo, el día y la hora: el bloque no es más ancho que su fila más ancha */
+#vistaAhora .cuando {
+  display: grid;
+  grid-template-columns: auto auto;
+  justify-content: end;
+  align-items: end;
+}
+
+.atajos {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 6px;
+}
+
+.campo-con-boton {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  width: 9.75rem;
+}
+
+.campo-fecha input[type='text'] {
+  width: 100%;
+  padding-right: 44px;
+  font-variant-numeric: tabular-nums;
+}
+
+.campo-hora input[type='text'] {
+  width: 4.5rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.campo input[aria-invalid='true'] {
+  border-color: var(--crit);
+  box-shadow: 0 0 0 1px var(--crit) inset;
+}
+
+.btn-calendario {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  border: 0;
+  border-radius: 0 var(--r-m) var(--r-m) 0;
+  background: transparent;
+  color: var(--ink-2);
+  cursor: pointer;
+}
+
+.btn-calendario:hover {
+  color: var(--ink);
+}
+
+.fecha-nativa {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  border: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.ayuda-fecha {
+  grid-column: 1 / -1;
+  font-size: 12px;
+  color: var(--muted);
+  text-align: right;
+}
+
+/* La ayuda de cómo escribir aparece al escribir (no suma palabras a la pantalla mientras tanto); un error, siempre */
+.cuando:not(:focus-within) .ayuda-fecha:not(.error) {
+  visibility: hidden;
+}
+
+.ayuda-fecha.error {
+  color: var(--crit);
+  font-weight: 600;
+}
+
+@media (pointer: coarse) {
+  .btn-calendario {
+    width: 44px;
+  }
+
+  .campo-con-boton input,
+  .campo-hora input {
+    min-height: 44px;
+  }
+}
+
+@media (max-width: 760px) {
+  .ayuda-fecha {
+    text-align: left;
+  }
+
+  /* En el celular, el día y la hora primero (donde estaban) y los atajos debajo */
+  .atajos {
+    order: 1;
+    justify-content: flex-start;
+  }
+
+  .ayuda-fecha {
+    order: 2;
+  }
+
+  #vistaAhora .cuando {
+    justify-content: start;
+  }
+}
