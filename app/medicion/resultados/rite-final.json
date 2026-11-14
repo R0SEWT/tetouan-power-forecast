@@ -1,7 +1,7 @@
 {
   "etiqueta": "rite-final",
   "version": "pr06",
-  "fecha": "2026-11-14T10:13:21.912Z",
+  "fecha": "2026-11-14T10:21:17.018Z",
   "modelo": "Combinado: Chronos-2 ajustado + híbrido",
   "caso": {
     "area": "centro",
@@ -38,7 +38,7 @@
         "escrituras": 1,
         "pulsaciones": 4,
         "desplazamientos": 0,
-        "segundos_robot": 1.21,
+        "segundos_robot": 1.14,
         "segundos_klm": 5.5
       },
       "movil": {
@@ -51,7 +51,7 @@
         "escrituras": 1,
         "pulsaciones": 4,
         "desplazamientos": 1,
-        "segundos_robot": 1.45,
+        "segundos_robot": 1.37,
         "segundos_klm": 6.5
       }
     },
@@ -78,7 +78,7 @@
         "escrituras": 0,
         "pulsaciones": 0,
         "desplazamientos": 0,
-        "segundos_robot": 0.2,
+        "segundos_robot": 0.17,
         "segundos_klm": 2.7
       },
       "movil": {
@@ -126,7 +126,7 @@
         "escrituras": 0,
         "pulsaciones": 0,
         "desplazamientos": 0,
-        "segundos_robot": 1.06,
+        "segundos_robot": 1.03,
         "segundos_klm": 5.3
       }
     },
@@ -150,7 +150,7 @@
         "escrituras": 0,
         "pulsaciones": 0,
         "desplazamientos": 0,
-        "segundos_robot": 0.56,
+        "segundos_robot": 0.55,
         "segundos_klm": 2.7
       },
       "movil": {
@@ -163,7 +163,7 @@
         "escrituras": 0,
         "pulsaciones": 0,
         "desplazamientos": 1,
-        "segundos_robot": 0.74,
+        "segundos_robot": 0.77,
         "segundos_klm": 3.7
       }
     }
@@ -172,13 +172,13 @@
     "local": {
       "grafico_ms": 90,
       "grafico_rango_ms": [
-        85,
-        96
+        87,
+        91
       ],
       "respuesta_ms": 93,
       "respuesta_rango_ms": [
-        89,
-        98
+        90,
+        94
       ]
     },
     "peticiones": 11,
@@ -191,15 +191,15 @@
     },
     "peticiones_a_terceros": 0,
     "red_lenta": {
-      "grafico_ms": 714,
+      "grafico_ms": 695,
       "grafico_rango_ms": [
-        707,
-        762
+        690,
+        702
       ],
-      "respuesta_ms": 726,
+      "respuesta_ms": 708,
       "respuesta_rango_ms": [
-        724,
-        788
+        702,
+        714
       ]
     }
   },
