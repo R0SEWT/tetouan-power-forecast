@@ -1,14 +1,24 @@
 <!DOCTYPE html>
-<html lang="es" data-theme="dark">
+<html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Demanda del SEIN por área</title>
-  <meta name="description" content="Pronóstico de la demanda eléctrica de las áreas Norte, Centro y Sur del SEIN, a 1 hora y a 24 horas.">
-  <meta name="theme-color" content="#0e1117">
+  <title>Curva · Demanda del SEIN por áreas</title>
+  <meta name="description" content="Curva: el pronóstico abierto de la demanda del SEIN por áreas. Cuánta demanda viene hoy y mañana en Norte, Centro y Sur, con su rango y su error publicado.">
+  <meta name="theme-color" content="#f4f6f8">
+  <meta name="color-scheme" content="light dark">
   <link rel="manifest" href="manifest.json">
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230e1117'/%3E%3Cpath d='M9 44 20 31l10 6 12-18 13 8' fill='none' stroke='%23D55E00' stroke-width='5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='15' fill='%230e1726'/%3E%3Cpath d='M10 42c7 0 9-20 17-20s8 16 14 16 7-12 13-14' fill='none' stroke='%23fff' stroke-width='5' stroke-linecap='round'/%3E%3Ccircle cx='54' cy='24' r='5' fill='%234a93ea'/%3E%3C/svg%3E">
 
+  <!-- Tema antes de pintar (sin parpadeo): el guardado o, si no hay, el del sistema -->
+  <script>
+    (() => {
+      let t = null;
+      try { t = localStorage.getItem('tpf-tema'); } catch { /* sin almacenamiento */ }
+      if (t !== 'light' && t !== 'dark') t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      document.documentElement.dataset.theme = t;
+    })();
+  </script>
   <!-- Pide los datos de arranque mientras baja app.js (lo que más pesa en una red lenta): app.js los reutiliza -->
   <script>
     (() => {
@@ -16,12 +26,21 @@
       const api = u ? u.replace(/\/+$/, '') : (location.protocol === 'file:' || !location.hostname
         ? 'http://localhost:8000' : `${location.protocol}//${location.hostname}:8000`);
       const rutas = ['/salud', '/areas', '/resumen', '/modelos'];
-      const m = location.hash.match(/^#\/area\/([^?]+)\?(.*)$/);
-      if (m) {
-        const h = new URLSearchParams(m[2]);
-        const q = new URLSearchParams();
-        ['fecha', 'horizonte', 'variante', 'modelo'].forEach((k) => { if (h.get(k)) q.set(k, h.get(k)); });
-        if (q.get('fecha') && q.get('horizonte') && q.get('variante')) rutas.push(`/series/${m[1]}?${q}`);
+      const h = location.hash || '#/';
+      const m = h.match(/^#\/(ahora|area|confianza)\/([^?]+)(?:\?(.*))?$/);
+      const area = m ? m[2] : (() => { try { return localStorage.getItem('tpf-area') || 'centro'; } catch { return 'centro'; } })();
+      const q = new URLSearchParams(m && m[3] ? m[3] : '');
+      if (!m || m[1] === 'ahora') {
+        // «Ahora» de las tres áreas: la elegida primero (de ella sale el número)
+        const extra = new URLSearchParams();
+        if (q.get('fecha') && q.get('hora')) extra.set('origen', `${q.get('fecha')}T${q.get('hora')}`);
+        if (q.get('modelo')) extra.set('modelo', q.get('modelo'));
+        const cola = extra.toString() ? `?${extra}` : '';
+        [area, ...['norte', 'centro', 'sur'].filter((a) => a !== area)].forEach((a) => rutas.push(`/ahora/${a}${cola}`));
+      } else if (m[1] === 'area') {
+        const s = new URLSearchParams();
+        ['fecha', 'horizonte', 'variante', 'modelo'].forEach((k) => { if (q.get(k)) s.set(k, q.get(k)); });
+        if (s.get('fecha') && s.get('horizonte') && s.get('variante')) rutas.push(`/series/${area}?${s}`);
       }
       window.PRECARGA = new Map(rutas.map((r) => [r, fetch(api + r).catch(() => null)]));
     })();
@@ -30,63 +49,150 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <a class="saltar" href="#respuesta" id="saltar">Saltar al pronóstico</a>
+  <a class="saltar" href="#principal" id="saltar">Saltar al contenido</a>
   <div id="app" class="app">
 
-    <!-- Barra superior con chips -->
-    <header class="hud-top">
-      <div class="hud-row">
-        <a class="hud-brand" href="#/" aria-label="Ir al inicio">
-          <span class="brand-badge">SEIN</span>
-          <span class="brand-sub">Demanda por área</span>
+    <header class="cab">
+      <div class="cab-in">
+        <a class="cab-marca" href="#/" aria-label="Curva, demanda del SEIN por áreas: ir a «Ahora»">
+          <svg width="30" height="30" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="15" fill="currentColor"/><path d="M10 42c7 0 9-20 17-20s8 16 14 16 7-12 13-14" fill="none" stroke="var(--surface)" stroke-width="5" stroke-linecap="round"/><circle cx="54" cy="24" r="5" fill="var(--pron)"/></svg>
+          <b>Curva</b><span class="marca-sub">Demanda del SEIN por áreas</span>
         </a>
-        <div class="hud-actions">
-          <button id="btnFicha" class="chip-btn icon-only" type="button" aria-label="Abrir la ficha técnica" title="Ficha técnica">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+        <nav class="nav" id="navPantallas" aria-label="Pantallas">
+          <a href="#/" data-nav="ahora">Ahora</a>
+          <a href="#/confianza/centro" data-nav="confianza">Confianza</a>
+          <a href="#/area/centro" data-nav="detalle">Detalle</a>
+        </nav>
+        <div class="cab-der">
+          <span id="estadoDatos" class="estado" hidden><i aria-hidden="true"></i><span class="txt" id="estadoTxt"></span></span>
+          <button id="btnFicha" class="icono" type="button" aria-label="Modelo y datos: la ficha técnica" title="Modelo y datos">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
           </button>
-          <button id="btnTema" class="chip-btn icon-only" type="button" aria-label="Cambiar a modo claro" title="Modo claro u oscuro">
-            <svg id="iconoLuna" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-            <svg id="iconoSol" hidden width="16" height="16" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+          <button id="btnTema" class="icono" type="button" aria-label="Cambiar a modo oscuro" title="Modo claro u oscuro">
+            <svg id="iconoLuna" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+            <svg id="iconoSol" hidden width="18" height="18" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
           </button>
         </div>
-      </div>
-      <div class="hud-chips">
-        <button id="chipRegimen" class="chip-btn" type="button" aria-haspopup="dialog">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"/></svg>
-          <span id="chipRegimenTxt">El Niño: cargando…</span>
-        </button>
-        <span id="chipPrueba" class="chip-static chip-aviso" hidden title="El backend corre el modelo de prueba con datos sintéticos">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 3h6M10 3v6L4.5 18.5A1.7 1.7 0 0 0 6 21h12a1.7 1.7 0 0 0 1.5-2.5L14 9V3"/></svg>
-          Datos de prueba
-        </span>
       </div>
     </header>
 
     <div id="bannerError" class="banner-error" role="alert" hidden></div>
 
-    <!-- Pantalla 1: Inicio -->
-    <main id="vistaInicio" class="vista" hidden>
-      <section class="intro">
-        <h1>¿Cuánta demanda viene en cada área?</h1>
-        <p class="muted">Pronóstico de la demanda eléctrica cada 30 minutos, a 1 hora y a 24 horas, para las tres áreas operativas del COES. Cada tarjeta dice cuánto se equivocó el modelo en 2026. Elige un área.</p>
-      </section>
-      <nav id="listaAreas" class="area-list" aria-label="Áreas del SEIN">
-        <p class="cargando-txt">Cargando las áreas…</p>
-      </nav>
-      <p class="nota">El mapa de las áreas llega en una próxima versión. Las áreas son las operativas del COES y no siguen exactamente los límites de los departamentos.</p>
-      <p id="notaPruebaInicio" class="nota aviso" hidden><strong>Datos de prueba.</strong> El modelo real todavía no está conectado: las curvas y los errores salen de series sintéticas y sirven para probar la app.</p>
+    <!-- Ahora: la pantalla de entrada. Un solo gráfico de hoy y las próximas 24 h, con las cifras arriba -->
+    <main id="vistaAhora" class="pantalla" hidden>
+      <div class="contexto">
+        <div class="contexto-titulo">
+          <div class="titulo-fila"><h1 id="principal" tabindex="-1">Ahora</h1><span id="chipRegimen" class="chip"><span id="chipRegimenTxt">El Niño costero: cargando</span></span><span id="chipPrueba" class="chip" hidden>Datos de prueba: series sintéticas</span></div>
+          <p id="ahModo" class="modo-linea"></p>
+          <p id="ahDiaCompleto" class="dia-completo" aria-live="polite" hidden></p>
+        </div>
+        <div class="cuando" role="group" aria-label="Qué momento ver">
+          <button type="button" id="ahHoy" class="btn-hoy" aria-pressed="true">Hoy</button>
+          <label class="campo"><span>Repasar un día</span><input type="date" id="ahFecha" aria-describedby="ahFechaLarga"></label>
+          <label class="campo"><span>A las</span><input type="time" id="ahHora" step="1800"></label>
+          <label class="interruptor" id="ahDespuesCampo" hidden><input type="checkbox" id="ahDespues"><span class="mk despues" aria-hidden="true"></span>Mostrar lo que pasó después</label>
+          <span id="ahFechaLarga" class="visually-hidden"></span>
+        </div>
+      </div>
+      <p id="ahAviso" class="aviso-linea" role="status" hidden></p>
+      <nav id="ahAreas" class="areas" aria-label="Áreas"></nav>
+      <section id="ahCifras" class="kpis" aria-label="Cifras de ahora" aria-busy="true"></section>
+      <div class="grid-principal">
+        <div class="col-izq">
+        <section class="card orden-grafico" aria-labelledby="ahGrafTitulo">
+          <div class="card-h card-h-grafico">
+            <h2 id="ahGrafTitulo">Hoy y las próximas 24 horas</h2>
+            <div class="leyenda" id="ahLeyenda">
+              <span class="it"><span class="mk real"></span>Real (COES)</span>
+              <span class="it"><span class="mk pron"></span>Pronóstico</span>
+              <span class="it"><span class="mk banda"></span><span id="ahLeyRango">Rango del 90 %</span></span>
+              <label><input type="checkbox" id="ahRef" checked><span class="mk ref"></span><span id="ahLeyRef">Referencia simple</span></label>
+            </div>
+          </div>
+          <div class="card-b">
+            <div id="ahLienzo" class="chart lienzo" tabindex="0" role="group" aria-roledescription="gráfico" aria-describedby="ahGrafSub ahDesc" aria-busy="true"></div>
+            <p id="ahGrafSub" class="sub"></p>
+            <p id="ahDesc" class="nota-pie"></p>
+            <div class="pie-grafico">
+              <details class="datos" id="ahTablaDet"><summary>Ver los datos del gráfico en una tabla</summary><div id="ahTabla"></div></details>
+              <span class="acciones-grafico"><button type="button" id="ahCsv" class="btn-enlace btn-chico">Descargar CSV</button></span>
+            </div>
+          </div>
+        </section>
+        <section class="card orden-origen" aria-labelledby="ahOrigenTit">
+          <div class="card-h"><h2 id="ahOrigenTit">¿De dónde sale el número?</h2></div>
+          <div class="card-b" id="ahOrigen"></div>
+        </section>
+        </div>
+        <aside class="lado" aria-label="Rendición de cuentas">
+          <section class="card" aria-labelledby="ahAyerTit">
+            <div class="card-h"><h2 id="ahAyerTit">Lo que dijimos ayer para esta hora</h2></div>
+            <div class="card-b" id="ahAyer" aria-live="polite"></div>
+          </section>
+          <section class="card" aria-labelledby="ahBuenoTit">
+            <div class="card-h"><h2 id="ahBuenoTit">¿Qué tan bueno es?</h2></div>
+            <div class="card-b" id="ahBueno"></div>
+          </section>
+        </aside>
+      </div>
+      <p class="pie-nota" id="ahPie"></p>
+    </main>
+
+    <!-- Confianza: el error al frente, con su meta, sus días fallidos y su contexto -->
+    <main id="vistaConfianza" class="pantalla" hidden>
+      <div class="conf-cab">
+        <nav class="seg" id="cfAreas" aria-label="Área"></nav>
+        <div class="seg" role="group" aria-label="Con cuánta anticipación">
+          <button type="button" data-cf-horizonte="1h" aria-pressed="false">A 1 hora</button>
+          <button type="button" data-cf-horizonte="24h" aria-pressed="true">A 24 horas</button>
+        </div>
+      </div>
+      <h1 id="cfTitular" class="titular" tabindex="-1">Calculando la confianza…</h1>
+      <p id="cfLead" class="lead"></p>
+      <section id="cfStats" class="stats" aria-label="Cifras de 2026"></section>
+      <div class="grid-conf">
+        <section class="card c8" aria-labelledby="cfMesTit">
+          <div class="card-h"><h2 id="cfMesTit">Error mes a mes en 2026</h2></div>
+          <div class="card-b" id="cfMes"><p class="cargando-bloque">Calculando…</p></div>
+        </section>
+        <section class="card c4" aria-labelledby="cfCobTit">
+          <div class="card-h"><h2 id="cfCobTit">¿El rango cumple lo que promete?</h2></div>
+          <div class="card-b" id="cfCob"><p class="cargando-bloque">Calculando…</p></div>
+        </section>
+        <section class="card c12" aria-labelledby="cfVivoTit" id="cfVivoCard">
+          <div class="card-h"><h2 id="cfVivoTit">El seguimiento en vivo</h2></div>
+          <div class="card-b" id="cfVivo"><p class="cargando-bloque">Cargando el registro en vivo…</p></div>
+        </section>
+        <section class="card c12" aria-labelledby="cfDiaTit">
+          <div class="card-h"><h2 id="cfDiaTit">Día a día: el error del pico</h2></div>
+          <div class="card-b" id="cfDia"><p class="cargando-bloque">Calculando…</p></div>
+        </section>
+        <section class="card c6" aria-labelledby="cfSesgoTit">
+          <div class="card-h"><h2 id="cfSesgoTit">¿Hacia dónde se equivoca?</h2></div>
+          <div class="card-b" id="cfSesgo"></div>
+        </section>
+        <section class="card c6" aria-labelledby="cfNinoTit">
+          <div class="card-h"><h2 id="cfNinoTit">Con El Niño</h2></div>
+          <div class="card-b" id="cfNino"><p class="cargando-bloque">Calculando…</p></div>
+        </section>
+        <section class="card c12 mundo" aria-labelledby="cfMundoTit">
+          <div class="card-h"><h2 id="cfMundoTit">Para poner la cifra en contexto</h2></div>
+          <div class="card-b" id="cfMundo"></div>
+        </section>
+      </div>
+      <p class="pie-nota" id="cfPie"></p>
     </main>
 
     <!-- Pantalla 2: Detalle del área. Orden: la respuesta, los controles, qué tan bueno es, la curva y el detalle -->
     <main id="vistaArea" class="vista vista-area" hidden>
       <div class="area-header">
-        <a href="#/" class="btn-back" aria-label="Volver a las áreas">
+        <a href="#/" class="btn-back" id="detVolver" aria-label="Volver a «Ahora»">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
         </a>
         <span id="areaBadge" class="area-badge" aria-hidden="true"></span>
         <div>
           <h1 id="areaNombre">Área</h1>
-          <p id="areaDesc" class="muted"></p>
+          <p id="areaDesc" class="muted">Elige la anticipación, los datos y el modelo; prueba escenarios y mira el diagnóstico completo.</p>
         </div>
       </div>
 
