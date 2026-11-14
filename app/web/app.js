@@ -23,6 +23,8 @@ const ESCENARIO_BASE = Object.freeze({ delta_temp_c: 0, nino: 'observado', falla
 const MESES = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto',
   'septiembre', 'octubre', 'noviembre', 'diciembre'];
 const MESES_CORTOS = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'set', 'oct', 'nov', 'dic'];
+// Qué es Curva, dicho también en la pestaña del navegador (la cabecera lo dice con las mismas palabras).
+const TITULO_CURVA = 'Curva, pronóstico de la demanda eléctrica del Perú';
 const DIAS = ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'];
 
 const INFO_AREA = {
@@ -715,7 +717,7 @@ function escribirRuta() {
   const destino = `#/area/${encodeURIComponent(S.area)}?${q}`;
   if (location.hash !== destino) history.replaceState(null, '', destino);
   pintarEstado({ modo: 'repaso', texto: `Repaso · ${fechaNumerica(S.fecha)}, ${idxAHora(S.idx)}`,
-    corto: `Repaso ${fechaNumerica(S.fecha).replace(/\/20(\d\d)$/, '/$1')} ${idxAHora(S.idx)}`,
+    corto: ['Repaso', `${fechaNumerica(S.fecha).replace(/\/20(\d\d)$/, '/$1')} ${idxAHora(S.idx)}`],
     titulo: `Detalle de un día del historial: ${fechaLarga(S.fecha)}, ${idxAHora(S.idx)}` });
   actualizarNav();
 }
@@ -785,7 +787,7 @@ function mostrarArea(id, q) {
   const badge = $('#areaBadge');
   badge.textContent = info.letra;
   $('#areaNombre').textContent = `${area.nombre}: detalle del pronóstico`;
-  document.title = `${area.nombre}, detalle · Curva`;
+  document.title = `${area.nombre}, detalle · ${TITULO_CURVA}`;
 
   mostrarVista('detalle');
   if (cambioDeArea || llega) window.scrollTo(0, 0);
@@ -1821,7 +1823,9 @@ function pintarEstado({ modo, texto, titulo, corto }) {
   const e = $('#estadoDatos');
   e.hidden = false;
   e.classList.toggle('repaso', modo === 'repaso');
-  $('#estadoTxt').innerHTML = `<span class="larga">${esc(texto)}</span><span class="corta">${esc(corto || texto)}</span>`;
+  // En el celular, la versión corta va en dos líneas (qué y hasta cuándo) para dejarle sitio a la marca
+  const corta = (Array.isArray(corto) ? corto : [corto || texto]).map((t) => `<span>${esc(t)}</span>`).join(' ');
+  $('#estadoTxt').innerHTML = `<span class="larga">${esc(texto)}</span><span class="corta">${corta}</span>`;
   e.title = titulo || texto;
   e.setAttribute('aria-label', titulo || texto);
 }
@@ -1902,7 +1906,7 @@ function mostrarAhora(area, q) {
   A.modelo = q.get('modelo') && (!S.modelos.length || modeloPorId(q.get('modelo'))) ? q.get('modelo') : null;
   const llega = $('#vistaAhora').hidden;
   mostrarVista('ahora');
-  document.title = `${nombreArea(area)} · Ahora · Curva`;
+  document.title = `${nombreArea(area)} · Ahora · ${TITULO_CURVA}`;
   if (llega || cambio) window.scrollTo(0, 0);
   cargarAhora();
 }
@@ -1948,7 +1952,7 @@ async function cargarAhora() {
         const txt = `${String(cuando.getDate()).padStart(2, '0')}/${String(cuando.getMonth() + 1).padStart(2, '0')}, ${String(cuando.getHours()).padStart(2, '0')}:${String(cuando.getMinutes()).padStart(2, '0')}`;
         $('#ahAviso').innerHTML = `${ICONO.ojo}<span>Sin conexión con el servidor de datos: se muestra la última copia guardada en este navegador, consultada el ${esc(txt)}.</span>`;
         $('#ahAviso').hidden = false;
-        pintarEstado({ modo: 'repaso', texto: `Sin conexión · copia del ${txt}`, corto: `Copia del ${txt}`, titulo: 'Sin conexión: última copia guardada' });
+        pintarEstado({ modo: 'repaso', texto: `Sin conexión · copia del ${txt}`, corto: ['Copia del', txt], titulo: 'Sin conexión: última copia guardada' });
         return;
       }
       pintarEstado({ modo: 'repaso', texto: 'Sin conexión con los datos', corto: 'Sin conexión' });
@@ -2004,8 +2008,8 @@ function pintarAhora() {
     ? `<b>Son las ${esc(horaDe(d.ahora))}.</b> Lo real llega hasta el ${esc(fin.largo)}: el COES publica cada día la demanda del día anterior, hacia las 09:45. Todo lo que sigue es pronóstico, emitido hoy a las ${esc(horaDe(d.emitido_en || d.ahora))}.`
     : `<b>Repaso de un día del historial.</b> Así se veía a las ${esc(horaDe(d.origen))}: lo real llega hasta esa hora y lo que sigue es lo que el modelo ya había pronosticado.`;
   pintarEstado(vivo
-    ? { modo: 'vivo', texto: `Hoy · datos del COES al ${fin.corto}`, corto: `COES ${fin.corto.replace(', ', ' ')}`, titulo: `Pronóstico de hoy. Datos reales del COES hasta el ${fin.largo}; el resto es pronóstico.` }
-    : { modo: 'repaso', texto: `Repaso · ${fechaNumerica(d.origen)}, ${horaDe(d.origen)}`, corto: `Repaso ${fechaNumerica(d.origen).replace(/\/20(\d\d)$/, '/$1')} ${horaDe(d.origen)}`, titulo: `Repaso del ${fechaLarga(d.origen)}, ${horaDe(d.origen)}` });
+    ? { modo: 'vivo', texto: `Hoy · datos del COES al ${fin.corto}`, corto: ['COES', fin.corto.replace(', ', ' ')], titulo: `Pronóstico de hoy. Datos reales del COES hasta el ${fin.largo}; el resto es pronóstico.` }
+    : { modo: 'repaso', texto: `Repaso · ${fechaNumerica(d.origen)}, ${horaDe(d.origen)}`, corto: ['Repaso', `${fechaNumerica(d.origen).replace(/\/20(\d\d)$/, '/$1')} ${horaDe(d.origen)}`], titulo: `Repaso del ${fechaLarga(d.origen)}, ${horaDe(d.origen)}` });
 
   // Controles: «Hoy» o un día del historial, y la hora (solo al repasar)
   $('#ahHoy').setAttribute('aria-pressed', String(vivo));
@@ -2473,7 +2477,7 @@ function mostrarConfianza(area, q) {
   C.mes = /^\d{4}-\d{2}$/.test(q.get('mes') || '') ? q.get('mes') : (A.fecha && A.fecha.startsWith('2026') ? A.fecha.slice(0, 7) : C.mes);
   const llega = $('#vistaConfianza').hidden;
   mostrarVista('confianza');
-  document.title = `${nombreArea(area)} · Confianza · Curva`;
+  document.title = `${nombreArea(area)} · Confianza · ${TITULO_CURVA}`;
   if (llega) window.scrollTo(0, 0);
   $('#cfAreas').innerHTML = (S.areas.length ? S.areas : AREAS_RESPALDO).map((a) => `<a href="#/confianza/${encodeURIComponent(a.id)}?horizonte=${C.horizonte}"${a.id === area ? ' aria-current="page"' : ''}>${esc(a.nombre)}</a>`).join('');
   $$('[data-cf-horizonte]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.cfHorizonte === C.horizonte)));
@@ -2513,7 +2517,7 @@ async function cargarConfianza() {
   const u = C.datos.vivo && C.datos.vivo.ultimo;
   if (u) {
     const fin = finTxt(u.datos_hasta);
-    pintarEstado({ modo: 'vivo', texto: `Datos del COES al ${fin.corto}`, corto: `COES ${fin.corto.replace(', ', ' ')}`, titulo: `Datos reales del COES hasta el ${fin.largo}` });
+    pintarEstado({ modo: 'vivo', texto: `Datos del COES al ${fin.corto}`, corto: ['COES', fin.corto.replace(', ', ' ')], titulo: `Datos reales del COES hasta el ${fin.largo}` });
   } else {
     pintarEstado({ modo: 'repaso', texto: 'Prueba de 2026', titulo: 'El error medido en la prueba de 2026' });
   }

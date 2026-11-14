@@ -1642,14 +1642,23 @@ a {
   flex: none;
 }
 
+/* Qué es Curva, en todas las vistas: el nombre y lo que hace en palabras llanas (debajo, o al lado si cabe) */
+.marca-txt {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  line-height: 1.15;
+}
+
 .cab-marca b {
   font-size: 18px;
   letter-spacing: -0.01em;
 }
 
 .marca-sub {
-  font-size: 12px;
-  color: var(--muted);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink-2);
   white-space: nowrap;
 }
 
@@ -3036,10 +3045,6 @@ table.cmp tr.nuestro td {
   .c4 {
     grid-column: span 12;
   }
-
-  .marca-sub {
-    display: none;
-  }
 }
 
 @media (max-width: 760px) {
@@ -3054,6 +3059,30 @@ table.cmp tr.nuestro td {
     height: 56px;
     padding: 0 16px;
     gap: 8px;
+  }
+
+  .cab-marca {
+    gap: 8px;
+  }
+
+  .cab-marca svg {
+    width: 28px;
+    height: 28px;
+  }
+
+  .marca-sub {
+    font-size: 12px;
+    line-height: 1.2;
+    white-space: normal;
+  }
+
+  .marca-pais {
+    display: none;
+  }
+
+  /* El estado de los datos no se recorta: lo que cede es la segunda línea de la marca */
+  .cab-der {
+    flex: none;
   }
 
   .nav {
@@ -3219,6 +3248,49 @@ table.cmp tr.nuestro td {
 
 }
 
+/* En escritorio y proyector, la marca en una línea («Curva  Pronóstico de…»); en el proyector (1920 px) crece con la
+   pantalla: a 13–14 px se pierde en una sala */
+@media (min-width: 1200px) {
+  .marca-txt {
+    flex-direction: row;
+    align-items: baseline;
+    gap: 12px;
+  }
+
+  .marca-sub {
+    font-size: 16px;
+  }
+}
+
+@media (min-width: 1600px) {
+  .cab-marca svg {
+    width: 34px;
+    height: 34px;
+  }
+
+  .cab-marca b {
+    font-size: 20px;
+  }
+
+  .marca-sub {
+    font-size: 18px;
+  }
+}
+
+/* En los teléfonos más angostos (320 px) cede el ícono, no lo que dice qué es Curva */
+@media (max-width: 359px) {
+  .cab-marca svg {
+    display: none;
+  }
+
+  .cab-in {
+    height: auto;
+    min-height: 56px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+  }
+}
+
 @media (forced-colors: active) {
   .mk.banda,
   .sw.banda {
@@ -3254,7 +3326,14 @@ table.t tr.fila-elegida td {
   }
 
   .estado .corta {
-    display: inline;
+    display: inline-flex;
+    flex-direction: column;
+    line-height: 1.15;
+  }
+
+  .estado .corta span:first-child {
+    font-weight: 700;
+    color: var(--ink);
   }
 
   #btnFicha {
@@ -3304,7 +3383,10 @@ table.t tr.fila-elegida td {
 @media (max-width: 760px) {
   .estado {
     max-width: none;
-    padding: 0 10px;
+    height: auto;
+    min-height: 36px;
+    padding: 2px 12px 2px 10px;
+    border-radius: var(--r-l);
   }
 }
 
