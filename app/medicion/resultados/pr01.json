@@ -1,7 +1,7 @@
 {
   "etiqueta": "pr01",
   "version": "it8",
-  "fecha": "2026-11-14T04:20:44.580Z",
+  "fecha": "2026-11-14T04:48:43.093Z",
   "modelo": "Combinado: Chronos-2 ajustado + híbrido",
   "caso": {
     "area": "centro",
@@ -38,7 +38,7 @@
         "escrituras": 2,
         "pulsaciones": 13,
         "desplazamientos": 0,
-        "segundos_robot": 1.1,
+        "segundos_robot": 2.01,
         "segundos_klm": 7.1
       },
       "movil": {
@@ -51,7 +51,7 @@
         "escrituras": 2,
         "pulsaciones": 13,
         "desplazamientos": 0,
-        "segundos_robot": 1.14,
+        "segundos_robot": 1.64,
         "segundos_klm": 7.1
       }
     },
@@ -78,7 +78,7 @@
         "escrituras": 0,
         "pulsaciones": 0,
         "desplazamientos": 0,
-        "segundos_robot": 0.2,
+        "segundos_robot": 0.29,
         "segundos_klm": 2.7
       },
       "movil": {
@@ -91,7 +91,7 @@
         "escrituras": 0,
         "pulsaciones": 0,
         "desplazamientos": 0,
-        "segundos_robot": 0.16,
+        "segundos_robot": 0.35,
         "segundos_klm": 2.7
       }
     },
@@ -113,7 +113,7 @@
         "escrituras": 0,
         "pulsaciones": 0,
         "desplazamientos": 0,
-        "segundos_robot": 1.03,
+        "segundos_robot": 1.47,
         "segundos_klm": 5.3
       },
       "movil": {
@@ -126,7 +126,7 @@
         "escrituras": 0,
         "pulsaciones": 0,
         "desplazamientos": 0,
-        "segundos_robot": 0.99,
+        "segundos_robot": 1.4,
         "segundos_klm": 5.3
       }
     },
@@ -150,7 +150,7 @@
         "escrituras": 0,
         "pulsaciones": 0,
         "desplazamientos": 0,
-        "segundos_robot": 0.53,
+        "segundos_robot": 0.81,
         "segundos_klm": 2.7
       },
       "movil": {
@@ -163,22 +163,22 @@
         "escrituras": 0,
         "pulsaciones": 0,
         "desplazamientos": 1,
-        "segundos_robot": 0.76,
+        "segundos_robot": 1.05,
         "segundos_klm": 3.7
       }
     }
   },
   "rendimiento": {
     "local": {
-      "grafico_ms": 132,
+      "grafico_ms": 343,
       "grafico_rango_ms": [
-        129,
-        136
+        338,
+        364
       ],
-      "respuesta_ms": 135,
+      "respuesta_ms": 352,
       "respuesta_rango_ms": [
-        132,
-        139
+        344,
+        384
       ]
     },
     "peticiones": 11,
@@ -191,15 +191,15 @@
     },
     "peticiones_a_terceros": 0,
     "red_lenta": {
-      "grafico_ms": 828,
+      "grafico_ms": 1424,
       "grafico_rango_ms": [
-        811,
-        853
+        1159,
+        1502
       ],
-      "respuesta_ms": 840,
+      "respuesta_ms": 1467,
       "respuesta_rango_ms": [
-        821,
-        868
+        1183,
+        1536
       ]
     }
   },
