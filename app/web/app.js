@@ -312,7 +312,8 @@ function pintarRegimen() {
   }
   const [y, m] = r.mes.split('-').map(Number);
   const estado = ESTADO_NINO[r.estado] || r.estado;
-  $('#chipRegimenTxt').textContent = `El Niño costero (calentamiento del mar frente a la costa): ${estado}`;
+  $('#chipRegimenTxt').textContent = `El Niño costero (calentamiento del mar frente a la costa): ${estado} · ¿cuándo se equivoca más? →`;
+  chip.href = `#/confianza/${encodeURIComponent(A.area)}?seccion=nino`;
   chip.title = `Último ICEN publicado: ${r.icen} en ${MESES[m - 1]} de ${y}, régimen ${estado} según ENFEN. El ICEN sale con meses de rezago.`;
   chip.hidden = false;
 }
@@ -649,7 +650,10 @@ function pintarAhora() {
   A.sinAviso = Boolean(preg.sinAviso);
   // Arriba de la pregunta, de qué zona habla: el nombre del área y qué parte del país es
   $('#principal').innerHTML = `<span class="pregunta-area">${esc(nombreArea(A.area))} · ${esc(ZONA_AREA[A.area] || 'Perú')}</span>${esc(preg.q)}`;
-  $('#ahRespuesta').innerHTML = preg.html;
+  // «¿Y si hace más calor?» también en vivo: los escenarios necesitan el clima, que llega hasta el último día del
+  // historial; el enlace abre ese día a la misma hora (en un repaso ya va en la frase)
+  const calor = vivo && FECHA_MAX ? ` <a class="kpi-enlace" href="${rutaDetalle(A.area, { fecha: FECHA_MAX, hora: horaDe(d.ahora) }, 'escenarios')}" title="Escenarios de temperatura sobre el ${esc(fechaLarga(FECHA_MAX))}, el último día con datos de clima">¿Y si hace más calor?</a>` : '';
+  $('#ahRespuesta').innerHTML = calor ? preg.html.replace(/<\/p>$/, `${calor}</p>`) : preg.html;
   $('#ahRespuesta').classList.remove('siguiendo'); // la cifra vuelve a ser la de la hora fijada
   $('#ahModo').innerHTML = vivo
     ? `Lo real llega con un día de retraso: el COES, el operador del sistema eléctrico, publica cada mañana la demanda del día anterior. Lo demás es pronóstico, emitido ${emitidoTxt(d.emitido_en || d.ahora)}.`
@@ -1335,7 +1339,7 @@ function pintarOrigen(d) {
 }
 
 // El estado de «Confianza»: la pantalla se carga aparte, pero la cabecera y las rutas lo leen
-const C = { area: 'centro', horizonte: '24h', mes: null, turno: 0, datos: null };
+const C = { area: 'centro', horizonte: '24h', mes: null, turno: 0, datos: null, ir: null };
 
 // ---- Rutas e inicio ------------------------------------------------------------------------
 

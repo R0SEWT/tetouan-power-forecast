@@ -9,6 +9,7 @@ function mostrarConfianza(area, q) {
   C.area = area;
   if (['1h', '24h'].includes(q.get('horizonte'))) C.horizonte = q.get('horizonte');
   C.mes = /^\d{4}-\d{2}$/.test(q.get('mes') || '') ? q.get('mes') : (A.fecha && A.fecha.startsWith('2026') ? A.fecha.slice(0, 7) : C.mes);
+  C.ir = q.get('seccion') === 'nino' ? '#cfNinoTit' : null; // el chip de El Niño de «Ahora» lleva a su sección
   const llega = $('#vistaConfianza').hidden;
   mostrarVista('confianza');
   document.title = `${nombreArea(area)} · Confianza · ${TITULO_CURVA}`;
@@ -56,6 +57,13 @@ async function cargarConfianza() {
     pintarEstado({ modo: 'repaso', texto: 'Prueba de 2026', titulo: 'El error medido en la prueba de 2026' });
   }
   pintarConfianzaPantalla();
+  if (C.ir) {
+    const sec = $(C.ir).closest('section');
+    C.ir = null;
+    sec.scrollIntoView({ block: 'start', behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+    sec.setAttribute('tabindex', '-1');
+    sec.focus({ preventScroll: true });
+  }
 }
 
 function pintarConfianzaPantalla() {
