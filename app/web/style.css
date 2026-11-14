@@ -2080,35 +2080,6 @@ input[type='time']:focus-within,
   color: var(--ink);
 }
 
-/* ¿Acertamos ayer?: el veredicto del último día con dato real, en una línea; informa, no celebra */
-.acierto {
-  display: flex;
-  gap: 8px;
-  align-items: flex-start;
-  max-width: 72ch;
-  margin-top: 8px;
-  font-size: 15px;
-  line-height: 1.4;
-  color: var(--ink);
-}
-
-.acierto svg {
-  flex: none;
-  margin-top: 1px;
-}
-
-.acierto.bien svg {
-  color: var(--good);
-}
-
-.acierto.ojo svg {
-  color: var(--warn);
-}
-
-.acierto-fuente {
-  color: var(--ink-2);
-}
-
 .pregunta-area {
   display: block;
   margin-bottom: 2px;

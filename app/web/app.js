@@ -676,7 +676,6 @@ function pintarAhora() {
   $('#ahDesc').textContent = descripcionAhora(d);
   if ($('#ahTablaDet').open) conExtra(() => pintarTablaAhora(d));
   pintarAyer(d);
-  pintarAcierto(d);
   pintarBueno(d);
   pintarOrigen(d);
   $('#ahPie').textContent = `Curva es un pronóstico abierto hecho con los datos públicos del COES (IEOD); no sirve para operar el sistema eléctrico. ${vivo ? `Pronóstico en vivo de ${nombreModeloAhora}, emitido cada mañana con la demanda del día anterior.` : `Pronósticos del modelo ${nombreModeloAhora.toLowerCase()}.`} El CSV trae el pronóstico, su rango y su error, no la serie real del COES, que no tiene una licencia publicada.`;
@@ -1167,26 +1166,6 @@ function pintarDiaCompleto(d) {
   const ref = NOMBRE_REF[d.referencia_nombre] || 'la referencia';
   p.innerHTML = `El día completo: el modelo se equivocó <b>${nf1.format(f.mae_modelo)} MW</b> en promedio; repetir ${esc(ref)}, `
     + `<b>${f.mae_referencia == null ? '—' : `${nf1.format(f.mae_referencia)} MW`}</b>. ${frasesMejora(f.mae_modelo, f.mae_referencia, 'la referencia')}`;
-}
-
-// El motivo para volver, a la vista: ¿acertamos el último día con dato real? Una línea bajo la respuesta, con cuántas
-// medias horas cayeron dentro del rango y si ese pronóstico se emitió antes o se reconstruyó después. Solo en vivo:
-// en un repaso, la pregunta del día ya es «¿acertamos?»
-function pintarAcierto(d) {
-  const el = $('#ahAcierto');
-  const dia = d.modo === 'en_vivo' ? d.origen.slice(0, 10) : null;
-  const idx = dia ? d.fecha_hora.map((f, i) => i).filter((i) => d.fecha_hora[i].startsWith(dia)
-    && d.real[i] != null && d.inferior[i] != null && d.superior[i] != null) : [];
-  el.hidden = idx.length < 24; // con menos de medio día no se juzga un día
-  if (el.hidden) return;
-  const dentro = idx.filter((i) => d.real[i] >= d.inferior[i] && d.real[i] <= d.superior[i]).length;
-  const cumple = dentro / idx.length >= d.nivel_rango_pct / 100;
-  const reconstruido = idx.some((i) => d.tipo && d.tipo[i] === 'reconstruido');
-  const cuando = dia === sumarDias(hoyLima(), -1) ? 'ayer' : `el ${DIAS[partesFecha(dia).dow]}`; // de esta semana: sin número
-  el.className = `acierto ${cumple ? 'bien' : 'ojo'}`;
-  el.innerHTML = `${cumple ? ICONO.bien : ICONO.ojo}<span><b>¿Acertamos ${esc(cuando)}?</b> `
-    + `Lo real cayó dentro del rango en ${dentro} de ${idx.length} medias horas${cumple ? '' : ', menos de lo que promete'}. `
-    + `<span class="acierto-fuente">${reconstruido ? 'Ese pronóstico se reconstruyó después, con los datos que habría tenido.' : 'Ese pronóstico se emitió antes de conocerse el real.'} A la izquierda del gráfico, hora por hora.</span></span>`;
 }
 
 function pintarAyer(d) {
