@@ -131,7 +131,7 @@ resueltos), escala tipográfica y consistencia entre pantallas (Jaccard de tama�
 - **Las pruebas de 5 segundos y de primer clic son sintéticas**: reglas explícitas sobre lo que está a la vista, su
   texto y la atención predicha. Sirven para comparar versiones con la misma regla; no reemplazan la prueba con personas
   (Gronier, 2016, sobre la validez de la prueba de 5 s con personas).
-- **«Inicio» depende del reloj**: en vivo, la pantalla cambia con la hora (a las 21:30 el pico del día ya pasó; a las
+- **«Inicio» depende del reloj**: en vivo, la pantalla cambia con la hora (a las 22:30 el pico del día ya pasó; a las
   09:00, no). La comparación entre versiones se hace con capturas del mismo momento, o en repaso (`ahora`).
 - **Ruido**: dos corridas completas del mismo build (`base` y `base-r2`) se comparan en `linea-base.md`.
 - Nada de esto se probó con personas. La primera línea de trabajo del plan incluye cinco sesiones cortas.

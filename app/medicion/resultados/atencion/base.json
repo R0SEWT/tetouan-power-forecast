@@ -1,25 +1,25 @@
 {
  "etiqueta": "base",
- "fecha_capturas": "2026-11-14T02:54:06.850Z",
+ "fecha_capturas": "2026-11-14T03:32:41.617Z",
  "modelo": "CC 0.69 en el test oficial de UEyes (sesgo central 0.435)",
  "capturas": {
   "inicio-escritorio-light": {
    "atencion": {
     "1s": {
      "cifra_ahora": {
-      "cuota": 0.008,
+      "cuota": 0.0078,
       "area": 0.0048,
-      "lift": 1.66
+      "lift": 1.63
      },
      "pico_24h": {
-      "cuota": 0.0242,
+      "cuota": 0.0246,
       "area": 0.0069,
-      "lift": 3.5
+      "lift": 3.55
      },
      "linea_ahora": {
-      "cuota": 0.0002,
-      "area": 0.0014,
-      "lift": 0.13
+      "cuota": 0.0004,
+      "area": 0.0024,
+      "lift": 0.17
      },
      "estado_datos": {
       "cuota": 0.0013,
@@ -27,39 +27,39 @@
       "lift": 0.17
      },
      "dijimos_ayer": {
-      "cuota": 0.0062,
+      "cuota": 0.006,
       "area": 0.0433,
       "lift": 0.14
      },
      "titulo": {
-      "cuota": 0.0486,
+      "cuota": 0.0489,
       "area": 0.0094,
-      "lift": 5.16
+      "lift": 5.2
      },
      "que_es": {
-      "cuota": 0.0585,
+      "cuota": 0.058,
       "area": 0.011,
-      "lift": 5.3
+      "lift": 5.26
      },
      "modo": {
-      "cuota": 0.1224,
+      "cuota": 0.1217,
       "area": 0.0282,
-      "lift": 4.34
+      "lift": 4.31
      },
      "otras_cifras": {
       "cuota": 0.0143,
       "area": 0.0135,
-      "lift": 1.05
+      "lift": 1.06
      },
      "grafico": {
-      "cuota": 0.0658,
-      "area": 0.2111,
+      "cuota": 0.0649,
+      "area": 0.2102,
       "lift": 0.31
      },
      "areas": {
-      "cuota": 0.2159,
+      "cuota": 0.2165,
       "area": 0.0963,
-      "lift": 2.24
+      "lift": 2.25
      },
      "cuando": {
       "cuota": 0.0019,
@@ -67,9 +67,9 @@
       "lift": 0.16
      },
      "regimen": {
-      "cuota": 0.0221,
+      "cuota": 0.0219,
       "area": 0.0088,
-      "lift": 2.51
+      "lift": 2.49
      },
      "fijo": {
       "cuota": 0.0,
@@ -77,36 +77,36 @@
       "lift": null
      },
      "controles": {
-      "cuota": 0.0199,
+      "cuota": 0.0196,
       "area": 0.0189,
-      "lift": 1.05
+      "lift": 1.04
      },
      "texto": {
-      "cuota": 0.0355,
+      "cuota": 0.0357,
       "area": 0.0638,
       "lift": 0.56
      },
      "resto": {
-      "cuota": 0.3555,
+      "cuota": 0.3567,
       "area": 0.4633,
       "lift": 0.77
      }
     },
     "3s": {
      "cifra_ahora": {
-      "cuota": 0.0115,
+      "cuota": 0.0121,
       "area": 0.0048,
-      "lift": 2.4
+      "lift": 2.51
      },
      "pico_24h": {
-      "cuota": 0.0215,
+      "cuota": 0.0224,
       "area": 0.0069,
-      "lift": 3.11
+      "lift": 3.23
      },
      "linea_ahora": {
-      "cuota": 0.0001,
-      "area": 0.0014,
-      "lift": 0.06
+      "cuota": 0.0002,
+      "area": 0.0024,
+      "lift": 0.09
      },
      "estado_datos": {
       "cuota": 0.0042,
@@ -114,39 +114,39 @@
       "lift": 0.57
      },
      "dijimos_ayer": {
-      "cuota": 0.0072,
+      "cuota": 0.0071,
       "area": 0.0433,
-      "lift": 0.17
+      "lift": 0.16
      },
      "titulo": {
-      "cuota": 0.054,
+      "cuota": 0.0536,
       "area": 0.0094,
-      "lift": 5.74
+      "lift": 5.69
      },
      "que_es": {
-      "cuota": 0.0805,
+      "cuota": 0.0809,
       "area": 0.011,
-      "lift": 7.29
+      "lift": 7.34
      },
      "modo": {
-      "cuota": 0.0959,
+      "cuota": 0.095,
       "area": 0.0282,
-      "lift": 3.4
+      "lift": 3.37
      },
      "otras_cifras": {
-      "cuota": 0.0133,
+      "cuota": 0.0131,
       "area": 0.0135,
-      "lift": 0.98
+      "lift": 0.97
      },
      "grafico": {
-      "cuota": 0.069,
-      "area": 0.2111,
-      "lift": 0.33
+      "cuota": 0.0674,
+      "area": 0.2102,
+      "lift": 0.32
      },
      "areas": {
-      "cuota": 0.1874,
+      "cuota": 0.187,
       "area": 0.0963,
-      "lift": 1.95
+      "lift": 1.94
      },
      "cuando": {
       "cuota": 0.007,
@@ -154,9 +154,9 @@
       "lift": 0.6
      },
      "regimen": {
-      "cuota": 0.0147,
+      "cuota": 0.0146,
       "area": 0.0088,
-      "lift": 1.68
+      "lift": 1.66
      },
      "fijo": {
       "cuota": 0.0,
@@ -164,36 +164,36 @@
       "lift": null
      },
      "controles": {
-      "cuota": 0.0344,
+      "cuota": 0.0343,
       "area": 0.0189,
       "lift": 1.82
      },
      "texto": {
-      "cuota": 0.0316,
+      "cuota": 0.0319,
       "area": 0.0638,
-      "lift": 0.49
+      "lift": 0.5
      },
      "resto": {
-      "cuota": 0.3677,
+      "cuota": 0.3692,
       "area": 0.4633,
-      "lift": 0.79
+      "lift": 0.8
      }
     },
     "7s": {
      "cifra_ahora": {
-      "cuota": 0.0112,
+      "cuota": 0.0115,
       "area": 0.0048,
-      "lift": 2.34
+      "lift": 2.4
      },
      "pico_24h": {
-      "cuota": 0.019,
+      "cuota": 0.0193,
       "area": 0.0069,
-      "lift": 2.74
+      "lift": 2.79
      },
      "linea_ahora": {
-      "cuota": 0.0002,
-      "area": 0.0014,
-      "lift": 0.12
+      "cuota": 0.0004,
+      "area": 0.0024,
+      "lift": 0.15
      },
      "estado_datos": {
       "cuota": 0.0047,
@@ -201,37 +201,37 @@
       "lift": 0.63
      },
      "dijimos_ayer": {
-      "cuota": 0.0325,
+      "cuota": 0.0329,
       "area": 0.0433,
-      "lift": 0.75
+      "lift": 0.76
      },
      "titulo": {
-      "cuota": 0.0369,
+      "cuota": 0.0368,
       "area": 0.0094,
       "lift": 3.91
      },
      "que_es": {
-      "cuota": 0.0517,
+      "cuota": 0.0522,
       "area": 0.011,
-      "lift": 4.69
+      "lift": 4.73
      },
      "modo": {
-      "cuota": 0.072,
+      "cuota": 0.0714,
       "area": 0.0282,
-      "lift": 2.55
+      "lift": 2.53
      },
      "otras_cifras": {
-      "cuota": 0.014,
+      "cuota": 0.0144,
       "area": 0.0135,
-      "lift": 1.04
+      "lift": 1.06
      },
      "grafico": {
-      "cuota": 0.1192,
-      "area": 0.2111,
-      "lift": 0.56
+      "cuota": 0.1146,
+      "area": 0.2102,
+      "lift": 0.55
      },
      "areas": {
-      "cuota": 0.1577,
+      "cuota": 0.1581,
       "area": 0.0963,
       "lift": 1.64
      },
@@ -241,9 +241,9 @@
       "lift": 1.05
      },
      "regimen": {
-      "cuota": 0.0134,
+      "cuota": 0.0133,
       "area": 0.0088,
-      "lift": 1.53
+      "lift": 1.51
      },
      "fijo": {
       "cuota": 0.0,
@@ -251,19 +251,19 @@
       "lift": null
      },
      "controles": {
-      "cuota": 0.0298,
+      "cuota": 0.0296,
       "area": 0.0189,
       "lift": 1.57
      },
      "texto": {
-      "cuota": 0.0528,
+      "cuota": 0.0535,
       "area": 0.0638,
-      "lift": 0.83
+      "lift": 0.84
      },
      "resto": {
-      "cuota": 0.3726,
+      "cuota": 0.3751,
       "area": 0.4633,
-      "lift": 0.8
+      "lift": 0.81
      }
     }
    },
@@ -281,7 +281,7 @@
     "linea_ahora": {
      "existe": true,
      "a_la_vista": 1.0,
-     "arriba_px": 710
+     "arriba_px": 479
     },
     "estado_datos": {
      "existe": true,
@@ -345,9 +345,9 @@
      "Cambiar a modo oscuro",
      "Hoy",
      "Repasar un día",
-     "N Norte Ahora 1,266 MW (pron.) Pico de h",
-     "C Centro Ahora 4,880 MW (pron.) Pico de ",
-     "S Sur Ahora 1,963 MW (pron.) Pico de hoy",
+     "N Norte Ahora 1,185 MW (pron.) Pico de h",
+     "C Centro Ahora 4,651 MW (pron.) Pico de ",
+     "S Sur Ahora 1,907 MW (pron.) Pico de hoy",
      "Referencia (semana pasada)"
     ],
     "cifras": {
@@ -443,48 +443,48 @@
     {
      "pregunta": "¿Es real o pronóstico, y hasta cuándo hay datos?",
      "a_la_vista": true,
-     "cuota_7s": 0.077,
+     "cuota_7s": 0.076,
      "responde": true
     },
     {
      "pregunta": "¿Viene más o menos demanda?",
      "a_la_vista": true,
-     "cuota_7s": 0.138,
+     "cuota_7s": 0.134,
      "responde": true
     },
     {
      "pregunta": "¿Qué puedo hacer aquí?",
      "a_la_vista": true,
-     "cuota_7s": 0.093,
+     "cuota_7s": 0.094,
      "responde": true,
-     "control_mas_mirado": "N Norte Ahora 1,266 MW (pron.) Pico de h"
+     "control_mas_mirado": "N Norte Ahora 1,185 MW (pron.) Pico de h"
     }
    ],
    "controles_mas_mirados": [
     {
-     "control": "N Norte Ahora 1,266 MW (pron.) Pico de h",
-     "cuota_3s": 0.093,
-     "lift": 2.96
+     "control": "N Norte Ahora 1,185 MW (pron.) Pico de h",
+     "cuota_3s": 0.094,
+     "lift": 2.99
     },
     {
      "control": "Curva, demanda del SEIN por áreas: ir a ",
-     "cuota_3s": 0.08,
-     "lift": 7.29
+     "cuota_3s": 0.081,
+     "lift": 7.34
     },
     {
-     "control": "C Centro Ahora 4,880 MW (pron.) Pico de ",
-     "cuota_3s": 0.073,
-     "lift": 2.33
+     "control": "C Centro Ahora 4,651 MW (pron.) Pico de ",
+     "cuota_3s": 0.072,
+     "lift": 2.29
     },
     {
-     "control": "S Sur Ahora 1,963 MW (pron.) Pico de hoy",
+     "control": "S Sur Ahora 1,907 MW (pron.) Pico de hoy",
      "cuota_3s": 0.018,
-     "lift": 0.56
+     "lift": 0.57
     },
     {
      "control": "Ahora",
      "cuota_3s": 0.015,
-     "lift": 5.48
+     "lift": 5.51
     }
    ],
    "primer_clic": [
@@ -506,7 +506,7 @@
     },
     {
      "tarea": "T3 ¿y si hace 2 °C más?",
-     "predicho": "N Norte Ahora 1,266 MW (pron.) Pico de h",
+     "predicho": "N Norte Ahora 1,185 MW (pron.) Pico de h",
      "por": "atención",
      "acierta": false,
      "destino_a_la_vista": true,
@@ -514,7 +514,7 @@
     },
     {
      "tarea": "T4 ¿con qué fase de El Niño yerra más?",
-     "predicho": "N Norte Ahora 1,266 MW (pron.) Pico de h",
+     "predicho": "N Norte Ahora 1,185 MW (pron.) Pico de h",
      "por": "atención",
      "acierta": false,
      "destino_a_la_vista": true,
@@ -522,7 +522,7 @@
     },
     {
      "tarea": "T5 ver la demanda del Sur",
-     "predicho": "S Sur Ahora 1,963 MW (pron.) Pico de hoy",
+     "predicho": "S Sur Ahora 1,907 MW (pron.) Pico de hoy",
      "por": "palabras",
      "acierta": true,
      "destino_a_la_vista": true,
@@ -591,59 +591,59 @@
    "atencion": {
     "1s": {
      "cifra_ahora": {
-      "cuota": 0.0079,
+      "cuota": 0.0076,
       "area": 0.0048,
-      "lift": 1.66
+      "lift": 1.59
      },
      "pico_24h": {
-      "cuota": 0.0234,
+      "cuota": 0.0235,
       "area": 0.0069,
-      "lift": 3.38
+      "lift": 3.4
      },
      "linea_ahora": {
-      "cuota": 0.0001,
-      "area": 0.0014,
-      "lift": 0.1
+      "cuota": 0.0003,
+      "area": 0.0024,
+      "lift": 0.15
      },
      "estado_datos": {
-      "cuota": 0.0014,
+      "cuota": 0.0013,
       "area": 0.0074,
       "lift": 0.18
      },
      "dijimos_ayer": {
-      "cuota": 0.0055,
+      "cuota": 0.0056,
       "area": 0.0433,
       "lift": 0.13
      },
      "titulo": {
-      "cuota": 0.0469,
+      "cuota": 0.0471,
       "area": 0.0094,
-      "lift": 4.97
+      "lift": 5.0
      },
      "que_es": {
-      "cuota": 0.0501,
+      "cuota": 0.0508,
       "area": 0.011,
-      "lift": 4.54
+      "lift": 4.6
      },
      "modo": {
-      "cuota": 0.1242,
+      "cuota": 0.1235,
       "area": 0.0282,
-      "lift": 4.4
+      "lift": 4.38
      },
      "otras_cifras": {
-      "cuota": 0.0144,
+      "cuota": 0.0138,
       "area": 0.0135,
-      "lift": 1.06
+      "lift": 1.02
      },
      "grafico": {
-      "cuota": 0.0653,
-      "area": 0.2111,
+      "cuota": 0.0649,
+      "area": 0.2102,
       "lift": 0.31
      },
      "areas": {
-      "cuota": 0.2125,
+      "cuota": 0.2119,
       "area": 0.0963,
-      "lift": 2.21
+      "lift": 2.2
      },
      "cuando": {
       "cuota": 0.0019,
@@ -661,76 +661,76 @@
       "lift": null
      },
      "controles": {
-      "cuota": 0.0286,
+      "cuota": 0.0288,
       "area": 0.0189,
-      "lift": 1.51
+      "lift": 1.53
      },
      "texto": {
-      "cuota": 0.0378,
+      "cuota": 0.0384,
       "area": 0.0638,
-      "lift": 0.59
+      "lift": 0.6
      },
      "resto": {
-      "cuota": 0.3578,
+      "cuota": 0.3583,
       "area": 0.4633,
       "lift": 0.77
      }
     },
     "3s": {
      "cifra_ahora": {
-      "cuota": 0.016,
+      "cuota": 0.0159,
       "area": 0.0048,
-      "lift": 3.33
+      "lift": 3.31
      },
      "pico_24h": {
-      "cuota": 0.0233,
+      "cuota": 0.0235,
       "area": 0.0069,
-      "lift": 3.37
+      "lift": 3.39
      },
      "linea_ahora": {
       "cuota": 0.0001,
-      "area": 0.0014,
-      "lift": 0.05
+      "area": 0.0024,
+      "lift": 0.06
      },
      "estado_datos": {
-      "cuota": 0.0033,
+      "cuota": 0.0032,
       "area": 0.0074,
-      "lift": 0.45
+      "lift": 0.43
      },
      "dijimos_ayer": {
-      "cuota": 0.0091,
+      "cuota": 0.0088,
       "area": 0.0433,
-      "lift": 0.21
+      "lift": 0.2
      },
      "titulo": {
-      "cuota": 0.0478,
+      "cuota": 0.0481,
       "area": 0.0094,
-      "lift": 5.07
+      "lift": 5.1
      },
      "que_es": {
-      "cuota": 0.0552,
+      "cuota": 0.0563,
       "area": 0.011,
-      "lift": 5.0
+      "lift": 5.1
      },
      "modo": {
-      "cuota": 0.0919,
+      "cuota": 0.0923,
       "area": 0.0282,
-      "lift": 3.26
+      "lift": 3.27
      },
      "otras_cifras": {
-      "cuota": 0.0176,
+      "cuota": 0.0167,
       "area": 0.0135,
-      "lift": 1.3
+      "lift": 1.23
      },
      "grafico": {
-      "cuota": 0.0681,
-      "area": 0.2111,
+      "cuota": 0.0676,
+      "area": 0.2102,
       "lift": 0.32
      },
      "areas": {
-      "cuota": 0.1971,
+      "cuota": 0.1968,
       "area": 0.0963,
-      "lift": 2.05
+      "lift": 2.04
      },
      "cuando": {
       "cuota": 0.0065,
@@ -738,9 +738,9 @@
       "lift": 0.56
      },
      "regimen": {
-      "cuota": 0.0182,
+      "cuota": 0.0185,
       "area": 0.0088,
-      "lift": 2.07
+      "lift": 2.11
      },
      "fijo": {
       "cuota": 0.0,
@@ -748,36 +748,36 @@
       "lift": null
      },
      "controles": {
-      "cuota": 0.0367,
+      "cuota": 0.0371,
       "area": 0.0189,
-      "lift": 1.94
+      "lift": 1.96
      },
      "texto": {
-      "cuota": 0.0401,
+      "cuota": 0.0398,
       "area": 0.0638,
-      "lift": 0.63
+      "lift": 0.62
      },
      "resto": {
-      "cuota": 0.3691,
+      "cuota": 0.3689,
       "area": 0.4633,
       "lift": 0.8
      }
     },
     "7s": {
      "cifra_ahora": {
-      "cuota": 0.0129,
+      "cuota": 0.0131,
       "area": 0.0048,
-      "lift": 2.69
+      "lift": 2.73
      },
      "pico_24h": {
-      "cuota": 0.0197,
+      "cuota": 0.0201,
       "area": 0.0069,
-      "lift": 2.85
+      "lift": 2.9
      },
      "linea_ahora": {
-      "cuota": 0.0001,
-      "area": 0.0014,
-      "lift": 0.09
+      "cuota": 0.0003,
+      "area": 0.0024,
+      "lift": 0.12
      },
      "estado_datos": {
       "cuota": 0.0041,
@@ -787,35 +787,35 @@
      "dijimos_ayer": {
       "cuota": 0.0327,
       "area": 0.0433,
-      "lift": 0.76
+      "lift": 0.75
      },
      "titulo": {
-      "cuota": 0.032,
+      "cuota": 0.0318,
       "area": 0.0094,
-      "lift": 3.39
+      "lift": 3.37
      },
      "que_es": {
-      "cuota": 0.034,
+      "cuota": 0.0344,
       "area": 0.011,
-      "lift": 3.09
+      "lift": 3.12
      },
      "modo": {
-      "cuota": 0.0688,
+      "cuota": 0.0687,
       "area": 0.0282,
-      "lift": 2.44
+      "lift": 2.43
      },
      "otras_cifras": {
-      "cuota": 0.0163,
+      "cuota": 0.0162,
       "area": 0.0135,
       "lift": 1.2
      },
      "grafico": {
-      "cuota": 0.124,
-      "area": 0.2111,
-      "lift": 0.59
+      "cuota": 0.1218,
+      "area": 0.2102,
+      "lift": 0.58
      },
      "areas": {
-      "cuota": 0.1616,
+      "cuota": 0.162,
       "area": 0.0963,
       "lift": 1.68
      },
@@ -827,7 +827,7 @@
      "regimen": {
       "cuota": 0.0154,
       "area": 0.0088,
-      "lift": 1.75
+      "lift": 1.76
      },
      "fijo": {
       "cuota": 0.0,
@@ -835,19 +835,19 @@
       "lift": null
      },
      "controles": {
-      "cuota": 0.0324,
+      "cuota": 0.0327,
       "area": 0.0189,
-      "lift": 1.72
+      "lift": 1.73
      },
      "texto": {
-      "cuota": 0.0616,
+      "cuota": 0.0617,
       "area": 0.0638,
-      "lift": 0.96
+      "lift": 0.97
      },
      "resto": {
-      "cuota": 0.3728,
+      "cuota": 0.3735,
       "area": 0.4633,
-      "lift": 0.8
+      "lift": 0.81
      }
     }
    },
@@ -865,7 +865,7 @@
     "linea_ahora": {
      "existe": true,
      "a_la_vista": 1.0,
-     "arriba_px": 710
+     "arriba_px": 479
     },
     "estado_datos": {
      "existe": true,
@@ -929,9 +929,9 @@
      "Cambiar a modo claro",
      "Hoy",
      "Repasar un día",
-     "N Norte Ahora 1,266 MW (pron.) Pico de h",
-     "C Centro Ahora 4,880 MW (pron.) Pico de ",
-     "S Sur Ahora 1,963 MW (pron.) Pico de hoy",
+     "N Norte Ahora 1,185 MW (pron.) Pico de h",
+     "C Centro Ahora 4,651 MW (pron.) Pico de ",
+     "S Sur Ahora 1,907 MW (pron.) Pico de hoy",
      "Referencia (semana pasada)"
     ],
     "cifras": {
@@ -1033,42 +1033,42 @@
     {
      "pregunta": "¿Viene más o menos demanda?",
      "a_la_vista": true,
-     "cuota_7s": 0.144,
+     "cuota_7s": 0.142,
      "responde": true
     },
     {
      "pregunta": "¿Qué puedo hacer aquí?",
      "a_la_vista": true,
-     "cuota_7s": 0.107,
+     "cuota_7s": 0.105,
      "responde": true,
-     "control_mas_mirado": "N Norte Ahora 1,266 MW (pron.) Pico de h"
+     "control_mas_mirado": "N Norte Ahora 1,185 MW (pron.) Pico de h"
     }
    ],
    "controles_mas_mirados": [
     {
-     "control": "N Norte Ahora 1,266 MW (pron.) Pico de h",
-     "cuota_3s": 0.107,
-     "lift": 3.39
+     "control": "N Norte Ahora 1,185 MW (pron.) Pico de h",
+     "cuota_3s": 0.105,
+     "lift": 3.35
     },
     {
-     "control": "C Centro Ahora 4,880 MW (pron.) Pico de ",
-     "cuota_3s": 0.071,
-     "lift": 2.27
+     "control": "C Centro Ahora 4,651 MW (pron.) Pico de ",
+     "cuota_3s": 0.073,
+     "lift": 2.31
     },
     {
      "control": "Curva, demanda del SEIN por áreas: ir a ",
-     "cuota_3s": 0.055,
-     "lift": 5.0
+     "cuota_3s": 0.056,
+     "lift": 5.1
     },
     {
-     "control": "S Sur Ahora 1,963 MW (pron.) Pico de hoy",
+     "control": "S Sur Ahora 1,907 MW (pron.) Pico de hoy",
      "cuota_3s": 0.016,
-     "lift": 0.52
+     "lift": 0.51
     },
     {
      "control": "Ahora",
      "cuota_3s": 0.013,
-     "lift": 4.87
+     "lift": 4.9
     }
    ],
    "primer_clic": [
@@ -1090,7 +1090,7 @@
     },
     {
      "tarea": "T3 ¿y si hace 2 °C más?",
-     "predicho": "N Norte Ahora 1,266 MW (pron.) Pico de h",
+     "predicho": "N Norte Ahora 1,185 MW (pron.) Pico de h",
      "por": "atención",
      "acierta": false,
      "destino_a_la_vista": true,
@@ -1098,7 +1098,7 @@
     },
     {
      "tarea": "T4 ¿con qué fase de El Niño yerra más?",
-     "predicho": "N Norte Ahora 1,266 MW (pron.) Pico de h",
+     "predicho": "N Norte Ahora 1,185 MW (pron.) Pico de h",
      "por": "atención",
      "acierta": false,
      "destino_a_la_vista": true,
@@ -1106,7 +1106,7 @@
     },
     {
      "tarea": "T5 ver la demanda del Sur",
-     "predicho": "S Sur Ahora 1,963 MW (pron.) Pico de hoy",
+     "predicho": "S Sur Ahora 1,907 MW (pron.) Pico de hoy",
      "por": "palabras",
      "acierta": true,
      "destino_a_la_vista": true,
@@ -1175,19 +1175,19 @@
    "atencion": {
     "1s": {
      "cifra_ahora": {
-      "cuota": 0.0081,
+      "cuota": 0.0086,
       "area": 0.0024,
-      "lift": 3.33
+      "lift": 3.53
      },
      "pico_24h": {
-      "cuota": 0.0184,
+      "cuota": 0.018,
       "area": 0.0035,
-      "lift": 5.25
+      "lift": 5.14
      },
      "linea_ahora": {
-      "cuota": 0.0004,
-      "area": 0.0007,
-      "lift": 0.54
+      "cuota": 0.0008,
+      "area": 0.0013,
+      "lift": 0.65
      },
      "estado_datos": {
       "cuota": 0.0014,
@@ -1195,39 +1195,39 @@
       "lift": 0.36
      },
      "dijimos_ayer": {
-      "cuota": 0.0094,
+      "cuota": 0.0095,
       "area": 0.0219,
       "lift": 0.43
      },
      "titulo": {
-      "cuota": 0.0279,
+      "cuota": 0.0276,
       "area": 0.0048,
-      "lift": 5.86
+      "lift": 5.79
      },
      "que_es": {
-      "cuota": 0.0374,
+      "cuota": 0.037,
       "area": 0.0056,
-      "lift": 6.69
+      "lift": 6.63
      },
      "modo": {
-      "cuota": 0.0628,
+      "cuota": 0.0624,
       "area": 0.0143,
-      "lift": 4.4
+      "lift": 4.37
      },
      "otras_cifras": {
-      "cuota": 0.0134,
+      "cuota": 0.0131,
       "area": 0.0068,
-      "lift": 1.96
+      "lift": 1.92
      },
      "grafico": {
-      "cuota": 0.1475,
-      "area": 0.1307,
-      "lift": 1.13
+      "cuota": 0.1492,
+      "area": 0.1302,
+      "lift": 1.15
      },
      "areas": {
-      "cuota": 0.1635,
+      "cuota": 0.1634,
       "area": 0.0487,
-      "lift": 3.36
+      "lift": 3.35
      },
      "cuando": {
       "cuota": 0.0019,
@@ -1235,9 +1235,9 @@
       "lift": 0.32
      },
      "regimen": {
-      "cuota": 0.0134,
+      "cuota": 0.0133,
       "area": 0.0044,
-      "lift": 3.02
+      "lift": 3.0
      },
      "fijo": {
       "cuota": 0.0,
@@ -1250,81 +1250,81 @@
       "lift": 0.89
      },
      "texto": {
-      "cuota": 0.0641,
+      "cuota": 0.0642,
       "area": 0.1029,
       "lift": 0.62
      },
      "resto": {
-      "cuota": 0.4083,
+      "cuota": 0.4076,
       "area": 0.6187,
       "lift": 0.66
      }
     },
     "3s": {
      "cifra_ahora": {
-      "cuota": 0.0088,
+      "cuota": 0.009,
       "area": 0.0024,
-      "lift": 3.62
+      "lift": 3.71
      },
      "pico_24h": {
-      "cuota": 0.0143,
+      "cuota": 0.0145,
       "area": 0.0035,
-      "lift": 4.08
+      "lift": 4.13
      },
      "linea_ahora": {
-      "cuota": 0.0002,
-      "area": 0.0007,
-      "lift": 0.26
+      "cuota": 0.0005,
+      "area": 0.0013,
+      "lift": 0.36
      },
      "estado_datos": {
       "cuota": 0.0035,
       "area": 0.0037,
-      "lift": 0.94
+      "lift": 0.93
      },
      "dijimos_ayer": {
-      "cuota": 0.0112,
+      "cuota": 0.0111,
       "area": 0.0219,
       "lift": 0.51
      },
      "titulo": {
-      "cuota": 0.0391,
+      "cuota": 0.0385,
       "area": 0.0048,
-      "lift": 8.21
+      "lift": 8.08
      },
      "que_es": {
-      "cuota": 0.0597,
+      "cuota": 0.0588,
       "area": 0.0056,
-      "lift": 10.7
+      "lift": 10.53
      },
      "modo": {
-      "cuota": 0.0692,
+      "cuota": 0.069,
       "area": 0.0143,
-      "lift": 4.85
+      "lift": 4.83
      },
      "otras_cifras": {
-      "cuota": 0.0099,
+      "cuota": 0.0101,
       "area": 0.0068,
-      "lift": 1.45
+      "lift": 1.48
      },
      "grafico": {
-      "cuota": 0.1562,
-      "area": 0.1307,
+      "cuota": 0.1543,
+      "area": 0.1302,
       "lift": 1.19
      },
      "areas": {
-      "cuota": 0.141,
+      "cuota": 0.1432,
       "area": 0.0487,
-      "lift": 2.89
+      "lift": 2.94
      },
      "cuando": {
       "cuota": 0.0057,
       "area": 0.0059,
-      "lift": 0.97
+      "lift": 0.96
      },
      "regimen": {
       "cuota": 0.0142,
       "area": 0.0044,
-      "lift": 3.19
+      "lift": 3.2
      },
      "fijo": {
       "cuota": 0.0,
@@ -1332,46 +1332,46 @@
       "lift": null
      },
      "controles": {
-      "cuota": 0.0308,
+      "cuota": 0.0307,
       "area": 0.0248,
       "lift": 1.24
      },
      "texto": {
-      "cuota": 0.0516,
+      "cuota": 0.0522,
       "area": 0.1029,
-      "lift": 0.5
+      "lift": 0.51
      },
      "resto": {
-      "cuota": 0.3846,
+      "cuota": 0.3847,
       "area": 0.6187,
       "lift": 0.62
      }
     },
     "7s": {
      "cifra_ahora": {
-      "cuota": 0.0078,
+      "cuota": 0.0081,
       "area": 0.0024,
-      "lift": 3.21
+      "lift": 3.32
      },
      "pico_24h": {
       "cuota": 0.0109,
       "area": 0.0035,
-      "lift": 3.1
+      "lift": 3.12
      },
      "linea_ahora": {
-      "cuota": 0.0002,
-      "area": 0.0007,
-      "lift": 0.33
+      "cuota": 0.0006,
+      "area": 0.0013,
+      "lift": 0.44
      },
      "estado_datos": {
       "cuota": 0.0046,
       "area": 0.0037,
-      "lift": 1.23
+      "lift": 1.22
      },
      "dijimos_ayer": {
-      "cuota": 0.0294,
+      "cuota": 0.0299,
       "area": 0.0219,
-      "lift": 1.34
+      "lift": 1.37
      },
      "titulo": {
       "cuota": 0.0262,
@@ -1379,39 +1379,39 @@
       "lift": 5.49
      },
      "que_es": {
-      "cuota": 0.0398,
+      "cuota": 0.0396,
       "area": 0.0056,
-      "lift": 7.12
+      "lift": 7.09
      },
      "modo": {
-      "cuota": 0.0521,
+      "cuota": 0.0527,
       "area": 0.0143,
-      "lift": 3.65
+      "lift": 3.69
      },
      "otras_cifras": {
       "cuota": 0.0095,
       "area": 0.0068,
-      "lift": 1.38
+      "lift": 1.39
      },
      "grafico": {
-      "cuota": 0.1973,
-      "area": 0.1307,
-      "lift": 1.51
+      "cuota": 0.1921,
+      "area": 0.1302,
+      "lift": 1.48
      },
      "areas": {
-      "cuota": 0.1203,
+      "cuota": 0.1212,
       "area": 0.0487,
-      "lift": 2.47
+      "lift": 2.49
      },
      "cuando": {
-      "cuota": 0.0092,
+      "cuota": 0.0091,
       "area": 0.0059,
-      "lift": 1.56
+      "lift": 1.54
      },
      "regimen": {
-      "cuota": 0.0107,
+      "cuota": 0.011,
       "area": 0.0044,
-      "lift": 2.42
+      "lift": 2.47
      },
      "fijo": {
       "cuota": 0.0,
@@ -1419,17 +1419,17 @@
       "lift": null
      },
      "controles": {
-      "cuota": 0.0257,
+      "cuota": 0.0261,
       "area": 0.0248,
-      "lift": 1.04
+      "lift": 1.05
      },
      "texto": {
-      "cuota": 0.0755,
+      "cuota": 0.0762,
       "area": 0.1029,
-      "lift": 0.73
+      "lift": 0.74
      },
      "resto": {
-      "cuota": 0.381,
+      "cuota": 0.3824,
       "area": 0.6187,
       "lift": 0.62
      }
@@ -1449,7 +1449,7 @@
     "linea_ahora": {
      "existe": true,
      "a_la_vista": 1.0,
-     "arriba_px": 770
+     "arriba_px": 479
     },
     "estado_datos": {
      "existe": true,
@@ -1513,9 +1513,9 @@
      "Cambiar a modo oscuro",
      "Hoy",
      "Repasar un día",
-     "N Norte Ahora 1,266 MW (pron.) Pico de h",
-     "C Centro Ahora 4,880 MW (pron.) Pico de ",
-     "S Sur Ahora 1,963 MW (pron.) Pico de hoy",
+     "N Norte Ahora 1,185 MW (pron.) Pico de h",
+     "C Centro Ahora 4,651 MW (pron.) Pico de ",
+     "S Sur Ahora 1,907 MW (pron.) Pico de hoy",
      "Referencia (semana pasada)",
      "Ver los datos del gráfico en una tabla",
      "Descargar CSV"
@@ -1624,42 +1624,42 @@
     {
      "pregunta": "¿Viene más o menos demanda?",
      "a_la_vista": true,
-     "cuota_7s": 0.208,
+     "cuota_7s": 0.203,
      "responde": true
     },
     {
      "pregunta": "¿Qué puedo hacer aquí?",
      "a_la_vista": true,
-     "cuota_7s": 0.073,
+     "cuota_7s": 0.075,
      "responde": true,
-     "control_mas_mirado": "N Norte Ahora 1,266 MW (pron.) Pico de h"
+     "control_mas_mirado": "N Norte Ahora 1,185 MW (pron.) Pico de h"
     }
    ],
    "controles_mas_mirados": [
     {
-     "control": "N Norte Ahora 1,266 MW (pron.) Pico de h",
-     "cuota_3s": 0.073,
-     "lift": 4.59
+     "control": "N Norte Ahora 1,185 MW (pron.) Pico de h",
+     "cuota_3s": 0.075,
+     "lift": 4.71
     },
     {
      "control": "Curva, demanda del SEIN por áreas: ir a ",
-     "cuota_3s": 0.06,
-     "lift": 10.7
+     "cuota_3s": 0.059,
+     "lift": 10.53
     },
     {
-     "control": "C Centro Ahora 4,880 MW (pron.) Pico de ",
-     "cuota_3s": 0.05,
-     "lift": 3.17
+     "control": "C Centro Ahora 4,651 MW (pron.) Pico de ",
+     "cuota_3s": 0.051,
+     "lift": 3.21
     },
     {
-     "control": "S Sur Ahora 1,963 MW (pron.) Pico de hoy",
+     "control": "S Sur Ahora 1,907 MW (pron.) Pico de hoy",
      "cuota_3s": 0.015,
-     "lift": 0.95
+     "lift": 0.93
     },
     {
      "control": "Confianza",
      "cuota_3s": 0.009,
-     "lift": 4.75
+     "lift": 4.68
     }
    ],
    "primer_clic": [
@@ -1681,7 +1681,7 @@
     },
     {
      "tarea": "T3 ¿y si hace 2 °C más?",
-     "predicho": "N Norte Ahora 1,266 MW (pron.) Pico de h",
+     "predicho": "N Norte Ahora 1,185 MW (pron.) Pico de h",
      "por": "atención",
      "acierta": false,
      "destino_a_la_vista": true,
@@ -1689,7 +1689,7 @@
     },
     {
      "tarea": "T4 ¿con qué fase de El Niño yerra más?",
-     "predicho": "N Norte Ahora 1,266 MW (pron.) Pico de h",
+     "predicho": "N Norte Ahora 1,185 MW (pron.) Pico de h",
      "por": "atención",
      "acierta": false,
      "destino_a_la_vista": true,
@@ -1697,7 +1697,7 @@
     },
     {
      "tarea": "T5 ver la demanda del Sur",
-     "predicho": "S Sur Ahora 1,963 MW (pron.) Pico de hoy",
+     "predicho": "S Sur Ahora 1,907 MW (pron.) Pico de hoy",
      "por": "palabras",
      "acierta": true,
      "destino_a_la_vista": true,
@@ -1766,24 +1766,24 @@
    "atencion": {
     "1s": {
      "cifra_ahora": {
-      "cuota": 0.0078,
+      "cuota": 0.0083,
       "area": 0.0024,
-      "lift": 3.22
+      "lift": 3.43
      },
      "pico_24h": {
-      "cuota": 0.0195,
+      "cuota": 0.0197,
       "area": 0.0035,
-      "lift": 5.57
+      "lift": 5.62
      },
      "linea_ahora": {
-      "cuota": 0.0003,
-      "area": 0.0007,
-      "lift": 0.45
+      "cuota": 0.0007,
+      "area": 0.0013,
+      "lift": 0.53
      },
      "estado_datos": {
       "cuota": 0.0012,
       "area": 0.0037,
-      "lift": 0.32
+      "lift": 0.31
      },
      "dijimos_ayer": {
       "cuota": 0.0072,
@@ -1791,34 +1791,34 @@
       "lift": 0.33
      },
      "titulo": {
-      "cuota": 0.0303,
+      "cuota": 0.03,
       "area": 0.0048,
-      "lift": 6.36
+      "lift": 6.3
      },
      "que_es": {
-      "cuota": 0.0363,
+      "cuota": 0.0355,
       "area": 0.0056,
-      "lift": 6.5
+      "lift": 6.36
      },
      "modo": {
-      "cuota": 0.0741,
+      "cuota": 0.0738,
       "area": 0.0143,
-      "lift": 5.19
+      "lift": 5.17
      },
      "otras_cifras": {
-      "cuota": 0.0136,
+      "cuota": 0.0138,
       "area": 0.0068,
-      "lift": 1.99
+      "lift": 2.01
      },
      "grafico": {
-      "cuota": 0.1245,
-      "area": 0.1307,
+      "cuota": 0.1233,
+      "area": 0.1302,
       "lift": 0.95
      },
      "areas": {
-      "cuota": 0.1804,
+      "cuota": 0.1824,
       "area": 0.0487,
-      "lift": 3.7
+      "lift": 3.74
      },
      "cuando": {
       "cuota": 0.0014,
@@ -1826,9 +1826,9 @@
       "lift": 0.24
      },
      "regimen": {
-      "cuota": 0.0162,
+      "cuota": 0.016,
       "area": 0.0044,
-      "lift": 3.64
+      "lift": 3.6
      },
      "fijo": {
       "cuota": 0.0,
@@ -1836,76 +1836,76 @@
       "lift": null
      },
      "controles": {
-      "cuota": 0.0257,
+      "cuota": 0.0253,
       "area": 0.0248,
-      "lift": 1.04
+      "lift": 1.02
      },
      "texto": {
-      "cuota": 0.0591,
+      "cuota": 0.0593,
       "area": 0.1029,
-      "lift": 0.57
+      "lift": 0.58
      },
      "resto": {
-      "cuota": 0.4023,
+      "cuota": 0.4022,
       "area": 0.6187,
       "lift": 0.65
      }
     },
     "3s": {
      "cifra_ahora": {
-      "cuota": 0.0104,
+      "cuota": 0.0108,
       "area": 0.0024,
-      "lift": 4.29
+      "lift": 4.44
      },
      "pico_24h": {
-      "cuota": 0.0168,
+      "cuota": 0.017,
       "area": 0.0035,
-      "lift": 4.79
+      "lift": 4.84
      },
      "linea_ahora": {
-      "cuota": 0.0001,
-      "area": 0.0007,
-      "lift": 0.18
+      "cuota": 0.0003,
+      "area": 0.0013,
+      "lift": 0.22
      },
      "estado_datos": {
-      "cuota": 0.0025,
+      "cuota": 0.0024,
       "area": 0.0037,
-      "lift": 0.66
+      "lift": 0.65
      },
      "dijimos_ayer": {
-      "cuota": 0.0113,
+      "cuota": 0.0112,
       "area": 0.0219,
-      "lift": 0.52
+      "lift": 0.51
      },
      "titulo": {
-      "cuota": 0.0421,
+      "cuota": 0.0415,
       "area": 0.0048,
-      "lift": 8.83
+      "lift": 8.72
      },
      "que_es": {
-      "cuota": 0.0525,
+      "cuota": 0.0517,
       "area": 0.0056,
-      "lift": 9.4
+      "lift": 9.27
      },
      "modo": {
-      "cuota": 0.0802,
+      "cuota": 0.0798,
       "area": 0.0143,
-      "lift": 5.62
+      "lift": 5.59
      },
      "otras_cifras": {
       "cuota": 0.0111,
       "area": 0.0068,
-      "lift": 1.62
+      "lift": 1.63
      },
      "grafico": {
-      "cuota": 0.1251,
-      "area": 0.1307,
-      "lift": 0.96
+      "cuota": 0.1234,
+      "area": 0.1302,
+      "lift": 0.95
      },
      "areas": {
-      "cuota": 0.1604,
+      "cuota": 0.1624,
       "area": 0.0487,
-      "lift": 3.29
+      "lift": 3.33
      },
      "cuando": {
       "cuota": 0.0039,
@@ -1913,9 +1913,9 @@
       "lift": 0.66
      },
      "regimen": {
-      "cuota": 0.0172,
+      "cuota": 0.0171,
       "area": 0.0044,
-      "lift": 3.86
+      "lift": 3.85
      },
      "fijo": {
       "cuota": 0.0,
@@ -1928,51 +1928,51 @@
       "lift": 1.25
      },
      "texto": {
-      "cuota": 0.0542,
+      "cuota": 0.0548,
       "area": 0.1029,
       "lift": 0.53
      },
      "resto": {
-      "cuota": 0.3815,
+      "cuota": 0.3816,
       "area": 0.6187,
       "lift": 0.62
      }
     },
     "7s": {
      "cifra_ahora": {
-      "cuota": 0.0084,
+      "cuota": 0.0086,
       "area": 0.0024,
-      "lift": 3.46
+      "lift": 3.55
      },
      "pico_24h": {
-      "cuota": 0.012,
+      "cuota": 0.0122,
       "area": 0.0035,
-      "lift": 3.41
+      "lift": 3.5
      },
      "linea_ahora": {
-      "cuota": 0.0002,
-      "area": 0.0007,
-      "lift": 0.31
+      "cuota": 0.0005,
+      "area": 0.0013,
+      "lift": 0.37
      },
      "estado_datos": {
       "cuota": 0.0038,
       "area": 0.0037,
-      "lift": 1.02
+      "lift": 1.01
      },
      "dijimos_ayer": {
-      "cuota": 0.0306,
+      "cuota": 0.0301,
       "area": 0.0219,
-      "lift": 1.4
+      "lift": 1.37
      },
      "titulo": {
-      "cuota": 0.0258,
+      "cuota": 0.0256,
       "area": 0.0048,
-      "lift": 5.42
+      "lift": 5.37
      },
      "que_es": {
-      "cuota": 0.0325,
+      "cuota": 0.0321,
       "area": 0.0056,
-      "lift": 5.83
+      "lift": 5.75
      },
      "modo": {
       "cuota": 0.0553,
@@ -1980,19 +1980,19 @@
       "lift": 3.87
      },
      "otras_cifras": {
-      "cuota": 0.0099,
+      "cuota": 0.0101,
       "area": 0.0068,
-      "lift": 1.45
+      "lift": 1.47
      },
      "grafico": {
-      "cuota": 0.1977,
-      "area": 0.1307,
-      "lift": 1.51
+      "cuota": 0.1949,
+      "area": 0.1302,
+      "lift": 1.5
      },
      "areas": {
-      "cuota": 0.1214,
+      "cuota": 0.1233,
       "area": 0.0487,
-      "lift": 2.49
+      "lift": 2.53
      },
      "cuando": {
       "cuota": 0.0073,
@@ -2002,7 +2002,7 @@
      "regimen": {
       "cuota": 0.0128,
       "area": 0.0044,
-      "lift": 2.88
+      "lift": 2.89
      },
      "fijo": {
       "cuota": 0.0,
@@ -2010,17 +2010,17 @@
       "lift": null
      },
      "controles": {
-      "cuota": 0.0295,
+      "cuota": 0.0297,
       "area": 0.0248,
-      "lift": 1.19
+      "lift": 1.2
      },
      "texto": {
-      "cuota": 0.08,
+      "cuota": 0.0803,
       "area": 0.1029,
       "lift": 0.78
      },
      "resto": {
-      "cuota": 0.3728,
+      "cuota": 0.3734,
       "area": 0.6187,
       "lift": 0.6
      }
@@ -2040,7 +2040,7 @@
     "linea_ahora": {
      "existe": true,
      "a_la_vista": 1.0,
-     "arriba_px": 770
+     "arriba_px": 479
     },
     "estado_datos": {
      "existe": true,
@@ -2104,9 +2104,9 @@
      "Cambiar a modo claro",
      "Hoy",
      "Repasar un día",
-     "N Norte Ahora 1,266 MW (pron.) Pico de h",
-     "C Centro Ahora 4,880 MW (pron.) Pico de ",
-     "S Sur Ahora 1,963 MW (pron.) Pico de hoy",
+     "N Norte Ahora 1,185 MW (pron.) Pico de h",
+     "C Centro Ahora 4,651 MW (pron.) Pico de ",
+     "S Sur Ahora 1,907 MW (pron.) Pico de hoy",
      "Referencia (semana pasada)",
      "Ver los datos del gráfico en una tabla",
      "Descargar CSV"
@@ -2191,7 +2191,7 @@
     {
      "pregunta": "¿Qué es esto?",
      "a_la_vista": true,
-     "cuota_7s": 0.033,
+     "cuota_7s": 0.032,
      "responde": false
     },
     {
@@ -2203,7 +2203,7 @@
     {
      "pregunta": "¿Cuánta demanda hay ahora?",
      "a_la_vista": true,
-     "cuota_7s": 0.008,
+     "cuota_7s": 0.009,
      "responde": false
     },
     {
@@ -2215,42 +2215,42 @@
     {
      "pregunta": "¿Viene más o menos demanda?",
      "a_la_vista": true,
-     "cuota_7s": 0.21,
+     "cuota_7s": 0.207,
      "responde": true
     },
     {
      "pregunta": "¿Qué puedo hacer aquí?",
      "a_la_vista": true,
-     "cuota_7s": 0.086,
+     "cuota_7s": 0.087,
      "responde": true,
-     "control_mas_mirado": "N Norte Ahora 1,266 MW (pron.) Pico de h"
+     "control_mas_mirado": "N Norte Ahora 1,185 MW (pron.) Pico de h"
     }
    ],
    "controles_mas_mirados": [
     {
-     "control": "N Norte Ahora 1,266 MW (pron.) Pico de h",
-     "cuota_3s": 0.086,
-     "lift": 5.38
+     "control": "N Norte Ahora 1,185 MW (pron.) Pico de h",
+     "cuota_3s": 0.087,
+     "lift": 5.49
     },
     {
-     "control": "C Centro Ahora 4,880 MW (pron.) Pico de ",
+     "control": "C Centro Ahora 4,651 MW (pron.) Pico de ",
      "cuota_3s": 0.06,
-     "lift": 3.77
+     "lift": 3.79
     },
     {
      "control": "Curva, demanda del SEIN por áreas: ir a ",
      "cuota_3s": 0.052,
-     "lift": 9.4
+     "lift": 9.27
     },
     {
-     "control": "S Sur Ahora 1,963 MW (pron.) Pico de hoy",
+     "control": "S Sur Ahora 1,907 MW (pron.) Pico de hoy",
      "cuota_3s": 0.012,
      "lift": 0.77
     },
     {
      "control": "Confianza",
      "cuota_3s": 0.009,
-     "lift": 4.92
+     "lift": 4.86
     }
    ],
    "primer_clic": [
@@ -2272,7 +2272,7 @@
     },
     {
      "tarea": "T3 ¿y si hace 2 °C más?",
-     "predicho": "N Norte Ahora 1,266 MW (pron.) Pico de h",
+     "predicho": "N Norte Ahora 1,185 MW (pron.) Pico de h",
      "por": "atención",
      "acierta": false,
      "destino_a_la_vista": true,
@@ -2280,7 +2280,7 @@
     },
     {
      "tarea": "T4 ¿con qué fase de El Niño yerra más?",
-     "predicho": "N Norte Ahora 1,266 MW (pron.) Pico de h",
+     "predicho": "N Norte Ahora 1,185 MW (pron.) Pico de h",
      "por": "atención",
      "acierta": false,
      "destino_a_la_vista": true,
@@ -2288,7 +2288,7 @@
     },
     {
      "tarea": "T5 ver la demanda del Sur",
-     "predicho": "S Sur Ahora 1,963 MW (pron.) Pico de hoy",
+     "predicho": "S Sur Ahora 1,907 MW (pron.) Pico de hoy",
      "por": "palabras",
      "acierta": true,
      "destino_a_la_vista": true,
@@ -2357,9 +2357,9 @@
    "atencion": {
     "1s": {
      "cifra_ahora": {
-      "cuota": 0.0129,
+      "cuota": 0.0139,
       "area": 0.0064,
-      "lift": 2.02
+      "lift": 2.17
      },
      "pico_24h": {
       "cuota": 0.0069,
@@ -2368,8 +2368,8 @@
      },
      "linea_ahora": {
       "cuota": 0.0,
-      "area": 0.0,
-      "lift": null
+      "area": 0.0004,
+      "lift": 0.05
      },
      "estado_datos": {
       "cuota": 0.0018,
@@ -2382,34 +2382,34 @@
       "lift": null
      },
      "titulo": {
-      "cuota": 0.0429,
+      "cuota": 0.043,
       "area": 0.0126,
-      "lift": 3.41
+      "lift": 3.42
      },
      "que_es": {
       "cuota": 0.0217,
       "area": 0.0051,
-      "lift": 4.21
+      "lift": 4.22
      },
      "modo": {
-      "cuota": 0.1438,
+      "cuota": 0.1446,
       "area": 0.0364,
-      "lift": 3.94
+      "lift": 3.97
      },
      "otras_cifras": {
-      "cuota": 0.0324,
+      "cuota": 0.0321,
       "area": 0.018,
-      "lift": 1.8
+      "lift": 1.78
      },
      "grafico": {
-      "cuota": 0.0287,
-      "area": 0.1919,
-      "lift": 0.15
+      "cuota": 0.0273,
+      "area": 0.1915,
+      "lift": 0.14
      },
      "areas": {
-      "cuota": 0.2559,
+      "cuota": 0.2572,
       "area": 0.1229,
-      "lift": 2.08
+      "lift": 2.09
      },
      "cuando": {
       "cuota": 0.003,
@@ -2417,7 +2417,7 @@
       "lift": 0.18
      },
      "regimen": {
-      "cuota": 0.0098,
+      "cuota": 0.0097,
       "area": 0.0117,
       "lift": 0.83
      },
@@ -2427,41 +2427,41 @@
       "lift": null
      },
      "controles": {
-      "cuota": 0.04,
+      "cuota": 0.0401,
       "area": 0.0292,
       "lift": 1.37
      },
      "texto": {
-      "cuota": 0.0328,
+      "cuota": 0.0326,
       "area": 0.0471,
-      "lift": 0.7
+      "lift": 0.69
      },
      "resto": {
-      "cuota": 0.3674,
+      "cuota": 0.3662,
       "area": 0.4828,
       "lift": 0.76
      }
     },
     "3s": {
      "cifra_ahora": {
-      "cuota": 0.0163,
+      "cuota": 0.0174,
       "area": 0.0064,
-      "lift": 2.55
+      "lift": 2.71
      },
      "pico_24h": {
-      "cuota": 0.0086,
+      "cuota": 0.0084,
       "area": 0.0092,
-      "lift": 0.93
+      "lift": 0.91
      },
      "linea_ahora": {
       "cuota": 0.0,
-      "area": 0.0,
-      "lift": null
+      "area": 0.0004,
+      "lift": 0.02
      },
      "estado_datos": {
       "cuota": 0.0057,
       "area": 0.0099,
-      "lift": 0.58
+      "lift": 0.57
      },
      "dijimos_ayer": {
       "cuota": 0.0,
@@ -2469,44 +2469,44 @@
       "lift": null
      },
      "titulo": {
-      "cuota": 0.0572,
+      "cuota": 0.0578,
       "area": 0.0126,
-      "lift": 4.55
+      "lift": 4.6
      },
      "que_es": {
-      "cuota": 0.026,
+      "cuota": 0.0262,
       "area": 0.0051,
-      "lift": 5.04
+      "lift": 5.08
      },
      "modo": {
-      "cuota": 0.1031,
+      "cuota": 0.1035,
       "area": 0.0364,
-      "lift": 2.83
+      "lift": 2.84
      },
      "otras_cifras": {
-      "cuota": 0.0273,
+      "cuota": 0.0268,
       "area": 0.018,
-      "lift": 1.51
+      "lift": 1.48
      },
      "grafico": {
-      "cuota": 0.0206,
-      "area": 0.1919,
-      "lift": 0.11
+      "cuota": 0.0195,
+      "area": 0.1915,
+      "lift": 0.1
      },
      "areas": {
-      "cuota": 0.235,
+      "cuota": 0.2354,
       "area": 0.1229,
-      "lift": 1.91
+      "lift": 1.92
      },
      "cuando": {
-      "cuota": 0.0105,
+      "cuota": 0.0102,
       "area": 0.0166,
-      "lift": 0.63
+      "lift": 0.62
      },
      "regimen": {
-      "cuota": 0.0093,
+      "cuota": 0.0092,
       "area": 0.0117,
-      "lift": 0.79
+      "lift": 0.78
      },
      "fijo": {
       "cuota": 0.0,
@@ -2514,9 +2514,9 @@
       "lift": null
      },
      "controles": {
-      "cuota": 0.0643,
+      "cuota": 0.0646,
       "area": 0.0292,
-      "lift": 2.2
+      "lift": 2.21
      },
      "texto": {
       "cuota": 0.0287,
@@ -2524,16 +2524,16 @@
       "lift": 0.61
      },
      "resto": {
-      "cuota": 0.3874,
+      "cuota": 0.3867,
       "area": 0.4828,
       "lift": 0.8
      }
     },
     "7s": {
      "cifra_ahora": {
-      "cuota": 0.0174,
+      "cuota": 0.0181,
       "area": 0.0064,
-      "lift": 2.73
+      "lift": 2.82
      },
      "pico_24h": {
       "cuota": 0.0154,
@@ -2542,8 +2542,8 @@
      },
      "linea_ahora": {
       "cuota": 0.0,
-      "area": 0.0,
-      "lift": null
+      "area": 0.0004,
+      "lift": 0.11
      },
      "estado_datos": {
       "cuota": 0.0058,
@@ -2556,44 +2556,44 @@
       "lift": null
      },
      "titulo": {
-      "cuota": 0.0403,
+      "cuota": 0.0405,
       "area": 0.0126,
-      "lift": 3.21
+      "lift": 3.22
      },
      "que_es": {
-      "cuota": 0.0157,
+      "cuota": 0.0158,
       "area": 0.0051,
-      "lift": 3.06
+      "lift": 3.07
      },
      "modo": {
-      "cuota": 0.0912,
+      "cuota": 0.0918,
       "area": 0.0364,
-      "lift": 2.5
+      "lift": 2.52
      },
      "otras_cifras": {
-      "cuota": 0.0304,
+      "cuota": 0.0299,
       "area": 0.018,
-      "lift": 1.69
-     },
-     "grafico": {
-      "cuota": 0.0627,
-      "area": 0.1919,
-      "lift": 0.33
-     },
-     "areas": {
-      "cuota": 0.2036,
-      "area": 0.1229,
       "lift": 1.66
      },
+     "grafico": {
+      "cuota": 0.0608,
+      "area": 0.1915,
+      "lift": 0.32
+     },
+     "areas": {
+      "cuota": 0.2054,
+      "area": 0.1229,
+      "lift": 1.67
+     },
      "cuando": {
-      "cuota": 0.0169,
+      "cuota": 0.0168,
       "area": 0.0166,
-      "lift": 1.02
+      "lift": 1.01
      },
      "regimen": {
       "cuota": 0.0108,
       "area": 0.0117,
-      "lift": 0.93
+      "lift": 0.92
      },
      "fijo": {
       "cuota": 0.0,
@@ -2601,17 +2601,17 @@
       "lift": null
      },
      "controles": {
-      "cuota": 0.0536,
+      "cuota": 0.0532,
       "area": 0.0292,
-      "lift": 1.83
+      "lift": 1.82
      },
      "texto": {
-      "cuota": 0.0408,
+      "cuota": 0.0411,
       "area": 0.0471,
-      "lift": 0.86
+      "lift": 0.87
      },
      "resto": {
-      "cuota": 0.3952,
+      "cuota": 0.3945,
       "area": 0.4828,
       "lift": 0.82
      }
@@ -2630,8 +2630,8 @@
     },
     "linea_ahora": {
      "existe": true,
-     "a_la_vista": 0.0,
-     "arriba_px": 845
+     "a_la_vista": 0.137,
+     "arriba_px": 614
     },
     "estado_datos": {
      "existe": true,
@@ -2695,9 +2695,9 @@
      "Cambiar a modo oscuro",
      "Hoy",
      "Repasar un día",
-     "N Norte Ahora 1,266 MW (pron.) Pico de h",
-     "C Centro Ahora 4,880 MW (pron.) Pico de ",
-     "S Sur Ahora 1,963 MW (pron.) Pico de hoy",
+     "N Norte Ahora 1,185 MW (pron.) Pico de h",
+     "C Centro Ahora 4,651 MW (pron.) Pico de ",
+     "S Sur Ahora 1,907 MW (pron.) Pico de hoy",
      "Referencia (semana pasada)"
     ],
     "cifras": {
@@ -2766,60 +2766,60 @@
     {
      "pregunta": "¿De qué zona habla?",
      "a_la_vista": true,
-     "cuota_7s": 0.04,
+     "cuota_7s": 0.041,
      "responde": false
     },
     {
      "pregunta": "¿Cuánta demanda hay ahora?",
      "a_la_vista": true,
-     "cuota_7s": 0.017,
+     "cuota_7s": 0.018,
      "responde": false
     },
     {
      "pregunta": "¿Es real o pronóstico, y hasta cuándo hay datos?",
      "a_la_vista": true,
-     "cuota_7s": 0.097,
+     "cuota_7s": 0.098,
      "responde": true
     },
     {
      "pregunta": "¿Viene más o menos demanda?",
      "a_la_vista": true,
-     "cuota_7s": 0.078,
+     "cuota_7s": 0.076,
      "responde": true
     },
     {
      "pregunta": "¿Qué puedo hacer aquí?",
      "a_la_vista": true,
-     "cuota_7s": 0.11,
+     "cuota_7s": 0.111,
      "responde": true,
-     "control_mas_mirado": "N Norte Ahora 1,266 MW (pron.) Pico de h"
+     "control_mas_mirado": "N Norte Ahora 1,185 MW (pron.) Pico de h"
     }
    ],
    "controles_mas_mirados": [
     {
-     "control": "N Norte Ahora 1,266 MW (pron.) Pico de h",
-     "cuota_3s": 0.11,
-     "lift": 2.75
+     "control": "N Norte Ahora 1,185 MW (pron.) Pico de h",
+     "cuota_3s": 0.111,
+     "lift": 2.79
     },
     {
-     "control": "C Centro Ahora 4,880 MW (pron.) Pico de ",
-     "cuota_3s": 0.093,
-     "lift": 2.32
+     "control": "C Centro Ahora 4,651 MW (pron.) Pico de ",
+     "cuota_3s": 0.092,
+     "lift": 2.3
     },
     {
-     "control": "S Sur Ahora 1,963 MW (pron.) Pico de hoy",
+     "control": "S Sur Ahora 1,907 MW (pron.) Pico de hoy",
      "cuota_3s": 0.027,
-     "lift": 0.68
+     "lift": 0.67
     },
     {
      "control": "Curva, demanda del SEIN por áreas: ir a ",
      "cuota_3s": 0.026,
-     "lift": 5.04
+     "lift": 5.08
     },
     {
      "control": "Confianza",
      "cuota_3s": 0.025,
-     "lift": 4.99
+     "lift": 5.03
     }
    ],
    "primer_clic": [
@@ -2841,7 +2841,7 @@
     },
     {
      "tarea": "T3 ¿y si hace 2 °C más?",
-     "predicho": "N Norte Ahora 1,266 MW (pron.) Pico de h",
+     "predicho": "N Norte Ahora 1,185 MW (pron.) Pico de h",
      "por": "atención",
      "acierta": false,
      "destino_a_la_vista": true,
@@ -2849,7 +2849,7 @@
     },
     {
      "tarea": "T4 ¿con qué fase de El Niño yerra más?",
-     "predicho": "N Norte Ahora 1,266 MW (pron.) Pico de h",
+     "predicho": "N Norte Ahora 1,185 MW (pron.) Pico de h",
      "por": "atención",
      "acierta": false,
      "destino_a_la_vista": true,
@@ -2857,7 +2857,7 @@
     },
     {
      "tarea": "T5 ver la demanda del Sur",
-     "predicho": "S Sur Ahora 1,963 MW (pron.) Pico de hoy",
+     "predicho": "S Sur Ahora 1,907 MW (pron.) Pico de hoy",
      "por": "palabras",
      "acierta": true,
      "destino_a_la_vista": true,
@@ -2924,9 +2924,9 @@
    "atencion": {
     "1s": {
      "cifra_ahora": {
-      "cuota": 0.0127,
+      "cuota": 0.0132,
       "area": 0.0064,
-      "lift": 1.99
+      "lift": 2.06
      },
      "pico_24h": {
       "cuota": 0.0053,
@@ -2935,8 +2935,8 @@
      },
      "linea_ahora": {
       "cuota": 0.0,
-      "area": 0.0,
-      "lift": null
+      "area": 0.0004,
+      "lift": 0.05
      },
      "estado_datos": {
       "cuota": 0.0018,
@@ -2954,14 +2954,14 @@
       "lift": 2.64
      },
      "que_es": {
-      "cuota": 0.0136,
+      "cuota": 0.0137,
       "area": 0.0051,
-      "lift": 2.65
+      "lift": 2.67
      },
      "modo": {
-      "cuota": 0.1551,
+      "cuota": 0.1558,
       "area": 0.0364,
-      "lift": 4.26
+      "lift": 4.27
      },
      "otras_cifras": {
       "cuota": 0.0288,
@@ -2969,12 +2969,12 @@
       "lift": 1.6
      },
      "grafico": {
-      "cuota": 0.0284,
-      "area": 0.1919,
-      "lift": 0.15
+      "cuota": 0.027,
+      "area": 0.1915,
+      "lift": 0.14
      },
      "areas": {
-      "cuota": 0.284,
+      "cuota": 0.2841,
       "area": 0.1229,
       "lift": 2.31
      },
@@ -2984,9 +2984,9 @@
       "lift": 0.14
      },
      "regimen": {
-      "cuota": 0.0092,
+      "cuota": 0.0091,
       "area": 0.0117,
-      "lift": 0.79
+      "lift": 0.78
      },
      "fijo": {
       "cuota": 0.0,
@@ -2999,31 +2999,31 @@
       "lift": 1.21
      },
      "texto": {
-      "cuota": 0.0322,
+      "cuota": 0.0323,
       "area": 0.0471,
-      "lift": 0.68
+      "lift": 0.69
      },
      "resto": {
-      "cuota": 0.3579,
+      "cuota": 0.358,
       "area": 0.4828,
       "lift": 0.74
      }
     },
     "3s": {
      "cifra_ahora": {
-      "cuota": 0.0218,
+      "cuota": 0.022,
       "area": 0.0064,
-      "lift": 3.4
+      "lift": 3.44
      },
      "pico_24h": {
-      "cuota": 0.0098,
+      "cuota": 0.0097,
       "area": 0.0092,
-      "lift": 1.06
+      "lift": 1.05
      },
      "linea_ahora": {
       "cuota": 0.0,
-      "area": 0.0,
-      "lift": null
+      "area": 0.0004,
+      "lift": 0.02
      },
      "estado_datos": {
       "cuota": 0.0048,
@@ -3036,28 +3036,28 @@
       "lift": null
      },
      "titulo": {
-      "cuota": 0.0511,
+      "cuota": 0.0514,
       "area": 0.0126,
-      "lift": 4.07
+      "lift": 4.09
      },
      "que_es": {
-      "cuota": 0.0183,
+      "cuota": 0.0184,
       "area": 0.0051,
-      "lift": 3.56
+      "lift": 3.58
      },
      "modo": {
-      "cuota": 0.0911,
+      "cuota": 0.0906,
       "area": 0.0364,
-      "lift": 2.5
+      "lift": 2.49
      },
      "otras_cifras": {
-      "cuota": 0.0296,
+      "cuota": 0.0298,
       "area": 0.018,
-      "lift": 1.64
+      "lift": 1.65
      },
      "grafico": {
-      "cuota": 0.0234,
-      "area": 0.1919,
+      "cuota": 0.0229,
+      "area": 0.1915,
       "lift": 0.12
      },
      "areas": {
@@ -3066,14 +3066,14 @@
       "lift": 2.11
      },
      "cuando": {
-      "cuota": 0.0071,
+      "cuota": 0.007,
       "area": 0.0166,
-      "lift": 0.43
+      "lift": 0.42
      },
      "regimen": {
-      "cuota": 0.0109,
+      "cuota": 0.0108,
       "area": 0.0117,
-      "lift": 0.93
+      "lift": 0.92
      },
      "fijo": {
       "cuota": 0.0,
@@ -3081,26 +3081,26 @@
       "lift": null
      },
      "controles": {
-      "cuota": 0.054,
+      "cuota": 0.0539,
       "area": 0.0292,
-      "lift": 1.85
+      "lift": 1.84
      },
      "texto": {
-      "cuota": 0.0377,
+      "cuota": 0.0378,
       "area": 0.0471,
       "lift": 0.8
      },
      "resto": {
-      "cuota": 0.3816,
+      "cuota": 0.3821,
       "area": 0.4828,
       "lift": 0.79
      }
     },
     "7s": {
      "cifra_ahora": {
-      "cuota": 0.021,
+      "cuota": 0.02,
       "area": 0.0064,
-      "lift": 3.28
+      "lift": 3.13
      },
      "pico_24h": {
       "cuota": 0.0161,
@@ -3109,8 +3109,8 @@
      },
      "linea_ahora": {
       "cuota": 0.0,
-      "area": 0.0,
-      "lift": null
+      "area": 0.0004,
+      "lift": 0.12
      },
      "estado_datos": {
       "cuota": 0.0063,
@@ -3125,7 +3125,7 @@
      "titulo": {
       "cuota": 0.0325,
       "area": 0.0126,
-      "lift": 2.59
+      "lift": 2.58
      },
      "que_es": {
       "cuota": 0.0097,
@@ -3133,24 +3133,24 @@
       "lift": 1.89
      },
      "modo": {
-      "cuota": 0.0714,
+      "cuota": 0.0713,
       "area": 0.0364,
       "lift": 1.96
      },
      "otras_cifras": {
-      "cuota": 0.0344,
+      "cuota": 0.0348,
       "area": 0.018,
-      "lift": 1.91
+      "lift": 1.93
      },
      "grafico": {
-      "cuota": 0.0772,
-      "area": 0.1919,
+      "cuota": 0.0773,
+      "area": 0.1915,
       "lift": 0.4
      },
      "areas": {
-      "cuota": 0.2041,
+      "cuota": 0.205,
       "area": 0.1229,
-      "lift": 1.66
+      "lift": 1.67
      },
      "cuando": {
       "cuota": 0.0134,
@@ -3168,17 +3168,17 @@
       "lift": null
      },
      "controles": {
-      "cuota": 0.0412,
+      "cuota": 0.0408,
       "area": 0.0292,
-      "lift": 1.41
+      "lift": 1.4
      },
      "texto": {
-      "cuota": 0.0535,
+      "cuota": 0.0539,
       "area": 0.0471,
       "lift": 1.14
      },
      "resto": {
-      "cuota": 0.4068,
+      "cuota": 0.4067,
       "area": 0.4828,
       "lift": 0.84
      }
@@ -3197,8 +3197,8 @@
     },
     "linea_ahora": {
      "existe": true,
-     "a_la_vista": 0.0,
-     "arriba_px": 845
+     "a_la_vista": 0.137,
+     "arriba_px": 614
     },
     "estado_datos": {
      "existe": true,
@@ -3262,9 +3262,9 @@
      "Cambiar a modo claro",
      "Hoy",
      "Repasar un día",
-     "N Norte Ahora 1,266 MW (pron.) Pico de h",
-     "C Centro Ahora 4,880 MW (pron.) Pico de ",
-     "S Sur Ahora 1,963 MW (pron.) Pico de hoy",
+     "N Norte Ahora 1,185 MW (pron.) Pico de h",
+     "C Centro Ahora 4,651 MW (pron.) Pico de ",
+     "S Sur Ahora 1,907 MW (pron.) Pico de hoy",
      "Referencia (semana pasada)"
     ],
     "cifras": {
@@ -3339,7 +3339,7 @@
     {
      "pregunta": "¿Cuánta demanda hay ahora?",
      "a_la_vista": true,
-     "cuota_7s": 0.021,
+     "cuota_7s": 0.02,
      "responde": false
     },
     {
@@ -3357,26 +3357,26 @@
     {
      "pregunta": "¿Qué puedo hacer aquí?",
      "a_la_vista": true,
-     "cuota_7s": 0.127,
+     "cuota_7s": 0.128,
      "responde": true,
-     "control_mas_mirado": "N Norte Ahora 1,266 MW (pron.) Pico de h"
+     "control_mas_mirado": "N Norte Ahora 1,185 MW (pron.) Pico de h"
     }
    ],
    "controles_mas_mirados": [
     {
-     "control": "N Norte Ahora 1,266 MW (pron.) Pico de h",
-     "cuota_3s": 0.127,
-     "lift": 3.18
+     "control": "N Norte Ahora 1,185 MW (pron.) Pico de h",
+     "cuota_3s": 0.128,
+     "lift": 3.21
     },
     {
-     "control": "C Centro Ahora 4,880 MW (pron.) Pico de ",
-     "cuota_3s": 0.098,
-     "lift": 2.44
+     "control": "C Centro Ahora 4,651 MW (pron.) Pico de ",
+     "cuota_3s": 0.097,
+     "lift": 2.43
     },
     {
-     "control": "S Sur Ahora 1,963 MW (pron.) Pico de hoy",
-     "cuota_3s": 0.03,
-     "lift": 0.74
+     "control": "S Sur Ahora 1,907 MW (pron.) Pico de hoy",
+     "cuota_3s": 0.029,
+     "lift": 0.73
     },
     {
      "control": "Confianza",
@@ -3386,7 +3386,7 @@
     {
      "control": "Curva, demanda del SEIN por áreas: ir a ",
      "cuota_3s": 0.018,
-     "lift": 3.56
+     "lift": 3.58
     }
    ],
    "primer_clic": [
@@ -3408,7 +3408,7 @@
     },
     {
      "tarea": "T3 ¿y si hace 2 °C más?",
-     "predicho": "N Norte Ahora 1,266 MW (pron.) Pico de h",
+     "predicho": "N Norte Ahora 1,185 MW (pron.) Pico de h",
      "por": "atención",
      "acierta": false,
      "destino_a_la_vista": true,
@@ -3416,7 +3416,7 @@
     },
     {
      "tarea": "T4 ¿con qué fase de El Niño yerra más?",
-     "predicho": "N Norte Ahora 1,266 MW (pron.) Pico de h",
+     "predicho": "N Norte Ahora 1,185 MW (pron.) Pico de h",
      "por": "atención",
      "acierta": false,
      "destino_a_la_vista": true,
@@ -3424,7 +3424,7 @@
     },
     {
      "tarea": "T5 ver la demanda del Sur",
-     "predicho": "S Sur Ahora 1,963 MW (pron.) Pico de hoy",
+     "predicho": "S Sur Ahora 1,907 MW (pron.) Pico de hoy",
      "por": "palabras",
      "acierta": true,
      "destino_a_la_vista": true,
@@ -3491,14 +3491,14 @@
    "atencion": {
     "1s": {
      "cifra_ahora": {
-      "cuota": 0.0232,
+      "cuota": 0.0235,
       "area": 0.0137,
-      "lift": 1.69
+      "lift": 1.72
      },
      "pico_24h": {
-      "cuota": 0.0176,
+      "cuota": 0.0169,
       "area": 0.0241,
-      "lift": 0.73
+      "lift": 0.7
      },
      "linea_ahora": {
       "cuota": 0.0,
@@ -3516,24 +3516,24 @@
       "lift": null
      },
      "titulo": {
-      "cuota": 0.1356,
+      "cuota": 0.1354,
       "area": 0.0437,
       "lift": 3.1
      },
      "que_es": {
-      "cuota": 0.0593,
+      "cuota": 0.0594,
       "area": 0.0133,
-      "lift": 4.46
+      "lift": 4.47
      },
      "modo": {
-      "cuota": 0.1116,
+      "cuota": 0.113,
       "area": 0.0856,
-      "lift": 1.3
+      "lift": 1.32
      },
      "otras_cifras": {
-      "cuota": 0.0152,
+      "cuota": 0.0148,
       "area": 0.0402,
-      "lift": 0.38
+      "lift": 0.37
      },
      "grafico": {
       "cuota": 0.0,
@@ -3541,22 +3541,22 @@
       "lift": null
      },
      "areas": {
-      "cuota": 0.11,
+      "cuota": 0.1094,
       "area": 0.071,
-      "lift": 1.55
+      "lift": 1.54
      },
      "cuando": {
-      "cuota": 0.1514,
+      "cuota": 0.152,
       "area": 0.0721,
-      "lift": 2.1
+      "lift": 2.11
      },
      "regimen": {
-      "cuota": 0.0469,
+      "cuota": 0.0475,
       "area": 0.0303,
-      "lift": 1.55
+      "lift": 1.57
      },
      "fijo": {
-      "cuota": 0.0028,
+      "cuota": 0.0027,
       "area": 0.0653,
       "lift": 0.04
      },
@@ -3566,14 +3566,14 @@
       "lift": 0.05
      },
      "texto": {
-      "cuota": 0.0327,
+      "cuota": 0.0326,
       "area": 0.0877,
       "lift": 0.37
      },
      "resto": {
-      "cuota": 0.2834,
+      "cuota": 0.2826,
       "area": 0.4324,
-      "lift": 0.66
+      "lift": 0.65
      }
     },
     "3s": {
@@ -3583,9 +3583,9 @@
       "lift": 1.52
      },
      "pico_24h": {
-      "cuota": 0.0199,
+      "cuota": 0.0191,
       "area": 0.0241,
-      "lift": 0.83
+      "lift": 0.8
      },
      "linea_ahora": {
       "cuota": 0.0,
@@ -3593,9 +3593,9 @@
       "lift": null
      },
      "estado_datos": {
-      "cuota": 0.0263,
+      "cuota": 0.0261,
       "area": 0.0144,
-      "lift": 1.83
+      "lift": 1.82
      },
      "dijimos_ayer": {
       "cuota": 0.0,
@@ -3603,19 +3603,19 @@
       "lift": null
      },
      "titulo": {
-      "cuota": 0.1886,
+      "cuota": 0.1888,
       "area": 0.0437,
-      "lift": 4.31
+      "lift": 4.32
      },
      "que_es": {
-      "cuota": 0.0701,
+      "cuota": 0.0699,
       "area": 0.0133,
-      "lift": 5.27
+      "lift": 5.26
      },
      "modo": {
-      "cuota": 0.0794,
+      "cuota": 0.0806,
       "area": 0.0856,
-      "lift": 0.93
+      "lift": 0.94
      },
      "otras_cifras": {
       "cuota": 0.0141,
@@ -3633,17 +3633,17 @@
       "lift": 1.03
      },
      "cuando": {
-      "cuota": 0.0919,
+      "cuota": 0.0917,
       "area": 0.0721,
       "lift": 1.27
      },
      "regimen": {
-      "cuota": 0.0593,
+      "cuota": 0.06,
       "area": 0.0303,
-      "lift": 1.96
+      "lift": 1.98
      },
      "fijo": {
-      "cuota": 0.0023,
+      "cuota": 0.0022,
       "area": 0.0653,
       "lift": 0.03
      },
@@ -3653,26 +3653,26 @@
       "lift": 0.21
      },
      "texto": {
-      "cuota": 0.0376,
+      "cuota": 0.0372,
       "area": 0.0877,
-      "lift": 0.43
+      "lift": 0.42
      },
      "resto": {
-      "cuota": 0.3156,
+      "cuota": 0.3152,
       "area": 0.4324,
       "lift": 0.73
      }
     },
     "7s": {
      "cifra_ahora": {
-      "cuota": 0.0307,
+      "cuota": 0.0305,
       "area": 0.0137,
-      "lift": 2.25
+      "lift": 2.23
      },
      "pico_24h": {
-      "cuota": 0.0431,
+      "cuota": 0.0424,
       "area": 0.0241,
-      "lift": 1.79
+      "lift": 1.76
      },
      "linea_ahora": {
       "cuota": 0.0,
@@ -3682,7 +3682,7 @@
      "estado_datos": {
       "cuota": 0.0175,
       "area": 0.0144,
-      "lift": 1.22
+      "lift": 1.21
      },
      "dijimos_ayer": {
       "cuota": 0.0,
@@ -3690,22 +3690,22 @@
       "lift": null
      },
      "titulo": {
-      "cuota": 0.1169,
+      "cuota": 0.1168,
       "area": 0.0437,
       "lift": 2.67
      },
      "que_es": {
-      "cuota": 0.0348,
+      "cuota": 0.0347,
       "area": 0.0133,
-      "lift": 2.62
+      "lift": 2.61
      },
      "modo": {
-      "cuota": 0.0795,
+      "cuota": 0.0812,
       "area": 0.0856,
-      "lift": 0.93
+      "lift": 0.95
      },
      "otras_cifras": {
-      "cuota": 0.0421,
+      "cuota": 0.0423,
       "area": 0.0402,
       "lift": 1.05
      },
@@ -3715,9 +3715,9 @@
       "lift": null
      },
      "areas": {
-      "cuota": 0.104,
+      "cuota": 0.1036,
       "area": 0.071,
-      "lift": 1.47
+      "lift": 1.46
      },
      "cuando": {
       "cuota": 0.0859,
@@ -3725,9 +3725,9 @@
       "lift": 1.19
      },
      "regimen": {
-      "cuota": 0.0498,
+      "cuota": 0.0505,
       "area": 0.0303,
-      "lift": 1.65
+      "lift": 1.67
      },
      "fijo": {
       "cuota": 0.0092,
@@ -3740,12 +3740,12 @@
       "lift": 0.15
      },
      "texto": {
-      "cuota": 0.0686,
+      "cuota": 0.0682,
       "area": 0.0877,
       "lift": 0.78
      },
      "resto": {
-      "cuota": 0.3168,
+      "cuota": 0.3162,
       "area": 0.4324,
       "lift": 0.73
      }
@@ -3765,7 +3765,7 @@
     "linea_ahora": {
      "existe": true,
      "a_la_vista": 0.0,
-     "arriba_px": 1219
+     "arriba_px": 998
     },
     "estado_datos": {
      "existe": true,
@@ -3828,9 +3828,9 @@
      "Cambiar a modo oscuro",
      "Hoy",
      "Repasar un día",
-     "Norte Ahora 1,266",
-     "Centro Ahora 4,880",
-     "Sur Ahora 1,963"
+     "Norte Ahora 1,185",
+     "Centro Ahora 4,651",
+     "Sur Ahora 1,907"
     ],
     "cifras": {
      "magnitudes": 22,
@@ -3894,19 +3894,19 @@
     {
      "pregunta": "¿Cuánta demanda hay ahora?",
      "a_la_vista": true,
-     "cuota_7s": 0.031,
+     "cuota_7s": 0.03,
      "responde": false
     },
     {
      "pregunta": "¿Es real o pronóstico, y hasta cuándo hay datos?",
      "a_la_vista": true,
-     "cuota_7s": 0.097,
+     "cuota_7s": 0.099,
      "responde": true
     },
     {
      "pregunta": "¿Viene más o menos demanda?",
      "a_la_vista": true,
-     "cuota_7s": 0.043,
+     "cuota_7s": 0.042,
      "responde": false
     },
     {
@@ -3921,27 +3921,27 @@
     {
      "control": "Curva, demanda del SEIN por áreas: ir a ",
      "cuota_3s": 0.07,
-     "lift": 5.27
+     "lift": 5.26
     },
     {
      "control": "Repasar un día",
      "cuota_3s": 0.045,
-     "lift": 1.12
+     "lift": 1.13
     },
     {
-     "control": "Norte Ahora 1,266",
-     "cuota_3s": 0.034,
-     "lift": 1.49
+     "control": "Norte Ahora 1,185",
+     "cuota_3s": 0.033,
+     "lift": 1.46
     },
     {
-     "control": "Centro Ahora 4,880",
+     "control": "Centro Ahora 4,651",
      "cuota_3s": 0.028,
-     "lift": 1.23
+     "lift": 1.25
     },
     {
      "control": "Hoy",
      "cuota_3s": 0.017,
-     "lift": 1.9
+     "lift": 1.88
     }
    ],
    "primer_clic": [
@@ -3979,7 +3979,7 @@
     },
     {
      "tarea": "T5 ver la demanda del Sur",
-     "predicho": "Sur Ahora 1,963",
+     "predicho": "Sur Ahora 1,907",
      "por": "palabras",
      "acierta": true,
      "destino_a_la_vista": true,
@@ -4046,14 +4046,14 @@
    "atencion": {
     "1s": {
      "cifra_ahora": {
-      "cuota": 0.0237,
+      "cuota": 0.0235,
       "area": 0.0137,
-      "lift": 1.73
+      "lift": 1.72
      },
      "pico_24h": {
-      "cuota": 0.014,
+      "cuota": 0.0138,
       "area": 0.0241,
-      "lift": 0.58
+      "lift": 0.57
      },
      "linea_ahora": {
       "cuota": 0.0,
@@ -4061,7 +4061,7 @@
       "lift": null
      },
      "estado_datos": {
-      "cuota": 0.0084,
+      "cuota": 0.0083,
       "area": 0.0144,
       "lift": 0.58
      },
@@ -4071,24 +4071,24 @@
       "lift": null
      },
      "titulo": {
-      "cuota": 0.1471,
+      "cuota": 0.1464,
       "area": 0.0437,
-      "lift": 3.36
+      "lift": 3.35
      },
      "que_es": {
       "cuota": 0.0602,
       "area": 0.0133,
-      "lift": 4.53
+      "lift": 4.52
      },
      "modo": {
-      "cuota": 0.1361,
+      "cuota": 0.1366,
       "area": 0.0856,
-      "lift": 1.59
+      "lift": 1.6
      },
      "otras_cifras": {
-      "cuota": 0.0136,
+      "cuota": 0.0128,
       "area": 0.0402,
-      "lift": 0.34
+      "lift": 0.32
      },
      "grafico": {
       "cuota": 0.0,
@@ -4096,17 +4096,17 @@
       "lift": null
      },
      "areas": {
-      "cuota": 0.1004,
+      "cuota": 0.1013,
       "area": 0.071,
-      "lift": 1.42
+      "lift": 1.43
      },
      "cuando": {
-      "cuota": 0.1362,
+      "cuota": 0.1376,
       "area": 0.0721,
-      "lift": 1.89
+      "lift": 1.91
      },
      "regimen": {
-      "cuota": 0.0568,
+      "cuota": 0.0569,
       "area": 0.0303,
       "lift": 1.88
      },
@@ -4121,26 +4121,26 @@
       "lift": 0.04
      },
      "texto": {
-      "cuota": 0.0344,
+      "cuota": 0.0345,
       "area": 0.0877,
       "lift": 0.39
      },
      "resto": {
-      "cuota": 0.2666,
+      "cuota": 0.2653,
       "area": 0.4324,
-      "lift": 0.62
+      "lift": 0.61
      }
     },
     "3s": {
      "cifra_ahora": {
-      "cuota": 0.0224,
+      "cuota": 0.0215,
       "area": 0.0137,
-      "lift": 1.64
+      "lift": 1.57
      },
      "pico_24h": {
-      "cuota": 0.0208,
+      "cuota": 0.0205,
       "area": 0.0241,
-      "lift": 0.86
+      "lift": 0.85
      },
      "linea_ahora": {
       "cuota": 0.0,
@@ -4148,9 +4148,9 @@
       "lift": null
      },
      "estado_datos": {
-      "cuota": 0.0174,
+      "cuota": 0.0175,
       "area": 0.0144,
-      "lift": 1.21
+      "lift": 1.22
      },
      "dijimos_ayer": {
       "cuota": 0.0,
@@ -4158,24 +4158,24 @@
       "lift": null
      },
      "titulo": {
-      "cuota": 0.1926,
+      "cuota": 0.1936,
       "area": 0.0437,
-      "lift": 4.4
+      "lift": 4.43
      },
      "que_es": {
-      "cuota": 0.0609,
+      "cuota": 0.0612,
       "area": 0.0133,
-      "lift": 4.58
+      "lift": 4.6
      },
      "modo": {
-      "cuota": 0.1154,
+      "cuota": 0.1162,
       "area": 0.0856,
-      "lift": 1.35
+      "lift": 1.36
      },
      "otras_cifras": {
-      "cuota": 0.0133,
+      "cuota": 0.0127,
       "area": 0.0402,
-      "lift": 0.33
+      "lift": 0.32
      },
      "grafico": {
       "cuota": 0.0,
@@ -4183,14 +4183,14 @@
       "lift": null
      },
      "areas": {
-      "cuota": 0.0657,
+      "cuota": 0.0659,
       "area": 0.071,
       "lift": 0.93
      },
      "cuando": {
-      "cuota": 0.0864,
+      "cuota": 0.0871,
       "area": 0.0721,
-      "lift": 1.2
+      "lift": 1.21
      },
      "regimen": {
       "cuota": 0.0747,
@@ -4208,26 +4208,26 @@
       "lift": 0.11
      },
      "texto": {
-      "cuota": 0.0446,
+      "cuota": 0.0435,
       "area": 0.0877,
-      "lift": 0.51
+      "lift": 0.5
      },
      "resto": {
-      "cuota": 0.2834,
+      "cuota": 0.2831,
       "area": 0.4324,
-      "lift": 0.66
+      "lift": 0.65
      }
     },
     "7s": {
      "cifra_ahora": {
-      "cuota": 0.031,
+      "cuota": 0.0293,
       "area": 0.0137,
-      "lift": 2.26
+      "lift": 2.14
      },
      "pico_24h": {
-      "cuota": 0.0424,
+      "cuota": 0.0422,
       "area": 0.0241,
-      "lift": 1.76
+      "lift": 1.75
      },
      "linea_ahora": {
       "cuota": 0.0,
@@ -4235,9 +4235,9 @@
       "lift": null
      },
      "estado_datos": {
-      "cuota": 0.0132,
+      "cuota": 0.0134,
       "area": 0.0144,
-      "lift": 0.92
+      "lift": 0.93
      },
      "dijimos_ayer": {
       "cuota": 0.0,
@@ -4245,24 +4245,24 @@
       "lift": null
      },
      "titulo": {
-      "cuota": 0.1099,
+      "cuota": 0.111,
       "area": 0.0437,
-      "lift": 2.51
+      "lift": 2.54
      },
      "que_es": {
-      "cuota": 0.0267,
+      "cuota": 0.0269,
       "area": 0.0133,
-      "lift": 2.01
+      "lift": 2.02
      },
      "modo": {
-      "cuota": 0.1154,
+      "cuota": 0.1165,
       "area": 0.0856,
-      "lift": 1.35
+      "lift": 1.36
      },
      "otras_cifras": {
-      "cuota": 0.0422,
+      "cuota": 0.0416,
       "area": 0.0402,
-      "lift": 1.05
+      "lift": 1.04
      },
      "grafico": {
       "cuota": 0.0,
@@ -4270,22 +4270,22 @@
       "lift": null
      },
      "areas": {
-      "cuota": 0.0934,
+      "cuota": 0.0938,
       "area": 0.071,
       "lift": 1.32
      },
      "cuando": {
-      "cuota": 0.0819,
+      "cuota": 0.0821,
       "area": 0.0721,
       "lift": 1.14
      },
      "regimen": {
-      "cuota": 0.0608,
+      "cuota": 0.0612,
       "area": 0.0303,
-      "lift": 2.01
+      "lift": 2.02
      },
      "fijo": {
-      "cuota": 0.0089,
+      "cuota": 0.009,
       "area": 0.0653,
       "lift": 0.14
      },
@@ -4295,12 +4295,12 @@
       "lift": 0.11
      },
      "texto": {
-      "cuota": 0.0755,
+      "cuota": 0.0747,
       "area": 0.0877,
-      "lift": 0.86
+      "lift": 0.85
      },
      "resto": {
-      "cuota": 0.298,
+      "cuota": 0.2977,
       "area": 0.4324,
       "lift": 0.69
      }
@@ -4320,7 +4320,7 @@
     "linea_ahora": {
      "existe": true,
      "a_la_vista": 0.0,
-     "arriba_px": 1219
+     "arriba_px": 998
     },
     "estado_datos": {
      "existe": true,
@@ -4383,9 +4383,9 @@
      "Cambiar a modo claro",
      "Hoy",
      "Repasar un día",
-     "Norte Ahora 1,266",
-     "Centro Ahora 4,880",
-     "Sur Ahora 1,963"
+     "Norte Ahora 1,185",
+     "Centro Ahora 4,651",
+     "Sur Ahora 1,907"
     ],
     "cifras": {
      "magnitudes": 22,
@@ -4443,19 +4443,19 @@
     {
      "pregunta": "¿De qué zona habla?",
      "a_la_vista": true,
-     "cuota_7s": 0.11,
+     "cuota_7s": 0.111,
      "responde": true
     },
     {
      "pregunta": "¿Cuánta demanda hay ahora?",
      "a_la_vista": true,
-     "cuota_7s": 0.031,
+     "cuota_7s": 0.029,
      "responde": false
     },
     {
      "pregunta": "¿Es real o pronóstico, y hasta cuándo hay datos?",
      "a_la_vista": true,
-     "cuota_7s": 0.129,
+     "cuota_7s": 0.13,
      "responde": true
     },
     {
@@ -4467,7 +4467,7 @@
     {
      "pregunta": "¿Qué puedo hacer aquí?",
      "a_la_vista": true,
-     "cuota_7s": 0.042,
+     "cuota_7s": 0.043,
      "responde": true,
      "control_mas_mirado": "Repasar un día"
     }
@@ -4476,27 +4476,27 @@
     {
      "control": "Curva, demanda del SEIN por áreas: ir a ",
      "cuota_3s": 0.061,
-     "lift": 4.58
+     "lift": 4.6
     },
     {
      "control": "Repasar un día",
-     "cuota_3s": 0.042,
-     "lift": 1.07
+     "cuota_3s": 0.043,
+     "lift": 1.09
     },
     {
-     "control": "Norte Ahora 1,266",
+     "control": "Norte Ahora 1,185",
      "cuota_3s": 0.032,
-     "lift": 1.44
+     "lift": 1.42
     },
     {
-     "control": "Centro Ahora 4,880",
-     "cuota_3s": 0.024,
-     "lift": 1.07
+     "control": "Centro Ahora 4,651",
+     "cuota_3s": 0.025,
+     "lift": 1.1
     },
     {
      "control": "Hoy",
      "cuota_3s": 0.014,
-     "lift": 1.62
+     "lift": 1.6
     }
    ],
    "primer_clic": [
@@ -4534,7 +4534,7 @@
     },
     {
      "tarea": "T5 ver la demanda del Sur",
-     "predicho": "Sur Ahora 1,963",
+     "predicho": "Sur Ahora 1,907",
      "por": "palabras",
      "acierta": true,
      "destino_a_la_vista": true,
@@ -4611,9 +4611,9 @@
       "lift": 3.3
      },
      "linea_ahora": {
-      "cuota": 0.0002,
-      "area": 0.0014,
-      "lift": 0.11
+      "cuota": 0.0004,
+      "area": 0.0021,
+      "lift": 0.19
      },
      "estado_datos": {
       "cuota": 0.0009,
@@ -4646,8 +4646,8 @@
       "lift": 1.1
      },
      "grafico": {
-      "cuota": 0.061,
-      "area": 0.204,
+      "cuota": 0.0608,
+      "area": 0.2034,
       "lift": 0.3
      },
      "areas": {
@@ -4698,9 +4698,9 @@
       "lift": 2.89
      },
      "linea_ahora": {
-      "cuota": 0.0001,
-      "area": 0.0014,
-      "lift": 0.07
+      "cuota": 0.0003,
+      "area": 0.0021,
+      "lift": 0.14
      },
      "estado_datos": {
       "cuota": 0.0032,
@@ -4733,8 +4733,8 @@
       "lift": 1.14
      },
      "grafico": {
-      "cuota": 0.0622,
-      "area": 0.204,
+      "cuota": 0.062,
+      "area": 0.2034,
       "lift": 0.3
      },
      "areas": {
@@ -4785,9 +4785,9 @@
       "lift": 2.74
      },
      "linea_ahora": {
-      "cuota": 0.0002,
-      "area": 0.0014,
-      "lift": 0.14
+      "cuota": 0.0006,
+      "area": 0.0021,
+      "lift": 0.27
      },
      "estado_datos": {
       "cuota": 0.0028,
@@ -4820,8 +4820,8 @@
       "lift": 1.34
      },
      "grafico": {
-      "cuota": 0.109,
-      "area": 0.204,
+      "cuota": 0.1086,
+      "area": 0.2034,
       "lift": 0.53
      },
      "areas": {
@@ -4874,8 +4874,8 @@
     },
     "linea_ahora": {
      "existe": true,
-     "a_la_vista": 1.0,
-     "arriba_px": 747
+     "a_la_vista": 0.965,
+     "arriba_px": 516
     },
     "estado_datos": {
      "existe": true,
@@ -5031,7 +5031,7 @@
     {
      "pregunta": "¿Viene más o menos demanda?",
      "a_la_vista": true,
-     "cuota_7s": 0.132,
+     "cuota_7s": 0.131,
      "responde": true
     },
     {
@@ -5183,9 +5183,9 @@
       "lift": 3.36
      },
      "linea_ahora": {
-      "cuota": 0.0001,
-      "area": 0.0014,
-      "lift": 0.09
+      "cuota": 0.0004,
+      "area": 0.0021,
+      "lift": 0.19
      },
      "estado_datos": {
       "cuota": 0.0009,
@@ -5218,8 +5218,8 @@
       "lift": 0.97
      },
      "grafico": {
-      "cuota": 0.0568,
-      "area": 0.204,
+      "cuota": 0.0565,
+      "area": 0.2034,
       "lift": 0.28
      },
      "areas": {
@@ -5270,9 +5270,9 @@
       "lift": 3.08
      },
      "linea_ahora": {
-      "cuota": 0.0001,
-      "area": 0.0014,
-      "lift": 0.06
+      "cuota": 0.0003,
+      "area": 0.0021,
+      "lift": 0.15
      },
      "estado_datos": {
       "cuota": 0.0022,
@@ -5305,9 +5305,9 @@
       "lift": 1.2
      },
      "grafico": {
-      "cuota": 0.0582,
-      "area": 0.204,
-      "lift": 0.29
+      "cuota": 0.058,
+      "area": 0.2034,
+      "lift": 0.28
      },
      "areas": {
       "cuota": 0.1936,
@@ -5357,9 +5357,9 @@
       "lift": 2.97
      },
      "linea_ahora": {
-      "cuota": 0.0002,
-      "area": 0.0014,
-      "lift": 0.1
+      "cuota": 0.0006,
+      "area": 0.0021,
+      "lift": 0.27
      },
      "estado_datos": {
       "cuota": 0.0024,
@@ -5392,8 +5392,8 @@
       "lift": 1.36
      },
      "grafico": {
-      "cuota": 0.1205,
-      "area": 0.204,
+      "cuota": 0.1201,
+      "area": 0.2034,
       "lift": 0.59
      },
      "areas": {
@@ -5446,8 +5446,8 @@
     },
     "linea_ahora": {
      "existe": true,
-     "a_la_vista": 1.0,
-     "arriba_px": 747
+     "a_la_vista": 0.965,
+     "arriba_px": 516
     },
     "estado_datos": {
      "existe": true,
@@ -5755,9 +5755,9 @@
       "lift": 4.01
      },
      "linea_ahora": {
-      "cuota": 0.0003,
-      "area": 0.0007,
-      "lift": 0.42
+      "cuota": 0.0008,
+      "area": 0.0011,
+      "lift": 0.72
      },
      "estado_datos": {
       "cuota": 0.001,
@@ -5790,8 +5790,8 @@
       "lift": 1.81
      },
      "grafico": {
-      "cuota": 0.1191,
-      "area": 0.1307,
+      "cuota": 0.1186,
+      "area": 0.1303,
       "lift": 0.91
      },
      "areas": {
@@ -5842,9 +5842,9 @@
       "lift": 3.32
      },
      "linea_ahora": {
-      "cuota": 0.0003,
-      "area": 0.0007,
-      "lift": 0.39
+      "cuota": 0.0008,
+      "area": 0.0011,
+      "lift": 0.67
      },
      "estado_datos": {
       "cuota": 0.0035,
@@ -5877,8 +5877,8 @@
       "lift": 1.5
      },
      "grafico": {
-      "cuota": 0.1411,
-      "area": 0.1307,
+      "cuota": 0.1406,
+      "area": 0.1303,
       "lift": 1.08
      },
      "areas": {
@@ -5929,9 +5929,9 @@
       "lift": 2.88
      },
      "linea_ahora": {
-      "cuota": 0.0005,
-      "area": 0.0007,
-      "lift": 0.7
+      "cuota": 0.0012,
+      "area": 0.0011,
+      "lift": 1.07
      },
      "estado_datos": {
       "cuota": 0.0039,
@@ -5964,8 +5964,8 @@
       "lift": 1.51
      },
      "grafico": {
-      "cuota": 0.1898,
-      "area": 0.1307,
+      "cuota": 0.1891,
+      "area": 0.1303,
       "lift": 1.45
      },
      "areas": {
@@ -6019,7 +6019,7 @@
     "linea_ahora": {
      "existe": true,
      "a_la_vista": 1.0,
-     "arriba_px": 807
+     "arriba_px": 516
     },
     "estado_datos": {
      "existe": true,
@@ -6182,7 +6182,7 @@
     {
      "pregunta": "¿Viene más o menos demanda?",
      "a_la_vista": true,
-     "cuota_7s": 0.202,
+     "cuota_7s": 0.201,
      "responde": true
     },
     {
@@ -6334,9 +6334,9 @@
       "lift": 4.96
      },
      "linea_ahora": {
-      "cuota": 0.0004,
-      "area": 0.0007,
-      "lift": 0.49
+      "cuota": 0.001,
+      "area": 0.0011,
+      "lift": 0.88
      },
      "estado_datos": {
       "cuota": 0.001,
@@ -6369,8 +6369,8 @@
       "lift": 1.72
      },
      "grafico": {
-      "cuota": 0.1292,
-      "area": 0.1307,
+      "cuota": 0.1285,
+      "area": 0.1303,
       "lift": 0.99
      },
      "areas": {
@@ -6421,9 +6421,9 @@
       "lift": 3.98
      },
      "linea_ahora": {
-      "cuota": 0.0003,
-      "area": 0.0007,
-      "lift": 0.44
+      "cuota": 0.0009,
+      "area": 0.0011,
+      "lift": 0.78
      },
      "estado_datos": {
       "cuota": 0.0031,
@@ -6456,9 +6456,9 @@
       "lift": 1.46
      },
      "grafico": {
-      "cuota": 0.1379,
-      "area": 0.1307,
-      "lift": 1.06
+      "cuota": 0.1374,
+      "area": 0.1303,
+      "lift": 1.05
      },
      "areas": {
       "cuota": 0.1485,
@@ -6508,9 +6508,9 @@
       "lift": 3.38
      },
      "linea_ahora": {
-      "cuota": 0.0006,
-      "area": 0.0007,
-      "lift": 0.84
+      "cuota": 0.0014,
+      "area": 0.0011,
+      "lift": 1.24
      },
      "estado_datos": {
       "cuota": 0.0037,
@@ -6543,8 +6543,8 @@
       "lift": 1.51
      },
      "grafico": {
-      "cuota": 0.2122,
-      "area": 0.1307,
+      "cuota": 0.2114,
+      "area": 0.1303,
       "lift": 1.62
      },
      "areas": {
@@ -6598,7 +6598,7 @@
     "linea_ahora": {
      "existe": true,
      "a_la_vista": 1.0,
-     "arriba_px": 807
+     "arriba_px": 516
     },
     "estado_datos": {
      "existe": true,
@@ -6914,8 +6914,8 @@
      },
      "linea_ahora": {
       "cuota": 0.0,
-      "area": 0.0,
-      "lift": null
+      "area": 0.0003,
+      "lift": 0.11
      },
      "estado_datos": {
       "cuota": 0.001,
@@ -6949,7 +6949,7 @@
      },
      "grafico": {
       "cuota": 0.0062,
-      "area": 0.0895,
+      "area": 0.0892,
       "lift": 0.07
      },
      "areas": {
@@ -7001,8 +7001,8 @@
      },
      "linea_ahora": {
       "cuota": 0.0,
-      "area": 0.0,
-      "lift": null
+      "area": 0.0003,
+      "lift": 0.07
      },
      "estado_datos": {
       "cuota": 0.0028,
@@ -7036,7 +7036,7 @@
      },
      "grafico": {
       "cuota": 0.0047,
-      "area": 0.0895,
+      "area": 0.0892,
       "lift": 0.05
      },
      "areas": {
@@ -7088,8 +7088,8 @@
      },
      "linea_ahora": {
       "cuota": 0.0,
-      "area": 0.0,
-      "lift": null
+      "area": 0.0003,
+      "lift": 0.17
      },
      "estado_datos": {
       "cuota": 0.0031,
@@ -7123,7 +7123,7 @@
      },
      "grafico": {
       "cuota": 0.0164,
-      "area": 0.0895,
+      "area": 0.0892,
       "lift": 0.18
      },
      "areas": {
@@ -7176,8 +7176,8 @@
     },
     "linea_ahora": {
      "existe": true,
-     "a_la_vista": 0.0,
-     "arriba_px": 932
+     "a_la_vista": 0.08,
+     "arriba_px": 701
     },
     "estado_datos": {
      "existe": true,
@@ -7479,8 +7479,8 @@
      },
      "linea_ahora": {
       "cuota": 0.0,
-      "area": 0.0,
-      "lift": null
+      "area": 0.0003,
+      "lift": 0.1
      },
      "estado_datos": {
       "cuota": 0.001,
@@ -7514,7 +7514,7 @@
      },
      "grafico": {
       "cuota": 0.006,
-      "area": 0.0895,
+      "area": 0.0892,
       "lift": 0.07
      },
      "areas": {
@@ -7566,8 +7566,8 @@
      },
      "linea_ahora": {
       "cuota": 0.0,
-      "area": 0.0,
-      "lift": null
+      "area": 0.0003,
+      "lift": 0.09
      },
      "estado_datos": {
       "cuota": 0.0022,
@@ -7600,8 +7600,8 @@
       "lift": 1.06
      },
      "grafico": {
-      "cuota": 0.0054,
-      "area": 0.0895,
+      "cuota": 0.0053,
+      "area": 0.0892,
       "lift": 0.06
      },
      "areas": {
@@ -7652,9 +7652,9 @@
       "lift": 1.81
      },
      "linea_ahora": {
-      "cuota": 0.0,
-      "area": 0.0,
-      "lift": null
+      "cuota": 0.0001,
+      "area": 0.0003,
+      "lift": 0.26
      },
      "estado_datos": {
       "cuota": 0.0031,
@@ -7688,7 +7688,7 @@
      },
      "grafico": {
       "cuota": 0.0201,
-      "area": 0.0895,
+      "area": 0.0892,
       "lift": 0.22
      },
      "areas": {
@@ -7741,8 +7741,8 @@
     },
     "linea_ahora": {
      "existe": true,
-     "a_la_vista": 0.0,
-     "arriba_px": 932
+     "a_la_vista": 0.08,
+     "arriba_px": 701
     },
     "estado_datos": {
      "existe": true,
@@ -8307,7 +8307,7 @@
     "linea_ahora": {
      "existe": true,
      "a_la_vista": 0.0,
-     "arriba_px": 1245
+     "arriba_px": 1023
     },
     "estado_datos": {
      "existe": true,
@@ -8860,7 +8860,7 @@
     "linea_ahora": {
      "existe": true,
      "a_la_vista": 0.0,
-     "arriba_px": 1245
+     "arriba_px": 1023
     },
     "estado_datos": {
      "existe": true,

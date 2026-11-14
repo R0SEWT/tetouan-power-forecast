@@ -9,7 +9,7 @@ funciona. **No se implementa nada todavía**: los bocetos están en
 ## 1. Lo que pasa hoy en la primera apertura
 
 Medido con el arnés de atención ([`metodo.md`](metodo.md)) sobre `develop`, en la URL raíz (en vivo, viernes 13 de
-noviembre a las 21:30 de Lima, Centro), sin desplazarse. Detalle en [`linea-base.md`](linea-base.md).
+noviembre a las 22:30 de Lima, Centro), sin desplazarse. Detalle en [`linea-base.md`](linea-base.md).
 
 | Primera pantalla, sin desplazarse | Escritorio 1366×768 | Proyector 1920×1080 | Tablet 1024×768 | Móvil 375×812 |
 |---|---|---|---|---|
@@ -18,16 +18,16 @@ noviembre a las 21:30 de Lima, Centro), sin desplazarse. Detalle en [`linea-base
 | Palabras a la vista | 356 | 577 | 249 | 170 |
 | Términos a la vista sin definir en la pantalla | 9 de 11 | 9 de 10 | 8 de 9 | 7 de 7 |
 | Prueba de 5 s sintética (preguntas respondidas) | 4 de 6 | 3 de 6 | 3 de 6 | 3 de 6 |
-| «¿Cuánta demanda hay ahora?»: atención a 7 s en la cifra (umbral 5 %) | 1.1 % | 0.8 % | 1.7 % | 3.1 % |
-| Lo más mirado (3 s) | tarjetas de área 18.7 % | gráfico 15.6 % | tarjetas de área 23.5 % | título 18.9 % |
+| «¿Cuánta demanda hay ahora?»: atención a 7 s en la cifra (umbral 5 %) | 1.1 % | 0.8 % | 1.8 % | 3.0 % |
+| Lo más mirado (3 s) | tarjetas de área 18.7 % | gráfico 15.4 % | tarjetas de área 23.5 % | título 18.9 % |
 | Primer clic sintético acertado (6 tareas) | 3 | 3 | 3 | 3 |
 
 Lo que dicen esas cifras:
 
 1. **No hay un punto de entrada.** Compiten 12 controles y 56 cifras en la primera pantalla de un portátil. La
-   atención se reparte entre las tres tarjetas de área (18.7 %; la más mirada de todas es la de **Norte**, 9.3 %, no
+   atención se reparte entre las tres tarjetas de área (18.7 %; la más mirada de todas es la de **Norte**, 9.4 %, no
    la del área elegida), la marca, el título y el párrafo que explica el modo. La cifra que responde la pregunta
-   principal, «cuánta demanda hay ahora», se lleva el 1.1 %; el pico, el 2.1 %; la línea de «ahora» en el gráfico,
+   principal, «cuánta demanda hay ahora», se lleva el 1.2 %; el pico, el 2.2 %; la línea de «ahora» en el gráfico,
    0.0 %. En el móvil, el gráfico ni siquiera entra en la primera pantalla (empieza a 989 px de 812).
 2. **No se entiende qué es ni con qué palabras habla.** «¿Qué es esto?» solo se responde en el escritorio y al límite
    (5.2 % contra un umbral de 5 %), gracias al subtítulo «Demanda del SEIN por áreas», que no dice «pronóstico» ni
@@ -43,7 +43,7 @@ Lo que dicen esas cifras:
    controles nativos de fecha y hora (7.1 s estimados con KLM), que además muestran `03/10/2026` y `07:00 PM` en un
    navegador en inglés.
 
-Además: la cifra más grande de la pantalla (el pico, a 40 px) habla del pasado a las 21:30 («según el pronóstico, ya
+Además: la cifra más grande de la pantalla (el pico, a 40 px) habla del pasado a las 22:30 («según el pronóstico, ya
 pasó»), una de las cinco tarjetas de cifras está vacía en vivo («Mañana a esta hora: —») y «lo que dijimos ayer», la
 rendición de cuentas que distingue a Curva, se lleva el 0.7 % en escritorio y queda fuera de la vista en tablet y
 móvil.
@@ -85,7 +85,7 @@ saltar y no vuelve a aparecer. Una sola cifra a la vista en el paso 1.
 | Medición | Base (escritorio / móvil) | Umbral |
 |---|---|---|
 | Prueba de 5 s sintética, en el paso 1 | 4 / 3 de 6 | ≥ 5 de 6 en las cuatro vistas |
-| Atención a 3 s en el punto de «ahora» (línea, punto y pastilla) | 0.0 % / fuera de la vista | ≥ 3 % y lift ≥ 2 |
+| Atención a 3 s en el punto de «ahora» (línea, punto y pastilla) | 0.0 % (lift 0.09) / fuera de la vista | ≥ 3 % y lift ≥ 2 |
 | Cifras a la vista en el paso 1 | 40 + 16 / 22 + 11 | ≤ 5 |
 | Primer clic sintético acertado (6 tareas) | 3 / 3 | ≥ 5 |
 | KLM hasta fijar otra hora (T1) | 7.1 s, 15 acciones | ≤ 4 s, ≤ 3 acciones |
@@ -103,7 +103,7 @@ bloque «Todas las cifras de hoy», a un toque; las tres áreas, a un selector c
 
 | Medición | Base (escritorio / móvil) | Umbral |
 |---|---|---|
-| Atención a 3 s en la pregunta y su respuesta | (no existe) cifra de ahora 1.1 % / 2.1 % | ≥ 15 % en las cuatro vistas |
+| Atención a 3 s en la pregunta y su respuesta | (no existe) cifra de ahora 1.2 % / 2.1 % | ≥ 15 % en las cuatro vistas |
 | «¿Qué es esto?» y «¿cuánta demanda hay ahora?» en la prueba de 5 s | sí al límite, no / no, no | sí y sí en las cuatro vistas |
 | Cifras a la vista sin desplazarse | 40 + 16 / 22 + 11 | ≤ 12 en total |
 | Palabras a la vista | 356 / 170 | ≤ 150 / ≤ 90 |

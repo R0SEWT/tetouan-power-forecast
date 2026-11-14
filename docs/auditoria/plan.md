@@ -18,17 +18,17 @@ o con capturas de `inicio` hechas en la misma media hora.
 | # | PR | Línea | Medición clave: base → umbral | Decisión del dueño |
 |---|---|---|---|---|
 | 1 | **Qué es Curva**, dicho en la cabecera y el título en las cuatro vistas | L1 Orientación | Prueba de 5 s, «¿Qué es esto?»: responde en 1 de 4 vistas (al límite, 5.2 %) → 4 de 4 | — |
-| 2 | **Una cifra del presente al frente**: «Ahora» como cifra destacada, el pico de hoy sin opacarla (y marcado si ya pasó), sin tarjeta vacía en vivo | L2 Jerarquía | Atención a 3 s en la cifra de ahora, escritorio: 1.1 % → ≥ 5 %; «¿cuánta demanda hay ahora?»: 0 de 4 vistas → ≥ 3 de 4; tarjetas vacías: 1 → 0 | — |
+| 2 | **Una cifra del presente al frente**: «Ahora» como cifra destacada, el pico de hoy sin opacarla (y marcado si ya pasó), sin tarjeta vacía en vivo | L2 Jerarquía | Atención a 3 s en la cifra de ahora, escritorio: 1.2 % → ≥ 5 %; «¿cuánta demanda hay ahora?»: 0 de 4 vistas → ≥ 3 de 4; tarjetas vacías: 1 → 0 | — |
 | 3 | **La pregunta del día** (concepto B) | L1 Orientación | Prueba de 5 s: 4 / 3 de 6 (escritorio / móvil) → ≥ 5 de 6 en las cuatro vistas; cifras a la vista: 56 / 33 → ≤ 12 | — |
 | 4 | **Palabras**: cada término explicado donde aparece y un nombre por concepto | L1 Orientación | Términos a la vista sin definir en la pantalla: 9 / 7 → 0 en «Ahora» y «Confianza»; conceptos con más de un nombre entre pantallas: 5 → 0 | — |
 | 5 | **Tocar o arrastrar el gráfico de «Ahora» fija la hora** | L3 Tiempo | T1 (otra hora del mismo día): 15 acciones, 7.1 s KLM → ≤ 3 acciones, ≤ 4 s | — |
 | 6 | **Selector propio de fecha y hora**, dd/mm/aaaa y 24 h, con atajos (ayer, hace una semana) | L3 Tiempo | Formato visto en un Chrome en inglés: `03/10/2026` y `07:00 PM` → `10/03/2026` y `19:00`; pulsaciones de T1: 13 → ≤ 4 | — |
-| 7 | **El gráfico se lee de un vistazo**: «ahora» como hito, banda visible en claro, rótulo de la rampa con conector | L2 Jerarquía | Atención a 3 s en el punto de «ahora»: 0.0 % → ≥ 3 % y lift ≥ 2 (escritorio y proyector); contraste banda/fondo en claro: 1.22:1 → ≥ 1.6:1 sin bajar el de la línea (3.41:1) | — |
+| 7 | **El gráfico se lee de un vistazo**: «ahora» como hito, banda visible en claro, rótulo de la rampa con conector | L2 Jerarquía | Atención a 3 s en el punto de «ahora»: 0.0 % / 0.1 % → ≥ 3 % y lift ≥ 2 (escritorio / proyector); contraste banda/fondo en claro: 1.22:1 → ≥ 1.6:1 sin bajar el de la línea (3.41:1) | — |
 | 8 | **Apertura guiada de tres pasos sobre el gráfico** (concepto A; necesita el 5) | L1 Orientación | Primer clic sintético: 3 de 6 → ≥ 5 de 6; cifras a la vista en el paso 1: ≤ 5; 0 % de reaperturas tras saltarlo | Sí: si la primera visita se marca en el navegador |
-| 9 | **«Lo que dijimos ayer» en el recorrido de lectura** | L2 Jerarquía | Atención a 3 s, escritorio: 0.7 % (lift 0.17) → ≥ 3 %; en tablet y móvil: fuera de la vista → visible sin desplazarse | — |
+| 9 | **«Lo que dijimos ayer» en el recorrido de lectura** | L2 Jerarquía | Atención a 3 s, escritorio: 0.7 % (lift 0.16) → ≥ 3 %; en tablet y móvil: fuera de la vista → visible sin desplazarse | — |
 | 10 | **Confianza honesta de un vistazo**: el aviso en vivo junto al veredicto de cobertura, selectores con menos peso | L4 Confianza | Atención a 3 s en el aviso en vivo: 0.2 % → ≥ 3 % y a la vista sin desplazarse; selectores: 21 % → ≤ 10 % (escritorio) | — |
 | 11 | **Un solo rango, recalibrado**: el 80 % en vivo y el 90 % del repaso pasan a un nivel, calibrado con el registro en vivo | L4 Confianza | Cobertura en vivo (23-oct → 12-nov) del rango publicado: 73.2 % Centro, 74.3 % Norte para un 80 % nominal → dentro de ±3 puntos del nominal en las tres áreas, en un tramo que no se usó para calibrar | Sí: qué nivel publicar (80 o 90 %) |
-| 12 | **Tarjetas de área con identidad y cuota de la demanda** en vez de las insignias N/C/S | L2 Jerarquía | El área elegida se lleva más atención que cada una de las otras (hoy Norte 9.3 % > Centro 7.3 %); «¿de qué zona habla?»: 1 de 4 vistas → ≥ 3 de 4 | — |
+| 12 | **Tarjetas de área con identidad y cuota de la demanda** en vez de las insignias N/C/S | L2 Jerarquía | El área elegida se lleva más atención que cada una de las otras (hoy Norte 9.4 % > Centro 7.2 %); «¿de qué zona habla?»: 1 de 4 vistas → ≥ 3 de 4 | — |
 | 13 | **«Detalle» se funde en «Ahora» y «Confianza»** (escenarios, diagnóstico y modelo se mudan; lo duplicado se va) | L5 Consistencia | Jaccard de tamaños de letra Detalle~Ahora: 0.44 → ≥ 0.7 (o pantalla retirada); controles a la vista: 19 / 29 (escritorio / proyector) → ≤ 15; T3 ≤ 2 acciones | **Sí: fusionar o retirar** |
 | 14 | **Partir `app.js`**: «Confianza» y lo que quede de «Detalle» se cargan al abrirlos | L6 Rendimiento | Peso de «Ahora»: 76 KB → ≤ 50 KB; hasta ver el número en red lenta: 829 ms → ≤ 706 ms | — |
 | 15 | **Niveles Ciudadano y Operador** (concepto C), con estados vacíos que enseñan | L1 Orientación | En Ciudadano: controles a la vista 12 / 10 → ≤ 6; prueba de 5 s ≥ 5 de 6; en Operador, KLM de T1–T4 ≤ base | **Sí: público objetivo** |
@@ -76,9 +76,9 @@ dueño lo adopta.
 
 ### L2 · Jerarquía y atención en «Ahora» (PR 2, 7, 9, 12)
 
-- **Hallazgos (base, escritorio, 3 s):** tarjetas de área 18.7 % (lift 2.0), cifra de ahora 1.1 %, pico 2.1 %, punto
-  de «ahora» 0.0 %, «lo que dijimos ayer» 0.7 % (lift 0.17), gráfico 6.9 % (lift 0.33). El pico a 40 px opaca a la
-  cifra de ahora a 28 px, y en vivo a las 21:30 habla de un pico que ya pasó.
+- **Hallazgos (base, escritorio, 3 s):** tarjetas de área 18.7 % (lift 1.9), cifra de ahora 1.2 %, pico 2.2 %, punto
+  de «ahora» 0.0 %, «lo que dijimos ayer» 0.7 % (lift 0.16), gráfico 6.7 % (lift 0.32). El pico a 40 px opaca a la
+  cifra de ahora a 28 px, y en vivo a las 22:30 habla de un pico que ya pasó.
 - **Próximos pasos:** PR 2 → 7 → 9 → 12.
 
 ### L3 · Interacción con el tiempo (PR 5, 6)
@@ -121,8 +121,8 @@ dueño lo adopta.
 |---|---|---|---|
 | Clic o arrastre en el gráfico de «Ahora» para fijar la hora | Sí, no existe | `app.js`: `#ahLienzo` solo escucha `pointermove`, `pointerleave`, `focus`, `blur` y flechas (tooltip); el de «Detalle» sí tiene `alPulsar` | 5 |
 | Selector de fecha y hora propio, formato peruano y 24 h | Sí | `<input type="date">` y `<input type="time" step="1800">`; en la captura del arnés (Chrome en inglés, página `es`, locale `es-PE`): `03/10/2026` y `07:00 PM` | 6 |
-| El «Pico» a 40 px opaca a «Ahora» a 28 px; tarjeta vacía sin «mañana a esta hora» | Sí | `.kpi.dest .n { font-size: 40px }` frente a `.kpi .n { 28px }`; atención a 3 s: pico 2.1 %, ahora 1.1 %; en vivo, «Mañana a esta hora: —» | 2 |
-| Insignias N/C/S genéricas en vez de identidad y cuota | Sí | `INFO_AREA` solo da una letra; las tarjetas no dicen qué parte del SEIN es cada área; la más mirada es Norte (9.3 %), no la elegida | 12 |
+| El «Pico» a 40 px opaca a «Ahora» a 28 px; tarjeta vacía sin «mañana a esta hora» | Sí | `.kpi.dest .n { font-size: 40px }` frente a `.kpi .n { 28px }`; atención a 3 s: pico 2.2 %, ahora 1.2 %; en vivo, «Mañana a esta hora: —» | 2 |
+| Insignias N/C/S genéricas en vez de identidad y cuota | Sí | `INFO_AREA` solo da una letra; las tarjetas no dicen qué parte del SEIN es cada área; la más mirada es Norte (9.4 %), no la elegida | 12 |
 | Rótulo de la rampa sin conector; banda del rango casi invisible en claro | Sí | El texto «+325 MW en 1 h» se dibuja a 10 px del tramo, sin línea; banda `rgba(42,120,214,.16)` sobre el fondo del futuro: **1.22:1** en claro (1.36:1 en oscuro) | 7 |
 | «Detalle» con estilos antiguos que duplica «Ahora»/«Confianza» | Sí | Variables de la «versión anterior» en `style.css`; 12 tamaños de letra, 5 propios; repite cifra, rango, real, error, curva, pico y «¿qué tan bueno es?»; propio: escenarios, diagnóstico, modelo, horizonte y la sección en vivo | 13 (dueño) |
 | README de trabajo de curso, sin imágenes | Sí | Título `tetouan-power-forecast`, «Trabajo grupal (TB1)…», 0 imágenes | 16 |
