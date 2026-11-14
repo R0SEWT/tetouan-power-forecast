@@ -787,6 +787,22 @@ a {
   font-weight: 600;
 }
 
+.chip-enlace {
+  color: var(--pron-texto);
+  text-decoration: none;
+}
+
+.chip-enlace:hover {
+  border-color: var(--axis);
+  text-decoration: underline;
+}
+
+@media (pointer: coarse) {
+  .chip-enlace {
+    min-height: 44px;
+  }
+}
+
 .veredicto {
   display: flex;
   gap: 10px;
@@ -2075,7 +2091,7 @@ input[type='time']:focus-within,
 }
 
 .pregunta {
-  max-width: 40ch;
+  max-width: 50ch;
 }
 
 .resp-dia {
@@ -2268,3 +2284,122 @@ input[type='time']:focus-within,
   }
 }
 
+
+/* ---- Ahora: el selector propio de fecha y hora (dd/mm/aaaa, 24 h) y sus atajos ---- */
+/* Atajos en su fila y, debajo, el día y la hora: el bloque no es más ancho que su fila más ancha */
+#vistaAhora .cuando {
+  display: grid;
+  grid-template-columns: auto auto;
+  justify-content: end;
+  align-items: end;
+}
+
+.atajos {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 6px;
+}
+
+.campo-con-boton {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  width: 9.75rem;
+}
+
+.campo-fecha input[type='text'] {
+  width: 100%;
+  padding-right: 44px;
+  font-variant-numeric: tabular-nums;
+}
+
+.campo-hora input[type='text'] {
+  width: 4.5rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.campo input[aria-invalid='true'] {
+  border-color: var(--crit);
+  box-shadow: 0 0 0 1px var(--crit) inset;
+}
+
+.btn-calendario {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  border: 0;
+  border-radius: 0 var(--r-m) var(--r-m) 0;
+  background: transparent;
+  color: var(--ink-2);
+  cursor: pointer;
+}
+
+.btn-calendario:hover {
+  color: var(--ink);
+}
+
+.fecha-nativa {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  border: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.ayuda-fecha {
+  grid-column: 1 / -1;
+  font-size: 12px;
+  color: var(--muted);
+  text-align: right;
+}
+
+/* La ayuda de cómo escribir aparece al escribir (no suma palabras a la pantalla mientras tanto); un error, siempre */
+.cuando:not(:focus-within) .ayuda-fecha:not(.error) {
+  visibility: hidden;
+}
+
+.ayuda-fecha.error {
+  color: var(--crit);
+  font-weight: 600;
+}
+
+@media (pointer: coarse) {
+  .btn-calendario {
+    width: 44px;
+  }
+
+  .campo-con-boton input,
+  .campo-hora input {
+    min-height: 44px;
+  }
+}
+
+@media (max-width: 760px) {
+  .ayuda-fecha {
+    text-align: left;
+  }
+
+  /* En el celular, el día y la hora primero (donde estaban) y los atajos debajo */
+  .atajos {
+    order: 1;
+    justify-content: flex-start;
+  }
+
+  .ayuda-fecha {
+    order: 2;
+  }
+
+  #vistaAhora .cuando {
+    justify-content: start;
+  }
+}

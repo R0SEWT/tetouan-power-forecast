@@ -90,10 +90,24 @@
         <div class="mandos">
           <nav id="ahAreas" class="seg areas-seg" aria-label="Área"></nav>
           <div class="cuando" role="group" aria-label="Qué momento ver">
-            <button type="button" id="ahHoy" class="btn-hoy" aria-pressed="true">Hoy</button>
-            <label class="campo"><span>Ver otro día</span><input type="date" id="ahFecha" aria-describedby="ahFechaLarga"></label>
-            <label class="campo"><span>A las</span><input type="time" id="ahHora" step="1800"></label>
+            <div class="atajos">
+              <button type="button" id="ahHoy" class="btn-hoy" aria-pressed="true">Hoy</button>
+              <button type="button" class="btn-hoy" data-atajo="1" aria-pressed="false">Ayer</button>
+              <button type="button" class="btn-hoy" data-atajo="7" aria-pressed="false">Hace una semana</button>
+            </div>
+            <!-- Fecha y hora propias: siempre dd/mm/aaaa y 24 h, sin importar el idioma del navegador -->
+            <div class="campo campo-fecha"><label for="ahFecha">Ver otro día</label>
+              <span class="campo-con-boton">
+                <input type="text" id="ahFecha" inputmode="numeric" autocomplete="off" spellcheck="false" placeholder="dd/mm/aaaa" maxlength="10" aria-describedby="ahFechaLarga ahFechaAyuda">
+                <button type="button" id="ahCalendario" class="btn-calendario" aria-label="Elegir el día en un calendario" title="Calendario">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>
+                </button>
+                <input type="date" id="ahFechaNativa" class="fecha-nativa" tabindex="-1" aria-hidden="true">
+              </span>
+            </div>
+            <label class="campo campo-hora"><span>A las</span><input type="text" id="ahHora" inputmode="numeric" autocomplete="off" spellcheck="false" placeholder="hh:mm" maxlength="5" aria-describedby="ahFechaAyuda"></label>
             <span id="ahFechaLarga" class="visually-hidden"></span>
+            <span id="ahFechaAyuda" class="ayuda-fecha" role="status">Escribe 10/03 o 1003; la hora, 19 o 1930</span>
           </div>
         </div>
       </div>
@@ -126,7 +140,7 @@
         </section>
         <!-- Debajo del gráfico, El Niño: entre la respuesta y el gráfico que la prueba no queda nada más que las cifras -->
         <div class="bajo-grafico">
-          <div class="titulo-fila"><span id="chipRegimen" class="chip"><span id="chipRegimenTxt">El Niño costero: cargando</span></span><span id="chipPrueba" class="chip" hidden>Datos de prueba: series sintéticas</span></div>
+          <div class="titulo-fila"><a id="chipRegimen" class="chip chip-enlace" href="#/confianza/centro?seccion=nino"><span id="chipRegimenTxt">El Niño costero: cargando</span></a><span id="chipPrueba" class="chip" hidden>Datos de prueba: series sintéticas</span></div>
         </div>
         <section class="card orden-origen" aria-labelledby="ahOrigenTit">
           <div class="card-h"><h2 id="ahOrigenTit">¿De dónde sale el número?</h2></div>

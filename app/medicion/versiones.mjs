@@ -211,6 +211,27 @@ VERSIONES['pr05-hora'] = {
   tareas: { ...VERSIONES.pr05.tareas, t1: [tocarHora('19:00'), { revisar: true }] },
 };
 
+// PR 6: el día se escribe como se dice en el campo propio (10/03: sin año, el último que pasó); la hora, en el gráfico
+VERSIONES.pr06 = {
+  ...VERSIONES.pr05,
+  tareas: {
+    ...VERSIONES.pr05.tareas,
+    t1: [{ escribir: (p) => p.locator('#ahFecha'), texto: '1003' }, tocarHora('19:00'), { revisar: true }],
+  },
+};
+// …y con todo escrito (día y hora) en los campos propios, sin tocar el gráfico
+VERSIONES['pr06-campos'] = {
+  ...VERSIONES.pr05,
+  tareas: {
+    ...VERSIONES.pr05.tareas,
+    t1: [
+      { escribir: (p) => p.locator('#ahFecha'), texto: '1003' },
+      { escribir: (p) => p.locator('#ahHora'), texto: '19' },
+      { revisar: true },
+    ],
+  },
+};
+
 export function version(nombre) {
   const v = VERSIONES[nombre];
   if (!v) throw new Error(`Versión desconocida: ${nombre}. Hay: ${Object.keys(VERSIONES).join(', ')}`);

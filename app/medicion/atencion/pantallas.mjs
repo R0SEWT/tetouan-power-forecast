@@ -45,10 +45,12 @@ export const PANTALLAS = {
     esperar: () => /\S/.test(document.querySelector('#cfTitular')?.textContent || '') && !/Calculando/.test(document.querySelector('#cfTitular').textContent) && !document.querySelector('#cfMes .cargando-bloque'),
     aoi: [
       { n: 'titular', s: '#cfTitular' },
-      { n: 'cobertura', s: '#cfStats .stat:nth-child(3), #cfCobTit, #cfCob svg', modo: 'caja' },
-      { n: 'aviso_vivo', s: '#cfLead b:nth-of-type(3), #cfVivoTit, #cfVivo .veredicto', modo: 'caja' },
+      // El aviso en vivo antes que la cobertura: desde el PR 10 va dentro de la tarjeta de cobertura (.aviso-vivo)
+      { n: 'aviso_vivo', s: '#cfLead b:nth-of-type(3), #cfVivoTit, #cfVivo .veredicto, #vistaConfianza .aviso-vivo', modo: 'caja' },
+      // La tarjeta de cobertura de la fila de cifras (la única con veredicto) o, desde el PR 10, la de junto al titular
+      { n: 'cobertura', s: '#cfStats .stat:has(> .estado-meta), #cfCobVista, #cfCobTit, #cfCob svg', modo: 'caja' },
       { n: 'mes_a_mes', s: '#cfMesTit, #cfMes svg', modo: 'caja' },
-      { n: 'cifras', s: '#cfStats .stat:not(:nth-child(3)) :is(.k,.n)' },
+      { n: 'cifras', s: '#cfStats .stat:not(:has(> .estado-meta)) :is(.k,.n)' },
       { n: 'lead', s: '#cfLead' },
       { n: 'estado_datos', s: '#estadoDatos', modo: 'caja' },
       { n: 'que_es', s: '.cab-marca', modo: 'caja' },

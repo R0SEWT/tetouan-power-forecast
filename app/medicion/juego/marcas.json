@@ -1,0 +1,17 @@
+{
+  "hoy": [
+    { "n": 1, "selector": "#ahFecha", "nota": "fecha en mes/día/año" },
+    { "n": 2, "selector": "#chipRegimen", "nota": "chip de El Niño: parece un botón (T4)" },
+    { "n": 3, "selector": "#navPantallas a[href*='#/area']", "nota": "«Detalle»: el único camino para T3 desde hoy" },
+    { "n": 4, "selector": "#ahModo", "nota": "horas de emisión que no cuadran de madrugada" }
+  ],
+  "repaso-1900": [
+    { "n": 1, "selector": "#ahFecha", "nota": "03/10/2026 para el 10 de marzo" },
+    { "n": 2, "selector": "#ahHora", "nota": "07:00 PM" },
+    { "n": 3, "selector": "#chipRegimen", "nota": "chip de El Niño: parece un botón (T4)" }
+  ],
+  "escenarios": [
+    { "n": 1, "selector": ".panel.controles", "nota": "«Solo demanda» y «Combinado» marcados" },
+    { "n": 2, "texto": "El modelo combinado usa solo la demanda", "nota": "pero el escenario lo calcula otro modelo" }
+  ]
+}

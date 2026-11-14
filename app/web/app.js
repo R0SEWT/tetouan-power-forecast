@@ -312,7 +312,7 @@ function pintarRegimen() {
   }
   const [y, m] = r.mes.split('-').map(Number);
   const estado = ESTADO_NINO[r.estado] || r.estado;
-  $('#chipRegimenTxt').textContent = `El Niño costero (calentamiento del mar frente a la costa): ${estado}`;
+  $('#chipRegimenTxt').textContent = `El Niño costero (calentamiento del mar frente a la costa): ${estado} · ¿cuándo se equivoca más? →`;
   chip.title = `Último ICEN publicado: ${r.icen} en ${MESES[m - 1]} de ${y}, régimen ${estado} según ENFEN. El ICEN sale con meses de rezago.`;
   chip.hidden = false;
 }
@@ -321,41 +321,6 @@ const nombreModelo = () => {
   const m = modeloEfectivo();
   return m ? m.nombre : (S.salud ? S.salud.modelo : 'modelo');
 };
-
-// ---- Ficha técnica -------------------------------------------------------------------------
-
-function pintarFicha() {
-  const r = S.resumen;
-  const s = S.salud;
-  const prueba = s && s.modelo === 'prueba';
-  const cortes = r
-    ? Object.entries(r.fechas_corte).map(([k, v]) => `<tr><td>${esc(CORTE[k] || k)}</td><td class="num mono">${esc(v)}</td></tr>`).join('')
-    : '';
-  let nino = '';
-  if (r) {
-    const [y, m] = r.regimen_nino.mes.split('-').map(Number);
-    nino = `El último ICEN publicado es ${r.regimen_nino.icen.toFixed(2)}, de ${MESES[m - 1]} de ${y}: régimen ${ESTADO_NINO[r.regimen_nino.estado] || r.regimen_nino.estado} según ENFEN. `;
-  }
-  $('#fichaCuerpo').innerHTML = `
-    <section><h3>Qué hace</h3><p>Pronostica la demanda eléctrica de las áreas Norte, Centro y Sur del SEIN cada 30 minutos, a 1 hora y a 24 horas, con su rango del 90 %. La compara con la referencia: la mejor de tres reglas sin modelo (el último dato, ayer o la semana pasada a la misma hora).</p></section>
-    <section><h3>Modelo</h3><p>Modelo <span class="mono">${esc(s ? nombreModelo() : '—')}</span>, datos <span class="mono">${esc(s ? s.version_datos : '—')}</span>.${prueba ? ' Es el modelo de prueba: persistencia, ciclo diario y ruido sobre series sintéticas. Sirve para probar la app; sus números no son resultados.' : ''}</p></section>
-    <section><h3>El Niño Costero</h3><p>${esc(nino)}Cada variable entra con su rezago real de publicación.</p></section>
-    <section><h3>Fechas de corte</h3><table class="tabla"><tbody>${cortes}</tbody></table></section>
-    <section><h3>Fuentes y licencias</h3><ul>
-      <li>COES: demanda por área (IEOD) y eventos. Sin licencia publicada.</li>
-      <li>ERA5 de Copernicus, vía Open-Meteo: temperatura. CC BY 4.0.</li>
-      <li>IGP y ENFEN: ICEN.</li>
-      <li>NOAA: Niño 1+2. Dominio público.</li>
-      <li>Osinergmin: SAIDI. ODC-By.</li>
-    </ul></section>
-    <section><h3>Supuesto de colaboración</h3><p>Se simula que el COES recibe en tiempo real los datos y los pronósticos de clima y de El Niño de ENFEN (SENAMHI, IGP e IMARPE). Por eso hay escenarios a 24 h.</p></section>
-    <section><h3>Por qué no hay escenarios a 1 h</h3><p>A 1 h la demanda reciente ya contiene el clima del momento. En su lugar se muestra la sensibilidad del modelo.</p></section>
-    <section><h3>Lo que no cubre</h3><ul>
-      <li>La demanda por subestación o por distribuidora.</li>
-      <li>Los costos marginales.</li>
-      <li>Pronósticos de clima reales: se simulan.</li>
-    </ul></section>`;
-}
 
 const REF_CORTA = { persistencia: 'último dato', ayer: 'ayer', semana_pasada: 'semana pasada' };
 const plural = (n, uno, varios) => `${nf0.format(n)} ${n === 1 ? uno : varios}`;
@@ -453,6 +418,77 @@ function rutaDetalle(area, repaso = null, seccion = null) {
 }
 
 const hoyLima = () => ahoraEnLima().fecha;
+// De madrugada (entre la medianoche y el pronóstico del día) lo último que hay es de días que ya no son hoy ni ayer:
+// la pantalla los nombra con su fecha en lugar de decir «hoy», «ahora» y «mañana», y no finge una hora en vivo
+const desfasado = (d) => d.modo === 'en_vivo' && d.ahora.slice(0, 10) < hoyLima();
+const diaPron = (d) => sumarDias(d.ahora.slice(0, 10), 1); // el día que cubre el último pronóstico emitido
+const diaNum = (iso) => `${DIAS[partesFecha(iso).dow]} ${partesFecha(iso).d}`; // «viernes 13»
+
+// «10/03», «1003», «10/3/26» o «10032026» → «2026-03-10». Sin año, el último 10 de marzo que ya pasó.
+function leerFecha(texto) {
+  const t = (texto || '').trim();
+  let d;
+  let m;
+  let y = null;
+  if (t.includes('/') || t.includes('-') || t.includes('.')) {
+    const partes = t.split(/[/.-]/).filter(Boolean).map(Number);
+    if (partes.length < 2 || partes.some((x) => !Number.isInteger(x))) return null;
+    if (partes[0] > 31) [y, m, d] = partes; // también se entiende 2026-03-10
+    else [d, m, y = null] = partes;
+  } else {
+    const c = t.replace(/\D/g, '');
+    if (![4, 6, 8].includes(c.length)) return null;
+    d = Number(c.slice(0, 2));
+    m = Number(c.slice(2, 4));
+    if (c.length > 4) y = Number(c.slice(4));
+    if (c.length === 8 && m > 12) [y, m, d] = [Number(c.slice(0, 4)), Number(c.slice(4, 6)), Number(c.slice(6))]; // 20260310
+  }
+  if (y != null && y < 100) y += 2000;
+  else if (y != null && (y < 1000 || y > 9999)) return null; // un año de 3 cifras todavía se está escribiendo
+  const hoy = hoyLima();
+  const iso = (a) => `${a}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+  const valida = (a) => {
+    const f = new Date(Date.UTC(a, m - 1, d));
+    return f.getUTCFullYear() === a && f.getUTCMonth() === m - 1 && f.getUTCDate() === d;
+  };
+  if (y == null) {
+    // El último que ya pasó: este año o, si todavía no llega (o no existe, como un 29/02), uno de los anteriores
+    for (let a = Number(hoy.slice(0, 4)); a > Number(hoy.slice(0, 4)) - 8; a -= 1) {
+      if (valida(a) && iso(a) <= hoy) return iso(a);
+    }
+    return null;
+  }
+  return valida(y) ? iso(y) : null;
+}
+
+// «19» → «19:00», «1930» → «19:30», «7:30» → «07:30»; la media hora que empieza a esa hora
+function leerHora(texto) {
+  const t = (texto || '').trim();
+  let h;
+  let mi = 0;
+  if (t.includes(':')) [h, mi] = t.split(':').map(Number);
+  else {
+    const c = t.replace(/\D/g, '');
+    if (!c || c.length > 4) return null;
+    if (c.length <= 2) h = Number(c);
+    else {
+      h = Number(c.slice(0, c.length - 2));
+      mi = Number(c.slice(-2));
+    }
+  }
+  if (!Number.isInteger(h) || !Number.isInteger(mi) || h < 0 || h > 23 || mi < 0 || mi > 59) return null;
+  return `${String(h).padStart(2, '0')}:${mi >= 30 ? '30' : '00'}`;
+}
+
+// Mientras se escribe la fecha, las barras se ponen solas: 1003 → 10/03, 10032026 → 10/03/2026
+function formatearFecha(texto) {
+  const propias = [...texto].some((ch, i) => /[/.-]/.test(ch) && !(ch === '/' && (i === 2 || i === 5)));
+  if (propias || /[^\d/]/.test(texto)) return texto; // «1/3», «10/3/25» o «2026-03-10»: como lo escribió
+  const c = texto.replace(/\D/g, '').slice(0, 8);
+  // «2026…» no es día y mes (no hay mes 26): se está escribiendo el año primero, como en 2026-03-10
+  if (c.length >= 4 && (Number(c.slice(0, 2)) > 31 || Number(c.slice(2, 4)) > 12)) return c;
+  return [c.slice(0, 2), c.slice(2, 4), c.slice(4)].filter(Boolean).join('/');
+}
 function horaValida(t) {
   const i = horaAIdx(t);
   return i == null ? null : idxAHora(i);
@@ -583,7 +619,10 @@ function pintarAhora() {
   A.sinAviso = Boolean(preg.sinAviso);
   // Arriba de la pregunta, de qué zona habla: el nombre del área y qué parte del país es
   $('#principal').innerHTML = `<span class="pregunta-area">${esc(nombreArea(A.area))} · ${esc(ZONA_AREA[A.area] || 'Perú')}</span>${esc(preg.q)}`;
-  $('#ahRespuesta').innerHTML = preg.html;
+  // «¿Y si hace más calor?» también en vivo: los escenarios necesitan el clima, que llega hasta el último día del
+  // historial; el enlace abre ese día a la misma hora (en un repaso ya va en la frase)
+  const calor = vivo && FECHA_MAX ? ` <a class="kpi-enlace" href="${rutaDetalle(A.area, { fecha: FECHA_MAX, hora: horaDe(d.ahora) }, 'escenarios')}" title="Escenarios de temperatura sobre el ${esc(fechaLarga(FECHA_MAX))}, el último día con datos de clima">¿Y si hace más calor?</a>` : '';
+  $('#ahRespuesta').innerHTML = calor ? preg.html.replace(/<\/p>$/, `${calor}</p>`) : preg.html;
   $('#ahRespuesta').classList.remove('siguiendo'); // la cifra vuelve a ser la de la hora fijada
   $('#ahModo').innerHTML = vivo
     ? `Lo real llega con un día de retraso: el COES, el operador del sistema eléctrico, publica cada mañana la demanda del día anterior. Lo demás es pronóstico, emitido ${emitidoTxt(d.emitido_en || d.ahora)}.`
@@ -596,12 +635,18 @@ function pintarAhora() {
   $('#ahHoy').setAttribute('aria-pressed', String(vivo));
   const fecha = $('#ahFecha');
   const tramos = d.dias_disponibles || [];
-  if (tramos.length) fecha.min = tramos.map((t) => t[0]).sort()[0];
-  fecha.max = hoyLima();
-  fecha.value = vivo ? d.ahora.slice(0, 10) : d.origen.slice(0, 10);
+  const nativa = $('#ahFechaNativa');
+  if (tramos.length) nativa.min = tramos.map((t) => t[0]).sort()[0];
+  nativa.max = hoyLima();
+  const dia = vivo ? hoyLima() : d.origen.slice(0, 10);
+  nativa.value = dia;
+  if (document.activeElement !== fecha) fecha.value = fechaNumerica(dia);
+  fecha.removeAttribute('aria-invalid');
+  $$('[data-atajo]').forEach((b) => b.setAttribute('aria-pressed', String(!vivo && dia === sumarDias(hoyLima(), -Number(b.dataset.atajo)))));
   $('#ahFechaLarga').textContent = vivo ? 'Hoy' : `${fechaLarga(d.origen)} (${fechaNumerica(d.origen)})`;
   const hora = $('#ahHora');
-  hora.value = horaDe(d.ahora);
+  if (document.activeElement !== hora) hora.value = horaDe(d.ahora);
+  hora.removeAttribute('aria-invalid');
   hora.closest('.campo').hidden = vivo;
   // Si la respuesta ya explica que el pronóstico del día no llegó, el aviso no lo repite con otra hora
   const avisos = (d.avisos || []).filter((t) => !(A.sinAviso && /^Todavía no llega la demanda/.test(t)));
@@ -610,11 +655,17 @@ function pintarAhora() {
 
   pintarAreasAhora();
   pintarCifras(d);
-  $('#ahTodasTit').textContent = vivo ? 'Todas las cifras de hoy' : 'Todas las cifras de ese día';
-  $('#ahGrafTitulo').textContent = vivo ? 'Ayer y hoy' : 'Ese día y las 24 h siguientes';
-  $('#ahGrafSub').textContent = vivo
+  const viejo = desfasado(d);
+  // Días de esta semana, sin número: el eje ya dice «jue 12» y «vie 13», y el título de arriba, qué día es hoy
+  const dReal = capital(DIAS[partesFecha(d.ahora).dow]);
+  const dPron = DIAS[partesFecha(diaPron(d)).dow];
+  $('#ahTodasTit').textContent = viejo ? 'Todas las cifras del último pronóstico' : vivo ? 'Todas las cifras de hoy' : 'Todas las cifras de ese día';
+  $('#ahGrafTitulo').textContent = viejo ? `${dReal} (real) y ${dPron} (pronóstico)` : vivo ? 'Ayer y hoy' : 'Ese día y las 24 h siguientes';
+  $('#ahGrafSub').textContent = viejo
+    ? `${nombreArea(A.area)}. A la izquierda, lo real del ${dReal.toLowerCase()} y lo que se había pronosticado; a la derecha, lo pronosticado para el ${dPron}, cuyo real el COES todavía no publica. Toca o arrastra el gráfico para leer cada hora.`
+    : vivo
     ? `${nombreArea(A.area)}. A la izquierda, lo real de ayer y lo que se había pronosticado; desde la línea punteada no hay dato real todavía. «Ahora» marca la hora de Lima. Toca o arrastra el gráfico para leer cada hora.`
-    : `${nombreArea(A.area)}. A la izquierda de «Ahora», lo real y lo que se pronosticó un día antes; a la derecha, lo que ya estaba pronosticado a las ${horaDe(d.origen)}. Toca o arrastra el gráfico para elegir otra hora.`;
+    : `${nombreArea(A.area)}. A la izquierda de las ${horaDe(d.origen)}, lo real y lo que se pronosticó un día antes; a la derecha, lo que ya estaba pronosticado a las ${horaDe(d.origen)}. Toca o arrastra el gráfico para elegir otra hora.`;
   $('#ahLeyRango').textContent = `Rango del ${d.nivel_rango_pct} % (cae ahí ${d.nivel_rango_pct / 10} de cada 10 veces)`;
   $('#ahLeyRef').textContent = `Referencia (${(REF_CORTA[d.referencia_nombre] || 'simple')})`;
   $('#ahDespuesCampo').hidden = vivo;
@@ -623,7 +674,7 @@ function pintarAhora() {
   $('#ahRef').checked = A.ref;
   graficoAhora($('#ahLienzo'), d);
   $('#ahDesc').textContent = descripcionAhora(d);
-  if ($('#ahTablaDet').open) pintarTablaAhora(d);
+  if ($('#ahTablaDet').open) conExtra(() => pintarTablaAhora(d));
   pintarAyer(d);
   pintarBueno(d);
   pintarOrigen(d);
@@ -635,6 +686,7 @@ function pintarAreasAhora() {
   const lista = S.areas.length ? S.areas : AREAS_RESPALDO;
   const repaso = A.fecha ? { fecha: A.fecha, hora: A.hora } : null;
   $('#ahAreas').innerHTML = lista.map((a) => `<a href="${rutaAhora(a.id, repaso, { modelo: A.modelo })}"${a.id === A.area ? ' aria-current="page"' : ''}>${esc(a.nombre)}</a>`).join('');
+  $('#chipRegimen').href = `#/confianza/${encodeURIComponent(A.area)}?seccion=nino`; // el chip lleva a «Confianza» del área elegida
 }
 
 const cambioPct = (a, b) => Math.round((100 * Math.abs(a - b)) / b);
@@ -668,10 +720,16 @@ function preguntaDelDia(d) {
     };
   }
   if (real) {
+    const hoy = hoyLima();
+    const sinReal = sumarDias(hoy, -1);
+    // Qué día es hoy, hasta cuándo hay dato real y qué es pronóstico, con sus fechas
+    const queSeVe = desfasado(d) && diaPron(d) < hoy
+      ? `Mientras, abajo, lo que se pronosticó para ese ${esc(DIAS[partesFecha(diaPron(d)).dow])}.`
+      : 'Mientras, abajo, el último que se emitió.';
     return {
-      q: '¿Cuánta electricidad se usará hoy?',
-      html: cifra(`Último dato real · ${esc(horaDe(c.fecha_hora))}`, 'real', 'Dato del COES, en megavatios (MW)')
-        + '<p class="r-frase">El pronóstico de hoy sale hacia las 10:00, cuando el COES publique la demanda de ayer. Mientras, abajo, el último que se emitió.</p>',
+      q: `Hoy, ${diaNum(hoy)}: el pronóstico sale hacia las 10:00`,
+      html: cifra(`Último dato real · ${esc(DIAS[partesFecha(c.fecha_hora).dow])}, ${esc(horaDe(c.fecha_hora))}`, 'real', 'Dato del COES, en megavatios (MW)')
+        + `<p class="r-frase">Sale cuando el COES publique la demanda del ${esc(DIAS[partesFecha(sinReal).dow])}. ${queSeVe}</p>`,
       sinAviso: true,
     };
   }
@@ -680,7 +738,7 @@ function preguntaDelDia(d) {
   if (p.fecha_hora > d.ahora) {
     return {
       q: '¿A qué hora se usará más electricidad hoy?',
-      html: `${ahora}<p class="r-frase">A las ${esc(horaDe(p.fecha_hora))}, con unos <b>${mw(p.valor)} MW</b>: ${cambioPct(p.valor, c.valor)} % más que ahora.</p>`,
+      html: `${ahora}<p class="r-frase">A las ${esc(horaDe(p.fecha_hora))}, con unos <b>${mw(p.valor)} MW</b>: ${cambioPct(p.valor, c.valor)}\u00a0% más que ahora.</p>`,
     };
   }
   const hoy = d.ahora.slice(0, 10);
@@ -696,7 +754,7 @@ function preguntaDelDia(d) {
   const q = `¿Cuánta electricidad se usará ${hora >= 18 ? 'esta noche' : 'el resto del día'}?`;
   const iMax = resto.reduce((a, i) => (d.pronostico[i] > d.pronostico[a] ? i : a), resto[0]);
   if (d.pronostico[iMax] > c.valor * 1.01) {
-    return { q, html: `${ahora}<p class="r-frase">Subirá hasta unos <b>${mw(d.pronostico[iMax])} MW</b> a las ${esc(horaDe(d.fecha_hora[iMax]))}: ${cambioPct(d.pronostico[iMax], c.valor)} % más que ahora.</p>` };
+    return { q, html: `${ahora}<p class="r-frase">Subirá hasta unos <b>${mw(d.pronostico[iMax])} MW</b> a las ${esc(horaDe(d.fecha_hora[iMax]))}: ${cambioPct(d.pronostico[iMax], c.valor)}\u00a0% más que ahora.</p>` };
   }
   const iFin = resto[resto.length - 1];
   const v = d.pronostico[iFin];
@@ -704,7 +762,7 @@ function preguntaDelDia(d) {
   // Una subida menor que el 1 % (las mayores ya se dijeron arriba) no se cuenta como bajada
   return {
     q,
-    html: `${ahora}<p class="r-frase">${v >= c.valor || pct < 1 ? `Se mantendrá cerca de <b>${mw(v)} MW</b> hasta las ${esc(horaDe(d.fecha_hora[iFin]))}.` : `Irá bajando: unos <b>${mw(v)} MW</b> a las ${esc(horaDe(d.fecha_hora[iFin]))}, ${pct} % menos que ahora.`}</p>`,
+    html: `${ahora}<p class="r-frase">${v >= c.valor || pct < 1 ? `Se mantendrá cerca de <b>${mw(v)} MW</b> hasta las ${esc(horaDe(d.fecha_hora[iFin]))}.` : `Irá bajando: unos <b>${mw(v)} MW</b> a las ${esc(horaDe(d.fecha_hora[iFin]))}, ${pct}\u00a0% menos que ahora.`}</p>`,
   };
 }
 
@@ -719,13 +777,14 @@ function pintarCifras(d) {
   const html = [];
   // Todas las cifras, a un toque; sin tarjetas vacías
   const dijimos = d.ayer && d.ayer.fecha_hora === c.fecha_hora ? `. Se pronosticó ${mw(d.ayer.pronostico)} (${rangoTxt(d.ayer.inferior, d.ayer.superior)}): ${d.ayer.dentro ? 'dentro' : 'fuera'} del rango` : '';
+  const viejo = desfasado(d);
   html.push(kpiHtml({
     sw: c.fuente === 'real' ? 'real' : 'pron',
-    k: `Ahora · ${esc(horaDe(c.fecha_hora))}`,
+    k: viejo ? `Último dato real · ${esc(diaCorto(c.fecha_hora))}, ${esc(horaDe(c.fecha_hora))}` : `Ahora · ${esc(horaDe(c.fecha_hora))}`,
     n: mw(c.valor),
     d: c.fuente === 'real' ? `Dato del COES${dijimos}` : `Pronóstico, rango ${rangoTxt(c.inferior, c.superior)} · el real llega mañana`,
   }));
-  const u = d.en_1h;
+  const u = viejo ? null : d.en_1h; // de madrugada no hay «en 1 hora»: el último dato es de hace más de un día
   if (u) {
     html.push(kpiHtml({
       k: `En 1 hora · ${esc(horaDe(u.fecha_hora))}`,
@@ -734,18 +793,18 @@ function pintarCifras(d) {
     }));
   }
   const p = d.pico;
-  const yaPaso = vivo && p.fecha_hora < d.ahora;
+  const yaPaso = vivo && (viejo || p.fecha_hora < d.ahora);
   html.push(kpiHtml({
     clase: `kpi-pico${yaPaso ? ' kpi-pasado' : ''}`,
     k: `Pico${yaPaso ? ' <span class="kpi-paso">ya pasó</span>' : ''}`,
     n: mw(p.valor),
-    d: `${yaPaso ? `Fue a las ${esc(horaDe(p.fecha_hora))}, según el pronóstico` : `${esc(fechaDiaMes(p.fecha_hora))}, ${esc(horaDe(p.fecha_hora))}`} · Rango del ${d.nivel_rango_pct} %: ${rangoTxt(p.inferior, p.superior)}`,
+    d: `${yaPaso ? `Fue ${viejo ? `el ${esc(diaCorto(p.fecha_hora))} ` : ''}a las ${esc(horaDe(p.fecha_hora))}, según el pronóstico` : `${esc(fechaDiaMes(p.fecha_hora))}, ${esc(horaDe(p.fecha_hora))}`} · Rango del ${d.nivel_rango_pct} %: ${rangoTxt(p.inferior, p.superior)}`,
   }));
   if (d.manana) {
     html.push(kpiHtml({
-      k: 'Mañana a esta hora',
+      k: viejo ? `Un día después · ${esc(diaCorto(d.manana.fecha_hora))}, ${esc(horaDe(d.manana.fecha_hora))}` : 'Mañana a esta hora',
       n: mw(d.manana.valor),
-      d: `${firmado(d.manana.valor - c.valor)} MW frente a ahora`,
+      d: `${firmado(d.manana.valor - c.valor)} MW frente a ${viejo ? 'ese último dato' : 'ahora'}`,
     }));
   }
   const r = d.rampa;
@@ -760,7 +819,9 @@ function pintarCifras(d) {
     }));
   }
   $('#ahCifras').innerHTML = html.join('');
-  const nombres = ['ahora', d.en_1h && 'en 1 hora', vivo ? 'el pico de hoy' : 'el pico', d.manana && 'mañana a esta hora', d.rampa && 'la mayor subida'].filter(Boolean);
+  const nombres = viejo
+    ? ['el último dato real', 'el pico', d.manana && 'un día después', d.rampa && 'la mayor subida'].filter(Boolean)
+    : ['ahora', d.en_1h && 'en 1 hora', vivo ? 'el pico de hoy' : 'el pico', d.manana && 'mañana a esta hora', d.rampa && 'la mayor subida'].filter(Boolean);
   $('#ahTodasQue').textContent = `${nombres.slice(0, -1).join(', ')} y ${nombres[nombres.length - 1]}`;
 }
 
@@ -826,7 +887,7 @@ function graficoAhora(el, d) {
     const fh = d.fecha_hora[i];
     const medianoche = horaDe(fh) === '00:00';
     if (medianoche && i > 0 && !(ia !== io && Math.abs(i - io) <= 1)) s += `<line class="g-eje" x1="${x(i).toFixed(1)}" x2="${x(i).toFixed(1)}" y1="${m.t}" y2="${H - m.b}"/>`;
-    if (i % paso || Math.abs(x(i) - x(ia)) < 52) continue;
+    if (i % paso || Math.abs(x(i) - x(ia)) < (desfasado(d) ? 102 : 52)) continue;
     s += `<line class="g-eje" x1="${x(i).toFixed(1)}" x2="${x(i).toFixed(1)}" y1="${H - m.b}" y2="${H - m.b + 4}"/>`;
     s += `<text class="g-texto g-hora-eje" x="${x(i).toFixed(1)}" y="${H - m.b + 17}" text-anchor="middle">${esc(medianoche ? diaCorto(fh) : horaDe(fh))}</text>`;
   }
@@ -912,14 +973,15 @@ function graficoAhora(el, d) {
   const ip = d.fecha_hora.indexOf(d.pico.fecha_hora);
   if (ip >= 0) s += anotar(ip, d.pico.valor, movil ? `Pico ${mw(d.pico.valor)}` : `Pico ${mw(d.pico.valor)} · ${horaDe(d.pico.fecha_hora)}`);
   const im = d.manana ? d.fecha_hora.indexOf(d.manana.fecha_hora) : -1;
-  if (!movil && im >= 0 && Math.abs(im - ip) > 10) s += anotar(im, d.manana.valor, `Mañana ${horaDe(d.manana.fecha_hora)}: ${mw(d.manana.valor)}`);
+  if (!movil && im >= 0 && Math.abs(im - ip) > 10) s += anotar(im, d.manana.valor, `${desfasado(d) ? diaCorto(d.manana.fecha_hora) : 'Mañana'} ${horaDe(d.manana.fecha_hora)}: ${mw(d.manana.valor)}`);
   s += rotuloRampa;
   // El hito de «ahora»: la línea, un halo alrededor del punto, su valor y la pastilla con la hora en el eje
   s += `<line class="g-ahora" x1="${x(ia).toFixed(1)}" x2="${x(ia).toFixed(1)}" y1="${m.t - 22}" y2="${H - m.b}"/>`;
-  const anchoPastilla = vivo ? 84 : 104;
+  const viejo = desfasado(d); // de madrugada, la pastilla marca el último dato real, no «ahora»
+  const anchoPastilla = viejo ? 158 : vivo ? 84 : 104;
   const gx = Math.min(Math.max(x(ia) - anchoPastilla / 2, m.l), W - m.r - anchoPastilla);
   s += `<rect class="g-pastilla" x="${gx.toFixed(1)}" y="${H - m.b + 4}" width="${anchoPastilla}" height="22" rx="11"/>`;
-  s += `<text class="g-pastilla-texto" x="${(gx + anchoPastilla / 2).toFixed(1)}" y="${H - m.b + 19}" text-anchor="middle">${vivo ? `Ahora ${esc(horaDe(d.ahora))}` : `‹ A las ${esc(horaDe(d.ahora))} ›`}</text>`;
+  s += `<text class="g-pastilla-texto" x="${(gx + anchoPastilla / 2).toFixed(1)}" y="${H - m.b + 19}" text-anchor="middle">${viejo ? `Último real · ${esc(DIAS_CORTOS[partesFecha(d.ahora).dow])} ${esc(horaDe(d.ahora))}` : vivo ? `Ahora ${esc(horaDe(d.ahora))}` : `‹ A las ${esc(horaDe(d.ahora))} ›`}</text>`;
   const esReal = d.real[ia] != null;
   s += `<circle class="g-ahora-halo${esReal ? ' real' : ''}" cx="${x(ia).toFixed(1)}" cy="${y(vAhora).toFixed(1)}" r="12"/>`;
   s += `<circle class="g-punto g-ahora-punto${esReal ? ' real' : ''}" cx="${x(ia).toFixed(1)}" cy="${y(vAhora).toFixed(1)}" r="6"/>`;
@@ -1087,46 +1149,13 @@ function descripcionAhora(d) {
   let t = `Demanda del ${a} desde el ${fechaDiaMes(ini)} a las 00:00 hasta el ${fechaDiaMes(fin)} a las ${horaDe(fin)}. `;
   if (c.fuente === 'real') {
     const dentro = d.ayer && d.ayer.fecha_hora === c.fecha_hora ? (d.ayer.dentro ? ', dentro del rango que se pronosticó' : ', fuera del rango que se pronosticó') : '';
-    t += `Ahora (${horaDe(c.fecha_hora)}) la demanda es ${mw(c.valor)} MW${dentro}. `;
+    t += `${desfasado(d) ? `El último dato real (${fechaDiaMes(c.fecha_hora)}, ${horaDe(c.fecha_hora)})` : `Ahora (${horaDe(c.fecha_hora)}) la demanda`} es ${mw(c.valor)} MW${dentro}. `;
   } else {
     t += `Lo real llega hasta el ${finTxt(d.datos_hasta).largo}. Ahora (${horaDe(c.fecha_hora)}) se pronostican ${mw(c.valor)} MW, entre ${mw(c.inferior)} y ${mw(c.superior)}. `;
   }
-  t += `El pico ${d.modo === 'en_vivo' ? 'de hoy' : 'de las próximas 24 horas'} sería ${mw(d.pico.valor)} MW el ${fechaDiaMes(d.pico.fecha_hora)} a las ${horaDe(d.pico.fecha_hora)}`;
+  t += `El pico ${desfasado(d) ? 'del último pronóstico' : d.modo === 'en_vivo' ? 'de hoy' : 'de las próximas 24 horas'} sería ${mw(d.pico.valor)} MW el ${fechaDiaMes(d.pico.fecha_hora)} a las ${horaDe(d.pico.fecha_hora)}`;
   if (d.rampa) t += `; la mayor subida, ${mw(d.rampa.subida_mw)} MW en una hora desde las ${horaDe(d.rampa.desde)}${d.rampa.fuerte ? ' (rampa fuerte)' : ''}`;
   return `${t}.`;
-}
-
-function pintarTablaAhora(d) {
-  const filas = d.fecha_hora.map((fh, i) => {
-    const real = i <= d.i_origen ? d.real[i] : (A.despues && d.real_despues ? d.real_despues[i] : null);
-    return `<tr${i === d.i_ahora ? ' class="fila-elegida"' : ''}><th scope="row">${esc(diaCorto(fh))} ${esc(horaDe(fh))}</th>`
-      + `<td>${real == null ? '—' : mw(real)}</td><td>${mw(d.pronostico[i])}</td><td>${mw(d.inferior[i])}–${mw(d.superior[i])}</td>`
-      + `<td>${d.referencia[i] == null ? '—' : mw(d.referencia[i])}</td></tr>`;
-  }).join('');
-  $('#ahTabla').innerHTML = '<div class="tabla-scroll" tabindex="0" role="region" aria-label="Datos del gráfico"><table class="t">'
-    + `<caption class="visually-hidden">Demanda del ${esc(nombreArea(A.area))} en MW: real, pronóstico a 24 h, rango del ${d.nivel_rango_pct} % y referencia</caption>`
-    + `<thead><tr><th scope="col">Hora</th><th scope="col">Real</th><th scope="col">Pronóstico</th><th scope="col">Rango ${d.nivel_rango_pct} %</th><th scope="col">Referencia</th></tr></thead>`
-    + `<tbody>${filas}</tbody></table></div>`;
-}
-
-function descargarCsvAhora() {
-  const d = A.datos.get(A.area);
-  if (!d) return;
-  const filas = [['inicio_periodo', 'pronostico_mw', `rango_${d.nivel_rango_pct}_inferior_mw`, `rango_${d.nivel_rango_pct}_superior_mw`, 'error_mw']];
-  d.fecha_hora.forEach((fh, i) => {
-    const real = i <= d.i_origen ? d.real[i] : (d.real_despues ? d.real_despues[i] : null);
-    filas.push([fh, d.pronostico[i], d.inferior[i], d.superior[i], real == null ? '' : (d.pronostico[i] - real).toFixed(1)]);
-  });
-  const cabeza = `# Curva · ${nombreArea(A.area)} · ${d.modelo_nombre} · último dato real hasta ${d.datos_hasta} (hora de Lima)\n`
-    + '# pronostico_mw: pronóstico directo a 24 h, emitido 24 h antes de cada periodo; error_mw = pronóstico − real\n';
-  const blob = new Blob([cabeza + filas.map((f) => f.join(',')).join('\n')], { type: 'text/csv;charset=utf-8' });
-  const enlace = document.createElement('a');
-  enlace.href = URL.createObjectURL(blob);
-  enlace.download = `curva-${A.area}-${d.origen.replace(':', '')}.csv`;
-  document.body.append(enlace);
-  enlace.click();
-  enlace.remove();
-  setTimeout(() => URL.revokeObjectURL(enlace.href), 1000);
 }
 
 // Al mostrar lo que pasó después, también cómo le fue en el día completo (en repaso ya pasó)
@@ -1143,8 +1172,10 @@ function pintarDiaCompleto(d) {
 function pintarAyer(d) {
   const y = d.ayer;
   const cont = $('#ahAyer');
-  const hoy = y && y.fecha_hora.slice(0, 10) === d.ahora.slice(0, 10);
-  $('#ahAyerTit').textContent = hoy || !y ? 'Lo que dijimos ayer para esta hora' : 'Lo que dijimos para ayer a esta hora';
+  // «De hoy» solo cuando es hoy: en un repaso y de madrugada, el día con su fecha
+  const hoy = y && y.fecha_hora.slice(0, 10) === hoyLima();
+  const deAyer = y && d.modo === 'en_vivo' && y.fecha_hora.slice(0, 10) === sumarDias(hoyLima(), -1);
+  $('#ahAyerTit').textContent = hoy || !y ? 'Lo que dijimos ayer para esta hora' : deAyer ? 'Lo que dijimos para ayer a esta hora' : 'Lo que se dijo un día antes';
   if (!y) {
     cont.innerHTML = '<p class="sub">Todavía no hay un pronóstico verificado contra el real para esta hora.</p>';
     return;
@@ -1154,7 +1185,7 @@ function pintarAyer(d) {
   const fuente = y.fuente === 'historial'
     ? `Historial · modelo ${esc(d.modelo_nombre.replace(/\s*\(.*\)\s*$/, '').toLowerCase())}`
     : y.fuente === 'reconstruido'
-      ? 'Registro en vivo · reconstruido: se calculó después de conocerse el real, con los datos que habría tenido'
+      ? 'Reconstruido: se calculó después de conocerse el real, con los datos que habría tenido'
       : 'Registro en vivo · emitido antes de conocerse el real';
   cont.innerHTML = `<p class="sub">Para las ${esc(horaDe(y.fecha_hora))} ${hoy ? 'de hoy' : `del ${esc(fechaDiaMes(y.fecha_hora))}`}, emitido el ${esc(fechaDiaMes(y.emitido))} a las ${esc(horaDe(y.emitido))} (24 h antes).</p>`
     + `<dl class="dijimos"><div><dt><span class="sw pron" aria-hidden="true"></span>Dijimos</dt><dd>${mw(y.pronostico)}<small>MW</small></dd></div>`
@@ -1194,7 +1225,7 @@ function pintarBueno(d) {
   const bloques = [];
   const e = d.error_hasta_origen;
   if (e) {
-    const titulo = vivo ? 'Ayer, el día completo' : `Ese día, hasta las ${horaDe(d.origen)}`;
+    const titulo = vivo ? (desfasado(d) ? `${capital(diaNum(d.ahora))}, el día completo` : 'Ayer, el día completo') : `Ese día, hasta las ${horaDe(d.origen)}`;
     bloques.push(`<div class="bloque"><h3>${esc(titulo)}</h3>${barrasCmp(e.mae_modelo, e.mae_referencia)}<p class="sub">${frasesMejora(e.mae_modelo, e.mae_referencia, nombreRef)}</p></div>`);
   }
   if (!vivo && A.despues && d.error_dia) {
@@ -1263,7 +1294,7 @@ function pintarOrigen(d) {
 }
 
 // El estado de «Confianza»: la pantalla se carga aparte, pero la cabecera y las rutas lo leen
-const C = { area: 'centro', horizonte: '24h', mes: null, turno: 0, datos: null };
+const C = { area: 'centro', horizonte: '24h', mes: null, turno: 0, datos: null, ir: null };
 
 // ---- Rutas e inicio ------------------------------------------------------------------------
 
@@ -1305,6 +1336,8 @@ function cargarRecurso(url) {
   }
   return RECURSOS.get(url);
 }
+// La ficha técnica, la tabla del gráfico y el CSV de «Ahora» se cargan al pedirlos: abrir la app no los paga
+const conExtra = (f) => cargarRecurso('ahora-extra.js').then(f).catch(mostrarError);
 const PANTALLAS = {}; // nombre → promesa de la pantalla lista: código, estilos y HTML
 const LISTAS = new Set();
 function cargarPantalla(nombre) {
@@ -1400,7 +1433,6 @@ async function cargarBase() {
   aplicarModelo();
   $('#chipPrueba').hidden = salud.modelo !== 'prueba';
   pintarRegimen();
-  pintarFicha();
 }
 
 async function iniciar() {
@@ -1442,7 +1474,11 @@ function conectarEventos() {
   });
 
   const ficha = $('#dlgFicha');
-  const abrirFicha = () => (typeof ficha.showModal === 'function' ? ficha.showModal() : ficha.setAttribute('open', ''));
+  const abrirFicha = () => conExtra(() => {
+    pintarFicha(); // con lo último de /resumen y /salud
+    if (typeof ficha.showModal === 'function') ficha.showModal();
+    else ficha.setAttribute('open', '');
+  });
   $('#btnFicha').addEventListener('click', abrirFicha);
   $('#btnCerrarFicha').addEventListener('click', () => ficha.close());
   ficha.addEventListener('click', (ev) => {
@@ -1451,16 +1487,116 @@ function conectarEventos() {
 
   // Ahora
   $('#ahHoy').addEventListener('click', () => irAhora(null));
-  $('#ahFecha').addEventListener('change', (ev) => {
-    const f = ev.target.value;
-    if (!esFecha(f)) return;
-    if (f >= hoyLima()) irAhora(null);
-    else irAhora({ fecha: f, hora: A.hora || horaValida($('#ahHora').value) || idxAHora(ahoraEnLima().idx) });
+  // La fecha se fija apenas lo escrito es un día (10/03 ya lo es; si sigue el año, se vuelve a fijar), con Intro o
+  // al salir del campo. La hora igual: 19 ya es 19:00 y 1930, 19:30. Lo que no se entiende se marca y no se fija.
+  const ayuda = $('#ahFechaAyuda');
+  const AYUDA = ayuda.textContent;
+  const avisar = (texto) => {
+    ayuda.textContent = texto || AYUDA;
+    ayuda.classList.toggle('error', Boolean(texto));
+  };
+  // Un día fuera del historial o futuro no se pide: se dice por qué, junto al campo
+  const problemaFecha = (f) => {
+    const hoy = hoyLima();
+    if (f > hoy) return `El ${fechaNumerica(f)} todavía no llega: hay datos hasta hoy.`;
+    const d = A.datos.get(A.area);
+    const tramos = (d && d.dias_disponibles) || [];
+    const desde = tramos.length ? tramos.map((t) => t[0]).sort()[0] : null;
+    if (desde && f < desde) return `No hay datos del ${fechaNumerica(f)}: el historial empieza el ${fechaNumerica(desde)}.`;
+    return null;
+  };
+  const irAFecha = (f) => {
+    if (!f) return;
+    const problema = problemaFecha(f);
+    marcar(campoFecha, !problema);
+    avisar(problema);
+    if (problema) return;
+    if (f === hoyLima()) irAhora(null);
+    else if (f !== A.fecha) irAhora({ fecha: f, hora: A.hora || leerHora($('#ahHora').value) || idxAHora(ahoraEnLima().idx) });
+  };
+  const irAHora = (h) => { if (h && A.fecha && h !== A.hora) irAhora({ fecha: A.fecha, hora: h }); };
+  const campoFecha = $('#ahFecha');
+  const campoHora = $('#ahHora');
+  const marcar = (campo, ok) => (ok ? campo.removeAttribute('aria-invalid') : campo.setAttribute('aria-invalid', 'true'));
+  campoFecha.addEventListener('input', () => {
+    if (campoFecha.selectionStart === campoFecha.value.length) campoFecha.value = formatearFecha(campoFecha.value);
+    marcar(campoFecha, true);
+    avisar(null);
+    // 10/03 ya es un día (el último 10 de marzo que pasó), 10/03/2026 y 2026-03-10 también; 10/03/2 todavía no
+    if (/^\d{2}\/\d{2}(\/\d{4})?$|^\d{4}-\d{2}-\d{2}$/.test(campoFecha.value)) irAFecha(leerFecha(campoFecha.value));
   });
-  $('#ahHora').addEventListener('change', (ev) => {
-    const h = horaValida(ev.target.value);
-    if (h && A.fecha) irAhora({ fecha: A.fecha, hora: h });
+  const fijarFecha = () => {
+    const f = leerFecha(campoFecha.value);
+    const vacio = !campoFecha.value.trim();
+    marcar(campoFecha, Boolean(f) || vacio);
+    if (!f && !vacio) avisar(`No entiendo «${campoFecha.value}»: escribe el día como 10/03 o 10/03/2026.`);
+    if (f) irAFecha(f);
+  };
+  let esperaDia = null;
+  campoFecha.addEventListener('keydown', (ev) => {
+    if (ev.key === 'Enter') {
+      ev.preventDefault();
+      fijarFecha();
+    }
+    if (ev.key === 'ArrowUp' || ev.key === 'ArrowDown') {
+      // Flechas: un día más o menos
+      ev.preventDefault();
+      const base = leerFecha(campoFecha.value) || A.fecha || hoyLima();
+      campoFecha.value = fechaNumerica(sumarDias(base, ev.key === 'ArrowUp' ? 1 : -1));
+      clearTimeout(esperaDia);
+      esperaDia = setTimeout(fijarFecha, 500);
+    }
   });
+  campoFecha.addEventListener('change', fijarFecha);
+  campoFecha.addEventListener('blur', () => {
+    const d = A.datos.get(A.area);
+    if (d && campoFecha.getAttribute('aria-invalid') !== 'true') campoFecha.value = fechaNumerica(A.fecha || d.ahora.slice(0, 10));
+  });
+  campoHora.addEventListener('input', () => {
+    const c = campoHora.value.replace(/[^\d:]/g, '');
+    campoHora.value = c;
+    marcar(campoHora, true);
+    const digitos = c.replace(/\D/g, '');
+    if ((digitos.length === 4 || (digitos.length === 2 && !c.includes(':'))) && leerHora(c)) irAHora(leerHora(c));
+  });
+  const fijarHoraCampo = () => {
+    const h = leerHora(campoHora.value);
+    marcar(campoHora, Boolean(h));
+    if (!h) avisar(`No entiendo «${campoHora.value}»: escribe la hora como 19 o 19:30 (de 00:00 a 23:30).`);
+    else avisar(null);
+    if (h) {
+      campoHora.value = h;
+      irAHora(h);
+    }
+  };
+  let esperaFlecha = null;
+  campoHora.addEventListener('keydown', (ev) => {
+    if (ev.key === 'Enter') {
+      ev.preventDefault();
+      fijarHoraCampo();
+    }
+    if (ev.key === 'ArrowUp' || ev.key === 'ArrowDown') {
+      // Flechas: media hora más o menos, como un reloj de 24 h
+      ev.preventDefault();
+      const i = horaAIdx(leerHora(campoHora.value) || A.hora || '00:00') ?? 0;
+      campoHora.value = idxAHora((i + (ev.key === 'ArrowUp' ? 1 : 47)) % 48);
+      clearTimeout(esperaFlecha);
+      esperaFlecha = setTimeout(fijarHoraCampo, 500);
+    }
+  });
+  campoHora.addEventListener('change', fijarHoraCampo);
+  campoHora.addEventListener('blur', () => { if (A.hora && campoHora.getAttribute('aria-invalid') !== 'true') campoHora.value = A.hora; });
+  // El calendario: el del navegador, pero lo que queda escrito en el campo es dd/mm/aaaa
+  $('#ahCalendario').addEventListener('click', () => {
+    const n = $('#ahFechaNativa');
+    try {
+      n.showPicker();
+    } catch {
+      campoFecha.focus(); // sin calendario nativo: se escribe
+    }
+  });
+  $('#ahFechaNativa').addEventListener('change', (ev) => { if (esFecha(ev.target.value)) irAFecha(ev.target.value); });
+  $$('[data-atajo]').forEach((b) => b.addEventListener('click', () => irAFecha(sumarDias(hoyLima(), -Number(b.dataset.atajo)))));
   $('#ahRef').addEventListener('change', (ev) => {
     A.ref = ev.target.checked;
     const d = A.datos.get(A.area);
@@ -1473,15 +1609,15 @@ function conectarEventos() {
     graficoAhora($('#ahLienzo'), d);
     pintarDiaCompleto(d);
     pintarBueno(d);
-    if ($('#ahTablaDet').open) pintarTablaAhora(d);
+    if ($('#ahTablaDet').open) conExtra(() => pintarTablaAhora(d));
   });
-  $('#ahCsv').addEventListener('click', descargarCsvAhora);
+  $('#ahCsv').addEventListener('click', () => conExtra(() => descargarCsvAhora())); // se busca después de cargar el archivo
   $('#ahOrigen').addEventListener('click', (ev) => {
     if (ev.target.closest('[data-accion="ficha"]')) $('#btnFicha').click();
   });
   $('#ahTablaDet').addEventListener('toggle', () => {
     const d = A.datos.get(A.area);
-    if (d && $('#ahTablaDet').open) pintarTablaAhora(d);
+    if (d && $('#ahTablaDet').open) conExtra(() => pintarTablaAhora(d));
   });
   const lienzo = $('#ahLienzo');
   const indiceLienzo = (ev) => {
