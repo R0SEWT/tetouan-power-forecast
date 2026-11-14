@@ -8,6 +8,8 @@ Correr en local (desde la raíz del repo):
 Sirve también la web (``app/web``) en ``http://localhost:8000/``, y todo comprimido con gzip.
 
 La tubería en vivo (``python -m tetouan_power_forecast.en_vivo diario``) se lee en ``GET /en-vivo/{area}``.
+Las dos pantallas de entrada de la web tienen su ruta: ``GET /ahora/{area}`` (hoy y las próximas 24 h, en vivo o en
+repaso) y ``GET /confianza/{area}`` (el error de 2026 mes a mes y día a día, el sesgo y la cobertura).
 
 Variables de entorno:
 - ``TPF_CORS_ORIGENES``: orígenes extra separados por comas, además de localhost y 127.0.0.1
@@ -24,11 +26,13 @@ import os
 from datetime import date, datetime
 from pathlib import Path
 from typing import Annotated
+from zoneinfo import ZoneInfo
 
 from fastapi import FastAPI, HTTPException, Query, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.gzip import GZipMiddleware
 
+from .ahora import desde_historial, metricas_confianza
 from .contrato import (
     AREAS,
     FECHA_MAX,
@@ -37,7 +41,9 @@ from .contrato import (
     IDS_AREAS,
     MENSAJE_ESCENARIO_1H,
     PATRON_ORIGEN,
+    Ahora,
     Area,
+    Confianza,
     Diagnostico,
     EnVivo,
     Escenario,
@@ -123,6 +129,7 @@ def crear_app(
     app.state.pronosticador = pronosticador or PronosticadorDePrueba()
     app.state.pronosticadores = {_id(p): p for p in [app.state.pronosticador, *(otros or [])]}
     app.state.en_vivo = LectorEnVivo(en_vivo)
+    app.state.confianza = {}
 
     def respaldo(request: Request, p: Pronosticador) -> Pronosticador | None:
         """El modelo que responde por ``p`` fuera de su rango, si la API también lo sirve."""
@@ -257,6 +264,89 @@ def crear_app(
         """
         _validar_area(area)
         return request.app.state.en_vivo.area(area)
+
+    def dias_disponibles(request: Request, area: str, p: Pronosticador) -> list[list[str]]:
+        minimo, maximo = _rango(p)
+        tramos = [[minimo.isoformat(), maximo.isoformat()]]
+        vivo = request.app.state.en_vivo.tramo_repaso(area)
+        if vivo is not None:
+            tramos.append(list(vivo))
+        return tramos
+
+    def umbral_de(p: Pronosticador, area: str) -> float | None:
+        return p.umbral_rampa(area) if hasattr(p, "umbral_rampa") else None
+
+    @app.get("/ahora/{area}", response_model=Ahora)
+    def ahora(
+        request: Request,
+        area: str,
+        origen: Annotated[str | None, Query(pattern=PATRON_ORIGEN, description="Repaso: AAAA-MM-DDTHH:MM")] = None,
+        variante: Variante = "M3",
+        id_modelo: str | None = PARAMETRO_MODELO,
+        reloj: Annotated[str | None, Query(alias="ahora", pattern=r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$",
+                                           description="En vivo: la hora de Lima que se marca como «ahora» "
+                                           "(por defecto, la del servidor)")] = None,
+    ) -> Ahora:
+        """Hoy y las próximas 24 h en un gráfico, con las cifras de arriba y «lo que dijimos ayer para esta hora».
+
+        Sin ``origen``, el último pronóstico del registro en vivo (sin registro, el último día del historial). Con
+        ``origen``, el repaso de ese momento: con el modelo pedido si cae en su rango y, si no, con el registro en vivo.
+        """
+        _validar_area(area)
+        vivo = request.app.state.en_vivo
+        base = request.app.state.pronosticador
+        hora = _leer_origen(reloj) if reloj else None
+        if origen is None:
+            resultado = vivo.ahora(area, reloj=hora, umbral=umbral_de(base, area))
+            if resultado is not None:
+                return resultado.model_copy(update={"dias_disponibles": dias_disponibles(request, area, base)})
+            p = modelo(request, id_modelo)
+            reloj_lima = hora or datetime.now(ZoneInfo("America/Lima")).replace(tzinfo=None)
+            momento = datetime.combine(_rango(p)[1], reloj_lima.time()).replace(minute=0 if reloj_lima.minute < 30 else 30,
+                                                                                second=0, microsecond=0)
+            avisos = ["Todavía no hay pronósticos en vivo de esta área: se muestra el último día del historial."]
+        else:
+            momento = _leer_origen(origen)
+            p = modelo(request, id_modelo, momento.date())
+            minimo, maximo = _rango(p)
+            avisos = []
+            if not minimo <= momento.date() <= maximo:
+                resultado = vivo.ahora(area, origen=momento, umbral=umbral_de(base, area))
+                if resultado is not None:
+                    return resultado.model_copy(update={"dias_disponibles": dias_disponibles(request, area, p)})
+                tramos = dias_disponibles(request, area, p)
+                texto = " y ".join(f"del {a} al {b}" for a, b in tramos)
+                raise HTTPException(422, f"No hay datos para repasar el {momento:%Y-%m-%d}. Hay {texto}.")
+        resultado = desde_historial(p, area, momento, variante, modelo=_id(p),
+                                    modelo_nombre=getattr(p, "nombre", p.modelo), umbral=umbral_de(p, area),
+                                    avisos=avisos)
+        return resultado.model_copy(update={"dias_disponibles": dias_disponibles(request, area, p)})
+
+    @app.get("/confianza/{area}", response_model=Confianza)
+    def confianza(
+        request: Request,
+        area: str,
+        horizonte: Horizonte = "24h",
+        variante: Variante = "M3",
+        id_modelo: str | None = PARAMETRO_MODELO,
+    ) -> Confianza:
+        """El error de 2026 mes a mes frente a la referencia, la cobertura, el sesgo, el MAPE y el WAPE, y el pico de
+        cada día a 24 h con los días que pasaron el 3 % (también los del registro en vivo)."""
+        _validar_area(area)
+        p = modelo(request, id_modelo)
+        clave = (_id(p), area, horizonte, variante)
+        cache = request.app.state.confianza
+        if clave not in cache:
+            try:
+                seguimiento = p.seguimiento(area, horizonte, variante)
+            except LookupError as error:
+                raise HTTPException(422, str(error)) from error
+            mape, wape, sesgo, dias = metricas_confianza(p, area, horizonte, variante, _rango(p)[1])
+            acierto = p.acierto_pico(area, variante) if hasattr(p, "acierto_pico") else None
+            cache[clave] = Confianza(area=area, horizonte=horizonte, modelo=_id(p), seguimiento=seguimiento,
+                                     mape_pct=mape, wape_pct=wape, sesgo=sesgo, dias=dias, acierto=acierto)
+        # El registro en vivo crece cada mañana: se lee en cada pedido (sus archivos se cachean por fecha)
+        return cache[clave].model_copy(update={"dias_en_vivo": request.app.state.en_vivo.dias_pico(area)})
 
     # Al final, para que las rutas de la API vayan antes que los archivos.
     if web is not None and web.is_dir():
