@@ -53,6 +53,7 @@ TERMINOS = [
     ("medias horas / periodos", r"medias horas|periodos"),
     ("reconstruido / registro en vivo", r"reconstru|registro"),
     ("horizonte / 24 h", r"horizonte|\b24 ?h\b|\b1 ?h\b"),
+    ("Simons (componente del modelo)", r"simons"),
     ("modelo / híbrido / XGBoost", r"modelo|hibrido|xgboost|combinado"),
     ("escenario / supuesto", r"escenario|supuesto"),
     ("ENFEN", r"enfen"),
@@ -154,8 +155,26 @@ def ubicar(cita: str, pantalla: dict) -> dict:
             mejor, puntaje = (t, archivo), p
     if mejor and puntaje >= 0.4:
         t, archivo = mejor
+        campo = campo_de_etiqueta(t, archivo, pantalla)
+        if campo:
+            return campo
         return {"tipo": "texto", "etiqueta": t["t"][:60], "zona": t["zona"], "vista": archivo}
     return {"tipo": "fuera", "etiqueta": cita[:60]}
+
+
+def campo_de_etiqueta(texto: dict, archivo: str, pantalla: dict) -> dict | None:
+    """Un texto corto junto a un campo de la misma zona es su etiqueta: tocarla activa el campo («Ver otro día»)."""
+    if len(texto["t"]) > 40:
+        return None
+    vista = next(v for v in pantalla["vistas"] if v["archivo"] == archivo)
+    campos = [c for c in vista["controles"] if c["tipo"].startswith("input:") and c["zona"] == texto["zona"]]
+    if not campos:
+        return None
+    n = norm(texto["t"])
+    preferido = {"input:date": r"dia|fecha", "input:time": r"hora|\blas\b", "input:checkbox": r"mostrar|referencia"}
+    elegido = next((c for c in campos if re.search(preferido.get(c["tipo"], "$^"), n)), campos[0])
+    return {"tipo": "control", "etiqueta": f"{texto['t']} ({elegido['tipo']})", "zona": elegido["zona"],
+            "vista": archivo}
 
 
 def calificar_clic(cita: str, pantalla: dict, regla: dict) -> dict:
@@ -189,6 +208,8 @@ IMPORTO = {
     "los datos para descargar": r"csv|descarg|datos limpios|tabla",
     "nada": r"no me sirve|\bnada\b|no me ayuda|no me importa",
 }
+# Lo primero que mira es la cifra del momento o la respuesta a la pregunta (el hito de la pantalla)
+ZONAS_CIFRA = {"cifra_ahora", "respuesta", "#ahRespuesta"}
 ESPERADO_MOMENTO = {"hoy": "hoy_en_vivo", "repaso-1030": "dia_pasado", "repaso-1900": "dia_pasado"}
 CLIC_2C = r"\+\s*2\s*(°|o|grados)?\s*c?\b"
 # Marcadores de confusión en la voz alta (codificación clásica del protocolo de pensar en voz alta)
@@ -362,6 +383,7 @@ def medidas_pantalla(codigos: list[dict], tareas: dict) -> dict:
                                      for t in c["clics"] if c["clics"][t]["resultado"] == "no_es_control"
                                      ).most_common(4)
         m["mira_primero"] = Counter(c["mira_primero"] for c in codigos).most_common(4)
+        m["mira_primero_cifra"] = por_repeticion(codigos, lambda c: c["mira_primero"] in ZONAS_CIFRA)
         m["volveria"] = dict(Counter(c["volveria"] for c in codigos))
         m["importo"] = [(k, round(n / len(codigos), 2)) for k, n in
                         Counter(k for c in codigos for k in c["importo"]).most_common()]
@@ -503,6 +525,9 @@ ZONAS = {
     "cobertura": "cobertura", "#cfStats": "cifras de Confianza", "#cfCob": "cobertura", "#cfVivo": "en vivo",
     "#cfDia": "error por día", "titular": "titular", "aviso_vivo": "aviso en vivo", "mes_a_mes": "error mes a mes",
     "selectores": "selectores", "#cfMes": "error mes a mes", "#cfRegimen": "error por régimen",
+    "#ahDespuesCampo": "«Mostrar lo que pasó después»", "#ahRespuesta": "respuesta a la pregunta",
+    "panel_controles": "panel de controles de «Detalle»", "#panel-escenarios": "panel de escenarios",
+    "no ubicada": "no ubicada",
 }
 
 
@@ -537,6 +562,7 @@ def informe(a: dict) -> str:
                  ("Sabe qué momento muestra", lambda m: pct(m["momento_ok"])),
                  ("Lee la cifra del momento", lambda m: pct(m["lectura_cifra"])),
                  ("Lee cifra, pronóstico y rango", lambda m: pct(m["lectura_completa"])),
+                 ("Lo primero que mira es la cifra o la respuesta", lambda m: pct(m["mira_primero_cifra"])),
                  ("Primer clic acertado (media de 4 tareas)", lambda m: pct(m["primer_clic_medio"]))]
         filas += [(f"…{t}", lambda m, t=t: pct(m["primer_clic"][t])) for t in ("t1", "t2", "t3", "t4")]
         filas += [("Dudas por sesión", lambda m: num(m["dudas_por_sesion"])),
@@ -606,6 +632,8 @@ def comparar(a: dict, b: dict) -> str:
                           ("sabe qué momento muestra", ma["momento_ok"], mb["momento_ok"], True),
                           ("lee la cifra del momento", ma["lectura_cifra"], mb["lectura_cifra"], True),
                           ("lee cifra, pronóstico y rango", ma["lectura_completa"], mb["lectura_completa"], True),
+                          ("lo primero que mira es la cifra o la respuesta", ma["mira_primero_cifra"],
+                           mb["mira_primero_cifra"], True),
                           ("primer clic (media)", ma["primer_clic_medio"], mb["primer_clic_medio"], True)]
             candidatas += [(f"primer clic {t}", ma["primer_clic"][t], mb["primer_clic"][t], True)
                            for t in ("t1", "t2", "t3", "t4")]

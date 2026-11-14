@@ -1,0 +1,112 @@
+{
+ "etiqueta": "develop",
+ "sesion": "entrada-hoy",
+ "pantalla": "hoy",
+ "persona": "profesora",
+ "repeticion": 2,
+ "modo": "imagen",
+ "modelo": "gemini-4-argon-medium",
+ "vistas": 2,
+ "inicio": "2026-11-14T02:27:24",
+ "intento": 1,
+ "segundos": 107.2,
+ "estado": "SUCCESS",
+ "uso": {
+  "input_tokens": 53511,
+  "output_tokens": 6992,
+  "thinking_tokens": 5213,
+  "cache_read_tokens": 24991,
+  "total_tokens": 60503
+ },
+ "respuesta": {
+  "dudas": [
+   {
+    "donde": "Centro · hoy, jueves 12 de noviembre",
+    "imagen": 1,
+    "que": "Dice «hoy, jueves 12 de noviembre» y «Son las 23:30», pero las tarjetas llaman «Pico de hoy» al «vie 13 11:00» (viernes 13 de noviembre) y el aviso amarillo dice que todavía no llega la demanda del 2026-11-13 porque se publica hacia las 09:45, mezclando qué día es hoy y qué día falta publicar."
+   },
+   {
+    "donde": "11/12/2026",
+    "imagen": 1,
+    "que": "El selector de fecha está en formato mes/día/año estadounidense; en español «11/12/2026» se lee como 11 de diciembre de 2026 en vez de 12 de noviembre."
+   },
+   {
+    "donde": "07:30–08:30 vie 13 · habitual (umbral 497)",
+    "imagen": 1,
+    "que": "No explica qué es «umbral 497», en qué unidades está ni con qué criterio estadístico se define qué subida es «habitual»."
+   },
+   {
+    "donde": "Diferencia -73 MW (1.6 %)",
+    "imagen": 1,
+    "que": "Entre 4,384 MW y 4,456 MW la diferencia es de 72 MW, no 73 MW (supongo que por redondeo), y como estadístico espero Real menos Pronóstico (+72 MW) cuando se subestima."
+   },
+   {
+    "donde": "Registro en vivo · reconstruido: se calculó después de conocerse el real, con los datos que habría tenido",
+    "imagen": 2,
+    "que": "Resulta contradictorio llamar a algo «Registro en vivo» y «reconstruido» al mismo tiempo, sobre todo cuando a la izquierda dice que cada pronóstico «Queda registrado con su hora de emisión antes de conocerse el real y no se reescribe»."
+   },
+   {
+    "donde": "Modelo 54.4 MW",
+    "imagen": 2,
+    "que": "En «¿Qué tan bueno es?» compara el error del modelo y la referencia en MW, pero no indica qué métrica de error es (MAE, RMSE, mediana del error absoluto, etc.)."
+   }
+  ],
+  "le_importo": "Que sea honesta con la incertidumbre: muestra el intervalo de predicción del 80 %, compara el modelo contra una referencia simple de la semana pasada y advierte abiertamente que su rango del 80 % solo cubrió el 73.2 % de las medias horas.",
+  "lectura": {
+   "seguridad": 5,
+   "texto": "Se usaba: 4,456 MW. Se había pronosticado: 4,384 MW. Podía estar entre: 4,282 – 4,476 MW (Rango del 80 %)."
+  },
+  "mira_primero": {
+   "imagen": 1,
+   "texto": "Centro · hoy, jueves 12 de noviembre"
+  },
+  "momento": {
+   "texto": "Habla de hoy, en vivo: jueves 12 de noviembre de 2026 a las 23:30 (aunque confunde porque llama «Pico de hoy» al viernes 13 de noviembre a las 11:00 y en el selector aparece 11/12/2026).",
+   "tipo": "hoy_en_vivo"
+  },
+  "palabras_no_entendidas": [
+   "SEIN",
+   "COES",
+   "ICEN 3.38 (jul-2026)",
+   "umbral 497",
+   "Chronos-2",
+   "IEOD"
+  ],
+  "para_quien": "Para personas que monitorean o analizan el consumo eléctrico en el Perú, o estudiantes y analistas interesados en pronósticos de demanda eléctrica.",
+  "por_que_volveria": "No soy del sector eléctrico, pero volvería para mostrarla en mis clases de series de tiempo como buen ejemplo de cómo presentar intervalos de predicción, cobertura empírica y comparación contra un pronóstico ingenuo.",
+  "primeros_clics": [
+   {
+    "imagen": 1,
+    "por_que": "Ya está seleccionada la zona «Centro» y arriba a la derecha, debajo de «Repasar un día», está el campo de fecha con el calendario para buscar el 20 de marzo de 2026.",
+    "seguridad": 5,
+    "tarea": "t1",
+    "texto_exacto": "11/12/2026"
+   },
+   {
+    "imagen": 1,
+    "por_que": "Aunque en la segunda captura ya se ve un resumen bajo «¿Qué tan bueno es?», tocaría la pestaña «Confianza» en la barra superior (o «Ver la confianza mes a mes →» en la imagen 2) para revisar a fondo cuánto se equivoca frente a la referencia.",
+    "seguridad": 5,
+    "tarea": "t2",
+    "texto_exacto": "Confianza"
+   },
+   {
+    "imagen": 1,
+    "por_que": "En ninguna parte de la pantalla se menciona la temperatura ni simulaciones de clima; de hecho, en la imagen 2 dice que el modelo solo usa la serie histórica y los feriados de Perú. Si tuviera que buscar si existe algo así, probaría en «Detalle» o «Ficha técnica: modelo y datos», pero no veo dónde hacerlo.",
+    "seguridad": 1,
+    "tarea": "t3",
+    "texto_exacto": "no sé"
+   },
+   {
+    "imagen": 1,
+    "por_que": "En la imagen 1 aparece la etiqueta «El Niño costero: extraordinario · ICEN 3.38 (jul-2026)», pero no parece un botón interactivo; para ver en qué condiciones o meses se equivoca más el pronóstico iría a la pestaña «Confianza» (o a «Diagnóstico completo» en la imagen 2).",
+    "seguridad": 3,
+    "tarea": "t4",
+    "texto_exacto": "Confianza"
+   }
+  ],
+  "que_cambiarias": "Corregiría la incoherencia de fechas y etiquetas temporales (aclarar qué día es «hoy» frente a mañana, poner el selector en formato día/mes/año y no mezclar «Registro en vivo» con «reconstruido»).",
+  "que_es": "Es una aplicación web que muestra la demanda de electricidad en el Perú por zonas y la compara con un pronóstico por media hora y su intervalo de predicción del 80 %.",
+  "volveria_manana": "tal_vez",
+  "voz_alta": "Primero veo «Centro · hoy, jueves 12 de noviembre» y que son las 23:30. Arriba hay siglas que no conozco: SEIN, COES, ICEN. En el selector de fecha dice «11/12/2026», al estilo estadounidense, y el aviso amarillo habla del «2026-11-13», así que me cuesta ubicar qué día es hoy exactamente. En las tarjetas veo la demanda actual, 4,456 MW, y el pronóstico con su rango. Me gusta el gráfico «Ayer y hoy» porque dibuja la banda del «Rango del 80 %» y una «Referencia (semana pasada)». A la derecha comparan «Dijimos 4,384 MW» con «Fue 4,456 MW». Al bajar, leo que usan «Chronos-2 ajustado con feriados», pero me choca que diga «Registro en vivo · reconstruido». En «¿Qué tan bueno es?» comparan el error con la referencia, aunque sin decir qué métrica es, y admiten en rojo que el rango del 80 % solo cubrió el 73.2 %. Eso es muy honesto."
+ }
+}

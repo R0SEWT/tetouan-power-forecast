@@ -1,0 +1,41 @@
+{
+ "etiqueta": "punta",
+ "sesion": "escenarios",
+ "pantalla": "escenarios",
+ "persona": "profesora",
+ "repeticion": 2,
+ "modo": "imagen",
+ "modelo": "gemini-3.8-flash-medium",
+ "vistas": 2,
+ "inicio": "2026-11-14T02:55:31",
+ "intento": 1,
+ "segundos": 67.1,
+ "estado": "SUCCESS",
+ "uso": {
+  "input_tokens": 53404,
+  "output_tokens": 5762,
+  "thinking_tokens": 5356,
+  "cache_read_tokens": 25225,
+  "total_tokens": 59166
+ },
+ "respuesta": {
+  "clic": {
+   "imagen": 1,
+   "por_que": "Está directamente debajo de «Temperatura frente a la esperada» y permite simular el incremento de 2 grados sobre el escenario base.",
+   "seguridad": 5,
+   "texto_exacto": "+2 °C"
+  },
+  "dudas": [
+   {
+    "donde": "El modelo combinado usa solo la demanda, así que el clima y El Niño no lo mueven. Estos escenarios los calcula el modelo Base (XGBoost), con clima y El Niño.",
+    "imagen": 1,
+    "que": "En el panel izquierdo está marcado «Combinado (recomendado)» y «Solo demanda». No sé si al presionar +2 °C el simulador cambia de modelo automáticamente o si tengo que cambiarlo yo a la izquierda."
+   }
+  ],
+  "palabras_no_entendidas": [
+   "COES",
+   "ENFEN"
+  ],
+  "voz_alta": "Veo la pestaña «¿Y si...?». En el panel derecho encuentro «Temperatura frente a la esperada». Está marcado «±0 °C» y al costado veo «+2 °C». Es justo lo que necesito tocar. Sin embargo, me desconcierta la advertencia amarilla: dice que el modelo combinado no responde al clima y que estos escenarios usan XGBoost. En el panel izquierdo veo seleccionado «Combinado» y «Solo demanda». ¿Debo cambiarlo yo a la izquierda o la herramienta lo hace sola? Además, no sé qué son COES ni ENFEN. Al bajar a la segunda vista veo en la leyenda «Tu escenario y su rango». Me alegra que muestre intervalos."
+ }
+}

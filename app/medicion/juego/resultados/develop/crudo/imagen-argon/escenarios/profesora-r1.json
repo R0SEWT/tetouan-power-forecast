@@ -1,0 +1,59 @@
+{
+ "etiqueta": "develop",
+ "sesion": "escenarios",
+ "pantalla": "escenarios",
+ "persona": "profesora",
+ "repeticion": 1,
+ "modo": "imagen",
+ "modelo": "gemini-4-argon-medium",
+ "vistas": 2,
+ "inicio": "2026-11-14T02:23:21",
+ "intento": 1,
+ "segundos": 40.1,
+ "estado": "SUCCESS",
+ "uso": {
+  "input_tokens": 50743,
+  "output_tokens": 1772,
+  "thinking_tokens": 1145,
+  "cache_read_tokens": 0,
+  "total_tokens": 52515
+ },
+ "respuesta": {
+  "clic": {
+   "imagen": 1,
+   "por_que": "Es el botón que suma dos grados a la temperatura esperada dentro de la sección «¿Y si mañana hace más calor, o El Niño se calma?».",
+   "seguridad": 5,
+   "texto_exacto": "+2 °C"
+  },
+  "dudas": [
+   {
+    "donde": "Próximas horas / ¿Y si...? / Diagnóstico",
+    "imagen": 1,
+    "que": "La barra superior tapa la mitad de estas pestañas y el título de la columna izquierda; se ve cortado."
+   },
+   {
+    "donde": "Con clima y El Niño",
+    "imagen": 1,
+    "que": "A la izquierda dice «Solo demanda» y «Con clima y El Niño» está desactivado, aunque el recuadro amarillo aclara que aquí sí se usa el modelo Base con clima."
+   },
+   {
+    "donde": "A las 11:00 del 11 de marzo, la hora de mayor demanda de las próximas 24 h, el modelo espera 4,919 MW",
+    "imagen": 1,
+    "que": "Aquí dice que el máximo es a las 11:00 con 4,919 MW, pero en la columna izquierda (vista 2) dice que el máximo es 4,977 MW a las 14:30; cuesta notar que son dos modelos distintos."
+   },
+   {
+    "donde": "Falla en la red al emitir",
+    "imagen": 1,
+    "que": "No conozco el sector eléctrico y no sé qué tipo de falla es ni cómo entra como variable en el modelo."
+   }
+  ],
+  "palabras_no_entendidas": [
+   "SEIN",
+   "COES",
+   "ENFEN",
+   "Falla en la red al emitir",
+   "Rampa fuerte"
+  ],
+  "voz_alta": "A ver, llegué a «¿Y si mañana hace más calor, o El Niño se calma?». Arriba las pestañas se ven cortadas por la barra fija, qué descuido. Dice que el COES recibe datos de ENFEN; no conozco esas siglas. El aviso amarillo es honesto: explica que el modelo combinado solo usa la demanda y que estos escenarios los calcula el modelo Base con XGBoost. Bien que lo aclaren. Aquí veo «Temperatura frente a la esperada» y el botón «+2 °C». Si bajo en la página, veo el gráfico con «Tu escenario y su rango» y un rango probable de 9 de cada 10. Me gusta que muestre el intervalo de predicción. Tocaría «+2 °C»."
+ }
+}

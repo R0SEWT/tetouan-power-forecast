@@ -1,0 +1,108 @@
+{
+ "etiqueta": "punta",
+ "sesion": "entrada-1900",
+ "pantalla": "repaso-1900",
+ "persona": "profesora",
+ "repeticion": 1,
+ "modo": "imagen",
+ "modelo": "gemini-4-argon-medium",
+ "vistas": 2,
+ "inicio": "2026-11-14T02:20:38",
+ "intento": 1,
+ "segundos": 86.1,
+ "estado": "SUCCESS",
+ "uso": {
+  "input_tokens": 30680,
+  "output_tokens": 4375,
+  "thinking_tokens": 2638,
+  "cache_read_tokens": 47784,
+  "total_tokens": 35055
+ },
+ "respuesta": {
+  "dudas": [
+   {
+    "donde": "03/10/2026",
+    "imagen": 1,
+    "que": "El título y la etiqueta de arriba dicen 10 de marzo de 2026 (10/03/2026), pero el selector de fecha muestra 03/10/2026 en formato mes/día/año, lo que hace dudar si es 10 de marzo o 3 de octubre."
+   },
+   {
+    "donde": "+414 MW en 1 h",
+    "imagen": 1,
+    "que": "En la zona de «Próximas 24 horas (pronóstico)» aparece un tramo de línea negra sólida igual a la de «Real (COES)», y me hace dudar si es un dato real o para resaltar una subida rápida del pronóstico."
+   },
+   {
+    "donde": "Error –18 MW (0.4 %)",
+    "imagen": 2,
+    "que": "Si dijimos 4,767 MW y fue 4,784 MW, la resta da –17 MW y no –18 MW; imagino que es por redondeo de decimales, pero choca al ver los dos números enteros arriba."
+   },
+   {
+    "donde": "32.8 MW",
+    "imagen": 2,
+    "que": "En «¿Qué tan bueno es?» da el error en MW (32.8 MW y 71.9 MW), pero no dice qué métrica estadística es: ¿error absoluto medio (MAE), raíz del error cuadrático medio (RMSE) u otra?"
+   },
+   {
+    "donde": "Usa solo la demanda y el calendario; no usa el clima.",
+    "imagen": 2,
+    "que": "Dice que el modelo no usa el clima, pero justo debajo pone el botón «¿Y si hace más calor? →». Me hace dudar de cómo calcula el efecto del calor si el modelo no usa variables climáticas."
+   },
+   {
+    "donde": "Para las 19:00 de hoy, emitido el lunes 9 de marzo a las 19:00 (24 h antes).",
+    "imagen": 2,
+    "que": "Mezcla «hoy» y «Ahora 19:00» con un día pasado del historial (martes 10 de marzo de 2026), lo que al principio confunde sobre si estoy viendo datos en vivo o históricos."
+   }
+  ],
+  "le_importo": "Me importó mucho que muestre el intervalo de predicción del 90 %, compare honestamente el pronóstico contra una referencia simple (la semana pasada) y reporte si la cobertura empírica (91.1 %) cumple lo prometido.",
+  "lectura": {
+   "seguridad": 5,
+   "texto": "En ese momento se usaban 4,784 MW. Se había pronosticado 4,767 MW, con un rango (Rango del 90 %) de 4,588 a 4,929 (4,588 – 4,929 MW)."
+  },
+  "mira_primero": {
+   "imagen": 1,
+   "texto": "¿Acertamos el martes 10 de marzo de 2026 a las 19:00?"
+  },
+  "momento": {
+   "texto": "Habla de un día pasado: el martes 10 de marzo de 2026 a las 19:00 (07:00 PM). Arriba indica «Repaso · 10/03/2026, 19:00» y en el texto explica que es un «Repaso de un día del historial».",
+   "tipo": "dia_pasado"
+  },
+  "palabras_no_entendidas": [
+   "Simons",
+   "Híbrido (XGBoost + Simons)"
+  ],
+  "para_quien": "Para personas que quieran consultar o evaluar pronósticos de demanda eléctrica en el Perú, incluyendo estudiantes, analistas o ciudadanos que no son expertos en el sector eléctrico pero quieren entender qué tan confiable es la predicción.",
+  "por_que_volveria": "Volvería si necesitara ejemplos reales y claros de pronósticos de series de tiempo con intervalos de predicción bien calibrados para mis clases, aunque en mi día a día no sigo el sector eléctrico.",
+  "primeros_clics": [
+   {
+    "imagen": 1,
+    "por_que": "Ya está seleccionada la zona «Centro» (Lima y el centro del país), así que lo primero que tocaría es el selector de fecha «03/10/2026» bajo «Ver otro día» para cambiar al 20 de marzo de 2026 (y luego cambiaría la hora a las 08:00 PM).",
+    "seguridad": 5,
+    "tarea": "t1",
+    "texto_exacto": "03/10/2026"
+   },
+   {
+    "imagen": 2,
+    "por_que": "En la tarjeta «¿Qué tan bueno es?» ya veo el error promedio y la comparación con la referencia simple; para profundizar en qué tanto puedo fiarme tocaría «Ver la confianza mes a mes →» (o la pestaña «Confianza» arriba).",
+    "seguridad": 5,
+    "tarea": "t2",
+    "texto_exacto": "Ver la confianza mes a mes →"
+   },
+   {
+    "imagen": 1,
+    "por_que": "El enlace pregunta literalmente por el efecto de que haga más calor, justo al lado del resumen del pronóstico.",
+    "seguridad": 5,
+    "tarea": "t3",
+    "texto_exacto": "¿Y si hace más calor?"
+   },
+   {
+    "imagen": 2,
+    "por_que": "No hay un botón que mencione a El Niño directamente para ver errores, salvo la etiqueta informativa en la vista 1; tocaría «Diagnóstico completo» (o «Confianza») esperando encontrar ahí el desglose del error según el fenómeno de El Niño.",
+    "seguridad": 3,
+    "tarea": "t4",
+    "texto_exacto": "Diagnóstico completo"
+   }
+  ],
+  "que_cambiarias": "Especificaría qué métrica de error son los 32.8 MW y 71.9 MW (por ejemplo, aclarar que es el error absoluto medio) y unificaría el formato de fecha a día/mes/año en el selector «03/10/2026».",
+  "que_es": "Es una herramienta web que pronostica la demanda de electricidad en el Perú para las próximas 24 horas y evalúa qué tan bien acertó comparando el pronóstico y su intervalo de incertidumbre con el consumo real.",
+  "volveria_manana": "tal_vez",
+  "voz_alta": "Primero veo la pregunta «¿Acertamos el martes 10 de marzo de 2026 a las 19:00?» y el número grande: 4,784 MW. Al lado dice que pronosticaron 4,767 MW con un rango de 4,588 a 4,929. Qué bien que den un intervalo de predicción de entrada. Abajo aclaran que COES es el operador eléctrico y que esto es un repaso histórico. A la derecha puedo cambiar de región, día y hora, aunque «03/10/2026» está en formato mes/día/año y confunde. En el gráfico veo la serie real, el pronóstico, la banda del 90 % y la referencia de la semana pasada. Bajo. En las tres tarjetas veo el resumen del error (dice –18 MW aunque la resta da –17), qué tan bueno es frente a la referencia con 91.1 % de cobertura empírica, y que el número sale de promediar dos modelos."
+ }
+}

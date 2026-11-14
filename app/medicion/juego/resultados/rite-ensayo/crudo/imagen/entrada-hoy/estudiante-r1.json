@@ -1,0 +1,88 @@
+{
+ "etiqueta": "rite-ensayo",
+ "sesion": "entrada-hoy",
+ "pantalla": "hoy",
+ "persona": "estudiante",
+ "repeticion": 1,
+ "modo": "imagen",
+ "modelo": "gemini-3.8-flash-medium",
+ "vistas": 2,
+ "inicio": "2026-11-14T02:42:49",
+ "intento": 1,
+ "segundos": 121.4,
+ "estado": "SUCCESS",
+ "uso": {
+  "input_tokens": 54891,
+  "output_tokens": 14831,
+  "thinking_tokens": 13605,
+  "cache_read_tokens": 25973,
+  "total_tokens": 69722
+ },
+ "respuesta": {
+  "dudas": [
+   {
+    "donde": "Lo real llega con un día de retraso: el COES, el operador del sistema eléctrico, publica cada mañana la demanda del día anterior.",
+    "imagen": 1,
+    "que": "Me confunde porque dice que el dato real llega con un día de retraso, pero al costado muestra 'Último dato real · 23:30 4,456 MW' como si fuera de hoy. No me queda claro qué parte de la curva es de hoy y cuál de ayer."
+   },
+   {
+    "donde": "Registro en vivo · reconstruido: se calculó después de conocerse el real, con los datos que habría tenido",
+    "imagen": 2,
+    "que": "No entiendo bien qué significa 'reconstruido'. Me suena a que calcularon el pronóstico después de que ya sabían el resultado real, y me hace dudar si fue una predicción auténtica o simulada."
+   }
+  ],
+  "le_importo": "Poder ver la curva de demanda y tener el botón 'Descargar CSV' para bajar los datos a mi trabajo del curso.",
+  "lectura": {
+   "seguridad": 5,
+   "texto": "Se usaba 4,456 MW (figura en 'Último dato real · 23:30: 4,456 MW' y 'Fue 4,456 MW'). Se había pronosticado 4,384 MW ('Dijimos 4,384 MW') y según el 'Rango del 80 %' podía estar entre 4,282 – 4,476 MW."
+  },
+  "mira_primero": {
+   "imagen": 1,
+   "texto": "4,456 MW"
+  },
+  "momento": {
+   "texto": "Habla de hoy, jueves 12 de noviembre de 2026 a las 23:30 (marcado con el botón 'Hoy', el eje 'Ahora 23:30' y el texto 'Para las 23:30 de hoy'). Aunque avisa que los datos reales del COES vienen con retraso de un día.",
+   "tipo": "hoy_en_vivo"
+  },
+  "palabras_no_entendidas": [
+   "Chronos-2",
+   "IEOD"
+  ],
+  "para_quien": "Para ingenieros, estudiantes de ingeniería eléctrica o gente del sector energético que necesita ver y proyectar la demanda del sistema eléctrico.",
+  "por_que_volveria": "Para revisar la curva de carga actualizada y descargar los datos en CSV para las tareas del curso de sistemas de potencia.",
+  "primeros_clics": [
+   {
+    "imagen": 1,
+    "por_que": "La región Centro ya está marcada por defecto. Para cambiar la fecha al 20 de marzo de 2026 tocaría la caja del calendario que muestra '11/12/2026'.",
+    "seguridad": 4,
+    "tarea": "t1",
+    "texto_exacto": "11/12/2026"
+   },
+   {
+    "imagen": 1,
+    "por_que": "En la barra de navegación superior hay una pestaña que dice directamente 'Confianza', que es justo donde deben estar las métricas de error y fiabilidad.",
+    "seguridad": 5,
+    "tarea": "t2",
+    "texto_exacto": "Confianza"
+   },
+   {
+    "imagen": 1,
+    "por_que": "En el bloque superior hay un enlace azul subrayado con esa misma pregunta literal.",
+    "seguridad": 5,
+    "tarea": "t3",
+    "texto_exacto": "¿Y si hace más calor?"
+   },
+   {
+    "imagen": 1,
+    "por_que": "Hay un botón gris destacado que menciona El Niño costero y termina preguntando '¿cuándo se equivoca más? →'.",
+    "seguridad": 5,
+    "tarea": "t4",
+    "texto_exacto": "El Niño costero (calentamiento del mar frente a la costa): extraordinario · ¿cuándo se equivoca más? →"
+   }
+  ],
+  "que_cambiarias": "Poner el botón de 'Descargar CSV' arriba en la pantalla principal para no tener que bajar con el ratón a buscarlo.",
+  "que_es": "Es una aplicación web que muestra en tiempo real la curva de demanda eléctrica del Perú en megavatios y su pronóstico diario con datos del COES. Sirve para monitorear el consumo de potencia del sistema.",
+  "volveria_manana": "si",
+  "voz_alta": "Abro la página. Arriba dice 'Curva' y veo un numerazo: 4,456 MW a las 23:30. Pregunta cuánta electricidad se usará hoy. Al lado hay botones de Norte, Centro y Sur; bacán que se pueda filtrar por zona. Miro el gráfico de demanda: la curva negra es el real del COES y la azul es el pronóstico. Veo un pico de 5,297 MW a las 11:00. Hay una línea vertical que marca 'Ahora 23:30'. Bajo con la rueda. Veo el botón 'Descargar CSV', genial para mi trabajo. Abajo hay tres cuadros: uno compara lo que dijeron con lo real, fallaron por 73 MW. El segundo cuadro dice que le gana a la referencia. El tercero menciona un modelo 'Chronos-2' que ni idea qué es. Hay mucho texto chico al final, me da flojera leerlo."
+ }
+}

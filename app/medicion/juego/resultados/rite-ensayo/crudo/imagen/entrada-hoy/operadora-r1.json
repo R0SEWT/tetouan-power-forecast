@@ -1,0 +1,98 @@
+{
+ "etiqueta": "rite-ensayo",
+ "sesion": "entrada-hoy",
+ "pantalla": "hoy",
+ "persona": "operadora",
+ "repeticion": 1,
+ "modo": "imagen",
+ "modelo": "gemini-3.8-flash-medium",
+ "vistas": 2,
+ "inicio": "2026-11-14T02:44:36",
+ "intento": 1,
+ "segundos": 107.1,
+ "estado": "SUCCESS",
+ "uso": {
+  "input_tokens": 46782,
+  "output_tokens": 15439,
+  "thinking_tokens": 13969,
+  "cache_read_tokens": 34167,
+  "total_tokens": 62221
+ },
+ "respuesta": {
+  "dudas": [
+   {
+    "donde": "El pronóstico de hoy sale hacia las 10:00, cuando el COES publique la demanda de ayer. Mientras, abajo, el último que se emitió.",
+    "imagen": 1,
+    "que": "Si el gráfico marca «Ahora 23:30», no me queda claro si estoy viendo el pronóstico de hoy o de ayer, ni por qué dice que sale a las 10:00 si ya es de noche."
+   },
+   {
+    "donde": "11/12/2026",
+    "imagen": 1,
+    "que": "Arriba en la etiqueta dice 12/11, pero en la casilla de fecha dice 11/12/2026. No sé si está en formato gringo (12 de noviembre) o si se refiere al 11 de diciembre."
+   },
+   {
+    "donde": "Registro en vivo · reconstruido: se calculó después de conocerse el real, con los datos que habría tenido",
+    "imagen": 2,
+    "que": "Me confunde que diga a la vez «en vivo» y «reconstruido»: si se calculó después de conocer el dato real, ya no es en vivo, es una simulación."
+   },
+   {
+    "donde": "Curva es un pronóstico abierto hecho con los datos públicos del COES (IEOD); no sirve para operar el sistema eléctrico.",
+    "imagen": 2,
+    "que": "Un colega me pasó el enlace para apoyarme en el turno del centro de control, pero este aviso dice explícitamente que no sirve para operar."
+   }
+  ],
+  "le_importo": "Me sirvió ver de inmediato el error del pronóstico frente a la demanda real (-73 MW) y que muestre el rango del 80 % para saber el margen de desviación.",
+  "lectura": {
+   "seguridad": 5,
+   "texto": "En el momento que muestra (23:30) se usaban 4,456 MW (figura como «Último dato real · 23:30: 4,456 MW» y «Fue 4,456 MW»). Se había pronosticado 4,384 MW («Dijimos 4,384 MW») y podía estar entre 4,282 – 4,476 MW («Rango del 80 % 4,282 – 4,476 MW»)."
+  },
+  "mira_primero": {
+   "imagen": 1,
+   "texto": "4,456 MW"
+  },
+  "momento": {
+   "texto": "La pantalla habla de hoy en vivo: el botón «Hoy» está activo, arriba dice «Hoy · datos del COES al 12/11, 24:00» y la línea vertical del gráfico marca «Ahora 23:30» del jueves 12 de noviembre de 2026.",
+   "tipo": "hoy_en_vivo"
+  },
+  "palabras_no_entendidas": [
+   "Chronos-2",
+   "modelo fundacional"
+  ],
+  "para_quien": "Para operadores de centro de control, despachadores o ingenieros de distribución eléctrica que necesitan anticipar la demanda de energía.",
+  "por_que_volveria": "Volvería para ver la curva estimada del pico nocturno y qué tanto se desvía frente a la semana pasada, si es que cargan el pronóstico a tiempo para mi turno.",
+  "primeros_clics": [
+   {
+    "imagen": 1,
+    "por_que": "Está debajo de «Ver otro día» al lado de «Hoy»; es la casilla con icono de calendario para cambiar la fecha y buscar el 20 de marzo de 2026. La región Centro ya está seleccionada.",
+    "seguridad": 4,
+    "tarea": "t1",
+    "texto_exacto": "11/12/2026"
+   },
+   {
+    "imagen": 1,
+    "por_que": "En la barra superior hay una pestaña que dice «Confianza», que es el lugar directo para ver el desempeño histórico y qué tanto se equivoca el modelo.",
+    "seguridad": 5,
+    "tarea": "t2",
+    "texto_exacto": "Confianza"
+   },
+   {
+    "imagen": 1,
+    "por_que": "Es un enlace azul directo junto a la cifra principal que plantea exactamente esa pregunta sobre la temperatura.",
+    "seguridad": 5,
+    "tarea": "t3",
+    "texto_exacto": "¿Y si hace más calor?"
+   },
+   {
+    "imagen": 1,
+    "por_que": "Es un botón recuadrado que menciona expresamente El Niño costero y pregunta directamente «¿cuándo se equivoca más?».",
+    "seguridad": 5,
+    "tarea": "t4",
+    "texto_exacto": "El Niño costero (calentamiento del mar frente a la costa): extraordinario · ¿cuándo se equivoca más? →"
+   }
+  ],
+  "que_cambiarias": "Que el pronóstico de la demanda de hoy esté disponible desde temprano para planificar el turno y las maniobras, en vez de tener que esperar hasta las 10:00 con datos retrasados.",
+  "que_es": "Es una página web con el pronóstico de demanda eléctrica para Lima y el centro del país comparado con datos reales del COES. Sirve para ver la curva esperada y cuántos megavatios se van a consumir en el día.",
+  "volveria_manana": "tal_vez",
+  "voz_alta": "Veo 4,456 MW en grande, dato real de las 23:30. Pero dice que el pronóstico de hoy recién sale a las 10:00; me deja con la duda de qué estoy viendo. Veo un enlace de temperatura y otro de El Niño costero. En el gráfico sigo la curva: marca un pico de 5,297 MW a las 11:00 y sube 325 MW en una hora. Bajo con el ratón. En la primera tarjeta comparan: pronosticaron 4,384 MW y fue 4,456 MW, subestimaron por 73 MW; bien que reconozcan el error. Al costado dice que fallan 46 % menos que la semana pasada, pero el aviso en rojo advierte que el rango del 80 % queda corto. A la derecha leo 'Chronos-2' y 'modelo fundacional', no entiendo esos términos. Al final dice que no sirve para operar. Si no sirve para operar, a mí en control me deja dudas."
+ }
+}

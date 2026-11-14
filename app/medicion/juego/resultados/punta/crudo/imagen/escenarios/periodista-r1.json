@@ -1,0 +1,46 @@
+{
+ "etiqueta": "punta",
+ "sesion": "escenarios",
+ "pantalla": "escenarios",
+ "persona": "periodista",
+ "repeticion": 1,
+ "modo": "imagen",
+ "modelo": "gemini-3.8-flash-medium",
+ "vistas": 2,
+ "inicio": "2026-11-14T02:44:21",
+ "intento": 1,
+ "segundos": 51.3,
+ "estado": "SUCCESS",
+ "uso": {
+  "input_tokens": 51937,
+  "output_tokens": 5468,
+  "thinking_tokens": 5009,
+  "cache_read_tokens": 0,
+  "total_tokens": 57405
+ },
+ "respuesta": {
+  "clic": {
+   "imagen": 1,
+   "por_que": "Es el botón específico para ver el escenario de 2 grados más de temperatura que necesito para mi nota. No le pongo 5 únicamente por la confusión que me genera la advertencia sobre los modelos.",
+   "seguridad": 4,
+   "texto_exacto": "+2 °C"
+  },
+  "dudas": [
+   {
+    "donde": "El modelo combinado usa solo la demanda, así que el clima y El Niño no lo mueven. Estos escenarios los calcula el modelo Base (XGBoost), con clima y El Niño.",
+    "imagen": 1,
+    "que": "Me confunde si al elegir una temperatura la herramienta cambia de modelo automáticamente o si tengo que cambiarlo yo manualmente. Además, no sé qué es XGBoost."
+   },
+   {
+    "donde": "Solo demanda",
+    "imagen": 1,
+    "que": "En el panel lateral izquierdo está marcado 'Solo demanda'. Me hace dudar si debo cambiar a 'Con clima y El Niño' antes de poder simular el aumento de temperatura."
+   }
+  ],
+  "palabras_no_entendidas": [
+   "XGBoost",
+   "Chronos-2"
+  ],
+  "voz_alta": "Veo la pestaña '¿Y si...?'. En la parte central encuentro 'Temperatura frente a la esperada' con varias opciones y distingo claramente el botón '+2 °C'. Es justo la cifra de aumento que necesito para mi nota. Sin embargo, me desconcierta el aviso amarillo: dice que el modelo combinado no considera el clima ni El Niño y menciona un 'modelo Base (XGBoost)'. Miro a la izquierda y veo marcado 'Solo demanda'. Me entra la duda de si al pulsar '+2 °C' el sistema cambiará solo de modelo o si debo mover algo antes. Al bajar a la vista 2 solo veo métricas y errores pasados; lo que busco está en la primera pantalla."
+ }
+}

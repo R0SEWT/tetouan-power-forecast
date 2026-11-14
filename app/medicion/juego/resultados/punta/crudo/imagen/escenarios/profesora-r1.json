@@ -1,0 +1,46 @@
+{
+ "etiqueta": "punta",
+ "sesion": "escenarios",
+ "pantalla": "escenarios",
+ "persona": "profesora",
+ "repeticion": 1,
+ "modo": "imagen",
+ "modelo": "gemini-3.8-flash-medium",
+ "vistas": 2,
+ "inicio": "2026-11-14T02:44:31",
+ "intento": 1,
+ "segundos": 67.7,
+ "estado": "SUCCESS",
+ "uso": {
+  "input_tokens": 52331,
+  "output_tokens": 8030,
+  "thinking_tokens": 7526,
+  "cache_read_tokens": 0,
+  "total_tokens": 60361
+ },
+ "respuesta": {
+  "clic": {
+   "imagen": 1,
+   "por_que": "Quiero evaluar el efecto de 2 °C más de calor y el botón indica exactamente «+2 °C» bajo «Temperatura frente a la esperada». No le pongo 5 porque me queda la duda de si primero debía cambiar a la izquierda el selector a «Con clima y El Niño».",
+   "seguridad": 4,
+   "texto_exacto": "+2 °C"
+  },
+  "dudas": [
+   {
+    "donde": "El modelo combinado usa solo la demanda, así que el clima y El Niño no lo mueven. Estos escenarios los calcula el modelo Base (XGBoost), con clima y El Niño.",
+    "imagen": 1,
+    "que": "A la izquierda tengo seleccionado el modelo combinado («Solo demanda»), pero este aviso dice que no responde al clima y que usará XGBoost. Me hace dudar sobre qué modelo estoy evaluando realmente y si debo cambiarlo a mano."
+   },
+   {
+    "donde": "Solo demanda",
+    "imagen": 1,
+    "que": "Dice «Este modelo usa solo la demanda: no distingue clima ni El Niño». Dudé si debía hacer clic en «Con clima y El Niño» antes de poder simular el cambio de temperatura."
+   }
+  ],
+  "palabras_no_entendidas": [
+   "COES",
+   "ENFEN"
+  ],
+  "voz_alta": "Veo la pestaña «¿Y si...?». Busco qué pasa si aumenta 2 °C la temperatura. En el centro veo el control con opciones claras: -2, 0, +2 y +4 °C. Pero el recuadro amarillo me descoloca: dice que el modelo combinado solo usa demanda y que el clima no lo afecta, usando XGBoost en su lugar. A la izquierda veo «Solo demanda» marcado; me pregunto si debo cambiarlo primero. Abajo en la segunda pantalla veo que graficará «Tu escenario y su rango» con un intervalo del 90 %, lo cual agradezco como estadística para ver la incertidumbre. No entiendo qué son COES ni ENFEN."
+ }
+}

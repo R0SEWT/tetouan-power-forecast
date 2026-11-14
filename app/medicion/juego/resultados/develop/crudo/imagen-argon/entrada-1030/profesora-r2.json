@@ -1,0 +1,112 @@
+{
+ "etiqueta": "develop",
+ "sesion": "entrada-1030",
+ "pantalla": "repaso-1030",
+ "persona": "profesora",
+ "repeticion": 2,
+ "modo": "imagen",
+ "modelo": "gemini-4-argon-medium",
+ "vistas": 2,
+ "inicio": "2026-11-14T02:29:40",
+ "intento": 1,
+ "segundos": 90.8,
+ "estado": "SUCCESS",
+ "uso": {
+  "input_tokens": 53502,
+  "output_tokens": 4580,
+  "thinking_tokens": 2837,
+  "cache_read_tokens": 24971,
+  "total_tokens": 58082
+ },
+ "respuesta": {
+  "dudas": [
+   {
+    "donde": "03/10/2026",
+    "imagen": 1,
+    "que": "El selector de fecha está en formato mes/día/año (03/10/2026) mientras que arriba a la derecha dice 10/03/2026; me hizo dudar por un segundo de qué fecha estaba viendo."
+   },
+   {
+    "donde": "Ahora · 10:30",
+    "imagen": 1,
+    "que": "Usa la palabra «Ahora» en las tarjetas y en el gráfico aunque no es el momento actual sino la hora de corte de un día pasado (10 de marzo de 2026)."
+   },
+   {
+    "donde": "Centro",
+    "imagen": 1,
+    "que": "No indica qué departamentos o ciudades abarca el área «Centro» (como no conozco el sector eléctrico peruano, tengo que suponer que Lima está ahí)."
+   },
+   {
+    "donde": "El Niño costero: extraordinario · ICEN 3.38 (jul-2026)",
+    "imagen": 1,
+    "que": "No entiendo por qué cita «jul-2026» si estamos repasando el 10 de marzo de 2026, ni queda claro si esa etiqueta se puede clicar."
+   },
+   {
+    "donde": "41.6 MW",
+    "imagen": 2,
+    "que": "En «¿Qué tan bueno es?» da el error en MW (41.6 MW y 71.9 MW), pero como estadística echo en falta saber qué métrica exacta es (¿error absoluto medio MAE, raíz del error cuadrático medio RMSE?)."
+   },
+   {
+    "donde": "07:30–08:30 mié 11 · habitual (umbral 497)",
+    "imagen": 1,
+    "que": "No sé qué significa exactamente «umbral 497» ni cómo se fijó ese criterio para decidir que la subida es «habitual»."
+   }
+  ],
+  "le_importo": "Me gustó mucho que muestre explícitamente el intervalo de predicción del 90 %, compare el modelo contra una referencia ingenua («la semana pasada a la misma hora») y verifique la cobertura empírica real (91.1 %).",
+  "lectura": {
+   "seguridad": 5,
+   "texto": "Se usaban 4,910 MW. Se había pronosticado 4,916 MW y según el rango del 90 % podía estar entre 4,732 – 5,083 MW."
+  },
+  "mira_primero": {
+   "imagen": 1,
+   "texto": "Centro · martes 10 de marzo de 2026"
+  },
+  "momento": {
+   "texto": "Habla de un día pasado («Repaso de un día del historial»): el martes 10 de marzo de 2026 a las 10:30 AM.",
+   "tipo": "dia_pasado"
+  },
+  "palabras_no_entendidas": [
+   "SEIN",
+   "COES",
+   "COES (IEOD)",
+   "ICEN 3.38 (jul-2026)",
+   "umbral 497",
+   "Simons"
+  ],
+  "para_quien": "Para analistas, técnicos o estudiantes que siguen la demanda eléctrica en el Perú y quieren consultar pronósticos de corto plazo y evaluar su precisión.",
+  "por_que_volveria": "Como no trabajo en el sector eléctrico no la necesito a diario, pero sí volvería a abrirla como ejemplo en mis clases de series de tiempo porque presenta intervalos de predicción, cobertura empírica y comparación con un modelo base de forma transparente.",
+  "primeros_clics": [
+   {
+    "imagen": 1,
+    "por_que": "Asumo que Lima está en «Centro» (que ya está seleccionado), así que primero tocaría el campo de fecha «03/10/2026» debajo de «Repasar un día» para elegir el viernes 20 de marzo de 2026 (y luego ajustaría la hora a las 8:00 PM y marcaría «Mostrar lo que pasó después»).",
+    "seguridad": 4,
+    "tarea": "t1",
+    "texto_exacto": "03/10/2026"
+   },
+   {
+    "imagen": 1,
+    "por_que": "Aunque en la segunda imagen el recuadro «¿Qué tan bueno es?» ya me dice cuánto se equivoca (71.9 MW frente a 135.4 MW de la referencia de la semana pasada), para ver la evaluación completa tocaría «Confianza» en el menú superior (o el botón «Ver la confianza mes a mes →» en la vista 2).",
+    "seguridad": 5,
+    "tarea": "t2",
+    "texto_exacto": "Confianza"
+   },
+   {
+    "imagen": 1,
+    "por_que": "En la tarjeta del pico de las próximas 24 h aparece directamente el enlace «¿Y si hace más calor?» (también está como botón «¿Y si hace más calor? →» en la segunda imagen), que apunta justo a una sensibilidad ante la temperatura.",
+    "seguridad": 5,
+    "tarea": "t3",
+    "texto_exacto": "¿Y si hace más calor?"
+   },
+   {
+    "imagen": 2,
+    "por_que": "No hay un botón que mencione directamente el error según El Niño; probaría primero «Diagnóstico completo» (o «Confianza» arriba) pensando que ahí desglosan el desempeño del modelo según las condiciones de El Niño costero, aunque no estoy segura de si la etiqueta «El Niño costero: extraordinario · ICEN 3.38 (jul-2026)» de la vista 1 también es clicable.",
+    "seguridad": 3,
+    "tarea": "t4",
+    "texto_exacto": "Diagnóstico completo"
+   }
+  ],
+  "que_cambiarias": "Explicaría en lenguaje llano las siglas del sector eléctrico (SEIN, COES, ICEN, qué regiones incluye Centro) y especificaría qué métrica estadística exacta (por ejemplo, MAE o RMSE) representan los errores en MW de «¿Qué tan bueno es?».",
+  "que_es": "Es una aplicación web que muestra el consumo real y el pronóstico de demanda de electricidad por zonas para las próximas 24 horas, con su banda de incertidumbre. Sirve para anticipar cuánta electricidad se va a necesitar y comprobar qué tan bien acertó el modelo frente a los datos observados.",
+  "volveria_manana": "tal_vez",
+  "voz_alta": "Leo arriba «Curva Demanda del SEIN por áreas», aunque no sé qué significa SEIN. Veo grande «Centro · martes 10 de marzo de 2026» y que es un «Repaso de un día del historial» a las 10:30. Hay tres zonas: Norte, Centro y Sur. Abajo veo tarjetas con números en MW: a las 10:30 hubo 4,910 MW según el COES —tampoco conozco esa sigla— y se pronosticó 4,916 con rango 4,732 – 5,083. El gráfico muestra la curva real, el pronóstico, la banda del «Rango del 90 %» y la referencia de la semana pasada. A la derecha comparan «Dijimos 4,916 MW» con «Fue 4,910 MW». Al bajar a la segunda vista, veo de dónde sale el número: una combinación lineal con pesos 0.85 y 0.15. A la derecha, en «¿Qué tan bueno es?», comparan el error con la referencia y muestran que el rango del 90 % cubrió el 91.1 %."
+ }
+}

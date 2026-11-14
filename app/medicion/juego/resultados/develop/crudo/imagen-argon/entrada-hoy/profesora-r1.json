@@ -1,0 +1,101 @@
+{
+ "etiqueta": "develop",
+ "sesion": "entrada-hoy",
+ "pantalla": "hoy",
+ "persona": "profesora",
+ "repeticion": 1,
+ "modo": "imagen",
+ "modelo": "gemini-4-argon-medium",
+ "vistas": 2,
+ "inicio": "2026-11-14T02:15:18",
+ "intento": 1,
+ "segundos": 99.0,
+ "estado": "SUCCESS",
+ "uso": {
+  "input_tokens": 53313,
+  "output_tokens": 1971,
+  "thinking_tokens": 0,
+  "cache_read_tokens": 24853,
+  "total_tokens": 55284
+ },
+ "respuesta": {
+  "dudas": [
+   {
+    "donde": "Centro · hoy, jueves 12 de noviembre / Todavía no llega la demanda del 2026-11-13 del COES / Pico de hoy: 5,297 MW · vie 13 11:00 / 11/12/2026",
+    "imagen": 1,
+    "que": "Me confunde mucho qué día es «hoy». El título dice «hoy, jueves 12 de noviembre» y que «Son las 23:30», pero el aviso amarillo habla de que falta la demanda del «2026-11-13» (que suele publicarse a las 09:45, como si ya fuera el día siguiente), y «Pico de hoy» dice «viernes 13 de noviembre, 11:00». Además el selector de fecha dice «11/12/2026» en formato mes/día/año. No queda claro si estamos en la noche del jueves 12 o en el viernes 13."
+   },
+   {
+    "donde": "Queda registrado con su hora de emisión antes de conocerse el real y no se reescribe. / Registro en vivo · reconstruido: se calculó después de conocerse el real, con los datos que habría tenido",
+    "imagen": 2,
+    "que": "Hay una contradicción importante: a la izquierda asegura que el pronóstico queda registrado antes de conocerse el dato real, pero a la derecha una nota gris aclara que este registro fue «reconstruido: se calculó después de conocerse el real». Como estadística, saber si es pronóstico verdadero ex-ante o backtest reconstruido cambia mucho las cosas."
+   },
+   {
+    "donde": "Modelo 54.4 MW / Referencia 101.0 MW",
+    "imagen": 2,
+    "que": "En «¿Qué tan bueno es?» muestra barras con valores en MW para el error del modelo y la referencia, pero no dice qué métrica estadística es (¿MAE, RMSE, mediana del error absoluto?)."
+   },
+   {
+    "donde": "El Niño costero: extraordinario · ICEN 3.38 (jul-2026)",
+    "imagen": 1,
+    "que": "Si estamos en noviembre de 2026, no sé por qué el indicador de El Niño muestra un dato de julio de 2026 ni si esta etiqueta es un botón interactivo o solo un texto fijo."
+   }
+  ],
+  "le_importo": "Me importó muchísimo que evalúe honestamente la cobertura empírica de sus intervalos de predicción y admita con una alerta clara que su rango del 80 % solo cubrió el 73.2 % de las medias horas, además de comparar siempre contra un modelo ingenuo de referencia (la semana pasada).",
+  "lectura": {
+   "seguridad": 5,
+   "texto": "A las 23:30 se usaban 4,456 MW. Se había pronosticado 4,384 MW y el rango del 80 % estaba entre 4,282 – 4,476 MW (en la tarjeta pequeña aparece como 4,282 – 4,476 y en el recuadro de la derecha como 4,282 – 4,476 MW)."
+  },
+  "mira_primero": {
+   "imagen": 1,
+   "texto": "Centro · hoy, jueves 12 de noviembre"
+  },
+  "momento": {
+   "texto": "Habla de «hoy» como si fuera en vivo a las 23:30, pero las fechas se contradicen entre sí: el título dice «hoy, jueves 12 de noviembre» y «Son las 23:30» (con datos reales hasta el jueves 12 a las 24:00), mientras que las tarjetas de «Pico de hoy» y el aviso amarillo hablan del viernes 13 de noviembre de 2026.",
+   "tipo": "hoy_en_vivo"
+  },
+  "palabras_no_entendidas": [
+   "SEIN",
+   "COES",
+   "ICEN",
+   "IEOD",
+   "umbral 497"
+  ],
+  "para_quien": "Para personas que siguen o planifican el consumo eléctrico en el Perú, o analistas que quieren monitorear la demanda y evaluar qué tan bien funciona este modelo de pronóstico sin necesidad de operar la red.",
+  "por_que_volveria": "Porque es raro encontrar una herramienta que muestre sin esconder sus intervalos de predicción, compare contra un baseline simple («Referencia (semana pasada)») y audite abiertamente su propia calibración empírica (como avisar que el rango del 80 % está quedando angosto en 73.2 %); me serviría como un excelente ejemplo real en mis clases de series de tiempo.",
+  "primeros_clics": [
+   {
+    "imagen": 1,
+    "por_que": "Es el selector de fecha bajo «Repasar un día» (y ya estamos en la pestaña «Centro», que según el texto de abajo corresponde a la hora de Lima). Tocaría ahí para cambiar la fecha al 20 de marzo de 2026 y luego buscar las 20:00 en el gráfico o la tabla.",
+    "seguridad": 4,
+    "tarea": "t1",
+    "texto_exacto": "11/12/2026"
+   },
+   {
+    "imagen": 1,
+    "por_que": "Aunque en la vista 2 ya hay un resumen («¿Qué tan bueno es?») que compara con la referencia de la semana pasada, para ver a fondo cuánto se equivoca normalmente y la fiabilidad tocaría la pestaña «Confianza» en el menú superior (o «Diagnóstico completo» en la vista 2).",
+    "seguridad": 5,
+    "tarea": "t2",
+    "texto_exacto": "Confianza"
+   },
+   {
+    "imagen": 1,
+    "por_que": "No veo en ninguna parte de la pantalla controles de simulación de temperatura o sensibilidad al calor; de hecho, abajo explica que usa «Chronos-2 ajustado con feriados» solo con la demanda pasada y feriados. Si existiera algo así, tendría que buscarlo dentro de «Detalle», pero dudo que lo tenga.",
+    "seguridad": 2,
+    "tarea": "t3",
+    "texto_exacto": "Detalle"
+   },
+   {
+    "imagen": 2,
+    "por_que": "En la vista 1 solo hay una etiqueta arriba («El Niño costero: extraordinario · ICEN 3.38 (jul-2026)») que no parece un menú de análisis de errores, mientras que «Diagnóstico completo» (o «Ver la confianza mes a mes →») promete el desglose del desempeño del pronóstico en distintas épocas o condiciones.",
+    "seguridad": 3,
+    "tarea": "t4",
+    "texto_exacto": "Diagnóstico completo"
+   }
+  ],
+  "que_cambiarias": "Arreglaría la confusión de fechas entre el jueves 12 y el viernes 13 de noviembre (incluyendo el formato estadounidense «11/12/2026» del calendario) para que quede meridianamente claro en qué día y hora estamos parados y qué es «hoy».",
+  "que_es": "Es una aplicación web («Curva») que muestra y pronostica por horas la demanda de electricidad en el Perú dividida por zonas (Norte, Centro y Sur), comparando el consumo real con el pronóstico y su intervalo de incertidumbre.",
+  "volveria_manana": "si",
+  "voz_alta": "A ver, dice «Centro · hoy, jueves 12 de noviembre», son las 23:30. Qué siglas: SEIN, COES, ICEN... no las conozco. Pero espera: el aviso amarillo dice que falta la demanda del 13 de noviembre, y en «Pico de hoy» dice «viernes 13 de noviembre, 11:00». ¿Hoy es jueves 12 o viernes 13? Y la fecha arriba dice «11/12/2026», al revés, estilo gringo. Eso me confunde. Veo tres zonas: Norte, Centro, Sur. Abajo el gráfico «Ayer y hoy»: línea negra lo real, azul el pronóstico con «Rango del 80 %» y línea punteada de referencia de la semana pasada. ¡Bien! A la derecha comparan lo pronosticado (4,384 MW) con lo real (4,456 MW): cayó en el rango. Bajo con el ratón. Dice que fue «reconstruido»... ¿entonces no fue en vivo? Pero me encanta el cuadro rojo: admite que su rango del 80 % solo cubrió el 73.2 %. Eso es honestidad estadística."
+ }
+}

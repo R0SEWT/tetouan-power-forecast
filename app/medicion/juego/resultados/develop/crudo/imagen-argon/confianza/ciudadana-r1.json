@@ -1,0 +1,85 @@
+{
+ "etiqueta": "develop",
+ "sesion": "confianza",
+ "pantalla": "confianza",
+ "persona": "ciudadana",
+ "repeticion": 1,
+ "modo": "imagen",
+ "modelo": "gemini-4-argon-medium",
+ "vistas": 3,
+ "inicio": "2026-11-14T02:20:33",
+ "intento": 1,
+ "segundos": 45.8,
+ "estado": "SUCCESS",
+ "uso": {
+  "input_tokens": 52653,
+  "output_tokens": 2211,
+  "thinking_tokens": 1253,
+  "cache_read_tokens": 0,
+  "total_tokens": 54864
+ },
+ "respuesta": {
+  "dudas": [
+   {
+    "donde": "1.7 % de la demanda (MAPE)",
+    "imagen": 1,
+    "que": "Entiendo el 1.7 %, pero no sé qué significa la sigla MAPE ni qué es un MW (71.9 MW)."
+   },
+   {
+    "donde": "Todo se mide con pronósticos que el modelo no vio al entrenar; 2026 sí se usó para elegir el modelo.",
+    "imagen": 1,
+    "que": "No entiendo qué significa «entrenar» un modelo ni por qué importa cómo lo eligieron."
+   },
+   {
+    "donde": "Parte de las medias horas en que lo real cayó dentro del rango del 90 %. Banda verde: de 85 a 95 %.",
+    "imagen": 1,
+    "que": "Me marea eso de «las medias horas en que lo real cayó dentro del rango del 90 %»."
+   },
+   {
+    "donde": "Desde el viernes 23 de octubre, Chronos-2 ajustado con feriados pronostica cada día con la demanda del día anterior que publica el COES. Lleva 21 días reconstruidos (calculados después de conocerse el real, con los datos que habría tenido: no cuentan como en vivo) y 1 día en vivo",
+    "imagen": 2,
+    "que": "No sé qué es Chronos-2 ni el COES, y me confunde la diferencia entre «reconstruidos» y «en vivo»."
+   },
+   {
+    "donde": "Elia, en Bélgica, tiene el mismo problema con su banda del 80 %: cubrió entre 74 % y 79 % en 2024-2026.",
+    "imagen": 2,
+    "que": "No sé quién es Elia ni qué tiene que ver Bélgica con la luz de Lima."
+   },
+   {
+    "donde": "Arriba, sobrestimó; abajo, subestimó (lo más costoso: obliga a arrancar generación cara de urgencia). Líneas en ±3 %, como en el informe de PJM.",
+    "imagen": 3,
+    "que": "No entiendo qué es «generación cara de urgencia» ni qué es «el informe de PJM»."
+   }
+  ],
+  "palabras_no_entendidas": [
+   "SEIN",
+   "COES",
+   "71.9 MW",
+   "MW",
+   "MAPE",
+   "80.6 MW",
+   "135.4 MW",
+   "Chronos-2",
+   "79.6 MW",
+   "140.8 MW",
+   "51.0 MW",
+   "134.1 MW",
+   "Elia",
+   "PJM"
+  ],
+  "si_no_lo_encuentras": {
+   "imagen": 1,
+   "texto_exacto": "nada"
+  },
+  "t2": {
+   "mejor_que_referencia": "si",
+   "seguridad": 4,
+   "texto": "71.9 MW (1.7 % de la demanda)"
+  },
+  "t4": {
+   "seguridad": 4,
+   "texto": "Niño moderado, 80.6 MW"
+  },
+  "voz_alta": "A ver, arriba dice «En 2026 se equivocó menos que la referencia los 10 meses». Más abajo veo cinco cuadritos. El primero dice «Error medio 2026: 71.9 MW» y «1.7 % de la demanda (MAPE)». No sé qué es MW ni MAPE, pero entiendo que se equivoca poquito, un 1.7 %. Al lado dice «Frente a la referencia: −47 %», o sea que lo hace mejor. Y en el último cuadrito dice «Con El Niño, donde más yerra: 80.6 MW» y abajo «Niño moderado». Bajo a mirar el resto y me salen cosas de «Chronos-2», «COES», «Elia, en Bélgica» y «PJM» con muchos gráficos. ¡Qué mareo tantos números! Menos mal que lo que buscaba estaba arriba."
+ }
+}

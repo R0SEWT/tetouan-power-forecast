@@ -1,0 +1,47 @@
+{
+ "etiqueta": "develop",
+ "sesion": "escenarios",
+ "pantalla": "escenarios",
+ "persona": "profesora",
+ "repeticion": 1,
+ "modo": "imagen",
+ "modelo": "gemini-3.8-flash-medium",
+ "vistas": 2,
+ "inicio": "2026-11-14T02:44:40",
+ "intento": 1,
+ "segundos": 51.4,
+ "estado": "SUCCESS",
+ "uso": {
+  "input_tokens": 52076,
+  "output_tokens": 5667,
+  "thinking_tokens": 5172,
+  "cache_read_tokens": 0,
+  "total_tokens": 57743
+ },
+ "respuesta": {
+  "clic": {
+   "imagen": 1,
+   "por_que": "Está ubicado bajo «Temperatura frente a la esperada» y coincide exactamente con los 2 °C adicionales que busco evaluar, aunque me queda una pequeña duda por el modelo seleccionado en la izquierda.",
+   "seguridad": 4,
+   "texto_exacto": "+2 °C"
+  },
+  "dudas": [
+   {
+    "donde": "El modelo combinado usa solo la demanda, así que el clima y El Niño no lo mueven. Estos escenarios los calcula el modelo Base (XGBoost), con clima y El Niño.",
+    "imagen": 1,
+    "que": "Me confunde porque a la izquierda tengo seleccionado «Combinado (recomendado)» que solo usa demanda; no sé si al pulsar la temperatura el sistema cambia de modelo automáticamente o si debo modificarlo yo primero a la izquierda."
+   },
+   {
+    "donde": "Supuesto del proyecto: el COES recibe de ENFEN los pronósticos de clima y de El Niño.",
+    "imagen": 1,
+    "que": "No conozco qué significan las siglas COES ni ENFEN; son instituciones o términos locales del Perú ajenos a mi conocimiento."
+   }
+  ],
+  "palabras_no_entendidas": [
+   "SEIN",
+   "COES",
+   "ENFEN"
+  ],
+  "voz_alta": "Veo la pantalla de escenarios. Arriba leo «SEIN», sigla que no conozco. En la izquierda veo seleccionado un modelo combinado que dice usar solo demanda, lo que me inquieta porque vine a simular temperatura. Sin embargo, el aviso amarillo me aclara que estos escenarios los calcula el modelo Base con clima. En la sección central veo claramente «Temperatura frente a la esperada» y la opción «+2 °C». Al bajar a la segunda vista veo la serie temporal y métricas con «Rango probable». Como profesora de estadística valoro mucho que muestren la incertidumbre y el error, aunque mencionan términos como COES y ENFEN que no entiendo. El botón de +2 °C parece el camino directo."
+ }
+}

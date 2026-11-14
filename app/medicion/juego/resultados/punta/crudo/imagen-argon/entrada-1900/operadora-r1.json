@@ -1,0 +1,94 @@
+{
+ "etiqueta": "punta",
+ "sesion": "entrada-1900",
+ "pantalla": "repaso-1900",
+ "persona": "operadora",
+ "repeticion": 1,
+ "modo": "imagen",
+ "modelo": "gemini-4-argon-medium",
+ "vistas": 2,
+ "inicio": "2026-11-14T02:19:43",
+ "intento": 1,
+ "segundos": 55.4,
+ "estado": "SUCCESS",
+ "uso": {
+  "input_tokens": 53365,
+  "output_tokens": 1560,
+  "thinking_tokens": 0,
+  "cache_read_tokens": 24879,
+  "total_tokens": 54925
+ },
+ "respuesta": {
+  "dudas": [
+   {
+    "donde": "03/10/2026",
+    "imagen": 1,
+    "que": "El selector de fecha está en formato mes/día/año (03/10/2026 para el 10 de marzo), al revés de como escribimos las fechas en Perú y distinto al texto de arriba que dice 10/03/2026. Si quiero buscar otro día me puedo equivocar de fecha."
+   },
+   {
+    "donde": "¿Acertamos el martes 10 de marzo de 2026 a las 19:00?",
+    "imagen": 1,
+    "que": "Al abrir la pestaña «Ahora» me sale un día pasado de marzo en modo repaso en lugar de la demanda en vivo de mi turno de hoy. Tuve que buscar el botón «Hoy» para entender cómo ir al presente."
+   },
+   {
+    "donde": "4,764 × 0.85 (Chronos-2 ajustado) + 4,781 × 0.15 (Híbrido (XGBoost + Simons)) = 4,767 MW",
+    "imagen": 2,
+    "que": "No sé qué son esos nombres técnicos de modelos ni por qué dice abajo que «no usa el clima» si al mismo tiempo hay un botón de «¿Y si hace más calor?»."
+   }
+  ],
+  "le_importo": "Que me da el dato en MW directo con su rango de variación y me dice de frente cuántos MW se equivoca comparado con la semana pasada, sin esconder el error.",
+  "lectura": {
+   "seguridad": 5,
+   "texto": "Se usaba realmente: 4,784 MW. Se había pronosticado: 4,767 MW. Podía estar entre: 4,588 a 4,929 (en la tarjeta de abajo figura como 4,588 – 4,929 MW)."
+  },
+  "mira_primero": {
+   "imagen": 1,
+   "texto": "4,784 MW"
+  },
+  "momento": {
+   "texto": "Habla de un día pasado (un repaso del historial), no de hoy en vivo: el martes 10 de marzo de 2026 a las 19:00 (07:00 PM).",
+   "tipo": "dia_pasado"
+  },
+  "palabras_no_entendidas": [
+   "Chronos-2 ajustado",
+   "XGBoost + Simons",
+   "modelo fundacional de series de tiempo"
+  ],
+  "para_quien": "Para operadores de centro de control o despachadores eléctricos en Perú que siguen la demanda del COES por zonas y necesitan prever la carga de las próximas horas.",
+  "por_que_volveria": "Porque de un vistazo veo el pronóstico de las próximas 24 horas para la zona Centro, la rampa en MW y el margen de error real, aunque para usarlo en mi turno necesito que abra directo en el día de hoy en vivo.",
+  "primeros_clics": [
+   {
+    "imagen": 1,
+    "por_que": "Ahí está el selector de fecha bajo «Ver otro día» para cambiar al 20 de marzo de 2026 (y al lado el de la hora «07:00 PM» para poner las 8 de la noche), ya con «Centro» seleccionado.",
+    "seguridad": 5,
+    "tarea": "t1",
+    "texto_exacto": "03/10/2026"
+   },
+   {
+    "imagen": 1,
+    "por_que": "Aunque en la vista 2 ya veo el cuadro «¿Qué tan bueno es?» con el error en MW frente a la referencia de la semana pasada, si quiero ir a la sección dedicada a qué tanto confiar tocaría «Confianza» en el menú de arriba (o «Ver la confianza mes a mes →» en la vista 2).",
+    "seguridad": 5,
+    "tarea": "t2",
+    "texto_exacto": "Confianza"
+   },
+   {
+    "imagen": 1,
+    "por_que": "Ese enlace pregunta exactamente qué pasa si sube la temperatura, que es lo que busco para saber el cambio por 2 °C más de calor.",
+    "seguridad": 5,
+    "tarea": "t3",
+    "texto_exacto": "¿Y si hace más calor?"
+   },
+   {
+    "imagen": 2,
+    "por_que": "En la pantalla no hay un botón que diga cómo cambia el error según El Niño (la etiqueta «El Niño costero (calentamiento del mar frente a la costa): extraordinario» de la vista 1 solo informa el estado de ese día), así que tocaría «Ver la confianza mes a mes →» o «Diagnóstico completo» para ver cómo le fue en distintos periodos.",
+    "seguridad": 3,
+    "tarea": "t4",
+    "texto_exacto": "Ver la confianza mes a mes →"
+   }
+  ],
+  "que_cambiarias": "Que al entrar en la pestaña «Ahora» muestre directamente la demanda y el pronóstico de hoy en vivo en lugar de un día pasado de marzo, y que la fecha del selector esté en formato día/mes/año.",
+  "que_es": "Es una página llamada Curva que muestra el pronóstico de la demanda eléctrica del Perú por zonas y lo compara con el dato real del COES. Sirve para ver cuántos MW se esperan en las próximas 24 horas, entre qué rango puede estar la demanda y cuánto se suele equivocar el pronóstico.",
+  "volveria_manana": "si",
+  "voz_alta": "A ver qué me pasó mi compañero. Primero veo el número grande: 4,784 MW a las 19:00, dato del COES para Lima y el centro. Pero ojo, dice martes 10 de marzo de 2026, «Repaso de un día del historial». No es hoy en vivo, aunque para ir a hoy hay un botón «Hoy». Un día antes pronosticó 4,767 MW, entre 4,588 y 4,929. Cayó dentro, bien. Hay un enlace «¿Y si hace más calor?». En el gráfico veo la curva real en negro, el pronóstico en azul con su banda del 90 % y la semana pasada en naranja. Marca una rampa de +414 MW en 1 h y pico de 4,977 a las 14:30. Bajo la rueda: «Lo que dijimos ayer», subestimó por 18 MW (0.4 %). En «¿Qué tan bueno es?» dice que en 2026 a 24 horas se equivoca 71.9 MW frente a 135.4 MW de la referencia. En «¿De dónde sale el número?» habla de Chronos-2 y XGBoost + Simons, eso sí me suena a chino, y dice que no usa el clima."
+ }
+}

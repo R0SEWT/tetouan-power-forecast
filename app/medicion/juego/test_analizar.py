@@ -64,3 +64,15 @@ def test_embudo_acumula_los_pasos():
 def test_terminos_canonicos():
     assert a.termino("megavatios (MW)") == "MW / megavatios"
     assert a.termino("Rango del 80 %") == "rango del N %"
+
+
+def test_la_etiqueta_de_un_campo_cuenta_como_el_campo():
+    pantalla = {"vistas": [{
+        "archivo": "vista-1.png",
+        "controles": [{"etiqueta": "2026-11-12", "tipo": "input:date", "zona": "cuando"},
+                      {"etiqueta": "07:00", "tipo": "input:time", "zona": "cuando"}],
+        "textos": [{"t": "Ver otro día", "zona": "cuando"}, {"t": "A las", "zona": "cuando"}],
+    }]}
+    regla = {"aciertos": ["ver otro dia"], "aceptables": ["\\ba las\\b"]}
+    assert a.calificar_clic("Ver otro día", pantalla, regla)["resultado"] == "acierto"
+    assert "input:time" in a.ubicar("A las", pantalla)["etiqueta"]

@@ -1,0 +1,52 @@
+{
+ "etiqueta": "develop",
+ "sesion": "escenarios",
+ "pantalla": "escenarios",
+ "persona": "operadora",
+ "repeticion": 1,
+ "modo": "imagen",
+ "modelo": "gemini-4-argon-medium",
+ "vistas": 2,
+ "inicio": "2026-11-14T02:22:30",
+ "intento": 1,
+ "segundos": 51.8,
+ "estado": "SUCCESS",
+ "uso": {
+  "input_tokens": 50810,
+  "output_tokens": 2094,
+  "thinking_tokens": 1387,
+  "cache_read_tokens": 0,
+  "total_tokens": 52904
+ },
+ "respuesta": {
+  "clic": {
+   "imagen": 1,
+   "por_que": "Está justo debajo de «Temperatura frente a la esperada» en el panel de «¿Y si mañana hace más calor, o El Niño se calma?», que es exactamente el cambio de 2 grados más que busco. Aunque me deja una pequeña duda de si antes debo tocar «Con clima y El Niño» a la izquierda, el aviso amarillo dice que estos escenarios ya los calcula otro modelo con clima.",
+   "seguridad": 4,
+   "texto_exacto": "+2 °C"
+  },
+  "dudas": [
+   {
+    "donde": "El modelo combinado usa solo la demanda, así que el clima y El Niño no lo mueven. Estos escenarios los calcula el modelo Base (XGBoost), con clima y El Niño.",
+    "imagen": 1,
+    "que": "A la izquierda está marcado «Solo demanda» y «Combinado (recomendado)». No me queda del todo claro si al tocar «+2 °C» a la derecha ya calcula solo con ese modelo Base o si tengo que cambiar primero a «Con clima y El Niño» a la izquierda."
+   },
+   {
+    "donde": "A las 11:00 del 11 de marzo, la hora de mayor demanda de las próximas 24 h, el modelo espera 4,919 MW",
+    "imagen": 1,
+    "que": "Aquí dice que la mayor demanda es 4,919 MW a las 11:00, pero al bajar en la columna izquierda dice «4,977 MW a las 14:30 del miércoles 11 de marzo». Me confunde tener dos picos y horas distintas en la misma pantalla."
+   },
+   {
+    "donde": "03/10/2026",
+    "imagen": 1,
+    "que": "En la caja de fecha dice 03/10/2026 como si fuera octubre, aunque abajo aclara martes 10 de marzo de 2026 (10/03/2026)."
+   }
+  ],
+  "palabras_no_entendidas": [
+   "XGBoost",
+   "modelo fundacional",
+   "Chronos-2"
+  ],
+  "voz_alta": "A ver, entré a «¿Y si...?». A la derecha veo «¿Y si mañana hace más calor, o El Niño se calma?». Hay un aviso amarillo: dice que el modelo combinado usa solo la demanda y que estos escenarios los calcula un modelo Base, XGBoost, que no sé qué es. Pero justo abajo veo «Temperatura frente a la esperada» y el botón «+2 °C». A la izquierda sigue marcado «Solo demanda» y me habla de un Chronos-2 que tampoco conozco. Bajo un poco: a la izquierda dice máximo 4,977 MW a las 14:30, con su rango y el error en MW, eso sí me sirve. Tocaría «+2 °C» de frente."
+ }
+}

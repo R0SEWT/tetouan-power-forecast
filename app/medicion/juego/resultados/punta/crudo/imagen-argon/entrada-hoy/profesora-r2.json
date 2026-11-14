@@ -1,0 +1,97 @@
+{
+ "etiqueta": "punta",
+ "sesion": "entrada-hoy",
+ "pantalla": "hoy",
+ "persona": "profesora",
+ "repeticion": 2,
+ "modo": "imagen",
+ "modelo": "gemini-4-argon-medium",
+ "vistas": 2,
+ "inicio": "2026-11-14T02:27:29",
+ "intento": 1,
+ "segundos": 115.4,
+ "estado": "SUCCESS",
+ "uso": {
+  "input_tokens": 53313,
+  "output_tokens": 1689,
+  "thinking_tokens": 0,
+  "cache_read_tokens": 24853,
+  "total_tokens": 55002
+ },
+ "respuesta": {
+  "dudas": [
+   {
+    "donde": "11/12/2026",
+    "imagen": 1,
+    "que": "El selector de fecha está en formato mes/día/año (11/12/2026) mientras que arriba dice «12/11» en día/mes; parece 11 de diciembre y confunde."
+   },
+   {
+    "donde": "Pronóstico: el real todavía no se publica",
+    "imagen": 1,
+    "que": "La línea vertical negra dice «Ahora 23:30» del jueves 12, pero el aviso arriba dice «datos del COES al 12/11, 24:00» y el texto dice que el real llega con un día de retraso; cuesta entender qué día es «hoy» y qué día es «ayer» o «mañana» en el eje horizontal."
+   },
+   {
+    "donde": "Registro en vivo · reconstruido: se calculó después de conocerse el real, con los datos que habría tenido",
+    "imagen": 2,
+    "que": "Primero dice «Registro en vivo» y al lado «reconstruido: se calculó después de conocerse el real», mientras que la tarjeta de la derecha asegura que «Queda registrado con su hora de emisión antes de conocerse el real». No queda claro si este pronóstico se emitió en vivo o fue un backtest posterior."
+   },
+   {
+    "donde": "Pronóstico 54.4 MW / Referencia 101.0 MW",
+    "imagen": 2,
+    "que": "En «¿Qué tan bueno es?» muestra barras con cifras en MW (54.4 MW, 79.6 MW), pero no indica qué métrica estadística de error es (¿MAE, RMSE?)."
+   }
+  ],
+  "le_importo": "Me gustó mucho que muestre el intervalo de predicción del 80 %, compare contra una referencia ingenua de la semana pasada y admita abiertamente con una alerta roja que su cobertura empírica (73.2 %) está por debajo del nivel nominal.",
+  "lectura": {
+   "seguridad": 5,
+   "texto": "Se usaban 4,456 MW (dato real a las 23:30). Se había pronosticado 4,384 MW y el rango del 80 % estaba entre 4,282 – 4,476 MW."
+  },
+  "mira_primero": {
+   "imagen": 1,
+   "texto": "¿Cuánta electricidad se usará hoy?"
+  },
+  "momento": {
+   "texto": "Muestra el estado en vivo («Hoy» / «Ahora 23:30») correspondiente al jueves 12 de noviembre de 2026 a las 23:30 (hora de Lima), con datos reales publicados hasta el 12/11 y el pronóstico hacia adelante.",
+   "tipo": "hoy_en_vivo"
+  },
+  "palabras_no_entendidas": [
+   "IEOD"
+  ],
+  "para_quien": "Para personas interesadas en seguir o analizar la demanda eléctrica en el Perú (analistas, estudiantes o curiosos), aunque aclara que no sirve para operar el sistema eléctrico.",
+  "por_que_volveria": "Volvería si necesitara datos o ejemplos reales de pronósticos con intervalos de predicción mal calibrados para mis clases de series de tiempo, pero no para uso diario porque no trabajo en el sector eléctrico.",
+  "primeros_clics": [
+   {
+    "imagen": 1,
+    "por_que": "Es el selector de fecha bajo «Ver otro día» para elegir el 20 de marzo de 2026 (teniendo cuidado porque parece estar en formato mes/día/año), con «Centro» ya seleccionado arriba.",
+    "seguridad": 5,
+    "tarea": "t1",
+    "texto_exacto": "11/12/2026"
+   },
+   {
+    "imagen": 2,
+    "por_que": "En la misma vista 2 ya veo el resumen en «¿Qué tan bueno es?» (54.4 MW vs 101.0 MW y 79.6 MW vs 140.8 MW), y para profundizar en la fiabilidad tocaría «Ver la confianza mes a mes →» (o la pestaña «Confianza» arriba).",
+    "seguridad": 5,
+    "tarea": "t2",
+    "texto_exacto": "Ver la confianza mes a mes →"
+   },
+   {
+    "imagen": 1,
+    "por_que": "En esta pantalla no hay nada sobre sensibilidad a la temperatura (+2 °C); probaría en la pestaña «Detalle» del menú superior o en «Explorar el historial con otro modelo» por si hubiera un simulador, pero no se ve dónde hacer ese cálculo.",
+    "seguridad": 2,
+    "tarea": "t3",
+    "texto_exacto": "Detalle"
+   },
+   {
+    "imagen": 2,
+    "por_que": "En la primera vista aparece la etiqueta «El Niño costero (calentamiento del mar frente a la costa): extraordinario», pero para ver en qué situación de El Niño se equivoca más el modelo iría a «Ver la confianza mes a mes →» o a «Diagnóstico completo» / pestaña «Confianza».",
+    "seguridad": 4,
+    "tarea": "t4",
+    "texto_exacto": "Ver la confianza mes a mes →"
+   }
+  ],
+  "que_cambiarias": "Unificaría el formato de las fechas a día/mes/año en toda la pantalla (cambiar ese «11/12/2026» por «12/11/2026» y poner fechas claras en el eje del gráfico) y especificaría qué métrica de error (por ejemplo, MAE) son esos 54.4 MW.",
+  "que_es": "Es una aplicación web que muestra el pronóstico por media hora de la demanda de electricidad en el Perú (dividido en Norte, Centro y Sur) y lo compara con el consumo real publicado por el COES. Sirve para consultar cuánta electricidad se espera usar, con su intervalo de predicción del 80 %, y evaluar cuánto se equivoca el modelo frente a una referencia simple.",
+  "volveria_manana": "tal_vez",
+  "voz_alta": "Veo «¿Cuánta electricidad se usará hoy?» y un número grande: 4,456 MW a las 23:30. Abajo explican qué es el COES, bien, porque yo no conozco el sector. A la derecha puedo elegir Norte, Centro, Sur, y veo una fecha «11/12/2026»... ¿11 de diciembre? Pero arriba dice «12/11». Tienen el formato en inglés mes/día/año, qué confuso. Miro el gráfico: línea negra real, azul pronóstico, banda del 80 % —bien que expliquen «cae ahí 8 de cada 10 veces»— y línea punteada de referencia de la semana pasada. Bajo a la segunda pantalla. A la izquierda: «Dijimos 4,384 MW, Fue 4,456 MW», rango 4,282 – 4,476 MW. Pero abajo dice «Registro en vivo · reconstruido»... ¿en qué quedamos, es en vivo o reconstruido? En el centro comparan con la referencia y admiten en rojo que el rango del 80 % solo cubrió el 73.2 %. ¡Eso sí es honestidad estadística! A la derecha explican el modelo Chronos-2."
+ }
+}

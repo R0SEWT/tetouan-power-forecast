@@ -68,7 +68,8 @@ async function leerVista(pagina, aoi) {
     }
     const etiquetaDe = (el) => {
       const porId = el.id ? document.querySelector(`label[for="${el.id}"]`) : null;
-      return (el.getAttribute('aria-label') || (porId && porId.textContent) || el.innerText || el.value
+      const implicita = el.labels && el.labels[0] ? el.labels[0].innerText : '';
+      return (el.getAttribute('aria-label') || (porId && porId.textContent) || implicita || el.innerText || el.value
         || el.getAttribute('title') || el.getAttribute('placeholder') || '').replace(/\s+/g, ' ').trim();
     };
     const controles = [...document.querySelectorAll('a[href], button, input, select, summary, [role=tab], [role=button], [tabindex="0"]')]

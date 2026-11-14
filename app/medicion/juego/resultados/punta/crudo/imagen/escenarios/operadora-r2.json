@@ -1,0 +1,47 @@
+{
+ "etiqueta": "punta",
+ "sesion": "escenarios",
+ "pantalla": "escenarios",
+ "persona": "operadora",
+ "repeticion": 2,
+ "modo": "imagen",
+ "modelo": "gemini-3.8-flash-medium",
+ "vistas": 2,
+ "inicio": "2026-11-14T02:55:21",
+ "intento": 1,
+ "segundos": 51.6,
+ "estado": "SUCCESS",
+ "uso": {
+  "input_tokens": 53138,
+  "output_tokens": 4819,
+  "thinking_tokens": 4350,
+  "cache_read_tokens": 24936,
+  "total_tokens": 57957
+ },
+ "respuesta": {
+  "clic": {
+   "imagen": 1,
+   "por_que": "Está el botón «+2 °C» justo debajo de «Temperatura frente a la esperada» para ver el efecto del aumento de 2 grados.",
+   "seguridad": 5,
+   "texto_exacto": "+2 °C"
+  },
+  "dudas": [
+   {
+    "donde": "El modelo combinado usa solo la demanda, así que el clima y El Niño no lo mueven. Estos escenarios los calcula el modelo Base (XGBoost), con clima y El Niño.",
+    "imagen": 1,
+    "que": "Me hace dudar si tengo que cambiar algo en el modelo yo misma o si ya lo hace el sistema, además de mencionar términos técnicos que no conozco."
+   },
+   {
+    "donde": "Solo demanda",
+    "imagen": 1,
+    "que": "En el panel izquierdo sigue seleccionado «Solo demanda», lo que me hace dudar de si la simulación de temperatura va a funcionar sin cambiar esa opción primero."
+   }
+  ],
+  "palabras_no_entendidas": [
+   "XGBoost",
+   "Chronos-2",
+   "modelo fundacional"
+  ],
+  "voz_alta": "Llegué a «¿Y si...?». Veo opciones de temperatura: -2 °C, ±0 °C, +2 °C y +4 °C. Directo al grano, eso me sirve para la guardia. Pero me distrae ese aviso amarillo: dice que el modelo combinado no usa clima y menciona «XGBoost». A la izquierda también veo seleccionado «Solo demanda» y habla de «Chronos-2». No sé qué es eso, yo solo necesito los MW para preparar maniobras. En la segunda pantalla veo la curva con el escenario base y abajo el error medio en MW con el rango al 90 %, lo cual me da tranquilidad para saber cuánto falla. Para ver los 2 °C más, toco «+2 °C»."
+ }
+}

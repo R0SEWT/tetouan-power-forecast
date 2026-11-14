@@ -1,0 +1,44 @@
+{
+ "etiqueta": "develop",
+ "sesion": "escenario-2c",
+ "pantalla": "escenario-2c",
+ "persona": "operadora",
+ "repeticion": 2,
+ "modo": "imagen",
+ "modelo": "gemini-3.8-flash-medium",
+ "vistas": 2,
+ "inicio": "2026-11-14T02:57:31",
+ "intento": 1,
+ "segundos": 62.3,
+ "estado": "SUCCESS",
+ "uso": {
+  "input_tokens": 52434,
+  "output_tokens": 7211,
+  "thinking_tokens": 6671,
+  "cache_read_tokens": 0,
+  "total_tokens": 59645
+ },
+ "respuesta": {
+  "dudas": [
+   {
+    "donde": "El modelo combinado usa solo la demanda, así que el clima y El Niño no lo mueven. Estos escenarios los calcula el modelo Base (XGBoost), con clima y El Niño.",
+    "imagen": 1,
+    "que": "A la izquierda tengo seleccionado 'Combinado (recomendado)', pero este cartel me dice que ese no reacciona al clima y que el cálculo lo hace otro modelo llamado Base (XGBoost). Me confunde cuál es el que manda."
+   },
+   {
+    "donde": "4,977 MW a las 14:30 del miércoles 11 de marzo",
+    "imagen": 2,
+    "que": "El cuadro azul decía que la hora de mayor demanda era a las 11:00 (4,934 MW), pero aquí en el panel lateral dice que el máximo del día es a las 14:30 con 4,977 MW."
+   }
+  ],
+  "lectura": {
+   "seguridad": 4,
+   "texto": "A las 11:00 del 11 de marzo cambiaría +15 MW (+0.3 %, alcanzando 4,934 MW) y el mayor cambio es a las 15:30 con +25 MW."
+  },
+  "palabras_no_entendidas": [
+   "XGBoost",
+   "Chronos-2"
+  ],
+  "voz_alta": "Ya está marcado +2 °C. Veo un aviso amarillo que me habla de XGBoost y dice que el modelo combinado no se mueve con el clima... no entiendo bien qué modelo me está respondiendo. Pero en el recuadro azul la cifra está directa: a las 11:00 aumentaría 15 MW (+0.3 %) y a las 15:30 se da el mayor cambio con +25 MW. Bien, eso responde lo que quería.\nAl bajar a la segunda vista, sigo la curva morada de mi escenario. Me desconcierta ver a la izquierda una máxima de 4,977 MW a las 14:30 cuando arriba decía a las 11:00. El error medio de 31.1 MW sí me sirve."
+ }
+}

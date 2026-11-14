@@ -1,0 +1,44 @@
+{
+ "etiqueta": "punta",
+ "sesion": "escenario-2c",
+ "pantalla": "escenario-2c",
+ "persona": "operadora",
+ "repeticion": 2,
+ "modo": "imagen",
+ "modelo": "gemini-3.8-flash-medium",
+ "vistas": 2,
+ "inicio": "2026-11-14T02:56:38",
+ "intento": 1,
+ "segundos": 72.7,
+ "estado": "SUCCESS",
+ "uso": {
+  "input_tokens": 52004,
+  "output_tokens": 8047,
+  "thinking_tokens": 7549,
+  "cache_read_tokens": 0,
+  "total_tokens": 60051
+ },
+ "respuesta": {
+  "dudas": [
+   {
+    "donde": "El modelo combinado usa solo la demanda, así que el clima y El Niño no lo mueven. Estos escenarios los calcula el modelo Base (XGBoost), con clima y El Niño.",
+    "imagen": 1,
+    "que": "A la izquierda tengo seleccionado el modelo Combinado, pero este aviso dice que ese modelo no usa clima y que el escenario lo calcula el modelo Base. No sé cuál modelo me está mostrando realmente."
+   },
+   {
+    "donde": "a las 11:00 del 11 de marzo (la hora de mayor demanda)",
+    "imagen": 1,
+    "que": "En Lima preparo maniobras para la punta de la noche, pero aquí señala las 11:00 como hora de mayor demanda y no me muestra la cifra para la noche."
+   }
+  ],
+  "lectura": {
+   "seguridad": 4,
+   "texto": "A las 11:00 (hora de mayor demanda) sube 15 MW (espera 4,934 MW, +0.3 % frente al escenario base) y a las 15:30 se registra el mayor cambio con +25 MW."
+  },
+  "palabras_no_entendidas": [
+   "XGBoost",
+   "Chronos-2"
+  ],
+  "voz_alta": "Veo la pantalla con +2 °C marcado. Al centro hay un recuadro directo: a las 11:00 sube 15 MW y el mayor cambio es a las 15:30 con +25 MW. Bien, la cifra está ahí. Pero me desconcierta el aviso amarillo: dice que el modelo combinado no usa clima y que esto lo calcula otro modelo, Base XGBoost, mientras a la izquierda tengo seleccionado el Combinado. ¿Qué modelo estoy mirando? En el gráfico la línea morada sube un poco sobre la base. Al bajar a la segunda vista busco qué pasa en la punta de la noche, pero solo encuentro errores históricos y porcentajes. Me falta ver la noche."
+ }
+}

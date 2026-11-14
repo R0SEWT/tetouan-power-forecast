@@ -1,0 +1,98 @@
+{
+ "etiqueta": "rite-ensayo",
+ "sesion": "entrada-hoy",
+ "pantalla": "hoy",
+ "persona": "operadora",
+ "repeticion": 3,
+ "modo": "imagen",
+ "modelo": "gemini-3.8-flash-medium",
+ "vistas": 2,
+ "inicio": "2026-11-14T02:53:23",
+ "intento": 1,
+ "segundos": 128.7,
+ "estado": "SUCCESS",
+ "uso": {
+  "input_tokens": 53664,
+  "output_tokens": 15828,
+  "thinking_tokens": 14431,
+  "cache_read_tokens": 0,
+  "total_tokens": 69492
+ },
+ "respuesta": {
+  "dudas": [
+   {
+    "donde": "11/12/2026",
+    "imagen": 1,
+    "que": "En Perú usamos día/mes/año; ver 11/12 me hace dudar si se refiere al 11 de diciembre o al 12 de noviembre, aunque el texto y la gráfica hablen del jueves 12."
+   },
+   {
+    "donde": "Lo real llega con un día de retraso: el COES, el operador del sistema eléctrico, publica cada mañana la demanda del día anterior.",
+    "imagen": 1,
+    "que": "Dice que el dato real llega con un día de retraso a la mañana siguiente, pero arriba me muestran un dato real de las 23:30. No me cuadra cómo tienen el real de hace media hora si el COES no lo publica hasta mañana."
+   },
+   {
+    "donde": "Registro en vivo · reconstruido: se calculó después de conocerse el real, con los datos que habría tenido",
+    "imagen": 2,
+    "que": "Me confunde que pongan 'en vivo' y al mismo tiempo 'reconstruido: se calculó después de conocerse el real'. Si ya tenían el dato real, no es una predicción en tiempo real auténtica sino una prueba posterior."
+   },
+   {
+    "donde": "no sirve para operar el sistema eléctrico",
+    "imagen": 2,
+    "que": "Como operadora busco datos que me sirvan para preparar maniobras del turno; que en la letra chica digan explícitamente que no sirve para operar me genera desconfianza."
+   }
+  ],
+  "le_importo": "Me sirvió ver la forma de la curva de demanda con su rango de incertidumbre y que muestren abiertamente el error en MW comparándolo con la semana pasada.",
+  "lectura": {
+   "seguridad": 5,
+   "texto": "En ese momento se usaba 4,456 MW (dato real del COES). Se había pronosticado 4,384 MW y según el rango del 80 % podía estar entre 4,282 – 4,476 MW."
+  },
+  "mira_primero": {
+   "imagen": 1,
+   "texto": "4,456 MW"
+  },
+  "momento": {
+   "texto": "Habla de hoy en vivo: tiene el botón 'Hoy' seleccionado, dice 'Último dato real · 23:30' y la gráfica marca 'Ahora 23:30'. La fecha mostrada es jueves 12 de noviembre de 2026 (aunque en el selector figure 11/12/2026 en formato estadounidense) a las 23:30.",
+   "tipo": "hoy_en_vivo"
+  },
+  "palabras_no_entendidas": [
+   "Chronos-2",
+   "modelo fundacional"
+  ],
+  "para_quien": "Para ingenieros, operadores o analistas del sector eléctrico que monitorean el consumo de energía en el país, aunque por el estilo parece más una herramienta de consulta y análisis que un sistema para despacho en tiempo real.",
+  "por_que_volveria": "Volvería para tener una referencia rápida de la tendencia de la demanda antes de mi guardia y ver si el rango de error es razonable, pero con cuidado porque ellos mismos aclaran que no es para operar el sistema.",
+  "primeros_clics": [
+   {
+    "imagen": 1,
+    "por_que": "Como la zona 'Centro' ya está marcada, tocaría la casilla de la fecha '11/12/2026' para abrir el calendario y seleccionar el 20 de marzo de 2026.",
+    "seguridad": 4,
+    "tarea": "t1",
+    "texto_exacto": "11/12/2026"
+   },
+   {
+    "imagen": 1,
+    "por_que": "Tocaría la pestaña 'Confianza' en la barra de navegación superior para ver el historial de error del modelo y cómo rinde frente a una referencia simple.",
+    "seguridad": 5,
+    "tarea": "t2",
+    "texto_exacto": "Confianza"
+   },
+   {
+    "imagen": 1,
+    "por_que": "Hay un enlace azul que plantea textualmente esa pregunta justo al lado de la cifra principal.",
+    "seguridad": 5,
+    "tarea": "t3",
+    "texto_exacto": "¿Y si hace más calor?"
+   },
+   {
+    "imagen": 1,
+    "por_que": "Es un botón gris con flecha que menciona directamente el calentamiento del mar y la pregunta sobre cuándo falla más el pronóstico.",
+    "seguridad": 5,
+    "tarea": "t4",
+    "texto_exacto": "El Niño costero (calentamiento del mar frente a la costa): extraordinario · ¿cuándo se equivoca más? →"
+   }
+  ],
+  "que_cambiarias": "Que muestre y resalte de forma directa la hora y el valor estimado de la punta de la noche, que es lo crucial para preparar maniobras en distribución, en lugar de destacar solo el pico de la mañana.",
+  "que_es": "Es una página de pronóstico de demanda de energía eléctrica para el Perú y la zona Centro, pensada para anticipar el consumo horario y ver la curva de carga frente al dato del COES.",
+  "volveria_manana": "tal_vez",
+  "voz_alta": "Miro primero ese 4,456 MW grandazo: es el dato real del COES a las 23:30. Arriba veo seleccionado 'Centro'. La curva me da la demanda de ayer y hoy con una franja azul de rango al 80 %. Me marca un pico a las 11:00 de 5,297 MW, pero para mi turno busco la punta de la noche. Al bajar, me muestran qué dijeron ayer para esta hora: pronosticaron 4,384 MW y fue 4,456 MW, con un error de -73 MW (1.6 %). Me parece bien que admitan su error y lo comparen con la semana pasada (54.4 MW frente a 101 MW). Pero a la derecha me salen con 'Chronos-2' y 'modelo fundacional', términos que no usamos en sala de control. Y abajo advierten que no sirve para operar."
+ }
+}

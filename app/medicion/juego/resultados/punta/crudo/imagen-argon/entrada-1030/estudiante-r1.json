@@ -1,0 +1,101 @@
+{
+ "etiqueta": "punta",
+ "sesion": "entrada-1030",
+ "pantalla": "repaso-1030",
+ "persona": "estudiante",
+ "repeticion": 1,
+ "modo": "imagen",
+ "modelo": "gemini-4-argon-medium",
+ "vistas": 2,
+ "inicio": "2026-11-14T02:16:37",
+ "intento": 1,
+ "segundos": 89.3,
+ "estado": "SUCCESS",
+ "uso": {
+  "input_tokens": 53481,
+  "output_tokens": 4995,
+  "thinking_tokens": 3330,
+  "cache_read_tokens": 24970,
+  "total_tokens": 58476
+ },
+ "respuesta": {
+  "dudas": [
+   {
+    "donde": "03/10/2026",
+    "imagen": 1,
+    "que": "El selector de fecha está en formato mes/día/año (03/10/2026), mientras que en el resto de la pantalla se usa día/mes/año (10/03/2026), así que de reojo parece decir 3 de octubre en vez de 10 de marzo."
+   },
+   {
+    "donde": "Ahora 10:30",
+    "imagen": 1,
+    "que": "La pestaña de arriba dice «Ahora» y el eje del gráfico dice «Ahora 10:30», pero en realidad es el repaso de un día pasado (martes 10 de marzo de 2026) y para ir al presente hay otro botón que dice «Hoy»."
+   },
+   {
+    "donde": "+414 MW en 1 h",
+    "imagen": 1,
+    "que": "En la zona de pronóstico del día siguiente aparece un tramo pintado de negro con «+414 MW en 1 h»; como el negro en la leyenda significa «Real (COES)», confunde un poco al principio hasta deducir que resalta la rampa de subida más fuerte pronosticada."
+   },
+   {
+    "donde": "El Niño costero (calentamiento del mar frente a la costa): extraordinario",
+    "imagen": 1,
+    "que": "Parece una etiqueta suelta debajo de la explicación del historial y no queda claro si se puede tocar para filtrar o ver cómo afecta El Niño al error del pronóstico."
+   }
+  ],
+  "le_importo": "Que puedo ver la curva de carga real del COES junto al pronóstico por zona (Norte, Centro, Sur) y bajarme los datos directo con el botón «Descargar CSV» para mi trabajo del curso.",
+  "lectura": {
+   "seguridad": 5,
+   "texto": "Se usaba (dato real del COES): 4,910 MW. Se había pronosticado un día antes: 4,916 MW. Podía estar entre: 4,732 a 5,083 (en la vista 1 dice «con un rango de 4,732 a 5,083» y en la vista 2 dice «4,732 – 5,083 MW»)."
+  },
+  "mira_primero": {
+   "imagen": 1,
+   "texto": "4,910 MW"
+  },
+  "momento": {
+   "texto": "Habla de un día pasado (en modo «Repaso de un día del historial»): el martes 10 de marzo de 2026 a las 10:30 (10:30 AM).",
+   "tipo": "dia_pasado"
+  },
+  "palabras_no_entendidas": [
+   "Chronos-2 ajustado",
+   "Híbrido (XGBoost + Simons)",
+   "Chronos-2",
+   "XGBoost",
+   "Simons"
+  ],
+  "para_quien": "Para estudiantes e ingenieros eléctricos, analistas o gente del sector de potencia que necesita consultar la demanda eléctrica del Perú (datos del COES) y su pronóstico por zonas.",
+  "por_que_volveria": "Porque me deja elegir fechas pasadas y zonas del país y descargar el CSV o ver la tabla al toque para mi trabajo de sistemas de potencia, mucho más rápido que buscar en el portal del COES.",
+  "primeros_clics": [
+   {
+    "imagen": 1,
+    "por_que": "Como ya está marcada la zona «Centro» (Lima y el centro del país), lo primero que tocaría es el selector de fecha debajo de «Ver otro día» para poner el 20 de marzo de 2026 (y después cambiaría la hora «10:30 AM» a las 8 p. m. y marcaría «Mostrar lo que pasó después»).",
+    "seguridad": 5,
+    "tarea": "t1",
+    "texto_exacto": "03/10/2026"
+   },
+   {
+    "imagen": 1,
+    "por_que": "En la vista 2 ya se ve la tarjeta «¿Qué tan bueno es?» con el error en MW y la comparación contra la referencia de la semana pasada, pero si busco qué tocar primero para profundizar en si puedo fiarme del pronóstico tocaría la pestaña «Confianza» arriba (o «Ver la confianza mes a mes →» / «Diagnóstico completo» en la vista 2).",
+    "seguridad": 5,
+    "tarea": "t2",
+    "texto_exacto": "Confianza"
+   },
+   {
+    "imagen": 1,
+    "por_que": "Al lado del pronóstico principal hay un enlace azul que pregunta literalmente «¿Y si hace más calor?» (y en la vista 2 también se repite como botón «¿Y si hace más calor? →»).",
+    "seguridad": 5,
+    "tarea": "t3",
+    "texto_exacto": "¿Y si hace más calor?"
+   },
+   {
+    "imagen": 2,
+    "por_que": "En la pantalla principal no hay un botón específico de errores según El Niño (la pastilla «El Niño costero (calentamiento del mar frente a la costa): extraordinario» en la vista 1 parece solo una etiqueta informativa), así que probaría entrando a «Diagnóstico completo» (o a la pestaña «Confianza» / «Ver la confianza mes a mes →») para ver el desglose del error por condiciones climáticas.",
+    "seguridad": 3,
+    "tarea": "t4",
+    "texto_exacto": "Diagnóstico completo"
+   }
+  ],
+  "que_cambiarias": "Pondría el selector de fecha «03/10/2026» en formato día/mes/año (10/03/2026) como en el resto de la web, porque ver 03/10 cuando el título dice 10 de marzo marea.",
+  "que_es": "Es una aplicación web llamada Curva que muestra la demanda eléctrica real del Perú (con datos del COES) y la compara con el pronóstico para las siguientes 24 horas por zonas. Sirve para revisar cuánta potencia (MW) se consumió o se va a consumir, ver qué tanto acierta el pronóstico y descargar los datos.",
+  "volveria_manana": "si",
+  "voz_alta": "Primero me salta a la vista el 4,910 MW gigante y la pregunta de si acertaron el martes 10 de marzo a las 10:30 en Lima y el centro. Leo que pronosticaron 4,916 MW y veo un link azul de «¿Y si hace más calor?». Hay un check para mostrar lo que pasó después y a la derecha botones de Norte, Centro, Sur y la fecha «03/10/2026», que me marea un segundo porque está en mes/día. Abajo veo la curva de carga con lo real del COES en negro, el pronóstico en azul y la referencia de la semana pasada. Bajo a la segunda captura: ¡qué buena, tiene para ver en tabla y botón de «Descargar CSV»! Abajo hay tres tarjetas: el error de ese día (+6 MW), qué tan bueno es el pronóstico frente a la semana pasada y una fórmula con «Chronos-2» y «XGBoost + Simons» que no conozco."
+ }
+}

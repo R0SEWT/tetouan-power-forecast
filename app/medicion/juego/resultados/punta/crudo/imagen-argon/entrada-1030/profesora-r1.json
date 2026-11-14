@@ -1,0 +1,99 @@
+{
+ "etiqueta": "punta",
+ "sesion": "entrada-1030",
+ "pantalla": "repaso-1030",
+ "persona": "profesora",
+ "repeticion": 1,
+ "modo": "imagen",
+ "modelo": "gemini-4-argon-medium",
+ "vistas": 2,
+ "inicio": "2026-11-14T02:18:06",
+ "intento": 1,
+ "segundos": 96.8,
+ "estado": "SUCCESS",
+ "uso": {
+  "input_tokens": 53634,
+  "output_tokens": 4666,
+  "thinking_tokens": 2974,
+  "cache_read_tokens": 25096,
+  "total_tokens": 58300
+ },
+ "respuesta": {
+  "dudas": [
+   {
+    "donde": "03/10/2026",
+    "imagen": 1,
+    "que": "Arriba dice «martes 10 de marzo de 2026» y «10/03/2026», pero en la casilla para elegir fecha aparece «03/10/2026» en formato mes/día/año, lo que hace dudar si es 10 de marzo o 3 de octubre."
+   },
+   {
+    "donde": "+414 MW en 1 h",
+    "imagen": 1,
+    "que": "En el gráfico, a la derecha de «Ahora 10:30» (en la mañana del miércoles 11), aparece un trazo negro con el texto «+414 MW en 1 h» aunque se supone que lo real solo llega hasta las 10:30 del martes y la casilla «Mostrar lo que pasó después» no está marcada; no queda claro si señala la subida más fuerte del pronóstico o qué es ese trazo negro."
+   },
+   {
+    "donde": "41.6 MW",
+    "imagen": 2,
+    "que": "En «¿Qué tan bueno es?» da un valor en MW (41.6 MW y 71.9 MW) para comparar el error del pronóstico y la referencia, pero no indica qué métrica estadística es (si es error absoluto medio MAE, raíz del error cuadrático medio RMSE, o mediana)."
+   },
+   {
+    "donde": "Usa solo la demanda y el calendario; no usa el clima.",
+    "imagen": 2,
+    "que": "Dice explícitamente que el modelo no usa el clima, pero justo debajo hay un botón que dice «¿Y si hace más calor? →» y arriba muestra una etiqueta de «El Niño costero»; me hace dudar de cómo responde a un cambio de temperatura si el modelo no usa variables climáticas."
+   }
+  ],
+  "le_importo": "Me importó que no se queda en una cifra puntual: muestra el intervalo de predicción del 90 %, lo compara con una referencia ingenua («la semana pasada a la misma hora») y verifica que la cobertura empírica del intervalo fue del 91.1 %.",
+  "lectura": {
+   "seguridad": 5,
+   "texto": "En ese momento se usaban 4,910 MW. Un día antes se había pronosticado 4,916 MW, y el rango del 90 % indicaba que podía estar entre 4,732 a 5,083 (4,732 – 5,083 MW)."
+  },
+  "mira_primero": {
+   "imagen": 1,
+   "texto": "¿Acertamos el martes 10 de marzo de 2026 a las 10:30?"
+  },
+  "momento": {
+   "texto": "Habla de un día pasado («Repaso de un día del historial»): el martes 10 de marzo de 2026 a las 10:30 de la mañana.",
+   "tipo": "dia_pasado"
+  },
+  "palabras_no_entendidas": [
+   "Simons",
+   "COES",
+   "Chronos-2"
+  ],
+  "para_quien": "Para personas que analizan o planifican el consumo eléctrico en el Perú, o para cualquier interesado que quiera consultar y evaluar qué tan bien acierta este pronóstico de demanda.",
+  "por_que_volveria": "Como profesora de estadística no trabajo a diario con el sector eléctrico, pero volvería para explorar las pestañas «Confianza» y «Diagnóstico completo» para terminar de calificar el proyecto y quizá usarla en clase como ejemplo claro de intervalos de predicción y comparación contra un modelo de referencia.",
+  "primeros_clics": [
+   {
+    "imagen": 1,
+    "por_que": "Ya está seleccionado «Centro», así que primero tocaría el selector de fecha «03/10/2026» bajo «Ver otro día» para cambiar al 20 de marzo de 2026 (y luego cambiaría la hora en «10:30 AM»).",
+    "seguridad": 5,
+    "tarea": "t1",
+    "texto_exacto": "03/10/2026"
+   },
+   {
+    "imagen": 2,
+    "por_que": "En la tarjeta «¿Qué tan bueno es?» ya veo el resumen del error en 2026 frente a la referencia de la semana pasada (71.9 MW frente a 135.4 MW), y tocaría «Ver la confianza mes a mes →» (o la pestaña «Confianza» arriba) para ver el detalle de cuánto se equivoca normalmente.",
+    "seguridad": 5,
+    "tarea": "t2",
+    "texto_exacto": "Ver la confianza mes a mes →"
+   },
+   {
+    "imagen": 1,
+    "por_que": "El enlace pregunta directamente «¿Y si hace más calor?», lo que apunta a explorar la sensibilidad de la demanda ante aumentos de temperatura.",
+    "seguridad": 5,
+    "tarea": "t3",
+    "texto_exacto": "¿Y si hace más calor?"
+   },
+   {
+    "imagen": 2,
+    "por_que": "No veo ningún botón que mencione directamente el error según El Niño (la etiqueta «El Niño costero (calentamiento del mar frente a la costa): extraordinario» en la vista 1 parece solo informativa o si acaso clicable, pero no lo sé), así que iría a «Ver la confianza mes a mes →» o «Diagnóstico completo» esperando ver el error desglosado por meses o condiciones de El Niño.",
+    "seguridad": 3,
+    "tarea": "t4",
+    "texto_exacto": "Ver la confianza mes a mes →"
+   }
+  ],
+  "que_cambiarias": "Indicaría explícitamente qué medida estadística es el error en MW (por ejemplo, «Error absoluto medio: 71.9 MW») y corregía el formato de la fecha en el selector («03/10/2026») para que coincida con el formato día/mes/año del resto de la página.",
+  "que_es": "Es una aplicación web llamada Curva que muestra el pronóstico de la demanda eléctrica del Perú con su rango de incertidumbre y evalúa si acertó comparándolo con el consumo real y con la semana pasada.",
+  "volveria_manana": "tal_vez",
+  "voz_alta": "Primero leo la pregunta grande: «¿Acertamos el martes 10 de marzo de 2026 a las 10:30?» y veo 4,910 MW. Al lado dice que pronosticaron 4,916 MW con un rango de 4,732 a 5,083. Qué bien que den un intervalo de predicción y no solo el punto. Veo que estoy viendo un día pasado de Lima y el centro, aunque la casilla de fecha dice 03/10/2026 al estilo estadounidense y confunde. En el gráfico distingo la curva real, el pronóstico con su banda del 90 % y la referencia de la semana pasada. Al bajar, veo tres tarjetas muy claras. La primera resume el error puntual (+6 MW, 0.1 %). La del medio compara contra la referencia simple y muestra que el rango del 90 % cubrió el 91.1 % de las medias horas en 2026; eso es ser honesto con la incertidumbre. A la derecha veo la fórmula del promedio ponderado de dos modelos."
+ }
+}

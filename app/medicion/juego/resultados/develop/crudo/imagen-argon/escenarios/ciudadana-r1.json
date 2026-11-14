@@ -1,0 +1,69 @@
+{
+ "etiqueta": "develop",
+ "sesion": "escenarios",
+ "pantalla": "escenarios",
+ "persona": "ciudadana",
+ "repeticion": 1,
+ "modo": "imagen",
+ "modelo": "gemini-4-argon-medium",
+ "vistas": 2,
+ "inicio": "2026-11-14T02:22:14",
+ "intento": 1,
+ "segundos": 44.0,
+ "estado": "SUCCESS",
+ "uso": {
+  "input_tokens": 50870,
+  "output_tokens": 1906,
+  "thinking_tokens": 1079,
+  "cache_read_tokens": 0,
+  "total_tokens": 52776
+ },
+ "respuesta": {
+  "clic": {
+   "imagen": 1,
+   "por_que": "Debajo de «Temperatura frente a la esperada» está el botón «+2 °C», que dice justo los 2 grados más de calor que quiero probar.",
+   "seguridad": 5,
+   "texto_exacto": "+2 °C"
+  },
+  "dudas": [
+   {
+    "donde": "El modelo combinado usa solo la demanda, así que el clima y El Niño no lo mueven. Estos escenarios los calcula el modelo Base (XGBoost), con clima y El Niño.",
+    "imagen": 1,
+    "que": "Sale como una advertencia en amarillo y a la izquierda está marcado «Solo demanda», así que me hace dudar si primero tengo que tocar «Con clima y El Niño» a la izquierda o si basta con tocar «+2 °C»."
+   },
+   {
+    "donde": "03/10/2026",
+    "imagen": 1,
+    "que": "En el recuadro del día dice «03/10/2026» como si fuera octubre, pero abajo dice «martes 10 de marzo de 2026 (10/03/2026)». Me confunde que esté al revés."
+   },
+   {
+    "donde": "Próximas horas / ¿Y si...? / Diagnóstico",
+    "imagen": 1,
+    "que": "Arriba del cuadro de la derecha hay unas letras cortadas por la barra blanca de arriba y no se ve bien qué son."
+   },
+   {
+    "donde": "¿Acierta la hora? En 2026, la hora del máximo pronosticado de cada día cayó a ±1 h de la del máximo real en 61.5 % de los días (288); la referencia simple, en 56.9 %. El valor del máximo se equivocó en promedio 84 MW (la referencia, 143 MW).",
+    "imagen": 2,
+    "que": "Hay demasiados números, porcentajes y palabras raras juntas; me canso de leerlo y no entiendo qué me quiere decir."
+   }
+  ],
+  "palabras_no_entendidas": [
+   "SEIN",
+   "COES",
+   "ENFEN",
+   "modelo Base (XGBoost)",
+   "modelo fundacional (Chronos-2)",
+   "Escenario base",
+   "4,919 MW",
+   "17 MW",
+   "4,977 MW",
+   "+414 MW",
+   "Rampa fuerte",
+   "referencia simple",
+   "31.1 MW",
+   "65.9 MW",
+   "71.9 MW"
+  ],
+  "voz_alta": "A ver, ya entré a «¿Y si mañana hace más calor, o El Niño se calma?». Arriba sale un cuadro amarillo que habla de «modelo Base (XGBoost)» y a la izquierda dice «Solo demanda», qué enredo, no sé qué es eso. Pero justo abajo veo «Temperatura frente a la esperada» y cuatro botoncitos: «−2 °C», «✓ ±0 °C», «+2 °C» y «+4 °C». Eso sí lo entiendo clarito: si quiero ver qué pasa con dos grados más de calor, tengo que tocar «+2 °C». Si bajo con el ratón en la otra imagen, solo termina el gráfico y a la izquierda salen un montón de números con «MW» y porcentajes que me marean. Me quedo arriba y toco «+2 °C»."
+ }
+}

@@ -1,0 +1,54 @@
+{
+ "etiqueta": "develop",
+ "sesion": "escenario-2c",
+ "pantalla": "escenario-2c",
+ "persona": "ciudadana",
+ "repeticion": 3,
+ "modo": "imagen",
+ "modelo": "gemini-3.8-flash-medium",
+ "vistas": 2,
+ "inicio": "2026-11-14T03:08:34",
+ "intento": 1,
+ "segundos": 66.1,
+ "estado": "SUCCESS",
+ "uso": {
+  "input_tokens": 53607,
+  "output_tokens": 6956,
+  "thinking_tokens": 6214,
+  "cache_read_tokens": 25410,
+  "total_tokens": 60563
+ },
+ "respuesta": {
+  "dudas": [
+   {
+    "donde": "Si hiciera 2 °C más de lo pronosticado, a las 11:00 del 11 de marzo (la hora de mayor demanda) el modelo espera 4,934 MW: 15 MW más que en el escenario base (+0.3 %). El mayor cambio es a las 15:30: +25 MW.",
+    "imagen": 1,
+    "que": "Me da dos horas distintas y dos aumentos diferentes (15 MW a las 11:00 y +25 MW a las 15:30). No sé cuál de los dos cambios es el que vale ni qué significa MW."
+   },
+   {
+    "donde": "El modelo combinado usa solo la demanda, así que el clima y El Niño no lo mueven. Estos escenarios los calcula el modelo Base (XGBoost), con clima y El Niño.",
+    "imagen": 1,
+    "que": "Dice que el clima no lo mueve y menciona cosas técnicas como XGBoost; me confunde porque yo justamente toqué +2 °C para ver el calor."
+   },
+   {
+    "donde": "¿Acierta la hora? En 2026, la hora del máximo pronosticado de cada día cayó a ±1 h de la del máximo real en 61.5 % de los días (288); la referencia simple, en 56.9 %. El valor del máximo se equivocó en promedio 84 MW (la referencia, 143 MW).",
+    "imagen": 2,
+    "que": "Hay demasiados números, porcentajes y cálculos juntos. Me marea y no entiendo para qué sirve tanta matemática."
+   }
+  ],
+  "lectura": {
+   "seguridad": 2,
+   "texto": "En el recuadro celeste dice que a las 11:00 (del 11 de marzo) son «15 MW más» (+0.3 %), pero también dice que «el mayor cambio es a las 15:30: +25 MW». No entiendo qué es MW ni con cuál de las dos horas quedarme."
+  },
+  "palabras_no_entendidas": [
+   "MW",
+   "COES",
+   "ENFEN",
+   "SEIN",
+   "XGBoost",
+   "Chronos-2",
+   "Rampa fuerte"
+  ],
+  "voz_alta": "Ya marqué +2 °C. Veo un recuadro celeste que dice que a las 11:00 aumentaría 15 MW, pero al costado dice que a las 15:30 el mayor cambio es +25 MW. Me confundo: ¿cuál miro? Además, ¿qué es MW? Yo solo entiendo los kWh de mi recibo. El cuadro amarillo habla de COES, ENFEN y XGBoost, no entiendo nada de eso. Abajo hay un gráfico con curvas y horas que me marea. Al bajar a la segunda imagen hay más números: porcentajes, errores y algo de 'rampa fuerte'. Son demasiados datos técnicos para mí. Solo quería saber cuánta luz más se gasta con el calor, pero esto parece hecho para ingenieros."
+ }
+}

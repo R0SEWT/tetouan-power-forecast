@@ -1,0 +1,93 @@
+{
+ "etiqueta": "rite-ensayo",
+ "sesion": "entrada-hoy",
+ "pantalla": "hoy",
+ "persona": "profesora",
+ "repeticion": 1,
+ "modo": "imagen",
+ "modelo": "gemini-3.8-flash-medium",
+ "vistas": 2,
+ "inicio": "2026-11-14T02:46:24",
+ "intento": 1,
+ "segundos": 145.6,
+ "estado": "SUCCESS",
+ "uso": {
+  "input_tokens": 54705,
+  "output_tokens": 18197,
+  "thinking_tokens": 16867,
+  "cache_read_tokens": 25802,
+  "total_tokens": 72902
+ },
+ "respuesta": {
+  "dudas": [
+   {
+    "donde": "11/12/2026",
+    "imagen": 1,
+    "que": "El selector de fecha muestra 11/12/2026, lo que parece formato estadounidense (mes/día/año). Si hoy es 12 de noviembre (jueves 12 en el gráfico y 12/11 arriba), poner 11/12 confunde: parece 11 de diciembre."
+   },
+   {
+    "donde": "Registro en vivo · reconstruido: se calculó después de conocerse el real, con los datos que habría tenido",
+    "imagen": 2,
+    "que": "Hay una contradicción terminológica: si se calculó a posteriori ('después de conocerse el real'), es una evaluación retrospectiva o backtest, no un registro 'en vivo'."
+   },
+   {
+    "donde": "El pronóstico de hoy sale hacia las 10:00, cuando el COES publique la demanda de ayer. Mientras, abajo, el último que se emitió.",
+    "imagen": 1,
+    "que": "Si estamos a las 23:30, no me queda claro si la curva que veo para el resto del día se emitió hoy a las 10:00 o ayer a las 10:34."
+   }
+  ],
+  "le_importo": "Me importó la honestidad con la incertidumbre: que presenten intervalos del 80 % y reconozcan abiertamente que la cobertura empírica (73.2 %) se queda corta y el rango es más angosto de lo debido.",
+  "lectura": {
+   "seguridad": 5,
+   "texto": "En ese momento (23:30) se usaban 4,456 MW (dato real). Se había pronosticado 4,384 MW, y el intervalo estimado (rango del 80 %) estaba entre 4,282 – 4,476 MW."
+  },
+  "mira_primero": {
+   "imagen": 1,
+   "texto": "4,456 MW"
+  },
+  "momento": {
+   "texto": "Muestra hoy en vivo: jueves 12 de noviembre de 2026 a las 23:30 (la marca 'Ahora 23:30' en el gráfico y el botón 'Hoy' activo, con datos reales disponibles hasta esa hora).",
+   "tipo": "hoy_en_vivo"
+  },
+  "palabras_no_entendidas": [
+   "IEOD",
+   "COES"
+  ],
+  "para_quien": "Para analistas y operadores del sector eléctrico, planificadores del sistema energético, y profesores o estudiantes de series de tiempo que evalúan modelos predictivos.",
+  "por_que_volveria": "Para ver si hacia las 10:00 se actualiza el pronóstico con la demanda del día anterior y comprobar cómo sigue calibrándose la cobertura del intervalo del 80 %.",
+  "primeros_clics": [
+   {
+    "imagen": 1,
+    "por_que": "Es el selector de fecha con el icono de calendario ubicado bajo 'Ver otro día'; la región ya está seleccionada en 'Centro'.",
+    "seguridad": 5,
+    "tarea": "t1",
+    "texto_exacto": "11/12/2026"
+   },
+   {
+    "imagen": 1,
+    "por_que": "Es la pestaña principal en la barra superior dedicada a la fiabilidad y evaluación del pronóstico (si estoy abajo en la vista 2, también usaría 'Ver la confianza mes a mes →').",
+    "seguridad": 5,
+    "tarea": "t2",
+    "texto_exacto": "Confianza"
+   },
+   {
+    "imagen": 1,
+    "por_que": "Es el enlace azul que plantea exactamente la pregunta sobre el impacto de una mayor temperatura en la demanda eléctrica.",
+    "seguridad": 5,
+    "tarea": "t3",
+    "texto_exacto": "¿Y si hace más calor?"
+   },
+   {
+    "imagen": 1,
+    "por_que": "Es el botón que enlaza directamente con el análisis de cuándo falla más el pronóstico ante el calentamiento del mar frente a la costa.",
+    "seguridad": 5,
+    "tarea": "t4",
+    "texto_exacto": "El Niño costero (calentamiento del mar frente a la costa): extraordinario · ¿cuándo se equivoca más? →"
+   }
+  ],
+  "que_cambiarias": "Corregir el formato de fecha en el selector ('11/12/2026') a formato estándar en español (12/11/2026 o '12 nov 2026') para no confundir 12 de noviembre con 11 de diciembre.",
+  "que_es": "Es una aplicación interactiva que pronostica la demanda eléctrica del sistema peruano hora a hora para hoy, incorporando intervalos de predicción. Sirve para anticipar el consumo de energía y evaluar la precisión del modelo frente a los datos reales observados.",
+  "volveria_manana": "si",
+  "voz_alta": "Veo el título de demanda eléctrica y ese 4,456 MW enorme. Dicen que el dato real tiene un día de retraso. Miro el gráfico: la serie real negra y el pronóstico azul. Me gusta que incluyan el rango del 80 %; odio los pronósticos sin intervalo. Veo la línea vertical de 'Ahora 23:30' y el pico estimado en 5,297 MW. Bajo a la segunda pantalla. La tarjeta izquierda compara lo pronosticado (4,384 MW) con lo real (4,456 MW): error de 1.6 %, dentro del intervalo. En la tarjeta central comparan el error contra una referencia ingenua y dicen con franqueza que la cobertura empírica es 73.2 % y no 80 %. ¡Qué honestidad para un alumno! Al final veo que usan Chronos-2 ajustado con feriados."
+ }
+}
