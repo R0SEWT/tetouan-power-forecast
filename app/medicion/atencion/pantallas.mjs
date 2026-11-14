@@ -23,6 +23,10 @@ const AOI_AHORA = [
   { n: 'otras_cifras', s: '#ahCifras .kpi:not(:nth-child(1)):not(.dest):not(.kpi-pico) :is(.k,.n)' },
   { n: 'rotulos', s: '#ahLienzo .g-rotulo' }, // «Real (COES)» y «Pronóstico» sobre sus líneas (PR 7)
   { n: 'grafico', s: '#ahLienzo svg', modo: 'caja' },
+  // El selector de área: la elegida y cada una de las otras por separado (PR 12); lo que queda del control, «areas»
+  { n: 'area_elegida', s: '#ahAreas > [aria-current="page"]', modo: 'caja' },
+  { n: 'area_otra_1', s: '#ahAreas > a:nth-child(1 of :not([aria-current="page"]))', modo: 'caja' },
+  { n: 'area_otra_2', s: '#ahAreas > a:nth-child(2 of :not([aria-current="page"]))', modo: 'caja' },
   { n: 'areas', s: '#ahAreas', modo: 'caja' },
   { n: 'cuando', s: '.cuando', modo: 'caja' },
   { n: 'regimen', s: '#chipRegimen', modo: 'caja' },
