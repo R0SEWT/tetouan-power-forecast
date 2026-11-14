@@ -237,8 +237,7 @@ input[type='date']:focus-within {
    Barra superior con chips
    ========================================================================== */
 
-.chip-btn,
-.chip-static {
+.chip-btn {
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -270,16 +269,9 @@ input[type='date']:focus-within {
   justify-content: center;
 }
 
-.chip-btn svg,
-.chip-static svg {
+.chip-btn svg {
   flex-shrink: 0;
   stroke: currentColor;
-}
-
-.chip-aviso {
-  background: var(--aviso-bg);
-  border: 1px dashed var(--aviso-borde);
-  box-shadow: none;
 }
 
 .banner-error {
@@ -1321,12 +1313,6 @@ select {
   background: var(--bg-surface-elevated);
   font-size: 13px;
   font-weight: 700;
-}
-
-.btn-primario {
-  background: var(--text-main);
-  border-color: var(--text-main);
-  color: var(--bg-app);
 }
 
 /* ==========================================================================
@@ -3045,11 +3031,6 @@ table.cmp tr.nuestro td {
   background: var(--surface-3);
   color: var(--ink);
   border: 1px solid var(--line);
-}
-
-.volver-ahora {
-  font-size: 14px;
-  font-weight: 600;
 }
 
 /* ---- Responsivo ---- */
