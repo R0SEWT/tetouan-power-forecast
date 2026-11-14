@@ -714,7 +714,7 @@ function pintarAhora() {
   pintarAcierto(d);
   pintarBueno(d);
   pintarOrigen(d);
-  $('#ahPie').textContent = `Curva es un pronóstico abierto hecho con los datos públicos del COES (IEOD); no sirve para operar el sistema eléctrico. ${vivo ? `Pronóstico en vivo de ${nombreModeloAhora}, emitido cada mañana con la demanda del día anterior.` : `Pronósticos del modelo ${nombreModeloAhora.toLowerCase()}.`} El CSV trae el pronóstico, su rango y su error, no la serie real del COES, que no tiene una licencia publicada.`;
+  $('#ahPie').textContent = `Curva es un pronóstico abierto hecho con los datos públicos del COES; no sirve para operar el sistema eléctrico. ${vivo ? 'Pronóstico en vivo, emitido cada mañana con la demanda del día anterior.' : `Pronósticos del modelo ${nombreModeloAhora.toLowerCase()}.`} El CSV trae el pronóstico, su rango y su error, no la serie real del COES, que no tiene una licencia publicada.`;
   actualizarNav();
 }
 
@@ -908,7 +908,8 @@ function graficoAhora(el, d) {
   // …y hasta cuándo hay dato real, si cabe
   // Hasta dónde llega lo real: el fin del último periodo con dato (en un repaso de las 19:00, las 19:30)
   const hasta = vivo ? finTxt(d.datos_hasta).corto : finTxt(d.datos_hasta).corto.slice(7);
-  const reales = [`Real (COES) hasta ${vivo ? 'el' : 'las'} ${hasta}`, 'Real (COES)', 'Real'].find((t) => movil ? t === 'Real' : t.length * 7.4 + 30 < x(io) - m.l);
+  // En un repaso se nombra por su media hora, como la pastilla y el título («de las 19:00», no «hasta las 19:30»)
+  const reales = [vivo ? `Real (COES) hasta el ${hasta}` : `Real (COES) hasta la media hora de las ${horaDe(d.origen)}`, 'Real (COES)', 'Real'].find((t) => movil ? t === 'Real' : t.length * 7.4 + 30 < x(io) - m.l);
   if (io > 0 && reales) s += `<text class="g-rotulo real" x="${(m.l + 14).toFixed(1)}" y="${m.t - 8}">${esc(reales)}</text>`;
   marcas(lo, hi, movil ? 3 : 4).filter((t) => y(t) >= m.t - 2 && y(t) <= H - m.b + 1).forEach((t) => {
     s += `<line class="g-rejilla" x1="${m.l}" x2="${W - m.r}" y1="${y(t).toFixed(1)}" y2="${y(t).toFixed(1)}"/>`;
@@ -1267,7 +1268,7 @@ function pintarAyer(d) {
     cont.innerHTML = '<p class="sub">Todavía no hay un pronóstico verificado contra el real para esta hora.</p>';
     return;
   }
-  const dif = y.diferencia;
+  const dif = Math.round(y.pronostico) - Math.round(y.real); // con las cifras que se ven, para que la resta cuadre
   const porc = (100 * Math.abs(dif)) / y.real;
   const fuente = y.fuente === 'historial'
     ? `Historial · modelo ${esc(d.modelo_nombre.replace(/\s*\(.*\)\s*$/, '').toLowerCase())}`
@@ -1362,12 +1363,14 @@ function pintarOrigen(d) {
   const repaso = A.fecha ? { fecha: A.fecha, hora: A.hora } : null;
   let html;
   if (d.modelo.startsWith('en_vivo:')) {
-    html = `<p class="sub">${esc(d.modelo_nombre)}: un modelo fundacional de series de tiempo, ajustado a la demanda del SEIN (Sistema Eléctrico Interconectado Nacional) con datos hasta 2024 y con los feriados de Perú. Cada mañana, con la demanda de ayer que publica el COES, pronostica las 48 medias horas de hoy. Queda registrado con su hora de emisión antes de conocerse el real y no se reescribe.</p>`;
+    html = '<p class="sub">Lo calcula un modelo de series de tiempo ajustado a la demanda del SEIN (Sistema Eléctrico Interconectado Nacional) con datos hasta 2024 y con los feriados de Perú. Cada mañana, con la demanda de ayer que publica el COES, pronostica las 48 medias horas de hoy. Queda registrado con su hora de emisión antes de conocerse el real y no se reescribe.</p>'
+      + `<details class="datos"><summary>El modelo, por su nombre</summary><p class="nota-pie">${esc(d.modelo_nombre)}: un modelo fundacional de series de tiempo (Chronos-2), ajustado a esta demanda.</p></details>`;
   } else if (y && y.componentes && y.componentes.length) {
     const suma = y.componentes.reduce((t, c) => t + c.peso * (c.valores[0] || 0), 0);
-    html = `<p class="sub">Lo calcula el modelo <b>${esc(d.modelo_nombre.replace(/\s*\(.*\)\s*$/, '').toLowerCase())}</b>, el de menor error en 2026. Lo que se dijo para las ${esc(horaDe(y.fecha_hora))}:</p>`
+    html = `<p class="sub">Lo calcula el modelo <b>${esc(d.modelo_nombre.replace(/\s*\(.*\)\s*$/, '').toLowerCase())}</b>, el de menor error en 2026: junta dos pronósticos con pesos fijos. Usa solo la demanda y el calendario, no el clima; los escenarios de «¿Y si hace más calor?» los calcula otro modelo, que sí lo usa.</p>`
+      + `<details class="datos"><summary>Cómo se juntan, con sus nombres</summary><p class="nota-pie">Lo que se dijo para las ${esc(horaDe(y.fecha_hora))}:</p>`
       + `<div class="formula">${y.componentes.map((c) => `${mw(c.valores[0])} × ${c.peso.toFixed(2)} <span class="muted">(${esc(c.nombre)})</span>`).join('<br>+ ')}<br>= <b>${mw(suma)} MW</b></div>`
-      + '<p class="nota-pie">Pesos fijados con la validación de 2025 y aplicados tal cual a 2026. Usa solo la demanda y el calendario; no usa el clima. Chronos-2 es un modelo fundacional de series de tiempo, ajustado a esta demanda.</p>';
+      + '<p class="nota-pie">Pesos fijados con la validación de 2025 y aplicados tal cual a 2026. Chronos-2 es un modelo fundacional de series de tiempo, ajustado a esta demanda.</p></details>';
   } else {
     const m = modeloPorId(d.modelo);
     html = `<p class="sub">Lo calcula el modelo <b>${esc(d.modelo_nombre)}</b>. ${esc((m && m.descripcion) || '')}</p>`;
