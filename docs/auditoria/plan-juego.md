@@ -44,14 +44,14 @@ de [`plan.md`](plan.md), se dice; las demás son nuevas y se proponen para esa t
 
 | # | Mejora | Tropiezo / idea | Medida: base → umbral | Relación con `plan.md` |
 |---|---|---|---|---|
-| J1 | **«¿Y si hace más calor?» también en vivo**: el enlace en la respuesta de hoy, hacia los escenarios del último día con modelo (o, cuando exista, un escenario sobre el pronóstico vivo) | Tropiezo 1 (sev. 4, 15 de 15) | Primer clic de T3 desde hoy: 0 % → ≥ 80 %, con «no sabe» ≤ 10 %. Ensayo: 0 → 100 % | Nueva; cabe antes del PR 5 (es una línea) |
-| J2 | **El chip de El Niño deja de mentir**: o es un enlace a «Confianza» que dice a dónde lleva («¿cuándo se equivoca más? →»), o deja de verse como pastilla | Tropiezo 2 (sev. 3, 15 de 15) | Falsas affordances en T4: 15 de 15 → 0; primer clic de T4 desde las tres entradas: 0 % → ≥ 80 %. Ensayo (como enlace): 0 → 100 % | Nueva; junto con J1 |
-| J3 | **De madrugada, decir qué hora es de verdad**: entre la medianoche y la publicación del día, «Ahora» no marca una hora de hace un día; el gráfico se titula con sus fechas, y «emitido» y «reconstruido» se explican una vez | Tropiezo 3 | Sesiones de madrugada que dudan en «Lo que dijimos ayer» o en el párrafo de modo: 12 de 15 → ≤ 3; «sabe qué momento muestra» (que hoy depende de cómo lea «Hoy») 100 % con imagen y en solo texto | Completa el PR 2 (que ya agregó el aviso de «todavía no llega») |
+| J1 | **«¿Y si hace más calor?» también en vivo**: el enlace en la respuesta de hoy, hacia los escenarios del último día con modelo (o, cuando exista, un escenario sobre el pronóstico vivo) | Tropiezo 1 (sev. 4, 15 de 15) | Primer clic de T3 desde hoy: 0 % → ≥ 80 %, con «no sabe» ≤ 10 %. Ensayo: 0 → 100 % | Nueva; cabe antes del PR 5 (es una línea). **Hecha en el PR 9: 0 → 100 %** |
+| J2 | **El chip de El Niño deja de mentir**: o es un enlace a «Confianza» que dice a dónde lleva («¿cuándo se equivoca más? →»), o deja de verse como pastilla | Tropiezo 2 (sev. 3, 15 de 15) | Falsas affordances en T4: 15 de 15 → 0; primer clic de T4 desde las tres entradas: 0 % → ≥ 80 %. Ensayo (como enlace): 0 → 100 % | Nueva; junto con J1. **Hecha en el PR 9: T4 0 → 100 % en las tres entradas; falsas affordances → 0** |
+| J3 | **De madrugada, decir qué hora es de verdad**: entre la medianoche y la publicación del día, «Ahora» no marca una hora de hace un día; el gráfico se titula con sus fechas, y «emitido» y «reconstruido» se explican una vez | Tropiezo 3 | Sesiones de madrugada que dudan en «Lo que dijimos ayer» o en el párrafo de modo: 12 de 15 → ≤ 3; «sabe qué momento muestra» (que hoy depende de cómo lea «Hoy») 100 % con imagen y en solo texto | Completa el PR 2 (que ya agregó el aviso de «todavía no llega»). **Hecha en el PR 9** (medida nueva: explica qué día es hoy y hasta cuándo hay real 0 → 5 de 5) |
 | J4 | **Fecha dd/mm/aaaa y hora de 24 h** | Tropiezo 4; lo que más piden cambiar | Sesiones que dudan en los controles de fecha y hora: 11 de 15 (hoy) y 10 de 15 (19:00) → ≤ 2; «que_cambiarias» que mencionen la fecha → 0 | **Es el PR 6**: el playtest le agrega la medida |
-| J5 | **«Detalle» con un solo modelo a la vista en los escenarios**: el panel dice qué modelo calcula el escenario, o los escenarios se mudan a «Ahora» con su propio modelo; una sola cifra de cambio | Tropiezo 5 (15 de 15 sesiones) | Sesiones que dudan en el panel de controles: 15 de 15 en `escenarios` y en `escenario-2c` → ≤ 3 | Entra en el **PR 13** (fundir «Detalle»), decisión del dueño |
+| J5 | **«Detalle» con un solo modelo a la vista en los escenarios**: el panel dice qué modelo calcula el escenario, o los escenarios se mudan a «Ahora» con su propio modelo; una sola cifra de cambio | Tropiezo 5 (15 de 15 sesiones) | Sesiones que dudan en el panel de controles: 15 de 15 en `escenarios` y en `escenario-2c` → ≤ 3 | Entra en el **PR 13** (fundir «Detalle»), decisión del dueño. **En parte en el PR 9**: el panel dice qué modelo calcula (dudas en el panel 10 de 10 → 6 de 10 y 1 de 7) |
 | J6 | **Los nombres del modelo fuera del camino**: «Chronos-2», «Simons», «IEOD» pasan a una ficha técnica plegada; en la primera pantalla, «el pronóstico» | Jerga persistente pese al PR 4 | Términos no entendidos por sesión en las entradas: 3.1–3.4 → ≤ 2; «Chronos-2» citado: 12 de 15 → ≤ 3 | Sigue al PR 4 (que las definió: definir no bastó) |
 | J7 | **«Confianza» sin referencias que nadie conoce**: PJM y Elia, con una frase de quiénes son o en una nota; MAE/MAPE/WAPE como «error medio en MW» y «en %» | Severidad 1, pero 15 de 15 | Términos en «Confianza»: 3.4 → ≤ 2; PJM/Elia citados: 15 de 15 → ≤ 3 | Junto con el **PR 10** (confianza de un vistazo) |
-| J8 | **Lo que hace volver, a la vista**: «Lo que dijimos ayer» en el recorrido (bucle de un día) y el CSV con la demanda real | Lo que les importó: la rendición de cuentas (60 %); lo que pidieron Diego y Luis | Con personas (M11): de cinco, cuántos dicen para qué la abrirían mañana; en el playtest, solo como pista: «le importó la rendición de cuentas» ≥ 60 % en las tres entradas | **PR 9** («Lo que dijimos ayer» en el recorrido); el CSV, nuevo |
+| J8 | **Lo que hace volver, a la vista**: «Lo que dijimos ayer» en el recorrido (bucle de un día) y el CSV con la demanda real | Lo que les importó: la rendición de cuentas (60 %); lo que pidieron Diego y Luis | Con personas (M11): de cinco, cuántos dicen para qué la abrirían mañana; en el playtest, solo como pista: «le importó la rendición de cuentas» ≥ 60 % en las tres entradas | **PR 9** («Lo que dijimos ayer» en el recorrido); el CSV, nuevo. **Probado y revertido** en el PR 9 (la línea «¿Acertamos ayer?»: dentro del ruido) |
 
 **Las tres primeras que haría:** J1 y J2 juntas (los dos tropiezos más graves, una línea cada uno, y el ensayo ya
 mostró que el instrumento las ve) y J4 (el PR 6, que es lo que todos los perfiles piden). J3 va después, porque toca
@@ -60,6 +60,33 @@ el modo en vivo y conviene medirlo de madrugada y de día.
 **Lo que no se propone** (sería maquillaje, [`juego.md`](juego.md) §1.6): rachas de días, insignias, celebraciones
 cuando el pronóstico acierta o recordatorios para volver. Para Rosa, que quiere saber si «la luz va a alcanzar», la
 respuesta no es un juego sino el nivel Ciudadano del concepto C ([`onboarding.md`](onboarding.md)), decisión del dueño.
+
+### Estado tras la ronda RITE del PR 9 (14-nov, madrugada)
+
+Un ciclo RITE sobre la punta de la serie (`hcd/08-selector-fecha` con este método), con el modelo del evaluador fijado
+en `jugar.py`, 5 personas y 2 repeticiones mientras hubo cuota (las rondas 2, 4 y 5 quedaron con una repetición: el
+evaluador se quedó sin cuota a las 05:05 y no vuelve hasta pasadas las 07:00). Corridas en
+[`app/medicion/juego/resultados/`](../../app/medicion/juego/resultados/) (`r0` = antes; `r1`–`r5` = después de cada
+ronda) y comparaciones `comparacion-r0-r1.md`, `-r1-r2`, `-r0-r3`, `-r2-r4`, `-r4-r5`.
+
+| Ronda | Tropiezo | Cambio | Medida: antes → después | Veredicto |
+|---|---|---|---|---|
+| 1 (J1 + J2) | T3 sin camino desde hoy; el chip de El Niño parece botón | «¿Y si hace más calor?» también en vivo (escenarios del último día con clima); el chip, enlace a «Con El Niño» en «Confianza» | Primer clic T3 hoy 0 → **100 %**; T4 en hoy / 10:30 / 19:00 0 / 0 / 0 → **100 / 100 / 100 %**; falsas affordances 28 de 30 → **0**; dudas 10:30 3.4 → 3.0 | **Se queda** (supera el ruido) |
+| 2 (J3) | De madrugada, «Ahora 23:30» del jueves y horas que no cuadran | Título con el día de hoy; «Último dato real · jueves, 23:30» en la cifra y la pastilla; el gráfico nombra el día real y el pronosticado; sin «en 1 hora» ni «mañana»; «de hoy» solo si es hoy | Explica qué día es hoy y hasta cuándo hay real: 0–1 de 10 → **5 de 5**; contradicción «Ahora 23:30» vs. 10:00: 4–5 de 10 → **0 de 5** | **Se queda** |
+| 3 (J5) | «Detalle» marca un modelo y el escenario lo calcula otro | El panel lo dice junto a «Datos que usa»; el aviso nombra primero al modelo que calcula | Sesiones que dudan en el panel: 10 de 10 → **6 de 10** (escenarios) y **1 de 7** (+2 °C); dudas en +2 °C 2.2 → 2.9: se mudaron a los **dos picos** y las **dos cifras de cambio** | **Se queda**, con el siguiente tropiezo anotado |
+| 4 (J8) | «Lo que dijimos ayer» fuera de la primera vista | Línea «¿Acertamos ayer?» bajo la respuesta (en vivo) | Volvería 80 → 80 %; motivo de volver = rendición de cuentas 0 → 1 de 5; la duda por «reconstruido» se mudó a la línea (4 de 5) | **Revertida** (dentro del ruido) |
+| 5 | Lo que un evaluador externo vio descuidado (verificado) | Título de madrugada sin pregunta incumplible; campo de fecha = hoy con «Hoy» marcado; «Reconstruido» sin «Registro en vivo»; eje sin rótulos bajo la pastilla; en el repaso, el texto del gráfico ya no cita «Ahora» | «En vivo» y «reconstruido» a la vez: 4 de 5 → **0 de 5**; «Hoy» marcado y otra fecha: 1 de 5 → **0** | **Se queda** |
+| 6 | Repaso: «hasta las 19:30» contra las 19:00 (9 citas); Simons/Chronos-2/IEOD (80–100 %) | Rótulo por media hora; fórmula y nombres plegados | **Sin medir** (sin cuota) | **Revertida** hasta medirla (`git revert` del revert la reaplica) |
+
+Sin playtest (no cambian lo que se ve, o lo mide el arnés): la ficha técnica, la tabla y el CSV bajan al pedirlos
+(peso de «Ahora» 52 → 51 KB) y, de madrugada, los días de esta semana se nombran sin número (cifras a la vista en la
+entrada 12 → 5; antes de la serie, 4).
+
+**Tropiezos abiertos, en orden:** (1) «reconstruido»: el pronóstico del jueves 12 se reconstruyó después y 4 de 5
+desconfían de cualquier veredicto que lo use (decisión: mostrar «¿acertamos?» solo con pronósticos emitidos antes);
+(2) en «Detalle», dos picos de dos modelos (4,977 MW a las 14:30 en el panel, 4,934 MW a las 11:00 en el escenario) y
+dos cifras de cambio (15 y 25 MW): es el PR 13; (3) los nombres del modelo en los repasos (ronda 6, por medir);
+(4) de madrugada, el título dice sábado y la cifra grande es del jueves (4 de 5 lo notan, aunque lo entienden).
 
 ## 3. El protocolo de 30 minutos con cinco personas
 
