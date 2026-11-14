@@ -42,6 +42,7 @@ async function cargarConfianza() {
     $('#cfTitular').textContent = 'No pudimos calcular la confianza de esta área';
     $('#cfLead').textContent = textoError(conf.reason);
     $('#cfStats').innerHTML = '';
+    $('#cfCobVista').innerHTML = '';
     ['#cfMes', '#cfCob', '#cfVivo', '#cfDia', '#cfSesgo', '#cfNino'].forEach((s) => { $(s).innerHTML = '<p class="vacio">Sin datos por ahora.</p>'; });
     $('#cfMundo').innerHTML = '';
     return;
@@ -99,20 +100,37 @@ function pintarConfianzaPantalla() {
   $('#cfStats').innerHTML = [
     `<div class="stat"><p class="k">Error medio 2026</p><p class="n">${nf1.format(t.mae_modelo)}<small> MW</small></p><p class="d">${nf1.format(conf.mape_pct)} % de la demanda (MAPE)</p></div>`,
     `<div class="stat"><p class="k">Frente a la referencia</p><p class="n">${mejora >= 0 ? '−' : '+'}${nf0.format(Math.abs(mejora))}<small> %</small></p><p class="d">${nf1.format(t.mae_referencia)} MW la referencia</p></div>`,
-    `<div class="stat"><p class="k">Cobertura del rango</p><p class="n">${nf1.format(t.cobertura_pct)}<small> %</small></p><p class="d">meta ${nf0.format(meta)} %</p><p class="estado-meta ${vCob.clase}">${ICONO[vCob.clase]}${esc(capital(vCob.texto))}</p></div>`,
     ac ? `<div class="stat"><p class="k">Hora del pico (±1 h)</p><p class="n">${nf1.format(ac.pct_hora)}<small> %</small></p><p class="d">de ${nf0.format(ac.dias)} días; referencia ${nf1.format(ac.pct_hora_referencia)} %</p></div>`
       : `<div class="stat"><p class="k">Medias horas medidas</p><p class="n">${nf0.format(t.periodos)}</p><p class="d">de 2026</p></div>`,
     statNino(diag),
   ].join('');
 
   pintarMesAMes(seg, conf);
-  pintarCoberturaConf(seg);
+  pintarCoberturaVista(t.cobertura_pct, meta, vCob, rVivo, vivo);
+  pintarCoberturaConf(seg, rVivo, vivo);
   pintarVivoConf(vivo, conf);
   pintarDiaADia(conf);
   pintarSesgoConf(conf);
   pintarNinoConf(diag);
   pintarMundo(conf);
   $('#cfPie').textContent = `Modelo: ${(modeloPorId(conf.modelo) || { nombre: conf.modelo }).nombre}. Prueba de 2026: del 1 de enero al ${fechaCorta((S.resumen && S.resumen.fechas_corte.prueba_hasta) || '2026-10-15')}, con todas las medias horas que tienen dato real. El registro en vivo usa otro modelo (${(vivo && vivo.modelo) || 'Chronos-2 ajustado'}): sus cifras van aparte.`;
+}
+
+// La cobertura del rango, junto al titular: la de la prueba de 2026 y la del registro en vivo, una al lado de la otra.
+// Si en vivo el rango queda corto, el aviso va con el veredicto de la prueba, no debajo de un «Cumple lo que promete»
+// que lo contradice
+function pintarCoberturaVista(cubrio, meta, vCob, rVivo, vivo) {
+  const vv = rVivo ? veredictoCobertura(rVivo.cobertura_pct, vivo.nivel_rango_pct) : null;
+  const fila = (clase, titulo, pct, nivel, v, extra) => `<div class="cob-fila${clase}"><p class="k">${titulo}</p>`
+    + `<p class="n">${nf1.format(pct)}<small> %</small></p><p class="d">rango del ${nf0.format(nivel)} %</p>`
+    + `<p class="estado-meta ${v.clase}">${ICONO[v.clase]}${esc(capital(v.texto))}${extra}</p></div>`;
+  let html = '<p class="cob-tit">¿El rango cumple lo que promete?</p>'
+    + fila('', 'Prueba de 2026', cubrio, meta, vCob, '');
+  if (vv) {
+    const debe = vivo.nivel_rango_pct % 10 === 0 ? `: cubre ${nf0.format(rVivo.cobertura_pct / 10)} de cada 10, no ${vivo.nivel_rango_pct / 10}` : '';
+    html += fila(vv.clase === 'bien' ? '' : ` aviso-vivo ${vv.clase}`, `En vivo, desde el ${esc(fechaCorta(rVivo.desde).replace(/ \d{4}$/, ''))}`, rVivo.cobertura_pct, vivo.nivel_rango_pct, vv, vv.clase === 'bien' ? '' : debe);
+  }
+  $('#cfCobVista').innerHTML = html;
 }
 
 function statNino(diag) {
@@ -167,7 +185,7 @@ function barrasMeses(el, meses) {
   el.innerHTML = `${s}</svg>`;
 }
 
-function pintarCoberturaConf(seg) {
+function pintarCoberturaConf(seg, rVivo, vivo) {
   const cont = $('#cfCob');
   const meta = seg.meta_cobertura_pct;
   const t = seg.total.cobertura_pct;
@@ -178,8 +196,16 @@ function pintarCoberturaConf(seg) {
   cont.innerHTML = `<p class="sub">Parte de las medias horas en que lo real cayó dentro del rango del ${nf0.format(meta)} %. Banda verde: de ${nf0.format(meta - 5)} a ${nf0.format(meta + 5)} %.</p>`
     + '<div id="cfCobG" class="chart lienzo" style="min-height:200px"></div>'
     + `<div class="veredicto ${v.clase}">${ICONO[v.clase]}<span>En el año cubrió el ${nf1.format(t)} %: ${esc(v.texto)}${v.porque ? `; ${esc(v.porque)}` : ''}.${cortos.length ? ` Quedó corto en ${esc(cortos.join(', '))}.` : ''}${anchos.length ? ` Fue más ancho de lo necesario en ${esc(anchos.join(', '))}.` : ''}</span></div>`
+    + avisoVivoCob(rVivo, vivo)
     + `<p class="nota-pie">Puntos destacados: ${fuera.length ? 'meses a más de 5 puntos de la meta' : 'ninguno: todos los meses quedan a 5 puntos de la meta o menos'}.</p>`;
   lineaCobertura($('#cfCobG'), seg.meses, meta);
+}
+
+// En la tarjeta de cobertura, el registro en vivo al lado del veredicto de la prueba (si allí el rango queda corto)
+function avisoVivoCob(rVivo, vivo) {
+  const vv = rVivo ? veredictoCobertura(rVivo.cobertura_pct, vivo.nivel_rango_pct) : null;
+  if (!vv || vv.clase === 'bien') return '';
+  return `<div class="veredicto ${vv.clase} aviso-vivo" style="margin-top:8px">${ICONO[vv.clase]}<span>En vivo, desde el ${esc(fechaDiaMes(rVivo.desde))}, el rango del ${vivo.nivel_rango_pct} % cubrió el ${nf1.format(rVivo.cobertura_pct)} %: ${esc(vv.texto)}. Más abajo, en «El seguimiento en vivo».</span></div>`;
 }
 
 function lineaCobertura(el, meses, meta) {
@@ -371,6 +397,7 @@ const HTML_CONFIANZA = `
     </div>
   </div>
   <h1 id="cfTitular" class="titular" tabindex="-1">Calculando la confianza…</h1>
+  <aside id="cfCobVista" class="cob-vista" aria-label="Cobertura del rango"></aside>
   <p id="cfLead" class="lead"></p>
   <section id="cfStats" class="stats" aria-label="Cifras de 2026"></section>
   <div class="grid-conf">
