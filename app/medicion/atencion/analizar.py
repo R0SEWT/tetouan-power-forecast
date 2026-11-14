@@ -66,7 +66,8 @@ PREGUNTAS_5S = [
     ("¿Qué es esto?", ["que_es"], r"(?i)demanda|pron[oó]stic"),
     ("¿De qué zona habla?", ["titulo"], r"Norte|Centro|Sur"),
     ("¿Cuánta demanda hay ahora?", ["cifra_ahora"], r"\d"),
-    ("¿Es real o pronóstico, y hasta cuándo hay datos?", ["estado_datos", "modo"], r"COES|[Rr]eal"),
+    # Desde el PR 7 también responden los rótulos de las líneas del gráfico («Real (COES)», «Pronóstico»)
+    ("¿Es real o pronóstico, y hasta cuándo hay datos?", ["estado_datos", "modo", "rotulos"], r"COES|[Rr]eal"),
     ("¿Viene más o menos demanda?", ["grafico", "pico_24h"], None),
 ]
 UMBRAL_5S = 0.05  # cuota de atención a 7 s que se exige a la respuesta (fijado antes de medir)
