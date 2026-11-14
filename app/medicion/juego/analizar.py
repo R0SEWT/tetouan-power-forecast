@@ -1,6 +1,6 @@
 """Playtest sintético, paso 3: codifica las respuestas del evaluador y calcula las medidas por pantalla.
 
-La codificación es por reglas (sin otro modelo de lenguaje), para que dos corridas del análisis den lo mismo:
+La codificación es por reglas (sin otro evaluador automático), para que dos corridas del análisis den lo mismo:
 
 - **Primer clic**: el texto que cita el jugador se ubica entre los controles visibles de esa pantalla
   (``pantallas.json``, por coincidencia de texto; una fecha o una hora citadas se ubican en su campo). Se califica

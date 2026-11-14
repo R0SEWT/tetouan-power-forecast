@@ -34,7 +34,7 @@ from pathlib import Path
 
 AQUI = Path(__file__).resolve().parent
 # El modelo del evaluador, fijado para que las corridas sean comparables. La línea base se jugó con este; una primera
-# corrida con gemini-4-argon-medium (que se quedó sin cuota) queda en crudo/imagen-argon como control entre modelos.
+# corrida con otro modelo (que se quedó sin cuota) queda en crudo/imagen-argon como control entre modelos.
 MODELO = "gemini-3.8-flash-medium"
 
 SESIONES = {
