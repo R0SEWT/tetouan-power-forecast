@@ -728,8 +728,8 @@ function preguntaDelDia(d) {
       : 'Mientras, abajo, el último que se emitió.';
     return {
       q: `Hoy, ${diaNum(hoy)}: el pronóstico sale hacia las 10:00`,
-      html: cifra(`Último dato real · ${esc(diaCorto(c.fecha_hora))}, ${esc(horaDe(c.fecha_hora))}`, 'real', 'Dato del COES, en megavatios (MW)')
-        + `<p class="r-frase">Sale cuando el COES publique la demanda del ${esc(diaNum(sinReal))}. ${queSeVe}</p>`,
+      html: cifra(`Último dato real · ${esc(DIAS[partesFecha(c.fecha_hora).dow])}, ${esc(horaDe(c.fecha_hora))}`, 'real', 'Dato del COES, en megavatios (MW)')
+        + `<p class="r-frase">Sale cuando el COES publique la demanda del ${esc(DIAS[partesFecha(sinReal).dow])}. ${queSeVe}</p>`,
       sinAviso: true,
     };
   }
@@ -738,7 +738,7 @@ function preguntaDelDia(d) {
   if (p.fecha_hora > d.ahora) {
     return {
       q: '¿A qué hora se usará más electricidad hoy?',
-      html: `${ahora}<p class="r-frase">A las ${esc(horaDe(p.fecha_hora))}, con unos <b>${mw(p.valor)} MW</b>: ${cambioPct(p.valor, c.valor)} % más que ahora.</p>`,
+      html: `${ahora}<p class="r-frase">A las ${esc(horaDe(p.fecha_hora))}, con unos <b>${mw(p.valor)} MW</b>: ${cambioPct(p.valor, c.valor)}\u00a0% más que ahora.</p>`,
     };
   }
   const hoy = d.ahora.slice(0, 10);
@@ -754,7 +754,7 @@ function preguntaDelDia(d) {
   const q = `¿Cuánta electricidad se usará ${hora >= 18 ? 'esta noche' : 'el resto del día'}?`;
   const iMax = resto.reduce((a, i) => (d.pronostico[i] > d.pronostico[a] ? i : a), resto[0]);
   if (d.pronostico[iMax] > c.valor * 1.01) {
-    return { q, html: `${ahora}<p class="r-frase">Subirá hasta unos <b>${mw(d.pronostico[iMax])} MW</b> a las ${esc(horaDe(d.fecha_hora[iMax]))}: ${cambioPct(d.pronostico[iMax], c.valor)} % más que ahora.</p>` };
+    return { q, html: `${ahora}<p class="r-frase">Subirá hasta unos <b>${mw(d.pronostico[iMax])} MW</b> a las ${esc(horaDe(d.fecha_hora[iMax]))}: ${cambioPct(d.pronostico[iMax], c.valor)}\u00a0% más que ahora.</p>` };
   }
   const iFin = resto[resto.length - 1];
   const v = d.pronostico[iFin];
@@ -762,7 +762,7 @@ function preguntaDelDia(d) {
   // Una subida menor que el 1 % (las mayores ya se dijeron arriba) no se cuenta como bajada
   return {
     q,
-    html: `${ahora}<p class="r-frase">${v >= c.valor || pct < 1 ? `Se mantendrá cerca de <b>${mw(v)} MW</b> hasta las ${esc(horaDe(d.fecha_hora[iFin]))}.` : `Irá bajando: unos <b>${mw(v)} MW</b> a las ${esc(horaDe(d.fecha_hora[iFin]))}, ${pct} % menos que ahora.`}</p>`,
+    html: `${ahora}<p class="r-frase">${v >= c.valor || pct < 1 ? `Se mantendrá cerca de <b>${mw(v)} MW</b> hasta las ${esc(horaDe(d.fecha_hora[iFin]))}.` : `Irá bajando: unos <b>${mw(v)} MW</b> a las ${esc(horaDe(d.fecha_hora[iFin]))}, ${pct}\u00a0% menos que ahora.`}</p>`,
   };
 }
 
@@ -1183,7 +1183,7 @@ function pintarAcierto(d) {
   const dentro = idx.filter((i) => d.real[i] >= d.inferior[i] && d.real[i] <= d.superior[i]).length;
   const cumple = dentro / idx.length >= d.nivel_rango_pct / 100;
   const reconstruido = idx.some((i) => d.tipo && d.tipo[i] === 'reconstruido');
-  const cuando = dia === sumarDias(hoyLima(), -1) ? 'ayer' : `el ${diaNum(dia)}`;
+  const cuando = dia === sumarDias(hoyLima(), -1) ? 'ayer' : `el ${DIAS[partesFecha(dia).dow]}`; // de esta semana: sin número
   el.className = `acierto ${cumple ? 'bien' : 'ojo'}`;
   el.innerHTML = `${cumple ? ICONO.bien : ICONO.ojo}<span><b>¿Acertamos ${esc(cuando)}?</b> `
     + `Lo real cayó dentro del rango en ${dentro} de ${idx.length} medias horas${cumple ? '' : ', menos de lo que promete'}. `
