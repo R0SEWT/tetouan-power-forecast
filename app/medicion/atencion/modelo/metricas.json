@@ -1,0 +1,322 @@
+{
+ "zenodo": {
+  "licencia": {
+   "id": "cc-by-4.0"
+  },
+  "doi": "10.5281/zenodo.8010312",
+  "titulo": "UEyes: Understanding Visual Saliency across User Interface Types"
+ },
+ "3s": {
+  "n_train": 1872,
+  "n_test": 108,
+  "sesgo_central": {
+   "desktop": {
+    "cc": 0.363,
+    "kld": 1.411,
+    "n": 27
+   },
+   "mobile": {
+    "cc": 0.498,
+    "kld": 1.025,
+    "n": 27
+   },
+   "poster": {
+    "cc": 0.435,
+    "kld": 1.106,
+    "n": 27
+   },
+   "web": {
+    "cc": 0.444,
+    "kld": 1.29,
+    "n": 27
+   },
+   "todo": {
+    "cc": 0.435,
+    "kld": 1.208,
+    "n": 108
+   }
+  },
+  "lector": {
+   "desktop": {
+    "cc": 0.655,
+    "kld": 0.763,
+    "n": 27
+   },
+   "mobile": {
+    "cc": 0.753,
+    "kld": 0.48,
+    "n": 27
+   },
+   "poster": {
+    "cc": 0.704,
+    "kld": 0.57,
+    "n": 27
+   },
+   "web": {
+    "cc": 0.648,
+    "kld": 0.732,
+    "n": 27
+   },
+   "todo": {
+    "cc": 0.69,
+    "kld": 0.636,
+    "n": 108
+   }
+  }
+ },
+ "7s": {
+  "n_train": 1872,
+  "n_test": 108,
+  "sesgo_central": {
+   "desktop": {
+    "cc": 0.351,
+    "kld": 1.022,
+    "n": 27
+   },
+   "mobile": {
+    "cc": 0.483,
+    "kld": 0.764,
+    "n": 27
+   },
+   "poster": {
+    "cc": 0.464,
+    "kld": 0.805,
+    "n": 27
+   },
+   "web": {
+    "cc": 0.431,
+    "kld": 0.902,
+    "n": 27
+   },
+   "todo": {
+    "cc": 0.432,
+    "kld": 0.873,
+    "n": 108
+   }
+  },
+  "lector": {
+   "desktop": {
+    "cc": 0.701,
+    "kld": 0.521,
+    "n": 27
+   },
+   "mobile": {
+    "cc": 0.788,
+    "kld": 0.312,
+    "n": 27
+   },
+   "poster": {
+    "cc": 0.733,
+    "kld": 0.381,
+    "n": 27
+   },
+   "web": {
+    "cc": 0.65,
+    "kld": 0.5,
+    "n": 27
+   },
+   "todo": {
+    "cc": 0.718,
+    "kld": 0.428,
+    "n": 108
+   }
+  }
+ },
+ "1s": {
+  "n_train": 1872,
+  "n_test": 108,
+  "sesgo_central": {
+   "desktop": {
+    "cc": 0.361,
+    "kld": 1.774,
+    "n": 27
+   },
+   "mobile": {
+    "cc": 0.449,
+    "kld": 1.373,
+    "n": 27
+   },
+   "poster": {
+    "cc": 0.47,
+    "kld": 1.376,
+    "n": 27
+   },
+   "web": {
+    "cc": 0.385,
+    "kld": 1.693,
+    "n": 27
+   },
+   "todo": {
+    "cc": 0.416,
+    "kld": 1.554,
+    "n": 108
+   }
+  },
+  "lector": {
+   "desktop": {
+    "cc": 0.537,
+    "kld": 1.252,
+    "n": 27
+   },
+   "mobile": {
+    "cc": 0.629,
+    "kld": 0.904,
+    "n": 27
+   },
+   "poster": {
+    "cc": 0.578,
+    "kld": 1.035,
+    "n": 27
+   },
+   "web": {
+    "cc": 0.509,
+    "kld": 1.271,
+    "n": 27
+   },
+   "todo": {
+    "cc": 0.563,
+    "kld": 1.115,
+    "n": 108
+   }
+  }
+ },
+ "validacion": {
+  "dif_pesos_timm_vs_hf": 0.0,
+  "dif_interp_pos": 1.6624107956886292e-07,
+  "casos": [
+   {
+    "img": "3076c2.png",
+    "rejilla": [
+     24,
+     43
+    ],
+    "dif_rasgos_max": 5.9629,
+    "dif_rasgos_media": 0.015202,
+    "cc_mapa": 0.999707,
+    "dif_mapa_max_rel": 0.031719
+   },
+   {
+    "img": "5bfe3d.png",
+    "rejilla": [
+     24,
+     43
+    ],
+    "dif_rasgos_max": 5.251,
+    "dif_rasgos_media": 0.014323,
+    "cc_mapa": 0.999916,
+    "dif_mapa_max_rel": 0.016478
+   },
+   {
+    "img": "b44e33.jpg",
+    "rejilla": [
+     28,
+     37
+    ],
+    "dif_rasgos_max": 2.0771,
+    "dif_rasgos_media": 0.008798,
+    "cc_mapa": 0.99987,
+    "dif_mapa_max_rel": 0.019586
+   },
+   {
+    "img": "18db69.png",
+    "rejilla": [
+     47,
+     22
+    ],
+    "dif_rasgos_max": 7.918,
+    "dif_rasgos_media": 0.025732,
+    "cc_mapa": 0.99968,
+    "dif_mapa_max_rel": 0.039196
+   },
+   {
+    "img": "40e990.jpg",
+    "rejilla": [
+     43,
+     24
+    ],
+    "dif_rasgos_max": 4.7578,
+    "dif_rasgos_media": 0.018443,
+    "cc_mapa": 0.999774,
+    "dif_mapa_max_rel": 0.024327
+   },
+   {
+    "img": "c84353.png",
+    "rejilla": [
+     24,
+     43
+    ],
+    "dif_rasgos_max": 10.7617,
+    "dif_rasgos_media": 0.02243,
+    "cc_mapa": 0.999895,
+    "dif_mapa_max_rel": 0.02935
+   },
+   {
+    "img": "5d66d2.jpg",
+    "rejilla": [
+     28,
+     37
+    ],
+    "dif_rasgos_max": 4.8839,
+    "dif_rasgos_media": 0.008829,
+    "cc_mapa": 0.99995,
+    "dif_mapa_max_rel": 0.011992
+   },
+   {
+    "img": "8b2ea2.png",
+    "rejilla": [
+     47,
+     22
+    ],
+    "dif_rasgos_max": 7.3372,
+    "dif_rasgos_media": 0.022703,
+    "cc_mapa": 0.999694,
+    "dif_mapa_max_rel": 0.022206
+   },
+   {
+    "img": "ad1e05.png",
+    "rejilla": [
+     25,
+     41
+    ],
+    "dif_rasgos_max": 7.3086,
+    "dif_rasgos_media": 0.015456,
+    "cc_mapa": 0.999671,
+    "dif_mapa_max_rel": 0.046644
+   },
+   {
+    "img": "b86b7d.png",
+    "rejilla": [
+     24,
+     43
+    ],
+    "dif_rasgos_max": 11.9492,
+    "dif_rasgos_media": 0.025569,
+    "cc_mapa": 0.999731,
+    "dif_mapa_max_rel": 0.032867
+   },
+   {
+    "img": "a8f275.png",
+    "rejilla": [
+     28,
+     37
+    ],
+    "dif_rasgos_max": 6.8633,
+    "dif_rasgos_media": 0.013212,
+    "cc_mapa": 0.99991,
+    "dif_mapa_max_rel": 0.016367
+   },
+   {
+    "img": "0dc366.jpg",
+    "rejilla": [
+     47,
+     22
+    ],
+    "dif_rasgos_max": 8.9492,
+    "dif_rasgos_media": 0.025159,
+    "cc_mapa": 0.999654,
+    "dif_mapa_max_rel": 0.034633
+   }
+  ],
+  "cc_mapa_min": 0.999654
+ }
+}
