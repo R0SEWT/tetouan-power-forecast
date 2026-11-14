@@ -94,7 +94,7 @@
           <nav id="ahAreas" class="seg areas-seg" aria-label="Área"></nav>
           <div class="cuando" role="group" aria-label="Qué momento ver">
             <button type="button" id="ahHoy" class="btn-hoy" aria-pressed="true">Hoy</button>
-            <label class="campo"><span>Repasar un día</span><input type="date" id="ahFecha" aria-describedby="ahFechaLarga"></label>
+            <label class="campo"><span>Ver otro día</span><input type="date" id="ahFecha" aria-describedby="ahFechaLarga"></label>
             <label class="campo"><span>A las</span><input type="time" id="ahHora" step="1800"></label>
             <span id="ahFechaLarga" class="visually-hidden"></span>
           </div>
@@ -114,7 +114,7 @@
               <span class="it"><span class="mk real"></span>Real (COES)</span>
               <span class="it"><span class="mk pron"></span>Pronóstico</span>
               <span class="it"><span class="mk banda"></span><span id="ahLeyRango">Rango del 90 %</span></span>
-              <label><input type="checkbox" id="ahRef" checked><span class="mk ref"></span><span id="ahLeyRef">Referencia simple</span></label>
+              <label><input type="checkbox" id="ahRef" checked><span class="mk ref"></span><span id="ahLeyRef">Referencia</span></label>
             </div>
           </div>
           <div class="card-b">
@@ -224,14 +224,14 @@
             <p id="respAviso" class="resp-aviso" hidden></p>
             <p class="resp-valor"><span id="respValor" class="num">—</span> <span class="unidad">MW</span></p>
             <p class="resp-rango">
-              <span class="resp-rango-txt">Rango probable</span>
+              <span class="resp-rango-txt">Rango del 90 %</span>
               <span id="respRango" class="num">—</span>
               <span id="respMarca"></span>
               <span class="muted small resp-rango-ayuda">9 de cada 10 veces la demanda cae aquí</span>
             </p>
             <dl class="resp-datos">
               <div><dt>Real</dt><dd id="respReal">—</dd></div>
-              <div><dt>Error a esa hora</dt><dd id="respError">—</dd></div>
+              <div><dt>Error</dt><dd id="respError">—</dd></div>
               <div><dt>Error medio del día</dt><dd id="respDia">—</dd></div>
             </dl>
             <p id="respVeredicto" class="resp-veredicto" aria-live="polite"></p>
@@ -279,14 +279,14 @@
             <div id="momentos" class="moment-chips" role="group" aria-label="Ir a un momento del día"></div>
 
             <label class="field" id="campoModelo">
-              <span class="field-label">Modelo</span>
+              <span class="field-label">Qué modelo usa</span>
               <select id="inModelo" aria-describedby="ayudaModelo"></select>
             </label>
             <p id="ayudaModelo" class="field-help" hidden></p>
           </section>
 
           <section id="pico" class="panel pico" aria-labelledby="tituloPico" aria-busy="true">
-            <h2 id="tituloPico">Máximo y mayor subida de las próximas 24 h</h2>
+            <h2 id="tituloPico">Pico y mayor subida de las próximas 24 h</h2>
             <div id="picoCuerpo"><p class="cargando-txt">Calculando…</p></div>
           </section>
 

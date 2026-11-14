@@ -703,7 +703,7 @@ function pintarRegimen() {
   }
   const [y, m] = r.mes.split('-').map(Number);
   const estado = ESTADO_NINO[r.estado] || r.estado;
-  $('#chipRegimenTxt').textContent = `El Niño costero: ${estado}`;
+  $('#chipRegimenTxt').textContent = `El Niño costero (calentamiento del mar frente a la costa): ${estado}`;
   chip.title = `Último ICEN publicado: ${r.icen} en ${MESES[m - 1]} de ${y}, régimen ${estado} según ENFEN. El ICEN sale con meses de rezago.`;
   chip.hidden = false;
 }
@@ -738,7 +738,7 @@ function pintarMomentos() {
   const lista = [...MOMENTOS];
   const pico = indicePico();
   const conReal = S.serie && S.serie.real.some((v) => v != null);
-  if (pico != null) lista.push({ txt: conReal ? 'Máximo real del día' : 'Máximo pronosticado', idx: pico });
+  if (pico != null) lista.push({ txt: conReal ? 'Pico real del día' : 'Pico pronosticado', idx: pico });
   $('#momentos').innerHTML = lista.map((mo) => (
     `<button type="button" class="moment-btn" data-idx="${mo.idx}" aria-pressed="${mo.idx === S.idx}">${esc(mo.txt)} <span class="mono">${idxAHora(mo.idx)}</span></button>`
   )).join('');
@@ -917,7 +917,7 @@ function pintarFichaNumero() {
   let html = `<p>${esc(m ? m.nombre : 'Combinado')}, ${esc(area ? area.nombre : '')} a ${horizonteTxt()}, para las ${idxAHora(i)}:</p>`;
   const faltan = piezas.filter((c) => c.valores[i] == null);
   if (faltan.length) {
-    html += `<p>En esta media hora falta el pronóstico de ${esc(faltan.map((c) => c.nombre).join(' y '))}: el número usa la referencia simple.</p>`;
+    html += `<p>En esta media hora falta el pronóstico de ${esc(faltan.map((c) => c.nombre).join(' y '))}: el número usa la referencia.</p>`;
   } else {
     const suma = piezas.reduce((t, c) => t + c.peso * c.valores[i], 0);
     html += '<div class="tabla-scroll ficha-tabla" tabindex="0" role="region" aria-label="Cómo se arma el número"><table class="tabla">'
@@ -973,15 +973,15 @@ function pintarRespuesta() {
     return;
   }
   const mejora = (100 * (maeRef - maeModelo)) / maeRef;
-  const ref = NOMBRE_REF[s.referencia_nombre] || 'la referencia simple';
+  const ref = NOMBRE_REF[s.referencia_nombre] || 'la referencia';
   if (Math.abs(maeRef - maeModelo) < 0.5) {
-    ver.textContent = `Este día se equivocó lo mismo que la referencia simple, ${ref}.`;
+    ver.textContent = `Este día se equivocó lo mismo que la referencia, ${ref}.`;
   } else if (mejora > 0) {
     ver.classList.add('bueno');
-    ver.textContent = `Este día se equivocó ${nf0.format(mejora)} % menos que la referencia simple, ${ref} (${nf1.format(maeRef)} MW).`;
+    ver.textContent = `Este día se equivocó ${nf0.format(mejora)} % menos que la referencia, ${ref} (${nf1.format(maeRef)} MW).`;
   } else {
     ver.classList.add('malo');
-    ver.textContent = `Este día se equivocó ${nf0.format(-mejora)} % más que la referencia simple, ${ref} (${nf1.format(maeRef)} MW).`;
+    ver.textContent = `Este día se equivocó ${nf0.format(-mejora)} % más que la referencia, ${ref} (${nf1.format(maeRef)} MW).`;
   }
 }
 
@@ -991,7 +991,7 @@ function pintarConfianza() {
   if (!s) return;
   const maeModelo = mae(s.real, s.pronostico);
   const maeRef = mae(s.real, s.referencia);
-  const ref = TITULO_REF[s.referencia_nombre] || 'Referencia simple';
+  const ref = TITULO_REF[s.referencia_nombre] || 'Regla simple';
   const barras = $('#barrasConfianza');
   if (maeModelo != null && maeRef != null) {
     const tope = Math.max(maeModelo, maeRef) || 1;
@@ -999,7 +999,7 @@ function pintarConfianza() {
       + `<span class="barra-pista"><span class="barra ${clase}" style="width:${((100 * valor) / tope).toFixed(1)}%"></span></span>`
       + `<span class="barra-valor num">${nf1.format(valor)} MW</span></div>`;
     barras.innerHTML = '<p class="muted small">Error medio de este día (menos es mejor)</p>'
-      + fila('Modelo', maeModelo, 'barra-modelo-h') + fila(`Referencia: ${ref.toLowerCase()}`, maeRef, 'barra-referencia-h');
+      + fila('Pronóstico', maeModelo, 'barra-modelo-h') + fila(`Referencia (${ref.toLowerCase()})`, maeRef, 'barra-referencia-h');
   } else {
     barras.innerHTML = '<p class="muted small">Este día no tiene datos reales para medir el error.</p>';
   }
@@ -1012,11 +1012,11 @@ function pintarConfianza() {
       n += 1;
       if (r >= s.intervalo.inferior[i] && r <= s.intervalo.superior[i]) dentro += 1;
     });
-    if (n) items.push(`<li><strong>Rango probable:</strong> la demanda real cayó dentro en <span class="num">${dentro}</span> de <span class="num">${n}</span> medias horas del día (se espera alrededor de 9 de cada 10).</li>`);
+    if (n) items.push(`<li><strong>Rango del 90 %:</strong> la demanda real cayó dentro en <span class="num">${dentro}</span> de <span class="num">${n}</span> medias horas del día (se espera alrededor de 9 de cada 10).</li>`);
   }
   const met = S.resumen && S.resumen.metricas_prueba[S.area];
   if (met) items.push(`<li><strong>En toda la prueba de 2026</strong> (a 24 h, ${usaSoloDemanda(modeloActual()) ? 'solo con la demanda' : 'con clima y El Niño'}): error medio <span class="num">${nf1.format(met.mae_mw)} MW</span> (<span class="num">${pct(met.mape_pct)}</span>). Mes a mes, en «Diagnóstico».</li>`);
-  items.push('<li><strong>Referencia simple:</strong> la mejor de tres reglas sin modelo (el último dato, ayer o la semana pasada a la misma hora). Es la vara mínima que el modelo debe superar.</li>');
+  items.push('<li><strong>Referencia:</strong> la mejor de tres reglas sin modelo (el último dato, ayer o la semana pasada a la misma hora). Es la vara mínima que el modelo debe superar.</li>');
   $('#listaConfianza').innerHTML = items.join('');
 }
 
@@ -1025,15 +1025,15 @@ function pintarCurva() {
   const el = $('#graficoDia');
   if (!s) return;
   const nombreRef = TITULO_REF[s.referencia_nombre] || 'Referencia';
-  const banda = s.intervalo ? { inf: s.intervalo.inferior, sup: s.intervalo.superior, clase: 'banda-pronostico', nombre: 'Rango probable' } : null;
+  const banda = s.intervalo ? { inf: s.intervalo.inferior, sup: s.intervalo.superior, clase: 'banda-pronostico', nombre: 'Rango del 90 %' } : null;
   const series = [
-    { clase: 'ln-referencia', valores: s.referencia, nombre: `Referencia: ${nombreRef.toLowerCase()}` },
-    { clase: 'ln-pronostico', valores: s.pronostico, nombre: 'Modelo', banda },
+    { clase: 'ln-referencia', valores: s.referencia, nombre: `Referencia (${nombreRef.toLowerCase()})` },
+    { clase: 'ln-pronostico', valores: s.pronostico, nombre: 'Pronóstico', banda },
     { clase: 'ln-real', valores: s.real, nombre: 'Real', puente: true },
   ];
   const pico = indicePico();
   const resumen = pico != null && s.real[pico] != null
-    ? ` El máximo real fue ${mw(s.real[pico])} MW a las ${idxAHora(pico)}.`
+    ? ` El pico real fue ${mw(s.real[pico])} MW a las ${idxAHora(pico)}.`
     : '';
   graficoLineas(el, {
     n: s.fecha_hora.length,
@@ -1045,13 +1045,13 @@ function pintarCurva() {
     etiquetaPunto: (i) => horaDe(s.fecha_hora[i]),
     alto: 240,
     alPulsar: elegirHora,
-    aria: `Curva del ${fechaLarga(S.fecha)}: demanda real, pronóstico a ${horizonteTxt()} con su rango probable y la referencia simple (${nombreRef.toLowerCase()}).${resumen}`,
+    aria: `Curva del ${fechaLarga(S.fecha)}: demanda real, pronóstico a ${horizonteTxt()} con su rango del 90 % y la referencia (${nombreRef.toLowerCase()}).${resumen}`,
   });
   $('#subCurva').textContent = `${fechaCorta(S.fecha)} · a ${horizonteTxt()}`;
 
-  let leyenda = itemLinea('ln-real', 'Real') + itemLinea('ln-pronostico', 'Modelo');
-  if (banda) leyenda += itemBanda('banda-pronostico', 'Rango probable');
-  leyenda += itemLinea('ln-referencia', `Referencia: ${nombreRef.toLowerCase()}`);
+  let leyenda = itemLinea('ln-real', 'Real') + itemLinea('ln-pronostico', 'Pronóstico');
+  if (banda) leyenda += itemBanda('banda-pronostico', 'Rango del 90 %');
+  leyenda += itemLinea('ln-referencia', `Referencia (${nombreRef.toLowerCase()})`);
   const hayHueco = s.hueco.some(Boolean);
   const hayPrelim = s.preliminar.some(Boolean);
   if (hayHueco) leyenda += ITEM_HUECO;
@@ -1078,11 +1078,11 @@ function pintarTablaDia() {
     + `<td class="num mono">${mw(s.referencia[i])}</td></tr>`).join('');
   $('#tablaDiaCuerpo').innerHTML = `<div class="tabla-scroll" tabindex="0" role="region" aria-label="Datos del día"><table class="tabla">`
     + `<caption class="visually-hidden">Demanda del ${esc(fechaLarga(S.fecha))}, en MW, pronóstico a ${horizonteTxt()}</caption>`
-    + '<thead><tr><th scope="col">Hora</th><th scope="col" class="num">Modelo</th><th scope="col" class="num">Rango probable</th><th scope="col" class="num">Real</th><th scope="col" class="num">Referencia</th></tr></thead>'
+    + '<thead><tr><th scope="col">Hora</th><th scope="col" class="num">Pronóstico</th><th scope="col" class="num">Rango del 90 %</th><th scope="col" class="num">Real</th><th scope="col" class="num">Referencia</th></tr></thead>'
     + `<tbody>${filas}</tbody></table></div>`;
 }
 
-// ---- Máximo y mayor subida de las próximas 24 h -------------------------------------------------
+// ---- Pico y mayor subida de las próximas 24 h -------------------------------------------------
 
 // Lo que se ve es de la elección anterior: se descarta la respuesta en vuelo y se atenúa hasta la nueva.
 function invalidarPico() {
@@ -1125,8 +1125,8 @@ function pintarPico() {
   const { fecha, idx } = d.pedido || { fecha: S.fecha, idx: S.idx };
   let html = `<p class="muted small">Si se emite a las ${idxAHora(idx)} del ${esc(fechaDiaMes(fecha))}: de las ${esc(cuandoTxt(d.desde))} a las ${esc(cuandoTxt(d.hasta))}, con el pronóstico a 24 h${m ? ` del modelo ${esc(nombreCorto(m))}` : ''}.</p>`;
   html += '<dl class="pico-datos">';
-  html += `<div><dt>Máximo</dt><dd><span class="pico-valor num">${mw(pico.valor)} MW</span> a las ${esc(cuandoTxt(pico.fecha_hora))}`
-    + `<span class="pico-nota">Rango probable: <span class="num">${mw(pico.inferior)} – ${mw(pico.superior)} MW</span></span></dd></div>`;
+  html += `<div><dt>Pico</dt><dd><span class="pico-valor num">${mw(pico.valor)} MW</span> a las ${esc(cuandoTxt(pico.fecha_hora))}`
+    + `<span class="pico-nota">Rango del 90 %: <span class="num">${mw(pico.inferior)} – ${mw(pico.superior)} MW</span></span></dd></div>`;
   if (rampa) {
     html += `<div><dt>Mayor subida en una hora</dt><dd><span class="pico-valor num">+${mw(rampa.subida_mw)} MW</span> de las ${esc(horaDe(rampa.desde))} a las ${esc(cuandoTxt(rampa.hasta))}`
       + `<span class="pico-nota"><span class="marca ${rampa.fuerte ? 'fuera' : 'dentro'}">${rampa.fuerte ? 'rampa fuerte' : 'subida habitual'}</span></span></dd></div>`;
@@ -1135,8 +1135,8 @@ function pintarPico() {
   }
   html += '</dl>';
   if (acierto) {
-    html += `<p class="pico-acierto">¿Acierta la hora? En 2026, la hora del máximo pronosticado de cada día cayó a ±1 h de la del máximo real en <strong class="num">${nf1.format(acierto.pct_hora)} %</strong> de los días`
-      + ` (${nf0.format(acierto.dias)}); la referencia simple, en ${nf1.format(acierto.pct_hora_referencia)} %. El valor del máximo se equivocó en promedio <span class="num">${mw(acierto.mae_pico_mw)} MW</span> (la referencia, ${mw(acierto.mae_pico_referencia_mw)} MW).</p>`;
+    html += `<p class="pico-acierto">¿Acierta la hora? En 2026, la hora del pico pronosticado de cada día cayó a ±1 h de la del pico real en <strong class="num">${nf1.format(acierto.pct_hora)} %</strong> de los días`
+      + ` (${nf0.format(acierto.dias)}); la referencia, en ${nf1.format(acierto.pct_hora_referencia)} %. El valor del pico se equivocó en promedio <span class="num">${mw(acierto.mae_pico_mw)} MW</span> (la referencia, ${mw(acierto.mae_pico_referencia_mw)} MW).</p>`;
   }
   const umbral = rampa && rampa.umbral_mw != null
     ? ` «Rampa fuerte» es subir más de ${mw(rampa.umbral_mw)} MW en una hora: la mayor subida del día solo pasó de ahí en el 5 % de los días de 2016 a 2024 en ${area ? `el ${esc(area.nombre)}` : 'el área'}.`
@@ -1200,8 +1200,8 @@ async function cargarPronostico() {
 }
 
 const NOTAS_OPERACION = `<ul class="lista-notas">
-  <li><strong>Rango probable:</strong> la banda donde debería caer la demanda 9 de cada 10 veces.</li>
-  <li><strong>Referencia simple:</strong> la mejor de tres reglas sin modelo (el último dato, ayer o la semana pasada a la misma hora) en la validación de 2025.</li>
+  <li><strong>Rango del 90 %:</strong> la banda donde debería caer la demanda 9 de cada 10 veces.</li>
+  <li><strong>Referencia:</strong> la mejor de tres reglas sin modelo (el último dato, ayer o la semana pasada a la misma hora) en la validación de 2025.</li>
 </ul>`;
 
 function pintarOperacion() {
@@ -1215,7 +1215,7 @@ function pintarOperacion() {
   let html = `<h3>Si se emite a las ${idxAHora(S.idx)} del ${esc(fechaCorta(S.fecha))}: ${ventana}</h3>`;
   html += `<p class="frase" aria-live="polite">${esc(p.frase)}</p>`;
   if (S.horizonte === '1h') {
-    html += '<table class="tabla"><thead><tr><th scope="col">Hora</th><th scope="col" class="num">Modelo</th><th scope="col" class="num">Rango probable</th><th scope="col" class="num">Real</th></tr></thead><tbody>';
+    html += '<table class="tabla"><thead><tr><th scope="col">Hora</th><th scope="col" class="num">Pronóstico</th><th scope="col" class="num">Rango del 90 %</th><th scope="col" class="num">Real</th></tr></thead><tbody>';
     html += p.fecha_hora.map((fh, j) => (
       `<tr><td class="mono">${horaDe(fh)}</td><td class="num mono">${mw(p.pronostico[j])}</td>`
       + `<td class="num mono">${mw(p.intervalo.inferior[j])}–${mw(p.intervalo.superior[j])}</td>`
@@ -1224,7 +1224,7 @@ function pintarOperacion() {
     html += '</tbody></table>';
   } else {
     html += '<div id="graficoOperacion" class="chart"></div>';
-    html += `<ul class="legend">${itemLinea('ln-real', 'Real')}${itemLinea('ln-pronostico', 'Modelo')}${itemBanda('banda-pronostico', 'Rango probable')}${itemLinea('ln-referencia', 'Referencia simple')}</ul>`;
+    html += `<ul class="legend">${itemLinea('ln-real', 'Real')}${itemLinea('ln-pronostico', 'Pronóstico')}${itemBanda('banda-pronostico', 'Rango del 90 %')}${itemLinea('ln-referencia', 'Referencia (la mejor regla simple)')}</ul>`;
   }
   html += NOTAS_OPERACION;
   panel.innerHTML = html;
@@ -1232,14 +1232,14 @@ function pintarOperacion() {
     graficoLineas($('#graficoOperacion'), {
       n: p.fecha_hora.length,
       series: [
-        { clase: 'ln-referencia', valores: p.referencia, nombre: 'Referencia simple' },
-        { clase: 'ln-pronostico', valores: p.pronostico, nombre: 'Modelo', banda: { inf: p.intervalo.inferior, sup: p.intervalo.superior, clase: 'banda-pronostico', nombre: 'Rango probable' } },
+        { clase: 'ln-referencia', valores: p.referencia, nombre: 'Referencia (la mejor regla simple)' },
+        { clase: 'ln-pronostico', valores: p.pronostico, nombre: 'Pronóstico', banda: { inf: p.intervalo.inferior, sup: p.intervalo.superior, clase: 'banda-pronostico', nombre: 'Rango del 90 %' } },
         { clase: 'ln-real', valores: p.real, nombre: 'Real', puente: true },
       ],
       etiquetaX: (j) => (j % 12 === 11 ? horaDe(p.fecha_hora[j]) : null),
       etiquetaPunto: (j) => `${fechaCorta(p.fecha_hora[j])} ${horaDe(p.fecha_hora[j])}`,
       alto: 200,
-      aria: `Pronóstico de las próximas 24 horas desde las ${idxAHora(S.idx)}, con su rango probable. ${p.frase}`,
+      aria: `Pronóstico de las próximas 24 horas desde las ${idxAHora(S.idx)}, con su rango del 90 %. ${p.frase}`,
     });
   }
 }
@@ -1397,7 +1397,7 @@ async function pintarDiagnostico() {
     <section class="diag-seccion">
       <h3>¿Con qué fase de El Niño se equivoca más?</h3>
       <p class="muted small">Error medio en la prueba de 2026 según la fase de El Niño.</p>
-      <ul class="legend"><li><svg width="18" height="11" aria-hidden="true"><rect width="18" height="11" rx="3" class="barra-modelo"/></svg>Modelo</li><li><svg width="18" height="11" aria-hidden="true"><rect x="0.75" y="0.75" width="16.5" height="9.5" rx="3" class="barra-referencia"/></svg>Referencia simple</li></ul>
+      <ul class="legend"><li><svg width="18" height="11" aria-hidden="true"><rect width="18" height="11" rx="3" class="barra-modelo"/></svg>Pronóstico</li><li><svg width="18" height="11" aria-hidden="true"><rect x="0.75" y="0.75" width="16.5" height="9.5" rx="3" class="barra-referencia"/></svg>Referencia</li></ul>
       <p id="lecRegimen" class="lectura"></p>
       <div id="gRegimen" class="chart"></div>
     </section>
@@ -1438,7 +1438,7 @@ async function pintarDiagnostico() {
       { valor: r.modelo, clase: 'barra-modelo', texto: `modelo ${nf1.format(r.modelo)}` },
       { valor: r.referencia, clase: 'barra-referencia', texto: `ref. ${nf1.format(r.referencia)}` },
     ],
-  })), { aria: 'Error del modelo y de la referencia simple según la fase de El Niño.' });
+  })), { aria: 'Error del modelo y de la referencia según la fase de El Niño.' });
 
   const m0 = d.ablacion.find((a) => a.variante === 'M0');
   graficoPuntos($('#gAblacion'), d.ablacion.map((a) => ({
@@ -1514,15 +1514,15 @@ function pintarSeguimiento(modelos, res) {
     const fila = r.meses.find((x) => x.mes === mes);
     return fila ? fila[campo] : null;
   });
-  const nombreRef = (TITULO_REF[sel.referencia_nombre] || 'Referencia simple').toLowerCase();
-  const leyenda = modelos.map((m, k) => itemLinea(clases[k] || 'ln-modelo-3', m.nombre)).join('') + itemLinea('ln-referencia', `Referencia: ${nombreRef}`);
+  const nombreRef = (TITULO_REF[sel.referencia_nombre] || 'Regla simple').toLowerCase();
+  const leyenda = modelos.map((m, k) => itemLinea(clases[k] || 'ln-modelo-3', m.nombre)).join('') + itemLinea('ln-referencia', `Referencia (${nombreRef})`);
   const meta = sel.meta_cobertura_pct;
 
   // Lecturas: la conclusión de cada gráfico, calculada
   const ganados = sel.meses.filter((m) => m.mae_modelo < m.mae_referencia).length;
   const peor = sel.meses.reduce((a, b) => (b.mae_modelo > a.mae_modelo ? b : a));
   const totales = modelos.map((m, k) => `${nombreCorto(m)} ${nf1.format(res[k].total.mae_modelo)} MW`).join('; ');
-  const lecMae = `Todo 2026, a ${horizonteTxt()}: ${totales}; la referencia simple, ${nf1.format(sel.total.mae_referencia)} MW. `
+  const lecMae = `Todo 2026, a ${horizonteTxt()}: ${totales}; la referencia, ${nf1.format(sel.total.mae_referencia)} MW. `
     + `El ${nombreCorto(modelos[0])} se equivocó menos que la referencia en ${ganados === n ? `los ${n} meses` : `${ganados} de ${n} meses`}; su peor mes fue ${mesLargo(peor.mes)} (${nf1.format(peor.mae_modelo)} MW).`;
   const periodos = [...new Set(res.map((r) => r.total.periodos))];
   const avisoFilas = periodos.length > 1
@@ -1567,7 +1567,7 @@ function pintarSeguimiento(modelos, res) {
   graficoLineas($('#gSeguimiento'), {
     n,
     series: [
-      { clase: 'ln-referencia', valores: sel.meses.map((m) => m.mae_referencia), nombre: `Referencia: ${nombreRef}` },
+      { clase: 'ln-referencia', valores: sel.meses.map((m) => m.mae_referencia), nombre: `Referencia (${nombreRef})` },
       ...modelos.slice(1).map((m, k) => ({ clase: clases[k + 1] || 'ln-modelo-3', valores: porMes(res[k + 1], 'mae_modelo'), nombre: m.nombre })),
       { clase: 'ln-pronostico', valores: sel.meses.map((m) => m.mae_modelo), nombre: modelos[0].nombre, puntos: true },
     ],
@@ -1599,7 +1599,7 @@ function pintarLecturas(d) {
     const peor = regs.reduce((a, b) => (b.modelo > a.modelo ? b : a));
     const gana = regs.filter((r) => r.modelo < r.referencia).length;
     $('#lecRegimen').textContent = `Donde más se equivoca: ${nombreReg(peor.regimen)} (${nf1.format(peor.modelo)} MW). `
-      + (gana === regs.length ? `Le gana a la referencia simple en las ${regs.length} fases.` : `Le gana a la referencia simple en ${gana} de ${regs.length} fases.`);
+      + (gana === regs.length ? `Le gana a la referencia en las ${regs.length} fases.` : `Le gana a la referencia en ${gana} de ${regs.length} fases.`);
   }
   const m0 = d.ablacion.find((a) => a.variante === 'M0');
   const m3 = d.ablacion.find((a) => a.variante === 'M3');
@@ -1653,7 +1653,7 @@ function pintarFicha() {
     nino = `El último ICEN publicado es ${r.regimen_nino.icen.toFixed(2)}, de ${MESES[m - 1]} de ${y}: régimen ${ESTADO_NINO[r.regimen_nino.estado] || r.regimen_nino.estado} según ENFEN. `;
   }
   $('#fichaCuerpo').innerHTML = `
-    <section><h3>Qué hace</h3><p>Pronostica la demanda eléctrica de las áreas Norte, Centro y Sur del SEIN cada 30 minutos, a 1 hora y a 24 horas, con su rango probable. La compara con la referencia simple: la mejor de tres reglas sin modelo (el último dato, ayer o la semana pasada a la misma hora).</p></section>
+    <section><h3>Qué hace</h3><p>Pronostica la demanda eléctrica de las áreas Norte, Centro y Sur del SEIN cada 30 minutos, a 1 hora y a 24 horas, con su rango del 90 %. La compara con la referencia: la mejor de tres reglas sin modelo (el último dato, ayer o la semana pasada a la misma hora).</p></section>
     <section><h3>Modelo</h3><p>Modelo <span class="mono">${esc(s ? nombreModelo() : '—')}</span>, datos <span class="mono">${esc(s ? s.version_datos : '—')}</span>.${prueba ? ' Es el modelo de prueba: persistencia, ciclo diario y ruido sobre series sintéticas. Sirve para probar la app; sus números no son resultados.' : ''}</p></section>
     <section><h3>El Niño Costero</h3><p>${esc(nino)}Cada variable entra con su rezago real de publicación.</p></section>
     <section><h3>Fechas de corte</h3><table class="tabla"><tbody>${cortes}</tbody></table></section>
@@ -1737,7 +1737,7 @@ function pintarEnVivo(d) {
     .map(([tipo, ref]) => `${TIPO_DIA[tipo].toLowerCase()}, ${(TITULO_REF[ref] || ref).toLowerCase()}`).join('; ');
 
   const grupo = (g, h) => d.resumen.find((r) => r.grupo === g && r.horizonte === h);
-  const linea = (r) => `error medio <span class="num">${nf1.format(r.mae_modelo)} MW</span>; la referencia simple (${esc(REF_CORTA[r.referencia_nombre] || r.referencia_nombre)}), <span class="num">${nf1.format(r.mae_referencia)} MW</span>; el rango 10–90 % cubrió el <span class="num">${nf0.format(r.cobertura_pct)} %</span> (promete 80 %)`;
+  const linea = (r) => `error medio <span class="num">${nf1.format(r.mae_modelo)} MW</span>; la referencia (${esc(REF_CORTA[r.referencia_nombre] || r.referencia_nombre)}), <span class="num">${nf1.format(r.mae_referencia)} MW</span>; el rango del 80 % cubrió el <span class="num">${nf0.format(r.cobertura_pct)} %</span> (promete 80 %)`;
   const items = [];
   const vivo = grupo('en_vivo', '24h');
   const exAnteR = grupo('ex_ante_estricto', '24h');
@@ -1758,16 +1758,16 @@ function pintarEnVivo(d) {
     <h3 class="diag-sub">Pronóstico del ${esc(fechaLarga(u.fecha))}</h3>
     <p class="small">Emitido el ${esc(fechaDiaMes(u.emitido_lima))} a las ${esc(horaDe(u.emitido_lima))} (hora de Lima), con datos hasta el ${esc(fechaDiaMes(diaDatos))} a las 24:00. ${tipoTxt}</p>
     <div id="gEnVivo" class="chart"></div>
-    <ul class="legend" aria-label="Leyenda">${itemLinea('ln-pronostico', 'Modelo')}${itemBanda('banda-pronostico', 'Rango 10–90 % (8 de cada 10)')}${hayReal ? itemLinea('ln-real', 'Real') : ''}</ul>
+    <ul class="legend" aria-label="Leyenda">${itemLinea('ln-pronostico', 'Pronóstico')}${itemBanda('banda-pronostico', 'Rango del 80 % (8 de cada 10)')}${hayReal ? itemLinea('ln-real', 'Real') : ''}</ul>
     ${hayReal ? '' : '<p class="muted small">El real de este día llega mañana, con el anexo del COES.</p>'}
     <h3 class="diag-sub">Lo ya verificado contra el real</h3>
     <ul class="lista-confianza">${items.join('')}</ul>
     ${a24.length ? `<details class="tabla-datos"><summary>Ver el error de cada día a 24 h</summary>
       <div class="tabla-scroll" tabindex="0" role="region" aria-label="Error de cada día a 24 h"><table class="tabla">
-        <caption class="visually-hidden">Error medio en MW del modelo y de la referencia simple, y cobertura del rango 10–90 %, por día pronosticado a 24 h</caption>
-        <thead><tr><th scope="col">Día</th><th scope="col">Tipo</th><th scope="col" class="num">Modelo</th><th scope="col" class="num">Referencia</th><th scope="col" class="num">Cobertura</th></tr></thead>
+        <caption class="visually-hidden">Error medio en MW del modelo y de la referencia, y cobertura del rango del 80 %, por día pronosticado a 24 h</caption>
+        <thead><tr><th scope="col">Día</th><th scope="col">Tipo</th><th scope="col" class="num">Pronóstico</th><th scope="col" class="num">Referencia</th><th scope="col" class="num">Cobertura</th></tr></thead>
         <tbody>${filas}</tbody></table></div>
-      <p class="muted small">Error medio del día en MW. Referencia simple (la mejor en el acumulado de cada tipo): ${esc(refsTabla)}.</p>
+      <p class="muted small">Error medio del día en MW. Referencia (la mejor en el acumulado de cada tipo): ${esc(refsTabla)}.</p>
     </details>` : ''}
     <p class="muted small">Modelo: ${esc(d.modelo || '—')}${d.version_pesos ? ` · pesos <span class="mono">${esc(d.version_pesos.slice(0, 12))}</span>` : ''}. Datos del IEOD del COES.</p>`;
 
@@ -1777,7 +1777,7 @@ function pintarEnVivo(d) {
   graficoLineas($('#gEnVivo'), {
     n: u.fecha_hora.length,
     series: [
-      { clase: 'ln-pronostico', valores: u.pronostico, nombre: 'Modelo', banda: { inf: u.inferior, sup: u.superior, clase: 'banda-pronostico', nombre: 'Rango 10–90 %' } },
+      { clase: 'ln-pronostico', valores: u.pronostico, nombre: 'Pronóstico', banda: { inf: u.inferior, sup: u.superior, clase: 'banda-pronostico', nombre: 'Rango del 80 %' } },
       { clase: 'ln-real', valores: u.real, nombre: 'Real', puente: true },
     ],
     marcador: idxEmision != null ? { i: idxEmision, txt: `Emitido ${horaDe(u.emitido_lima)}` } : null,
@@ -2003,12 +2003,13 @@ function pintarAhora() {
   const fin = finTxt(d.datos_hasta);
   const nombreModeloAhora = d.modelo_nombre.replace(/\s*\(.*\)\s*$/, '');
   const preg = preguntaDelDia(d);
+  A.sinAviso = Boolean(preg.sinAviso);
   // Arriba de la pregunta, de qué zona habla: el nombre del área y qué parte del país es
   $('#principal').innerHTML = `<span class="pregunta-area">${esc(nombreArea(A.area))} · ${esc(ZONA_AREA[A.area] || 'Perú')}</span>${esc(preg.q)}`;
   $('#ahRespuesta').innerHTML = preg.html;
   $('#ahModo').innerHTML = vivo
-    ? `Lo real llega con un día de retraso: el COES publica cada mañana la demanda del día anterior. Lo demás es pronóstico, emitido ${emitidoTxt(d.emitido_en || d.ahora)}.`
-    : `<b>Repaso de un día del historial.</b> Así se veía a las ${esc(horaDe(d.origen))}: lo real llega hasta esa hora y lo que sigue es lo que ya se había pronosticado.`;
+    ? `Lo real llega con un día de retraso: el COES, el operador del sistema eléctrico, publica cada mañana la demanda del día anterior. Lo demás es pronóstico, emitido ${emitidoTxt(d.emitido_en || d.ahora)}.`
+    : `<b>Repaso de un día del historial.</b> Así se veía a las ${esc(horaDe(d.origen))}: lo real (del COES, el operador del sistema eléctrico) llega hasta esa hora y lo que sigue es lo que ya se había pronosticado.`;
   pintarEstado(vivo
     ? { modo: 'vivo', texto: `Hoy · datos del COES al ${fin.corto}`, corto: ['COES', fin.corto.replace(', ', ' ')], titulo: `Pronóstico de hoy. Datos reales del COES hasta el ${fin.largo}; el resto es pronóstico.` }
     : { modo: 'repaso', texto: `Repaso · ${fechaNumerica(d.origen)}, ${horaDe(d.origen)}`, corto: ['Repaso', `${fechaNumerica(d.origen).replace(/\/20(\d\d)$/, '/$1')} ${horaDe(d.origen)}`], titulo: `Repaso del ${fechaLarga(d.origen)}, ${horaDe(d.origen)}` });
@@ -2024,7 +2025,8 @@ function pintarAhora() {
   const hora = $('#ahHora');
   hora.value = horaDe(d.ahora);
   hora.closest('.campo').hidden = vivo;
-  const avisos = [...(d.avisos || [])];
+  // Si la respuesta ya explica que el pronóstico del día no llegó, el aviso no lo repite con otra hora
+  const avisos = (d.avisos || []).filter((t) => !(A.sinAviso && /^Todavía no llega la demanda/.test(t)));
   $('#ahAviso').innerHTML = avisos.map((t) => `${ICONO.ojo}<span>${esc(t)}</span>`).join('');
   $('#ahAviso').hidden = !avisos.length;
 
@@ -2035,7 +2037,7 @@ function pintarAhora() {
   $('#ahGrafSub').textContent = vivo
     ? `${nombreArea(A.area)}. A la izquierda, lo real de ayer y lo que se había pronosticado; desde la línea punteada no hay dato real todavía. «Ahora» marca la hora de Lima.`
     : `${nombreArea(A.area)}. A la izquierda de «Ahora», lo real y lo que se pronosticó un día antes; a la derecha, lo que ya estaba pronosticado a las ${horaDe(d.origen)}.`;
-  $('#ahLeyRango').textContent = `Rango del ${d.nivel_rango_pct} %`;
+  $('#ahLeyRango').textContent = `Rango del ${d.nivel_rango_pct} % (cae ahí ${d.nivel_rango_pct / 10} de cada 10 veces)`;
   $('#ahLeyRef').textContent = `Referencia (${(REF_CORTA[d.referencia_nombre] || 'simple')})`;
   $('#ahDespuesCampo').hidden = vivo;
   $('#ahDespues').checked = A.despues;
@@ -2083,18 +2085,19 @@ function preguntaDelDia(d) {
     }
     return {
       q: `¿Acertamos el ${fechaLarga(d.origen)} a las ${horaDe(d.origen)}?`,
-      html: cifra(`${real ? 'Fue' : 'Pronóstico'} · ${esc(horaDe(c.fecha_hora))}`, real ? 'real' : 'pron', real ? 'Dato del COES' : 'Pronóstico')
+      html: cifra(`${real ? 'Fue' : 'Pronóstico'} · ${esc(horaDe(c.fecha_hora))}`, real ? 'real' : 'pron', `${real ? 'Dato del COES' : 'Pronóstico'}, en megavatios (MW)`)
         + `<p class="r-frase">${frase}${escenario}</p>`,
     };
   }
   if (real) {
     return {
       q: '¿Cuánta electricidad se usará hoy?',
-      html: cifra(`Último dato real · ${esc(horaDe(c.fecha_hora))}`, 'real', 'Dato del COES')
-        + '<p class="r-frase">El pronóstico de hoy se publica hacia las 10:00, cuando el COES dé la demanda de ayer.</p>',
+      html: cifra(`Último dato real · ${esc(horaDe(c.fecha_hora))}`, 'real', 'Dato del COES, en megavatios (MW)')
+        + '<p class="r-frase">El pronóstico de hoy sale hacia las 10:00, cuando el COES publique la demanda de ayer. Mientras, abajo, el último que se emitió.</p>',
+      sinAviso: true,
     };
   }
-  const ahora = cifra(`Ahora · ${esc(horaDe(c.fecha_hora))}`, 'pron', 'Pronóstico; el dato real llega mañana');
+  const ahora = cifra(`Ahora · ${esc(horaDe(c.fecha_hora))}`, 'pron', 'Pronóstico en megavatios (MW); el real llega mañana');
   const p = d.pico;
   if (p.fecha_hora > d.ahora) {
     return {
@@ -2156,9 +2159,9 @@ function pintarCifras(d) {
   const yaPaso = vivo && p.fecha_hora < d.ahora;
   html.push(kpiHtml({
     clase: `kpi-pico${yaPaso ? ' kpi-pasado' : ''}`,
-    k: vivo ? `Pico de hoy${yaPaso ? ' <span class="kpi-paso">ya pasó</span>' : ''}` : 'Pico de las próximas 24 h',
+    k: `Pico${yaPaso ? ' <span class="kpi-paso">ya pasó</span>' : ''}`,
     n: mw(p.valor),
-    d: `${yaPaso ? `Fue a las ${esc(horaDe(p.fecha_hora))}, según el pronóstico` : `${esc(fechaDiaMes(p.fecha_hora))}, ${esc(horaDe(p.fecha_hora))}`} · rango ${rangoTxt(p.inferior, p.superior)}`,
+    d: `${yaPaso ? `Fue a las ${esc(horaDe(p.fecha_hora))}, según el pronóstico` : `${esc(fechaDiaMes(p.fecha_hora))}, ${esc(horaDe(p.fecha_hora))}`} · Rango del ${d.nivel_rango_pct} %: ${rangoTxt(p.inferior, p.superior)}`,
   }));
   if (d.manana) {
     html.push(kpiHtml({
@@ -2390,7 +2393,7 @@ function pintarDiaCompleto(d) {
   const f = d.error_dia;
   p.hidden = !(d.modo === 'repaso' && A.despues && f);
   if (p.hidden) return;
-  const ref = NOMBRE_REF[d.referencia_nombre] || 'la referencia simple';
+  const ref = NOMBRE_REF[d.referencia_nombre] || 'la referencia';
   p.innerHTML = `El día completo: el modelo se equivocó <b>${nf1.format(f.mae_modelo)} MW</b> en promedio; repetir ${esc(ref)}, `
     + `<b>${f.mae_referencia == null ? '—' : `${nf1.format(f.mae_referencia)} MW`}</b>. ${frasesMejora(f.mae_modelo, f.mae_referencia, 'la referencia')}`;
 }
@@ -2414,7 +2417,7 @@ function pintarAyer(d) {
   cont.innerHTML = `<p class="sub">Para las ${esc(horaDe(y.fecha_hora))} ${hoy ? 'de hoy' : `del ${esc(fechaDiaMes(y.fecha_hora))}`}, emitido el ${esc(fechaDiaMes(y.emitido))} a las ${esc(horaDe(y.emitido))} (24 h antes).</p>`
     + `<dl class="dijimos"><div><dt><span class="sw pron" aria-hidden="true"></span>Dijimos</dt><dd>${mw(y.pronostico)}<small>MW</small></dd></div>`
     + `<div><dt><span class="sw real" aria-hidden="true"></span>Fue</dt><dd>${mw(y.real)}<small>MW</small></dd></div></dl>`
-    + `<dl class="pares"><dt>Diferencia</dt><dd>${firmado(dif)} MW (${nf1.format(porc)} %)</dd><dt>Rango del ${d.nivel_rango_pct} %</dt><dd>${mw(y.inferior)} – ${mw(y.superior)} MW</dd></dl>`
+    + `<dl class="pares"><dt>Error</dt><dd>${firmado(dif)} MW (${nf1.format(porc)} %)</dd><dt>Rango del ${d.nivel_rango_pct} %</dt><dd>${mw(y.inferior)} – ${mw(y.superior)} MW</dd></dl>`
     + `<div class="veredicto ${y.dentro ? 'bien' : 'ojo'}">${y.dentro ? ICONO.bien : ICONO.ojo}<span>Lo real cayó ${y.dentro ? 'dentro' : 'fuera'} del rango. ${Math.abs(dif) < 0.5 ? 'Acertó.' : `${dif > 0 ? 'Sobrestimó' : 'Subestimó'} por ${mw(Math.abs(dif))} MW.`}</span></div>`
     + `<p class="nota-pie"><span class="etiqueta-fuente">${fuente}</span></p>`;
 }
@@ -2422,7 +2425,7 @@ function pintarAyer(d) {
 function barrasCmp(modelo, referencia) {
   const tope = Math.max(modelo, referencia || 0) || 1;
   const fila = (nombre, v, clase) => `<div class="barra-cmp"><span>${nombre}</span><span class="pista"><i class="${clase}" style="width:${((100 * v) / tope).toFixed(1)}%"></i></span><b>${nf1.format(v)} MW</b></div>`;
-  return fila('Modelo', modelo, 'i-pron') + (referencia != null ? fila('Referencia', referencia, 'i-ref') : '');
+  return fila('Pronóstico', modelo, 'i-pron') + (referencia != null ? fila('Referencia', referencia, 'i-ref') : '');
 }
 
 function frasesMejora(modelo, referencia, nombreRef) {
@@ -2445,7 +2448,7 @@ function veredictoCobertura(cubrio, meta) {
 function pintarBueno(d) {
   const cont = $('#ahBueno');
   const vivo = d.modo === 'en_vivo';
-  const nombreRef = NOMBRE_REF[d.referencia_nombre] || 'la referencia simple';
+  const nombreRef = NOMBRE_REF[d.referencia_nombre] || 'la referencia';
   const bloques = [];
   const e = d.error_hasta_origen;
   if (e) {
@@ -2499,15 +2502,15 @@ function pintarOrigen(d) {
   const repaso = A.fecha ? { fecha: A.fecha, hora: A.hora } : null;
   let html;
   if (d.modelo.startsWith('en_vivo:')) {
-    html = `<p class="sub">${esc(d.modelo_nombre)}: un modelo fundacional de series de tiempo, ajustado a la demanda del SEIN con datos hasta 2024 y con los feriados de Perú. Cada mañana, con la demanda de ayer que publica el COES, pronostica las 48 medias horas de hoy. Queda registrado con su hora de emisión antes de conocerse el real y no se reescribe.</p>`;
+    html = `<p class="sub">${esc(d.modelo_nombre)}: un modelo fundacional de series de tiempo, ajustado a la demanda del SEIN (Sistema Eléctrico Interconectado Nacional) con datos hasta 2024 y con los feriados de Perú. Cada mañana, con la demanda de ayer que publica el COES, pronostica las 48 medias horas de hoy. Queda registrado con su hora de emisión antes de conocerse el real y no se reescribe.</p>`;
   } else if (y && y.componentes && y.componentes.length) {
     const suma = y.componentes.reduce((t, c) => t + c.peso * (c.valores[0] || 0), 0);
-    html = `<p class="sub">Modelo <b>${esc(d.modelo_nombre.replace(/\s*\(.*\)\s*$/, '').toLowerCase())}</b>: el de menor error en 2026. Lo que se dijo para las ${esc(horaDe(y.fecha_hora))}:</p>`
+    html = `<p class="sub">Lo calcula el modelo <b>${esc(d.modelo_nombre.replace(/\s*\(.*\)\s*$/, '').toLowerCase())}</b>, el de menor error en 2026. Lo que se dijo para las ${esc(horaDe(y.fecha_hora))}:</p>`
       + `<div class="formula">${y.componentes.map((c) => `${mw(c.valores[0])} × ${c.peso.toFixed(2)} <span class="muted">(${esc(c.nombre)})</span>`).join('<br>+ ')}<br>= <b>${mw(suma)} MW</b></div>`
-      + '<p class="nota-pie">Pesos fijados con la validación de 2025 y aplicados tal cual a 2026. Usa solo la demanda y el calendario; no usa el clima.</p>';
+      + '<p class="nota-pie">Pesos fijados con la validación de 2025 y aplicados tal cual a 2026. Usa solo la demanda y el calendario; no usa el clima. Chronos-2 es un modelo fundacional de series de tiempo, ajustado a esta demanda.</p>';
   } else {
     const m = modeloPorId(d.modelo);
-    html = `<p class="sub">Modelo <b>${esc(d.modelo_nombre)}</b>. ${esc((m && m.descripcion) || '')}</p>`;
+    html = `<p class="sub">Lo calcula el modelo <b>${esc(d.modelo_nombre)}</b>. ${esc((m && m.descripcion) || '')}</p>`;
   }
   html += '<p class="enlaces">'
     + (repaso && repaso.fecha >= FECHA_MIN && repaso.fecha <= FECHA_MAX ? `<a class="btn-enlace" href="${rutaDetalle(A.area, repaso, 'escenarios')}">¿Y si hace más calor? →</a>` : '')
@@ -2579,7 +2582,7 @@ function pintarConfianzaPantalla() {
   const seg = conf.seguimiento;
   const area = nombreArea(C.area);
   const h = C.horizonte === '1h' ? '1 hora' : '24 horas';
-  const nombreRef = NOMBRE_REF[seg.referencia_nombre] || 'la referencia simple';
+  const nombreRef = NOMBRE_REF[seg.referencia_nombre] || 'la referencia';
   const n = seg.meses.length;
   const ganados = seg.meses.filter((x) => x.mae_modelo < x.mae_referencia).length;
   const t = seg.total;
@@ -2591,13 +2594,13 @@ function pintarConfianzaPantalla() {
   $('#cfTitular').textContent = ganados === n
     ? `En 2026 se equivocó menos que la referencia los ${n} meses.`
     : `En 2026 le ganó a la referencia en ${ganados} de ${n} meses.`;
-  let lead = `${esc(area)}, a ${h}: error medio de <b>${nf1.format(t.mae_modelo)} MW</b> (${nf1.format(conf.mape_pct)} % de la demanda), ${nf0.format(Math.abs(mejora))} % ${mejora >= 0 ? 'menos' : 'más'} que repetir ${esc(nombreRef)}. `
+  let lead = `${esc(area)}, a ${h}: error medio de <b>${nf1.format(t.mae_modelo)} MW</b> (megavatios; ${nf1.format(conf.mape_pct)} % de la demanda), ${nf0.format(Math.abs(mejora))} % ${mejora >= 0 ? 'menos' : 'más'} que repetir ${esc(nombreRef)}. `
     + `El rango del ${nf0.format(meta)} % cubrió el <b>${nf1.format(t.cobertura_pct)} %</b> en el año${bajos.length ? `, pero quedó corto en ${esc(bajos.map((x) => mesLargo(x.mes)).join(', '))}` : ''}. `;
   if (rVivo) {
     const vv = veredictoCobertura(rVivo.cobertura_pct, vivo.nivel_rango_pct);
     lead += `En vivo, desde el ${esc(fechaDiaMes(rVivo.desde))}, el rango del ${vivo.nivel_rango_pct} % cubrió el <b>${nf1.format(rVivo.cobertura_pct)} %</b>: ${esc(vv.texto)}. `;
   }
-  lead += 'Todo se mide con pronósticos que el modelo no vio al entrenar; 2026 sí se usó para elegir el modelo.';
+  lead += 'Todo se mide contra la demanda real que publica el COES, el operador del sistema eléctrico, con pronósticos que el modelo no vio al entrenar; 2026 sí se usó para elegir el modelo.';
   $('#cfLead').innerHTML = lead;
 
   const ac = conf.acierto;
@@ -2638,10 +2641,10 @@ function pintarMesAMes(seg, conf) {
   const ultimo = meses[meses.length - 1].mes;
   const parcial = hasta && hasta.slice(0, 7) === ultimo && Number(hasta.slice(8, 10)) < 28 ? ` ${capital(mesLargo(ultimo))} llega hasta el día ${Number(hasta.slice(8, 10))}.` : '';
   cont.innerHTML = `<p class="sub">Error medio absoluto en MW (menos es mejor), a ${C.horizonte === '1h' ? '1 hora' : '24 horas'}. Solo pronósticos que el modelo no vio al entrenar.</p>`
-    + `<div class="leyenda"><span class="it"><span class="mk pron"></span>Modelo</span><span class="it"><span class="mk ref" style="border-top-style:solid"></span>Referencia: ${esc((TITULO_REF[seg.referencia_nombre] || '').toLowerCase())}</span></div>`
+    + `<div class="leyenda"><span class="it"><span class="mk pron"></span>Pronóstico</span><span class="it"><span class="mk ref" style="border-top-style:solid"></span>Referencia (${esc((TITULO_REF[seg.referencia_nombre] || '').toLowerCase())})</span></div>`
     + '<div id="cfMesG" class="chart lienzo" style="min-height:220px"></div>'
     + `<p class="sub">Le ganó a la referencia en <b>${ganados} de ${meses.length}</b> meses. Peor mes: ${esc(mesLargo(peor.mes))} (${nf1.format(peor.mae_modelo)} MW).${esc(parcial)}</p>`
-    + `<details class="datos"><summary>Ver la tabla mes a mes</summary><div class="tabla-scroll" tabindex="0" role="region" aria-label="Error mes a mes"><table class="t"><caption class="visually-hidden">Error medio y cobertura por mes de 2026</caption><thead><tr><th scope="col">Mes</th><th scope="col">Modelo (MW)</th><th scope="col">Referencia (MW)</th><th scope="col">¿Le ganó?</th><th scope="col">Cobertura</th><th scope="col">Medias horas</th></tr></thead><tbody>`
+    + `<details class="datos"><summary>Ver la tabla mes a mes</summary><div class="tabla-scroll" tabindex="0" role="region" aria-label="Error mes a mes"><table class="t"><caption class="visually-hidden">Error medio y cobertura por mes de 2026</caption><thead><tr><th scope="col">Mes</th><th scope="col">Pronóstico (MW)</th><th scope="col">Referencia (MW)</th><th scope="col">¿Le ganó?</th><th scope="col">Cobertura</th><th scope="col">Medias horas</th></tr></thead><tbody>`
     + meses.map((x) => `<tr><th scope="row">${esc(capital(mesLargo(x.mes)))}</th><td>${nf1.format(x.mae_modelo)}</td><td>${nf1.format(x.mae_referencia)}</td><td>${x.mae_modelo < x.mae_referencia ? 'sí' : 'no'}</td><td>${nf1.format(x.cobertura_pct)} %</td><td>${nf0.format(x.periodos)}</td></tr>`).join('')
     + `<tr><th scope="row">2026</th><td><b>${nf1.format(seg.total.mae_modelo)}</b></td><td><b>${nf1.format(seg.total.mae_referencia)}</b></td><td></td><td><b>${nf1.format(seg.total.cobertura_pct)} %</b></td><td>${nf0.format(seg.total.periodos)}</td></tr></tbody></table></div></details>`;
   barrasMeses($('#cfMesG'), meses);
@@ -2743,7 +2746,7 @@ function pintarVivoConf(vivo, conf) {
   const v = principal ? veredictoCobertura(principal.cobertura_pct, vivo.nivel_rango_pct) : null;
   const malos = (conf.dias_en_vivo || []).filter((k) => Math.abs(k.error_pct) > conf.umbral_pico_pct);
   const inicio = [recon24 && recon24.desde, vivo24 && vivo24.desde, vivo.primer_dia_en_vivo].filter(Boolean).sort()[0];
-  let html = `<p class="sub">Desde el ${esc(fechaDiaMes(inicio || ''))}, ${esc(vivo.modelo || 'el modelo')} pronostica cada día con la demanda del día anterior que publica el COES. `
+  let html = `<p class="sub">Desde el ${esc(fechaDiaMes(inicio || ''))}, ${esc(vivo.modelo || 'el modelo')}${/Chronos/.test(vivo.modelo || '') ? ', un modelo fundacional de series de tiempo,' : ''} pronostica cada día con la demanda del día anterior que publica el COES. `
     + `Lleva ${plural(vivo.dias_reconstruidos, 'día reconstruido', 'días reconstruidos')} (calculados después de conocerse el real, con los datos que habría tenido: no cuentan como en vivo) y ${plural(vivo.dias_en_vivo, 'día en vivo', 'días en vivo')}${vivo.primer_dia_en_vivo ? `, desde el ${esc(fechaDiaMes(vivo.primer_dia_en_vivo))}` : ''}: emitidos antes de su real, cada uno se verifica a la mañana siguiente.</p>`;
   html += `<div class="vivo-tipos">${caja('En vivo a 24 h', vivo24, 'Todavía ningún día con su real')}${caja('Reconstruido a 24 h', recon24, 'Sin días reconstruidos')}${caja('A 1 hora, siempre reconstruido', g('reconstruido', '1h'), 'Sin datos')}</div>`;
   if (v && v.clase !== 'bien') {
