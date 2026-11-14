@@ -2120,9 +2120,10 @@ function preguntaDelDia(d) {
   const iFin = resto[resto.length - 1];
   const v = d.pronostico[iFin];
   const pct = cambioPct(v, c.valor);
+  // Una subida menor que el 1 % (las mayores ya se dijeron arriba) no se cuenta como bajada
   return {
     q,
-    html: `${ahora}<p class="r-frase">${pct < 1 ? `Se mantendrá cerca de <b>${mw(v)} MW</b> hasta las ${esc(horaDe(d.fecha_hora[iFin]))}.` : `Irá bajando: unos <b>${mw(v)} MW</b> a las ${esc(horaDe(d.fecha_hora[iFin]))}, ${pct} % menos que ahora.`}</p>`,
+    html: `${ahora}<p class="r-frase">${v >= c.valor || pct < 1 ? `Se mantendrá cerca de <b>${mw(v)} MW</b> hasta las ${esc(horaDe(d.fecha_hora[iFin]))}.` : `Irá bajando: unos <b>${mw(v)} MW</b> a las ${esc(horaDe(d.fecha_hora[iFin]))}, ${pct} % menos que ahora.`}</p>`,
   };
 }
 
