@@ -313,7 +313,6 @@ function pintarRegimen() {
   const [y, m] = r.mes.split('-').map(Number);
   const estado = ESTADO_NINO[r.estado] || r.estado;
   $('#chipRegimenTxt').textContent = `El Niño costero (calentamiento del mar frente a la costa): ${estado} · ¿cuándo se equivoca más? →`;
-  chip.href = `#/confianza/${encodeURIComponent(A.area)}?seccion=nino`;
   chip.title = `Último ICEN publicado: ${r.icen} en ${MESES[m - 1]} de ${y}, régimen ${estado} según ENFEN. El ICEN sale con meses de rezago.`;
   chip.hidden = false;
 }
@@ -687,6 +686,7 @@ function pintarAreasAhora() {
   const lista = S.areas.length ? S.areas : AREAS_RESPALDO;
   const repaso = A.fecha ? { fecha: A.fecha, hora: A.hora } : null;
   $('#ahAreas').innerHTML = lista.map((a) => `<a href="${rutaAhora(a.id, repaso, { modelo: A.modelo })}"${a.id === A.area ? ' aria-current="page"' : ''}>${esc(a.nombre)}</a>`).join('');
+  $('#chipRegimen').href = `#/confianza/${encodeURIComponent(A.area)}?seccion=nino`; // el chip lleva a «Confianza» del área elegida
 }
 
 const cambioPct = (a, b) => Math.round((100 * Math.abs(a - b)) / b);

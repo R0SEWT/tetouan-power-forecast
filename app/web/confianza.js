@@ -60,7 +60,10 @@ async function cargarConfianza() {
   if (C.ir) {
     const sec = $(C.ir).closest('section');
     C.ir = null;
-    sec.scrollIntoView({ block: 'start', behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+    // Debajo de la cabecera fija, no tapado por ella
+    const cabecera = document.querySelector('header');
+    const arriba = sec.getBoundingClientRect().top + window.scrollY - (cabecera ? cabecera.getBoundingClientRect().height : 0) - 12;
+    window.scrollTo({ top: Math.max(0, arriba), behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
     sec.setAttribute('tabindex', '-1');
     sec.focus({ preventScroll: true });
   }
