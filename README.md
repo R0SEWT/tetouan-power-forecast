@@ -28,8 +28,8 @@
 
 <table>
   <tr>
-    <td width="72%"><img src="docs/img/curva-ahora-escritorio.jpg" alt="«Ahora» en escritorio: el repaso del martes 10 de marzo de 2026 a las 10:30 en el Centro. La cifra de lo real, 4,910 MW, junto a lo que se pronosticó un día antes, 4,916 MW con un rango de 4,732 a 5,083, y el gráfico del día con lo real hasta las 10:30 y el pronóstico de las 24 horas siguientes."></td>
-    <td width="28%"><img src="docs/img/curva-ahora-movil.jpg" alt="«Ahora» en el celular: el mismo repaso, con la pregunta del día, la cifra y la respuesta arriba, y el gráfico debajo."></td>
+    <td width="72%" valign="top"><img src="docs/img/curva-ahora-escritorio.jpg" alt="«Ahora» en escritorio: el repaso del martes 10 de marzo de 2026 a las 10:30 en el Centro. La cifra de lo real, 4,910 MW, junto a lo que se pronosticó un día antes, 4,916 MW con un rango de 4,732 a 5,083, y el gráfico del día con lo real hasta las 10:30 y el pronóstico de las 24 horas siguientes."></td>
+    <td width="28%" valign="top"><img src="docs/img/curva-ahora-movil.jpg" alt="«Ahora» en el celular: el mismo repaso, con la pregunta del día, la cifra y la respuesta arriba, y el gráfico debajo."></td>
   </tr>
 </table>
 
