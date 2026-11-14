@@ -127,7 +127,10 @@ function pintarCoberturaVista(cubrio, meta, vCob, rVivo, vivo) {
   let html = '<p class="cob-tit">¿El rango cumple lo que promete?</p>'
     + fila('', 'Prueba de 2026', cubrio, meta, vCob, '');
   if (vv) {
-    const debe = vivo.nivel_rango_pct % 10 === 0 ? `: cubre ${nf0.format(rVivo.cobertura_pct / 10)} de cada 10, no ${vivo.nivel_rango_pct / 10}` : '';
+    // «cubre 7 de cada 10, no 8» solo si las dos cifras redondeadas difieren (con 77 % diría «8 de cada 10, no 8»)
+    const cubre = Math.round(rVivo.cobertura_pct / 10);
+    const nominal = vivo.nivel_rango_pct / 10;
+    const debe = Number.isInteger(nominal) && cubre !== nominal ? `: cubre ${cubre} de cada 10, no ${nominal}` : '';
     html += fila(vv.clase === 'bien' ? '' : ` aviso-vivo ${vv.clase}`, `En vivo, desde el ${esc(fechaCorta(rVivo.desde).replace(/ \d{4}$/, ''))}`, rVivo.cobertura_pct, vivo.nivel_rango_pct, vv, vv.clase === 'bien' ? '' : debe);
   }
   $('#cfCobVista').innerHTML = html;
