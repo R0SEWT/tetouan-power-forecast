@@ -95,7 +95,12 @@ rclone copy "$d/reportes/sein/en_vivo" "$r/reportes/sein/en_vivo" --exclude ".co
    de los pesos, `emitido_en`, `datos_hasta`, el sha256 del anexo usado y el commit del código.
    `verificar` reproduce los pronósticos guardados de Colab (`reportes/sein/fundacionales/chronos2ftcal_c2048.parquet`)
    con una diferencia máxima de 0.0005 MW.
-3. **Evaluación.** Cruza el registro con el real que ya llegó: `seguimiento.parquet` (error de cada periodo, si cayó
+3. **Rango adaptativo (modelo en paralelo).** Con las filas de `chronos2ftcal` ya registradas emite las de
+   `chronos2ftcal+rango`: el mismo pronóstico central y el rango 10–90 recalibrado en línea con ACI por lado
+   (γ = 0.2), porque el del modelo cubre 74–76 % en vez de 80 % (2025 y 2026). El rango del día X usa solo los reales
+   hasta X − 1 y arranca con el estado al cerrar el 22 de octubre (`ESTADO_RANGO_CHRONOS`). No llama al modelo, no
+   toca las filas del base y la app sigue mostrando el base. Elegido con 2025 en `experimentos/sesgo/remedios.py`.
+4. **Evaluación.** Cruza el registro con el real que ya llegó: `seguimiento.parquet` (error de cada periodo, si cayó
    dentro del rango y las referencias) y `resumen.parquet` (MAE, sesgo y cobertura por día y acumulados, por tipo,
    frente a la mejor referencia ingenua en esas mismas filas: ayer o la semana pasada a 24 h; también el último dato
    a 1 h). Se rehacen en cada corrida.

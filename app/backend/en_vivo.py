@@ -10,7 +10,7 @@ from pathlib import Path
 
 import pandas as pd
 
-from tetouan_power_forecast.en_vivo import GRUPOS, LIMA, PASO, rutas
+from tetouan_power_forecast.en_vivo import GRUPOS, LIMA, PASO, es_paralelo, rutas
 
 from .ahora import armar_ahora
 from .ahora import dias_pico as calcular_dias_pico
@@ -53,12 +53,15 @@ class LectorEnVivo:
         return self._cache[nombre][1]
 
     def _propio(self, area: str):
-        """Las filas del área del modelo y la versión de la última emisión (lo demás no se mezcla), o None."""
+        """Las filas del área del modelo y la versión de la última emisión (lo demás no se mezcla), o None.
+
+        Los modelos en paralelo (como «chronos2ftcal+rango») se registran para compararlos en vivo; no se muestran.
+        """
         registro = self._leer("pronosticos.parquet")
         if registro is None or registro.empty:
             return None
         codigo = area.upper()
-        propio = registro[registro["area"] == codigo]
+        propio = registro[(registro["area"] == codigo) & ~registro["modelo"].map(es_paralelo).astype(bool)]
         if propio.empty:
             return None
         ultima = propio.loc[propio["emitido_en"].idxmax()]
