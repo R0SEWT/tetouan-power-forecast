@@ -1611,7 +1611,7 @@ function conectarEventos() {
     pintarBueno(d);
     if ($('#ahTablaDet').open) conExtra(() => pintarTablaAhora(d));
   });
-  $('#ahCsv').addEventListener('click', () => conExtra(descargarCsvAhora));
+  $('#ahCsv').addEventListener('click', () => conExtra(() => descargarCsvAhora())); // se busca después de cargar el archivo
   $('#ahOrigen').addEventListener('click', (ev) => {
     if (ev.target.closest('[data-accion="ficha"]')) $('#btnFicha').click();
   });
