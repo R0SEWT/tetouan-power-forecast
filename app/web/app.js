@@ -1174,7 +1174,8 @@ function pintarAyer(d) {
   const cont = $('#ahAyer');
   // «De hoy» solo cuando es hoy: en un repaso y de madrugada, el día con su fecha
   const hoy = y && y.fecha_hora.slice(0, 10) === hoyLima();
-  $('#ahAyerTit').textContent = hoy || !y ? 'Lo que dijimos ayer para esta hora' : 'Lo que se dijo un día antes';
+  const deAyer = y && d.modo === 'en_vivo' && y.fecha_hora.slice(0, 10) === sumarDias(hoyLima(), -1);
+  $('#ahAyerTit').textContent = hoy || !y ? 'Lo que dijimos ayer para esta hora' : deAyer ? 'Lo que dijimos para ayer a esta hora' : 'Lo que se dijo un día antes';
   if (!y) {
     cont.innerHTML = '<p class="sub">Todavía no hay un pronóstico verificado contra el real para esta hora.</p>';
     return;
