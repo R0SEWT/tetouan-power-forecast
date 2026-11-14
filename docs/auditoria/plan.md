@@ -30,11 +30,13 @@ o con capturas de `inicio` hechas en la misma media hora.
 | 11 | **Un solo rango, recalibrado**: el 80 % en vivo y el 90 % del repaso pasan a un nivel, calibrado con el registro en vivo | L4 Confianza | Cobertura en vivo (23-oct → 12-nov) del rango publicado: 73.2 % Centro, 74.3 % Norte para un 80 % nominal → dentro de ±3 puntos del nominal en las tres áreas, en un tramo que no se usó para calibrar | Sí: qué nivel publicar (80 o 90 %) | Pendiente |
 | 12 | **Tarjetas de área con identidad y cuota de la demanda** en vez de las insignias N/C/S | L2 Jerarquía | El área elegida se lleva más atención que cada una de las otras (hoy Norte 9.4 % > Centro 7.2 %); «¿de qué zona habla?»: 1 de 4 vistas → ≥ 3 de 4 | — | Pendiente |
 | 13 | **«Detalle» se funde en «Ahora» y «Confianza»** (escenarios, diagnóstico y modelo se mudan; lo duplicado se va) | L5 Consistencia | Jaccard de tamaños de letra Detalle~Ahora: 0.44 → ≥ 0.7 (o pantalla retirada); controles a la vista: 19 / 29 (escritorio / proyector) → ≤ 15; T3 ≤ 2 acciones | **Sí: fusionar o retirar** | Pendiente |
-| 14 | **Partir `app.js`**: «Confianza» y lo que quede de «Detalle» se cargan al abrirlos | L6 Rendimiento | Peso de «Ahora»: 76 KB → ≤ 50 KB; hasta ver el número en red lenta: 829 ms → ≤ 706 ms | — | Pendiente |
+| 14 | **Partir `app.js`**: «Confianza» y lo que quede de «Detalle» se cargan al abrirlos | L6 Rendimiento | Peso de «Ahora»: 76 KB → ≤ 50 KB; hasta ver el número en red lenta: 829 ms → ≤ 706 ms | — | **Hecho** (#44, adelantado): peso 78 → **44 KB**; número en red lenta 844–878 → **660–682 ms** (cumple; antes y después alternados, 5 cargas cada uno). Pantallas idénticas: estilos calculados iguales elemento por elemento en «Confianza» y «Detalle» (4 vistas × 2 temas) y 25 de 32 capturas idénticas píxel a píxel (las otras 7, el antialias del ícono nativo de fecha y hora) |
 | 15 | **Niveles Ciudadano y Operador** (concepto C), con estados vacíos que enseñan | L1 Orientación | En Ciudadano: controles a la vista 12 / 10 → ≤ 6; prueba de 5 s ≥ 5 de 6; en Operador, KLM de T1–T4 ≤ base | **Sí: público objetivo** | Pendiente |
 | 16 | **El repositorio presenta «Curva»**: README con la captura principal y el contexto académico al pie, poda de capturas, `LICENSE` y `Dockerfile` | L7 Repositorio | README: 0 imágenes y el título de curso → captura de «Ahora» en la primera pantalla; capturas sin referencia en `docs/img/app-hcd`: 10 de 40 → 0; `docker run` responde `/salud` | **Sí: licencia** | Pendiente |
 
-**Estado de la serie (14-nov):** los PR 1 a 4 están abiertos y apilados (#40 → #41 → #42 → #43), sin fusionar. Las cuatro mediciones clave cumplen su umbral con el mismo arnés (medidas de noche y de madrugada; falta repetirlas de día, con el pronóstico del día publicado). El peso de «Ahora» quedó en 78 KB (76 en la base): lo justifican la pregunta del día y las definiciones, y lo devuelve el PR 14. Al arnés se le agregó el desvío de la API a otro puerto (`comun.mjs`), la AOI de la respuesta y un arreglo: lo que hay dentro de un `<details>` cerrado ya no cuenta como AOI. Tras el PR 3 se pidió una segunda opinión de diseño (agy); lo adoptado y lo descartado, con cifras, está en #43.
+**Estado de la serie (14-nov):** los PR 1 a 4 están abiertos y apilados (#40 → #41 → #42 → #43), sin fusionar. Sobre
+ellos va una segunda tanda, también apilada: el 14 (adelantado porque el peso quedó 2 KB sobre la guarda), el 7, el 5 y
+el 6. Las cuatro mediciones clave cumplen su umbral con el mismo arnés (medidas de noche y de madrugada; falta repetirlas de día, con el pronóstico del día publicado). El peso de «Ahora» quedó en 78 KB (76 en la base): lo justifican la pregunta del día y las definiciones, y lo devuelve el PR 14. Al arnés se le agregó el desvío de la API a otro puerto (`comun.mjs`), la AOI de la respuesta y un arreglo: lo que hay dentro de un `<details>` cerrado ya no cuenta como AOI. Tras el PR 3 se pidió una segunda opinión de diseño (agy); lo adoptado y lo descartado, con cifras, está en #43.
 
 Fuera de la numeración, porque no es un PR de interfaz:
 
@@ -106,6 +108,8 @@ dueño lo adopta.
 
 - **Hallazgos (iteración 8):** peso de «Ahora» 48 → 76 KB; hasta ver el número en red lenta 706 → 829 ms; `app.js`
   pesa 174 KB (49 KB comprimido) y trae el código de las tres pantallas.
+- **Resultado (PR 14):** `app.js` queda en 69 KB (22 KB comprimido); `detalle.js`/`.css` y `confianza.js`/`.css`
+  bajan al abrir su pantalla (o antes, cuando el puntero o el foco llegan a su enlace). Peso de «Ahora» 44 KB.
 
 ### L7 · El repositorio como producto (PR 16 y el renombre)
 
