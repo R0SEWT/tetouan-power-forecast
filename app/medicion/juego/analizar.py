@@ -86,10 +86,18 @@ def parecido(a: str, b: str) -> float:
     return len(ta & tb) / len(ta | tb) if ta and tb else 0.0
 
 
+MESES = r"enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|setiembre|octubre|noviembre|diciembre"
+# Horas y fechas no son cantidades: «a las 15:30» no es un cambio de 15 MW ni «10 de marzo» una cifra de 10
+NO_CANTIDAD = re.compile(r"\b\d{1,2}:\d{2}(?:\s*(?:am|pm|h)\b)?|\b\d{1,2}/\d{1,2}(?:/\d{2,4})?\b|"
+                         rf"\b\d{{1,2}} de (?:{MESES})\b|\b(?:19|20)\d{{2}}-\d{{2}}-\d{{2}}\b", re.IGNORECASE)
+
+
 def numeros(texto: str) -> list[float]:
-    """Las cifras de un texto, con coma o punto de miles o de decimales («4,456», «4.456», «71,9», «1.66»)."""
+    """Las cantidades de un texto, con coma o punto de miles o de decimales («4,456», «4.456», «71,9», «1.66»),
+    sin contar horas ni fechas."""
     salida = []
-    for m in re.finditer(r"\d{1,3}(?:[.,\s]\d{3})+(?:[.,]\d+)?|\d+(?:[.,]\d+)?", str(texto)):
+    limpio = NO_CANTIDAD.sub(" ", str(texto))
+    for m in re.finditer(r"\d{1,3}(?:[.,\s]\d{3})+(?:[.,]\d+)?|\d+(?:[.,]\d+)?", limpio):
         s = m.group().replace(" ", "")
         if "," in s and "." in s:
             dec = "," if s.rfind(",") > s.rfind(".") else "."

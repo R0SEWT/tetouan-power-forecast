@@ -76,3 +76,9 @@ def test_la_etiqueta_de_un_campo_cuenta_como_el_campo():
     regla = {"aciertos": ["ver otro dia"], "aceptables": ["\\ba las\\b"]}
     assert a.calificar_clic("Ver otro día", pantalla, regla)["resultado"] == "acierto"
     assert "input:time" in a.ubicar("A las", pantalla)["etiqueta"]
+
+
+def test_horas_y_fechas_no_son_cantidades():
+    assert not a.calza("A las 15:30 cambia 999 MW", [15.0])
+    assert a.calza("+15 MW a las 11:00; a las 15:30, +25 MW", [15.0])
+    assert not a.calza("el 10 de marzo, 03/10/2026", [10.0, 3.0])

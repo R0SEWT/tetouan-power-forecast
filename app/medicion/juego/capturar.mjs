@@ -12,7 +12,7 @@
 // Salida: app/medicion/juego/tmp/<etiqueta>/ (fuera de git): <pantalla>/vista-N.png, <pantalla>/aria.yaml y
 // <pantalla>/textos.json; y app/medicion/juego/resultados/<etiqueta>/pantallas.json (versionado): el manifiesto con los
 // oráculos y, por vista, los textos y controles visibles con su zona, que es lo que usa analizar.py.
-import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { mkdirSync, readdirSync, readFileSync, unlinkSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { abrirNavegador, api, nuevaPagina, vigilarRed, WEB } from '../comun.mjs';
@@ -87,6 +87,8 @@ async function leerVista(pagina, aoi) {
 async function capturar(navegador, nombre, def) {
   const dir = join(SALIDA, nombre);
   mkdirSync(dir, { recursive: true });
+  // Una captura anterior con más vistas no debe quedar mezclada con esta
+  for (const f of readdirSync(dir)) if (/^vista-\d+\.png$/.test(f)) unlinkSync(join(dir, f));
   const { contexto, pagina } = await nuevaPagina(navegador, 'escritorio', 'light');
   const quieto = vigilarRed(pagina);
   await pagina.goto(def.url());

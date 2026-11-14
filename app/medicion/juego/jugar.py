@@ -210,7 +210,12 @@ def preparar_carpeta(origen: Path, modo: str) -> tuple[Path, int]:
     if modo == "texto":
         shutil.copy(origen / "aria.yaml", carpeta / "pagina.txt")
         return carpeta, 1
+    # Solo las vistas que lista el manifiesto de esa captura (no restos de una captura anterior)
+    manifiesto = origen.parent / "manifiesto.json"
     vistas = sorted(origen.glob("vista-*.png"))
+    if manifiesto.exists():
+        pantalla = next(p for p in json.loads(manifiesto.read_text())["pantallas"] if p["pantalla"] == origen.name)
+        vistas = [origen / v["archivo"] for v in pantalla["vistas"]]
     for v in vistas:
         shutil.copy(v, carpeta / v.name)
     return carpeta, len(vistas)
