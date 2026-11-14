@@ -32,7 +32,7 @@ o con capturas de `inicio` hechas en la misma media hora.
 | 13 | **«Detalle» se funde en «Ahora» y «Confianza»** (escenarios, diagnóstico y modelo se mudan; lo duplicado se va) | L5 Consistencia | Jaccard de tamaños de letra Detalle~Ahora: 0.44 → ≥ 0.7 (o pantalla retirada); controles a la vista: 19 / 29 (escritorio / proyector) → ≤ 15; T3 ≤ 2 acciones | **Sí: fusionar o retirar** | Pendiente |
 | 14 | **Partir `app.js`**: «Confianza» y lo que quede de «Detalle» se cargan al abrirlos | L6 Rendimiento | Peso de «Ahora»: 76 KB → ≤ 50 KB; hasta ver el número en red lenta: 829 ms → ≤ 706 ms | — | **Hecho** (#44, adelantado): peso 78 → **44 KB**; número en red lenta 844–878 → **660–682 ms** (cumple; antes y después alternados, 5 cargas cada uno). Pantallas idénticas: estilos calculados iguales elemento por elemento en «Confianza» y «Detalle» (4 vistas × 2 temas) y 25 de 32 capturas idénticas píxel a píxel (las otras 7, el antialias del ícono nativo de fecha y hora) |
 | 15 | **Niveles Ciudadano y Operador** (concepto C), con estados vacíos que enseñan | L1 Orientación | En Ciudadano: controles a la vista 12 / 10 → ≤ 6; prueba de 5 s ≥ 5 de 6; en Operador, KLM de T1–T4 ≤ base | **Sí: público objetivo** | Pendiente |
-| 16 | **El repositorio presenta «Curva»**: README con la captura principal y el contexto académico al pie, poda de capturas, `LICENSE` y `Dockerfile` | L7 Repositorio | README: 0 imágenes y el título de curso → captura de «Ahora» en la primera pantalla; capturas sin referencia en `docs/img/app-hcd`: 10 de 40 → 0; `docker run` responde `/salud` | **Sí: licencia** | Pendiente |
+| 16 | **El repositorio presenta «Curva»**: README con la captura principal y el contexto académico al pie, poda de capturas, `LICENSE` y `Dockerfile` | L7 Repositorio | README: 0 imágenes y el título de curso → captura de «Ahora» en la primera pantalla; capturas sin referencia en `docs/img/app-hcd`: 10 de 40 → 0; `docker run` responde `/salud` | **Sí: licencia** | **Hecho en parte** (#51): el README abre con «Curva» (qué es, «Ahora» de día en escritorio y en el celular, cómo levantarla en 3 pasos, resultados clave con cifras ya publicadas y el mapa de la documentación) y deja el curso y el equipo al pie; capturas en la primera pantalla **0 → 2**; capturas sin referencia en `docs/img/app-hcd` **10 de 40 → 0** (3.8 → 2.6 MB); enlaces relativos rotos 0 → **0** (142 → 166). `Dockerfile` escrito y validado con `docker build --check` (sin avisos), **sin construir**: bajaría más de 200 MB (pyarrow, scipy, xgboost). Pendientes del dueño: `LICENSE`, el renombre y la descripción de `pyproject.toml` |
 
 **Estado de la serie (14-nov):** los PR 1 a 4 están abiertos y apilados (#40 → #41 → #42 → #43), sin fusionar. Sobre
 ellos va una segunda tanda, también apilada: el 14 (#44, adelantado porque el peso quedó 2 KB sobre la guarda), el 7
@@ -40,7 +40,7 @@ ellos va una segunda tanda, también apilada: el 14 (#44, adelantado porque el p
 pronóstico?», pero no el 3 % de atención en el punto de «ahora» (llega a 0.4–0.6 %; se propone revisar ese umbral). Desde el PR 7 el arnés de atención mide también el repaso de un día a media mañana (`ahora_dia`: 10-mar,
 10:30), además de la entrada en vivo y el repaso de las 19:00. Las cuatro mediciones clave cumplen su umbral con el mismo arnés (medidas de noche y de madrugada; falta repetirlas de día, con el pronóstico del día publicado). El peso de «Ahora» quedó en 78 KB (76 en la base): lo justifican la pregunta del día y las definiciones, y lo devuelve el PR 14. Al arnés se le agregó el desvío de la API a otro puerto (`comun.mjs`), la AOI de la respuesta y un arreglo: lo que hay dentro de un `<details>` cerrado ya no cuenta como AOI. Tras el PR 3 se pidió una segunda opinión de diseño (agy); lo adoptado y lo descartado, con cifras, está en #43.
 
-**Tercera tanda (14-nov, apilada sobre #49):** el 10 (#50), con su clave cumplida; ver la fila de la tabla.
+**Tercera tanda (14-nov, apilada sobre #49):** el 10 (#50) y el 16 (#51), con sus claves cumplidas; el `docker run` del 16 queda sin probar. Ver las filas de la tabla.
 
 **Ronda RITE (#49, 14-nov, apilado sobre #48):** con el playtest sintético de
 [`plan-juego.md`](plan-juego.md), seis rondas sobre la punta. Se quedan: «¿Y si hace más calor?» también en vivo y el
@@ -129,6 +129,10 @@ dueño lo adopta.
 - **Hallazgos:** el README abre con `tetouan-power-forecast` y «Trabajo grupal (TB1) del curso…», sin ninguna imagen;
   `docs/img/app-hcd` tiene 40 capturas (3.8 MB), 10 sin referencia; no hay `LICENSE` ni `Dockerfile`; el paquete se
   llama `tetouan_power_forecast` y `pyproject.toml` describe «el consumo eléctrico de la Zona 1 de Tetuán».
+- **Resultado (PR 16):** README de «Curva» con dos capturas en la primera pantalla; 10 capturas sin referencia fuera
+  (siguen en la historia de git); `Dockerfile` y `.dockerignore` (la API sirve la web en :8000; los datos se montan).
+- **Decisiones del dueño, sin tocar:** la licencia (`LICENSE`), el nombre del repositorio y del paquete
+  (`tetouan_power_forecast`) y la descripción de `pyproject.toml`, que sigue hablando de la Zona 1 de Tetuán.
 
 ### L8 · Validación con personas
 

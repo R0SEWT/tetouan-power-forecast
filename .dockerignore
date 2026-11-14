@@ -1,0 +1,15 @@
+# Lo que la imagen de la app no necesita: datos (se montan), entornos, notebooks, documentos y la medición
+.git
+.github
+.venv
+**/__pycache__
+**/node_modules
+.ruff_cache
+data
+notebooks
+entregables
+experimentos
+docs
+tests
+app/medicion
+*.ipynb
