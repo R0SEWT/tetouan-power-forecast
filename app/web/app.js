@@ -471,6 +471,7 @@ function leerFecha(texto) {
     d = Number(c.slice(0, 2));
     m = Number(c.slice(2, 4));
     if (c.length > 4) y = Number(c.slice(4));
+    if (c.length === 8 && m > 12) [y, m, d] = [Number(c.slice(0, 4)), Number(c.slice(4, 6)), Number(c.slice(6))]; // 20260310
   }
   if (y != null && y < 100) y += 2000;
   else if (y != null && (y < 1000 || y > 9999)) return null; // un año de 3 cifras todavía se está escribiendo
@@ -514,6 +515,8 @@ function formatearFecha(texto) {
   const propias = [...texto].some((ch, i) => /[/.-]/.test(ch) && !(ch === '/' && (i === 2 || i === 5)));
   if (propias || /[^\d/]/.test(texto)) return texto; // «1/3», «10/3/25» o «2026-03-10»: como lo escribió
   const c = texto.replace(/\D/g, '').slice(0, 8);
+  // «2026…» no es día y mes (no hay mes 26): se está escribiendo el año primero, como en 2026-03-10
+  if (c.length >= 4 && (Number(c.slice(0, 2)) > 31 || Number(c.slice(2, 4)) > 12)) return c;
   return [c.slice(0, 2), c.slice(2, 4), c.slice(4)].filter(Boolean).join('/');
 }
 function horaValida(t) {
