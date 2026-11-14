@@ -412,3 +412,133 @@ table.cmp tr.nuestro td {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
+
+/* ---- La cobertura del rango junto al titular (PR 10): la prueba y el registro en vivo, juntos ---- */
+.cob-vista:empty {
+  display: none;
+}
+
+.cob-vista {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 4px 16px;
+  max-width: 680px;
+  margin: 8px 0 16px;
+  padding: 12px 16px;
+  border-radius: var(--r-l);
+  border: 1px solid var(--line);
+  background: var(--surface);
+  box-shadow: var(--sombra);
+}
+
+.cob-tit {
+  grid-column: 1 / -1;
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.cob-fila {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  column-gap: 12px;
+  align-items: baseline;
+  padding: 8px 10px;
+  border-radius: var(--r-m);
+}
+
+.cob-fila .k {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink-2);
+}
+
+.cob-fila .n {
+  grid-row: span 2;
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+.cob-fila .n small {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink-2);
+}
+
+.cob-fila .d {
+  font-size: 12px;
+  color: var(--ink-2);
+}
+
+.cob-fila .estado-meta {
+  grid-column: 1 / -1;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 4px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.cob-fila.aviso-vivo.mal {
+  background: var(--crit-bg);
+}
+
+.cob-fila.aviso-vivo.ojo {
+  background: var(--warn-bg);
+}
+
+.cob-fila.aviso-vivo.mal .n {
+  color: var(--crit);
+}
+
+@media (min-width: 1101px) {
+  .stats:has(> .stat:nth-child(4):last-child) {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+
+/* ---- Los selectores de área y horizonte, con menos peso (PR 10): juntos, a la izquierda, sin caja ---- */
+@media (min-width: 761px) {
+  .conf-cab {
+    width: fit-content;
+    max-width: 100%;
+    margin-left: auto;
+    justify-content: flex-end;
+    gap: 4px 24px;
+  }
+}
+
+.conf-cab .seg {
+  padding: 0;
+  border-color: transparent;
+  background: transparent;
+}
+
+.conf-cab .seg a,
+.conf-cab .seg button {
+  height: 32px;
+  padding: 0 10px;
+  border-radius: var(--r-s);
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.conf-cab .seg [aria-pressed='true'],
+.conf-cab .seg [aria-current='page'] {
+  background: transparent;
+  box-shadow: inset 0 -2px 0 var(--ink-2);
+  border-radius: 0;
+  color: var(--ink);
+  font-weight: 600;
+}
+
+@media (max-width: 760px) {
+  .conf-cab .seg a,
+  .conf-cab .seg button {
+    height: 44px;
+  }
+}
