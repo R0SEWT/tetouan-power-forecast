@@ -1,0 +1,414 @@
+/* Curva · estilos de «Confianza»: se cargan al abrir la pantalla (app.js, cargarPantalla). */
+
+/* ---- Confianza ---- */
+.conf-cab {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.titular {
+  margin: 0 0 8px;
+  max-width: 32ch;
+  font-size: 28px !important;
+  line-height: 1.2 !important;
+  letter-spacing: -0.02em !important;
+}
+
+.lead {
+  max-width: 75ch;
+  margin: 0 0 24px;
+  font-size: 16px;
+  color: var(--ink-2);
+}
+
+.lead b {
+  color: var(--ink);
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.stat {
+  padding: 12px 16px;
+  border-radius: var(--r-l);
+  border: 1px solid var(--line);
+  background: var(--surface);
+  box-shadow: var(--sombra);
+}
+
+.stat .k {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.stat .n {
+  margin-top: 2px;
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+.stat .n small {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink-2);
+}
+
+.stat .d {
+  font-size: 12px;
+  color: var(--ink-2);
+}
+
+.stat .estado-meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 4px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.estado-meta svg {
+  flex: none;
+}
+
+.estado-meta.bien svg {
+  color: var(--good);
+}
+
+.estado-meta.ojo svg {
+  color: var(--warn);
+}
+
+.estado-meta.mal svg {
+  color: var(--crit);
+}
+
+.grid-conf {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.c12 {
+  grid-column: span 12;
+}
+
+.c8 {
+  grid-column: span 8;
+}
+
+.c6 {
+  grid-column: span 6;
+}
+
+.c4 {
+  grid-column: span 4;
+}
+
+.g-barra-modelo {
+  fill: var(--pron);
+}
+
+.g-barra-ref {
+  fill: var(--ref);
+  fill-opacity: 0.85;
+}
+
+.g-meta-zona {
+  fill: var(--good-bg);
+}
+
+.g-meta {
+  stroke: var(--ink);
+  stroke-width: 1.2;
+}
+
+.g-linea-pron {
+  stroke: var(--pron);
+  stroke-width: 2;
+  fill: none;
+}
+
+.g-punto-ojo {
+  fill: var(--warn-mark);
+  stroke: var(--surface);
+  stroke-width: 2;
+}
+
+.g-fin-semana {
+  fill: var(--surface-2);
+}
+
+.g-umbral {
+  stroke: var(--ink-2);
+  stroke-dasharray: 4 4;
+}
+
+.g-dia {
+  fill: var(--pron);
+  fill-opacity: 0.7;
+}
+
+.g-dia.sobre {
+  fill: var(--warn-mark);
+  fill-opacity: 1;
+}
+
+.g-dia.bajo {
+  fill: var(--crit);
+  fill-opacity: 1;
+}
+
+.meses-seg {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: 8px 0;
+}
+
+.meses-seg button {
+  min-width: 44px;
+  height: 36px;
+  padding: 0 8px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--ink-2);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.meses-seg button[aria-pressed='true'] {
+  border-color: var(--pron);
+  color: var(--ink);
+  box-shadow: 0 0 0 1px var(--pron) inset;
+}
+
+.meses-seg button .n {
+  margin-left: 4px;
+  color: var(--crit);
+  font-weight: 700;
+}
+
+.leyenda-dias {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  margin-top: 4px;
+  font-size: 12px;
+  color: var(--ink-2);
+}
+
+.leyenda-dias span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.leyenda-dias i {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+}
+
+.dias {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 12px;
+  margin: 12px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.dia {
+  padding: 10px 12px;
+  border-radius: var(--r-m);
+  border: 1px solid var(--line);
+  background: var(--surface-2);
+  font-size: 14px;
+}
+
+.dia .f {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+}
+
+.dia .e {
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.dia .e.sobre {
+  background: var(--warn-bg);
+  color: var(--warn);
+}
+
+.dia .e.bajo {
+  background: var(--crit-bg);
+  color: var(--crit);
+}
+
+.dia p {
+  margin: 6px 0 0;
+  font-size: 12px;
+  color: var(--ink-2);
+}
+
+.dia .causa {
+  display: block;
+  margin-top: 8px;
+  font-size: 12px;
+  color: var(--ink-2);
+}
+
+.dia .causa.sin {
+  color: var(--muted);
+  font-style: italic;
+}
+
+.medidor {
+  position: relative;
+  height: 14px;
+  margin: 16px 0 6px;
+  border-radius: 999px;
+  background: var(--surface-3);
+}
+
+.medidor .zona {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 45%;
+  width: 10%;
+  background: var(--good-bg);
+  border-left: 1px solid var(--good);
+  border-right: 1px solid var(--good);
+}
+
+.medidor .aguja {
+  position: absolute;
+  top: -5px;
+  width: 3px;
+  height: 24px;
+  border-radius: 2px;
+  background: var(--ink);
+  transform: translateX(-50%);
+}
+
+.medidor-eje {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+table.cmp {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+table.cmp th,
+table.cmp td {
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  vertical-align: top;
+}
+
+table.cmp th {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+table.cmp td.n {
+  text-align: right;
+  font-weight: 700;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+table.cmp tr.nuestro td {
+  background: var(--info-bg);
+}
+
+.vivo-tipos {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.vivo-tipo {
+  padding: 10px 12px;
+  border-radius: var(--r-m);
+  background: var(--surface-2);
+  font-size: 14px;
+}
+
+.vivo-tipo b {
+  display: block;
+  font-size: 20px;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 1100px) {
+  .c8,
+  .c6,
+  .c4 {
+    grid-column: span 12;
+  }
+}
+
+@media (max-width: 760px) {
+  .stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .titular {
+    font-size: 22px !important;
+  }
+  .vivo-tipos {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .mundo .tabla-scroll {
+    max-height: none;
+  }
+  .mundo table.cmp {
+    min-width: 560px;
+  }
+}
+
+.stats {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+@media (max-width: 1100px) {
+  .stats {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

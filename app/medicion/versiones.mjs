@@ -118,7 +118,11 @@ VERSIONES.it7 = {
 const URL_AHORA = `${WEB}/#/ahora/centro?fecha=2026-03-10&hora=19:00`;
 const URL_DETALLE = `${WEB}/#/area/centro?fecha=2026-03-10&hora=19:00&horizonte=24h&variante=M3`;
 const navegar = (nombre) => (p) => p.getByRole('navigation', { name: 'Pantallas' }).getByRole('link', { name: nombre });
-const confianzaLista = async (p) => p.waitForFunction(() => !/Calculando/.test(document.querySelector('#cfTitular').textContent));
+// Desde el PR 14 «Confianza» baja al abrirla: su titular no existe hasta que llega
+const confianzaLista = async (p) => p.waitForFunction(() => {
+  const t = document.querySelector('#cfTitular');
+  return Boolean(t) && !/Calculando/.test(t.textContent);
+});
 VERSIONES.it8 = {
   url: (estado) => ({
     inicio: `${WEB}/`,

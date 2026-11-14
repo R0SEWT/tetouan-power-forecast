@@ -37,7 +37,7 @@ export const PANTALLAS = {
   confianza: {
     url: () => `${URL_RAIZ}#/confianza/centro`,
     listo: '#cfStats .stat',
-    esperar: () => !/Calculando/.test(document.querySelector('#cfTitular').textContent) && !document.querySelector('#cfMes .cargando-bloque'),
+    esperar: () => /\S/.test(document.querySelector('#cfTitular')?.textContent || '') && !/Calculando/.test(document.querySelector('#cfTitular').textContent) && !document.querySelector('#cfMes .cargando-bloque'),
     aoi: [
       { n: 'titular', s: '#cfTitular' },
       { n: 'cobertura', s: '#cfStats .stat:nth-child(3), #cfCobTit, #cfCob svg', modo: 'caja' },
@@ -53,7 +53,7 @@ export const PANTALLAS = {
   detalle: {
     url: () => `${URL_RAIZ}#/area/${CASO}&horizonte=24h&variante=M3`,
     listo: '#respValor',
-    esperar: () => /\d/.test(document.querySelector('#respValor').textContent),
+    esperar: () => /\d/.test(document.querySelector('#respValor')?.textContent || ''),
     aoi: [
       { n: 'cifra', s: '#respValor, #respTitulo' },
       { n: 'rango', s: '.resp-rango' },
