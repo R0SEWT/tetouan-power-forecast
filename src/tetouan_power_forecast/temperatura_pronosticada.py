@@ -25,6 +25,7 @@ días objetivo ya cerrados al emitir (a 24 h, hasta X − 2; a 1 h, hasta X − 
 """
 
 import datetime as dt
+import http.client
 import json
 import logging
 import time
@@ -135,7 +136,7 @@ def bajar_reciente(raiz=None, hoy=None, modelo=MODELO, descargar=pedir, dias=DIA
     direccion = url(modelo, past_days=dias, forecast_days=3)
     try:
         _guardar(archivo, descargar(direccion), url=direccion, modelo=modelo, hoy=f"{hoy}")
-    except (urllib.error.URLError, TimeoutError, ConnectionError, ValueError) as error:
+    except (OSError, ValueError, http.client.HTTPException) as error:  # red, disco o una respuesta que no es JSON
         log.warning(f"Open-Meteo no respondió ({error}); se sigue con lo guardado")
         return False
     return True
