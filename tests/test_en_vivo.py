@@ -354,6 +354,89 @@ def test_diario_sale_con_3_si_el_anexo_es_invalido(raiz):
     assert ev.leer_registro(raiz).empty
 
 
+# ---- Rango adaptativo en paralelo ---------------------------------------------------------------------------------
+
+
+def _filas_rango(reales_dia2, reales_dia1=900.0):
+    """Un área a 24 h: pronóstico 1000 con rango ±100 y dos periodos por día; el 25 todavía sin real.
+
+    El primer periodo de los días 23 y 24 tiene el real que se pasa; el segundo, 1000 (en el centro).
+    """
+    filas = []
+    for dia, real in (("2026-10-23", reales_dia1), ("2026-10-24", reales_dia2), ("2026-10-25", np.nan)):
+        for k in range(2):
+            filas.append({"horizonte": "24h", "area": "CENTRO", "fecha_objetivo": pd.Timestamp(dia), "pred": 1000.0,
+                          "q10": 900.0, "q90": 1100.0, "real": real if k == 0 or np.isnan(real) else 1000.0})
+    return pd.DataFrame(filas)
+
+
+def test_factores_rango_solo_miran_los_dias_anteriores():
+    factores, estado = ev.factores_rango(_filas_rango(reales_dia2=1000.0), {("24h", "CENTRO"): (0.5, 0.0)}, 0.2)
+    f = factores.set_index("fecha_objetivo")
+    # El primer día sale con el estado inicial y su real solo pesa desde el siguiente. Con f = 0.5 el borde bajo
+    # queda en 1000 − e^0.5 · 100 ≈ 835: el 900 cae dentro, nada queda fuera y los dos bordes se acercan γ · 0.1
+    assert tuple(f.loc["2026-10-23", ["f_bajo", "f_alto"]]) == (0.5, 0.0)
+    assert f.loc["2026-10-24", "f_bajo"] == pytest.approx(0.5 - 0.2 * 0.1)
+    assert f.loc["2026-10-24", "f_alto"] == pytest.approx(-0.2 * 0.1)
+    # El día sin real no actualiza: el estado final es el que dejó el 24
+    assert estado[("24h", "CENTRO")] == pytest.approx((0.5 - 2 * 0.02, -2 * 0.02))
+    assert f.loc["2026-10-25", "f_bajo"] == pytest.approx(estado[("24h", "CENTRO")][0])
+    # Cambiar el real de un día no cambia el factor con que se emitió ese mismo día
+    otro, _ = ev.factores_rango(_filas_rango(reales_dia2=500.0), {("24h", "CENTRO"): (0.5, 0.0)}, 0.2)
+    assert otro.set_index("fecha_objetivo").loc["2026-10-24", "f_bajo"] == f.loc["2026-10-24", "f_bajo"]
+    # Un real fuera por abajo en la mitad de los periodos abre el borde bajo: +γ·(0.5 − 0.1)
+    abierto, _ = ev.factores_rango(_filas_rango(reales_dia2=1000.0, reales_dia1=700.0), None, 0.2)
+    assert abierto.set_index("fecha_objetivo").loc["2026-10-24", "f_bajo"] == pytest.approx(0.2 * 0.4)
+
+
+def test_rango_en_paralelo_se_registra_aparte_sin_tocar_el_base(raiz):
+    _con_tres_dias(raiz)
+    rangos = {"falso": {}}
+    ev.emitir(raiz, ModeloFalso(), hasta_objetivo=dt.date(2026, 10, 25), ahora=lambda: LIMA_10_05,
+              progreso=_silencio, rangos={})  # primero, como hasta hoy: solo el base
+    base = ev.leer_registro(raiz)
+    # Al desplegarlo, el base no tiene nada pendiente del pasado, pero el paralelo se pone al día con el relleno
+    tarde = LIMA_10_05 + pd.Timedelta(hours=2)
+    agregadas = ev.emitir(raiz, ModeloFalso(), ahora=lambda: tarde, progreso=_silencio, rangos=rangos)
+    registro = ev.leer_registro(raiz)
+    pd.testing.assert_frame_equal(registro.iloc[:len(base)], base)  # lo ya emitido no cambia
+    paralelo = registro[registro["modelo"] == "falso+rango"]
+    propio = registro[registro["modelo"] == "falso"]
+    assert agregadas == len(registro) - len(base) == 3 * 48 + len(paralelo)
+    assert len(paralelo) == len(propio) == (4 + 3) * 3 * 48
+    assert set(paralelo["version_pesos"]) == {"v1+rango-aci0.2"}
+    assert (paralelo["emitido_en"] == tarde).all()
+    # El relleno del paralelo es reconstruido; el día de hoy, en vivo o ex ante según su propio sello (12:05 en Lima)
+    hoy = paralelo[paralelo["fecha_objetivo"] == pd.Timestamp("2026-10-26")]
+    assert hoy.groupby("tipo").size().to_dict() == {"en_vivo": 25 * 3, "ex_ante_estricto": 23 * 3}
+    assert set(paralelo.loc[paralelo["fecha_objetivo"] < pd.Timestamp("2026-10-26"), "tipo"]) == {"reconstruido"}
+    clave = ["horizonte", "area", "objetivo"]
+    junto = paralelo.merge(propio, on=clave, suffixes=("", "_base"))
+    assert np.allclose(junto["pred"], junto["pred_base"])  # mismo pronóstico central
+    # El 23 sale con el rango del base (estado inicial 0); como el real cae siempre dentro (ruido de 3 MW frente a
+    # ±50), cada día el rango se angosta: e^(−0.02) por día con real
+    ancho = (junto["q90"] - junto["pred"]) / (junto["q90_base"] - junto["pred_base"])
+    dias = (pd.to_datetime(junto["fecha_objetivo"]) - pd.Timestamp("2026-10-23")).dt.days
+    a24 = (junto["horizonte"] == "24h").to_numpy()
+    assert np.allclose(ancho[a24], np.exp(-0.02 * dias[a24]))
+    # Otra corrida no agrega nada
+    assert ev.emitir(raiz, ModeloFalso(), ahora=lambda: tarde, progreso=_silencio, rangos=rangos) == 0
+    # La evaluación los separa y el log dice de qué modelo es cada línea
+    _, resumen = ev.evaluar(raiz, _silencio)
+    assert set(resumen["modelo"]) == {"falso", "falso+rango"}
+    texto = ev.tabla_acumulada(resumen)
+    assert "falso+rango" in texto and texto.count("reconstruido") == 6
+
+
+def test_rango_en_paralelo_solo_para_los_modelos_con_estado(raiz):
+    _con_tres_dias(raiz)
+    ev.emitir(raiz, ModeloFalso(), ahora=lambda: LIMA_10_05, progreso=_silencio)  # RANGOS: solo chronos2ftcal
+    assert set(ev.leer_registro(raiz)["modelo"]) == {"falso"}
+    assert set(ev.RANGOS) == {"chronos2ftcal"} and set(ev.RANGOS["chronos2ftcal"]) == {
+        (h, a) for h in ev.PASOS for a in ev.AREAS}
+    assert ev.es_paralelo("chronos2ftcal+rango") and not ev.es_paralelo("chronos2ftcal")
+
+
 # ---- API: GET /en-vivo/{area} -------------------------------------------------------------------------------------
 
 
@@ -391,6 +474,17 @@ def test_api_en_vivo_muestra_el_ultimo_perfil_y_lo_verificado(raiz):
     assert [v["fecha"] for v in a24] == ["2026-10-25", "2026-10-24", "2026-10-23"]
     assert all(v["tipo"] == "reconstruido" and v["periodos"] == 48 for v in a24)
     assert cliente.get("/en-vivo/oeste").status_code == 404
+
+
+def test_api_en_vivo_muestra_el_base_y_no_el_paralelo(raiz):
+    _con_tres_dias(raiz)
+    ev.emitir(raiz, ModeloFalso(), ahora=lambda: LIMA_10_05, progreso=_silencio, rangos={})
+    ev.emitir(raiz, ModeloFalso(), ahora=lambda: LIMA_10_05 + pd.Timedelta(hours=1), progreso=_silencio,
+              rangos={"falso": {}})  # el paralelo queda con la emisión más reciente
+    ev.evaluar(raiz, _silencio)
+    d = _cliente(raiz).get("/en-vivo/centro").json()
+    assert d["version_pesos"] == "v1" and d["dias_en_vivo"] == 1
+    assert d["ultimo"]["emitido_en"] == "2026-10-26T15:05:00Z"
 
 
 def test_api_en_vivo_sin_registro(tmp_path):

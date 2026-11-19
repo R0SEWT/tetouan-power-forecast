@@ -4,6 +4,7 @@ paralelo del modo en vivo. Sin red: Open-Meteo se reemplaza por respuestas sint�
 import datetime as dt
 import json
 import urllib.error
+from pathlib import Path
 
 import numpy as np
 import pandas as pd
@@ -235,3 +236,103 @@ def test_correr_emite_el_paralelo_y_un_fallo_no_frena_al_base(raiz, monkeypatch)
                      ahora=lambda: LIMA_10_05 + pd.Timedelta(days=1), progreso=_silencio) == 0
     corrida = json.loads(ev.rutas(raiz).corridas.read_text().splitlines()[-1])
     assert corrida["filas_calor"].startswith("error")
+
+
+# ---- Convivencia de los tres modelos ------------------------------------------------------------------------------
+
+
+class ChronosFalso(ModeloFalso):
+    """El modelo falso con el nombre del real: así recibe su «+rango» (estado de RANGOS) y su «+calor»."""
+
+    nombre = "chronos2ftcal"
+
+
+def _corrida_diaria(raiz, dias=3, hoy=dt.date(2026, 10, 26), temperatura=None, ahora=LIMA_10_05):  # noqa: F811
+    from tests.test_en_vivo import COESFalso, _anexo, _dias, _portal
+
+    falso = COESFalso({d: _anexo(d) for d in _dias(dt.date(2026, 10, 23), dias)})
+    return ev.correr("diario", raiz, portal=_portal(falso), modelo=ChronosFalso(), hoy=hoy, ahora=lambda: ahora,
+                     progreso=_silencio, temperatura=temperatura or (lambda url: b"no es json"))
+
+
+def test_los_tres_modelos_conviven_sin_tocarse(raiz):  # noqa: F811
+    _archivo_anual(raiz, 2026, "2026-08-01", "2026-10-31")
+    _sin_ajuste(raiz)
+    assert _corrida_diaria(raiz) == 0
+    registro = ev.leer_registro(raiz)
+    por_modelo = registro.groupby("modelo").size().to_dict()
+    assert por_modelo == {"chronos2ftcal": (4 + 3) * 3 * 48, "chronos2ftcal+rango": (4 + 3) * 3 * 48,
+                          "chronos2ftcal+calor": (4 + 3) * 3 * 48}
+    assert not registro.duplicated(["modelo", "version_pesos", "horizonte", "area", "objetivo"]).any()
+    base = registro[registro["modelo"] == "chronos2ftcal"].set_index(["horizonte", "area", "objetivo"])
+    for paralelo in ("chronos2ftcal+rango", "chronos2ftcal+calor"):
+        p = registro[registro["modelo"] == paralelo].set_index(["horizonte", "area", "objetivo"])
+        assert set(p.index) == set(base.index)
+    rango = registro[registro["modelo"] == "chronos2ftcal+rango"].set_index(["horizonte", "area", "objetivo"])
+    assert np.allclose(rango["pred"], base.loc[rango.index, "pred"])  # el rango no mueve el centro
+    # Otra corrida no agrega nada a ninguno, y lo emitido sigue igual
+    assert _corrida_diaria(raiz, ahora=LIMA_10_05 + pd.Timedelta(hours=2)) == 0
+    pd.testing.assert_frame_equal(ev.leer_registro(raiz), registro)
+    _, resumen = ev.evaluar(raiz, _silencio)
+    assert set(resumen["modelo"]) == {"chronos2ftcal", "chronos2ftcal+rango", "chronos2ftcal+calor"}
+
+
+def test_el_fallo_de_un_paralelo_no_impide_los_otros(raiz, monkeypatch):  # noqa: F811
+    # Sin archivo de temperatura (y sin red), «+calor» no emite; el base y «+rango» sí
+    assert _corrida_diaria(raiz) == 0
+    assert set(ev.leer_registro(raiz)["modelo"]) == {"chronos2ftcal", "chronos2ftcal+rango"}
+    # Llega el archivo, pero «+rango» revienta: «+calor» se registra igual
+    _archivo_anual(raiz, 2026, "2026-08-01", "2026-10-31")
+    _sin_ajuste(raiz)
+
+    def revienta(*a, **k):
+        raise RuntimeError("falla de prueba del rango")
+
+    monkeypatch.setattr(ev, "emitir_rango", revienta)
+    assert _corrida_diaria(raiz, dias=4, hoy=dt.date(2026, 10, 27), ahora=LIMA_10_05 + pd.Timedelta(days=1)) == 0
+    registro = ev.leer_registro(raiz)
+    dias = registro.groupby("modelo")["fecha_objetivo"].max()
+    assert dias["chronos2ftcal"] == dias["chronos2ftcal+calor"] == pd.Timestamp("2026-10-27")
+    assert dias["chronos2ftcal+rango"] == pd.Timestamp("2026-10-26")  # se queda donde estaba y se reintenta
+    monkeypatch.undo()
+    assert _corrida_diaria(raiz, dias=4, hoy=dt.date(2026, 10, 27), ahora=LIMA_10_05 + pd.Timedelta(days=1)) == 0
+    dias = ev.leer_registro(raiz).groupby("modelo")["fecha_objetivo"].max()
+    assert dias.nunique() == 1
+
+
+def test_paralelos_sobre_una_copia_del_registro_real(tmp_path):
+    """Con los datos del dueño (si están): copia del registro real a una carpeta temporal y los dos paralelos encima.
+
+    Nunca escribe en la carpeta de datos: todo va a `tmp_path`. Sin red (Open-Meteo «caído»): «+calor» usa lo guardado.
+    """
+    import os
+    import shutil
+
+    datos = Path(os.environ.get("TETOUAN_DATA", "data"))
+    registro_real = datos / "reportes" / "sein" / "en_vivo" / "pronosticos.parquet"
+    archivo = tp.carpeta(datos)
+    if not (registro_real.exists() and list(archivo.glob(f"{tp.MODELO}_2026.json"))):
+        pytest.skip("sin la carpeta de datos del proyecto")
+    for rel in ("coes/silver/demanda_areas.parquet", "coes/silver/demanda_areas_en_vivo.parquet",
+                "reportes/sein/en_vivo/pronosticos.parquet", "exogenas/silver/temperatura_areas.parquet",
+                "reportes/sein/fundacionales/chronos2ftcal_c2048.parquet"):
+        (tmp_path / rel).parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(datos / rel, tmp_path / rel)
+    shutil.copytree(archivo, tp.carpeta(tmp_path), ignore=shutil.ignore_patterns("reciente"))
+    antes = ev.leer_registro(tmp_path)
+    base = antes[antes["modelo"] == "chronos2ftcal"]
+    version = base.loc[base["emitido_en"].idxmax(), "version_pesos"]
+
+    def caida(url):
+        raise urllib.error.URLError("sin red")
+
+    n_rango = ev.emitir_rango(tmp_path, "chronos2ftcal", version, ev.ESTADO_RANGO_CHRONOS, progreso=_silencio)
+    n_calor = ev.emitir_calor(tmp_path, hoy=dt.date(2026, 11, 19), descargar=caida, progreso=_silencio)
+    despues = ev.leer_registro(tmp_path)
+    pd.testing.assert_frame_equal(despues.iloc[:len(antes)], antes)  # lo emitido no cambia
+    base = base[base["version_pesos"] == version]
+    assert n_rango == n_calor == len(base[pd.to_datetime(base["fecha_objetivo"]) >= pd.Timestamp(ev.ARRANQUE)])
+    ultimo = pd.to_datetime(base["fecha_objetivo"]).max()
+    del_ultimo = despues[pd.to_datetime(despues["fecha_objetivo"]) == ultimo].groupby("modelo").size()
+    assert del_ultimo["chronos2ftcal+rango"] == del_ultimo["chronos2ftcal+calor"] == del_ultimo["chronos2ftcal"]
+    assert not registro_real.with_name("pronosticos.parquet.tmp").exists()
