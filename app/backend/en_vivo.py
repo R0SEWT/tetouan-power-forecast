@@ -55,7 +55,8 @@ class LectorEnVivo:
     def _propio(self, area: str):
         """Las filas del área del modelo y la versión de la última emisión (lo demás no se mezcla), o None.
 
-        Los modelos en paralelo (como «chronos2ftcal+rango») se registran para compararlos en vivo; no se muestran.
+        Los modelos en paralelo («chronos2ftcal+rango», «chronos2ftcal+calor») se registran y se evalúan para
+        compararlos en vivo; no se muestran.
         """
         registro = self._leer("pronosticos.parquet")
         if registro is None or registro.empty:
