@@ -100,7 +100,26 @@ rclone copy "$d/reportes/sein/en_vivo" "$r/reportes/sein/en_vivo" --exclude ".co
    frente a la mejor referencia ingenua en esas mismas filas: ayer o la semana pasada a 24 h; también el último dato
    a 1 h). Se rehacen en cada corrida.
 
-La app lo muestra en `GET /en-vivo/{area}` y en la sección «En vivo» de la vista de cada área.
+La app lo muestra en `GET /en-vivo/{area}` y en la sección «En vivo» de la vista de cada área. Los modelos en
+paralelo (nombre con «+») se registran y se evalúan, pero la app sigue mostrando el base.
+
+### En paralelo: `chronos2ftcal+calor`
+
+Después del base se emite, con su propio sello, el mismo pronóstico corregido por la temperatura pronosticada:
+pronóstico × (1 + β · grados), con los grados de la media diaria pronosticada (GFS, archivo de corridas previas de
+Open-Meteo, llevada al nivel de ERA5) sobre el umbral del área en el día objetivo (Lima: 23 °C) y un β ≥ 0 por bloque
+de horas que se reestima cada día con los errores del base desde 2025, solo con días ya cerrados al emitir. Se eligió
+con 2025 en `experimentos/temperatura/`: baja el error del pico del Centro en los días cálidos (también en 2026 y en
+vivo), pero sube el nivel de esos días (sesgo positivo). Su versión es `<sha de los pesos>+calor-gfs-v1`.
+
+- Solo corre si está el archivo de pronósticos de temperatura en `exogenas/bronze/open_meteo_previous_runs/`
+  (`python -m experimentos.temperatura.descarga`, una vez). Cada día baja la ventana reciente (40 días atrás y 3
+  adelante, ~140 kB, una consulta) a `reciente/` y no la repite ese día.
+- Si Open-Meteo no responde, sigue con lo ya guardado; si eso no cubre un día, ese día no se emite y se reintenta en la
+  siguiente corrida. Si el paralelo falla por cualquier otra razón, queda en el log y en `corridas.jsonl`
+  (`filas_calor`) y el base sigue igual.
+- El primer relleno (del 23 de octubre al día de la primera corrida) sale como reconstruido.
+- Para el Drive: `rclone copy "$d/exogenas/bronze/open_meteo_previous_runs" "$r/exogenas/bronze/open_meteo_previous_runs"`.
 
 | Archivo (dentro de `TETOUAN_DATA`) | Qué es |
 |---|---|
@@ -110,6 +129,7 @@ La app lo muestra en `GET /en-vivo/{area}` y en la sección «En vivo» de la vi
 | `reportes/sein/en_vivo/pronosticos.parquet` | El registro, que solo crece |
 | `reportes/sein/en_vivo/seguimiento.parquet`, `resumen.parquet` | La evaluación |
 | `reportes/sein/en_vivo/corridas.jsonl`, `diario.log` | Una línea por corrida y su detalle |
+| `exogenas/bronze/open_meteo_previous_runs/` | Pronósticos de temperatura archivados (por año y la ventana reciente de cada día) y el ajuste de nivel a ERA5 |
 
 ## El combinado, después
 

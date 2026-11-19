@@ -27,6 +27,10 @@ feriado como covariable pasada y futura y los cuantiles 10, 50 y 90 %. Cualquier
 con el formato de esos experimentos (`ChronosAjustado.pronosticar`) entra igual; así se sumará el combinado cuando
 estén los pesos de Simons (ver `experimentos/en_vivo/README.md`).
 
+En paralelo se registra `chronos2ftcal+calor`: el mismo pronóstico corregido por la temperatura pronosticada sobre el
+umbral (ver `emitir_calor` y `temperatura_pronosticada`). Son filas aparte, con su propio sello: lo ya emitido no cambia
+y la app sigue mostrando el base.
+
 Capas, dentro de la carpeta de datos (`TETOUAN_DATA`):
 
 - coes/bronze/ieod_diario/AAAA-MM-DD/: el anexo tal cual, con las correcciones del COES aparte (con su sha256 en el
@@ -623,6 +627,102 @@ def emitir(raiz=None, modelo=None, desde=ARRANQUE, hasta_objetivo=None, ahora=_a
     return agregadas
 
 
+# ---- Corrección por calor: un modelo en paralelo -------------------------------------------------------------------
+#
+# «chronos2ftcal+calor» multiplica el pronóstico del base por 1 + β · grados, con los grados de la temperatura media
+# pronosticada (GFS, archivo de corridas previas de Open-Meteo) sobre el umbral del área en el día objetivo y un β ≥ 0
+# por bloque de horas que se reestima cada día con los errores del base desde 2025 (ver temperatura_pronosticada).
+# Elegido con 2025 en experimentos/temperatura (informe de noviembre de 2026): baja el error del pico del Centro en los
+# días cálidos; corre el sesgo hacia arriba en esos días. Las filas del base no cambian: las del paralelo son otras, con
+# su propio sello y tipo (el relleno de los días ya pasados sale como reconstruido). Si Open-Meteo no responde, se usa lo
+# ya guardado; si eso no cubre un día, ese día no se emite y se reintenta en la próxima corrida.
+
+SUFIJO_CALOR = "+calor"
+VERSION_CALOR = "calor-gfs-v1"
+
+
+def es_paralelo(modelo):
+    """Si el modelo es uno en paralelo (nombre con «+»: se registra para compararlo; la app muestra el base)."""
+    return "+" in str(modelo)
+
+
+def _continuos_base(r, registro, nombre_base, version_base, serie):
+    """El pronóstico del base por (horizonte, área, objetivo) desde 2025, sin cortes: los pronósticos guardados de los
+    experimentos (orígenes hasta el 22-oct-2026, la misma inferencia) y después el registro. Con su real."""
+    partes = []
+    guardado = r.raiz / "reportes" / "sein" / "fundacionales" / f"{nombre_base}_c{CONTEXTO}.parquet"
+    if guardado.exists():
+        t = pd.read_parquet(guardado)
+        for horizonte, p in PASOS.items():
+            partes.append(pd.DataFrame({"horizonte": horizonte, "area": t["area"], "origen": t["DateTime"],
+                                        "objetivo": t["DateTime"] + p * PASO, "pred": t[f"pred_{p}"]}))
+    propio = registro[(registro["modelo"] == nombre_base) & (registro["version_pesos"] == version_base)]
+    partes.append(propio[["horizonte", "area", "origen", "objetivo", "pred"]])
+    todo = pd.concat(partes, ignore_index=True).drop_duplicates(["horizonte", "area", "objetivo"], keep="first")
+    largo = serie.set_index("DateTime")[AREAS].stack()
+    todo["real"] = largo.reindex(pd.MultiIndex.from_arrays([todo["objetivo"], todo["area"]])).to_numpy(dtype=float)
+    return todo
+
+
+def emitir_calor(raiz=None, nombre_base="chronos2ftcal", hoy=None, ahora=_ahora_utc, descargar=None, progreso=print):
+    """Emite las filas que falten de «<base>+calor» a partir de las del base ya registradas. Devuelve cuántas agregó.
+
+    Solo corre si en la carpeta de datos está el archivo de pronósticos de temperatura (la descarga inicial la hace
+    `python -m experimentos.temperatura.descarga`); cada día baja la ventana reciente una vez.
+    """
+    from tetouan_power_forecast import temperatura_pronosticada as tp
+
+    r = rutas(raiz)
+    if not any(tp.carpeta(r.raiz).glob(f"{tp.MODELO}_[0-9][0-9][0-9][0-9].json")):
+        return 0
+    registro = leer_registro(r)
+    base = registro[registro["modelo"] == nombre_base]
+    if base.empty:
+        return 0
+    nombre = nombre_base + SUFIJO_CALOR
+    version_base = base.loc[base["emitido_en"].idxmax(), "version_pesos"]
+    version = f"{version_base}+{VERSION_CALOR}"
+    base = base[base["version_pesos"] == version_base].copy()
+    propias = registro[(registro["modelo"] == nombre) & (registro["version_pesos"] == version)]
+    hechas = set(zip(propias["horizonte"], pd.to_datetime(propias["fecha_objetivo"])))
+    base["fecha_objetivo"] = pd.to_datetime(base["fecha_objetivo"])
+    faltan = base[[k not in hechas for k in zip(base["horizonte"], base["fecha_objetivo"])]]
+    if faltan.empty:
+        return 0
+    tp.bajar_reciente(r.raiz, hoy or _hoy_lima(), descargar=descargar or tp.pedir)
+    por_desfase = tp.grados_por_desfase(r.raiz, tp.leer(r.raiz), tp.cargar_ajuste(r.raiz))
+    serie = serie_completa(r)
+    continuos = _continuos_base(r, registro, nombre_base, version_base, serie)
+    continuos["tp_cdd"] = np.nan
+    for (horizonte, area), g in continuos.groupby(["horizonte", "area"]):
+        continuos.loc[g.index, "tp_cdd"] = tp.grados_origen(por_desfase, g["origen"], horizonte, area)
+    betas = tp.betas_en_linea(continuos)
+    partes, sin_dato = [], set()
+    for (horizonte, area), g in faltan.groupby(["horizonte", "area"]):
+        g = g.copy()
+        g["grados"] = tp.grados_origen(por_desfase, g["origen"], horizonte, area)
+        completos = g.groupby("fecha_objetivo")["grados"].transform(lambda s: s.notna().all())
+        sin_dato |= {d.date() for d in g.loc[~completos, "fecha_objetivo"]}
+        g = g[completos]
+        factor = tp.factor_calor(betas, horizonte, area, g["objetivo"], g["grados"])
+        for columna in ("pred", "q10", "q90"):
+            g[columna] = g[columna].to_numpy(dtype=float) * factor
+        partes.append(g)
+    if sin_dato:
+        progreso(f"Calor: sin pronóstico de temperatura para {sorted(sin_dato)}; esos días se reintentan después")
+    nuevas = pd.concat(partes, ignore_index=True) if partes else pd.DataFrame()
+    if nuevas.empty:
+        return 0
+    emitido = ahora()
+    nuevas["modelo"], nuevas["version_pesos"], nuevas["emitido_en"] = nombre, version, emitido
+    nuevas["tipo"] = clasificar(emitido, nuevas["objetivo"])
+    nuevas["version_codigo"] = _version_codigo()
+    nuevas["fecha_objetivo"] = nuevas["fecha_objetivo"].astype(registro["fecha_objetivo"].dtype)
+    agregadas = agregar_al_registro(r, nuevas[COLUMNAS_REGISTRO])
+    progreso(f"Calor: {agregadas} filas nuevas de {nombre} ({nuevas['tipo'].value_counts().to_dict()})")
+    return agregadas
+
+
 # ---- Evaluación ---------------------------------------------------------------------------------------------------
 
 
@@ -694,10 +794,10 @@ def tabla_acumulada(resumen, horizonte="24h"):
         return "sin periodos con real todavía"
     acum = resumen[(resumen["nivel"] == "acumulado") & (resumen["horizonte"] == horizonte)]
     lineas = []
-    for f in acum.sort_values(["grupo", "area"]).itertuples():
-        lineas.append(f"{horizonte} {f.grupo:<16} {f.area:<6} {f.dias:>2} días · MAE {f.mae_modelo:6.1f} MW · "
-                      f"{f.referencia} {f.mae_referencia:6.1f} MW ({f.mejora_pct:+.0f} %) · sesgo {f.sesgo:+6.1f} · "
-                      f"cobertura 10–90 {f.cobertura_pct:5.1f} %")
+    for f in acum.sort_values(["modelo", "grupo", "area"]).itertuples():
+        lineas.append(f"{horizonte} {f.modelo:<19} {f.grupo:<16} {f.area:<6} {f.dias:>2} días · "
+                      f"MAE {f.mae_modelo:6.1f} MW · {f.referencia} {f.mae_referencia:6.1f} MW "
+                      f"({f.mejora_pct:+.0f} %) · sesgo {f.sesgo:+6.1f} · cobertura 10–90 {f.cobertura_pct:5.1f} %")
     return "\n".join(lineas)
 
 
@@ -742,12 +842,13 @@ def _candado(ruta):
 
 
 def correr(comando, raiz=None, portal=None, modelo=None, hoy=None, ahora=_ahora_utc, revisar=2, desde=ARRANQUE,
-           progreso=None):
+           progreso=None, temperatura=None):
     """Corre `diario` (ingesta → pronóstico → evaluación) o `relleno` (lo mismo sin emitir el día de hoy).
 
-    Devuelve el código de salida: 0 si todo salió, `SIN_PUBLICAR` (75) si el anexo de ayer todavía no está o si
-    otra corrida está en curso, `INVALIDO` (3) si un anexo no pasa las validaciones y 1 ante cualquier otro error.
-    Cada corrida deja una línea en corridas.jsonl con su duración.
+    Después del base emite su modelo en paralelo «+calor» (`emitir_calor`; `temperatura` es la función que baja de
+    Open-Meteo, para las pruebas). Devuelve el código de salida: 0 si todo salió, `SIN_PUBLICAR` (75) si el anexo de
+    ayer todavía no está o si otra corrida está en curso, `INVALIDO` (3) si un anexo no pasa las validaciones y 1 ante
+    cualquier otro error. Cada corrida deja una línea en corridas.jsonl con su duración.
     """
     r = rutas(raiz)
     progreso = progreso or log.info
@@ -767,6 +868,12 @@ def correr(comando, raiz=None, portal=None, modelo=None, hoy=None, ahora=_ahora_
             hasta = hoy - dt.timedelta(days=1) if comando == "relleno" else None
             linea["filas_emitidas"] = emitir(r, modelo, desde=desde, hasta_objetivo=hasta, ahora=ahora,
                                              progreso=progreso)
+            try:  # el modelo en paralelo nunca frena al base: si falla, queda en el log y se sigue
+                linea["filas_calor"] = emitir_calor(r, (modelo or ChronosAjustado).nombre, hoy=hoy, ahora=ahora,
+                                                    descargar=temperatura, progreso=progreso)
+            except Exception as error:
+                log.exception("Calor: no se pudo emitir el modelo en paralelo")
+                linea["filas_calor"] = f"error: {error}"
             _, resumen = evaluar(r, progreso)
             progreso("Acumulado:\n" + tabla_acumulada(resumen))
             if ingesta["faltante"] is not None:
