@@ -1,0 +1,171 @@
+{
+  "etiqueta": "pr06-t1-campos",
+  "version": "pr06-campos",
+  "fecha": "2026-11-14T09:24:03.477Z",
+  "modelo": "Combinado: Chronos-2 ajustado + híbrido",
+  "caso": {
+    "area": "centro",
+    "fecha": "2026-03-10",
+    "hora": "19:00",
+    "idx": 38,
+    "horizonte": "24h",
+    "variante": "M3"
+  },
+  "tareas": {
+    "t1": {
+      "nombre": "Pronóstico de un área, horizonte y fecha, con intervalo y real",
+      "fichas": {
+        "pronostico": [
+          "4,767"
+        ],
+        "intervalo inferior": [
+          "4,588"
+        ],
+        "intervalo superior": [
+          "4,929"
+        ],
+        "real": [
+          "4,784"
+        ]
+      },
+      "escritorio": {
+        "cumplida": true,
+        "vistos": 4,
+        "total": 4,
+        "faltan": [],
+        "acciones": 8,
+        "clics": 0,
+        "escrituras": 2,
+        "pulsaciones": 6,
+        "desplazamientos": 0,
+        "segundos_robot": 1.09,
+        "segundos_klm": 5.2
+      },
+      "movil": {
+        "cumplida": true,
+        "vistos": 4,
+        "total": 4,
+        "faltan": [],
+        "acciones": 9,
+        "clics": 0,
+        "escrituras": 2,
+        "pulsaciones": 6,
+        "desplazamientos": 1,
+        "segundos_robot": 1.34,
+        "segundos_klm": 6.2
+      }
+    },
+    "t2": {
+      "nombre": "¿Se puede confiar? Error reciente frente a la referencia",
+      "fichas": {
+        "error del modelo": [
+          "31.1",
+          "31 MW"
+        ],
+        "comparación con la referencia": [
+          "65.9",
+          "35 MW",
+          "35 MW menos"
+        ]
+      },
+      "escritorio": {
+        "cumplida": true,
+        "vistos": 2,
+        "total": 2,
+        "faltan": [],
+        "acciones": 1,
+        "clics": 1,
+        "escrituras": 0,
+        "pulsaciones": 0,
+        "desplazamientos": 0,
+        "segundos_robot": 0.17,
+        "segundos_klm": 2.7
+      },
+      "movil": {
+        "cumplida": true,
+        "vistos": 2,
+        "total": 2,
+        "faltan": [],
+        "acciones": 1,
+        "clics": 1,
+        "escrituras": 0,
+        "pulsaciones": 0,
+        "desplazamientos": 0,
+        "segundos_robot": 0.17,
+        "segundos_klm": 2.7
+      }
+    },
+    "t3": {
+      "nombre": "Efecto de +2 °C en el pronóstico a 24 h",
+      "fichas": {
+        "cambio del escenario": [
+          "15 MW",
+          "4,934"
+        ]
+      },
+      "escritorio": {
+        "cumplida": true,
+        "vistos": 1,
+        "total": 1,
+        "faltan": [],
+        "acciones": 2,
+        "clics": 2,
+        "escrituras": 0,
+        "pulsaciones": 0,
+        "desplazamientos": 0,
+        "segundos_robot": 1.05,
+        "segundos_klm": 5.3
+      },
+      "movil": {
+        "cumplida": true,
+        "vistos": 1,
+        "total": 1,
+        "faltan": [],
+        "acciones": 2,
+        "clics": 2,
+        "escrituras": 0,
+        "pulsaciones": 0,
+        "desplazamientos": 0,
+        "segundos_robot": 1.03,
+        "segundos_klm": 5.3
+      }
+    },
+    "t4": {
+      "nombre": "Diagnóstico: régimen de El Niño con más error",
+      "fichas": {
+        "régimen": [
+          "Niño moderado"
+        ],
+        "error": [
+          "80.6"
+        ]
+      },
+      "escritorio": {
+        "cumplida": true,
+        "vistos": 2,
+        "total": 2,
+        "faltan": [],
+        "acciones": 1,
+        "clics": 1,
+        "escrituras": 0,
+        "pulsaciones": 0,
+        "desplazamientos": 0,
+        "segundos_robot": 0.53,
+        "segundos_klm": 2.7
+      },
+      "movil": {
+        "cumplida": true,
+        "vistos": 2,
+        "total": 2,
+        "faltan": [],
+        "acciones": 2,
+        "clics": 1,
+        "escrituras": 0,
+        "pulsaciones": 0,
+        "desplazamientos": 1,
+        "segundos_robot": 0.74,
+        "segundos_klm": 3.7
+      }
+    }
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "etiqueta": "it6-mismo-origen-rend",
+  "version": "it4",
+  "fecha": "2026-11-13T11:19:45.039Z",
+  "modelo": "Combinado: Chronos-2 ajustado + híbrido",
+  "caso": {
+    "area": "centro",
+    "fecha": "2026-03-10",
+    "hora": "19:00",
+    "idx": 38,
+    "horizonte": "24h",
+    "variante": "M3"
+  },
+  "rendimiento": {
+    "local": {
+      "grafico_ms": 58,
+      "grafico_rango_ms": [
+        56,
+        91
+      ],
+      "respuesta_ms": 60,
+      "respuesta_rango_ms": [
+        58,
+        92
+      ]
+    },
+    "peticiones": 10,
+    "kb": 43,
+    "kb_por_tipo": {
+      "stylesheet": 7,
+      "document": 5,
+      "script": 26,
+      "fetch": 5
+    },
+    "peticiones_a_terceros": 0,
+    "red_lenta": {
+      "grafico_ms": 747,
+      "grafico_rango_ms": [
+        730,
+        764
+      ],
+      "respuesta_ms": 750,
+      "respuesta_rango_ms": [
+        734,
+        770
+      ]
+    }
+  }
+}

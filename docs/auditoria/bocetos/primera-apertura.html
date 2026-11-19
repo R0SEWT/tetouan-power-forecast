@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Curva · bocetos de primera apertura</title>
+<!-- Bocetos estáticos de la auditoría (docs/auditoria/onboarding.md). No son la app: no piden datos ni guardan nada.
+     Cifras de ejemplo tomadas de la captura de la línea base (Centro, 13-nov, 21:30). -->
+<style>
+  :root { --page:#f4f6f8; --surface:#fff; --surface-2:#f0f3f6; --ink:#0e1726; --ink-2:#435063; --muted:#5d6878; --line:#e3e7ec;
+          --pron:#2a78d6; --pron-band:rgba(42,120,214,.22); --ref:#d65a24; --good:#0a7d0a; --good-bg:#e6f4e6; --warn-bg:#fff4d6; }
+  * { box-sizing:border-box; margin:0; padding:0 }
+  body { background:var(--page); color:var(--ink); font:15px/1.45 system-ui,-apple-system,'Segoe UI',Roboto,sans-serif; padding:24px 16px 48px }
+  h1 { font-size:22px; max-width:1100px; margin:0 auto 4px } .intro { max-width:1100px; margin:0 auto 20px; color:var(--ink-2) }
+  .fila { display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:20px; max-width:1100px; margin:0 auto }
+  .concepto h2 { font-size:16px; margin-bottom:2px } .concepto > p { color:var(--ink-2); font-size:13px; margin-bottom:10px; min-height:78px }
+  .tel { width:100%; max-width:360px; min-height:560px; margin:0 auto; border:1px solid var(--line); border-radius:22px; background:var(--page); overflow:hidden; display:flex; flex-direction:column; box-shadow:0 1px 3px rgba(14,23,38,.08) }
+  .cab { display:flex; align-items:center; gap:8px; padding:12px 14px; background:var(--surface); border-bottom:1px solid var(--line); font-weight:700 }
+  .cab small { font-weight:500; color:var(--muted); font-size:12px } .logo { width:24px; height:24px; border-radius:7px; background:var(--ink) }
+  .cuerpo { padding:14px; display:flex; flex-direction:column; gap:12px; flex:1 }
+  .card { background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:12px 14px }
+  .k { font-size:12px; font-weight:600; color:var(--muted) } .n { font-size:34px; font-weight:750; letter-spacing:-.02em } .n small { font-size:14px; color:var(--ink-2); margin-left:3px }
+  .d { font-size:12.5px; color:var(--ink-2) } .paso { font-size:12px; font-weight:700; color:var(--pron) }
+  svg { display:block; width:100% } .banda { fill:var(--pron-band) } .real { fill:none; stroke:var(--ink); stroke-width:2 } .pron { fill:none; stroke:var(--pron); stroke-width:3 }
+  .ahora { stroke:var(--ink); stroke-width:1.5 } .halo { fill:none; stroke:var(--pron); stroke-width:2; stroke-dasharray:4 3 }
+  .burbuja { background:var(--ink); color:#fff; border-radius:12px; padding:10px 12px; font-size:13px; position:relative }
+  .burbuja b { color:#9cc6f6 } .burbuja .acc { display:flex; justify-content:space-between; margin-top:8px; font-size:12px; color:#c9d3df }
+  .btn { display:inline-block; border-radius:999px; padding:7px 14px; font-weight:650; font-size:13px; border:1px solid var(--line); background:var(--surface) }
+  .btn.pri { background:var(--pron); color:#fff; border-color:var(--pron) } .puntos { display:flex; gap:5px } .puntos i { width:7px; height:7px; border-radius:50%; background:#5f6f84 } .puntos i.on { background:#fff }
+  .pregunta { font-size:19px; font-weight:750; line-height:1.25 } .resp { font-size:15px } .resp b { font-size:26px }
+  .seg { display:flex; background:var(--surface-2); border-radius:999px; padding:3px; font-size:13px; font-weight:650 } .seg span { flex:1; text-align:center; padding:6px; border-radius:999px; color:var(--ink-2) } .seg span.on { background:var(--surface); color:var(--ink); box-shadow:0 1px 2px rgba(0,0,0,.08) }
+  .glosa { border-bottom:1px dotted var(--muted) } .vacio { background:var(--warn-bg); border-color:transparent }
+  .mas { font-size:13px; color:var(--pron); font-weight:650 } .nota { max-width:1100px; margin:22px auto 0; font-size:13px; color:var(--muted) }
+</style>
+</head>
+<body>
+<h1>Primera apertura de Curva: tres conceptos</h1>
+<p class="intro">Bocetos para discutir, no diseño final. Cada uno ataca la misma falla medida en la línea base (demasiadas cifras y controles compitiendo, ningún punto de entrada claro) con un principio distinto del diseño de niveles. La medición de cada uno está en <code>onboarding.md</code>.</p>
+<div class="fila">
+
+  <section class="concepto">
+    <h2>A · El primer nivel es el gráfico</h2>
+    <p>Tres pasos sobre el propio gráfico, cada uno con una acción (tocar o arrastrar), al estilo del World 1-1: se aprende haciendo, sin un tutorial aparte. Una sola cifra a la vista en el paso 1.</p>
+    <div class="tel">
+      <div class="cab"><span class="logo"></span>Curva <small>la demanda eléctrica del Perú, hora a hora</small></div>
+      <div class="cuerpo">
+        <div class="card"><p class="k">Centro · ahora, 21:30 · pronóstico</p><p class="n">4,880<small>MW</small></p></div>
+        <div class="card">
+          <svg viewBox="0 0 320 170" aria-hidden="true">
+            <path class="banda" d="M10 120 C60 60 90 40 130 70 S190 150 230 80 S290 40 310 70 L310 90 C290 60 250 110 230 100 S170 170 130 90 S60 80 10 140Z"/>
+            <path class="real" d="M10 130 C60 70 90 50 130 80"/>
+            <path class="pron" d="M130 80 C170 160 200 140 230 90 S290 50 310 80"/>
+            <line class="ahora" x1="262" x2="262" y1="10" y2="160"/>
+            <circle class="halo" cx="262" cy="72" r="13"/><circle cx="262" cy="72" r="5" fill="#2a78d6"/>
+          </svg>
+          <div class="burbuja"><span class="paso" style="color:#9cc6f6">1 de 3</span><br>Este punto es <b>ahora</b>: el Centro usa unos <b>4,880 MW</b>. A la izquierda, lo que ya pasó; a la derecha, lo que viene.
+            <div class="acc"><span class="puntos"><i class="on"></i><i></i><i></i></span><span>Toca el punto para seguir · Saltar</span></div></div>
+        </div>
+        <p class="d">Paso 2: «Lo más alto de hoy fue a las 11:00» (señala el pico). Paso 3: «Arrastra para ver otra hora» (requiere arrastrar; enseña el control que hoy no existe).</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="concepto">
+    <h2>B · La pregunta del día</h2>
+    <p>Un solo punto de referencia («weenie») arriba: una pregunta en lenguaje llano con su respuesta y el gráfico que la prueba. El resto de las cifras queda a un toque, no compitiendo en la primera pantalla.</p>
+    <div class="tel">
+      <div class="cab"><span class="logo"></span>Curva <small>la demanda eléctrica del Perú, hora a hora</small></div>
+      <div class="cuerpo">
+        <p class="pregunta">¿Cuánta electricidad usará Lima y el centro esta noche?</p>
+        <p class="resp">A las 22:30, unos <b>4,650 MW</b>: un 5 % menos que ahora.</p>
+        <div class="card">
+          <svg viewBox="0 0 320 150" aria-hidden="true">
+            <path class="banda" d="M10 110 C60 50 90 30 130 60 S190 140 230 70 S290 30 310 60 L310 80 C290 50 250 100 230 90 S170 160 130 80 S60 70 10 130Z"/>
+            <path class="real" d="M10 120 C60 60 90 40 130 70"/><path class="pron" d="M130 70 C170 150 200 130 230 80 S290 40 310 70"/>
+            <line class="ahora" x1="262" x2="262" y1="8" y2="145"/><circle cx="290" cy="76" r="6" fill="#2a78d6"/>
+          </svg>
+          <p class="d">La franja azul es donde cae la demanda 8 de cada 10 veces.</p>
+        </div>
+        <span class="mas">Ver todas las cifras de hoy (pico, mañana, mayor subida) →</span>
+        <span class="mas">Repasar un día pasado →</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="concepto">
+    <h2>C · Niveles: ciudadano y operador</h2>
+    <p>La dificultad como nivel opcional: la primera apertura entra en «Ciudadano» (tres cifras, palabras llanas, términos explicados donde aparecen, vacíos que enseñan); «Operador» revela rampa, referencia, umbral y el detalle.</p>
+    <div class="tel">
+      <div class="cab"><span class="logo"></span>Curva <small>la demanda eléctrica del Perú, hora a hora</small></div>
+      <div class="cuerpo">
+        <div class="seg"><span class="on">Ciudadano</span><span>Operador</span></div>
+        <div class="card"><p class="k">Ahora en el Centro</p><p class="n">4,880<small>MW</small></p><p class="d">Pronóstico. El dato real del <span class="glosa">COES</span> (el operador de la red) llega mañana.</p></div>
+        <div class="card"><p class="k">Lo más alto de hoy</p><p class="n" style="font-size:26px">5,297<small>MW · 11:00</small></p></div>
+        <div class="card vacio"><p class="k">Mañana a esta hora</p><p class="d">Se calcula mañana a las 10:00, cuando el COES publique lo de hoy. Mientras, mira <b>cómo acertamos ayer</b> →</p></div>
+        <p class="d"><span class="glosa">MW</span>: megavatios, la unidad en que se mide cuánta electricidad se usa en un momento.</p>
+      </div>
+    </div>
+  </section>
+</div>
+<p class="nota">Bocetos de la auditoría de atención (rama feature/auditoria-atencion). Ningún concepto está implementado; el plan de PR decide cuál se prueba primero y con qué umbral.</p>
+</body>
+</html>

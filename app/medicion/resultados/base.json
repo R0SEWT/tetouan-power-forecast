@@ -1,0 +1,589 @@
+{
+  "etiqueta": "base",
+  "version": "base",
+  "fecha": "2026-11-13T07:12:25.607Z",
+  "modelo": "XGBoost global",
+  "caso": {
+    "area": "centro",
+    "fecha": "2026-03-10",
+    "hora": "19:00",
+    "idx": 38,
+    "horizonte": "24h",
+    "variante": "M3"
+  },
+  "tareas": {
+    "t1": {
+      "nombre": "Pronóstico de un área, horizonte y fecha, con intervalo y real",
+      "fichas": {
+        "pronostico": [
+          "4,712"
+        ],
+        "intervalo inferior": [
+          "4,517"
+        ],
+        "intervalo superior": [
+          "4,905"
+        ],
+        "real": [
+          "4,784"
+        ]
+      },
+      "escritorio": {
+        "cumplida": false,
+        "vistos": 2,
+        "total": 4,
+        "faltan": [
+          "intervalo inferior",
+          "intervalo superior"
+        ],
+        "acciones": 17,
+        "clics": 5,
+        "escrituras": 1,
+        "pulsaciones": 10,
+        "desplazamientos": 1,
+        "segundos_robot": 2.13,
+        "segundos_klm": 18.8
+      },
+      "movil": {
+        "cumplida": false,
+        "vistos": 2,
+        "total": 4,
+        "faltan": [
+          "intervalo inferior",
+          "intervalo superior"
+        ],
+        "acciones": 17,
+        "clics": 5,
+        "escrituras": 1,
+        "pulsaciones": 10,
+        "desplazamientos": 1,
+        "segundos_robot": 2.13,
+        "segundos_klm": 18.8
+      }
+    },
+    "t2": {
+      "nombre": "¿Se puede confiar? Error reciente frente a la referencia",
+      "fichas": {
+        "error del modelo": [
+          "33.6",
+          "34 MW"
+        ],
+        "comparación con la referencia": [
+          "65.9",
+          "32 MW",
+          "32 MW menos"
+        ]
+      },
+      "escritorio": {
+        "cumplida": true,
+        "vistos": 2,
+        "total": 2,
+        "faltan": [],
+        "acciones": 0,
+        "clics": 0,
+        "escrituras": 0,
+        "pulsaciones": 0,
+        "desplazamientos": 0,
+        "segundos_robot": 0.13,
+        "segundos_klm": 0
+      },
+      "movil": {
+        "cumplida": true,
+        "vistos": 2,
+        "total": 2,
+        "faltan": [],
+        "acciones": 1,
+        "clics": 0,
+        "escrituras": 0,
+        "pulsaciones": 0,
+        "desplazamientos": 1,
+        "segundos_robot": 0.34,
+        "segundos_klm": 1
+      }
+    },
+    "t3": {
+      "nombre": "Efecto de +2 °C en el pronóstico a 24 h",
+      "fichas": {
+        "cambio del escenario": [
+          "15 MW",
+          "4,934"
+        ]
+      },
+      "escritorio": {
+        "cumplida": true,
+        "vistos": 1,
+        "total": 1,
+        "faltan": [],
+        "acciones": 2,
+        "clics": 2,
+        "escrituras": 0,
+        "pulsaciones": 0,
+        "desplazamientos": 0,
+        "segundos_robot": 0.97,
+        "segundos_klm": 5.3
+      },
+      "movil": {
+        "cumplida": true,
+        "vistos": 1,
+        "total": 1,
+        "faltan": [],
+        "acciones": 2,
+        "clics": 2,
+        "escrituras": 0,
+        "pulsaciones": 0,
+        "desplazamientos": 0,
+        "segundos_robot": 0.95,
+        "segundos_klm": 5.3
+      }
+    },
+    "t4": {
+      "nombre": "Diagnóstico: régimen de El Niño con más error",
+      "fichas": {
+        "régimen": [
+          "Niño débil"
+        ],
+        "error": [
+          "86.8"
+        ]
+      },
+      "escritorio": {
+        "cumplida": true,
+        "vistos": 2,
+        "total": 2,
+        "faltan": [],
+        "acciones": 1,
+        "clics": 1,
+        "escrituras": 0,
+        "pulsaciones": 0,
+        "desplazamientos": 0,
+        "segundos_robot": 0.52,
+        "segundos_klm": 2.7
+      },
+      "movil": {
+        "cumplida": true,
+        "vistos": 2,
+        "total": 2,
+        "faltan": [],
+        "acciones": 1,
+        "clics": 1,
+        "escrituras": 0,
+        "pulsaciones": 0,
+        "desplazamientos": 0,
+        "segundos_robot": 0.52,
+        "segundos_klm": 2.7
+      }
+    }
+  },
+  "rendimiento": {
+    "local": {
+      "grafico_ms": 286,
+      "grafico_rango_ms": [
+        216,
+        422
+      ],
+      "respuesta_ms": 288,
+      "respuesta_rango_ms": [
+        218,
+        423
+      ]
+    },
+    "peticiones": 11,
+    "kb": 157,
+    "kb_por_tipo": {
+      "stylesheet": 24,
+      "document": 11,
+      "script": 57,
+      "fetch": 8,
+      "font": 57
+    },
+    "peticiones_a_terceros": 3,
+    "red_lenta": {
+      "grafico_ms": 1139,
+      "grafico_rango_ms": [
+        1138,
+        1152
+      ],
+      "respuesta_ms": 1143,
+      "respuesta_rango_ms": [
+        1142,
+        1156
+      ]
+    }
+  },
+  "axe": {
+    "pantallas": 28,
+    "infracciones": 6,
+    "nodos": 6,
+    "buenas_practicas_nodos": 0,
+    "reglas": {
+      "scrollable-region-focusable": {
+        "impacto": "serious",
+        "nodos": 6,
+        "estados": 6
+      }
+    },
+    "corridas": [
+      {
+        "estado": "inicio",
+        "vista": "movil",
+        "tema": "dark",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "inicio",
+        "vista": "movil",
+        "tema": "light",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "inicio",
+        "vista": "escritorio",
+        "tema": "dark",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "inicio",
+        "vista": "escritorio",
+        "tema": "light",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "area",
+        "vista": "movil",
+        "tema": "dark",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "area",
+        "vista": "movil",
+        "tema": "light",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "area",
+        "vista": "escritorio",
+        "tema": "dark",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "area",
+        "vista": "escritorio",
+        "tema": "light",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "operacion",
+        "vista": "movil",
+        "tema": "dark",
+        "reglas": [
+          "scrollable-region-focusable"
+        ],
+        "nodos": 1
+      },
+      {
+        "estado": "operacion",
+        "vista": "movil",
+        "tema": "light",
+        "reglas": [
+          "scrollable-region-focusable"
+        ],
+        "nodos": 1
+      },
+      {
+        "estado": "operacion",
+        "vista": "escritorio",
+        "tema": "dark",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "operacion",
+        "vista": "escritorio",
+        "tema": "light",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "escenarios",
+        "vista": "movil",
+        "tema": "dark",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "escenarios",
+        "vista": "movil",
+        "tema": "light",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "escenarios",
+        "vista": "escritorio",
+        "tema": "dark",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "escenarios",
+        "vista": "escritorio",
+        "tema": "light",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "sensibilidad",
+        "vista": "movil",
+        "tema": "dark",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "sensibilidad",
+        "vista": "movil",
+        "tema": "light",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "sensibilidad",
+        "vista": "escritorio",
+        "tema": "dark",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "sensibilidad",
+        "vista": "escritorio",
+        "tema": "light",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "diagnostico",
+        "vista": "movil",
+        "tema": "dark",
+        "reglas": [
+          "scrollable-region-focusable"
+        ],
+        "nodos": 1
+      },
+      {
+        "estado": "diagnostico",
+        "vista": "movil",
+        "tema": "light",
+        "reglas": [
+          "scrollable-region-focusable"
+        ],
+        "nodos": 1
+      },
+      {
+        "estado": "diagnostico",
+        "vista": "escritorio",
+        "tema": "dark",
+        "reglas": [
+          "scrollable-region-focusable"
+        ],
+        "nodos": 1
+      },
+      {
+        "estado": "diagnostico",
+        "vista": "escritorio",
+        "tema": "light",
+        "reglas": [
+          "scrollable-region-focusable"
+        ],
+        "nodos": 1
+      },
+      {
+        "estado": "ficha",
+        "vista": "movil",
+        "tema": "dark",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "ficha",
+        "vista": "movil",
+        "tema": "light",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "ficha",
+        "vista": "escritorio",
+        "tema": "dark",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "ficha",
+        "vista": "escritorio",
+        "tema": "light",
+        "reglas": [],
+        "nodos": 0
+      }
+    ]
+  },
+  "foco": {
+    "movil": {
+      "enfocables": 22,
+      "tapados": 0,
+      "tapados_ejemplos": [],
+      "sin_indicador": 1,
+      "sin_indicador_ejemplos": [
+        "INPUT 2026-03-10"
+      ],
+      "tabs_hasta_horizonte": 18,
+      "tabs_hasta_diagnostico": 24
+    },
+    "escritorio": {
+      "enfocables": 22,
+      "tapados": 0,
+      "tapados_ejemplos": [],
+      "sin_indicador": 1,
+      "sin_indicador_ejemplos": [
+        "INPUT 2026-03-10"
+      ],
+      "tabs_hasta_horizonte": 18,
+      "tabs_hasta_diagnostico": 24
+    }
+  },
+  "estructura": {
+    "movil": {
+      "interactivos": 21,
+      "menores_24px": 0,
+      "menores_44px": 21,
+      "ejemplos_menores_24": [],
+      "cromo_fijo_pct": 23,
+      "respuesta_sin_desplazar": false,
+      "tamano_fuente_respuesta_px": 22,
+      "alto_pagina_px": 1441
+    },
+    "escritorio": {
+      "interactivos": 21,
+      "menores_24px": 0,
+      "menores_44px": 21,
+      "ejemplos_menores_24": [],
+      "cromo_fijo_pct": 24,
+      "respuesta_sin_desplazar": true,
+      "tamano_fuente_respuesta_px": 26,
+      "alto_pagina_px": 1267
+    },
+    "desborde_px": {
+      "320px": 0,
+      "375px": 0
+    }
+  },
+  "color": {
+    "dark": {
+      "contraste_series": {
+        "ln-real": 15.63,
+        "ln-pronostico": 4.46,
+        "ln-referencia": 5.63
+      },
+      "series_bajo_3a1": 0,
+      "deltaE_min_entre_series": {
+        "normal": 52.7,
+        "protan": 41,
+        "deutan": 33.3,
+        "tritan": 37
+      }
+    },
+    "light": {
+      "contraste_series": {
+        "ln-real": 17.85,
+        "ln-pronostico": 3.87,
+        "ln-referencia": 4.59
+      },
+      "series_bajo_3a1": 0,
+      "deltaE_min_entre_series": {
+        "normal": 61.7,
+        "protan": 37.3,
+        "deutan": 45.1,
+        "tritan": 27.7
+      }
+    }
+  },
+  "afirmaciones": {
+    "programacion_diaria_visible": 3,
+    "donde": [
+      "operacion: 1",
+      "ficha: 2"
+    ]
+  },
+  "lighthouse": {
+    "inicio_movil": {
+      "rendimiento": 97,
+      "accesibilidad": 100,
+      "buenas_practicas": 100,
+      "fcp_ms": 1515,
+      "lcp_ms": 1979,
+      "tbt_ms": 0,
+      "cls": 0.087,
+      "kb": 151,
+      "rendimiento_rango": [
+        97,
+        97
+      ],
+      "fallas_accesibilidad": [],
+      "fallas_buenas_practicas": []
+    },
+    "inicio_escritorio": {
+      "rendimiento": 100,
+      "accesibilidad": 100,
+      "buenas_practicas": 100,
+      "fcp_ms": 508,
+      "lcp_ms": 508,
+      "tbt_ms": 0,
+      "cls": 0,
+      "kb": 151,
+      "rendimiento_rango": [
+        100,
+        100
+      ],
+      "fallas_accesibilidad": [],
+      "fallas_buenas_practicas": []
+    },
+    "area_movil": {
+      "rendimiento": 96,
+      "accesibilidad": 100,
+      "buenas_practicas": 100,
+      "fcp_ms": 1518,
+      "lcp_ms": 1994,
+      "tbt_ms": 0,
+      "cls": 0.098,
+      "kb": 158,
+      "rendimiento_rango": [
+        96,
+        96
+      ],
+      "fallas_accesibilidad": [],
+      "fallas_buenas_practicas": []
+    },
+    "area_escritorio": {
+      "rendimiento": 99,
+      "accesibilidad": 100,
+      "buenas_practicas": 100,
+      "fcp_ms": 517,
+      "lcp_ms": 804,
+      "tbt_ms": 0,
+      "cls": 0.068,
+      "kb": 158,
+      "rendimiento_rango": [
+        99,
+        99
+      ],
+      "fallas_accesibilidad": [],
+      "fallas_buenas_practicas": []
+    }
+  }
+}

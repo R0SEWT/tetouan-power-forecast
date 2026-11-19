@@ -1,0 +1,2226 @@
+{
+ "etiqueta": "rite-ensayo",
+ "modo": "imagen",
+ "capturado_lima": "2026-11-14 02:38",
+ "sesiones_validas": 15,
+ "sesiones_fallidas": 0,
+ "por_pantalla": {
+  "entrada-hoy": {
+   "sesiones": 15,
+   "dudas_por_sesion": {
+    "media": 2.933,
+    "min": 2.8,
+    "max": 3.0,
+    "n": 15,
+    "reps": 3
+   },
+   "terminos_por_sesion": {
+    "media": 2.8,
+    "min": 2.6,
+    "max": 3.0,
+    "n": 15,
+    "reps": 3
+   },
+   "confusion_por_sesion": {
+    "media": 0.4,
+    "min": 0.4,
+    "max": 0.4,
+    "n": 15,
+    "reps": 3
+   },
+   "seguridad": {
+    "media": 4.933,
+    "min": 4.8,
+    "max": 5.0,
+    "n": 15,
+    "reps": 3
+   },
+   "dudas_zonas": [
+    [
+     "cuando",
+     13
+    ],
+    [
+     "#ahAyer",
+     12
+    ],
+    [
+     "#ahBueno",
+     3
+    ],
+    [
+     "#ahOrigenTit",
+     3
+    ],
+    [
+     "respuesta",
+     3
+    ],
+    [
+     "cifra_ahora",
+     2
+    ]
+   ],
+   "terminos_top": [
+    [
+     "Chronos-2 / modelo fundacional",
+     0.8
+    ],
+    [
+     "IEOD",
+     0.73
+    ],
+    [
+     "COES",
+     0.4
+    ],
+    [
+     "SEIN",
+     0.27
+    ],
+    [
+     "MW / megavatios",
+     0.2
+    ],
+    [
+     "CSV",
+     0.13
+    ],
+    [
+     "sesgo / subestima",
+     0.13
+    ],
+    [
+     "medias horas / periodos",
+     0.07
+    ]
+   ],
+   "comprende": {
+    "media": 1.0,
+    "min": 1.0,
+    "max": 1.0,
+    "n": 15,
+    "reps": 3
+   },
+   "momento_ok": {
+    "media": 1.0,
+    "min": 1.0,
+    "max": 1.0,
+    "n": 15,
+    "reps": 3
+   },
+   "lectura_cifra": {
+    "media": 1.0,
+    "min": 1.0,
+    "max": 1.0,
+    "n": 15,
+    "reps": 3
+   },
+   "lectura_completa": {
+    "media": 1.0,
+    "min": 1.0,
+    "max": 1.0,
+    "n": 15,
+    "reps": 3
+   },
+   "primer_clic": {
+    "t1": {
+     "media": 1.0,
+     "min": 1.0,
+     "max": 1.0,
+     "n": 15,
+     "reps": 3
+    },
+    "t2": {
+     "media": 1.0,
+     "min": 1.0,
+     "max": 1.0,
+     "n": 15,
+     "reps": 3
+    },
+    "t3": {
+     "media": 1.0,
+     "min": 1.0,
+     "max": 1.0,
+     "n": 15,
+     "reps": 3
+    },
+    "t4": {
+     "media": 1.0,
+     "min": 1.0,
+     "max": 1.0,
+     "n": 15,
+     "reps": 3
+    }
+   },
+   "primer_clic_estricto": {
+    "t1": {
+     "media": 1.0,
+     "min": 1.0,
+     "max": 1.0,
+     "n": 15,
+     "reps": 3
+    },
+    "t2": {
+     "media": 1.0,
+     "min": 1.0,
+     "max": 1.0,
+     "n": 15,
+     "reps": 3
+    },
+    "t3": {
+     "media": 1.0,
+     "min": 1.0,
+     "max": 1.0,
+     "n": 15,
+     "reps": 3
+    },
+    "t4": {
+     "media": 1.0,
+     "min": 1.0,
+     "max": 1.0,
+     "n": 15,
+     "reps": 3
+    }
+   },
+   "primer_clic_medio": {
+    "media": 1.0,
+    "min": 1.0,
+    "max": 1.0,
+    "n": 15,
+    "reps": 3
+   },
+   "no_es_control": [],
+   "mira_primero": [
+    [
+     "cifra_ahora",
+     15
+    ]
+   ],
+   "mira_primero_cifra": {
+    "media": 1.0,
+    "min": 1.0,
+    "max": 1.0,
+    "n": 15,
+    "reps": 3
+   },
+   "volveria": {
+    "no": 2,
+    "tal_vez": 4,
+    "si": 9
+   },
+   "importo": [
+    [
+     "rendición de cuentas (acertó, cuánto se equivoca)",
+     0.4
+    ],
+    [
+     "el pico y la hora de más consumo",
+     0.2
+    ],
+    [
+     "los datos para descargar",
+     0.2
+    ],
+    [
+     "la cifra de ahora",
+     0.13
+    ]
+   ],
+   "volveria_si_o_tal_vez": {
+    "media": 0.867,
+    "min": 0.8,
+    "max": 1.0,
+    "n": 15,
+    "reps": 3
+   },
+   "acuerdo_entre_repeticiones": {
+    "comprende": 1.0,
+    "lectura_cifra": 1.0,
+    "clic_t1": 1.0,
+    "clic_t2": 1.0,
+    "clic_t3": 1.0,
+    "clic_t4": 1.0
+   },
+   "embudo": [
+    {
+     "paso": "abre la pantalla",
+     "quedan": 15,
+     "de": 15
+    },
+    {
+     "paso": "dice qué es",
+     "quedan": 15,
+     "de": 15
+    },
+    {
+     "paso": "lee la cifra del momento",
+     "quedan": 15,
+     "de": 15
+    },
+    {
+     "paso": "sabe qué momento muestra",
+     "quedan": 15,
+     "de": 15
+    },
+    {
+     "paso": "acierta el primer clic en 3 de 4 tareas",
+     "quedan": 15,
+     "de": 15
+    },
+    {
+     "paso": "volvería mañana (sí o tal vez)",
+     "quedan": 13,
+     "de": 15
+    }
+   ]
+  }
+ },
+ "embudos_tareas": {
+  "t1": [
+   {
+    "paso": "primer clic desde hoy",
+    "quedan": 0,
+    "de": 0
+   },
+   {
+    "paso": "lee lo pronosticado, el rango y lo real (repaso 19:00)",
+    "quedan": 0,
+    "de": 0
+   }
+  ],
+  "t2": [
+   {
+    "paso": "primer clic desde hoy",
+    "quedan": 0,
+    "de": 0
+   },
+   {
+    "paso": "lee el error y la comparación (Confianza)",
+    "quedan": 0,
+    "de": 0
+   }
+  ],
+  "t3": [
+   {
+    "paso": "primer clic desde el repaso de las 19:00",
+    "quedan": 0,
+    "de": 0
+   },
+   {
+    "paso": "toca +2 °C",
+    "quedan": 0,
+    "de": 0
+   },
+   {
+    "paso": "lee el cambio",
+    "quedan": 0,
+    "de": 0
+   }
+  ],
+  "t4": [
+   {
+    "paso": "primer clic desde hoy",
+    "quedan": 0,
+    "de": 0
+   },
+   {
+    "paso": "lee el régimen con más error (Confianza)",
+    "quedan": 0,
+    "de": 0
+   }
+  ]
+ },
+ "tropiezos": [
+  {
+   "pantalla": "hoy",
+   "paso": "duda",
+   "tipo": "duda",
+   "objetivo": "cuando",
+   "severidad": 1,
+   "frecuencia": 0.867,
+   "personas": 5,
+   "puntaje": 0.867,
+   "evidencia": "Arriba en la etiqueta dice 12/11, pero en la casilla de fecha dice 11/12/2026. No sé si está en formato gringo (12 de noviembre) o si se refiere …"
+  },
+  {
+   "pantalla": "hoy",
+   "paso": "palabra",
+   "tipo": "palabra",
+   "objetivo": "Chronos-2 / modelo fundacional",
+   "severidad": 1,
+   "frecuencia": 0.8,
+   "personas": 4,
+   "puntaje": 0.8,
+   "evidencia": "Chronos-2 / modelo fundacional"
+  },
+  {
+   "pantalla": "hoy",
+   "paso": "duda",
+   "tipo": "duda",
+   "objetivo": "#ahAyer",
+   "severidad": 1,
+   "frecuencia": 0.8,
+   "personas": 4,
+   "puntaje": 0.8,
+   "evidencia": "Dice 'en vivo' pero luego aclara que se calculó después de conocerse el real. Como periodista me hace dudar si fue una predicción real o un cálculo posterior …"
+  },
+  {
+   "pantalla": "hoy",
+   "paso": "palabra",
+   "tipo": "palabra",
+   "objetivo": "IEOD",
+   "severidad": 1,
+   "frecuencia": 0.733,
+   "personas": 4,
+   "puntaje": 0.733,
+   "evidencia": "IEOD"
+  },
+  {
+   "pantalla": "hoy",
+   "paso": "palabra",
+   "tipo": "palabra",
+   "objetivo": "COES",
+   "severidad": 1,
+   "frecuencia": 0.4,
+   "personas": 2,
+   "puntaje": 0.4,
+   "evidencia": "COES"
+  },
+  {
+   "pantalla": "hoy",
+   "paso": "palabra",
+   "tipo": "palabra",
+   "objetivo": "SEIN",
+   "severidad": 1,
+   "frecuencia": 0.267,
+   "personas": 2,
+   "puntaje": 0.267,
+   "evidencia": "SEIN"
+  },
+  {
+   "pantalla": "hoy",
+   "paso": "duda",
+   "tipo": "duda",
+   "objetivo": "#ahBueno",
+   "severidad": 1,
+   "frecuencia": 0.2,
+   "personas": 2,
+   "puntaje": 0.2,
+   "evidencia": "Tiene una X roja que parece de error o peligro, pero no entiendo qué son medias horas ni por qué el rango queda corto."
+  },
+  {
+   "pantalla": "hoy",
+   "paso": "duda",
+   "tipo": "duda",
+   "objetivo": "#ahOrigenTit",
+   "severidad": 1,
+   "frecuencia": 0.2,
+   "personas": 1,
+   "puntaje": 0.2,
+   "evidencia": "Menciona cosas como Chronos-2, modelo fundacional de series de tiempo y SEIN, que suenan a lenguaje técnico que no comprendo."
+  },
+  {
+   "pantalla": "hoy",
+   "paso": "palabra",
+   "tipo": "palabra",
+   "objetivo": "MW / megavatios",
+   "severidad": 1,
+   "frecuencia": 0.2,
+   "personas": 1,
+   "puntaje": 0.2,
+   "evidencia": "MW / megavatios"
+  },
+  {
+   "pantalla": "hoy",
+   "paso": "duda",
+   "tipo": "duda",
+   "objetivo": "respuesta",
+   "severidad": 1,
+   "frecuencia": 0.2,
+   "personas": 2,
+   "puntaje": 0.2,
+   "evidencia": "Si el gráfico marca «Ahora 23:30», no me queda claro si estoy viendo el pronóstico de hoy o de ayer, ni por qué dice que sale a las …"
+  },
+  {
+   "pantalla": "hoy",
+   "paso": "palabra",
+   "tipo": "palabra",
+   "objetivo": "CSV",
+   "severidad": 1,
+   "frecuencia": 0.133,
+   "personas": 1,
+   "puntaje": 0.133,
+   "evidencia": "CSV"
+  },
+  {
+   "pantalla": "hoy",
+   "paso": "palabra",
+   "tipo": "palabra",
+   "objetivo": "sesgo / subestima",
+   "severidad": 1,
+   "frecuencia": 0.133,
+   "personas": 1,
+   "puntaje": 0.133,
+   "evidencia": "sesgo / subestima"
+  },
+  {
+   "pantalla": "hoy",
+   "paso": "duda",
+   "tipo": "duda",
+   "objetivo": "cifra_ahora",
+   "severidad": 1,
+   "frecuencia": 0.133,
+   "personas": 1,
+   "puntaje": 0.133,
+   "evidencia": "No sé qué significa MW porque en mi recibo de luz todo viene en kWh, ni entiendo si ese número es de todo el Perú, de Lima o …"
+  },
+  {
+   "pantalla": "hoy",
+   "paso": "duda",
+   "tipo": "duda",
+   "objetivo": "modo",
+   "severidad": 1,
+   "frecuencia": 0.133,
+   "personas": 2,
+   "puntaje": 0.133,
+   "evidencia": "Me confunde porque dice que el dato real llega con un día de retraso, pero al costado muestra 'Último dato real · 23:30 4,456 MW' como si fuera …"
+  },
+  {
+   "pantalla": "hoy",
+   "paso": "duda",
+   "tipo": "duda",
+   "objetivo": "que_es",
+   "severidad": 1,
+   "frecuencia": 0.133,
+   "personas": 1,
+   "puntaje": 0.133,
+   "evidencia": "La advertencia del pie de página dice expresamente que no sirve para operar el sistema eléctrico, que es justo la labor que realizo en mi turno."
+  },
+  {
+   "pantalla": "hoy",
+   "paso": "duda",
+   "tipo": "duda",
+   "objetivo": "#ahRespuesta",
+   "severidad": 1,
+   "frecuencia": 0.067,
+   "personas": 1,
+   "puntaje": 0.067,
+   "evidencia": "No sé qué significa MW ni qué es el COES; en mi recibo de luz solo veo kWh y soles."
+  },
+  {
+   "pantalla": "hoy",
+   "paso": "palabra",
+   "tipo": "palabra",
+   "objetivo": "medias horas / periodos",
+   "severidad": 1,
+   "frecuencia": 0.067,
+   "personas": 1,
+   "puntaje": 0.067,
+   "evidencia": "medias horas / periodos"
+  },
+  {
+   "pantalla": "hoy",
+   "paso": "duda",
+   "tipo": "duda",
+   "objetivo": "#ahGrafTitulo",
+   "severidad": 1,
+   "frecuencia": 0.067,
+   "personas": 1,
+   "puntaje": 0.067,
+   "evidencia": "Hay demasiadas líneas de colores (negra, azul, naranja punteada) y una sombra celeste; me marea entender qué es la referencia y cómo leer tantas horas juntas."
+  },
+  {
+   "pantalla": "hoy",
+   "paso": "duda",
+   "tipo": "duda",
+   "objetivo": "#ahLeyRango",
+   "severidad": 1,
+   "frecuencia": 0.067,
+   "personas": 1,
+   "puntaje": 0.067,
+   "evidencia": "No entiendo bien qué significa ese 80 % ni cómo es eso de que caiga 8 de cada 10 veces."
+  },
+  {
+   "pantalla": "hoy",
+   "paso": "duda",
+   "tipo": "duda",
+   "objetivo": "#ahPie",
+   "severidad": 1,
+   "frecuencia": 0.067,
+   "personas": 1,
+   "puntaje": 0.067,
+   "evidencia": "Como operadora busco datos que me sirvan para preparar maniobras del turno; que en la letra chica digan explícitamente que no sirve para operar me genera desconfianza."
+  },
+  {
+   "pantalla": "hoy",
+   "paso": "palabra",
+   "tipo": "palabra",
+   "objetivo": "reconstruido / registro en vivo",
+   "severidad": 1,
+   "frecuencia": 0.067,
+   "personas": 1,
+   "puntaje": 0.067,
+   "evidencia": "reconstruido / registro en vivo"
+  }
+ ],
+ "codigos": {
+  "entrada-hoy": [
+   {
+    "sesion": "entrada-hoy",
+    "pantalla": "hoy",
+    "persona": "ciudadana",
+    "repeticion": 1,
+    "tropiezos": [
+     {
+      "pantalla": "hoy",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "#ahRespuesta",
+      "severidad": 1,
+      "evidencia": "No sé qué significa MW ni qué es el COES; en mi recibo de luz solo veo kWh y soles."
+     },
+     {
+      "pantalla": "hoy",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "cuando",
+      "severidad": 1,
+      "evidencia": "El gráfico tiene muchas líneas, números y horas; me mareo y no sé cuál es la que se usó de verdad y cuál es el pronóstico."
+     },
+     {
+      "pantalla": "hoy",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "#ahBueno",
+      "severidad": 1,
+      "evidencia": "Tiene una X roja que parece de error o peligro, pero no entiendo qué son medias horas ni por qué el rango queda corto."
+     },
+     {
+      "pantalla": "hoy",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "#ahOrigenTit",
+      "severidad": 1,
+      "evidencia": "Habla de Chronos-2, series de tiempo y SEIN, que parecen cosas muy complicadas de computación o científicos."
+     },
+     {
+      "pantalla": "hoy",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "COES",
+      "severidad": 1,
+      "evidencia": "COES"
+     },
+     {
+      "pantalla": "hoy",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "CSV",
+      "severidad": 1,
+      "evidencia": "CSV"
+     },
+     {
+      "pantalla": "hoy",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "Chronos-2 / modelo fundacional",
+      "severidad": 1,
+      "evidencia": "Chronos-2 / modelo fundacional"
+     },
+     {
+      "pantalla": "hoy",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "IEOD",
+      "severidad": 1,
+      "evidencia": "IEOD"
+     },
+     {
+      "pantalla": "hoy",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "MW / megavatios",
+      "severidad": 1,
+      "evidencia": "MW / megavatios"
+     },
+     {
+      "pantalla": "hoy",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "SEIN",
+      "severidad": 1,
+      "evidencia": "SEIN"
+     },
+     {
+      "pantalla": "hoy",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "sesgo / subestima",
+      "severidad": 1,
+      "evidencia": "sesgo / subestima"
+     }
+    ],
+    "confusion": 0,
+    "dudas": [
+     "#ahRespuesta",
+     "cuando",
+     "#ahBueno",
+     "#ahOrigenTit"
+    ],
+    "terminos": [
+     "COES",
+     "CSV",
+     "Chronos-2 / modelo fundacional",
+     "IEOD",
+     "MW / megavatios",
+     "SEIN",
+     "sesgo / subestima"
+    ],
+    "comprende": true,
+    "mira_primero": "cifra_ahora",
+    "momento_ok": true,
+    "lectura_cifra": true,
+    "lectura_completa": true,
+    "clics": {
+     "t1": {
+      "tipo": "control",
+      "etiqueta": "2026-11-12",
+      "zona": "cuando",
+      "vista": "vista-1.png",
+      "resultado": "acierto",
+      "seguridad": 4
+     },
+     "t2": {
+      "tipo": "control",
+      "etiqueta": "Confianza",
+      "zona": "#navPantallas",
+      "vista": "vista-1.png",
+      "resultado": "acierto",
+      "seguridad": 4
+     },
+     "t3": {
+      "tipo": "control",
+      "etiqueta": "¿Y si hace más calor?",
+      "zona": "respuesta",
+      "vista": "vista-1.png",
+      "resultado": "acierto",
+      "seguridad": 5
+     },
+     "t4": {
+      "tipo": "control",
+      "etiqueta": "El Niño costero (calentamiento del mar frente a la costa): extraordinario · ¿cuándo se equivoca más? →",
+      "zona": "regimen",
+      "vista": "vista-1.png",
+      "resultado": "acierto",
+      "seguridad": 5
+     }
+    },
+    "volveria": "no",
+    "le_importo": "Ver que al mediodía es cuando más electricidad se gasta en Lima.",
+    "importo": [],
+    "por_que_volveria": "No volvería porque tiene demasiados números y palabras técnicas que me cansan, y no me sirve para saber si van a cortar la luz en Gamarra ni cuánto voy a pagar en mi recibo.",
+    "seguridad": 5
+   },
+   {
+    "sesion": "entrada-hoy",
+    "pantalla": "hoy",
+    "persona": "ciudadana",
+    "repeticion": 2,
+    "tropiezos": [
+     {
+      "pantalla": "hoy",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "cifra_ahora",
+      "severidad": 1,
+      "evidencia": "No sé qué significa MW porque en mi recibo de luz todo viene en kWh, ni entiendo si ese número es de todo el Perú, de Lima o …"
+     },
+     {
+      "pantalla": "hoy",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "cuando",
+      "severidad": 1,
+      "evidencia": "El gráfico tiene demasiadas líneas (negras, azules, celestes, rojas punteadas) y horas; me mareo y no sé cuál mirar ni qué significa."
+     },
+     {
+      "pantalla": "hoy",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "#ahBueno",
+      "severidad": 1,
+      "evidencia": "No entiendo qué son las medias horas ni a qué se refiere con que el rango quede corto o angosto."
+     },
+     {
+      "pantalla": "hoy",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "#ahOrigenTit",
+      "severidad": 1,
+      "evidencia": "Menciona cosas como Chronos-2, modelo fundacional de series de tiempo y SEIN, que suenan a lenguaje técnico que no comprendo."
+     },
+     {
+      "pantalla": "hoy",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "COES",
+      "severidad": 1,
+      "evidencia": "COES"
+     },
+     {
+      "pantalla": "hoy",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "Chronos-2 / modelo fundacional",
+      "severidad": 1,
+      "evidencia": "Chronos-2 / modelo fundacional"
+     },
+     {
+      "pantalla": "hoy",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "MW / megavatios",
+      "severidad": 1,
+      "evidencia": "MW / megavatios"
+     },
+     {
+      "pantalla": "hoy",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "SEIN",
+      "severidad": 1,
+      "evidencia": "SEIN"
+     },
+     {
+      "pantalla": "hoy",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "medias horas / periodos",
+      "severidad": 1,
+      "evidencia": "medias horas / periodos"
+     },
+     {
+      "pantalla": "hoy",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "sesgo / subestima",
+      "severidad": 1,
+      "evidencia": "sesgo / subestima"
+     }
+    ],
+    "confusion": 1,
+    "dudas": [
+     "cifra_ahora",
+     "cuando",
+     "#ahBueno",
+     "#ahOrigenTit"
+    ],
+    "terminos": [
+     "COES",
+     "Chronos-2 / modelo fundacional",
+     "MW / megavatios",
+     "SEIN",
+     "medias horas / periodos",
+     "sesgo / subestima"
+    ],
+    "comprende": true,
+    "mira_primero": "cifra_ahora",
+    "momento_ok": true,
+    "lectura_cifra": true,
+    "lectura_completa": true,
+    "clics": {
+     "t1": {
+      "tipo": "control",
+      "etiqueta": "2026-11-12",
+      "zona": "cuando",
+      "vista": "vista-1.png",
+      "resultado": "acierto",
+      "seguridad": 4
+     },
+     "t2": {
+      "tipo": "control",
+      "etiqueta": "Confianza",
+      "zona": "#navPantallas",
+      "vista": "vista-1.png",
+      "resultado": "acierto",
+      "seguridad": 4
+     },
+     "t3": {
+      "tipo": "control",
+      "etiqueta": "¿Y si hace más calor?",
+      "zona": "respuesta",
+      "vista": "vista-1.png",
+      "resultado": "acierto",
+      "seguridad": 5
+     },
+     "t4": {
+      "tipo": "control",
+      "etiqueta": "El Niño costero (calentamiento del mar frente a la costa): extraordinario · ¿cuándo se equivoca más? →",
+      "zona": "regimen",
+      "vista": "vista-1.png",
+      "resultado": "acierto",
+      "seguridad": 5
+     }
+    },
+    "volveria": "no",
+    "le_importo": "Lo único que me llamó la atención fue lo de si hace más calor, porque en verano cuando calienta fuerte a veces se nos va la luz en Gamarra.",
+    "importo": [],
+    "por_que_volveria": "Solo volvería si pusieran avisos claros y directos de si habrá cortes de luz programados en mi zona o en Gamarra, porque saber cuántos megavatios consume el país no me sirve para mi día a día.",
+    "seguridad": 5
+   },
+   {
+    "sesion": "entrada-hoy",
+    "pantalla": "hoy",
+    "persona": "ciudadana",
+    "repeticion": 3,
+    "tropiezos": [
+     {
+      "pantalla": "hoy",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "cifra_ahora",
+      "severidad": 1,
+      "evidencia": "No sé qué es MW ni qué significa COES; en mi casa solo veo kWh en el recibo de luz y no sé si 4,456 es poco o …"
+     },
+     {
+      "pantalla": "hoy",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "#ahGrafTitulo",
+      "severidad": 1,
+      "evidencia": "Hay demasiadas líneas de colores (negra, azul, naranja punteada) y una sombra celeste; me marea entender qué es la referencia y cómo leer tantas horas juntas."
+     },
+     {
+      "pantalla": "hoy",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "#ahLeyRango",
+      "severidad": 1,
+      "evidencia": "No entiendo bien qué significa ese 80 % ni cómo es eso de que caiga 8 de cada 10 veces."
+     },
+     {
+      "pantalla": "hoy",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "#ahOrigenTit",
+      "severidad": 1,
+      "evidencia": "Habla de modelo fundacional, SEIN, series de tiempo y 48 medias horas; parece lenguaje para ingenieros y me pierdo por completo."
+     },
+     {
+      "pantalla": "hoy",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "COES",
+      "severidad": 1,
+      "evidencia": "COES"
+     },
+     {
+      "pantalla": "hoy",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "CSV",
+      "severidad": 1,
+      "evidencia": "CSV"
+     },
+     {
+      "pantalla": "hoy",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "Chronos-2 / modelo fundacional",
+      "severidad": 1,
+      "evidencia": "Chronos-2 / modelo fundacional"
+     },
+     {
+      "pantalla": "hoy",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "IEOD",
+      "severidad": 1,
+      "evidencia": "IEOD"
+     },
+     {
+      "pantalla": "hoy",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "MW / megavatios",
+      "severidad": 1,
+      "evidencia": "MW / megavatios"
+     },
+     {
+      "pantalla": "hoy",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "SEIN",
+      "severidad": 1,
+      "evidencia": "SEIN"
+     }
+    ],
+    "confusion": 2,
+    "dudas": [
+     "cifra_ahora",
+     "#ahGrafTitulo",
+     "#ahLeyRango",
+     "#ahOrigenTit"
+    ],
+    "terminos": [
+     "COES",
+     "CSV",
+     "Chronos-2 / modelo fundacional",
+     "IEOD",
+     "MW / megavatios",
+     "SEIN"
+    ],
+    "comprende": true,
+    "mira_primero": "cifra_ahora",
+    "momento_ok": true,
+    "lectura_cifra": true,
+    "lectura_completa": true,
+    "clics": {
+     "t1": {
+      "tipo": "control",
+      "etiqueta": "2026-11-12",
+      "zona": "cuando",
+      "vista": "vista-1.png",
+      "resultado": "acierto",
+      "seguridad": 4
+     },
+     "t2": {
+      "tipo": "control",
+      "etiqueta": "Confianza",
+      "zona": "#navPantallas",
+      "vista": "vista-1.png",
+      "resultado": "acierto",
+      "seguridad": 4
+     },
+     "t3": {
+      "tipo": "control",
+      "etiqueta": "¿Y si hace más calor?",
+      "zona": "respuesta",
+      "vista": "vista-1.png",
+      "resultado": "acierto",
+      "seguridad": 5
+     },
+     "t4": {
+      "tipo": "control",
+      "etiqueta": "El Niño costero (calentamiento del mar frente a la costa): extraordinario · ¿cuándo se equivoca más? →",
+      "zona": "regimen",
+      "vista": "vista-1.png",
+      "resultado": "acierto",
+      "seguridad": 5
+     }
+    },
+    "volveria": "tal_vez",
+    "le_importo": "Ver a qué horas del día se gasta más electricidad y saber si el calor hace que se use más luz.",
+    "importo": [
+     "el pico y la hora de más consumo"
+    ],
+    "por_que_volveria": "Solo si me ayudara a saber si habrá cortes de luz en Gamarra o en mi casa, o si me explicara si mi recibo va a venir más caro.",
+    "seguridad": 4
+   },
+   {
+    "sesion": "entrada-hoy",
+    "pantalla": "hoy",
+    "persona": "estudiante",
+    "repeticion": 1,
+    "tropiezos": [
+     {
+      "pantalla": "hoy",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "modo",
+      "severidad": 1,
+      "evidencia": "Me confunde porque dice que el dato real llega con un día de retraso, pero al costado muestra 'Último dato real · 23:30 4,456 MW' como si fuera …"
+     },
+     {
+      "pantalla": "hoy",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "#ahAyer",
+      "severidad": 1,
+      "evidencia": "No entiendo bien qué significa 'reconstruido'. Me suena a que calcularon el pronóstico después de que ya sabían el resultado real, y me hace dudar si fue una …"
+     },
+     {
+      "pantalla": "hoy",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "Chronos-2 / modelo fundacional",
+      "severidad": 1,
+      "evidencia": "Chronos-2 / modelo fundacional"
+     },
+     {
+      "pantalla": "hoy",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "IEOD",
+      "severidad": 1,
+      "evidencia": "IEOD"
+     }
+    ],
+    "confusion": 0,
+    "dudas": [
+     "modo",
+     "#ahAyer"
+    ],
+    "terminos": [
+     "Chronos-2 / modelo fundacional",
+     "IEOD"
+    ],
+    "comprende": true,
+    "mira_primero": "cifra_ahora",
+    "momento_ok": true,
+    "lectura_cifra": true,
+    "lectura_completa": true,
+    "clics": {
+     "t1": {
+      "tipo": "control",
+      "etiqueta": "2026-11-12",
+      "zona": "cuando",
+      "vista": "vista-1.png",
+      "resultado": "acierto",
+      "seguridad": 4
+     },
+     "t2": {
+      "tipo": "control",
+      "etiqueta": "Confianza",
+      "zona": "#navPantallas",
+      "vista": "vista-1.png",
+      "resultado": "acierto",
+      "seguridad": 5
+     },
+     "t3": {
+      "tipo": "control",
+      "etiqueta": "¿Y si hace más calor?",
+      "zona": "respuesta",
+      "vista": "vista-1.png",
+      "resultado": "acierto",
+      "seguridad": 5
+     },
+     "t4": {
+      "tipo": "control",
+      "etiqueta": "El Niño costero (calentamiento del mar frente a la costa): extraordinario · ¿cuándo se equivoca más? →",
+      "zona": "regimen",
+      "vista": "vista-1.png",
+      "resultado": "acierto",
+      "seguridad": 5
+     }
+    },
+    "volveria": "si",
+    "le_importo": "Poder ver la curva de demanda y tener el botón 'Descargar CSV' para bajar los datos a mi trabajo del curso.",
+    "importo": [
+     "los datos para descargar"
+    ],
+    "por_que_volveria": "Para revisar la curva de carga actualizada y descargar los datos en CSV para las tareas del curso de sistemas de potencia.",
+    "seguridad": 5
+   },
+   {
+    "sesion": "entrada-hoy",
+    "pantalla": "hoy",
+    "persona": "estudiante",
+    "repeticion": 2,
+    "tropiezos": [
+     {
+      "pantalla": "hoy",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "cuando",
+      "severidad": 1,
+      "evidencia": "Me confunde el formato de la fecha: arriba dice 12/11 y en el eje del gráfico dice jue 12, pero el selector muestra 11/12/2026 en formato mes/día/año, haciéndome …"
+     },
+     {
+      "pantalla": "hoy",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "#ahAyer",
+      "severidad": 1,
+      "evidencia": "Me confunde que mezcle «en vivo» y «reconstruido»: no me queda claro si realmente se emitió antes de tiempo o si fue una simulación que hicieron después con …"
+     },
+     {
+      "pantalla": "hoy",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "Chronos-2 / modelo fundacional",
+      "severidad": 1,
+      "evidencia": "Chronos-2 / modelo fundacional"
+     },
+     {
+      "pantalla": "hoy",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "IEOD",
+      "severidad": 1,
+      "evidencia": "IEOD"
+     }
+    ],
+    "confusion": 0,
+    "dudas": [
+     "cuando",
+     "#ahAyer"
+    ],
+    "terminos": [
+     "Chronos-2 / modelo fundacional",
+     "IEOD"
+    ],
+    "comprende": true,
+    "mira_primero": "cifra_ahora",
+    "momento_ok": true,
+    "lectura_cifra": true,
+    "lectura_completa": true,
+    "clics": {
+     "t1": {
+      "tipo": "control",
+      "etiqueta": "2026-11-12",
+      "zona": "cuando",
+      "vista": "vista-1.png",
+      "resultado": "acierto",
+      "seguridad": 4
+     },
+     "t2": {
+      "tipo": "control",
+      "etiqueta": "Confianza",
+      "zona": "#navPantallas",
+      "vista": "vista-1.png",
+      "resultado": "acierto",
+      "seguridad": 5
+     },
+     "t3": {
+      "tipo": "control",
+      "etiqueta": "¿Y si hace más calor?",
+      "zona": "respuesta",
+      "vista": "vista-1.png",
+      "resultado": "acierto",
+      "seguridad": 5
+     },
+     "t4": {
+      "tipo": "control",
+      "etiqueta": "El Niño costero (calentamiento del mar frente a la costa): extraordinario · ¿cuándo se equivoca más? →",
+      "zona": "regimen",
+      "vista": "vista-1.png",
+      "resultado": "acierto",
+      "seguridad": 5
+     }
+    },
+    "volveria": "si",
+    "le_importo": "El botón «Descargar CSV» y la curva de carga detallada para poder bajarme los datos de demanda eléctrica para mi trabajo del curso.",
+    "importo": [
+     "los datos para descargar"
+    ],
+    "por_que_volveria": "Porque es mucho más rápido y visual para ver la curva de demanda y descargar datos limpios del sistema eléctrico que rebuscar en la página del COES.",
+    "seguridad": 5
+   },
+   {
+    "sesion": "entrada-hoy",
+    "pantalla": "hoy",
+    "persona": "estudiante",
+    "repeticion": 3,
+    "tropiezos": [
+     {
+      "pantalla": "hoy",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "cuando",
+      "severidad": 1,
+      "evidencia": "Me confunde el formato de la fecha: en el gráfico dice jue 12 y arriba 12/11, pero en la caja dice 11/12/2026 en formato gringo y parece 11 …"
+     },
+     {
+      "pantalla": "hoy",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "#ahAyer",
+      "severidad": 1,
+      "evidencia": "No entiendo si el dato fue en vivo o si lo inventaron o calcularon después; suena contradictorio decir en vivo y reconstruido a la vez."
+     },
+     {
+      "pantalla": "hoy",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "Chronos-2 / modelo fundacional",
+      "severidad": 1,
+      "evidencia": "Chronos-2 / modelo fundacional"
+     },
+     {
+      "pantalla": "hoy",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "IEOD",
+      "severidad": 1,
+      "evidencia": "IEOD"
+     }
+    ],
+    "confusion": 0,
+    "dudas": [
+     "cuando",
+     "#ahAyer"
+    ],
+    "terminos": [
+     "Chronos-2 / modelo fundacional",
+     "IEOD"
+    ],
+    "comprende": true,
+    "mira_primero": "cifra_ahora",
+    "momento_ok": true,
+    "lectura_cifra": true,
+    "lectura_completa": true,
+    "clics": {
+     "t1": {
+      "tipo": "control",
+      "etiqueta": "2026-11-12",
+      "zona": "cuando",
+      "vista": "vista-1.png",
+      "resultado": "acierto",
+      "seguridad": 5
+     },
+     "t2": {
+      "tipo": "control",
+      "etiqueta": "Confianza",
+      "zona": "#navPantallas",
+      "vista": "vista-1.png",
+      "resultado": "acierto",
+      "seguridad": 5
+     },
+     "t3": {
+      "tipo": "control",
+      "etiqueta": "¿Y si hace más calor?",
+      "zona": "respuesta",
+      "vista": "vista-1.png",
+      "resultado": "acierto",
+      "seguridad": 5
+     },
+     "t4": {
+      "tipo": "control",
+      "etiqueta": "El Niño costero (calentamiento del mar frente a la costa): extraordinario · ¿cuándo se equivoca más? →",
+      "zona": "regimen",
+      "vista": "vista-1.png",
+      "resultado": "acierto",
+      "seguridad": 5
+     }
+    },
+    "volveria": "si",
+    "le_importo": "Ver la forma de la curva de carga con el pico de demanda y el botón para descargar el CSV para mi trabajo de potencia.",
+    "importo": [
+     "el pico y la hora de más consumo",
+     "los datos para descargar"
+    ],
+    "por_que_volveria": "Porque me da la curva de carga clara del SEIN, los picos de demanda y puedo bajar el CSV al toque para mis tareas sin complicarme.",
+    "seguridad": 5
+   },
+   {
+    "sesion": "entrada-hoy",
+    "pantalla": "hoy",
+    "persona": "operadora",
+    "repeticion": 1,
+    "tropiezos": [
+     {
+      "pantalla": "hoy",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "respuesta",
+      "severidad": 1,
+      "evidencia": "Si el gráfico marca «Ahora 23:30», no me queda claro si estoy viendo el pronóstico de hoy o de ayer, ni por qué dice que sale a las …"
+     },
+     {
+      "pantalla": "hoy",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "cuando",
+      "severidad": 1,
+      "evidencia": "Arriba en la etiqueta dice 12/11, pero en la casilla de fecha dice 11/12/2026. No sé si está en formato gringo (12 de noviembre) o si se refiere …"
+     },
+     {
+      "pantalla": "hoy",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "#ahAyer",
+      "severidad": 1,
+      "evidencia": "Me confunde que diga a la vez «en vivo» y «reconstruido»: si se calculó después de conocer el dato real, ya no es en vivo, es una simulación."
+     },
+     {
+      "pantalla": "hoy",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "que_es",
+      "severidad": 1,
+      "evidencia": "Un colega me pasó el enlace para apoyarme en el turno del centro de control, pero este aviso dice explícitamente que no sirve para operar."
+     },
+     {
+      "pantalla": "hoy",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "Chronos-2 / modelo fundacional",
+      "severidad": 1,
+      "evidencia": "Chronos-2 / modelo fundacional"
+     }
+    ],
+    "confusion": 1,
+    "dudas": [
+     "respuesta",
+     "cuando",
+     "#ahAyer",
+     "que_es"
+    ],
+    "terminos": [
+     "Chronos-2 / modelo fundacional"
+    ],
+    "comprende": true,
+    "mira_primero": "cifra_ahora",
+    "momento_ok": true,
+    "lectura_cifra": true,
+    "lectura_completa": true,
+    "clics": {
+     "t1": {
+      "tipo": "control",
+      "etiqueta": "2026-11-12",
+      "zona": "cuando",
+      "vista": "vista-1.png",
+      "resultado": "acierto",
+      "seguridad": 4
+     },
+     "t2": {
+      "tipo": "control",
+      "etiqueta": "Confianza",
+      "zona": "#navPantallas",
+      "vista": "vista-1.png",
+      "resultado": "acierto",
+      "seguridad": 5
+     },
+     "t3": {
+      "tipo": "control",
+      "etiqueta": "¿Y si hace más calor?",
+      "zona": "respuesta",
+      "vista": "vista-1.png",
+      "resultado": "acierto",
+      "seguridad": 5
+     },
+     "t4": {
+      "tipo": "control",
+      "etiqueta": "El Niño costero (calentamiento del mar frente a la costa): extraordinario · ¿cuándo se equivoca más? →",
+      "zona": "regimen",
+      "vista": "vista-1.png",
+      "resultado": "acierto",
+      "seguridad": 5
+     }
+    },
+    "volveria": "tal_vez",
+    "le_importo": "Me sirvió ver de inmediato el error del pronóstico frente a la demanda real (-73 MW) y que muestre el rango del 80 % para saber el margen de desviación.",
+    "importo": [
+     "rendición de cuentas (acertó, cuánto se equivoca)"
+    ],
+    "por_que_volveria": "Volvería para ver la curva estimada del pico nocturno y qué tanto se desvía frente a la semana pasada, si es que cargan el pronóstico a tiempo para mi turno.",
+    "seguridad": 5
+   },
+   {
+    "sesion": "entrada-hoy",
+    "pantalla": "hoy",
+    "persona": "operadora",
+    "repeticion": 2,
+    "tropiezos": [
+     {
+      "pantalla": "hoy",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "cuando",
+      "severidad": 1,
+      "evidencia": "El formato parece mes/día/año (estilo estadounidense), mientras que en Perú usamos día/mes/año; confunde si es 12 de noviembre o 11 de diciembre."
+     },
+     {
+      "pantalla": "hoy",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "#ahAyer",
+      "severidad": 1,
+      "evidencia": "Dice «en vivo» y a la vez «reconstruido después de conocerse el real». Si se calculó sabiendo ya el dato real, no es un pronóstico ciego en tiempo …"
+     },
+     {
+      "pantalla": "hoy",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "que_es",
+      "severidad": 1,
+      "evidencia": "La advertencia del pie de página dice expresamente que no sirve para operar el sistema eléctrico, que es justo la labor que realizo en mi turno."
+     },
+     {
+      "pantalla": "hoy",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "Chronos-2 / modelo fundacional",
+      "severidad": 1,
+      "evidencia": "Chronos-2 / modelo fundacional"
+     }
+    ],
+    "confusion": 0,
+    "dudas": [
+     "cuando",
+     "#ahAyer",
+     "que_es"
+    ],
+    "terminos": [
+     "Chronos-2 / modelo fundacional"
+    ],
+    "comprende": true,
+    "mira_primero": "cifra_ahora",
+    "momento_ok": true,
+    "lectura_cifra": true,
+    "lectura_completa": true,
+    "clics": {
+     "t1": {
+      "tipo": "control",
+      "etiqueta": "2026-11-12",
+      "zona": "cuando",
+      "vista": "vista-1.png",
+      "resultado": "acierto",
+      "seguridad": 5
+     },
+     "t2": {
+      "tipo": "control",
+      "etiqueta": "Confianza",
+      "zona": "#navPantallas",
+      "vista": "vista-1.png",
+      "resultado": "acierto",
+      "seguridad": 5
+     },
+     "t3": {
+      "tipo": "control",
+      "etiqueta": "¿Y si hace más calor?",
+      "zona": "respuesta",
+      "vista": "vista-1.png",
+      "resultado": "acierto",
+      "seguridad": 5
+     },
+     "t4": {
+      "tipo": "control",
+      "etiqueta": "El Niño costero (calentamiento del mar frente a la costa): extraordinario · ¿cuándo se equivoca más? →",
+      "zona": "regimen",
+      "vista": "vista-1.png",
+      "resultado": "acierto",
+      "seguridad": 5
+     }
+    },
+    "volveria": "tal_vez",
+    "le_importo": "Ver la curva de demanda pronosticada con su banda de incertidumbre del 80 % y que muestre con transparencia el error real que tuvo.",
+    "importo": [
+     "rendición de cuentas (acertó, cuánto se equivoca)"
+    ],
+    "por_que_volveria": "Porque es honesta mostrando cuánto se equivoca y da una referencia rápida de la curva, aunque dudo al no tener datos en tiempo real y advertir que no sirve para operar.",
+    "seguridad": 5
+   },
+   {
+    "sesion": "entrada-hoy",
+    "pantalla": "hoy",
+    "persona": "operadora",
+    "repeticion": 3,
+    "tropiezos": [
+     {
+      "pantalla": "hoy",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "cuando",
+      "severidad": 1,
+      "evidencia": "En Perú usamos día/mes/año; ver 11/12 me hace dudar si se refiere al 11 de diciembre o al 12 de noviembre, aunque el texto y la gráfica hablen …"
+     },
+     {
+      "pantalla": "hoy",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "modo",
+      "severidad": 1,
+      "evidencia": "Dice que el dato real llega con un día de retraso a la mañana siguiente, pero arriba me muestran un dato real de las 23:30. No me cuadra …"
+     },
+     {
+      "pantalla": "hoy",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "#ahAyer",
+      "severidad": 1,
+      "evidencia": "Me confunde que pongan 'en vivo' y al mismo tiempo 'reconstruido: se calculó después de conocerse el real'. Si ya tenían el dato real, no es una predicción …"
+     },
+     {
+      "pantalla": "hoy",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "#ahPie",
+      "severidad": 1,
+      "evidencia": "Como operadora busco datos que me sirvan para preparar maniobras del turno; que en la letra chica digan explícitamente que no sirve para operar me genera desconfianza."
+     },
+     {
+      "pantalla": "hoy",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "Chronos-2 / modelo fundacional",
+      "severidad": 1,
+      "evidencia": "Chronos-2 / modelo fundacional"
+     }
+    ],
+    "confusion": 0,
+    "dudas": [
+     "cuando",
+     "modo",
+     "#ahAyer",
+     "#ahPie"
+    ],
+    "terminos": [
+     "Chronos-2 / modelo fundacional"
+    ],
+    "comprende": true,
+    "mira_primero": "cifra_ahora",
+    "momento_ok": true,
+    "lectura_cifra": true,
+    "lectura_completa": true,
+    "clics": {
+     "t1": {
+      "tipo": "control",
+      "etiqueta": "2026-11-12",
+      "zona": "cuando",
+      "vista": "vista-1.png",
+      "resultado": "acierto",
+      "seguridad": 4
+     },
+     "t2": {
+      "tipo": "control",
+      "etiqueta": "Confianza",
+      "zona": "#navPantallas",
+      "vista": "vista-1.png",
+      "resultado": "acierto",
+      "seguridad": 5
+     },
+     "t3": {
+      "tipo": "control",
+      "etiqueta": "¿Y si hace más calor?",
+      "zona": "respuesta",
+      "vista": "vista-1.png",
+      "resultado": "acierto",
+      "seguridad": 5
+     },
+     "t4": {
+      "tipo": "control",
+      "etiqueta": "El Niño costero (calentamiento del mar frente a la costa): extraordinario · ¿cuándo se equivoca más? →",
+      "zona": "regimen",
+      "vista": "vista-1.png",
+      "resultado": "acierto",
+      "seguridad": 5
+     }
+    },
+    "volveria": "tal_vez",
+    "le_importo": "Me sirvió ver la forma de la curva de demanda con su rango de incertidumbre y que muestren abiertamente el error en MW comparándolo con la semana pasada.",
+    "importo": [
+     "rendición de cuentas (acertó, cuánto se equivoca)"
+    ],
+    "por_que_volveria": "Volvería para tener una referencia rápida de la tendencia de la demanda antes de mi guardia y ver si el rango de error es razonable, pero con cuidado porque ellos mismos aclaran que no es para operar el sistema.",
+    "seguridad": 5
+   },
+   {
+    "sesion": "entrada-hoy",
+    "pantalla": "hoy",
+    "persona": "periodista",
+    "repeticion": 1,
+    "tropiezos": [
+     {
+      "pantalla": "hoy",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "#ahAyer",
+      "severidad": 1,
+      "evidencia": "Me resulta contradictorio que diga 'en vivo' y al mismo tiempo 'reconstruido después de conocerse el real'; no me queda claro si fue un pronóstico hecho previamente o …"
+     },
+     {
+      "pantalla": "hoy",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "cuando",
+      "severidad": 1,
+      "evidencia": "Parece estar en formato estadounidense mes/día/año. En Perú usamos día/mes/año, así que a primera vista pensé que mostraba datos del 11 de diciembre y no del 12 de …"
+     },
+     {
+      "pantalla": "hoy",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "Chronos-2 / modelo fundacional",
+      "severidad": 1,
+      "evidencia": "Chronos-2 / modelo fundacional"
+     },
+     {
+      "pantalla": "hoy",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "IEOD",
+      "severidad": 1,
+      "evidencia": "IEOD"
+     }
+    ],
+    "confusion": 1,
+    "dudas": [
+     "#ahAyer",
+     "cuando"
+    ],
+    "terminos": [
+     "Chronos-2 / modelo fundacional",
+     "IEOD"
+    ],
+    "comprende": true,
+    "mira_primero": "cifra_ahora",
+    "momento_ok": true,
+    "lectura_cifra": true,
+    "lectura_completa": true,
+    "clics": {
+     "t1": {
+      "tipo": "control",
+      "etiqueta": "2026-11-12",
+      "zona": "cuando",
+      "vista": "vista-1.png",
+      "resultado": "acierto",
+      "seguridad": 5
+     },
+     "t2": {
+      "tipo": "control",
+      "etiqueta": "Confianza",
+      "zona": "#navPantallas",
+      "vista": "vista-1.png",
+      "resultado": "acierto",
+      "seguridad": 5
+     },
+     "t3": {
+      "tipo": "control",
+      "etiqueta": "¿Y si hace más calor?",
+      "zona": "respuesta",
+      "vista": "vista-1.png",
+      "resultado": "acierto",
+      "seguridad": 5
+     },
+     "t4": {
+      "tipo": "control",
+      "etiqueta": "El Niño costero (calentamiento del mar frente a la costa): extraordinario · ¿cuándo se equivoca más? →",
+      "zona": "regimen",
+      "vista": "vista-1.png",
+      "resultado": "acierto",
+      "seguridad": 5
+     }
+    },
+    "volveria": "si",
+    "le_importo": "Poder ver una cifra concreta de la demanda real y el pico proyectado (5,297 MW) con la fuente oficial COES y el enlace directo sobre el calor y El Niño.",
+    "importo": [
+     "el pico y la hora de más consumo",
+     "la cifra de ahora"
+    ],
+    "por_que_volveria": "Porque mañana a las 10:00 se publica el nuevo dato del COES y el pronóstico actualizado del día, justo a tiempo para cerrar mi nota con cifras frescas.",
+    "seguridad": 5
+   },
+   {
+    "sesion": "entrada-hoy",
+    "pantalla": "hoy",
+    "persona": "periodista",
+    "repeticion": 2,
+    "tropiezos": [
+     {
+      "pantalla": "hoy",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "#ahAyer",
+      "severidad": 1,
+      "evidencia": "Me confunde que diga «en vivo» y a la vez «reconstruido»: si se calculó después de conocer el dato real, no me queda claro si fue un pronóstico …"
+     },
+     {
+      "pantalla": "hoy",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "cuando",
+      "severidad": 1,
+      "evidencia": "El formato numérico me genera duda sobre si es 12 de noviembre o 11 de diciembre de 2026, dado que en Perú usamos día/mes/año pero en sistemas suele …"
+     },
+     {
+      "pantalla": "hoy",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "#ahBueno",
+      "severidad": 1,
+      "evidencia": "La métrica de «medias horas» y la explicación del rango me parecen técnicas y difíciles de traducir a una cifra clara para mis lectores sin enredarme."
+     },
+     {
+      "pantalla": "hoy",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "Chronos-2 / modelo fundacional",
+      "severidad": 1,
+      "evidencia": "Chronos-2 / modelo fundacional"
+     },
+     {
+      "pantalla": "hoy",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "IEOD",
+      "severidad": 1,
+      "evidencia": "IEOD"
+     },
+     {
+      "pantalla": "hoy",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "reconstruido / registro en vivo",
+      "severidad": 1,
+      "evidencia": "reconstruido / registro en vivo"
+     }
+    ],
+    "confusion": 0,
+    "dudas": [
+     "#ahAyer",
+     "cuando",
+     "#ahBueno"
+    ],
+    "terminos": [
+     "Chronos-2 / modelo fundacional",
+     "IEOD",
+     "reconstruido / registro en vivo"
+    ],
+    "comprende": true,
+    "mira_primero": "cifra_ahora",
+    "momento_ok": true,
+    "lectura_cifra": true,
+    "lectura_completa": true,
+    "clics": {
+     "t1": {
+      "tipo": "control",
+      "etiqueta": "2026-11-12",
+      "zona": "cuando",
+      "vista": "vista-1.png",
+      "resultado": "acierto",
+      "seguridad": 5
+     },
+     "t2": {
+      "tipo": "control",
+      "etiqueta": "Confianza",
+      "zona": "#navPantallas",
+      "vista": "vista-1.png",
+      "resultado": "acierto",
+      "seguridad": 5
+     },
+     "t3": {
+      "tipo": "control",
+      "etiqueta": "¿Y si hace más calor?",
+      "zona": "respuesta",
+      "vista": "vista-1.png",
+      "resultado": "acierto",
+      "seguridad": 5
+     },
+     "t4": {
+      "tipo": "control",
+      "etiqueta": "El Niño costero (calentamiento del mar frente a la costa): extraordinario · ¿cuándo se equivoca más? →",
+      "zona": "regimen",
+      "vista": "vista-1.png",
+      "resultado": "acierto",
+      "seguridad": 5
+     }
+    },
+    "volveria": "si",
+    "le_importo": "Me sirvieron directamente los accesos para ver el impacto del calor («¿Y si hace más calor?») y el comportamiento frente a El Niño costero, que van directo al tema de mi nota.",
+    "importo": [],
+    "por_que_volveria": "Porque a las 10:00 sale el nuevo pronóstico del día con los datos consolidados del COES y necesito los números actualizados sobre calor y consumo para cerrar mi nota.",
+    "seguridad": 5
+   },
+   {
+    "sesion": "entrada-hoy",
+    "pantalla": "hoy",
+    "persona": "periodista",
+    "repeticion": 3,
+    "tropiezos": [
+     {
+      "pantalla": "hoy",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "cuando",
+      "severidad": 1,
+      "evidencia": "El formato de fecha parece mes/día/año (estilo estadounidense para 12 de noviembre). En Perú usamos día/mes/año, por lo que a primera vista parece 11 de diciembre de 2026 …"
+     },
+     {
+      "pantalla": "hoy",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "#ahAyer",
+      "severidad": 1,
+      "evidencia": "Dice 'en vivo' pero luego aclara que se calculó después de conocerse el real. Como periodista me hace dudar si fue una predicción real o un cálculo posterior …"
+     },
+     {
+      "pantalla": "hoy",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "Chronos-2 / modelo fundacional",
+      "severidad": 1,
+      "evidencia": "Chronos-2 / modelo fundacional"
+     },
+     {
+      "pantalla": "hoy",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "IEOD",
+      "severidad": 1,
+      "evidencia": "IEOD"
+     }
+    ],
+    "confusion": 0,
+    "dudas": [
+     "cuando",
+     "#ahAyer"
+    ],
+    "terminos": [
+     "Chronos-2 / modelo fundacional",
+     "IEOD"
+    ],
+    "comprende": true,
+    "mira_primero": "cifra_ahora",
+    "momento_ok": true,
+    "lectura_cifra": true,
+    "lectura_completa": true,
+    "clics": {
+     "t1": {
+      "tipo": "control",
+      "etiqueta": "2026-11-12",
+      "zona": "cuando",
+      "vista": "vista-1.png",
+      "resultado": "acierto",
+      "seguridad": 4
+     },
+     "t2": {
+      "tipo": "control",
+      "etiqueta": "Confianza",
+      "zona": "#navPantallas",
+      "vista": "vista-1.png",
+      "resultado": "acierto",
+      "seguridad": 5
+     },
+     "t3": {
+      "tipo": "control",
+      "etiqueta": "¿Y si hace más calor?",
+      "zona": "respuesta",
+      "vista": "vista-1.png",
+      "resultado": "acierto",
+      "seguridad": 5
+     },
+     "t4": {
+      "tipo": "control",
+      "etiqueta": "El Niño costero (calentamiento del mar frente a la costa): extraordinario · ¿cuándo se equivoca más? →",
+      "zona": "regimen",
+      "vista": "vista-1.png",
+      "resultado": "acierto",
+      "seguridad": 5
+     }
+    },
+    "volveria": "si",
+    "le_importo": "Me sirvió ver la cifra concreta de consumo frente al pronóstico y tener accesos directos para evaluar el impacto del calor y El Niño en la demanda.",
+    "importo": [
+     "la cifra de ahora"
+    ],
+    "por_que_volveria": "Porque a las 10:00 se publica la nueva demanda oficial del COES y el nuevo pronóstico, y necesito esas cifras actualizadas para cerrar mi nota sobre el calor.",
+    "seguridad": 5
+   },
+   {
+    "sesion": "entrada-hoy",
+    "pantalla": "hoy",
+    "persona": "profesora",
+    "repeticion": 1,
+    "tropiezos": [
+     {
+      "pantalla": "hoy",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "cuando",
+      "severidad": 1,
+      "evidencia": "El selector de fecha muestra 11/12/2026, lo que parece formato estadounidense (mes/día/año). Si hoy es 12 de noviembre (jueves 12 en el gráfico y 12/11 arriba), poner 11/12 …"
+     },
+     {
+      "pantalla": "hoy",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "#ahAyer",
+      "severidad": 1,
+      "evidencia": "Hay una contradicción terminológica: si se calculó a posteriori ('después de conocerse el real'), es una evaluación retrospectiva o backtest, no un registro 'en vivo'."
+     },
+     {
+      "pantalla": "hoy",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "respuesta",
+      "severidad": 1,
+      "evidencia": "Si estamos a las 23:30, no me queda claro si la curva que veo para el resto del día se emitió hoy a las 10:00 o ayer a …"
+     },
+     {
+      "pantalla": "hoy",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "COES",
+      "severidad": 1,
+      "evidencia": "COES"
+     },
+     {
+      "pantalla": "hoy",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "IEOD",
+      "severidad": 1,
+      "evidencia": "IEOD"
+     }
+    ],
+    "confusion": 0,
+    "dudas": [
+     "cuando",
+     "#ahAyer",
+     "respuesta"
+    ],
+    "terminos": [
+     "COES",
+     "IEOD"
+    ],
+    "comprende": true,
+    "mira_primero": "cifra_ahora",
+    "momento_ok": true,
+    "lectura_cifra": true,
+    "lectura_completa": true,
+    "clics": {
+     "t1": {
+      "tipo": "control",
+      "etiqueta": "2026-11-12",
+      "zona": "cuando",
+      "vista": "vista-1.png",
+      "resultado": "acierto",
+      "seguridad": 5
+     },
+     "t2": {
+      "tipo": "control",
+      "etiqueta": "Confianza",
+      "zona": "#navPantallas",
+      "vista": "vista-1.png",
+      "resultado": "acierto",
+      "seguridad": 5
+     },
+     "t3": {
+      "tipo": "control",
+      "etiqueta": "¿Y si hace más calor?",
+      "zona": "respuesta",
+      "vista": "vista-1.png",
+      "resultado": "acierto",
+      "seguridad": 5
+     },
+     "t4": {
+      "tipo": "control",
+      "etiqueta": "El Niño costero (calentamiento del mar frente a la costa): extraordinario · ¿cuándo se equivoca más? →",
+      "zona": "regimen",
+      "vista": "vista-1.png",
+      "resultado": "acierto",
+      "seguridad": 5
+     }
+    },
+    "volveria": "si",
+    "le_importo": "Me importó la honestidad con la incertidumbre: que presenten intervalos del 80 % y reconozcan abiertamente que la cobertura empírica (73.2 %) se queda corta y el rango es más angosto de lo debido.",
+    "importo": [
+     "rendición de cuentas (acertó, cuánto se equivoca)"
+    ],
+    "por_que_volveria": "Para ver si hacia las 10:00 se actualiza el pronóstico con la demanda del día anterior y comprobar cómo sigue calibrándose la cobertura del intervalo del 80 %.",
+    "seguridad": 5
+   },
+   {
+    "sesion": "entrada-hoy",
+    "pantalla": "hoy",
+    "persona": "profesora",
+    "repeticion": 2,
+    "tropiezos": [
+     {
+      "pantalla": "hoy",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "cuando",
+      "severidad": 1,
+      "evidencia": "El formato de fecha parece mes/día/año (12 de noviembre), pero en español y en Perú se usa día/mes/año, lo que hace pensar a primera vista en el 11 …"
+     },
+     {
+      "pantalla": "hoy",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "#ahAyer",
+      "severidad": 1,
+      "evidencia": "Llamarlo 'en vivo' y 'reconstruido' a la vez es contradictorio; en estadística es una validación retrospectiva o pseudo-en-tiempo-real, no un registro en vivo."
+     },
+     {
+      "pantalla": "hoy",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "COES",
+      "severidad": 1,
+      "evidencia": "COES"
+     },
+     {
+      "pantalla": "hoy",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "IEOD",
+      "severidad": 1,
+      "evidencia": "IEOD"
+     },
+     {
+      "pantalla": "hoy",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "SEIN",
+      "severidad": 1,
+      "evidencia": "SEIN"
+     }
+    ],
+    "confusion": 1,
+    "dudas": [
+     "cuando",
+     "#ahAyer"
+    ],
+    "terminos": [
+     "COES",
+     "IEOD",
+     "SEIN"
+    ],
+    "comprende": true,
+    "mira_primero": "cifra_ahora",
+    "momento_ok": true,
+    "lectura_cifra": true,
+    "lectura_completa": true,
+    "clics": {
+     "t1": {
+      "tipo": "control",
+      "etiqueta": "2026-11-12",
+      "zona": "cuando",
+      "vista": "vista-1.png",
+      "resultado": "acierto",
+      "seguridad": 5
+     },
+     "t2": {
+      "tipo": "control",
+      "etiqueta": "Confianza",
+      "zona": "#navPantallas",
+      "vista": "vista-1.png",
+      "resultado": "acierto",
+      "seguridad": 5
+     },
+     "t3": {
+      "tipo": "control",
+      "etiqueta": "¿Y si hace más calor?",
+      "zona": "respuesta",
+      "vista": "vista-1.png",
+      "resultado": "acierto",
+      "seguridad": 5
+     },
+     "t4": {
+      "tipo": "control",
+      "etiqueta": "El Niño costero (calentamiento del mar frente a la costa): extraordinario · ¿cuándo se equivoca más? →",
+      "zona": "regimen",
+      "vista": "vista-1.png",
+      "resultado": "acierto",
+      "seguridad": 5
+     }
+    },
+    "volveria": "si",
+    "le_importo": "Me importó mucho la honestidad con la incertidumbre: que muestren intervalos de predicción y reconozcan abiertamente en rojo que la cobertura del 80 % quedó corta en 73.2 %.",
+    "importo": [
+     "rendición de cuentas (acertó, cuánto se equivoca)"
+    ],
+    "por_que_volveria": "Para comprobar si el pronóstico de hoy acertó una vez que publiquen el dato real y ver si la cobertura del intervalo de predicción mejora con el tiempo.",
+    "seguridad": 5
+   },
+   {
+    "sesion": "entrada-hoy",
+    "pantalla": "hoy",
+    "persona": "profesora",
+    "repeticion": 3,
+    "tropiezos": [
+     {
+      "pantalla": "hoy",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "respuesta",
+      "severidad": 1,
+      "evidencia": "Si el reloj marca las 23:30, no me queda claro si las 10:00 ya pasaron o son de la mañana siguiente. Además, aquí dice que se emitió ayer …"
+     },
+     {
+      "pantalla": "hoy",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "#ahAyer",
+      "severidad": 1,
+      "evidencia": "Me resulta metodológicamente contradictorio unir «en vivo» con «reconstruido»: si se calculó tras conocerse el dato real, es una evaluación retrospectiva o backtest, no un registro en vivo."
+     },
+     {
+      "pantalla": "hoy",
+      "paso": "duda",
+      "tipo": "duda",
+      "objetivo": "cuando",
+      "severidad": 1,
+      "evidencia": "No sé si la fecha corresponde al 11 de diciembre o al 12 de noviembre por la ambigüedad del formato de fecha (día/mes frente a mes/día)."
+     },
+     {
+      "pantalla": "hoy",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "COES",
+      "severidad": 1,
+      "evidencia": "COES"
+     },
+     {
+      "pantalla": "hoy",
+      "paso": "palabra",
+      "tipo": "palabra",
+      "objetivo": "IEOD",
+      "severidad": 1,
+      "evidencia": "IEOD"
+     }
+    ],
+    "confusion": 0,
+    "dudas": [
+     "respuesta",
+     "#ahAyer",
+     "cuando"
+    ],
+    "terminos": [
+     "COES",
+     "IEOD"
+    ],
+    "comprende": true,
+    "mira_primero": "cifra_ahora",
+    "momento_ok": true,
+    "lectura_cifra": true,
+    "lectura_completa": true,
+    "clics": {
+     "t1": {
+      "tipo": "control",
+      "etiqueta": "2026-11-12",
+      "zona": "cuando",
+      "vista": "vista-1.png",
+      "resultado": "acierto",
+      "seguridad": 4
+     },
+     "t2": {
+      "tipo": "control",
+      "etiqueta": "Confianza",
+      "zona": "#navPantallas",
+      "vista": "vista-1.png",
+      "resultado": "acierto",
+      "seguridad": 5
+     },
+     "t3": {
+      "tipo": "control",
+      "etiqueta": "¿Y si hace más calor?",
+      "zona": "respuesta",
+      "vista": "vista-1.png",
+      "resultado": "acierto",
+      "seguridad": 5
+     },
+     "t4": {
+      "tipo": "control",
+      "etiqueta": "El Niño costero (calentamiento del mar frente a la costa): extraordinario · ¿cuándo se equivoca más? →",
+      "zona": "regimen",
+      "vista": "vista-1.png",
+      "resultado": "acierto",
+      "seguridad": 5
+     }
+    },
+    "volveria": "si",
+    "le_importo": "Me importó la honestidad con la que presentan los intervalos de predicción y que adviertan abiertamente cuando el modelo queda corto en cobertura empírica.",
+    "importo": [
+     "rendición de cuentas (acertó, cuánto se equivoca)"
+    ],
+    "por_que_volveria": "Volvería para revisar si a las 10:00 se publica efectivamente el nuevo pronóstico y evaluar cómo responde el intervalo de predicción ante los nuevos datos reales.",
+    "seguridad": 5
+   }
+  ]
+ }
+}

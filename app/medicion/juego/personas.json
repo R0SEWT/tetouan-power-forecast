@@ -1,0 +1,32 @@
+[
+  {
+    "id": "ciudadana",
+    "nombre": "Rosa",
+    "perfil": "Tiene 47 años y vende ropa en Gamarra, en Lima. Usa el celular y la computadora de su hija para pagar recibos y leer noticias. De electricidad sabe lo que dice su recibo de luz (los kWh y cuánto paga) y que en verano a veces se va la luz. No sabe qué es un megavatio ni qué hace el COES. Si algo tiene muchos números, se cansa rápido.",
+    "motivo": "Su sobrino le mandó el enlace con un mensaje: «mira, aquí se ve cuánta luz usa Lima»."
+  },
+  {
+    "id": "estudiante",
+    "nombre": "Diego",
+    "perfil": "Tiene 21 años y está en el sexto ciclo de ingeniería eléctrica. Sabe qué es un MW, una curva de carga y un pronóstico; ha oído del COES pero nunca usó sus datos. Lee rápido, prueba todo lo que se puede tocar y se aburre con los textos largos.",
+    "motivo": "Busca datos de demanda para un trabajo del curso de sistemas de potencia."
+  },
+  {
+    "id": "operadora",
+    "nombre": "Marta",
+    "perfil": "Tiene 39 años y es operadora en el centro de control de una distribuidora eléctrica de Lima. Mira la demanda varias veces por turno y prepara maniobras para la punta de la noche. Conoce el COES y los MW. Desconfía de los pronósticos que no dicen cuánto se equivocan. Tiene poco tiempo y quiere la cifra que le sirve sin buscarla.",
+    "motivo": "Un colega le pasó el enlace como posible apoyo para su turno."
+  },
+  {
+    "id": "periodista",
+    "nombre": "Luis",
+    "perfil": "Tiene 34 años y es periodista de datos en un diario de Lima. Lee gráficos y tablas con soltura, pero no es ingeniero. Busca una cifra que pueda citar, de dónde sale y una frase clara para sus lectores.",
+    "motivo": "Prepara para mañana una nota sobre el calor, El Niño y el consumo de electricidad."
+  },
+  {
+    "id": "profesora",
+    "nombre": "Carmen",
+    "perfil": "Tiene 55 años y es profesora universitaria de estadística. Sabe de series de tiempo y de intervalos de predicción; no conoce el sector eléctrico peruano. Le importa que una herramienta sea honesta con la incertidumbre y que se entienda sin que nadie se la explique.",
+    "motivo": "Le toca evaluar esta aplicación como proyecto final de un curso."
+  }
+]

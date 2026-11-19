@@ -1,0 +1,2908 @@
+{
+ "etiqueta": "pr10-conf",
+ "fecha_capturas": "2026-11-14T10:47:27.009Z",
+ "modelo": "CC 0.69 en el test oficial de UEyes (sesgo central 0.435)",
+ "capturas": {
+  "confianza-escritorio-light": {
+   "atencion": {
+    "1s": {
+     "titular": {
+      "cuota": 0.2113,
+      "area": 0.031,
+      "lift": 6.81
+     },
+     "aviso_vivo": {
+      "cuota": 0.0678,
+      "area": 0.0287,
+      "lift": 2.36
+     },
+     "cobertura": {
+      "cuota": 0.1881,
+      "area": 0.0739,
+      "lift": 2.54
+     },
+     "mes_a_mes": {
+      "cuota": 0.0004,
+      "area": 0.0042,
+      "lift": 0.08
+     },
+     "cifras": {
+      "cuota": 0.0064,
+      "area": 0.0192,
+      "lift": 0.33
+     },
+     "lead": {
+      "cuota": 0.0475,
+      "area": 0.0884,
+      "lift": 0.54
+     },
+     "estado_datos": {
+      "cuota": 0.0009,
+      "area": 0.0065,
+      "lift": 0.14
+     },
+     "que_es": {
+      "cuota": 0.057,
+      "area": 0.019,
+      "lift": 3.0
+     },
+     "selectores": {
+      "cuota": 0.0015,
+      "area": 0.0112,
+      "lift": 0.13
+     },
+     "fijo": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "controles": {
+      "cuota": 0.0051,
+      "area": 0.0124,
+      "lift": 0.41
+     },
+     "texto": {
+      "cuota": 0.0032,
+      "area": 0.0451,
+      "lift": 0.07
+     },
+     "resto": {
+      "cuota": 0.4108,
+      "area": 0.6603,
+      "lift": 0.62
+     }
+    },
+    "3s": {
+     "titular": {
+      "cuota": 0.2322,
+      "area": 0.031,
+      "lift": 7.49
+     },
+     "aviso_vivo": {
+      "cuota": 0.0598,
+      "area": 0.0287,
+      "lift": 2.08
+     },
+     "cobertura": {
+      "cuota": 0.2032,
+      "area": 0.0739,
+      "lift": 2.75
+     },
+     "mes_a_mes": {
+      "cuota": 0.0004,
+      "area": 0.0042,
+      "lift": 0.09
+     },
+     "cifras": {
+      "cuota": 0.0062,
+      "area": 0.0192,
+      "lift": 0.32
+     },
+     "lead": {
+      "cuota": 0.0423,
+      "area": 0.0884,
+      "lift": 0.48
+     },
+     "estado_datos": {
+      "cuota": 0.0027,
+      "area": 0.0065,
+      "lift": 0.41
+     },
+     "que_es": {
+      "cuota": 0.0528,
+      "area": 0.019,
+      "lift": 2.78
+     },
+     "selectores": {
+      "cuota": 0.003,
+      "area": 0.0112,
+      "lift": 0.26
+     },
+     "fijo": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "controles": {
+      "cuota": 0.0073,
+      "area": 0.0124,
+      "lift": 0.59
+     },
+     "texto": {
+      "cuota": 0.0032,
+      "area": 0.0451,
+      "lift": 0.07
+     },
+     "resto": {
+      "cuota": 0.387,
+      "area": 0.6603,
+      "lift": 0.59
+     }
+    },
+    "7s": {
+     "titular": {
+      "cuota": 0.1502,
+      "area": 0.031,
+      "lift": 4.84
+     },
+     "aviso_vivo": {
+      "cuota": 0.0735,
+      "area": 0.0287,
+      "lift": 2.56
+     },
+     "cobertura": {
+      "cuota": 0.1931,
+      "area": 0.0739,
+      "lift": 2.61
+     },
+     "mes_a_mes": {
+      "cuota": 0.0044,
+      "area": 0.0042,
+      "lift": 1.04
+     },
+     "cifras": {
+      "cuota": 0.026,
+      "area": 0.0192,
+      "lift": 1.35
+     },
+     "lead": {
+      "cuota": 0.0854,
+      "area": 0.0884,
+      "lift": 0.97
+     },
+     "estado_datos": {
+      "cuota": 0.0053,
+      "area": 0.0065,
+      "lift": 0.81
+     },
+     "que_es": {
+      "cuota": 0.036,
+      "area": 0.019,
+      "lift": 1.89
+     },
+     "selectores": {
+      "cuota": 0.0057,
+      "area": 0.0112,
+      "lift": 0.51
+     },
+     "fijo": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "controles": {
+      "cuota": 0.0059,
+      "area": 0.0124,
+      "lift": 0.48
+     },
+     "texto": {
+      "cuota": 0.0182,
+      "area": 0.0451,
+      "lift": 0.4
+     },
+     "resto": {
+      "cuota": 0.3964,
+      "area": 0.6603,
+      "lift": 0.6
+     }
+    }
+   },
+   "aoi": {
+    "titular": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 128
+    },
+    "aviso_vivo": {
+     "existe": true,
+     "a_la_vista": 0.213,
+     "arriba_px": 243
+    },
+    "cobertura": {
+     "existe": true,
+     "a_la_vista": 0.615,
+     "arriba_px": 206
+    },
+    "mes_a_mes": {
+     "existe": true,
+     "a_la_vista": 0.024,
+     "arriba_px": 681
+    },
+    "cifras": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 540
+    },
+    "lead": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 364
+    },
+    "estado_datos": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 14
+    },
+    "que_es": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 8
+    },
+    "selectores": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 81
+    }
+   },
+   "primera_pantalla": {
+    "controles": 11,
+    "controles_lista": [
+     "Curva, pronóstico de la demanda eléctric",
+     "Ahora",
+     "Confianza",
+     "Detalle",
+     "Modelo y datos: la ficha técnica",
+     "Cambiar a modo oscuro",
+     "Norte",
+     "Centro",
+     "Sur",
+     "A 1 hora",
+     "A 24 horas"
+    ],
+    "cifras": {
+     "magnitudes": 39,
+     "horas": 1,
+     "fechas": 1,
+     "en_el_grafico": 1
+    },
+    "palabras": 287,
+    "pantallas_de_alto": 4.59
+   },
+   "terminos": [
+    {
+     "termino": "COES",
+     "definido_en_pantalla": true,
+     "definido_a_la_vista": true
+    },
+    {
+     "termino": "MW",
+     "definido_en_pantalla": true,
+     "definido_a_la_vista": true
+    },
+    {
+     "termino": "rango del N %",
+     "definido_en_pantalla": true,
+     "definido_a_la_vista": true
+    },
+    {
+     "termino": "referencia",
+     "definido_en_pantalla": true,
+     "definido_a_la_vista": true
+    },
+    {
+     "termino": "en vivo",
+     "definido_en_pantalla": true,
+     "definido_a_la_vista": false
+    },
+    {
+     "termino": "MAPE",
+     "definido_en_pantalla": true,
+     "definido_a_la_vista": true
+    },
+    {
+     "termino": "error medio",
+     "definido_en_pantalla": true,
+     "definido_a_la_vista": true
+    }
+   ],
+   "lectura": {
+    "bloques": 16,
+    "ch_linea_mediana": 39.0,
+    "ch_linea_max": 143,
+    "sobre_80": [
+     "p#cfLead.lead 81",
+     "p.sub 143",
+     "p.sub 103",
+     "p#cfPie.pie-nota 111"
+    ],
+    "bajo_25": [
+     "p.estado-meta 21",
+     "p.estado-meta 24"
+    ]
+   },
+   "color": {
+    "tokens": 27,
+    "usados": 21,
+    "fuera_del_sistema": {},
+    "mezclas_derivadas": 1
+   },
+   "tipografia": {
+    "tamanos": [
+     11.0,
+     12.0,
+     13.0,
+     14.0,
+     16.0,
+     18.0,
+     20.0,
+     28.0
+    ],
+    "n_tamanos": 8,
+    "familias": [
+     "system-ui"
+    ]
+   },
+   "desborde": {
+    "horizontal_px": 0,
+    "elementos": []
+   },
+   "orientacion": {
+    "pantalla_marcada": [
+     "Confianza",
+     "Centro"
+    ],
+    "estado_datos": "Datos del COES al 12/11, 24:00COES 12/11 24:00"
+   }
+  },
+  "confianza-escritorio-dark": {
+   "atencion": {
+    "1s": {
+     "titular": {
+      "cuota": 0.1912,
+      "area": 0.031,
+      "lift": 6.16
+     },
+     "aviso_vivo": {
+      "cuota": 0.0791,
+      "area": 0.0287,
+      "lift": 2.76
+     },
+     "cobertura": {
+      "cuota": 0.2047,
+      "area": 0.0739,
+      "lift": 2.77
+     },
+     "mes_a_mes": {
+      "cuota": 0.0003,
+      "area": 0.0042,
+      "lift": 0.08
+     },
+     "cifras": {
+      "cuota": 0.0055,
+      "area": 0.0192,
+      "lift": 0.29
+     },
+     "lead": {
+      "cuota": 0.0511,
+      "area": 0.0884,
+      "lift": 0.58
+     },
+     "estado_datos": {
+      "cuota": 0.0009,
+      "area": 0.0065,
+      "lift": 0.13
+     },
+     "que_es": {
+      "cuota": 0.0639,
+      "area": 0.019,
+      "lift": 3.35
+     },
+     "selectores": {
+      "cuota": 0.0013,
+      "area": 0.0112,
+      "lift": 0.11
+     },
+     "fijo": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "controles": {
+      "cuota": 0.0056,
+      "area": 0.0124,
+      "lift": 0.46
+     },
+     "texto": {
+      "cuota": 0.003,
+      "area": 0.0451,
+      "lift": 0.07
+     },
+     "resto": {
+      "cuota": 0.3935,
+      "area": 0.6603,
+      "lift": 0.6
+     }
+    },
+    "3s": {
+     "titular": {
+      "cuota": 0.1992,
+      "area": 0.031,
+      "lift": 6.42
+     },
+     "aviso_vivo": {
+      "cuota": 0.0864,
+      "area": 0.0287,
+      "lift": 3.01
+     },
+     "cobertura": {
+      "cuota": 0.2497,
+      "area": 0.0739,
+      "lift": 3.38
+     },
+     "mes_a_mes": {
+      "cuota": 0.0006,
+      "area": 0.0042,
+      "lift": 0.15
+     },
+     "cifras": {
+      "cuota": 0.0077,
+      "area": 0.0192,
+      "lift": 0.4
+     },
+     "lead": {
+      "cuota": 0.0566,
+      "area": 0.0884,
+      "lift": 0.64
+     },
+     "estado_datos": {
+      "cuota": 0.0028,
+      "area": 0.0065,
+      "lift": 0.44
+     },
+     "que_es": {
+      "cuota": 0.0463,
+      "area": 0.019,
+      "lift": 2.43
+     },
+     "selectores": {
+      "cuota": 0.0031,
+      "area": 0.0112,
+      "lift": 0.28
+     },
+     "fijo": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "controles": {
+      "cuota": 0.0068,
+      "area": 0.0124,
+      "lift": 0.55
+     },
+     "texto": {
+      "cuota": 0.0045,
+      "area": 0.0451,
+      "lift": 0.1
+     },
+     "resto": {
+      "cuota": 0.3361,
+      "area": 0.6603,
+      "lift": 0.51
+     }
+    },
+    "7s": {
+     "titular": {
+      "cuota": 0.1297,
+      "area": 0.031,
+      "lift": 4.18
+     },
+     "aviso_vivo": {
+      "cuota": 0.0893,
+      "area": 0.0287,
+      "lift": 3.11
+     },
+     "cobertura": {
+      "cuota": 0.2101,
+      "area": 0.0739,
+      "lift": 2.84
+     },
+     "mes_a_mes": {
+      "cuota": 0.0051,
+      "area": 0.0042,
+      "lift": 1.2
+     },
+     "cifras": {
+      "cuota": 0.0243,
+      "area": 0.0192,
+      "lift": 1.27
+     },
+     "lead": {
+      "cuota": 0.098,
+      "area": 0.0884,
+      "lift": 1.11
+     },
+     "estado_datos": {
+      "cuota": 0.0052,
+      "area": 0.0065,
+      "lift": 0.8
+     },
+     "que_es": {
+      "cuota": 0.0342,
+      "area": 0.019,
+      "lift": 1.8
+     },
+     "selectores": {
+      "cuota": 0.0078,
+      "area": 0.0112,
+      "lift": 0.7
+     },
+     "fijo": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "controles": {
+      "cuota": 0.0065,
+      "area": 0.0124,
+      "lift": 0.52
+     },
+     "texto": {
+      "cuota": 0.0208,
+      "area": 0.0451,
+      "lift": 0.46
+     },
+     "resto": {
+      "cuota": 0.3691,
+      "area": 0.6603,
+      "lift": 0.56
+     }
+    }
+   },
+   "aoi": {
+    "titular": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 128
+    },
+    "aviso_vivo": {
+     "existe": true,
+     "a_la_vista": 0.213,
+     "arriba_px": 243
+    },
+    "cobertura": {
+     "existe": true,
+     "a_la_vista": 0.615,
+     "arriba_px": 206
+    },
+    "mes_a_mes": {
+     "existe": true,
+     "a_la_vista": 0.024,
+     "arriba_px": 681
+    },
+    "cifras": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 540
+    },
+    "lead": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 364
+    },
+    "estado_datos": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 14
+    },
+    "que_es": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 8
+    },
+    "selectores": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 81
+    }
+   },
+   "primera_pantalla": {
+    "controles": 11,
+    "controles_lista": [
+     "Curva, pronóstico de la demanda eléctric",
+     "Ahora",
+     "Confianza",
+     "Detalle",
+     "Modelo y datos: la ficha técnica",
+     "Cambiar a modo claro",
+     "Norte",
+     "Centro",
+     "Sur",
+     "A 1 hora",
+     "A 24 horas"
+    ],
+    "cifras": {
+     "magnitudes": 39,
+     "horas": 1,
+     "fechas": 1,
+     "en_el_grafico": 1
+    },
+    "palabras": 287,
+    "pantallas_de_alto": 4.59
+   },
+   "terminos": [
+    {
+     "termino": "COES",
+     "definido_en_pantalla": true,
+     "definido_a_la_vista": true
+    },
+    {
+     "termino": "MW",
+     "definido_en_pantalla": true,
+     "definido_a_la_vista": true
+    },
+    {
+     "termino": "rango del N %",
+     "definido_en_pantalla": true,
+     "definido_a_la_vista": true
+    },
+    {
+     "termino": "referencia",
+     "definido_en_pantalla": true,
+     "definido_a_la_vista": true
+    },
+    {
+     "termino": "en vivo",
+     "definido_en_pantalla": true,
+     "definido_a_la_vista": false
+    },
+    {
+     "termino": "MAPE",
+     "definido_en_pantalla": true,
+     "definido_a_la_vista": true
+    },
+    {
+     "termino": "error medio",
+     "definido_en_pantalla": true,
+     "definido_a_la_vista": true
+    }
+   ],
+   "lectura": {
+    "bloques": 16,
+    "ch_linea_mediana": 39.0,
+    "ch_linea_max": 143,
+    "sobre_80": [
+     "p#cfLead.lead 81",
+     "p.sub 143",
+     "p.sub 103",
+     "p#cfPie.pie-nota 111"
+    ],
+    "bajo_25": [
+     "p.estado-meta 21",
+     "p.estado-meta 24"
+    ]
+   },
+   "color": {
+    "tokens": 26,
+    "usados": 20,
+    "fuera_del_sistema": {},
+    "mezclas_derivadas": 1
+   },
+   "tipografia": {
+    "tamanos": [
+     11.0,
+     12.0,
+     13.0,
+     14.0,
+     16.0,
+     18.0,
+     20.0,
+     28.0
+    ],
+    "n_tamanos": 8,
+    "familias": [
+     "system-ui"
+    ]
+   },
+   "desborde": {
+    "horizontal_px": 0,
+    "elementos": []
+   },
+   "orientacion": {
+    "pantalla_marcada": [
+     "Confianza",
+     "Centro"
+    ],
+    "estado_datos": "Datos del COES al 12/11, 24:00COES 12/11 24:00"
+   }
+  },
+  "confianza-proyector-light": {
+   "atencion": {
+    "1s": {
+     "titular": {
+      "cuota": 0.1298,
+      "area": 0.0157,
+      "lift": 8.27
+     },
+     "aviso_vivo": {
+      "cuota": 0.0489,
+      "area": 0.0203,
+      "lift": 2.42
+     },
+     "cobertura": {
+      "cuota": 0.1576,
+      "area": 0.0695,
+      "lift": 2.27
+     },
+     "mes_a_mes": {
+      "cuota": 0.0244,
+      "area": 0.0871,
+      "lift": 0.28
+     },
+     "cifras": {
+      "cuota": 0.0123,
+      "area": 0.0097,
+      "lift": 1.26
+     },
+     "lead": {
+      "cuota": 0.1003,
+      "area": 0.0447,
+      "lift": 2.24
+     },
+     "estado_datos": {
+      "cuota": 0.0007,
+      "area": 0.0033,
+      "lift": 0.22
+     },
+     "que_es": {
+      "cuota": 0.0666,
+      "area": 0.0108,
+      "lift": 6.18
+     },
+     "selectores": {
+      "cuota": 0.0011,
+      "area": 0.0057,
+      "lift": 0.19
+     },
+     "fijo": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "controles": {
+      "cuota": 0.0034,
+      "area": 0.017,
+      "lift": 0.2
+     },
+     "texto": {
+      "cuota": 0.0122,
+      "area": 0.0378,
+      "lift": 0.32
+     },
+     "resto": {
+      "cuota": 0.4427,
+      "area": 0.6785,
+      "lift": 0.65
+     }
+    },
+    "3s": {
+     "titular": {
+      "cuota": 0.169,
+      "area": 0.0157,
+      "lift": 10.77
+     },
+     "aviso_vivo": {
+      "cuota": 0.0458,
+      "area": 0.0203,
+      "lift": 2.26
+     },
+     "cobertura": {
+      "cuota": 0.1671,
+      "area": 0.0695,
+      "lift": 2.41
+     },
+     "mes_a_mes": {
+      "cuota": 0.0138,
+      "area": 0.0871,
+      "lift": 0.16
+     },
+     "cifras": {
+      "cuota": 0.0092,
+      "area": 0.0097,
+      "lift": 0.95
+     },
+     "lead": {
+      "cuota": 0.0658,
+      "area": 0.0447,
+      "lift": 1.47
+     },
+     "estado_datos": {
+      "cuota": 0.0018,
+      "area": 0.0033,
+      "lift": 0.54
+     },
+     "que_es": {
+      "cuota": 0.0703,
+      "area": 0.0108,
+      "lift": 6.53
+     },
+     "selectores": {
+      "cuota": 0.0019,
+      "area": 0.0057,
+      "lift": 0.34
+     },
+     "fijo": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "controles": {
+      "cuota": 0.0051,
+      "area": 0.017,
+      "lift": 0.3
+     },
+     "texto": {
+      "cuota": 0.0098,
+      "area": 0.0378,
+      "lift": 0.26
+     },
+     "resto": {
+      "cuota": 0.4403,
+      "area": 0.6785,
+      "lift": 0.65
+     }
+    },
+    "7s": {
+     "titular": {
+      "cuota": 0.1174,
+      "area": 0.0157,
+      "lift": 7.48
+     },
+     "aviso_vivo": {
+      "cuota": 0.0331,
+      "area": 0.0203,
+      "lift": 1.63
+     },
+     "cobertura": {
+      "cuota": 0.1598,
+      "area": 0.0695,
+      "lift": 2.3
+     },
+     "mes_a_mes": {
+      "cuota": 0.077,
+      "area": 0.0871,
+      "lift": 0.88
+     },
+     "cifras": {
+      "cuota": 0.0186,
+      "area": 0.0097,
+      "lift": 1.92
+     },
+     "lead": {
+      "cuota": 0.0719,
+      "area": 0.0447,
+      "lift": 1.61
+     },
+     "estado_datos": {
+      "cuota": 0.0027,
+      "area": 0.0033,
+      "lift": 0.81
+     },
+     "que_es": {
+      "cuota": 0.049,
+      "area": 0.0108,
+      "lift": 4.55
+     },
+     "selectores": {
+      "cuota": 0.0025,
+      "area": 0.0057,
+      "lift": 0.44
+     },
+     "fijo": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "controles": {
+      "cuota": 0.0051,
+      "area": 0.017,
+      "lift": 0.3
+     },
+     "texto": {
+      "cuota": 0.0372,
+      "area": 0.0378,
+      "lift": 0.98
+     },
+     "resto": {
+      "cuota": 0.4258,
+      "area": 0.6785,
+      "lift": 0.63
+     }
+    }
+   },
+   "aoi": {
+    "titular": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 128
+    },
+    "aviso_vivo": {
+     "existe": true,
+     "a_la_vista": 0.297,
+     "arriba_px": 243
+    },
+    "cobertura": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 206
+    },
+    "mes_a_mes": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 681
+    },
+    "cifras": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 540
+    },
+    "lead": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 364
+    },
+    "estado_datos": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 14
+    },
+    "que_es": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 8
+    },
+    "selectores": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 81
+    }
+   },
+   "primera_pantalla": {
+    "controles": 12,
+    "controles_lista": [
+     "Curva, pronóstico de la demanda eléctric",
+     "Ahora",
+     "Confianza",
+     "Detalle",
+     "Modelo y datos: la ficha técnica",
+     "Cambiar a modo oscuro",
+     "Norte",
+     "Centro",
+     "Sur",
+     "A 1 hora",
+     "A 24 horas",
+     "Ver la tabla mes a mes"
+    ],
+    "cifras": {
+     "magnitudes": 47,
+     "horas": 1,
+     "fechas": 1,
+     "en_el_grafico": 8
+    },
+    "palabras": 393,
+    "pantallas_de_alto": 3.26
+   },
+   "terminos": [
+    {
+     "termino": "COES",
+     "definido_en_pantalla": true,
+     "definido_a_la_vista": true
+    },
+    {
+     "termino": "MW",
+     "definido_en_pantalla": true,
+     "definido_a_la_vista": true
+    },
+    {
+     "termino": "rango del N %",
+     "definido_en_pantalla": true,
+     "definido_a_la_vista": true
+    },
+    {
+     "termino": "referencia",
+     "definido_en_pantalla": true,
+     "definido_a_la_vista": true
+    },
+    {
+     "termino": "en vivo",
+     "definido_en_pantalla": true,
+     "definido_a_la_vista": false
+    },
+    {
+     "termino": "MAPE",
+     "definido_en_pantalla": true,
+     "definido_a_la_vista": true
+    },
+    {
+     "termino": "error medio",
+     "definido_en_pantalla": true,
+     "definido_a_la_vista": true
+    }
+   ],
+   "lectura": {
+    "bloques": 16,
+    "ch_linea_mediana": 39.0,
+    "ch_linea_max": 143,
+    "sobre_80": [
+     "p#cfLead.lead 81",
+     "p.sub 143",
+     "p.sub 103",
+     "p#cfPie.pie-nota 111"
+    ],
+    "bajo_25": [
+     "p.estado-meta 21",
+     "p.estado-meta 24"
+    ]
+   },
+   "color": {
+    "tokens": 27,
+    "usados": 21,
+    "fuera_del_sistema": {},
+    "mezclas_derivadas": 1
+   },
+   "tipografia": {
+    "tamanos": [
+     11.0,
+     12.0,
+     13.0,
+     14.0,
+     16.0,
+     18.0,
+     20.0,
+     28.0
+    ],
+    "n_tamanos": 8,
+    "familias": [
+     "system-ui"
+    ]
+   },
+   "desborde": {
+    "horizontal_px": 0,
+    "elementos": []
+   },
+   "orientacion": {
+    "pantalla_marcada": [
+     "Confianza",
+     "Centro"
+    ],
+    "estado_datos": "Datos del COES al 12/11, 24:00COES 12/11 24:00"
+   }
+  },
+  "confianza-proyector-dark": {
+   "atencion": {
+    "1s": {
+     "titular": {
+      "cuota": 0.1301,
+      "area": 0.0157,
+      "lift": 8.29
+     },
+     "aviso_vivo": {
+      "cuota": 0.0456,
+      "area": 0.0203,
+      "lift": 2.25
+     },
+     "cobertura": {
+      "cuota": 0.1533,
+      "area": 0.0695,
+      "lift": 2.21
+     },
+     "mes_a_mes": {
+      "cuota": 0.0249,
+      "area": 0.0871,
+      "lift": 0.29
+     },
+     "cifras": {
+      "cuota": 0.0103,
+      "area": 0.0097,
+      "lift": 1.06
+     },
+     "lead": {
+      "cuota": 0.1095,
+      "area": 0.0447,
+      "lift": 2.45
+     },
+     "estado_datos": {
+      "cuota": 0.0008,
+      "area": 0.0033,
+      "lift": 0.26
+     },
+     "que_es": {
+      "cuota": 0.0725,
+      "area": 0.0108,
+      "lift": 6.72
+     },
+     "selectores": {
+      "cuota": 0.0011,
+      "area": 0.0057,
+      "lift": 0.19
+     },
+     "fijo": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "controles": {
+      "cuota": 0.004,
+      "area": 0.017,
+      "lift": 0.24
+     },
+     "texto": {
+      "cuota": 0.0123,
+      "area": 0.0378,
+      "lift": 0.33
+     },
+     "resto": {
+      "cuota": 0.4355,
+      "area": 0.6785,
+      "lift": 0.64
+     }
+    },
+    "3s": {
+     "titular": {
+      "cuota": 0.1703,
+      "area": 0.0157,
+      "lift": 10.85
+     },
+     "aviso_vivo": {
+      "cuota": 0.0528,
+      "area": 0.0203,
+      "lift": 2.61
+     },
+     "cobertura": {
+      "cuota": 0.1967,
+      "area": 0.0695,
+      "lift": 2.83
+     },
+     "mes_a_mes": {
+      "cuota": 0.0165,
+      "area": 0.0871,
+      "lift": 0.19
+     },
+     "cifras": {
+      "cuota": 0.0081,
+      "area": 0.0097,
+      "lift": 0.84
+     },
+     "lead": {
+      "cuota": 0.0647,
+      "area": 0.0447,
+      "lift": 1.45
+     },
+     "estado_datos": {
+      "cuota": 0.0022,
+      "area": 0.0033,
+      "lift": 0.67
+     },
+     "que_es": {
+      "cuota": 0.0621,
+      "area": 0.0108,
+      "lift": 5.76
+     },
+     "selectores": {
+      "cuota": 0.0021,
+      "area": 0.0057,
+      "lift": 0.37
+     },
+     "fijo": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "controles": {
+      "cuota": 0.0047,
+      "area": 0.017,
+      "lift": 0.28
+     },
+     "texto": {
+      "cuota": 0.0122,
+      "area": 0.0378,
+      "lift": 0.32
+     },
+     "resto": {
+      "cuota": 0.4075,
+      "area": 0.6785,
+      "lift": 0.6
+     }
+    },
+    "7s": {
+     "titular": {
+      "cuota": 0.1049,
+      "area": 0.0157,
+      "lift": 6.68
+     },
+     "aviso_vivo": {
+      "cuota": 0.0419,
+      "area": 0.0203,
+      "lift": 2.07
+     },
+     "cobertura": {
+      "cuota": 0.181,
+      "area": 0.0695,
+      "lift": 2.6
+     },
+     "mes_a_mes": {
+      "cuota": 0.0841,
+      "area": 0.0871,
+      "lift": 0.97
+     },
+     "cifras": {
+      "cuota": 0.0169,
+      "area": 0.0097,
+      "lift": 1.74
+     },
+     "lead": {
+      "cuota": 0.0713,
+      "area": 0.0447,
+      "lift": 1.59
+     },
+     "estado_datos": {
+      "cuota": 0.0032,
+      "area": 0.0033,
+      "lift": 0.99
+     },
+     "que_es": {
+      "cuota": 0.0368,
+      "area": 0.0108,
+      "lift": 3.41
+     },
+     "selectores": {
+      "cuota": 0.0038,
+      "area": 0.0057,
+      "lift": 0.68
+     },
+     "fijo": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "controles": {
+      "cuota": 0.0062,
+      "area": 0.017,
+      "lift": 0.37
+     },
+     "texto": {
+      "cuota": 0.0422,
+      "area": 0.0378,
+      "lift": 1.12
+     },
+     "resto": {
+      "cuota": 0.4076,
+      "area": 0.6785,
+      "lift": 0.6
+     }
+    }
+   },
+   "aoi": {
+    "titular": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 128
+    },
+    "aviso_vivo": {
+     "existe": true,
+     "a_la_vista": 0.297,
+     "arriba_px": 243
+    },
+    "cobertura": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 206
+    },
+    "mes_a_mes": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 681
+    },
+    "cifras": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 540
+    },
+    "lead": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 364
+    },
+    "estado_datos": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 14
+    },
+    "que_es": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 8
+    },
+    "selectores": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 81
+    }
+   },
+   "primera_pantalla": {
+    "controles": 12,
+    "controles_lista": [
+     "Curva, pronóstico de la demanda eléctric",
+     "Ahora",
+     "Confianza",
+     "Detalle",
+     "Modelo y datos: la ficha técnica",
+     "Cambiar a modo claro",
+     "Norte",
+     "Centro",
+     "Sur",
+     "A 1 hora",
+     "A 24 horas",
+     "Ver la tabla mes a mes"
+    ],
+    "cifras": {
+     "magnitudes": 47,
+     "horas": 1,
+     "fechas": 1,
+     "en_el_grafico": 8
+    },
+    "palabras": 393,
+    "pantallas_de_alto": 3.26
+   },
+   "terminos": [
+    {
+     "termino": "COES",
+     "definido_en_pantalla": true,
+     "definido_a_la_vista": true
+    },
+    {
+     "termino": "MW",
+     "definido_en_pantalla": true,
+     "definido_a_la_vista": true
+    },
+    {
+     "termino": "rango del N %",
+     "definido_en_pantalla": true,
+     "definido_a_la_vista": true
+    },
+    {
+     "termino": "referencia",
+     "definido_en_pantalla": true,
+     "definido_a_la_vista": true
+    },
+    {
+     "termino": "en vivo",
+     "definido_en_pantalla": true,
+     "definido_a_la_vista": false
+    },
+    {
+     "termino": "MAPE",
+     "definido_en_pantalla": true,
+     "definido_a_la_vista": true
+    },
+    {
+     "termino": "error medio",
+     "definido_en_pantalla": true,
+     "definido_a_la_vista": true
+    }
+   ],
+   "lectura": {
+    "bloques": 16,
+    "ch_linea_mediana": 39.0,
+    "ch_linea_max": 143,
+    "sobre_80": [
+     "p#cfLead.lead 81",
+     "p.sub 143",
+     "p.sub 103",
+     "p#cfPie.pie-nota 111"
+    ],
+    "bajo_25": [
+     "p.estado-meta 21",
+     "p.estado-meta 24"
+    ]
+   },
+   "color": {
+    "tokens": 26,
+    "usados": 20,
+    "fuera_del_sistema": {},
+    "mezclas_derivadas": 1
+   },
+   "tipografia": {
+    "tamanos": [
+     11.0,
+     12.0,
+     13.0,
+     14.0,
+     16.0,
+     18.0,
+     20.0,
+     28.0
+    ],
+    "n_tamanos": 8,
+    "familias": [
+     "system-ui"
+    ]
+   },
+   "desborde": {
+    "horizontal_px": 0,
+    "elementos": []
+   },
+   "orientacion": {
+    "pantalla_marcada": [
+     "Confianza",
+     "Centro"
+    ],
+    "estado_datos": "Datos del COES al 12/11, 24:00COES 12/11 24:00"
+   }
+  },
+  "confianza-tablet-light": {
+   "atencion": {
+    "1s": {
+     "titular": {
+      "cuota": 0.2486,
+      "area": 0.0414,
+      "lift": 6.01
+     },
+     "aviso_vivo": {
+      "cuota": 0.0708,
+      "area": 0.0383,
+      "lift": 1.85
+     },
+     "cobertura": {
+      "cuota": 0.216,
+      "area": 0.0859,
+      "lift": 2.51
+     },
+     "mes_a_mes": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "cifras": {
+      "cuota": 0.0058,
+      "area": 0.0256,
+      "lift": 0.23
+     },
+     "lead": {
+      "cuota": 0.042,
+      "area": 0.1179,
+      "lift": 0.36
+     },
+     "estado_datos": {
+      "cuota": 0.0005,
+      "area": 0.0049,
+      "lift": 0.11
+     },
+     "que_es": {
+      "cuota": 0.0402,
+      "area": 0.0194,
+      "lift": 2.07
+     },
+     "selectores": {
+      "cuota": 0.0023,
+      "area": 0.0149,
+      "lift": 0.15
+     },
+     "fijo": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "controles": {
+      "cuota": 0.008,
+      "area": 0.0174,
+      "lift": 0.46
+     },
+     "texto": {
+      "cuota": 0.0018,
+      "area": 0.0214,
+      "lift": 0.09
+     },
+     "resto": {
+      "cuota": 0.3639,
+      "area": 0.6129,
+      "lift": 0.59
+     }
+    },
+    "3s": {
+     "titular": {
+      "cuota": 0.2402,
+      "area": 0.0414,
+      "lift": 5.8
+     },
+     "aviso_vivo": {
+      "cuota": 0.0688,
+      "area": 0.0383,
+      "lift": 1.8
+     },
+     "cobertura": {
+      "cuota": 0.212,
+      "area": 0.0859,
+      "lift": 2.47
+     },
+     "mes_a_mes": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "cifras": {
+      "cuota": 0.0061,
+      "area": 0.0256,
+      "lift": 0.24
+     },
+     "lead": {
+      "cuota": 0.038,
+      "area": 0.1179,
+      "lift": 0.32
+     },
+     "estado_datos": {
+      "cuota": 0.0019,
+      "area": 0.0049,
+      "lift": 0.38
+     },
+     "que_es": {
+      "cuota": 0.0481,
+      "area": 0.0194,
+      "lift": 2.48
+     },
+     "selectores": {
+      "cuota": 0.0041,
+      "area": 0.0149,
+      "lift": 0.27
+     },
+     "fijo": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "controles": {
+      "cuota": 0.0131,
+      "area": 0.0174,
+      "lift": 0.76
+     },
+     "texto": {
+      "cuota": 0.0019,
+      "area": 0.0214,
+      "lift": 0.09
+     },
+     "resto": {
+      "cuota": 0.3659,
+      "area": 0.6129,
+      "lift": 0.6
+     }
+    },
+    "7s": {
+     "titular": {
+      "cuota": 0.1591,
+      "area": 0.0414,
+      "lift": 3.84
+     },
+     "aviso_vivo": {
+      "cuota": 0.0893,
+      "area": 0.0383,
+      "lift": 2.33
+     },
+     "cobertura": {
+      "cuota": 0.2136,
+      "area": 0.0859,
+      "lift": 2.49
+     },
+     "mes_a_mes": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "cifras": {
+      "cuota": 0.0322,
+      "area": 0.0256,
+      "lift": 1.26
+     },
+     "lead": {
+      "cuota": 0.1069,
+      "area": 0.1179,
+      "lift": 0.91
+     },
+     "estado_datos": {
+      "cuota": 0.0034,
+      "area": 0.0049,
+      "lift": 0.7
+     },
+     "que_es": {
+      "cuota": 0.029,
+      "area": 0.0194,
+      "lift": 1.49
+     },
+     "selectores": {
+      "cuota": 0.0067,
+      "area": 0.0149,
+      "lift": 0.45
+     },
+     "fijo": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "controles": {
+      "cuota": 0.0091,
+      "area": 0.0174,
+      "lift": 0.53
+     },
+     "texto": {
+      "cuota": 0.0099,
+      "area": 0.0214,
+      "lift": 0.46
+     },
+     "resto": {
+      "cuota": 0.3408,
+      "area": 0.6129,
+      "lift": 0.56
+     }
+    }
+   },
+   "aoi": {
+    "titular": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 128
+    },
+    "aviso_vivo": {
+     "existe": true,
+     "a_la_vista": 0.182,
+     "arriba_px": 243
+    },
+    "cobertura": {
+     "existe": true,
+     "a_la_vista": 0.335,
+     "arriba_px": 206
+    },
+    "mes_a_mes": {
+     "existe": true,
+     "a_la_vista": 0.0,
+     "arriba_px": 796
+    },
+    "cifras": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 540
+    },
+    "lead": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 364
+    },
+    "estado_datos": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 12
+    },
+    "que_es": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 8
+    },
+    "selectores": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 81
+    }
+   },
+   "primera_pantalla": {
+    "controles": 11,
+    "controles_lista": [
+     "Curva, pronóstico de la demanda eléctric",
+     "Ahora",
+     "Confianza",
+     "Detalle",
+     "Modelo y datos: la ficha técnica",
+     "Cambiar a modo oscuro",
+     "Norte",
+     "Centro",
+     "Sur",
+     "A 1 hora",
+     "A 24 horas"
+    ],
+    "cifras": {
+     "magnitudes": 34,
+     "horas": 1,
+     "fechas": 1,
+     "en_el_grafico": 0
+    },
+    "palabras": 224,
+    "pantallas_de_alto": 5.65
+   },
+   "terminos": [
+    {
+     "termino": "COES",
+     "definido_en_pantalla": true,
+     "definido_a_la_vista": true
+    },
+    {
+     "termino": "MW",
+     "definido_en_pantalla": true,
+     "definido_a_la_vista": true
+    },
+    {
+     "termino": "rango del N %",
+     "definido_en_pantalla": true,
+     "definido_a_la_vista": true
+    },
+    {
+     "termino": "referencia",
+     "definido_en_pantalla": true,
+     "definido_a_la_vista": true
+    },
+    {
+     "termino": "en vivo",
+     "definido_en_pantalla": true,
+     "definido_a_la_vista": false
+    },
+    {
+     "termino": "MAPE",
+     "definido_en_pantalla": true,
+     "definido_a_la_vista": true
+    },
+    {
+     "termino": "error medio",
+     "definido_en_pantalla": true,
+     "definido_a_la_vista": false
+    }
+   ],
+   "lectura": {
+    "bloques": 13,
+    "ch_linea_mediana": 34,
+    "ch_linea_max": 111,
+    "sobre_80": [
+     "p#cfLead.lead 81",
+     "p.sub 108",
+     "p.sub 103",
+     "p.sub 85",
+     "p#cfPie.pie-nota 111"
+    ],
+    "bajo_25": [
+     "p.estado-meta 21",
+     "p.estado-meta 16"
+    ]
+   },
+   "color": {
+    "tokens": 27,
+    "usados": 21,
+    "fuera_del_sistema": {},
+    "mezclas_derivadas": 1
+   },
+   "tipografia": {
+    "tamanos": [
+     11.0,
+     12.0,
+     13.0,
+     14.0,
+     16.0,
+     18.0,
+     20.0,
+     28.0
+    ],
+    "n_tamanos": 8,
+    "familias": [
+     "system-ui"
+    ]
+   },
+   "desborde": {
+    "horizontal_px": 0,
+    "elementos": []
+   },
+   "orientacion": {
+    "pantalla_marcada": [
+     "Confianza",
+     "Centro"
+    ],
+    "estado_datos": "Datos del COES al 12/11, 24:00COES 12/11 24:00"
+   }
+  },
+  "confianza-tablet-dark": {
+   "atencion": {
+    "1s": {
+     "titular": {
+      "cuota": 0.2301,
+      "area": 0.0414,
+      "lift": 5.56
+     },
+     "aviso_vivo": {
+      "cuota": 0.0818,
+      "area": 0.0383,
+      "lift": 2.14
+     },
+     "cobertura": {
+      "cuota": 0.2311,
+      "area": 0.0859,
+      "lift": 2.69
+     },
+     "mes_a_mes": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "cifras": {
+      "cuota": 0.005,
+      "area": 0.0256,
+      "lift": 0.19
+     },
+     "lead": {
+      "cuota": 0.0424,
+      "area": 0.1179,
+      "lift": 0.36
+     },
+     "estado_datos": {
+      "cuota": 0.0005,
+      "area": 0.0049,
+      "lift": 0.1
+     },
+     "que_es": {
+      "cuota": 0.0419,
+      "area": 0.0194,
+      "lift": 2.16
+     },
+     "selectores": {
+      "cuota": 0.0019,
+      "area": 0.0149,
+      "lift": 0.13
+     },
+     "fijo": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "controles": {
+      "cuota": 0.0069,
+      "area": 0.0174,
+      "lift": 0.4
+     },
+     "texto": {
+      "cuota": 0.0015,
+      "area": 0.0214,
+      "lift": 0.07
+     },
+     "resto": {
+      "cuota": 0.357,
+      "area": 0.6129,
+      "lift": 0.58
+     }
+    },
+    "3s": {
+     "titular": {
+      "cuota": 0.2215,
+      "area": 0.0414,
+      "lift": 5.35
+     },
+     "aviso_vivo": {
+      "cuota": 0.0753,
+      "area": 0.0383,
+      "lift": 1.97
+     },
+     "cobertura": {
+      "cuota": 0.2392,
+      "area": 0.0859,
+      "lift": 2.78
+     },
+     "mes_a_mes": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "cifras": {
+      "cuota": 0.0074,
+      "area": 0.0256,
+      "lift": 0.29
+     },
+     "lead": {
+      "cuota": 0.0466,
+      "area": 0.1179,
+      "lift": 0.4
+     },
+     "estado_datos": {
+      "cuota": 0.0019,
+      "area": 0.0049,
+      "lift": 0.39
+     },
+     "que_es": {
+      "cuota": 0.048,
+      "area": 0.0194,
+      "lift": 2.47
+     },
+     "selectores": {
+      "cuota": 0.0045,
+      "area": 0.0149,
+      "lift": 0.3
+     },
+     "fijo": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "controles": {
+      "cuota": 0.0126,
+      "area": 0.0174,
+      "lift": 0.72
+     },
+     "texto": {
+      "cuota": 0.0021,
+      "area": 0.0214,
+      "lift": 0.1
+     },
+     "resto": {
+      "cuota": 0.3408,
+      "area": 0.6129,
+      "lift": 0.56
+     }
+    },
+    "7s": {
+     "titular": {
+      "cuota": 0.1428,
+      "area": 0.0414,
+      "lift": 3.45
+     },
+     "aviso_vivo": {
+      "cuota": 0.0969,
+      "area": 0.0383,
+      "lift": 2.53
+     },
+     "cobertura": {
+      "cuota": 0.2215,
+      "area": 0.0859,
+      "lift": 2.58
+     },
+     "mes_a_mes": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "cifras": {
+      "cuota": 0.0342,
+      "area": 0.0256,
+      "lift": 1.34
+     },
+     "lead": {
+      "cuota": 0.1045,
+      "area": 0.1179,
+      "lift": 0.89
+     },
+     "estado_datos": {
+      "cuota": 0.0037,
+      "area": 0.0049,
+      "lift": 0.77
+     },
+     "que_es": {
+      "cuota": 0.031,
+      "area": 0.0194,
+      "lift": 1.6
+     },
+     "selectores": {
+      "cuota": 0.009,
+      "area": 0.0149,
+      "lift": 0.6
+     },
+     "fijo": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "controles": {
+      "cuota": 0.0102,
+      "area": 0.0174,
+      "lift": 0.58
+     },
+     "texto": {
+      "cuota": 0.0125,
+      "area": 0.0214,
+      "lift": 0.58
+     },
+     "resto": {
+      "cuota": 0.3337,
+      "area": 0.6129,
+      "lift": 0.54
+     }
+    }
+   },
+   "aoi": {
+    "titular": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 128
+    },
+    "aviso_vivo": {
+     "existe": true,
+     "a_la_vista": 0.182,
+     "arriba_px": 243
+    },
+    "cobertura": {
+     "existe": true,
+     "a_la_vista": 0.335,
+     "arriba_px": 206
+    },
+    "mes_a_mes": {
+     "existe": true,
+     "a_la_vista": 0.0,
+     "arriba_px": 796
+    },
+    "cifras": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 540
+    },
+    "lead": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 364
+    },
+    "estado_datos": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 12
+    },
+    "que_es": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 8
+    },
+    "selectores": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 81
+    }
+   },
+   "primera_pantalla": {
+    "controles": 11,
+    "controles_lista": [
+     "Curva, pronóstico de la demanda eléctric",
+     "Ahora",
+     "Confianza",
+     "Detalle",
+     "Modelo y datos: la ficha técnica",
+     "Cambiar a modo claro",
+     "Norte",
+     "Centro",
+     "Sur",
+     "A 1 hora",
+     "A 24 horas"
+    ],
+    "cifras": {
+     "magnitudes": 34,
+     "horas": 1,
+     "fechas": 1,
+     "en_el_grafico": 0
+    },
+    "palabras": 224,
+    "pantallas_de_alto": 5.65
+   },
+   "terminos": [
+    {
+     "termino": "COES",
+     "definido_en_pantalla": true,
+     "definido_a_la_vista": true
+    },
+    {
+     "termino": "MW",
+     "definido_en_pantalla": true,
+     "definido_a_la_vista": true
+    },
+    {
+     "termino": "rango del N %",
+     "definido_en_pantalla": true,
+     "definido_a_la_vista": true
+    },
+    {
+     "termino": "referencia",
+     "definido_en_pantalla": true,
+     "definido_a_la_vista": true
+    },
+    {
+     "termino": "en vivo",
+     "definido_en_pantalla": true,
+     "definido_a_la_vista": false
+    },
+    {
+     "termino": "MAPE",
+     "definido_en_pantalla": true,
+     "definido_a_la_vista": true
+    },
+    {
+     "termino": "error medio",
+     "definido_en_pantalla": true,
+     "definido_a_la_vista": false
+    }
+   ],
+   "lectura": {
+    "bloques": 13,
+    "ch_linea_mediana": 34,
+    "ch_linea_max": 111,
+    "sobre_80": [
+     "p#cfLead.lead 81",
+     "p.sub 108",
+     "p.sub 103",
+     "p.sub 85",
+     "p#cfPie.pie-nota 111"
+    ],
+    "bajo_25": [
+     "p.estado-meta 21",
+     "p.estado-meta 16"
+    ]
+   },
+   "color": {
+    "tokens": 26,
+    "usados": 20,
+    "fuera_del_sistema": {},
+    "mezclas_derivadas": 1
+   },
+   "tipografia": {
+    "tamanos": [
+     11.0,
+     12.0,
+     13.0,
+     14.0,
+     16.0,
+     18.0,
+     20.0,
+     28.0
+    ],
+    "n_tamanos": 8,
+    "familias": [
+     "system-ui"
+    ]
+   },
+   "desborde": {
+    "horizontal_px": 0,
+    "elementos": []
+   },
+   "orientacion": {
+    "pantalla_marcada": [
+     "Confianza",
+     "Centro"
+    ],
+    "estado_datos": "Datos del COES al 12/11, 24:00COES 12/11 24:00"
+   }
+  },
+  "confianza-movil-light": {
+   "atencion": {
+    "1s": {
+     "titular": {
+      "cuota": 0.2071,
+      "area": 0.0609,
+      "lift": 3.4
+     },
+     "aviso_vivo": {
+      "cuota": 0.1005,
+      "area": 0.096,
+      "lift": 1.05
+     },
+     "cobertura": {
+      "cuota": 0.3065,
+      "area": 0.1746,
+      "lift": 1.75
+     },
+     "mes_a_mes": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "cifras": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "lead": {
+      "cuota": 0.0622,
+      "area": 0.3065,
+      "lift": 0.2
+     },
+     "estado_datos": {
+      "cuota": 0.0046,
+      "area": 0.0125,
+      "lift": 0.37
+     },
+     "que_es": {
+      "cuota": 0.0596,
+      "area": 0.0291,
+      "lift": 2.05
+     },
+     "selectores": {
+      "cuota": 0.1094,
+      "area": 0.0518,
+      "lift": 2.11
+     },
+     "fijo": {
+      "cuota": 0.0031,
+      "area": 0.0653,
+      "lift": 0.05
+     },
+     "controles": {
+      "cuota": 0.0003,
+      "area": 0.0064,
+      "lift": 0.05
+     },
+     "texto": {
+      "cuota": 0.001,
+      "area": 0.0003,
+      "lift": 3.03
+     },
+     "resto": {
+      "cuota": 0.1456,
+      "area": 0.1966,
+      "lift": 0.74
+     }
+    },
+    "3s": {
+     "titular": {
+      "cuota": 0.2279,
+      "area": 0.0609,
+      "lift": 3.74
+     },
+     "aviso_vivo": {
+      "cuota": 0.0708,
+      "area": 0.096,
+      "lift": 0.74
+     },
+     "cobertura": {
+      "cuota": 0.2361,
+      "area": 0.1746,
+      "lift": 1.35
+     },
+     "mes_a_mes": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "cifras": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "lead": {
+      "cuota": 0.0265,
+      "area": 0.3065,
+      "lift": 0.09
+     },
+     "estado_datos": {
+      "cuota": 0.0162,
+      "area": 0.0125,
+      "lift": 1.29
+     },
+     "que_es": {
+      "cuota": 0.0968,
+      "area": 0.0291,
+      "lift": 3.33
+     },
+     "selectores": {
+      "cuota": 0.1449,
+      "area": 0.0518,
+      "lift": 2.8
+     },
+     "fijo": {
+      "cuota": 0.0015,
+      "area": 0.0653,
+      "lift": 0.02
+     },
+     "controles": {
+      "cuota": 0.0016,
+      "area": 0.0064,
+      "lift": 0.25
+     },
+     "texto": {
+      "cuota": 0.0019,
+      "area": 0.0003,
+      "lift": 5.63
+     },
+     "resto": {
+      "cuota": 0.1758,
+      "area": 0.1966,
+      "lift": 0.89
+     }
+    },
+    "7s": {
+     "titular": {
+      "cuota": 0.1582,
+      "area": 0.0609,
+      "lift": 2.6
+     },
+     "aviso_vivo": {
+      "cuota": 0.127,
+      "area": 0.096,
+      "lift": 1.32
+     },
+     "cobertura": {
+      "cuota": 0.2594,
+      "area": 0.1746,
+      "lift": 1.49
+     },
+     "mes_a_mes": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "cifras": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "lead": {
+      "cuota": 0.1279,
+      "area": 0.3065,
+      "lift": 0.42
+     },
+     "estado_datos": {
+      "cuota": 0.0128,
+      "area": 0.0125,
+      "lift": 1.02
+     },
+     "que_es": {
+      "cuota": 0.0541,
+      "area": 0.0291,
+      "lift": 1.86
+     },
+     "selectores": {
+      "cuota": 0.0975,
+      "area": 0.0518,
+      "lift": 1.88
+     },
+     "fijo": {
+      "cuota": 0.0066,
+      "area": 0.0653,
+      "lift": 0.1
+     },
+     "controles": {
+      "cuota": 0.0015,
+      "area": 0.0064,
+      "lift": 0.24
+     },
+     "texto": {
+      "cuota": 0.001,
+      "area": 0.0003,
+      "lift": 2.8
+     },
+     "resto": {
+      "cuota": 0.1541,
+      "area": 0.1966,
+      "lift": 0.78
+     }
+    }
+   },
+   "aoi": {
+    "titular": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 133
+    },
+    "aviso_vivo": {
+     "existe": true,
+     "a_la_vista": 0.242,
+     "arriba_px": 329
+    },
+    "cobertura": {
+     "existe": true,
+     "a_la_vista": 0.542,
+     "arriba_px": 196
+    },
+    "mes_a_mes": {
+     "existe": true,
+     "a_la_vista": 0.0,
+     "arriba_px": 1069
+    },
+    "cifras": {
+     "existe": true,
+     "a_la_vista": 0.0,
+     "arriba_px": 765
+    },
+    "lead": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 449
+    },
+    "estado_datos": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 10
+    },
+    "que_es": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 3
+    },
+    "selectores": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 73
+    }
+   },
+   "primera_pantalla": {
+    "controles": 10,
+    "controles_lista": [
+     "Curva, pronóstico de la demanda eléctric",
+     "Ahora",
+     "Confianza",
+     "Detalle",
+     "Cambiar a modo oscuro",
+     "Norte",
+     "Centro",
+     "Sur",
+     "A 1 hora",
+     "A 24 horas"
+    ],
+    "cifras": {
+     "magnitudes": 23,
+     "horas": 1,
+     "fechas": 1,
+     "en_el_grafico": 0
+    },
+    "palabras": 167,
+    "pantallas_de_alto": 7.92
+   },
+   "terminos": [
+    {
+     "termino": "COES",
+     "definido_en_pantalla": true,
+     "definido_a_la_vista": true
+    },
+    {
+     "termino": "MW",
+     "definido_en_pantalla": true,
+     "definido_a_la_vista": true
+    },
+    {
+     "termino": "rango del N %",
+     "definido_en_pantalla": true,
+     "definido_a_la_vista": true
+    },
+    {
+     "termino": "referencia",
+     "definido_en_pantalla": true,
+     "definido_a_la_vista": true
+    },
+    {
+     "termino": "en vivo",
+     "definido_en_pantalla": true,
+     "definido_a_la_vista": false
+    },
+    {
+     "termino": "error medio",
+     "definido_en_pantalla": true,
+     "definido_a_la_vista": false
+    }
+   ],
+   "lectura": {
+    "bloques": 25,
+    "ch_linea_mediana": 34,
+    "ch_linea_max": 56,
+    "sobre_80": [],
+    "bajo_25": [
+     "p.d 18",
+     "p.estado-meta 14",
+     "p.estado-meta 16"
+    ]
+   },
+   "color": {
+    "tokens": 27,
+    "usados": 20,
+    "fuera_del_sistema": {},
+    "mezclas_derivadas": 0
+   },
+   "tipografia": {
+    "tamanos": [
+     11.0,
+     12.0,
+     13.0,
+     14.0,
+     16.0,
+     18.0,
+     20.0,
+     22.0,
+     28.0
+    ],
+    "n_tamanos": 9,
+    "familias": [
+     "system-ui"
+    ]
+   },
+   "desborde": {
+    "horizontal_px": 0,
+    "elementos": []
+   },
+   "orientacion": {
+    "pantalla_marcada": [
+     "Confianza",
+     "Centro"
+    ],
+    "estado_datos": "Datos del COES al 12/11, 24:00COES 12/11 24:00"
+   }
+  },
+  "confianza-movil-dark": {
+   "atencion": {
+    "1s": {
+     "titular": {
+      "cuota": 0.17,
+      "area": 0.0609,
+      "lift": 2.79
+     },
+     "aviso_vivo": {
+      "cuota": 0.1129,
+      "area": 0.096,
+      "lift": 1.18
+     },
+     "cobertura": {
+      "cuota": 0.3557,
+      "area": 0.1746,
+      "lift": 2.04
+     },
+     "mes_a_mes": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "cifras": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "lead": {
+      "cuota": 0.0593,
+      "area": 0.3065,
+      "lift": 0.19
+     },
+     "estado_datos": {
+      "cuota": 0.0031,
+      "area": 0.0125,
+      "lift": 0.25
+     },
+     "que_es": {
+      "cuota": 0.0519,
+      "area": 0.0291,
+      "lift": 1.79
+     },
+     "selectores": {
+      "cuota": 0.1091,
+      "area": 0.0518,
+      "lift": 2.11
+     },
+     "fijo": {
+      "cuota": 0.0024,
+      "area": 0.0653,
+      "lift": 0.04
+     },
+     "controles": {
+      "cuota": 0.0002,
+      "area": 0.0064,
+      "lift": 0.03
+     },
+     "texto": {
+      "cuota": 0.0009,
+      "area": 0.0003,
+      "lift": 2.52
+     },
+     "resto": {
+      "cuota": 0.1346,
+      "area": 0.1966,
+      "lift": 0.68
+     }
+    },
+    "3s": {
+     "titular": {
+      "cuota": 0.2172,
+      "area": 0.0609,
+      "lift": 3.57
+     },
+     "aviso_vivo": {
+      "cuota": 0.1011,
+      "area": 0.096,
+      "lift": 1.05
+     },
+     "cobertura": {
+      "cuota": 0.2705,
+      "area": 0.1746,
+      "lift": 1.55
+     },
+     "mes_a_mes": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "cifras": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "lead": {
+      "cuota": 0.0314,
+      "area": 0.3065,
+      "lift": 0.1
+     },
+     "estado_datos": {
+      "cuota": 0.0117,
+      "area": 0.0125,
+      "lift": 0.94
+     },
+     "que_es": {
+      "cuota": 0.0826,
+      "area": 0.0291,
+      "lift": 2.84
+     },
+     "selectores": {
+      "cuota": 0.1222,
+      "area": 0.0518,
+      "lift": 2.36
+     },
+     "fijo": {
+      "cuota": 0.001,
+      "area": 0.0653,
+      "lift": 0.01
+     },
+     "controles": {
+      "cuota": 0.0007,
+      "area": 0.0064,
+      "lift": 0.12
+     },
+     "texto": {
+      "cuota": 0.0017,
+      "area": 0.0003,
+      "lift": 4.84
+     },
+     "resto": {
+      "cuota": 0.16,
+      "area": 0.1966,
+      "lift": 0.81
+     }
+    },
+    "7s": {
+     "titular": {
+      "cuota": 0.1424,
+      "area": 0.0609,
+      "lift": 2.34
+     },
+     "aviso_vivo": {
+      "cuota": 0.1486,
+      "area": 0.096,
+      "lift": 1.55
+     },
+     "cobertura": {
+      "cuota": 0.2657,
+      "area": 0.1746,
+      "lift": 1.52
+     },
+     "mes_a_mes": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "cifras": {
+      "cuota": 0.0,
+      "area": 0.0,
+      "lift": null
+     },
+     "lead": {
+      "cuota": 0.1442,
+      "area": 0.3065,
+      "lift": 0.47
+     },
+     "estado_datos": {
+      "cuota": 0.0116,
+      "area": 0.0125,
+      "lift": 0.92
+     },
+     "que_es": {
+      "cuota": 0.0488,
+      "area": 0.0291,
+      "lift": 1.68
+     },
+     "selectores": {
+      "cuota": 0.0866,
+      "area": 0.0518,
+      "lift": 1.67
+     },
+     "fijo": {
+      "cuota": 0.0057,
+      "area": 0.0653,
+      "lift": 0.09
+     },
+     "controles": {
+      "cuota": 0.0008,
+      "area": 0.0064,
+      "lift": 0.13
+     },
+     "texto": {
+      "cuota": 0.0009,
+      "area": 0.0003,
+      "lift": 2.68
+     },
+     "resto": {
+      "cuota": 0.1446,
+      "area": 0.1966,
+      "lift": 0.74
+     }
+    }
+   },
+   "aoi": {
+    "titular": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 133
+    },
+    "aviso_vivo": {
+     "existe": true,
+     "a_la_vista": 0.242,
+     "arriba_px": 329
+    },
+    "cobertura": {
+     "existe": true,
+     "a_la_vista": 0.542,
+     "arriba_px": 196
+    },
+    "mes_a_mes": {
+     "existe": true,
+     "a_la_vista": 0.0,
+     "arriba_px": 1069
+    },
+    "cifras": {
+     "existe": true,
+     "a_la_vista": 0.0,
+     "arriba_px": 765
+    },
+    "lead": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 449
+    },
+    "estado_datos": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 10
+    },
+    "que_es": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 3
+    },
+    "selectores": {
+     "existe": true,
+     "a_la_vista": 1.0,
+     "arriba_px": 73
+    }
+   },
+   "primera_pantalla": {
+    "controles": 10,
+    "controles_lista": [
+     "Curva, pronóstico de la demanda eléctric",
+     "Ahora",
+     "Confianza",
+     "Detalle",
+     "Cambiar a modo claro",
+     "Norte",
+     "Centro",
+     "Sur",
+     "A 1 hora",
+     "A 24 horas"
+    ],
+    "cifras": {
+     "magnitudes": 23,
+     "horas": 1,
+     "fechas": 1,
+     "en_el_grafico": 0
+    },
+    "palabras": 167,
+    "pantallas_de_alto": 7.92
+   },
+   "terminos": [
+    {
+     "termino": "COES",
+     "definido_en_pantalla": true,
+     "definido_a_la_vista": true
+    },
+    {
+     "termino": "MW",
+     "definido_en_pantalla": true,
+     "definido_a_la_vista": true
+    },
+    {
+     "termino": "rango del N %",
+     "definido_en_pantalla": true,
+     "definido_a_la_vista": true
+    },
+    {
+     "termino": "referencia",
+     "definido_en_pantalla": true,
+     "definido_a_la_vista": true
+    },
+    {
+     "termino": "en vivo",
+     "definido_en_pantalla": true,
+     "definido_a_la_vista": false
+    },
+    {
+     "termino": "error medio",
+     "definido_en_pantalla": true,
+     "definido_a_la_vista": false
+    }
+   ],
+   "lectura": {
+    "bloques": 25,
+    "ch_linea_mediana": 34,
+    "ch_linea_max": 56,
+    "sobre_80": [],
+    "bajo_25": [
+     "p.d 18",
+     "p.estado-meta 14",
+     "p.estado-meta 16"
+    ]
+   },
+   "color": {
+    "tokens": 26,
+    "usados": 19,
+    "fuera_del_sistema": {},
+    "mezclas_derivadas": 0
+   },
+   "tipografia": {
+    "tamanos": [
+     11.0,
+     12.0,
+     13.0,
+     14.0,
+     16.0,
+     18.0,
+     20.0,
+     22.0,
+     28.0
+    ],
+    "n_tamanos": 9,
+    "familias": [
+     "system-ui"
+    ]
+   },
+   "desborde": {
+    "horizontal_px": 0,
+    "elementos": []
+   },
+   "orientacion": {
+    "pantalla_marcada": [
+     "Confianza",
+     "Centro"
+    ],
+    "estado_datos": "Datos del COES al 12/11, 24:00COES 12/11 24:00"
+   }
+  }
+ },
+ "consistencia": {
+  "escritorio-light": {},
+  "escritorio-dark": {},
+  "proyector-light": {},
+  "proyector-dark": {},
+  "tablet-light": {},
+  "tablet-dark": {},
+  "movil-light": {},
+  "movil-dark": {}
+ },
+ "vocabulario": {
+  "confianza": {
+   "el pronóstico": [
+    "Pronóstico"
+   ],
+   "el rango": [
+    "Rango del N %"
+   ],
+   "la referencia": [
+    "Referencia (…)"
+   ],
+   "el máximo del día": [],
+   "el error": [
+    "Error medio"
+   ]
+  }
+ }
+}

@@ -1,0 +1,4749 @@
+{
+ "etiqueta": "develop",
+ "web": "http://localhost:8191",
+ "capturado_lima": "2026-11-14 02:11",
+ "viewport": "1366x768",
+ "tema": "light",
+ "pantallas": [
+  {
+   "pantalla": "hoy",
+   "alto": 1449,
+   "vistas": [
+    {
+     "archivo": "vista-1.png",
+     "y": 0,
+     "textos": [
+      {
+       "t": "Curva",
+       "zona": "que_es"
+      },
+      {
+       "t": "Demanda del SEIN por áreas",
+       "zona": "que_es"
+      },
+      {
+       "t": "Ahora",
+       "zona": "#navPantallas"
+      },
+      {
+       "t": "Confianza",
+       "zona": "#navPantallas"
+      },
+      {
+       "t": "Detalle",
+       "zona": "#navPantallas"
+      },
+      {
+       "t": "Hoy · datos del COES al 12/11, 24:00",
+       "zona": "estado_datos"
+      },
+      {
+       "t": "Centro · hoy, jueves 12 de noviembre",
+       "zona": "titulo"
+      },
+      {
+       "t": "El Niño costero: extraordinario · ICEN 3.38 (jul-2026)",
+       "zona": "regimen"
+      },
+      {
+       "t": "Son las 23:30.",
+       "zona": "modo"
+      },
+      {
+       "t": "Lo real llega hasta el jueves 12 de noviembre a las 24:00: el COES publica cada día la demanda del día anterior, hacia las 09:45. Todo lo que sigue es pronóstico, emitido hoy a las 10:34.",
+       "zona": "modo"
+      },
+      {
+       "t": "Hoy",
+       "zona": "cuando"
+      },
+      {
+       "t": "Repasar un día",
+       "zona": "cuando"
+      },
+      {
+       "t": "Hoy",
+       "zona": "cuando"
+      },
+      {
+       "t": "Todavía no llega la demanda del 2026-11-13 del COES (suele publicarse hacia las 09:45): se muestra el último pronóstico emitido.",
+       "zona": "#ahAviso"
+      },
+      {
+       "t": "N",
+       "zona": "areas"
+      },
+      {
+       "t": "Norte",
+       "zona": "areas"
+      },
+      {
+       "t": "Ahora",
+       "zona": "areas"
+      },
+      {
+       "t": "1,103",
+       "zona": "areas"
+      },
+      {
+       "t": "MW",
+       "zona": "areas"
+      },
+      {
+       "t": "Pico de hoy:",
+       "zona": "areas"
+      },
+      {
+       "t": "1,345",
+       "zona": "areas"
+      },
+      {
+       "t": "MW · vie 13 18:30",
+       "zona": "areas"
+      },
+      {
+       "t": "C",
+       "zona": "areas"
+      },
+      {
+       "t": "Centro",
+       "zona": "areas"
+      },
+      {
+       "t": "Ahora",
+       "zona": "areas"
+      },
+      {
+       "t": "4,456",
+       "zona": "areas"
+      },
+      {
+       "t": "MW",
+       "zona": "areas"
+      },
+      {
+       "t": "Pico de hoy:",
+       "zona": "areas"
+      },
+      {
+       "t": "5,297",
+       "zona": "areas"
+      },
+      {
+       "t": "MW · vie 13 11:00",
+       "zona": "areas"
+      },
+      {
+       "t": "S",
+       "zona": "areas"
+      },
+      {
+       "t": "Sur",
+       "zona": "areas"
+      },
+      {
+       "t": "Ahora",
+       "zona": "areas"
+      },
+      {
+       "t": "1,869",
+       "zona": "areas"
+      },
+      {
+       "t": "MW",
+       "zona": "areas"
+      },
+      {
+       "t": "Pico de hoy:",
+       "zona": "areas"
+      },
+      {
+       "t": "2,005",
+       "zona": "areas"
+      },
+      {
+       "t": "MW · vie 13 18:00",
+       "zona": "areas"
+      },
+      {
+       "t": "Ahora · 23:30",
+       "zona": "cifra_ahora"
+      },
+      {
+       "t": "4,456",
+       "zona": "cifra_ahora"
+      },
+      {
+       "t": "MW",
+       "zona": "cifra_ahora"
+      },
+      {
+       "t": "Dato del COES. Se pronosticó 4,384 (4,282 – 4,476): dentro del rango",
+       "zona": "#ahCifras"
+      },
+      {
+       "t": "En 1 hora · 00:30",
+       "zona": "otras_cifras"
+      },
+      {
+       "t": "4,219",
+       "zona": "otras_cifras"
+      },
+      {
+       "t": "MW",
+       "zona": "otras_cifras"
+      },
+      {
+       "t": "Rango 4,119 – 4,301",
+       "zona": "#ahCifras"
+      },
+      {
+       "t": "Pico de hoy",
+       "zona": "pico_24h"
+      },
+      {
+       "t": "5,297",
+       "zona": "pico_24h"
+      },
+      {
+       "t": "MW",
+       "zona": "pico_24h"
+      },
+      {
+       "t": "viernes 13 de noviembre, 11:00 · rango 5,176 – 5,396",
+       "zona": "#ahCifras"
+      },
+      {
+       "t": "Mañana a esta hora",
+       "zona": "otras_cifras"
+      },
+      {
+       "t": "4,450",
+       "zona": "otras_cifras"
+      },
+      {
+       "t": "MW",
+       "zona": "otras_cifras"
+      },
+      {
+       "t": "−6 MW frente a ahora",
+       "zona": "#ahCifras"
+      },
+      {
+       "t": "Mayor subida en 1 hora",
+       "zona": "otras_cifras"
+      },
+      {
+       "t": "+325",
+       "zona": "otras_cifras"
+      },
+      {
+       "t": "MW",
+       "zona": "otras_cifras"
+      },
+      {
+       "t": "07:30–08:30 vie 13 · habitual (umbral 497)",
+       "zona": "#ahCifras"
+      },
+      {
+       "t": "Ayer y hoy",
+       "zona": "#ahGrafTitulo"
+      },
+      {
+       "t": "Real (COES)",
+       "zona": "#ahLeyenda"
+      },
+      {
+       "t": "Pronóstico",
+       "zona": "#ahLeyenda"
+      },
+      {
+       "t": "Rango del 80 %",
+       "zona": "#ahLeyRango"
+      },
+      {
+       "t": "Referencia (semana pasada)",
+       "zona": "#ahLeyRef"
+      },
+      {
+       "t": "Pronóstico: el real todavía no se publica",
+       "zona": "grafico"
+      },
+      {
+       "t": "4,000",
+       "zona": "grafico"
+      },
+      {
+       "t": "4,500",
+       "zona": "grafico"
+      },
+      {
+       "t": "5,000",
+       "zona": "grafico"
+      },
+      {
+       "t": "5,500",
+       "zona": "grafico"
+      },
+      {
+       "t": "MW",
+       "zona": "grafico"
+      },
+      {
+       "t": "jue 12",
+       "zona": "grafico"
+      },
+      {
+       "t": "06:00",
+       "zona": "grafico"
+      },
+      {
+       "t": "12:00",
+       "zona": "grafico"
+      },
+      {
+       "t": "18:00",
+       "zona": "grafico"
+      },
+      {
+       "t": "06:00",
+       "zona": "grafico"
+      },
+      {
+       "t": "12:00",
+       "zona": "grafico"
+      },
+      {
+       "t": "18:00",
+       "zona": "grafico"
+      },
+      {
+       "t": "+325 MW en 1 h",
+       "zona": "grafico"
+      },
+      {
+       "t": "Ahora 23:30",
+       "zona": "linea_ahora"
+      },
+      {
+       "t": "Pico 5,297 · 11:00",
+       "zona": "grafico"
+      },
+      {
+       "t": "Mañana 23:30: 4,450",
+       "zona": "grafico"
+      },
+      {
+       "t": "Lo que dijimos ayer para esta hora",
+       "zona": "dijimos_ayer"
+      },
+      {
+       "t": "Para las 23:30 de hoy, emitido el miércoles 11 de noviembre a las 23:30 (24 h antes).",
+       "zona": "#ahAyer"
+      },
+      {
+       "t": "Dijimos",
+       "zona": "dijimos_ayer"
+      },
+      {
+       "t": "4,384",
+       "zona": "dijimos_ayer"
+      },
+      {
+       "t": "MW",
+       "zona": "dijimos_ayer"
+      },
+      {
+       "t": "Fue",
+       "zona": "dijimos_ayer"
+      },
+      {
+       "t": "4,456",
+       "zona": "dijimos_ayer"
+      },
+      {
+       "t": "MW",
+       "zona": "dijimos_ayer"
+      },
+      {
+       "t": "Diferencia",
+       "zona": "#ahAyer"
+      },
+      {
+       "t": "−73 MW (1.6 %)",
+       "zona": "#ahAyer"
+      },
+      {
+       "t": "Rango del 80 %",
+       "zona": "#ahAyer"
+      },
+      {
+       "t": "4,282 – 4,476 MW",
+       "zona": "#ahAyer"
+      },
+      {
+       "t": "Lo real cayó dentro del rango. Subestimó por 73 MW.",
+       "zona": "dijimos_ayer"
+      }
+     ],
+     "controles": [
+      {
+       "etiqueta": "Curva, demanda del SEIN por áreas: ir a «Ahora»",
+       "tipo": "a",
+       "zona": "que_es"
+      },
+      {
+       "etiqueta": "Ahora",
+       "tipo": "a",
+       "zona": "#navPantallas"
+      },
+      {
+       "etiqueta": "Confianza",
+       "tipo": "a",
+       "zona": "#navPantallas"
+      },
+      {
+       "etiqueta": "Detalle",
+       "tipo": "a",
+       "zona": "#navPantallas"
+      },
+      {
+       "etiqueta": "Modelo y datos: la ficha técnica",
+       "tipo": "button:button",
+       "zona": "#btnFicha"
+      },
+      {
+       "etiqueta": "Cambiar a modo oscuro",
+       "tipo": "button:button",
+       "zona": "#btnTema"
+      },
+      {
+       "etiqueta": "Hoy",
+       "tipo": "button:button",
+       "zona": "cuando"
+      },
+      {
+       "etiqueta": "2026-11-12",
+       "tipo": "input:date",
+       "valor": "2026-11-12",
+       "zona": "cuando"
+      },
+      {
+       "etiqueta": "N Norte Ahora 1,103 MW Pico de hoy: 1,345 MW · vie 13 18:30",
+       "tipo": "a",
+       "zona": "areas"
+      },
+      {
+       "etiqueta": "C Centro Ahora 4,456 MW Pico de hoy: 5,297 MW · vie 13 11:00",
+       "tipo": "a",
+       "zona": "areas"
+      },
+      {
+       "etiqueta": "S Sur Ahora 1,869 MW Pico de hoy: 2,005 MW · vie 13 18:00",
+       "tipo": "a",
+       "zona": "areas"
+      },
+      {
+       "etiqueta": "on",
+       "tipo": "input:checkbox",
+       "valor": "on",
+       "zona": "#ahRef"
+      },
+      {
+       "etiqueta": "Gráfico de la demanda del Centro. Usa las flechas para recorrerlo.",
+       "tipo": "div",
+       "zona": "#ahLienzo"
+      }
+     ]
+    },
+    {
+     "archivo": "vista-2.png",
+     "y": 668,
+     "textos": [
+      {
+       "t": "Curva",
+       "zona": "que_es"
+      },
+      {
+       "t": "Demanda del SEIN por áreas",
+       "zona": "que_es"
+      },
+      {
+       "t": "Ahora",
+       "zona": "#navPantallas"
+      },
+      {
+       "t": "Confianza",
+       "zona": "#navPantallas"
+      },
+      {
+       "t": "Detalle",
+       "zona": "#navPantallas"
+      },
+      {
+       "t": "Hoy · datos del COES al 12/11, 24:00",
+       "zona": "estado_datos"
+      },
+      {
+       "t": "jue 12",
+       "zona": "grafico"
+      },
+      {
+       "t": "06:00",
+       "zona": "grafico"
+      },
+      {
+       "t": "12:00",
+       "zona": "grafico"
+      },
+      {
+       "t": "18:00",
+       "zona": "grafico"
+      },
+      {
+       "t": "06:00",
+       "zona": "grafico"
+      },
+      {
+       "t": "12:00",
+       "zona": "grafico"
+      },
+      {
+       "t": "18:00",
+       "zona": "grafico"
+      },
+      {
+       "t": "Ahora 23:30",
+       "zona": "linea_ahora"
+      },
+      {
+       "t": "Centro. A la izquierda, lo real de ayer y lo que se había pronosticado; desde la línea punteada no hay dato real todavía. «Ahora» marca la hora de Lima.",
+       "zona": "#ahGrafSub"
+      },
+      {
+       "t": "Demanda del Centro desde el jueves 12 de noviembre a las 00:00 hasta el viernes 13 de noviembre a las 23:30. Ahora (23:30) la demanda es 4,456 MW, dentro del rango que se pronosticó. El pico de hoy sería 5,297 MW el viernes 13 de noviembre a las 11:00; la mayor subida, 325 MW en una hora desde las 07:30.",
+       "zona": "#ahDesc"
+      },
+      {
+       "t": "Ver los datos del gráfico en una tabla",
+       "zona": "#ahTablaDet"
+      },
+      {
+       "t": "Descargar CSV",
+       "zona": "#ahCsv"
+      },
+      {
+       "t": "¿De dónde sale el número?",
+       "zona": "#ahOrigenTit"
+      },
+      {
+       "t": "Chronos-2 ajustado con feriados: un modelo fundacional de series de tiempo, ajustado a la demanda del SEIN con datos hasta 2024 y con los feriados de Perú. Cada mañana, con la demanda de ayer que publica el COES, pronostica las 48 medias horas de hoy. Queda registrado con su hora de emisión antes de conocerse el real y no se reescribe.",
+       "zona": "#ahOrigen"
+      },
+      {
+       "t": "Diagnóstico completo",
+       "zona": "#ahOrigen"
+      },
+      {
+       "t": "Explorar el historial con otro modelo",
+       "zona": "#ahOrigen"
+      },
+      {
+       "t": "Ficha técnica: modelo y datos",
+       "zona": "#ahOrigen"
+      },
+      {
+       "t": "Lo real cayó dentro del rango. Subestimó por 73 MW.",
+       "zona": "dijimos_ayer"
+      },
+      {
+       "t": "Registro en vivo · reconstruido: se calculó después de conocerse el real, con los datos que habría tenido",
+       "zona": "#ahAyer"
+      },
+      {
+       "t": "¿Qué tan bueno es?",
+       "zona": "#ahBuenoTit"
+      },
+      {
+       "t": "Ayer, el día completo",
+       "zona": "#ahBueno"
+      },
+      {
+       "t": "Modelo",
+       "zona": "#ahBueno"
+      },
+      {
+       "t": "54.4 MW",
+       "zona": "#ahBueno"
+      },
+      {
+       "t": "Referencia",
+       "zona": "#ahBueno"
+      },
+      {
+       "t": "101.0 MW",
+       "zona": "#ahBueno"
+      },
+      {
+       "t": "Se equivocó",
+       "zona": "#ahBueno"
+      },
+      {
+       "t": "46 % menos",
+       "zona": "#ahBueno"
+      },
+      {
+       "t": "que repetir «la semana pasada a la misma hora».",
+       "zona": "#ahBueno"
+      },
+      {
+       "t": "Desde el viernes 23 de octubre, reconstruido",
+       "zona": "#ahBueno"
+      },
+      {
+       "t": "Modelo",
+       "zona": "#ahBueno"
+      },
+      {
+       "t": "79.6 MW",
+       "zona": "#ahBueno"
+      },
+      {
+       "t": "Referencia",
+       "zona": "#ahBueno"
+      },
+      {
+       "t": "140.8 MW",
+       "zona": "#ahBueno"
+      },
+      {
+       "t": "Su rango del 80 % cubrió el 73.2 % de las medias horas: queda corto; el rango es más angosto de lo que debería.",
+       "zona": "#ahBueno"
+      },
+      {
+       "t": "Ver la confianza mes a mes →",
+       "zona": "#ahBueno"
+      },
+      {
+       "t": "Curva es un pronóstico abierto hecho con los datos públicos del COES (IEOD); no sirve para operar el sistema eléctrico. Pronóstico en vivo de Chronos-2 ajustado con feriados, emitido cada mañana con la demanda del día anterior. El CSV trae el pronóstico, su rango y su error, no la serie real del COES, que no tiene una licencia publicada.",
+       "zona": "#ahPie"
+      }
+     ],
+     "controles": [
+      {
+       "etiqueta": "Curva, demanda del SEIN por áreas: ir a «Ahora»",
+       "tipo": "a",
+       "zona": "que_es"
+      },
+      {
+       "etiqueta": "Ahora",
+       "tipo": "a",
+       "zona": "#navPantallas"
+      },
+      {
+       "etiqueta": "Confianza",
+       "tipo": "a",
+       "zona": "#navPantallas"
+      },
+      {
+       "etiqueta": "Detalle",
+       "tipo": "a",
+       "zona": "#navPantallas"
+      },
+      {
+       "etiqueta": "Modelo y datos: la ficha técnica",
+       "tipo": "button:button",
+       "zona": "#btnFicha"
+      },
+      {
+       "etiqueta": "Cambiar a modo oscuro",
+       "tipo": "button:button",
+       "zona": "#btnTema"
+      },
+      {
+       "etiqueta": "Ver los datos del gráfico en una tabla",
+       "tipo": "summary",
+       "zona": "#ahTablaDet"
+      },
+      {
+       "etiqueta": "Descargar CSV",
+       "tipo": "button:button",
+       "zona": "#ahCsv"
+      },
+      {
+       "etiqueta": "Diagnóstico completo",
+       "tipo": "a",
+       "zona": "#ahOrigen"
+      },
+      {
+       "etiqueta": "Explorar el historial con otro modelo",
+       "tipo": "a",
+       "zona": "#ahOrigen"
+      },
+      {
+       "etiqueta": "Ficha técnica: modelo y datos",
+       "tipo": "button:button",
+       "zona": "#ahOrigen"
+      },
+      {
+       "etiqueta": "Ver la confianza mes a mes →",
+       "tipo": "a",
+       "zona": "#ahBueno"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "pantalla": "repaso-1030",
+   "alto": 1399,
+   "vistas": [
+    {
+     "archivo": "vista-1.png",
+     "y": 0,
+     "textos": [
+      {
+       "t": "Curva",
+       "zona": "que_es"
+      },
+      {
+       "t": "Demanda del SEIN por áreas",
+       "zona": "que_es"
+      },
+      {
+       "t": "Ahora",
+       "zona": "#navPantallas"
+      },
+      {
+       "t": "Confianza",
+       "zona": "#navPantallas"
+      },
+      {
+       "t": "Detalle",
+       "zona": "#navPantallas"
+      },
+      {
+       "t": "Repaso · 10/03/2026, 10:30",
+       "zona": "estado_datos"
+      },
+      {
+       "t": "Centro · martes 10 de marzo de 2026",
+       "zona": "titulo"
+      },
+      {
+       "t": "El Niño costero: extraordinario · ICEN 3.38 (jul-2026)",
+       "zona": "regimen"
+      },
+      {
+       "t": "Repaso de un día del historial.",
+       "zona": "modo"
+      },
+      {
+       "t": "Así se veía a las 10:30: lo real llega hasta esa hora y lo que sigue es lo que el modelo ya había pronosticado.",
+       "zona": "modo"
+      },
+      {
+       "t": "Hoy",
+       "zona": "cuando"
+      },
+      {
+       "t": "Repasar un día",
+       "zona": "cuando"
+      },
+      {
+       "t": "A las",
+       "zona": "cuando"
+      },
+      {
+       "t": "Mostrar lo que pasó después",
+       "zona": "cuando"
+      },
+      {
+       "t": "martes 10 de marzo de 2026 (10/03/2026)",
+       "zona": "cuando"
+      },
+      {
+       "t": "N",
+       "zona": "areas"
+      },
+      {
+       "t": "Norte",
+       "zona": "areas"
+      },
+      {
+       "t": "Ahora",
+       "zona": "areas"
+      },
+      {
+       "t": "1,266",
+       "zona": "areas"
+      },
+      {
+       "t": "MW",
+       "zona": "areas"
+      },
+      {
+       "t": "Pico 24 h:",
+       "zona": "areas"
+      },
+      {
+       "t": "1,278",
+       "zona": "areas"
+      },
+      {
+       "t": "MW · mié 11 10:30",
+       "zona": "areas"
+      },
+      {
+       "t": "C",
+       "zona": "areas"
+      },
+      {
+       "t": "Centro",
+       "zona": "areas"
+      },
+      {
+       "t": "Ahora",
+       "zona": "areas"
+      },
+      {
+       "t": "4,910",
+       "zona": "areas"
+      },
+      {
+       "t": "MW",
+       "zona": "areas"
+      },
+      {
+       "t": "Pico 24 h:",
+       "zona": "areas"
+      },
+      {
+       "t": "4,990",
+       "zona": "areas"
+      },
+      {
+       "t": "MW · mar 10 15:00",
+       "zona": "areas"
+      },
+      {
+       "t": "S",
+       "zona": "areas"
+      },
+      {
+       "t": "Sur",
+       "zona": "areas"
+      },
+      {
+       "t": "Ahora",
+       "zona": "areas"
+      },
+      {
+       "t": "1,821",
+       "zona": "areas"
+      },
+      {
+       "t": "MW",
+       "zona": "areas"
+      },
+      {
+       "t": "Pico 24 h:",
+       "zona": "areas"
+      },
+      {
+       "t": "1,950",
+       "zona": "areas"
+      },
+      {
+       "t": "MW · mar 10 18:30",
+       "zona": "areas"
+      },
+      {
+       "t": "Ahora · 10:30",
+       "zona": "cifra_ahora"
+      },
+      {
+       "t": "4,910",
+       "zona": "cifra_ahora"
+      },
+      {
+       "t": "MW",
+       "zona": "cifra_ahora"
+      },
+      {
+       "t": "Dato del COES. Se pronosticó 4,916 (4,732 – 5,083): dentro del rango",
+       "zona": "#ahCifras"
+      },
+      {
+       "t": "En 1 hora · 11:30",
+       "zona": "otras_cifras"
+      },
+      {
+       "t": "4,953",
+       "zona": "otras_cifras"
+      },
+      {
+       "t": "MW",
+       "zona": "otras_cifras"
+      },
+      {
+       "t": "Rango 4,830 – 5,063 · a 1 h",
+       "zona": "#ahCifras"
+      },
+      {
+       "t": "Pico de las próximas 24 h",
+       "zona": "pico_24h"
+      },
+      {
+       "t": "4,990",
+       "zona": "pico_24h"
+      },
+      {
+       "t": "MW",
+       "zona": "pico_24h"
+      },
+      {
+       "t": "martes 10 de marzo, 15:00 · rango 4,803 – 5,160",
+       "zona": "#ahCifras"
+      },
+      {
+       "t": "¿Y si hace más calor?",
+       "zona": "#ahCifras"
+      },
+      {
+       "t": "Mañana a esta hora",
+       "zona": "otras_cifras"
+      },
+      {
+       "t": "4,923",
+       "zona": "otras_cifras"
+      },
+      {
+       "t": "MW",
+       "zona": "otras_cifras"
+      },
+      {
+       "t": "+12 MW frente a ahora",
+       "zona": "#ahCifras"
+      },
+      {
+       "t": "Mayor subida en 1 hora",
+       "zona": "otras_cifras"
+      },
+      {
+       "t": "+414",
+       "zona": "otras_cifras"
+      },
+      {
+       "t": "MW",
+       "zona": "otras_cifras"
+      },
+      {
+       "t": "07:30–08:30 mié 11 · habitual (umbral 497)",
+       "zona": "#ahCifras"
+      },
+      {
+       "t": "Ese día y las 24 h siguientes",
+       "zona": "#ahGrafTitulo"
+      },
+      {
+       "t": "Real (COES)",
+       "zona": "#ahLeyenda"
+      },
+      {
+       "t": "Pronóstico",
+       "zona": "#ahLeyenda"
+      },
+      {
+       "t": "Rango del 90 %",
+       "zona": "#ahLeyRango"
+      },
+      {
+       "t": "Referencia (semana pasada)",
+       "zona": "#ahLeyRef"
+      },
+      {
+       "t": "Próximas 24 horas (pronóstico)",
+       "zona": "grafico"
+      },
+      {
+       "t": "4,000",
+       "zona": "grafico"
+      },
+      {
+       "t": "5,000",
+       "zona": "grafico"
+      },
+      {
+       "t": "MW",
+       "zona": "grafico"
+      },
+      {
+       "t": "mar 10",
+       "zona": "grafico"
+      },
+      {
+       "t": "03:00",
+       "zona": "grafico"
+      },
+      {
+       "t": "06:00",
+       "zona": "grafico"
+      },
+      {
+       "t": "15:00",
+       "zona": "grafico"
+      },
+      {
+       "t": "18:00",
+       "zona": "grafico"
+      },
+      {
+       "t": "21:00",
+       "zona": "grafico"
+      },
+      {
+       "t": "mié 11",
+       "zona": "grafico"
+      },
+      {
+       "t": "03:00",
+       "zona": "grafico"
+      },
+      {
+       "t": "06:00",
+       "zona": "grafico"
+      },
+      {
+       "t": "09:00",
+       "zona": "grafico"
+      },
+      {
+       "t": "+414 MW en 1 h",
+       "zona": "grafico"
+      },
+      {
+       "t": "Ahora 10:30",
+       "zona": "linea_ahora"
+      },
+      {
+       "t": "Pico 4,990 · 15:00",
+       "zona": "grafico"
+      },
+      {
+       "t": "Mañana 10:30: 4,923",
+       "zona": "grafico"
+      },
+      {
+       "t": "Lo que dijimos ayer para esta hora",
+       "zona": "dijimos_ayer"
+      },
+      {
+       "t": "Para las 10:30 de hoy, emitido el lunes 9 de marzo a las 10:30 (24 h antes).",
+       "zona": "#ahAyer"
+      },
+      {
+       "t": "Dijimos",
+       "zona": "dijimos_ayer"
+      },
+      {
+       "t": "4,916",
+       "zona": "dijimos_ayer"
+      },
+      {
+       "t": "MW",
+       "zona": "dijimos_ayer"
+      },
+      {
+       "t": "Fue",
+       "zona": "dijimos_ayer"
+      },
+      {
+       "t": "4,910",
+       "zona": "dijimos_ayer"
+      },
+      {
+       "t": "MW",
+       "zona": "dijimos_ayer"
+      },
+      {
+       "t": "Diferencia",
+       "zona": "#ahAyer"
+      },
+      {
+       "t": "+6 MW (0.1 %)",
+       "zona": "#ahAyer"
+      },
+      {
+       "t": "Rango del 90 %",
+       "zona": "#ahAyer"
+      },
+      {
+       "t": "4,732 – 5,083 MW",
+       "zona": "#ahAyer"
+      },
+      {
+       "t": "Lo real cayó dentro del rango. Sobrestimó por 6 MW.",
+       "zona": "dijimos_ayer"
+      },
+      {
+       "t": "Historial · modelo combinado",
+       "zona": "#ahAyer"
+      }
+     ],
+     "controles": [
+      {
+       "etiqueta": "Curva, demanda del SEIN por áreas: ir a «Ahora»",
+       "tipo": "a",
+       "zona": "que_es"
+      },
+      {
+       "etiqueta": "Ahora",
+       "tipo": "a",
+       "zona": "#navPantallas"
+      },
+      {
+       "etiqueta": "Confianza",
+       "tipo": "a",
+       "zona": "#navPantallas"
+      },
+      {
+       "etiqueta": "Detalle",
+       "tipo": "a",
+       "zona": "#navPantallas"
+      },
+      {
+       "etiqueta": "Modelo y datos: la ficha técnica",
+       "tipo": "button:button",
+       "zona": "#btnFicha"
+      },
+      {
+       "etiqueta": "Cambiar a modo oscuro",
+       "tipo": "button:button",
+       "zona": "#btnTema"
+      },
+      {
+       "etiqueta": "Hoy",
+       "tipo": "button:button",
+       "zona": "cuando"
+      },
+      {
+       "etiqueta": "2026-03-10",
+       "tipo": "input:date",
+       "valor": "2026-03-10",
+       "zona": "cuando"
+      },
+      {
+       "etiqueta": "10:30",
+       "tipo": "input:time",
+       "valor": "10:30",
+       "zona": "cuando"
+      },
+      {
+       "etiqueta": "on",
+       "tipo": "input:checkbox",
+       "valor": "on",
+       "zona": "cuando"
+      },
+      {
+       "etiqueta": "N Norte Ahora 1,266 MW Pico 24 h: 1,278 MW · mié 11 10:30",
+       "tipo": "a",
+       "zona": "areas"
+      },
+      {
+       "etiqueta": "C Centro Ahora 4,910 MW Pico 24 h: 4,990 MW · mar 10 15:00",
+       "tipo": "a",
+       "zona": "areas"
+      },
+      {
+       "etiqueta": "S Sur Ahora 1,821 MW Pico 24 h: 1,950 MW · mar 10 18:30",
+       "tipo": "a",
+       "zona": "areas"
+      },
+      {
+       "etiqueta": "¿Y si hace más calor?",
+       "tipo": "a",
+       "zona": "#ahCifras"
+      },
+      {
+       "etiqueta": "on",
+       "tipo": "input:checkbox",
+       "valor": "on",
+       "zona": "#ahRef"
+      },
+      {
+       "etiqueta": "Gráfico de la demanda del Centro. Usa las flechas para recorrerlo.",
+       "tipo": "div",
+       "zona": "#ahLienzo"
+      }
+     ]
+    },
+    {
+     "archivo": "vista-2.png",
+     "y": 631,
+     "textos": [
+      {
+       "t": "Curva",
+       "zona": "que_es"
+      },
+      {
+       "t": "Demanda del SEIN por áreas",
+       "zona": "que_es"
+      },
+      {
+       "t": "Ahora",
+       "zona": "#navPantallas"
+      },
+      {
+       "t": "Confianza",
+       "zona": "#navPantallas"
+      },
+      {
+       "t": "Detalle",
+       "zona": "#navPantallas"
+      },
+      {
+       "t": "Repaso · 10/03/2026, 10:30",
+       "zona": "estado_datos"
+      },
+      {
+       "t": "mar 10",
+       "zona": "grafico"
+      },
+      {
+       "t": "03:00",
+       "zona": "grafico"
+      },
+      {
+       "t": "06:00",
+       "zona": "grafico"
+      },
+      {
+       "t": "15:00",
+       "zona": "grafico"
+      },
+      {
+       "t": "18:00",
+       "zona": "grafico"
+      },
+      {
+       "t": "21:00",
+       "zona": "grafico"
+      },
+      {
+       "t": "mié 11",
+       "zona": "grafico"
+      },
+      {
+       "t": "03:00",
+       "zona": "grafico"
+      },
+      {
+       "t": "06:00",
+       "zona": "grafico"
+      },
+      {
+       "t": "09:00",
+       "zona": "grafico"
+      },
+      {
+       "t": "Ahora 10:30",
+       "zona": "linea_ahora"
+      },
+      {
+       "t": "Centro. A la izquierda de «Ahora», lo real y lo que se pronosticó un día antes; a la derecha, lo que ya estaba pronosticado a las 10:30.",
+       "zona": "#ahGrafSub"
+      },
+      {
+       "t": "Demanda del Centro desde el martes 10 de marzo a las 00:00 hasta el miércoles 11 de marzo a las 10:30. Ahora (10:30) la demanda es 4,910 MW, dentro del rango que se pronosticó. El pico de las próximas 24 horas sería 4,990 MW el martes 10 de marzo a las 15:00; la mayor subida, 414 MW en una hora desde las 07:30.",
+       "zona": "#ahDesc"
+      },
+      {
+       "t": "Ver los datos del gráfico en una tabla",
+       "zona": "#ahTablaDet"
+      },
+      {
+       "t": "Descargar CSV",
+       "zona": "#ahCsv"
+      },
+      {
+       "t": "¿De dónde sale el número?",
+       "zona": "#ahOrigenTit"
+      },
+      {
+       "t": "Modelo",
+       "zona": "#ahOrigen"
+      },
+      {
+       "t": "combinado",
+       "zona": "#ahOrigen"
+      },
+      {
+       "t": ": el de menor error en 2026. Lo que se dijo para las 10:30:",
+       "zona": "#ahOrigen"
+      },
+      {
+       "t": "4,921 × 0.85",
+       "zona": "#ahOrigen"
+      },
+      {
+       "t": "(Chronos-2 ajustado)",
+       "zona": "#ahOrigen"
+      },
+      {
+       "t": "+ 4,886 × 0.15",
+       "zona": "#ahOrigen"
+      },
+      {
+       "t": "(Híbrido (XGBoost + Simons))",
+       "zona": "#ahOrigen"
+      },
+      {
+       "t": "=",
+       "zona": "#ahOrigen"
+      },
+      {
+       "t": "4,916 MW",
+       "zona": "#ahOrigen"
+      },
+      {
+       "t": "Pesos fijados con la validación de 2025 y aplicados tal cual a 2026. Usa solo la demanda y el calendario; no usa el clima.",
+       "zona": "#ahOrigen"
+      },
+      {
+       "t": "¿Y si hace más calor? →",
+       "zona": "#ahOrigen"
+      },
+      {
+       "t": "Diagnóstico completo",
+       "zona": "#ahOrigen"
+      },
+      {
+       "t": "Otro modelo u horizonte",
+       "zona": "#ahOrigen"
+      },
+      {
+       "t": "Ficha técnica: modelo y datos",
+       "zona": "#ahOrigen"
+      },
+      {
+       "t": "Lo real cayó dentro del rango. Sobrestimó por 6 MW.",
+       "zona": "dijimos_ayer"
+      },
+      {
+       "t": "Historial · modelo combinado",
+       "zona": "#ahAyer"
+      },
+      {
+       "t": "¿Qué tan bueno es?",
+       "zona": "#ahBuenoTit"
+      },
+      {
+       "t": "Ese día, hasta las 10:30",
+       "zona": "#ahBueno"
+      },
+      {
+       "t": "Modelo",
+       "zona": "#ahBueno"
+      },
+      {
+       "t": "41.6 MW",
+       "zona": "#ahBueno"
+      },
+      {
+       "t": "Referencia",
+       "zona": "#ahBueno"
+      },
+      {
+       "t": "66.9 MW",
+       "zona": "#ahBueno"
+      },
+      {
+       "t": "Se equivocó",
+       "zona": "#ahBueno"
+      },
+      {
+       "t": "38 % menos",
+       "zona": "#ahBueno"
+      },
+      {
+       "t": "que repetir «la semana pasada a la misma hora».",
+       "zona": "#ahBueno"
+      },
+      {
+       "t": "Marca «Mostrar lo que pasó después» para ver el error del día completo.",
+       "zona": "#ahBueno"
+      },
+      {
+       "t": "En 2026, a 24 horas",
+       "zona": "#ahBueno"
+      },
+      {
+       "t": "Modelo",
+       "zona": "#ahBueno"
+      },
+      {
+       "t": "71.9 MW",
+       "zona": "#ahBueno"
+      },
+      {
+       "t": "Referencia",
+       "zona": "#ahBueno"
+      },
+      {
+       "t": "135.4 MW",
+       "zona": "#ahBueno"
+      },
+      {
+       "t": "Se equivocó",
+       "zona": "#ahBueno"
+      },
+      {
+       "t": "47 % menos",
+       "zona": "#ahBueno"
+      },
+      {
+       "t": "que repetir «la semana pasada a la misma hora». Su rango del 90 % cubrió el",
+       "zona": "#ahBueno"
+      },
+      {
+       "t": "91.1 %",
+       "zona": "#ahBueno"
+      },
+      {
+       "t": "de las medias horas: cumple lo que promete.",
+       "zona": "#ahBueno"
+      },
+      {
+       "t": "Ver la confianza mes a mes →",
+       "zona": "#ahBueno"
+      },
+      {
+       "t": "Curva es un pronóstico abierto hecho con los datos públicos del COES (IEOD); no sirve para operar el sistema eléctrico. Pronósticos del modelo combinado. El CSV trae el pronóstico, su rango y su error, no la serie real del COES, que no tiene una licencia publicada.",
+       "zona": "#ahPie"
+      }
+     ],
+     "controles": [
+      {
+       "etiqueta": "Curva, demanda del SEIN por áreas: ir a «Ahora»",
+       "tipo": "a",
+       "zona": "que_es"
+      },
+      {
+       "etiqueta": "Ahora",
+       "tipo": "a",
+       "zona": "#navPantallas"
+      },
+      {
+       "etiqueta": "Confianza",
+       "tipo": "a",
+       "zona": "#navPantallas"
+      },
+      {
+       "etiqueta": "Detalle",
+       "tipo": "a",
+       "zona": "#navPantallas"
+      },
+      {
+       "etiqueta": "Modelo y datos: la ficha técnica",
+       "tipo": "button:button",
+       "zona": "#btnFicha"
+      },
+      {
+       "etiqueta": "Cambiar a modo oscuro",
+       "tipo": "button:button",
+       "zona": "#btnTema"
+      },
+      {
+       "etiqueta": "Ver los datos del gráfico en una tabla",
+       "tipo": "summary",
+       "zona": "#ahTablaDet"
+      },
+      {
+       "etiqueta": "Descargar CSV",
+       "tipo": "button:button",
+       "zona": "#ahCsv"
+      },
+      {
+       "etiqueta": "¿Y si hace más calor? →",
+       "tipo": "a",
+       "zona": "#ahOrigen"
+      },
+      {
+       "etiqueta": "Diagnóstico completo",
+       "tipo": "a",
+       "zona": "#ahOrigen"
+      },
+      {
+       "etiqueta": "Otro modelo u horizonte",
+       "tipo": "a",
+       "zona": "#ahOrigen"
+      },
+      {
+       "etiqueta": "Ficha técnica: modelo y datos",
+       "tipo": "button:button",
+       "zona": "#ahOrigen"
+      },
+      {
+       "etiqueta": "Ver la confianza mes a mes →",
+       "tipo": "a",
+       "zona": "#ahBueno"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "pantalla": "repaso-1900",
+   "alto": 1415,
+   "vistas": [
+    {
+     "archivo": "vista-1.png",
+     "y": 0,
+     "textos": [
+      {
+       "t": "Curva",
+       "zona": "que_es"
+      },
+      {
+       "t": "Demanda del SEIN por áreas",
+       "zona": "que_es"
+      },
+      {
+       "t": "Ahora",
+       "zona": "#navPantallas"
+      },
+      {
+       "t": "Confianza",
+       "zona": "#navPantallas"
+      },
+      {
+       "t": "Detalle",
+       "zona": "#navPantallas"
+      },
+      {
+       "t": "Repaso · 10/03/2026, 19:00",
+       "zona": "estado_datos"
+      },
+      {
+       "t": "Centro · martes 10 de marzo de 2026",
+       "zona": "titulo"
+      },
+      {
+       "t": "El Niño costero: extraordinario · ICEN 3.38 (jul-2026)",
+       "zona": "regimen"
+      },
+      {
+       "t": "Repaso de un día del historial.",
+       "zona": "modo"
+      },
+      {
+       "t": "Así se veía a las 19:00: lo real llega hasta esa hora y lo que sigue es lo que el modelo ya había pronosticado.",
+       "zona": "modo"
+      },
+      {
+       "t": "Hoy",
+       "zona": "cuando"
+      },
+      {
+       "t": "Repasar un día",
+       "zona": "cuando"
+      },
+      {
+       "t": "A las",
+       "zona": "cuando"
+      },
+      {
+       "t": "Mostrar lo que pasó después",
+       "zona": "cuando"
+      },
+      {
+       "t": "martes 10 de marzo de 2026 (10/03/2026)",
+       "zona": "cuando"
+      },
+      {
+       "t": "N",
+       "zona": "areas"
+      },
+      {
+       "t": "Norte",
+       "zona": "areas"
+      },
+      {
+       "t": "Ahora",
+       "zona": "areas"
+      },
+      {
+       "t": "1,288",
+       "zona": "areas"
+      },
+      {
+       "t": "MW",
+       "zona": "areas"
+      },
+      {
+       "t": "Pico 24 h:",
+       "zona": "areas"
+      },
+      {
+       "t": "1,309",
+       "zona": "areas"
+      },
+      {
+       "t": "MW · mié 11 11:30",
+       "zona": "areas"
+      },
+      {
+       "t": "C",
+       "zona": "areas"
+      },
+      {
+       "t": "Centro",
+       "zona": "areas"
+      },
+      {
+       "t": "Ahora",
+       "zona": "areas"
+      },
+      {
+       "t": "4,784",
+       "zona": "areas"
+      },
+      {
+       "t": "MW",
+       "zona": "areas"
+      },
+      {
+       "t": "Pico 24 h:",
+       "zona": "areas"
+      },
+      {
+       "t": "4,977",
+       "zona": "areas"
+      },
+      {
+       "t": "MW · mié 11 14:30",
+       "zona": "areas"
+      },
+      {
+       "t": "S",
+       "zona": "areas"
+      },
+      {
+       "t": "Sur",
+       "zona": "areas"
+      },
+      {
+       "t": "Ahora",
+       "zona": "areas"
+      },
+      {
+       "t": "1,855",
+       "zona": "areas"
+      },
+      {
+       "t": "MW",
+       "zona": "areas"
+      },
+      {
+       "t": "Pico 24 h:",
+       "zona": "areas"
+      },
+      {
+       "t": "1,940",
+       "zona": "areas"
+      },
+      {
+       "t": "MW · mar 10 19:30",
+       "zona": "areas"
+      },
+      {
+       "t": "Ahora · 19:00",
+       "zona": "cifra_ahora"
+      },
+      {
+       "t": "4,784",
+       "zona": "cifra_ahora"
+      },
+      {
+       "t": "MW",
+       "zona": "cifra_ahora"
+      },
+      {
+       "t": "Dato del COES. Se pronosticó 4,767 (4,588 – 4,929): dentro del rango",
+       "zona": "#ahCifras"
+      },
+      {
+       "t": "En 1 hora · 20:00",
+       "zona": "otras_cifras"
+      },
+      {
+       "t": "4,711",
+       "zona": "otras_cifras"
+      },
+      {
+       "t": "MW",
+       "zona": "otras_cifras"
+      },
+      {
+       "t": "Rango 4,594 – 4,816 · a 1 h",
+       "zona": "#ahCifras"
+      },
+      {
+       "t": "Pico de las próximas 24 h",
+       "zona": "pico_24h"
+      },
+      {
+       "t": "4,977",
+       "zona": "pico_24h"
+      },
+      {
+       "t": "MW",
+       "zona": "pico_24h"
+      },
+      {
+       "t": "miércoles 11 de marzo, 14:30 · rango 4,790 – 5,146",
+       "zona": "#ahCifras"
+      },
+      {
+       "t": "¿Y si hace más calor?",
+       "zona": "#ahCifras"
+      },
+      {
+       "t": "Mañana a esta hora",
+       "zona": "otras_cifras"
+      },
+      {
+       "t": "4,765",
+       "zona": "otras_cifras"
+      },
+      {
+       "t": "MW",
+       "zona": "otras_cifras"
+      },
+      {
+       "t": "−19 MW frente a ahora",
+       "zona": "#ahCifras"
+      },
+      {
+       "t": "Mayor subida en 1 hora",
+       "zona": "otras_cifras"
+      },
+      {
+       "t": "+414",
+       "zona": "otras_cifras"
+      },
+      {
+       "t": "MW",
+       "zona": "otras_cifras"
+      },
+      {
+       "t": "07:30–08:30 mié 11 · habitual (umbral 497)",
+       "zona": "#ahCifras"
+      },
+      {
+       "t": "Ese día y las 24 h siguientes",
+       "zona": "#ahGrafTitulo"
+      },
+      {
+       "t": "Real (COES)",
+       "zona": "#ahLeyenda"
+      },
+      {
+       "t": "Pronóstico",
+       "zona": "#ahLeyenda"
+      },
+      {
+       "t": "Rango del 90 %",
+       "zona": "#ahLeyRango"
+      },
+      {
+       "t": "Referencia (semana pasada)",
+       "zona": "#ahLeyRef"
+      },
+      {
+       "t": "Próximas 24 horas (pronóstico)",
+       "zona": "grafico"
+      },
+      {
+       "t": "4,000",
+       "zona": "grafico"
+      },
+      {
+       "t": "5,000",
+       "zona": "grafico"
+      },
+      {
+       "t": "MW",
+       "zona": "grafico"
+      },
+      {
+       "t": "mar 10",
+       "zona": "grafico"
+      },
+      {
+       "t": "03:00",
+       "zona": "grafico"
+      },
+      {
+       "t": "06:00",
+       "zona": "grafico"
+      },
+      {
+       "t": "09:00",
+       "zona": "grafico"
+      },
+      {
+       "t": "12:00",
+       "zona": "grafico"
+      },
+      {
+       "t": "15:00",
+       "zona": "grafico"
+      },
+      {
+       "t": "mié 11",
+       "zona": "grafico"
+      },
+      {
+       "t": "03:00",
+       "zona": "grafico"
+      },
+      {
+       "t": "06:00",
+       "zona": "grafico"
+      },
+      {
+       "t": "09:00",
+       "zona": "grafico"
+      },
+      {
+       "t": "12:00",
+       "zona": "grafico"
+      },
+      {
+       "t": "15:00",
+       "zona": "grafico"
+      },
+      {
+       "t": "18:00",
+       "zona": "grafico"
+      },
+      {
+       "t": "+414 MW en 1 h",
+       "zona": "grafico"
+      },
+      {
+       "t": "Ahora 19:00",
+       "zona": "linea_ahora"
+      },
+      {
+       "t": "Pico 4,977 · 14:30",
+       "zona": "grafico"
+      },
+      {
+       "t": "Lo que dijimos ayer para esta hora",
+       "zona": "dijimos_ayer"
+      },
+      {
+       "t": "Para las 19:00 de hoy, emitido el lunes 9 de marzo a las 19:00 (24 h antes).",
+       "zona": "#ahAyer"
+      },
+      {
+       "t": "Dijimos",
+       "zona": "dijimos_ayer"
+      },
+      {
+       "t": "4,767",
+       "zona": "dijimos_ayer"
+      },
+      {
+       "t": "MW",
+       "zona": "dijimos_ayer"
+      },
+      {
+       "t": "Fue",
+       "zona": "dijimos_ayer"
+      },
+      {
+       "t": "4,784",
+       "zona": "dijimos_ayer"
+      },
+      {
+       "t": "MW",
+       "zona": "dijimos_ayer"
+      },
+      {
+       "t": "Diferencia",
+       "zona": "#ahAyer"
+      },
+      {
+       "t": "−18 MW (0.4 %)",
+       "zona": "#ahAyer"
+      },
+      {
+       "t": "Rango del 90 %",
+       "zona": "#ahAyer"
+      },
+      {
+       "t": "4,588 – 4,929 MW",
+       "zona": "#ahAyer"
+      },
+      {
+       "t": "Lo real cayó dentro del rango. Subestimó por 18 MW.",
+       "zona": "dijimos_ayer"
+      }
+     ],
+     "controles": [
+      {
+       "etiqueta": "Curva, demanda del SEIN por áreas: ir a «Ahora»",
+       "tipo": "a",
+       "zona": "que_es"
+      },
+      {
+       "etiqueta": "Ahora",
+       "tipo": "a",
+       "zona": "#navPantallas"
+      },
+      {
+       "etiqueta": "Confianza",
+       "tipo": "a",
+       "zona": "#navPantallas"
+      },
+      {
+       "etiqueta": "Detalle",
+       "tipo": "a",
+       "zona": "#navPantallas"
+      },
+      {
+       "etiqueta": "Modelo y datos: la ficha técnica",
+       "tipo": "button:button",
+       "zona": "#btnFicha"
+      },
+      {
+       "etiqueta": "Cambiar a modo oscuro",
+       "tipo": "button:button",
+       "zona": "#btnTema"
+      },
+      {
+       "etiqueta": "Hoy",
+       "tipo": "button:button",
+       "zona": "cuando"
+      },
+      {
+       "etiqueta": "2026-03-10",
+       "tipo": "input:date",
+       "valor": "2026-03-10",
+       "zona": "cuando"
+      },
+      {
+       "etiqueta": "19:00",
+       "tipo": "input:time",
+       "valor": "19:00",
+       "zona": "cuando"
+      },
+      {
+       "etiqueta": "on",
+       "tipo": "input:checkbox",
+       "valor": "on",
+       "zona": "cuando"
+      },
+      {
+       "etiqueta": "N Norte Ahora 1,288 MW Pico 24 h: 1,309 MW · mié 11 11:30",
+       "tipo": "a",
+       "zona": "areas"
+      },
+      {
+       "etiqueta": "C Centro Ahora 4,784 MW Pico 24 h: 4,977 MW · mié 11 14:30",
+       "tipo": "a",
+       "zona": "areas"
+      },
+      {
+       "etiqueta": "S Sur Ahora 1,855 MW Pico 24 h: 1,940 MW · mar 10 19:30",
+       "tipo": "a",
+       "zona": "areas"
+      },
+      {
+       "etiqueta": "¿Y si hace más calor?",
+       "tipo": "a",
+       "zona": "#ahCifras"
+      },
+      {
+       "etiqueta": "on",
+       "tipo": "input:checkbox",
+       "valor": "on",
+       "zona": "#ahRef"
+      },
+      {
+       "etiqueta": "Gráfico de la demanda del Centro. Usa las flechas para recorrerlo.",
+       "tipo": "div",
+       "zona": "#ahLienzo"
+      }
+     ]
+    },
+    {
+     "archivo": "vista-2.png",
+     "y": 647,
+     "textos": [
+      {
+       "t": "Curva",
+       "zona": "que_es"
+      },
+      {
+       "t": "Demanda del SEIN por áreas",
+       "zona": "que_es"
+      },
+      {
+       "t": "Ahora",
+       "zona": "#navPantallas"
+      },
+      {
+       "t": "Confianza",
+       "zona": "#navPantallas"
+      },
+      {
+       "t": "Detalle",
+       "zona": "#navPantallas"
+      },
+      {
+       "t": "Repaso · 10/03/2026, 19:00",
+       "zona": "estado_datos"
+      },
+      {
+       "t": "mar 10",
+       "zona": "grafico"
+      },
+      {
+       "t": "03:00",
+       "zona": "grafico"
+      },
+      {
+       "t": "06:00",
+       "zona": "grafico"
+      },
+      {
+       "t": "09:00",
+       "zona": "grafico"
+      },
+      {
+       "t": "12:00",
+       "zona": "grafico"
+      },
+      {
+       "t": "15:00",
+       "zona": "grafico"
+      },
+      {
+       "t": "mié 11",
+       "zona": "grafico"
+      },
+      {
+       "t": "03:00",
+       "zona": "grafico"
+      },
+      {
+       "t": "06:00",
+       "zona": "grafico"
+      },
+      {
+       "t": "09:00",
+       "zona": "grafico"
+      },
+      {
+       "t": "12:00",
+       "zona": "grafico"
+      },
+      {
+       "t": "15:00",
+       "zona": "grafico"
+      },
+      {
+       "t": "18:00",
+       "zona": "grafico"
+      },
+      {
+       "t": "Ahora 19:00",
+       "zona": "linea_ahora"
+      },
+      {
+       "t": "Centro. A la izquierda de «Ahora», lo real y lo que se pronosticó un día antes; a la derecha, lo que ya estaba pronosticado a las 19:00.",
+       "zona": "#ahGrafSub"
+      },
+      {
+       "t": "Demanda del Centro desde el martes 10 de marzo a las 00:00 hasta el miércoles 11 de marzo a las 19:00. Ahora (19:00) la demanda es 4,784 MW, dentro del rango que se pronosticó. El pico de las próximas 24 horas sería 4,977 MW el miércoles 11 de marzo a las 14:30; la mayor subida, 414 MW en una hora desde las 07:30.",
+       "zona": "#ahDesc"
+      },
+      {
+       "t": "Ver los datos del gráfico en una tabla",
+       "zona": "#ahTablaDet"
+      },
+      {
+       "t": "Descargar CSV",
+       "zona": "#ahCsv"
+      },
+      {
+       "t": "¿De dónde sale el número?",
+       "zona": "#ahOrigenTit"
+      },
+      {
+       "t": "Modelo",
+       "zona": "#ahOrigen"
+      },
+      {
+       "t": "combinado",
+       "zona": "#ahOrigen"
+      },
+      {
+       "t": ": el de menor error en 2026. Lo que se dijo para las 19:00:",
+       "zona": "#ahOrigen"
+      },
+      {
+       "t": "4,764 × 0.85",
+       "zona": "#ahOrigen"
+      },
+      {
+       "t": "(Chronos-2 ajustado)",
+       "zona": "#ahOrigen"
+      },
+      {
+       "t": "+ 4,781 × 0.15",
+       "zona": "#ahOrigen"
+      },
+      {
+       "t": "(Híbrido (XGBoost + Simons))",
+       "zona": "#ahOrigen"
+      },
+      {
+       "t": "=",
+       "zona": "#ahOrigen"
+      },
+      {
+       "t": "4,767 MW",
+       "zona": "#ahOrigen"
+      },
+      {
+       "t": "Pesos fijados con la validación de 2025 y aplicados tal cual a 2026. Usa solo la demanda y el calendario; no usa el clima.",
+       "zona": "#ahOrigen"
+      },
+      {
+       "t": "¿Y si hace más calor? →",
+       "zona": "#ahOrigen"
+      },
+      {
+       "t": "Diagnóstico completo",
+       "zona": "#ahOrigen"
+      },
+      {
+       "t": "Otro modelo u horizonte",
+       "zona": "#ahOrigen"
+      },
+      {
+       "t": "Ficha técnica: modelo y datos",
+       "zona": "#ahOrigen"
+      },
+      {
+       "t": "Lo real cayó dentro del rango. Subestimó por 18 MW.",
+       "zona": "dijimos_ayer"
+      },
+      {
+       "t": "Historial · modelo combinado",
+       "zona": "#ahAyer"
+      },
+      {
+       "t": "¿Qué tan bueno es?",
+       "zona": "#ahBuenoTit"
+      },
+      {
+       "t": "Ese día, hasta las 19:00",
+       "zona": "#ahBueno"
+      },
+      {
+       "t": "Modelo",
+       "zona": "#ahBueno"
+      },
+      {
+       "t": "32.8 MW",
+       "zona": "#ahBueno"
+      },
+      {
+       "t": "Referencia",
+       "zona": "#ahBueno"
+      },
+      {
+       "t": "57.9 MW",
+       "zona": "#ahBueno"
+      },
+      {
+       "t": "Se equivocó",
+       "zona": "#ahBueno"
+      },
+      {
+       "t": "43 % menos",
+       "zona": "#ahBueno"
+      },
+      {
+       "t": "que repetir «la semana pasada a la misma hora».",
+       "zona": "#ahBueno"
+      },
+      {
+       "t": "Marca «Mostrar lo que pasó después» para ver el error del día completo.",
+       "zona": "#ahBueno"
+      },
+      {
+       "t": "En 2026, a 24 horas",
+       "zona": "#ahBueno"
+      },
+      {
+       "t": "Modelo",
+       "zona": "#ahBueno"
+      },
+      {
+       "t": "71.9 MW",
+       "zona": "#ahBueno"
+      },
+      {
+       "t": "Referencia",
+       "zona": "#ahBueno"
+      },
+      {
+       "t": "135.4 MW",
+       "zona": "#ahBueno"
+      },
+      {
+       "t": "Se equivocó",
+       "zona": "#ahBueno"
+      },
+      {
+       "t": "47 % menos",
+       "zona": "#ahBueno"
+      },
+      {
+       "t": "que repetir «la semana pasada a la misma hora». Su rango del 90 % cubrió el",
+       "zona": "#ahBueno"
+      },
+      {
+       "t": "91.1 %",
+       "zona": "#ahBueno"
+      },
+      {
+       "t": "de las medias horas: cumple lo que promete.",
+       "zona": "#ahBueno"
+      },
+      {
+       "t": "Ver la confianza mes a mes →",
+       "zona": "#ahBueno"
+      },
+      {
+       "t": "Curva es un pronóstico abierto hecho con los datos públicos del COES (IEOD); no sirve para operar el sistema eléctrico. Pronósticos del modelo combinado. El CSV trae el pronóstico, su rango y su error, no la serie real del COES, que no tiene una licencia publicada.",
+       "zona": "#ahPie"
+      }
+     ],
+     "controles": [
+      {
+       "etiqueta": "Curva, demanda del SEIN por áreas: ir a «Ahora»",
+       "tipo": "a",
+       "zona": "que_es"
+      },
+      {
+       "etiqueta": "Ahora",
+       "tipo": "a",
+       "zona": "#navPantallas"
+      },
+      {
+       "etiqueta": "Confianza",
+       "tipo": "a",
+       "zona": "#navPantallas"
+      },
+      {
+       "etiqueta": "Detalle",
+       "tipo": "a",
+       "zona": "#navPantallas"
+      },
+      {
+       "etiqueta": "Modelo y datos: la ficha técnica",
+       "tipo": "button:button",
+       "zona": "#btnFicha"
+      },
+      {
+       "etiqueta": "Cambiar a modo oscuro",
+       "tipo": "button:button",
+       "zona": "#btnTema"
+      },
+      {
+       "etiqueta": "Ver los datos del gráfico en una tabla",
+       "tipo": "summary",
+       "zona": "#ahTablaDet"
+      },
+      {
+       "etiqueta": "Descargar CSV",
+       "tipo": "button:button",
+       "zona": "#ahCsv"
+      },
+      {
+       "etiqueta": "¿Y si hace más calor? →",
+       "tipo": "a",
+       "zona": "#ahOrigen"
+      },
+      {
+       "etiqueta": "Diagnóstico completo",
+       "tipo": "a",
+       "zona": "#ahOrigen"
+      },
+      {
+       "etiqueta": "Otro modelo u horizonte",
+       "tipo": "a",
+       "zona": "#ahOrigen"
+      },
+      {
+       "etiqueta": "Ficha técnica: modelo y datos",
+       "tipo": "button:button",
+       "zona": "#ahOrigen"
+      },
+      {
+       "etiqueta": "Ver la confianza mes a mes →",
+       "tipo": "a",
+       "zona": "#ahBueno"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "pantalla": "confianza",
+   "alto": 3272,
+   "vistas": [
+    {
+     "archivo": "vista-1.png",
+     "y": 0,
+     "textos": [
+      {
+       "t": "Curva",
+       "zona": "que_es"
+      },
+      {
+       "t": "Demanda del SEIN por áreas",
+       "zona": "que_es"
+      },
+      {
+       "t": "Ahora",
+       "zona": "#navPantallas"
+      },
+      {
+       "t": "Confianza",
+       "zona": "#navPantallas"
+      },
+      {
+       "t": "Detalle",
+       "zona": "#navPantallas"
+      },
+      {
+       "t": "Datos del COES al 12/11, 24:00",
+       "zona": "estado_datos"
+      },
+      {
+       "t": "Norte",
+       "zona": "selectores"
+      },
+      {
+       "t": "Centro",
+       "zona": "selectores"
+      },
+      {
+       "t": "Sur",
+       "zona": "selectores"
+      },
+      {
+       "t": "A 1 hora",
+       "zona": "selectores"
+      },
+      {
+       "t": "A 24 horas",
+       "zona": "selectores"
+      },
+      {
+       "t": "En 2026 se equivocó menos que la referencia los 10 meses.",
+       "zona": "titular"
+      },
+      {
+       "t": "Centro, a 24 horas: error medio de",
+       "zona": "lead"
+      },
+      {
+       "t": "71.9 MW",
+       "zona": "lead"
+      },
+      {
+       "t": "(1.7 % de la demanda), 47 % menos que repetir «la semana pasada a la misma hora». El rango del 90 % cubrió el",
+       "zona": "lead"
+      },
+      {
+       "t": "91.1 %",
+       "zona": "lead"
+      },
+      {
+       "t": "en el año, pero quedó corto en marzo, mayo. En vivo, desde el viernes 23 de octubre, el rango del 80 % cubrió el",
+       "zona": "lead"
+      },
+      {
+       "t": "73.2 %",
+       "zona": "aviso_vivo"
+      },
+      {
+       "t": ": queda corto. Todo se mide con pronósticos que el modelo no vio al entrenar; 2026 sí se usó para elegir el modelo.",
+       "zona": "lead"
+      },
+      {
+       "t": "Error medio 2026",
+       "zona": "cifras"
+      },
+      {
+       "t": "71.9",
+       "zona": "cifras"
+      },
+      {
+       "t": "MW",
+       "zona": "cifras"
+      },
+      {
+       "t": "1.7 % de la demanda (MAPE)",
+       "zona": "#cfStats"
+      },
+      {
+       "t": "Frente a la referencia",
+       "zona": "cifras"
+      },
+      {
+       "t": "−47",
+       "zona": "cifras"
+      },
+      {
+       "t": "%",
+       "zona": "cifras"
+      },
+      {
+       "t": "135.4 MW la referencia",
+       "zona": "#cfStats"
+      },
+      {
+       "t": "Cobertura del rango",
+       "zona": "cobertura"
+      },
+      {
+       "t": "91.1",
+       "zona": "cobertura"
+      },
+      {
+       "t": "%",
+       "zona": "cobertura"
+      },
+      {
+       "t": "meta 90 %",
+       "zona": "cobertura"
+      },
+      {
+       "t": "Cumple lo que promete",
+       "zona": "cobertura"
+      },
+      {
+       "t": "Hora del pico (±1 h)",
+       "zona": "cifras"
+      },
+      {
+       "t": "61.5",
+       "zona": "cifras"
+      },
+      {
+       "t": "%",
+       "zona": "cifras"
+      },
+      {
+       "t": "de 288 días; referencia 56.9 %",
+       "zona": "#cfStats"
+      },
+      {
+       "t": "Con El Niño, donde más yerra",
+       "zona": "cifras"
+      },
+      {
+       "t": "80.6",
+       "zona": "cifras"
+      },
+      {
+       "t": "MW",
+       "zona": "cifras"
+      },
+      {
+       "t": "Niño moderado · le gana a la referencia en las 5 fases",
+       "zona": "#cfStats"
+      },
+      {
+       "t": "Error mes a mes en 2026",
+       "zona": "mes_a_mes"
+      },
+      {
+       "t": "Error medio absoluto en MW (menos es mejor), a 24 horas. Solo pronósticos que el modelo no vio al entrenar.",
+       "zona": "#cfMes"
+      },
+      {
+       "t": "Modelo",
+       "zona": "#cfMes"
+      },
+      {
+       "t": "Referencia: semana pasada, misma hora",
+       "zona": "#cfMes"
+      },
+      {
+       "t": "100",
+       "zona": "mes_a_mes"
+      },
+      {
+       "t": "150",
+       "zona": "mes_a_mes"
+      },
+      {
+       "t": "MW",
+       "zona": "mes_a_mes"
+      },
+      {
+       "t": "¿El rango cumple lo que promete?",
+       "zona": "cobertura"
+      },
+      {
+       "t": "Parte de las medias horas en que lo real cayó dentro del rango del 90 %. Banda verde: de 85 a 95 %.",
+       "zona": "#cfCob"
+      },
+      {
+       "t": "80 %",
+       "zona": "cobertura"
+      },
+      {
+       "t": "90 %",
+       "zona": "cobertura"
+      },
+      {
+       "t": "100 %",
+       "zona": "cobertura"
+      },
+      {
+       "t": "meta 90 %",
+       "zona": "cobertura"
+      }
+     ],
+     "controles": [
+      {
+       "etiqueta": "Curva, demanda del SEIN por áreas: ir a «Ahora»",
+       "tipo": "a",
+       "zona": "que_es"
+      },
+      {
+       "etiqueta": "Ahora",
+       "tipo": "a",
+       "zona": "#navPantallas"
+      },
+      {
+       "etiqueta": "Confianza",
+       "tipo": "a",
+       "zona": "#navPantallas"
+      },
+      {
+       "etiqueta": "Detalle",
+       "tipo": "a",
+       "zona": "#navPantallas"
+      },
+      {
+       "etiqueta": "Modelo y datos: la ficha técnica",
+       "tipo": "button:button",
+       "zona": "#btnFicha"
+      },
+      {
+       "etiqueta": "Cambiar a modo oscuro",
+       "tipo": "button:button",
+       "zona": "#btnTema"
+      },
+      {
+       "etiqueta": "Norte",
+       "tipo": "a",
+       "zona": "selectores"
+      },
+      {
+       "etiqueta": "Centro",
+       "tipo": "a",
+       "zona": "selectores"
+      },
+      {
+       "etiqueta": "Sur",
+       "tipo": "a",
+       "zona": "selectores"
+      },
+      {
+       "etiqueta": "A 1 hora",
+       "tipo": "button:button",
+       "zona": "selectores"
+      },
+      {
+       "etiqueta": "A 24 horas",
+       "tipo": "button:button",
+       "zona": "selectores"
+      }
+     ]
+    },
+    {
+     "archivo": "vista-2.png",
+     "y": 668,
+     "textos": [
+      {
+       "t": "Curva",
+       "zona": "que_es"
+      },
+      {
+       "t": "Demanda del SEIN por áreas",
+       "zona": "que_es"
+      },
+      {
+       "t": "Ahora",
+       "zona": "#navPantallas"
+      },
+      {
+       "t": "Confianza",
+       "zona": "#navPantallas"
+      },
+      {
+       "t": "Detalle",
+       "zona": "#navPantallas"
+      },
+      {
+       "t": "Datos del COES al 12/11, 24:00",
+       "zona": "estado_datos"
+      },
+      {
+       "t": "0",
+       "zona": "mes_a_mes"
+      },
+      {
+       "t": "50",
+       "zona": "mes_a_mes"
+      },
+      {
+       "t": "ene",
+       "zona": "mes_a_mes"
+      },
+      {
+       "t": "feb",
+       "zona": "mes_a_mes"
+      },
+      {
+       "t": "mar",
+       "zona": "mes_a_mes"
+      },
+      {
+       "t": "abr",
+       "zona": "mes_a_mes"
+      },
+      {
+       "t": "may",
+       "zona": "mes_a_mes"
+      },
+      {
+       "t": "jun",
+       "zona": "mes_a_mes"
+      },
+      {
+       "t": "jul",
+       "zona": "mes_a_mes"
+      },
+      {
+       "t": "ago",
+       "zona": "mes_a_mes"
+      },
+      {
+       "t": "set",
+       "zona": "mes_a_mes"
+      },
+      {
+       "t": "oct",
+       "zona": "mes_a_mes"
+      },
+      {
+       "t": "Le ganó a la referencia en",
+       "zona": "#cfMes"
+      },
+      {
+       "t": "10 de 10",
+       "zona": "#cfMes"
+      },
+      {
+       "t": "meses. Peor mes: marzo (86.1 MW). Octubre llega hasta el día 15.",
+       "zona": "#cfMes"
+      },
+      {
+       "t": "Ver la tabla mes a mes",
+       "zona": "#cfMes"
+      },
+      {
+       "t": "Mes",
+       "zona": "#cfMes"
+      },
+      {
+       "t": "Modelo (MW)",
+       "zona": "#cfMes"
+      },
+      {
+       "t": "Referencia (MW)",
+       "zona": "#cfMes"
+      },
+      {
+       "t": "¿Le ganó?",
+       "zona": "#cfMes"
+      },
+      {
+       "t": "Cobertura",
+       "zona": "#cfMes"
+      },
+      {
+       "t": "Medias horas",
+       "zona": "#cfMes"
+      },
+      {
+       "t": "80 %",
+       "zona": "cobertura"
+      },
+      {
+       "t": "E",
+       "zona": "cobertura"
+      },
+      {
+       "t": "F",
+       "zona": "cobertura"
+      },
+      {
+       "t": "M",
+       "zona": "cobertura"
+      },
+      {
+       "t": "A",
+       "zona": "cobertura"
+      },
+      {
+       "t": "M",
+       "zona": "cobertura"
+      },
+      {
+       "t": "J",
+       "zona": "cobertura"
+      },
+      {
+       "t": "J",
+       "zona": "cobertura"
+      },
+      {
+       "t": "A",
+       "zona": "cobertura"
+      },
+      {
+       "t": "S",
+       "zona": "cobertura"
+      },
+      {
+       "t": "O",
+       "zona": "cobertura"
+      },
+      {
+       "t": "En el año cubrió el 91.1 %: cumple lo que promete. Quedó corto en marzo, mayo. Fue más ancho de lo necesario en agosto.",
+       "zona": "#cfCob"
+      },
+      {
+       "t": "Puntos destacados: meses a más de 5 puntos de la meta.",
+       "zona": "#cfCob"
+      },
+      {
+       "t": "El seguimiento en vivo",
+       "zona": "aviso_vivo"
+      },
+      {
+       "t": "Desde el viernes 23 de octubre, Chronos-2 ajustado con feriados pronostica cada día con la demanda del día anterior que publica el COES. Lleva 21 días reconstruidos (calculados después de conocerse el real, con los datos que habría tenido: no cuentan como en vivo) y 1 día en vivo, desde el viernes 13 de noviembre: emitidos antes de su real, cada uno se verifica a la mañana siguiente.",
+       "zona": "#cfVivo"
+      },
+      {
+       "t": "En vivo a 24 h",
+       "zona": "#cfVivo"
+      },
+      {
+       "t": "—",
+       "zona": "#cfVivo"
+      },
+      {
+       "t": "Todavía ningún día con su real",
+       "zona": "#cfVivo"
+      },
+      {
+       "t": "Reconstruido a 24 h · 21 días",
+       "zona": "#cfVivo"
+      },
+      {
+       "t": "79.6 MW",
+       "zona": "#cfVivo"
+      },
+      {
+       "t": "frente a 140.8 MW de repetir semana pasada",
+       "zona": "#cfVivo"
+      },
+      {
+       "t": "Rango del 80 %: cubrió 73.2 %, queda corto",
+       "zona": "#cfVivo"
+      },
+      {
+       "t": "A 1 hora, siempre reconstruido · 21 días",
+       "zona": "#cfVivo"
+      },
+      {
+       "t": "51.0 MW",
+       "zona": "#cfVivo"
+      },
+      {
+       "t": "frente a 134.1 MW de repetir último dato",
+       "zona": "#cfVivo"
+      },
+      {
+       "t": "Rango del 80 %: cubrió 77.0 %, queda algo corto",
+       "zona": "#cfVivo"
+      },
+      {
+       "t": "El rango del 80 % queda corto. Entre el viernes 23 de octubre y el jueves 12 de noviembre cubrió el 73.2 % de las medias horas a 24 h, cuando debería cubrir 8 de cada 10. Elia, en Bélgica, tiene el mismo problema con su banda del 80 %: cubrió entre 74 % y 79 % en 2024-2026.",
+       "zona": "aviso_vivo"
+      },
+      {
+       "t": "2 días pasaron el 3 % en el pico con el registro en vivo",
+       "zona": "#cfVivo"
+      },
+      {
+       "t": "Domingo 1 nov",
+       "zona": "#cfVivo"
+      },
+      {
+       "t": "Subestimó 3.3 %",
+       "zona": "#cfVivo"
+      },
+      {
+       "t": "Pico real 4,610 MW a las 20:00; se pronosticó 4,457 MW a las 19:00.",
+       "zona": "#cfVivo"
+      },
+      {
+       "t": "Causa probable, según el calendario: feriado (Todos los Santos).",
+       "zona": "#cfVivo"
+      },
+      {
+       "t": "Lunes 2 nov",
+       "zona": "#cfVivo"
+      },
+      {
+       "t": "Subestimó 4.7 %",
+       "zona": "#cfVivo"
+      },
+      {
+       "t": "Pico real 5,266 MW a las 14:00; se pronosticó 5,017 MW a las 15:00.",
+       "zona": "#cfVivo"
+      },
+      {
+       "t": "Causa probable, según el calendario: día siguiente a un feriado (Todos los Santos).",
+       "zona": "#cfVivo"
+      }
+     ],
+     "controles": [
+      {
+       "etiqueta": "Curva, demanda del SEIN por áreas: ir a «Ahora»",
+       "tipo": "a",
+       "zona": "que_es"
+      },
+      {
+       "etiqueta": "Ahora",
+       "tipo": "a",
+       "zona": "#navPantallas"
+      },
+      {
+       "etiqueta": "Confianza",
+       "tipo": "a",
+       "zona": "#navPantallas"
+      },
+      {
+       "etiqueta": "Detalle",
+       "tipo": "a",
+       "zona": "#navPantallas"
+      },
+      {
+       "etiqueta": "Modelo y datos: la ficha técnica",
+       "tipo": "button:button",
+       "zona": "#btnFicha"
+      },
+      {
+       "etiqueta": "Cambiar a modo oscuro",
+       "tipo": "button:button",
+       "zona": "#btnTema"
+      },
+      {
+       "etiqueta": "Ver la tabla mes a mes",
+       "tipo": "summary",
+       "zona": "#cfMes"
+      }
+     ]
+    },
+    {
+     "archivo": "vista-3.png",
+     "y": 1336,
+     "textos": [
+      {
+       "t": "Curva",
+       "zona": "que_es"
+      },
+      {
+       "t": "Demanda del SEIN por áreas",
+       "zona": "que_es"
+      },
+      {
+       "t": "Ahora",
+       "zona": "#navPantallas"
+      },
+      {
+       "t": "Confianza",
+       "zona": "#navPantallas"
+      },
+      {
+       "t": "Detalle",
+       "zona": "#navPantallas"
+      },
+      {
+       "t": "Datos del COES al 12/11, 24:00",
+       "zona": "estado_datos"
+      },
+      {
+       "t": "Pico real 4,610 MW a las 20:00; se pronosticó 4,457 MW a las 19:00.",
+       "zona": "#cfVivo"
+      },
+      {
+       "t": "Causa probable, según el calendario: feriado (Todos los Santos).",
+       "zona": "#cfVivo"
+      },
+      {
+       "t": "Pico real 5,266 MW a las 14:00; se pronosticó 5,017 MW a las 15:00.",
+       "zona": "#cfVivo"
+      },
+      {
+       "t": "Causa probable, según el calendario: día siguiente a un feriado (Todos los Santos).",
+       "zona": "#cfVivo"
+      },
+      {
+       "t": "Ver el error de cada día en vivo",
+       "zona": "#cfVivo"
+      },
+      {
+       "t": "Día a día: el error del pico",
+       "zona": "#cfDiaTit"
+      },
+      {
+       "t": "El pico pronosticado a 24 h frente al pico real de cada día. Arriba, sobrestimó; abajo, subestimó (lo más costoso: obliga a arrancar generación cara de urgencia). Líneas en ±3 %, como en el informe de PJM.",
+       "zona": "#cfDia"
+      },
+      {
+       "t": "En todo 2026,",
+       "zona": "#cfDia"
+      },
+      {
+       "t": "42 de 288 días",
+       "zona": "#cfDia"
+      },
+      {
+       "t": "pasaron el 3 %: 34 subestimaciones y 8 sobrestimaciones.",
+       "zona": "#cfDia"
+      },
+      {
+       "t": "Ene",
+       "zona": "#cfDia"
+      },
+      {
+       "t": "7",
+       "zona": "#cfDia"
+      },
+      {
+       "t": "Feb",
+       "zona": "#cfDia"
+      },
+      {
+       "t": "5",
+       "zona": "#cfDia"
+      },
+      {
+       "t": "Mar",
+       "zona": "#cfDia"
+      },
+      {
+       "t": "7",
+       "zona": "#cfDia"
+      },
+      {
+       "t": "Abr",
+       "zona": "#cfDia"
+      },
+      {
+       "t": "3",
+       "zona": "#cfDia"
+      },
+      {
+       "t": "May",
+       "zona": "#cfDia"
+      },
+      {
+       "t": "5",
+       "zona": "#cfDia"
+      },
+      {
+       "t": "Jun",
+       "zona": "#cfDia"
+      },
+      {
+       "t": "3",
+       "zona": "#cfDia"
+      },
+      {
+       "t": "Jul",
+       "zona": "#cfDia"
+      },
+      {
+       "t": "3",
+       "zona": "#cfDia"
+      },
+      {
+       "t": "Ago",
+       "zona": "#cfDia"
+      },
+      {
+       "t": "2",
+       "zona": "#cfDia"
+      },
+      {
+       "t": "Set",
+       "zona": "#cfDia"
+      },
+      {
+       "t": "4",
+       "zona": "#cfDia"
+      },
+      {
+       "t": "Oct",
+       "zona": "#cfDia"
+      },
+      {
+       "t": "3",
+       "zona": "#cfDia"
+      },
+      {
+       "t": "−6 %",
+       "zona": "#cfDiaG"
+      },
+      {
+       "t": "−3 %",
+       "zona": "#cfDiaG"
+      },
+      {
+       "t": "0 %",
+       "zona": "#cfDiaG"
+      },
+      {
+       "t": "+3 %",
+       "zona": "#cfDiaG"
+      },
+      {
+       "t": "+6 %",
+       "zona": "#cfDiaG"
+      },
+      {
+       "t": "1",
+       "zona": "#cfDiaG"
+      },
+      {
+       "t": "2",
+       "zona": "#cfDiaG"
+      },
+      {
+       "t": "3",
+       "zona": "#cfDiaG"
+      },
+      {
+       "t": "4",
+       "zona": "#cfDiaG"
+      },
+      {
+       "t": "5",
+       "zona": "#cfDiaG"
+      },
+      {
+       "t": "6",
+       "zona": "#cfDiaG"
+      },
+      {
+       "t": "7",
+       "zona": "#cfDiaG"
+      },
+      {
+       "t": "8",
+       "zona": "#cfDiaG"
+      },
+      {
+       "t": "9",
+       "zona": "#cfDiaG"
+      },
+      {
+       "t": "10",
+       "zona": "#cfDiaG"
+      },
+      {
+       "t": "11",
+       "zona": "#cfDiaG"
+      },
+      {
+       "t": "12",
+       "zona": "#cfDiaG"
+      },
+      {
+       "t": "13",
+       "zona": "#cfDiaG"
+      },
+      {
+       "t": "14",
+       "zona": "#cfDiaG"
+      },
+      {
+       "t": "15",
+       "zona": "#cfDiaG"
+      },
+      {
+       "t": "Subestimó más de 3 %",
+       "zona": "#cfDia"
+      },
+      {
+       "t": "Sobrestimó más de 3 %",
+       "zona": "#cfDia"
+      },
+      {
+       "t": "Fin de semana",
+       "zona": "#cfDia"
+      },
+      {
+       "t": "Octubre: 3 días pasaron el 3 % en el pico (3 subestimaciones)",
+       "zona": "#cfDia"
+      },
+      {
+       "t": "Lunes 5 oct",
+       "zona": "#cfDia"
+      },
+      {
+       "t": "Subestimó 3.8 %",
+       "zona": "#cfDia"
+      },
+      {
+       "t": "Pico real 5,157 MW a las 15:00; se pronosticó 4,963 MW a las 14:30.",
+       "zona": "#cfDia"
+      },
+      {
+       "t": "Martes 6 oct",
+       "zona": "#cfDia"
+      },
+      {
+       "t": "Subestimó 3.8 %",
+       "zona": "#cfDia"
+      },
+      {
+       "t": "Viernes 9 oct",
+       "zona": "#cfDia"
+      },
+      {
+       "t": "Subestimó 5.1 %",
+       "zona": "#cfDia"
+      }
+     ],
+     "controles": [
+      {
+       "etiqueta": "Curva, demanda del SEIN por áreas: ir a «Ahora»",
+       "tipo": "a",
+       "zona": "que_es"
+      },
+      {
+       "etiqueta": "Ahora",
+       "tipo": "a",
+       "zona": "#navPantallas"
+      },
+      {
+       "etiqueta": "Confianza",
+       "tipo": "a",
+       "zona": "#navPantallas"
+      },
+      {
+       "etiqueta": "Detalle",
+       "tipo": "a",
+       "zona": "#navPantallas"
+      },
+      {
+       "etiqueta": "Modelo y datos: la ficha técnica",
+       "tipo": "button:button",
+       "zona": "#btnFicha"
+      },
+      {
+       "etiqueta": "Cambiar a modo oscuro",
+       "tipo": "button:button",
+       "zona": "#btnTema"
+      },
+      {
+       "etiqueta": "Ver el error de cada día en vivo",
+       "tipo": "a",
+       "zona": "#cfVivo"
+      },
+      {
+       "etiqueta": "Enero: 7 días sobre el 3 %",
+       "tipo": "button:button",
+       "zona": "#cfDia"
+      },
+      {
+       "etiqueta": "Febrero: 5 días sobre el 3 %",
+       "tipo": "button:button",
+       "zona": "#cfDia"
+      },
+      {
+       "etiqueta": "Marzo: 7 días sobre el 3 %",
+       "tipo": "button:button",
+       "zona": "#cfDia"
+      },
+      {
+       "etiqueta": "Abril: 3 días sobre el 3 %",
+       "tipo": "button:button",
+       "zona": "#cfDia"
+      },
+      {
+       "etiqueta": "Mayo: 5 días sobre el 3 %",
+       "tipo": "button:button",
+       "zona": "#cfDia"
+      },
+      {
+       "etiqueta": "Junio: 3 días sobre el 3 %",
+       "tipo": "button:button",
+       "zona": "#cfDia"
+      },
+      {
+       "etiqueta": "Julio: 3 días sobre el 3 %",
+       "tipo": "button:button",
+       "zona": "#cfDia"
+      },
+      {
+       "etiqueta": "Agosto: 2 días sobre el 3 %",
+       "tipo": "button:button",
+       "zona": "#cfDia"
+      },
+      {
+       "etiqueta": "Septiembre: 4 días sobre el 3 %",
+       "tipo": "button:button",
+       "zona": "#cfDia"
+      },
+      {
+       "etiqueta": "Octubre: 3 días sobre el 3 %",
+       "tipo": "button:button",
+       "zona": "#cfDia"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "pantalla": "escenarios",
+   "alto": 2969,
+   "vistas": [
+    {
+     "archivo": "vista-1.png",
+     "y": 572,
+     "textos": [
+      {
+       "t": "Curva",
+       "zona": "que_es"
+      },
+      {
+       "t": "Demanda del SEIN por áreas",
+       "zona": "que_es"
+      },
+      {
+       "t": "Ahora",
+       "zona": "#navPantallas"
+      },
+      {
+       "t": "Confianza",
+       "zona": "#navPantallas"
+      },
+      {
+       "t": "Detalle",
+       "zona": "#navPantallas"
+      },
+      {
+       "t": "Repaso · 10/03/2026, 19:00",
+       "zona": "estado_datos"
+      },
+      {
+       "t": "Pronóstico",
+       "zona": "secciones"
+      },
+      {
+       "t": "Curva",
+       "zona": "secciones"
+      },
+      {
+       "t": "¿Y si…?",
+       "zona": "secciones"
+      },
+      {
+       "t": "Diagnóstico",
+       "zona": "secciones"
+      },
+      {
+       "t": "En vivo",
+       "zona": "secciones"
+      },
+      {
+       "t": "1 hora",
+       "zona": "panel_controles"
+      },
+      {
+       "t": "24 horas",
+       "zona": "panel_controles"
+      },
+      {
+       "t": "Datos que usa",
+       "zona": "panel_controles"
+      },
+      {
+       "t": "Solo demanda",
+       "zona": "panel_controles"
+      },
+      {
+       "t": "Con clima y El Niño",
+       "zona": "panel_controles"
+      },
+      {
+       "t": "Este modelo usa solo la demanda: no distingue clima ni El Niño.",
+       "zona": "panel_controles"
+      },
+      {
+       "t": "Día",
+       "zona": "panel_controles"
+      },
+      {
+       "t": "martes 10 de marzo de 2026 (10/03/2026)",
+       "zona": "panel_controles"
+      },
+      {
+       "t": "Hora",
+       "zona": "panel_controles"
+      },
+      {
+       "t": "19:00",
+       "zona": "panel_controles"
+      },
+      {
+       "t": "00:00",
+       "zona": "panel_controles"
+      },
+      {
+       "t": "06:00",
+       "zona": "panel_controles"
+      },
+      {
+       "t": "12:00",
+       "zona": "panel_controles"
+      },
+      {
+       "t": "18:00",
+       "zona": "panel_controles"
+      },
+      {
+       "t": "23:30",
+       "zona": "panel_controles"
+      },
+      {
+       "t": "Madrugada",
+       "zona": "panel_controles"
+      },
+      {
+       "t": "03:00",
+       "zona": "panel_controles"
+      },
+      {
+       "t": "Mañana",
+       "zona": "panel_controles"
+      },
+      {
+       "t": "09:00",
+       "zona": "panel_controles"
+      },
+      {
+       "t": "Mediodía",
+       "zona": "panel_controles"
+      },
+      {
+       "t": "12:30",
+       "zona": "panel_controles"
+      },
+      {
+       "t": "Tarde",
+       "zona": "panel_controles"
+      },
+      {
+       "t": "16:00",
+       "zona": "panel_controles"
+      },
+      {
+       "t": "Noche",
+       "zona": "panel_controles"
+      },
+      {
+       "t": "20:00",
+       "zona": "panel_controles"
+      },
+      {
+       "t": "Máximo real del día",
+       "zona": "panel_controles"
+      },
+      {
+       "t": "15:00",
+       "zona": "panel_controles"
+      },
+      {
+       "t": "Modelo",
+       "zona": "panel_controles"
+      },
+      {
+       "t": "Recomendado: mezcla el híbrido con un segundo modelo fundacional (Chronos-2) ajustado a estas series con datos hasta 2024. Es el de menor error en 2026. Usa solo la demanda.",
+       "zona": "panel_controles"
+      },
+      {
+       "t": "Máximo y mayor subida de las próximas 24 h",
+       "zona": "pico"
+      },
+      {
+       "t": "Si se emite a las 19:00 del martes 10 de marzo: de las 19:30 del martes 10 de marzo a las 19:00 del miércoles 11 de marzo, con el pronóstico a 24 h del modelo combinado.",
+       "zona": "pico"
+      },
+      {
+       "t": "¿Y si mañana hace más calor, o El Niño se calma?",
+       "zona": "#panel-escenarios"
+      },
+      {
+       "t": "Cambia un supuesto y el modelo vuelve a calcular las próximas 24 h desde las 19:00 del 10 mar 2026. Supuesto del proyecto: el COES recibe de ENFEN los pronósticos de clima y de El Niño.",
+       "zona": "#panel-escenarios"
+      },
+      {
+       "t": "El modelo combinado usa solo la demanda, así que el clima y El Niño no lo mueven. Estos escenarios los calcula el modelo Base (XGBoost), con clima y El Niño.",
+       "zona": "#panel-escenarios"
+      },
+      {
+       "t": "Temperatura frente a la esperada",
+       "zona": "#lblTemp"
+      },
+      {
+       "t": "−2 °C",
+       "zona": "#panel-escenarios"
+      },
+      {
+       "t": "±0 °C",
+       "zona": "#panel-escenarios"
+      },
+      {
+       "t": "+2 °C",
+       "zona": "#panel-escenarios"
+      },
+      {
+       "t": "+4 °C",
+       "zona": "#panel-escenarios"
+      },
+      {
+       "t": "El Niño",
+       "zona": "#lblNino"
+      },
+      {
+       "t": "Como se observó",
+       "zona": "#panel-escenarios"
+      },
+      {
+       "t": "Neutro",
+       "zona": "#panel-escenarios"
+      },
+      {
+       "t": "Falla en la red al emitir",
+       "zona": "#lblFalla"
+      },
+      {
+       "t": "Como se observó",
+       "zona": "#panel-escenarios"
+      },
+      {
+       "t": "Sin falla",
+       "zona": "#panel-escenarios"
+      },
+      {
+       "t": "Elige un cambio para compararlo con el escenario base. A las 11:00 del 11 de marzo, la hora de mayor demanda de las próximas 24 h, el modelo espera 4,919 MW: 17 MW menos que «la semana pasada a la misma hora».",
+       "zona": "#fraseEscenario"
+      },
+      {
+       "t": "4,000",
+       "zona": "#graficoEscenario"
+      },
+      {
+       "t": "4,500",
+       "zona": "#graficoEscenario"
+      },
+      {
+       "t": "5,000",
+       "zona": "#graficoEscenario"
+      },
+      {
+       "t": "pico 11:00",
+       "zona": "#graficoEscenario"
+      }
+     ],
+     "controles": [
+      {
+       "etiqueta": "Curva, demanda del SEIN por áreas: ir a «Ahora»",
+       "tipo": "a",
+       "zona": "que_es"
+      },
+      {
+       "etiqueta": "Ahora",
+       "tipo": "a",
+       "zona": "#navPantallas"
+      },
+      {
+       "etiqueta": "Confianza",
+       "tipo": "a",
+       "zona": "#navPantallas"
+      },
+      {
+       "etiqueta": "Detalle",
+       "tipo": "a",
+       "zona": "#navPantallas"
+      },
+      {
+       "etiqueta": "Modelo y datos: la ficha técnica",
+       "tipo": "button:button",
+       "zona": "#btnFicha"
+      },
+      {
+       "etiqueta": "Cambiar a modo oscuro",
+       "tipo": "button:button",
+       "zona": "#btnTema"
+      },
+      {
+       "etiqueta": "Pronóstico",
+       "tipo": "button:button",
+       "zona": "secciones"
+      },
+      {
+       "etiqueta": "Curva",
+       "tipo": "button:button",
+       "zona": "secciones"
+      },
+      {
+       "etiqueta": "¿Y si…?",
+       "tipo": "button:button",
+       "zona": "secciones"
+      },
+      {
+       "etiqueta": "Diagnóstico",
+       "tipo": "button:button",
+       "zona": "secciones"
+      },
+      {
+       "etiqueta": "En vivo",
+       "tipo": "button:button",
+       "zona": "secciones"
+      },
+      {
+       "etiqueta": "1 hora",
+       "tipo": "button:button",
+       "zona": "panel_controles"
+      },
+      {
+       "etiqueta": "24 horas",
+       "tipo": "button:button",
+       "zona": "panel_controles"
+      },
+      {
+       "etiqueta": "Solo demanda",
+       "tipo": "button:button",
+       "zona": "panel_controles"
+      },
+      {
+       "etiqueta": "Con clima y El Niño",
+       "tipo": "button:button",
+       "zona": "panel_controles"
+      },
+      {
+       "etiqueta": "2026-03-10",
+       "tipo": "input:date",
+       "valor": "2026-03-10",
+       "zona": "panel_controles"
+      },
+      {
+       "etiqueta": "Hora del pronóstico",
+       "tipo": "input:range",
+       "valor": "38",
+       "zona": "panel_controles"
+      },
+      {
+       "etiqueta": "Madrugada 03:00",
+       "tipo": "button:button",
+       "zona": "panel_controles"
+      },
+      {
+       "etiqueta": "Mañana 09:00",
+       "tipo": "button:button",
+       "zona": "panel_controles"
+      },
+      {
+       "etiqueta": "Mediodía 12:30",
+       "tipo": "button:button",
+       "zona": "panel_controles"
+      },
+      {
+       "etiqueta": "Tarde 16:00",
+       "tipo": "button:button",
+       "zona": "panel_controles"
+      },
+      {
+       "etiqueta": "Noche 20:00",
+       "tipo": "button:button",
+       "zona": "panel_controles"
+      },
+      {
+       "etiqueta": "Máximo real del día 15:00",
+       "tipo": "button:button",
+       "zona": "panel_controles"
+      },
+      {
+       "etiqueta": "Combinado (recomendado) Base (XGBoost) Híbrido (XGBoost + Simons)",
+       "tipo": "select:select-one",
+       "zona": "panel_controles"
+      },
+      {
+       "etiqueta": "¿Y si mañana hace más calor, o El Niño se calma? Cambia un supuesto y el modelo vuelve a calcular las próximas 24 h desde las 19:00 del 10 mar 2026. Supuesto del proyecto: el COES recibe de ENFEN los pronósticos de clima y de El Niño. El modelo combinado usa solo la demanda, así que el clima y El Niño no lo mueven. Estos escenarios los calcula el modelo Base (XGBoost), con clima y El Niño. Temperatura frente a la esperada −2 °C ±0 °C +2 °C +4 °C El Niño Como se observó Neutro Falla en la red al emitir Como se observó Sin falla Elige un cambio para compararlo con el escenario base. A las 11:00 del 11 de marzo, la hora de mayor demanda de las próximas 24 h, el modelo espera 4,919 MW: 17 MW menos que «la semana pasada a la misma hora». 3,500 4,000 4,500 5,000 01:00 07:00 13:00 19:00 pico 11:00 Real Escenario base Tu escenario y su rango",
+       "tipo": "div",
+       "zona": "#panel-escenarios"
+      },
+      {
+       "etiqueta": "−2 °C",
+       "tipo": "button:button",
+       "zona": "#panel-escenarios"
+      },
+      {
+       "etiqueta": "±0 °C",
+       "tipo": "button:button",
+       "zona": "#panel-escenarios"
+      },
+      {
+       "etiqueta": "+2 °C",
+       "tipo": "button:button",
+       "zona": "#panel-escenarios"
+      },
+      {
+       "etiqueta": "+4 °C",
+       "tipo": "button:button",
+       "zona": "#panel-escenarios"
+      },
+      {
+       "etiqueta": "Como se observó",
+       "tipo": "button:button",
+       "zona": "#panel-escenarios"
+      },
+      {
+       "etiqueta": "Neutro",
+       "tipo": "button:button",
+       "zona": "#panel-escenarios"
+      },
+      {
+       "etiqueta": "Como se observó",
+       "tipo": "button:button",
+       "zona": "#panel-escenarios"
+      },
+      {
+       "etiqueta": "Sin falla",
+       "tipo": "button:button",
+       "zona": "#panel-escenarios"
+      }
+     ]
+    },
+    {
+     "archivo": "vista-2.png",
+     "y": 1240,
+     "textos": [
+      {
+       "t": "Curva",
+       "zona": "que_es"
+      },
+      {
+       "t": "Demanda del SEIN por áreas",
+       "zona": "que_es"
+      },
+      {
+       "t": "Ahora",
+       "zona": "#navPantallas"
+      },
+      {
+       "t": "Confianza",
+       "zona": "#navPantallas"
+      },
+      {
+       "t": "Detalle",
+       "zona": "#navPantallas"
+      },
+      {
+       "t": "Repaso · 10/03/2026, 19:00",
+       "zona": "estado_datos"
+      },
+      {
+       "t": "Pronóstico",
+       "zona": "secciones"
+      },
+      {
+       "t": "Curva",
+       "zona": "secciones"
+      },
+      {
+       "t": "¿Y si…?",
+       "zona": "secciones"
+      },
+      {
+       "t": "Diagnóstico",
+       "zona": "secciones"
+      },
+      {
+       "t": "En vivo",
+       "zona": "secciones"
+      },
+      {
+       "t": "4,977 MW",
+       "zona": "pico"
+      },
+      {
+       "t": "a las 14:30 del miércoles 11 de marzo",
+       "zona": "pico"
+      },
+      {
+       "t": "Rango probable:",
+       "zona": "pico"
+      },
+      {
+       "t": "4,790 – 5,146 MW",
+       "zona": "pico"
+      },
+      {
+       "t": "Mayor subida en una hora",
+       "zona": "pico"
+      },
+      {
+       "t": "+414 MW",
+       "zona": "pico"
+      },
+      {
+       "t": "de las 07:30 a las 08:30 del miércoles 11 de marzo",
+       "zona": "pico"
+      },
+      {
+       "t": "subida habitual",
+       "zona": "pico"
+      },
+      {
+       "t": "¿Acierta la hora? En 2026, la hora del máximo pronosticado de cada día cayó a ±1 h de la del máximo real en",
+       "zona": "pico"
+      },
+      {
+       "t": "61.5 %",
+       "zona": "pico"
+      },
+      {
+       "t": "de los días (288); la referencia simple, en 56.9 %. El valor del máximo se equivocó en promedio",
+       "zona": "pico"
+      },
+      {
+       "t": "84 MW",
+       "zona": "pico"
+      },
+      {
+       "t": "(la referencia, 143 MW).",
+       "zona": "pico"
+      },
+      {
+       "t": "Cada media hora de la ventana es el pronóstico a 24 h emitido 24 h antes, el mismo de la curva: a las 19:00 ya estaban todos emitidos. «Rampa fuerte» es subir más de 497 MW en una hora: la mayor subida del día solo pasó de ahí en el 5 % de los días de 2016 a 2024 en el Centro.",
+       "zona": "pico"
+      },
+      {
+       "t": "¿Qué tan bueno es?",
+       "zona": "#tituloConfianza"
+      },
+      {
+       "t": "Error medio de este día (menos es mejor)",
+       "zona": "#barrasConfianza"
+      },
+      {
+       "t": "Modelo",
+       "zona": "#barrasConfianza"
+      },
+      {
+       "t": "31.1 MW",
+       "zona": "#barrasConfianza"
+      },
+      {
+       "t": "Referencia: semana pasada, misma hora",
+       "zona": "#barrasConfianza"
+      },
+      {
+       "t": "65.9 MW",
+       "zona": "#barrasConfianza"
+      },
+      {
+       "t": "Rango probable:",
+       "zona": "#listaConfianza"
+      },
+      {
+       "t": "la demanda real cayó dentro en",
+       "zona": "#listaConfianza"
+      },
+      {
+       "t": "48",
+       "zona": "#listaConfianza"
+      },
+      {
+       "t": "de",
+       "zona": "#listaConfianza"
+      },
+      {
+       "t": "48",
+       "zona": "#listaConfianza"
+      },
+      {
+       "t": "medias horas del día (se espera alrededor de 9 de cada 10).",
+       "zona": "#listaConfianza"
+      },
+      {
+       "t": "En toda la prueba de 2026",
+       "zona": "#listaConfianza"
+      },
+      {
+       "t": "(a 24 h, solo con la demanda): error medio",
+       "zona": "#listaConfianza"
+      },
+      {
+       "t": "71.9 MW",
+       "zona": "#listaConfianza"
+      },
+      {
+       "t": "(",
+       "zona": "#listaConfianza"
+      },
+      {
+       "t": "1.7 %",
+       "zona": "#listaConfianza"
+      },
+      {
+       "t": "). Mes a mes, en «Diagnóstico».",
+       "zona": "#listaConfianza"
+      },
+      {
+       "t": "Referencia simple:",
+       "zona": "#listaConfianza"
+      },
+      {
+       "t": "la mejor de tres reglas sin modelo (el último dato, ayer o la semana pasada a la misma hora). Es la vara mínima que el modelo debe superar.",
+       "zona": "#listaConfianza"
+      },
+      {
+       "t": "01:00",
+       "zona": "#graficoEscenario"
+      },
+      {
+       "t": "07:00",
+       "zona": "#graficoEscenario"
+      },
+      {
+       "t": "13:00",
+       "zona": "#graficoEscenario"
+      },
+      {
+       "t": "19:00",
+       "zona": "#graficoEscenario"
+      },
+      {
+       "t": "Real",
+       "zona": "#panel-escenarios"
+      },
+      {
+       "t": "Escenario base",
+       "zona": "#panel-escenarios"
+      },
+      {
+       "t": "Tu escenario y su rango",
+       "zona": "#panel-escenarios"
+      }
+     ],
+     "controles": [
+      {
+       "etiqueta": "Curva, demanda del SEIN por áreas: ir a «Ahora»",
+       "tipo": "a",
+       "zona": "que_es"
+      },
+      {
+       "etiqueta": "Ahora",
+       "tipo": "a",
+       "zona": "#navPantallas"
+      },
+      {
+       "etiqueta": "Confianza",
+       "tipo": "a",
+       "zona": "#navPantallas"
+      },
+      {
+       "etiqueta": "Detalle",
+       "tipo": "a",
+       "zona": "#navPantallas"
+      },
+      {
+       "etiqueta": "Modelo y datos: la ficha técnica",
+       "tipo": "button:button",
+       "zona": "#btnFicha"
+      },
+      {
+       "etiqueta": "Cambiar a modo oscuro",
+       "tipo": "button:button",
+       "zona": "#btnTema"
+      },
+      {
+       "etiqueta": "Pronóstico",
+       "tipo": "button:button",
+       "zona": "secciones"
+      },
+      {
+       "etiqueta": "Curva",
+       "tipo": "button:button",
+       "zona": "secciones"
+      },
+      {
+       "etiqueta": "¿Y si…?",
+       "tipo": "button:button",
+       "zona": "secciones"
+      },
+      {
+       "etiqueta": "Diagnóstico",
+       "tipo": "button:button",
+       "zona": "secciones"
+      },
+      {
+       "etiqueta": "En vivo",
+       "tipo": "button:button",
+       "zona": "secciones"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "pantalla": "escenario-2c",
+   "alto": 2969,
+   "vistas": [
+    {
+     "archivo": "vista-1.png",
+     "y": 582,
+     "textos": [
+      {
+       "t": "Curva",
+       "zona": "que_es"
+      },
+      {
+       "t": "Demanda del SEIN por áreas",
+       "zona": "que_es"
+      },
+      {
+       "t": "Ahora",
+       "zona": "#navPantallas"
+      },
+      {
+       "t": "Confianza",
+       "zona": "#navPantallas"
+      },
+      {
+       "t": "Detalle",
+       "zona": "#navPantallas"
+      },
+      {
+       "t": "Repaso · 10/03/2026, 19:00",
+       "zona": "estado_datos"
+      },
+      {
+       "t": "Pronóstico",
+       "zona": "secciones"
+      },
+      {
+       "t": "Curva",
+       "zona": "secciones"
+      },
+      {
+       "t": "¿Y si…?",
+       "zona": "secciones"
+      },
+      {
+       "t": "Diagnóstico",
+       "zona": "secciones"
+      },
+      {
+       "t": "En vivo",
+       "zona": "secciones"
+      },
+      {
+       "t": "1 hora",
+       "zona": "panel_controles"
+      },
+      {
+       "t": "24 horas",
+       "zona": "panel_controles"
+      },
+      {
+       "t": "Datos que usa",
+       "zona": "panel_controles"
+      },
+      {
+       "t": "Solo demanda",
+       "zona": "panel_controles"
+      },
+      {
+       "t": "Con clima y El Niño",
+       "zona": "panel_controles"
+      },
+      {
+       "t": "Este modelo usa solo la demanda: no distingue clima ni El Niño.",
+       "zona": "panel_controles"
+      },
+      {
+       "t": "Día",
+       "zona": "panel_controles"
+      },
+      {
+       "t": "martes 10 de marzo de 2026 (10/03/2026)",
+       "zona": "panel_controles"
+      },
+      {
+       "t": "Hora",
+       "zona": "panel_controles"
+      },
+      {
+       "t": "19:00",
+       "zona": "panel_controles"
+      },
+      {
+       "t": "00:00",
+       "zona": "panel_controles"
+      },
+      {
+       "t": "06:00",
+       "zona": "panel_controles"
+      },
+      {
+       "t": "12:00",
+       "zona": "panel_controles"
+      },
+      {
+       "t": "18:00",
+       "zona": "panel_controles"
+      },
+      {
+       "t": "23:30",
+       "zona": "panel_controles"
+      },
+      {
+       "t": "Madrugada",
+       "zona": "panel_controles"
+      },
+      {
+       "t": "03:00",
+       "zona": "panel_controles"
+      },
+      {
+       "t": "Mañana",
+       "zona": "panel_controles"
+      },
+      {
+       "t": "09:00",
+       "zona": "panel_controles"
+      },
+      {
+       "t": "Mediodía",
+       "zona": "panel_controles"
+      },
+      {
+       "t": "12:30",
+       "zona": "panel_controles"
+      },
+      {
+       "t": "Tarde",
+       "zona": "panel_controles"
+      },
+      {
+       "t": "16:00",
+       "zona": "panel_controles"
+      },
+      {
+       "t": "Noche",
+       "zona": "panel_controles"
+      },
+      {
+       "t": "20:00",
+       "zona": "panel_controles"
+      },
+      {
+       "t": "Máximo real del día",
+       "zona": "panel_controles"
+      },
+      {
+       "t": "15:00",
+       "zona": "panel_controles"
+      },
+      {
+       "t": "Modelo",
+       "zona": "panel_controles"
+      },
+      {
+       "t": "Recomendado: mezcla el híbrido con un segundo modelo fundacional (Chronos-2) ajustado a estas series con datos hasta 2024. Es el de menor error en 2026. Usa solo la demanda.",
+       "zona": "panel_controles"
+      },
+      {
+       "t": "Máximo y mayor subida de las próximas 24 h",
+       "zona": "pico"
+      },
+      {
+       "t": "Si se emite a las 19:00 del martes 10 de marzo: de las 19:30 del martes 10 de marzo a las 19:00 del miércoles 11 de marzo, con el pronóstico a 24 h del modelo combinado.",
+       "zona": "pico"
+      },
+      {
+       "t": "Máximo",
+       "zona": "pico"
+      },
+      {
+       "t": "¿Y si mañana hace más calor, o El Niño se calma?",
+       "zona": "#panel-escenarios"
+      },
+      {
+       "t": "Cambia un supuesto y el modelo vuelve a calcular las próximas 24 h desde las 19:00 del 10 mar 2026. Supuesto del proyecto: el COES recibe de ENFEN los pronósticos de clima y de El Niño.",
+       "zona": "#panel-escenarios"
+      },
+      {
+       "t": "El modelo combinado usa solo la demanda, así que el clima y El Niño no lo mueven. Estos escenarios los calcula el modelo Base (XGBoost), con clima y El Niño.",
+       "zona": "#panel-escenarios"
+      },
+      {
+       "t": "Temperatura frente a la esperada",
+       "zona": "#lblTemp"
+      },
+      {
+       "t": "−2 °C",
+       "zona": "#panel-escenarios"
+      },
+      {
+       "t": "±0 °C",
+       "zona": "#panel-escenarios"
+      },
+      {
+       "t": "+2 °C",
+       "zona": "#panel-escenarios"
+      },
+      {
+       "t": "+4 °C",
+       "zona": "#panel-escenarios"
+      },
+      {
+       "t": "El Niño",
+       "zona": "#lblNino"
+      },
+      {
+       "t": "Como se observó",
+       "zona": "#panel-escenarios"
+      },
+      {
+       "t": "Neutro",
+       "zona": "#panel-escenarios"
+      },
+      {
+       "t": "Falla en la red al emitir",
+       "zona": "#lblFalla"
+      },
+      {
+       "t": "Como se observó",
+       "zona": "#panel-escenarios"
+      },
+      {
+       "t": "Sin falla",
+       "zona": "#panel-escenarios"
+      },
+      {
+       "t": "Si hiciera 2 °C más de lo pronosticado, a las 11:00 del 11 de marzo (la hora de mayor demanda) el modelo espera 4,934 MW: 15 MW más que en el escenario base (+0.3 %). El mayor cambio es a las 15:30: +25 MW.",
+       "zona": "#fraseEscenario"
+      },
+      {
+       "t": "4,000",
+       "zona": "#graficoEscenario"
+      },
+      {
+       "t": "5,000",
+       "zona": "#graficoEscenario"
+      },
+      {
+       "t": "pico 11:00",
+       "zona": "#graficoEscenario"
+      }
+     ],
+     "controles": [
+      {
+       "etiqueta": "Curva, demanda del SEIN por áreas: ir a «Ahora»",
+       "tipo": "a",
+       "zona": "que_es"
+      },
+      {
+       "etiqueta": "Ahora",
+       "tipo": "a",
+       "zona": "#navPantallas"
+      },
+      {
+       "etiqueta": "Confianza",
+       "tipo": "a",
+       "zona": "#navPantallas"
+      },
+      {
+       "etiqueta": "Detalle",
+       "tipo": "a",
+       "zona": "#navPantallas"
+      },
+      {
+       "etiqueta": "Modelo y datos: la ficha técnica",
+       "tipo": "button:button",
+       "zona": "#btnFicha"
+      },
+      {
+       "etiqueta": "Cambiar a modo oscuro",
+       "tipo": "button:button",
+       "zona": "#btnTema"
+      },
+      {
+       "etiqueta": "Pronóstico",
+       "tipo": "button:button",
+       "zona": "secciones"
+      },
+      {
+       "etiqueta": "Curva",
+       "tipo": "button:button",
+       "zona": "secciones"
+      },
+      {
+       "etiqueta": "¿Y si…?",
+       "tipo": "button:button",
+       "zona": "secciones"
+      },
+      {
+       "etiqueta": "Diagnóstico",
+       "tipo": "button:button",
+       "zona": "secciones"
+      },
+      {
+       "etiqueta": "En vivo",
+       "tipo": "button:button",
+       "zona": "secciones"
+      },
+      {
+       "etiqueta": "1 hora",
+       "tipo": "button:button",
+       "zona": "panel_controles"
+      },
+      {
+       "etiqueta": "24 horas",
+       "tipo": "button:button",
+       "zona": "panel_controles"
+      },
+      {
+       "etiqueta": "Solo demanda",
+       "tipo": "button:button",
+       "zona": "panel_controles"
+      },
+      {
+       "etiqueta": "Con clima y El Niño",
+       "tipo": "button:button",
+       "zona": "panel_controles"
+      },
+      {
+       "etiqueta": "2026-03-10",
+       "tipo": "input:date",
+       "valor": "2026-03-10",
+       "zona": "panel_controles"
+      },
+      {
+       "etiqueta": "Hora del pronóstico",
+       "tipo": "input:range",
+       "valor": "38",
+       "zona": "panel_controles"
+      },
+      {
+       "etiqueta": "Madrugada 03:00",
+       "tipo": "button:button",
+       "zona": "panel_controles"
+      },
+      {
+       "etiqueta": "Mañana 09:00",
+       "tipo": "button:button",
+       "zona": "panel_controles"
+      },
+      {
+       "etiqueta": "Mediodía 12:30",
+       "tipo": "button:button",
+       "zona": "panel_controles"
+      },
+      {
+       "etiqueta": "Tarde 16:00",
+       "tipo": "button:button",
+       "zona": "panel_controles"
+      },
+      {
+       "etiqueta": "Noche 20:00",
+       "tipo": "button:button",
+       "zona": "panel_controles"
+      },
+      {
+       "etiqueta": "Máximo real del día 15:00",
+       "tipo": "button:button",
+       "zona": "panel_controles"
+      },
+      {
+       "etiqueta": "Combinado (recomendado) Base (XGBoost) Híbrido (XGBoost + Simons)",
+       "tipo": "select:select-one",
+       "zona": "panel_controles"
+      },
+      {
+       "etiqueta": "¿Y si mañana hace más calor, o El Niño se calma? Cambia un supuesto y el modelo vuelve a calcular las próximas 24 h desde las 19:00 del 10 mar 2026. Supuesto del proyecto: el COES recibe de ENFEN los pronósticos de clima y de El Niño. El modelo combinado usa solo la demanda, así que el clima y El Niño no lo mueven. Estos escenarios los calcula el modelo Base (XGBoost), con clima y El Niño. Temperatura frente a la esperada −2 °C ±0 °C +2 °C +4 °C El Niño Como se observó Neutro Falla en la red al emitir Como se observó Sin falla Si hiciera 2 °C más de lo pronosticado, a las 11:00 del 11 de marzo (la hora de mayor demanda) el modelo espera 4,934 MW: 15 MW más que en el escenario base (+0.3 %). El mayor cambio es a las 15:30: +25 MW. 4,000 5,000 01:00 07:00 13:00 19:00 pico 11:00 Real Escenario base Tu escenario y su rango",
+       "tipo": "div",
+       "zona": "#panel-escenarios"
+      },
+      {
+       "etiqueta": "−2 °C",
+       "tipo": "button:button",
+       "zona": "#panel-escenarios"
+      },
+      {
+       "etiqueta": "±0 °C",
+       "tipo": "button:button",
+       "zona": "#panel-escenarios"
+      },
+      {
+       "etiqueta": "+2 °C",
+       "tipo": "button:button",
+       "zona": "#panel-escenarios"
+      },
+      {
+       "etiqueta": "+4 °C",
+       "tipo": "button:button",
+       "zona": "#panel-escenarios"
+      },
+      {
+       "etiqueta": "Como se observó",
+       "tipo": "button:button",
+       "zona": "#panel-escenarios"
+      },
+      {
+       "etiqueta": "Neutro",
+       "tipo": "button:button",
+       "zona": "#panel-escenarios"
+      },
+      {
+       "etiqueta": "Como se observó",
+       "tipo": "button:button",
+       "zona": "#panel-escenarios"
+      },
+      {
+       "etiqueta": "Sin falla",
+       "tipo": "button:button",
+       "zona": "#panel-escenarios"
+      }
+     ]
+    },
+    {
+     "archivo": "vista-2.png",
+     "y": 1250,
+     "textos": [
+      {
+       "t": "Curva",
+       "zona": "que_es"
+      },
+      {
+       "t": "Demanda del SEIN por áreas",
+       "zona": "que_es"
+      },
+      {
+       "t": "Ahora",
+       "zona": "#navPantallas"
+      },
+      {
+       "t": "Confianza",
+       "zona": "#navPantallas"
+      },
+      {
+       "t": "Detalle",
+       "zona": "#navPantallas"
+      },
+      {
+       "t": "Repaso · 10/03/2026, 19:00",
+       "zona": "estado_datos"
+      },
+      {
+       "t": "Pronóstico",
+       "zona": "secciones"
+      },
+      {
+       "t": "Curva",
+       "zona": "secciones"
+      },
+      {
+       "t": "¿Y si…?",
+       "zona": "secciones"
+      },
+      {
+       "t": "Diagnóstico",
+       "zona": "secciones"
+      },
+      {
+       "t": "En vivo",
+       "zona": "secciones"
+      },
+      {
+       "t": "4,977 MW",
+       "zona": "pico"
+      },
+      {
+       "t": "a las 14:30 del miércoles 11 de marzo",
+       "zona": "pico"
+      },
+      {
+       "t": "Rango probable:",
+       "zona": "pico"
+      },
+      {
+       "t": "4,790 – 5,146 MW",
+       "zona": "pico"
+      },
+      {
+       "t": "Mayor subida en una hora",
+       "zona": "pico"
+      },
+      {
+       "t": "+414 MW",
+       "zona": "pico"
+      },
+      {
+       "t": "de las 07:30 a las 08:30 del miércoles 11 de marzo",
+       "zona": "pico"
+      },
+      {
+       "t": "subida habitual",
+       "zona": "pico"
+      },
+      {
+       "t": "¿Acierta la hora? En 2026, la hora del máximo pronosticado de cada día cayó a ±1 h de la del máximo real en",
+       "zona": "pico"
+      },
+      {
+       "t": "61.5 %",
+       "zona": "pico"
+      },
+      {
+       "t": "de los días (288); la referencia simple, en 56.9 %. El valor del máximo se equivocó en promedio",
+       "zona": "pico"
+      },
+      {
+       "t": "84 MW",
+       "zona": "pico"
+      },
+      {
+       "t": "(la referencia, 143 MW).",
+       "zona": "pico"
+      },
+      {
+       "t": "Cada media hora de la ventana es el pronóstico a 24 h emitido 24 h antes, el mismo de la curva: a las 19:00 ya estaban todos emitidos. «Rampa fuerte» es subir más de 497 MW en una hora: la mayor subida del día solo pasó de ahí en el 5 % de los días de 2016 a 2024 en el Centro.",
+       "zona": "pico"
+      },
+      {
+       "t": "¿Qué tan bueno es?",
+       "zona": "#tituloConfianza"
+      },
+      {
+       "t": "Error medio de este día (menos es mejor)",
+       "zona": "#barrasConfianza"
+      },
+      {
+       "t": "Modelo",
+       "zona": "#barrasConfianza"
+      },
+      {
+       "t": "31.1 MW",
+       "zona": "#barrasConfianza"
+      },
+      {
+       "t": "Referencia: semana pasada, misma hora",
+       "zona": "#barrasConfianza"
+      },
+      {
+       "t": "65.9 MW",
+       "zona": "#barrasConfianza"
+      },
+      {
+       "t": "Rango probable:",
+       "zona": "#listaConfianza"
+      },
+      {
+       "t": "la demanda real cayó dentro en",
+       "zona": "#listaConfianza"
+      },
+      {
+       "t": "48",
+       "zona": "#listaConfianza"
+      },
+      {
+       "t": "de",
+       "zona": "#listaConfianza"
+      },
+      {
+       "t": "48",
+       "zona": "#listaConfianza"
+      },
+      {
+       "t": "medias horas del día (se espera alrededor de 9 de cada 10).",
+       "zona": "#listaConfianza"
+      },
+      {
+       "t": "En toda la prueba de 2026",
+       "zona": "#listaConfianza"
+      },
+      {
+       "t": "(a 24 h, solo con la demanda): error medio",
+       "zona": "#listaConfianza"
+      },
+      {
+       "t": "71.9 MW",
+       "zona": "#listaConfianza"
+      },
+      {
+       "t": "(",
+       "zona": "#listaConfianza"
+      },
+      {
+       "t": "1.7 %",
+       "zona": "#listaConfianza"
+      },
+      {
+       "t": "). Mes a mes, en «Diagnóstico».",
+       "zona": "#listaConfianza"
+      },
+      {
+       "t": "Referencia simple:",
+       "zona": "#listaConfianza"
+      },
+      {
+       "t": "la mejor de tres reglas sin modelo (el último dato, ayer o la semana pasada a la misma hora). Es la vara mínima que el modelo debe superar.",
+       "zona": "#listaConfianza"
+      },
+      {
+       "t": "Real",
+       "zona": "#panel-escenarios"
+      },
+      {
+       "t": "Escenario base",
+       "zona": "#panel-escenarios"
+      },
+      {
+       "t": "Tu escenario y su rango",
+       "zona": "#panel-escenarios"
+      }
+     ],
+     "controles": [
+      {
+       "etiqueta": "Curva, demanda del SEIN por áreas: ir a «Ahora»",
+       "tipo": "a",
+       "zona": "que_es"
+      },
+      {
+       "etiqueta": "Ahora",
+       "tipo": "a",
+       "zona": "#navPantallas"
+      },
+      {
+       "etiqueta": "Confianza",
+       "tipo": "a",
+       "zona": "#navPantallas"
+      },
+      {
+       "etiqueta": "Detalle",
+       "tipo": "a",
+       "zona": "#navPantallas"
+      },
+      {
+       "etiqueta": "Modelo y datos: la ficha técnica",
+       "tipo": "button:button",
+       "zona": "#btnFicha"
+      },
+      {
+       "etiqueta": "Cambiar a modo oscuro",
+       "tipo": "button:button",
+       "zona": "#btnTema"
+      },
+      {
+       "etiqueta": "Pronóstico",
+       "tipo": "button:button",
+       "zona": "secciones"
+      },
+      {
+       "etiqueta": "Curva",
+       "tipo": "button:button",
+       "zona": "secciones"
+      },
+      {
+       "etiqueta": "¿Y si…?",
+       "tipo": "button:button",
+       "zona": "secciones"
+      },
+      {
+       "etiqueta": "Diagnóstico",
+       "tipo": "button:button",
+       "zona": "secciones"
+      },
+      {
+       "etiqueta": "En vivo",
+       "tipo": "button:button",
+       "zona": "secciones"
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "oraculos": {
+  "lectura": {
+   "hoy": {
+    "momento": "2026-11-12T23:30",
+    "modo": "en_vivo",
+    "cifra": [
+     4456.4
+    ],
+    "pronostico": [
+     4383.7
+    ],
+    "inferior": [
+     4281.6
+    ],
+    "superior": [
+     4475.5
+    ],
+    "real": [
+     4456.4
+    ]
+   },
+   "repaso-1030": {
+    "momento": "2026-03-10T10:30",
+    "modo": "repaso",
+    "cifra": [
+     4910.1
+    ],
+    "pronostico": [
+     4915.9
+    ],
+    "inferior": [
+     4731.6
+    ],
+    "superior": [
+     5083.4
+    ],
+    "real": [
+     4910.1
+    ]
+   },
+   "repaso-1900": {
+    "momento": "2026-03-10T19:00",
+    "modo": "repaso",
+    "cifra": [
+     4784.4
+    ],
+    "pronostico": [
+     4766.8
+    ],
+    "inferior": [
+     4588.1
+    ],
+    "superior": [
+     4929.2
+    ],
+    "real": [
+     4784.4
+    ]
+   }
+  },
+  "t1": {
+   "pronostico": [
+    "4,767"
+   ],
+   "intervalo inferior": [
+    "4,588"
+   ],
+   "intervalo superior": [
+    "4,929"
+   ],
+   "real": [
+    "4,784"
+   ]
+  },
+  "t2": {
+   "error": [
+    70.3,
+    70.1,
+    86.1,
+    80.6,
+    78.6,
+    60.7,
+    69.9,
+    60.6,
+    66,
+    79.1,
+    71.9,
+    1.66,
+    1.64
+   ],
+   "referencia": [
+    167.2,
+    96.2,
+    178.1,
+    172.3,
+    145.4,
+    88.4,
+    139.8,
+    126.7,
+    94.2,
+    147.3,
+    135.4
+   ],
+   "mejor_que_referencia": true
+  },
+  "t3": {
+   "cambio del escenario": [
+    "15 MW",
+    "4,934"
+   ]
+  },
+  "t4": {
+   "régimen": [
+    "Niño moderado"
+   ],
+   "error": [
+    "80.6"
+   ]
+  }
+ }
+}
