@@ -13,7 +13,7 @@ Informe: `temperatura-pronosticada-2026-11.md` (fuera del repo, en la carpeta pe
 | `fuente.py` | Umbral de cada área con 2016–2024 y elección de la fuente con 2025 | Local |
 | `comun.py` | Variables de temperatura de cada origen: edición vigente, nivel ERA5, grados sobre el umbral | Local |
 | `apilar_temperatura.py` | (a) XGBoost híbrido con Simons + temperatura (observada, mixta o solo grados) | Colab (L4, ~1 min) |
-| `chronos_cdd.py` | (c) Chronos-2 reajustado con feriados + grados sobre el umbral como covariable futura | Colab (A100, ~30 min de ajuste y ~60 de pronóstico) |
+| `chronos_cdd.py` | (c) Chronos-2 reajustado con feriados + grados sobre el umbral como covariable futura. **No tiene resultados:** la sesión de Colab se cayó antes de terminar | Colab (A100, ~30 min de ajuste y ~60 de pronóstico) |
 | `correccion.py` | (b) Corrección monótona sobre Chronos-2 ajustado: fija (errores zero-shot 2016–2024) o en línea (errores desde 2025) | Local |
 | `panel.py`, `evaluar.py` | Panel de 2025, 2026 y en vivo; pico diario, días cálidos e IC por semanas | Local |
 | `graficos.py` | Los cuatro gráficos del informe | Local |

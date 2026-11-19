@@ -19,13 +19,12 @@ from experimentos.temperatura import comun as c
 SUPERFICIE, TEXTO, TEXTO2, REJILLA = "#fcfcfb", "#0b0b0b", "#52514e", "#e4e3df"
 AZUL, NARANJA, AGUA, GRIS = "#2a78d6", "#eb6834", "#1baf7a", "#8a8984"
 TRAMOS = {"2025": AZUL, "2026": NARANJA, "vivo": AGUA}
-NOMBRE_TRAMO = {"2025": "2025 (validación)", "2026": "2026 (prueba)", "vivo": "En vivo (23-oct → 17-nov)"}
+NOMBRE_TRAMO = {"2025": "2025 (validación)", "2026": "2026 (prueba)", "vivo": "En vivo (23-oct → 18-nov)"}
 CANDIDATOS = [  # (modelo, base, etiqueta)
-    ("c2linea_tp_cdd", "c2", "Chronos-2 + corrección en línea\n(grados sobre 23 °C)"),
-    ("c2fija_tp_cdd", "c2", "Chronos-2 + corrección fija\n(errores zero-shot 2016–2024)"),
-    ("c2cdd", "c2", "Chronos-2 reajustado con\nlos grados como covariable"),
-    ("xgb_s_tobs", "xgb_s", "XGBoost + Simons + temperatura\n(frente a XGBoost + Simons)"),
-    ("comb_tmix", "c2", "Combinación con el XGBoost\ncon temperatura"),
+    ("c2linea_tp_cdd", "c2", "Chronos-2 + corrección en línea"),
+    ("c2fija_tp_cdd", "c2", "Chronos-2 + corrección fija"),
+    ("xgb_s_tobs", "xgb_s", "XGB + temp. (vs. XGB sin temp.)"),
+    ("comb_tmix", "c2", "Combinación con XGB + temp."),
 ]
 
 
@@ -70,16 +69,16 @@ def pico_dias_calidos(comp, destino):
                     solid_capstyle="round")
             ax.plot(f["d_error_pico_abs"], yy, "o", color=color, markersize=8, markeredgecolor=SUPERFICIE,
                     markeredgewidth=2, label=NOMBRE_TRAMO[tramo] if y == 0 else None)
-        etiquetas.append(f"{etiqueta.splitlines()[0]}\n{'10 %' if sub == 'top10' else '20 %'} más cálidos")
+        etiquetas.append(f"{etiqueta}\n{'10 %' if sub == 'top10' else '20 %'} de días más cálidos")
         posiciones.append(y)
         y += 1
     ax.axvline(0, color=TEXTO2, linewidth=1)
     ax.set_yticks(posiciones, etiquetas, fontsize=8.5, color=TEXTO)
     ax.invert_yaxis()
     ax.set_xlabel("Cambio en el error absoluto del pico diario (MW); negativo = mejora", color=TEXTO2, fontsize=9)
-    ax.set_title("Pico del Centro a 24 h en los días más cálidos: cambio frente a la base, con IC 95 % por semanas",
+    ax.set_title("Pico del Centro a 24 h en los días más cálidos: cambio frente a la base (IC 95 %)",
                  color=TEXTO, fontsize=11, loc="left")
-    ax.legend(frameon=False, fontsize=9, loc="lower left", labelcolor=TEXTO)
+    ax.legend(frameon=False, fontsize=9, loc="upper right", labelcolor=TEXTO)
     fig.tight_layout()
     fig.savefig(destino / "1_pico_dias_calidos.png", dpi=150)
     plt.close(fig)
@@ -107,7 +106,7 @@ def vivo_pico(d, destino, temp_pron):
     ax2.axhline(c.UMBRAL["centro"], color=TEXTO2, linewidth=1, linestyle="--")
     ax2.text(real.index[0], c.UMBRAL["centro"] + 0.1, "umbral 23 °C", color=TEXTO2, fontsize=8, va="bottom")
     ax2.set_ylabel("°C", color=TEXTO2, fontsize=9)
-    ax2.legend(frameon=False, fontsize=8.5, loc="lower right", labelcolor=TEXTO)
+    ax2.legend(frameon=False, fontsize=8.5, loc="upper left", labelcolor=TEXTO)
     ax2.xaxis.set_major_formatter(mdates.DateFormatter("%d-%b"))
     fig.tight_layout()
     fig.savefig(destino / "2_vivo_pico_diario.png", dpi=150)
@@ -129,8 +128,8 @@ def temperatura(destino):
     ax.plot(p.index, p.rolling(3, center=True, min_periods=1).mean(), color=NARANJA, linewidth=1.6,
             label="Pronosticada con 2 días de antelación")
     ax.axhline(c.UMBRAL["centro"], color=TEXTO2, linewidth=1, linestyle="--")
-    ax.text(desde, c.UMBRAL["centro"] + 0.15, "umbral de enfriamiento: 23 °C (estimado con 2016–2024)", color=TEXTO2,
-            fontsize=8, va="bottom")
+    ax.text(pd.Timestamp("2024-06-15"), c.UMBRAL["centro"] + 0.15, "umbral de enfriamiento: 23 °C (estimado con "
+            "2016–2024)", color=TEXTO2, fontsize=8, va="bottom")
     for x0, x1, nombre in (("2025-01-01", "2026-01-01", "validación"), ("2026-01-01", "2026-10-23", "prueba")):
         ax.axvspan(pd.Timestamp(x0), pd.Timestamp(x1), color=REJILLA, alpha=0.35 if nombre == "validación" else 0.15,
                    linewidth=0)
@@ -160,15 +159,18 @@ def contrapartida(d, destino):
             pos = np.arange(len(TRAMOS)) + (k - 0.5) * ancho
             ax.bar(pos, valores, width=ancho - 0.04, color=color, label=nombre)
             for xx, v in zip(pos, valores, strict=True):
-                ax.text(xx, v + (2 if v >= 0 else -2), f"{v:+.0f}" if metrica != "mae" else f"{v:.0f}",
-                        ha="center", va="bottom" if v >= 0 else "top", fontsize=7.5, color=TEXTO)
+                ax.text(xx, v, f"{v:+.0f}" if metrica != "mae" else f"{v:.0f}", ha="center",
+                        va="bottom" if v >= 0 else "top", fontsize=7.5, color=TEXTO)
+        bajo, alto = ax.get_ylim()
+        ax.set_ylim(bajo - 0.12 * (alto - bajo) if bajo < 0 else bajo, alto + 0.12 * (alto - bajo))
         ax.axhline(0, color=TEXTO2, linewidth=1)
         ax.set_xticks(np.arange(len(TRAMOS)), ["2025", "2026", "En vivo"], fontsize=9, color=TEXTO)
         ax.set_title(nombres[metrica], color=TEXTO, fontsize=9.5, loc="left")
-    ejes[0].legend(frameon=False, fontsize=8.5, loc="lower left", labelcolor=TEXTO)
-    fig.suptitle("Centro a 24 h, 20 % de días más cálidos (en vivo, todos): la corrección acerca el pico y sube el día",
-                 color=TEXTO, fontsize=10.5, x=0.01, ha="left")
-    fig.tight_layout()
+    manijas, nombres_l = ejes[0].get_legend_handles_labels()
+    fig.legend(manijas, nombres_l, frameon=False, fontsize=8.5, loc="upper right", labelcolor=TEXTO, ncol=2)
+    fig.suptitle("Centro a 24 h, 20 % de días más cálidos (en vivo, todos)", color=TEXTO, fontsize=10.5, x=0.01,
+                 ha="left")
+    fig.tight_layout(rect=(0, 0, 1, 0.93))
     fig.savefig(destino / "4_contrapartida.png", dpi=150)
     plt.close(fig)
 

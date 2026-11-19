@@ -14,8 +14,8 @@ después. En el origen t se usa la **edición vigente**: el menor N ≥ 1 ya pub
 en X − 1) es el desfase 2 desde las 07:00 de X − 1 y el 3 antes; a 1 h, el 1 desde las 07:00 de X y el 2 antes. Lo que
 usa la regla ya está asentado cuando se emite, así que consultar el archivo después da los mismos valores.
 
-**Nivel.** ERA5 (la temperatura del proyecto, con la que se estimó el umbral) queda ~0.5 °C sobre GFS en Lima. El
-pronóstico se lleva al nivel de ERA5 con la diferencia media por desfase, área, mes y hora, solo con fechas < 2025.
+**Nivel.** ERA5 (la temperatura del proyecto, con la que se estimó el umbral) y GFS no tienen el mismo nivel: en Lima,
+GFS queda ~0.5 °C más cálido en verano y hasta 1.3 °C más frío en invierno. El pronóstico se lleva al nivel de ERA5 con la diferencia media por desfase, área, mes y hora, solo con fechas < 2025.
 
 **Corrección por calor** (`chronos2ftcal+calor`): pronóstico × (1 + β_b · grados), con los grados de la media diaria
 pronosticada sobre el umbral del área en el día objetivo y un β ≥ 0 por bloque de horas, reestimado cada día con los

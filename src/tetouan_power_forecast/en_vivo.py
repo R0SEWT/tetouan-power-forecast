@@ -47,6 +47,7 @@ Uso, con el entorno que tiene Chronos-2 (`experimentos/en_vivo/entorno.sh`):
 
     python -m tetouan_power_forecast.en_vivo diario      # ingesta → pronóstico → evaluación
     python -m tetouan_power_forecast.en_vivo relleno     # lo mismo, sin emitir el día de hoy
+    python -m tetouan_power_forecast.en_vivo calor       # solo el modelo en paralelo «+calor»
 """
 
 import argparse
@@ -903,7 +904,8 @@ def _configurar_log(r):
 
 def main(argv=None):
     parser = argparse.ArgumentParser(prog="python -m tetouan_power_forecast.en_vivo", description=__doc__.split("\n")[0])
-    parser.add_argument("comando", choices=["diario", "relleno", "ingesta", "pronostico", "evaluacion", "verificar"])
+    parser.add_argument("comando", choices=["diario", "relleno", "ingesta", "pronostico", "calor", "evaluacion",
+                                            "verificar"])
     parser.add_argument("--raiz", help="carpeta de datos (por defecto TETOUAN_DATA)")
     parser.add_argument("--pesos", help=f"carpeta de Chronos-2 ajustado (por defecto {PESOS_CHRONOS})")
     parser.add_argument("--revisar", type=int, default=2, help="días anteriores a revisar por correcciones del COES")
@@ -934,6 +936,9 @@ def _ejecutar(args, r):
         return SIN_PUBLICAR if resultado["faltante"] else 0
     if args.comando == "pronostico":
         emitir(r, modelo, desde=args.desde, progreso=log.info)
+        return 0
+    if args.comando == "calor":  # solo el modelo en paralelo, con lo que el base ya registró
+        emitir_calor(r, ChronosAjustado.nombre, hoy=args.hoy, progreso=log.info)
         return 0
     if args.comando == "evaluacion":
         _, resumen = evaluar(r, log.info)

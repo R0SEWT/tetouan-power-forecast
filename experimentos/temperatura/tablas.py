@@ -37,6 +37,29 @@ def principal(comp, base="c2", area="CENTRO", horizonte="24h"):
     return "\n".join(lineas)
 
 
+def por_area(comp, modelos=("c2linea_tp_cdd", "xgb_s_tobs"), base=None):
+    """El pico en los días cálidos para cada área y horizonte (cada modelo frente a su base)."""
+    from experimentos.temperatura.evaluar import BASE
+
+    lineas = ["| Modelo | Horizonte | Área | 2025: 10 % / 20 % | 2026: 10 % / 20 % | En vivo: 10 % / 20 % |",
+              "|---|---|---|---|---|---|"]
+    for m in modelos:
+        b = base or BASE[m]
+        for h in ("24h", "1h"):
+            for a in ("CENTRO", "NORTE", "SUR"):
+                celdas = []
+                for t in TRAMOS:
+                    f = comp[(comp["modelo"] == m) & (comp["base"] == b) & (comp["tramo"] == t) & (comp["horizonte"] == h)
+                             & (comp["area"] == a)]
+                    if f.empty:
+                        celdas.append("—")
+                        continue
+                    x = {sub: f[f["subconjunto"] == sub].iloc[0] for sub in ("top10", "top20")}
+                    celdas.append(f"{_ic(x['top10'], 'error_pico_abs')} / {_ic(x['top20'], 'error_pico_abs')}")
+                lineas.append(f"| {NOMBRES.get(m, m)} | {h} | {a.capitalize()} | " + " | ".join(celdas) + " |")
+    return "\n".join(lineas)
+
+
 def guardas(comp, modelo, base="c2"):
     sel = comp[(comp["modelo"] == modelo) & (comp["base"] == base)]
     lineas = ["| Tramo | Horizonte | Área | MAE base | Δ MAE todos [IC] | Sesgo base → modelo | Δ MAE días normales [IC] | Δ pico días normales [IC] |",
@@ -120,6 +143,8 @@ def main():
     print(principal(comp))
     print("\n## Principal (XGB frente a XGB + Simons sin temperatura)\n")
     print(principal(comp, base="xgb_s"))
+    print("\n## Por área y horizonte\n")
+    print(por_area(comp))
     print("\n## Guardas de la corrección en línea\n")
     print(guardas(comp, "c2linea_tp_cdd"))
     print("\n## Guardas de la corrección fija\n")
