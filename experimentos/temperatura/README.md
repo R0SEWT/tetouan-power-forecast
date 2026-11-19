@@ -66,7 +66,7 @@ python -m experimentos.temperatura.graficos DESTINO
 
 ## Resultados
 
-En `reportes/sein/temperatura/` de la carpeta de datos (y en el Drive, `datalake/tetouan-power-forecast/reportes/sein/temperatura/`):
+En `reportes/sein/temperatura/` de la carpeta de datos (para el Drive, la misma ruta bajo `datalake/tetouan-power-forecast/`):
 `comparacion.csv` (cada modelo frente a su base y a Chronos-2 ajustado, por tramo, horizonte, área y grupo de días, con
 IC), `diario.parquet` (una fila por día y modelo), `umbral.csv`, `fuente.csv`, `betas_fijas.csv`, `betas_en_linea.csv`,
 `pesos_combinaciones.csv` y los pronósticos por origen en `pronosticos/`.
