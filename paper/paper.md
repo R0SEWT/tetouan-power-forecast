@@ -7,7 +7,7 @@ author:
   - "[Apellidos], Adrián"
   - "[Apellidos], Andre"
   - "[Apellidos], Olenka"
-date: "Borrador del 12 de noviembre de 2026"
+date: "Borrador del 19 de noviembre de 2026"
 lang: es
 ---
 
@@ -351,15 +351,38 @@ el notebook 04.[^fm]
 
 ## 4.6 Implementación
 
-La app ejecuta el modelo sobre las capas reales del SEIN: un backend (FastAPI) que carga el XGBoost global
-entrenado con 2016-2025, calcula las variables con la misma función que los notebooks y responde pronósticos a 1 y
-24 horas por área; y un frontend web (HTML/JS) con tres vistas: **pronóstico** (el origen que el usuario elige, la
-predicción, el intervalo empírico del 90 % y las tres referencias), **escenarios** ("¿y si mañana hace más calor?",
-sobre el supuesto de colaboración) y **diagnóstico** (real contra predicho, residuos, error por régimen, ablación
-e importancia, siempre sobre la prueba de 2026).[^app] Sirve el XGBoost global y no el Random Forest elegido
-porque empataron en 2025 y en 2026 y el XGBoost pesa decenas de MB en vez de 1 GB. La rúbrica nombra Streamlit;
-el grupo eligió una app propia asumiendo ese riesgo, con la condición de que ejecute el modelo y no muestre
-resultados precalculados.
+**La app, Curva.** Una app web propia (backend FastAPI y frontend en HTML/JS) que ejecuta los modelos del proyecto
+sobre las capas reales del SEIN y pone a la vista cuánto acertó. Tiene tres pantallas: **«Ahora»** (la demanda de
+este momento o de cualquier hora del historial en repaso, el pico y la mayor subida de las próximas 24 horas
+anotados sobre la curva, el pronóstico con su rango y «lo que dijimos ayer para esta hora» frente a lo que pasó;
+tocar o arrastrar el gráfico fija la hora, y un selector propio de fecha y hora en formato peruano reemplaza a los
+controles del navegador), **«Confianza»** (el error mes a mes y día a día de la prueba de 2026, la cobertura del
+rango contra su meta, el seguimiento en vivo y el contexto internacional) y **«Detalle»** (el modelo, los escenarios
+"¿y si hace más calor?", el diagnóstico completo y el registro en vivo). El selector de modelo ofrece tres: el
+XGBoost base (el único que responde a los escenarios, porque usa el clima), el híbrido XGBoost + Simons y el
+combinado de la sección 5.5, que es el que abre por defecto; los dos últimos necesitan GPU y la app lee sus
+pronósticos precalculados. El backend calcula las variables con la misma función que los notebooks, sirve la web
+comprimida y expone el registro en vivo.[^app] La rúbrica nombra Streamlit; el grupo eligió una app propia
+asumiendo ese riesgo, con la condición de que ejecute el modelo.
+
+**Cómo se validó el diseño.** Con un método de medir antes y después tomado de una auditoría previa de diseño
+centrado en las personas: línea base medida antes de tocar nada, un cambio mínimo por iteración atado a una métrica
+que falla, re-medición con el mismo arnés, lo probado y revertido con cifras, y límites declarados. Los
+instrumentos son sintéticos: tareas con Playwright y tiempos estimados con el Keystroke-Level Model (Card, Moran y
+Newell, 1980), axe-core para WCAG 2.2, un lector de atención entrenado con las miradas de UEyes (Jiang et al., 2023;
+CC 0.69 en su test oficial), una prueba de 5 segundos y una de primer clic sintéticas, y un playtest con cinco
+personas sintéticas por ronda al estilo RITE (Medlock et al., 2002). **Nada se probó con personas**; el protocolo de
+30 minutos con cinco personas está escrito y es lo siguiente. Los resultados están en la sección 5.6.[^hcd]
+
+**El pronóstico en vivo.** Desde el 13 de noviembre de 2026, una corrida diaria baja el anexo del IEOD del COES
+(que sale a la mañana siguiente del día que describe), valida el día (48 periodos, sin vacíos, Norte + Centro +
+Sur = SEIN, empalme sin salto), emite con Chronos-2 ajustado con calendario el perfil de hoy a 24 horas desde cada
+origen de ayer, y registra cada pronóstico con su sello de tiempo, el sha256 de los pesos y del anexo y el commit del
+código, **antes de que exista su real**. El registro distingue tres tipos: *ex ante estricto* (el periodo todavía
+no empezaba al emitirse), *en vivo* (el periodo ya había empezado, pero el COES no podía haber publicado su real) y
+*reconstruido* (emitido después: el relleno del 23 de octubre al 12 de noviembre y todo el horizonte de 1 hora,
+que necesita la demanda de una hora antes, publicada al día siguiente). La evaluación cruza el registro con el real
+que llega al otro día y se rehace en cada corrida.[^vivo]
 
 # 5. Resultados del modelo
 
@@ -677,6 +700,118 @@ sigue ganando al Random Forest en los doce casos (por semanas, en 2026: Norte �
 entra en ningún ajuste ni elección, pero ya se había inspeccionado en el notebook 03: una prueba realmente intacta
 sería el periodo posterior al 22 de octubre de 2026.
 
+## 5.6 La app y su validación de diseño (sintética)
+
+Dos pasadas de medición. La primera, sobre la vista del área, con cuatro tareas fijas en un caso reproducible
+(Centro, martes 10 de marzo de 2026, 19:00, a 24 horas): ver el pronóstico con su rango y lo real (T1), saber si se
+puede confiar (T2), el efecto de 2 °C más (T3) y con qué fase de El Niño se equivoca más (T4). De la línea base a
+la segunda iteración, T1 pasó de cumplirse a medias (2 de 4 cifras: el rango no aparecía) a cumplirse entera; el
+tiempo estimado de las cuatro tareas en el celular bajó de 27.8 a 24.2 s (y a 17.8 s en escritorio con las
+pantallas nuevas); axe pasó de 6 infracciones a 0; la página pesó 115 KB en vez de 157 y dejó de pedir nada a
+terceros; y desaparecieron las tres menciones a una comparación con la Programación Diaria del COES que el proyecto
+no hizo. No mejoró el tiempo hasta ver el número en red lenta hasta que se partió el script y se sirvió comprimido
+(de 829 a 660-682 ms).[^hcd]
+
+La segunda pasada atacó lo que el dueño señalaba como dolor principal ("cuando abro la app como que me pierdo") con
+un arnés de atención y una serie de PR pequeños, cada uno con una medición clave y un umbral fijado antes:[^hcd]
+
+| PR | Qué cambió | Medición clave: antes → después |
+|---|---|---|
+| 1 | Qué es Curva, dicho en la cabecera y el título | Prueba de 5 s "¿qué es esto?": responde en 1 de 4 vistas → 4 de 4 |
+| 2 | Una cifra del presente al frente | Atención a 3 s en la cifra de ahora: 1.2 % → 8.2 %; "¿cuánta demanda hay ahora?": 0 → 3 de 4 vistas |
+| 3 | La pregunta del día | Prueba de 5 s: 3 / 4 / 4 / 5 → 5 / 5 / 6 / 5 de 6 (cuatro vistas); cifras a la vista: 61 / 36 → 10 / 10 |
+| 4 | Cada término explicado donde aparece | Términos sin definir en «Ahora» y «Confianza»: 5 / 3 y 2 / 2 → 0 |
+| 5 | Tocar o arrastrar el gráfico fija la hora | Pedir otra hora del mismo día: 6 acciones, 3.2 s → 1 acción, 2.7 s |
+| 6 | Selector propio de fecha y hora (dd/mm/aaaa, 24 h) | Pulsaciones de T1: 13 → 4; el caso se ve «10/03/2026» y «19:00» en un Chrome en inglés |
+| 7 | El gráfico de un vistazo | Contraste de la banda en claro: 1.22 → 1.63:1; atención en el punto de «ahora»: 0.0-0.1 → 0.4-0.6 % (**no cumple** el 3 % buscado) |
+| 10 | Confianza honesta de un vistazo | Atención a 3 s en el aviso de cobertura en vivo: 0.1 % → 6.0 %; selectores: 20.7 % → 0.3 % |
+| 14 | Partir el script | Peso de «Ahora»: 78 → 44 KB; número en red lenta: 844-878 → 660-682 ms |
+
+Un playtest sintético (cinco personas sintéticas por ronda, al estilo RITE) encontró y corrigió tropiezos que el
+arnés no veía: el enlace a los escenarios desde el día de hoy (primer clic de T3 desde hoy, 0 → 100 %), el chip de
+El Niño que parecía botón (T4 desde las tres entradas, 0 → 100 %) y la madrugada, cuando todavía no llegó el real
+de ayer (explica qué día es hoy y hasta cuándo hay real: 0 → 5 de 5); una línea "¿Acertamos ayer?" bajo la
+respuesta se probó y se revirtió porque no movió su medida más que el ruido. **Todo esto es sintético:** un lector
+que predice dónde caen los primeros vistazos, reglas explícitas sobre lo que está a la vista y evaluadores
+sintéticos que son complacientes y aplanan a los grupos (Agnew et al., 2024). Sirve para detectar regresiones y
+decidir qué observar, no para afirmar que alguien entendió una cifra; lo que valida o desmiente todo lo anterior
+son las sesiones con personas, con el protocolo ya escrito.[^hcd]
+
+## 5.7 Pronóstico en vivo: seguimiento en curso
+
+Desde el 13 de noviembre la tubería diaria emite el perfil de hoy antes de conocerse su real. Son pocos días: lo
+que sigue es **seguimiento en curso, no un resultado**. Cifras al 17 de noviembre de 2026 (24 horas, Chronos-2
+ajustado con calendario, frente a la mejor referencia ingenua en las mismas filas):[^vivo]
+
+| Tramo | Periodos por área | Centro: MAE (referencia) · sesgo · cobertura 10-90 | Norte | Sur |
+|---|---|---|---|---|
+| En vivo (13 a 17 de noviembre, emitido antes de que el COES pudiera publicar el real) | 240 (5 días) | 90.7 MW (120.3) · −68.3 · 66.7 % | 20.0 (26.5) · −0.1 · 89.2 % | 60.7 (67.2) · +40.4 · 63.7 % |
+| Ex ante estricto (solo los periodos que aún no empezaban al emitirse) | 120 | 99.2 (135.6) · −94.0 · 60.0 % | 19.0 (23.2) · −0.7 · 92.5 % | 70.2 (77.9) · +42.7 · 57.5 % |
+| Reconstruido, 23 de octubre a 12 de noviembre (emitido después, con los datos hasta su origen) | 1,008 (21 días) | 79.6 (140.8) · −21.3 · 73.2 % | 32.1 (45.6) · +18.1 · 74.3 % | 34.4 (49.7) · +1.6 · 84.5 % |
+
+A 1 hora todo es reconstruido (26 días): 51.3 MW en el Centro frente a 135.6 de la persistencia, 20.6 frente a 41.9
+en el Norte y 22.7 frente a 33.6 en el Sur. El modelo le gana a la referencia en todos los tramos y áreas, pero en
+el Centro **subestima** (sesgo de −68 MW en vivo y −94 en lo ex ante estricto) y el rango del 80 % cubre menos de
+lo que promete (67 % en vivo; 73 % en el reconstruido), mientras que en el Sur sobrestima. Noviembre llega después de
+meses de El Niño: el ICEN subió de 0.96 en marzo a 3.98 en agosto de 2026 y la anomalía de Niño 1+2 estaba en
++5.2 °C a mediados de octubre; el evento viene de atrás, no empezó en noviembre *[PENDIENTE: situación de El Niño
+en noviembre, con fuentes oficiales]*. Qué hay detrás del sesgo del Centro se revisa en la sección 5.8.
+
+## 5.8 Diagnóstico del sesgo de noviembre: ¿calor o deriva?
+
+Un análisis del 14 de noviembre sobre 2025, 2026 y el tramo en vivo (código en `experimentos/sesgo/`, PR #53, sin
+fusionar), con la misma regla de información del modo en vivo (para corregir el día X solo valen los errores
+hasta X − 1):[^sesgo]
+
+1. **El calor explica poco del sesgo diario.** Las variables de calor (anomalía media y mínima del día y su cambio
+   frente a la semana anterior) explican entre 1 y 8 % de lo que varía el sesgo diario a 24 horas en 2025 y 2026. Un
+   sesgo de hoy casi no anticipa el de mañana (autocorrelación a un día de −0.06 a 0.22). Lo que sí hay es una
+   **deriva lenta de estación**, del orden de 0.5 a 1 % del nivel: el sesgo mensual del Centro sale negativo cuando
+   arranca o arrecia el calor (−43 MW en febrero de 2025; −19 en enero y febrero de 2026; −39 del 3 al 13 de
+   noviembre, con 10 de 11 días bajo cero) y positivo cuando se enfría (+5 a +28 entre marzo y mayo). El 13 de
+   noviembre, el día más cálido del periodo en Lima y el de mayor demanda (pico de 5,572 MW), el pico quedó 275 MW
+   por debajo; el 1 y 2 de noviembre (feriado y lunes siguiente) dieron −103 y −119 MW en el Centro pero +60 y +87
+   en el Norte: calendario, no calor.
+2. **La falla ya estaba en 2026, en el pico de los días calurosos, no en el MAE.** En el 10 % de días más cálidos
+   de 2026, el pico diario del Centro quedó 38 MW más corto que en el resto (IC 95 % por semanas −72 a −6; con la
+   combinación, 41 MW; con el XGBoost en razón, 51) aunque el MAE del día no empeoró (+4.6 MW, IC −9.5 a +20.8),
+   porque el resto del día compensa. **Esto matiza la hipótesis 1:** la temperatura no aporta en promedio, pero el
+   pico de los días cálidos sí queda corto.
+3. **Ningún remedio barato ayuda en la historia.** De 88 variantes de corrección del sesgo con los errores
+   recientes, ninguna baja el MAE de 2025 (la menos mala lo sube 0.25 %; las de un día, entre 19 y 46 %) y en 2026 la
+   mejor queda en 0.0 %; en vivo sí habría ayudado (unos 3 %), pero son 22 días. Corregir por temperatura, ajustado
+   en 2025, tampoco mejora 2026 (con las anomalías empeora el Centro 5.6 MW, porque El Niño las lleva fuera de lo
+   visto). **No se adopta ninguna.** El XGBoost en razón no sufre menos con el calor sino más (Centro 2026: sesgo
+   de −22 frente a −6 MW de Chronos-2; pico −91 frente a −83): la lección de Tetuán no protege aquí.
+4. **El rango adaptativo sí cumple lo que promete.** El rango 10-90 del modelo cubría 74-76 % en 2025 y 2026, no
+   80 %. Con un ajuste conforme por lado (ACI, γ = 0.2, elegido con 2025) que abre o cierra cada borde según cuántos
+   periodos quedaron fuera el día anterior, la cobertura a 24 horas pasa a 79.3-80.1 % en 2025, 79.3-80.5 % en 2026 y
+   81.8-85.9 % en vivo, con un rango 12-18 % más ancho y el mismo puntaje de intervalo (±2 %). Queda **propuesto**
+   como modelo en paralelo (`chronos2ftcal+rango`, PR #53, sin fusionar); no cambia lo emitido ni lo que muestra la
+   app.
+
+Lo que falta para el pico es información que el modelo no tiene: un pronóstico de temperatura a un día con archivo
+histórico (la *Previous Runs API* de Open-Meteo lo guarda para Lima desde 2024, con 0.94 °C de error en la media
+diaria frente a su análisis), probado como covariable futura entrenando con 2024 y eligiendo con 2025.
+
+## 5.9 Contexto internacional
+
+Para situar las cifras, lo que publican operadores con auditoría externa, **sin que sea una comparación de igual a
+igual** (otro tamaño de sistema, otro perímetro, otro horizonte y otros años):[^refs-int]
+
+- **REE (España).** La CNMC liga parte de la retribución de Red Eléctrica al error de su pronóstico; el indicador
+  es la suma de errores absolutos horarios sobre la demanda del año (en la práctica, un WAPE). Diario: 1.600 % en
+  2024 y 1.694 % en 2025; intradiario (emitido 3 h antes): 1.202 % y 1.249 %. Para decidir si un cambio cuenta, la
+  CNMC corrige por la autocorrelación de los errores horarios al 99 %: la misma preocupación que el bootstrap por
+  bloques de la sección 5.5.
+- **NESO (Gran Bretaña)** publica cada mes un archivo abierto con el pronóstico del día siguiente, lo real y el
+  error de cada media hora desde abril de 2021, y Ofgem lo usa en su esquema de incentivos. **PJM** informa a su
+  comité el error horario y del pico de cada mes (enero de 2026: 1.73 % y 1.87 %).
+- En conjunto, el error al día siguiente que publican los operadores está entre 1.5 y 3 %. El combinado del
+  proyecto, en la prueba de 2026 a 24 horas, da un WAPE de 1.64 % en el Centro, 2.44 % en el Norte y 2.46 % en el Sur
+  (MAPE de 1.66, 2.50 y 2.49 %). Es competitivo en orden de magnitud; lo que ningún operador revisado hace es poner
+  el error y la cobertura del rango en el mismo tablero del pronóstico, que es lo que hace la pantalla «Confianza».
+
 # 6. Visualización y análisis
 
 ## 6.1 Figuras propuestas
@@ -698,9 +833,13 @@ celdas de texto) para exportarlas a la versión final.
 | 10 | Norte, dos semanas de julio de 2026 (el pico de El Niño): lo real, el modelo fijo, el reentrenado y la referencia, a 1 y 24 h; y los residuos del modelo fijo | `03_sein_prueba_2026.ipynb`, celda 20 | 6.2 |
 | 11 | Tetuán: origen móvil mensual y error por hora en la prueba | `notebooks/02_modelado_evaluacion.ipynb`, celdas 22 y 26 | 5.1 |
 | 12 | La iteración del Entregable 7: los mismos modelos en nivel y en razón frente a las tres referencias | `entregables/Entregable6_MDS_Grupo03.ipynb`, celda 86 | 7 |
-| 13 | Captura de la app: vista de pronóstico y de escenarios *(pendiente: tomarla en la demo)* | `app/web/index.html` | 4.6 |
+| 13 | Captura de «Detalle»: escenarios de temperatura y diagnóstico *(pendiente: tomarla en la demo; las de «Ahora» y «Confianza» son la figura 19)* | `app/web/index.html` | 4.6 |
 | 14 | Modelos fundacionales sin entrenar: mejora frente a la mejor referencia por modelo, área y horizonte, 2025 y 2026 | `notebooks/04_sein_modelos_fundacionales.ipynb` (rama `feature/modelos-fundacionales`, PR #32), celda 7 | 5.5 |
 | 15 | Mes a mes en 2025 y 2026: el Random Forest, el mejor zero-shot, el mejor ajuste fino, el híbrido y la combinación, por área y horizonte | `04_sein_modelos_fundacionales.ipynb`, celda 19 | 5.5 |
+| 16 | Peso en disco frente a rendimiento (MAE del Centro en 2026, a 1 y 24 h) de todos los modelos, con la frontera de lo mejor con ese peso o menos. *Nota:* el peso de varios fundacionales es estimado (parámetros × 4 bytes), marcado con círculo vacío | `paper/figuras/fig5_peso_rendimiento.png` (gráfico del 13-nov sobre las tablas del notebook 04) | 5.5 |
+| 17 | Sesgo diario a 24 h del 1 de octubre al 13 de noviembre y temperatura de Lima: el feriado, la subida lenta del Centro y el 13 de noviembre | `paper/figuras/fig6_sesgo_diario_en_vivo.png` (diagnóstico del 14-nov, `experimentos/sesgo/graficos.py`, PR #53) | 5.8 |
+| 18 | Cobertura del rango 10-90 antes y después del rango adaptativo, por año y área | `paper/figuras/fig7_cobertura_rango_adaptativo.png` (mismo diagnóstico) | 5.8 |
+| 19 | Capturas de «Ahora» (escritorio y celular) y de «Confianza» | `docs/img/curva-ahora-escritorio.jpg`, `docs/img/curva-ahora-movil.jpg`, `docs/img/app-hcd/it8-confianza-escritorio.jpg` | 4.6 |
 
 Nota a la figura 8: `media_24h` es la escala con la que la razón vuelve a MW, no una variable que el modelo vea;
 al permutarla se rompe la reconstrucción y salía como la más importante. Desde el PR #30 los notebooks la excluyen
@@ -729,10 +868,12 @@ de la importancia; la figura se exporta de esa versión.
 
 ## 6.3 La app
 
-La app traduce el modelo a la decisión del operador: para un origen y un área, muestra la predicción a 1 y 24
-horas con su intervalo y las tres referencias, deja mover la temperatura pronosticada ("¿y si mañana hace 2 °C
-más?") y expone el diagnóstico sobre 2026. La adaptación (fijo frente a reentrenado) no se reentrena en vivo;
-muestra la tabla del notebook 03.
+Curva traduce el modelo a la decisión del operador (sección 4.6): «Ahora» pone la cifra del momento, el pico de las
+próximas 24 horas y «lo que dijimos ayer» frente a lo que pasó; «Confianza» pone el error, la cobertura del rango
+contra su meta y el seguimiento en vivo antes que el pronóstico; «Detalle» deja mover la temperatura pronosticada
+("¿y si mañana hace 2 °C más?", solo con el XGBoost base, el único que usa el clima) y expone el diagnóstico sobre
+2026. La adaptación (fijo frente a reentrenado) no se reentrena en vivo; muestra la tabla del notebook 03. Lo que
+se midió de su diseño, y lo que no, está en la sección 5.6.
 
 ## 6.4 Limitaciones y amenazas a la validez
 
@@ -758,7 +899,7 @@ Lo que un lector debe tener en cuenta antes de generalizar los resultados.
 5. **Empate entre algoritmos y búsqueda acotada.** Random Forest y XGBoost difieren en 0.3 puntos, sin intervalo;
    la búsqueda de hiperparámetros se hizo solo en el Centro a 1 hora, con presupuestos distintos por algoritmo
    (15 y 30 combinaciones), y se reutilizó en las otras áreas y horizontes. Ninguna conclusión depende de cuál de
-   los dos se elija; la app corre el XGBoost.
+   los dos se elija; la app ejecuta el XGBoost (y abre con el combinado, precalculado).
 6. **Hipótesis.** Se escribieron después de explorar los datos de 2026 (el crecimiento del Norte ya se conocía: el
    texto original de la hipótesis 1 hablaba de "10 a 17 %", tomado del diseño de octubre; el análisis exploratorio
    midió entre 4 y 17 % según el mes, que es la cifra de este paper) y antes de evaluar ningún modelo en ellos. El origen móvil de 2023-2025 usa hiperparámetros elegidos con datos
@@ -785,6 +926,18 @@ Lo que un lector debe tener en cuenta antes de generalizar los resultados.
     muestra; la de 2026 queda fuera del entrenamiento y de la selección, pero sobre un año ya inspeccionado, y ahí
     su diferencia con el modelo elegido excluye el cero en los seis casos. Una prueba realmente intacta sería el
     periodo posterior al 22 de octubre de 2026 (trabajo futuro).
+12. **El pronóstico en vivo es un seguimiento en curso.** Cinco días emitidos de verdad antes del real (al 17 de
+    noviembre) y 21 reconstruidos; en vivo el Centro subestima y el rango del 80 % cubre 67 %. El modelo en vivo es
+    Chronos-2 ajustado con calendario, no el combinado (faltan los pesos de Simons en esa máquina), y "en vivo"
+    significa con un día de retraso: el COES publica el real de cada día a la mañana siguiente, así que el
+    horizonte de 1 hora solo puede reconstruirse.
+13. **El diagnóstico del sesgo es sobre pocos días en vivo** (22) y con ERA5 como temperatura; los deciles de calor
+    se ordenan dentro de cada año; los episodios se definen con el error del propio modelo. Sus remedios no se
+    adoptaron; el rango adaptativo es una propuesta (PR #53) todavía sin fusionar.
+14. **La validación del diseño es sintética**: atención predicha, tareas de robot, tiempos estimados y evaluadores
+    sintéticos. Detecta regresiones; no dice que alguien entendió. Faltan las sesiones con personas.
+15. **El contexto internacional no es una comparación de igual a igual:** otros sistemas, perímetros, horizontes y
+    años; se cita para dar orden de magnitud.
 
 # 7. Conclusiones y lecciones aprendidas
 
@@ -844,21 +997,41 @@ Centro a 24 horas, IC −8.7 a −3.8). Se propone como siguiente versión del m
 con un solo año y se confirmó en uno ya usado, los pesos de la combinación son de 2025 (dentro de muestra), y
 exige GPU para generar el pronóstico fundacional.
 
-**Trabajo futuro.** Cuatro cosas que este trabajo no hizo y que un lector del COES pediría primero: (1) comparar el
+**La app y el pronóstico en vivo.** Curva ejecuta los tres modelos, abre con el combinado y dice cuánto acertó;
+su diseño se midió antes y después con instrumentos sintéticos (de 2 de 4 cifras de la tarea principal a 4 de 4;
+cifras a la vista en la primera apertura, 61 → 10; atención en la cifra de ahora, 1.2 → 8.2 %; fijar otra hora,
+6 acciones → 1), con la salvedad de que nada se probó aún con personas. Desde el 13 de noviembre una tubería diaria
+emite el pronóstico del día antes de conocer su real: en cinco días en vivo le gana a la referencia en las tres
+áreas, pero el Centro subestima y su rango queda corto; el diagnóstico atribuye eso a una deriva lenta de estación
+y al pico de los días más cálidos, no al calor día a día, y ningún remedio barato lo arregla en la historia. Lo que
+sí cumple lo que promete es un rango adaptativo, propuesto y sin fusionar.
+
+**Trabajo futuro.** Seis cosas que este trabajo no hizo y que un lector del COES pediría primero: (1) comparar el
 pronóstico a 24 horas con la Programación Diaria del COES, evaluada sobre el perímetro del portal y en igualdad de
 origen y horizonte, que es la vara oficial; (2) medir la sensibilidad del resultado a 24 horas al error del
 pronóstico de temperatura (1 y 2 °C, como preveía el diseño), para saber si el daño del clima depende del supuesto;
 (3) construir una variable de fallas que sí separe la operación normal de una falla (solo eventos con
 interrupción de carga o potencia indisponible, por área) y repetir la ablación con ella; y (4) llevar la combinación
 con modelos fundacionales a una prueba realmente intacta (el periodo posterior al 22 de octubre de 2026 y el
-próximo año), con contextos más largos (8,192 periodos) y una licencia que permita el uso operativo.
+próximo año), con contextos más largos (8,192 periodos) y una licencia que permita el uso operativo; (5) probar
+un pronóstico de temperatura a un día con archivo histórico como covariable futura, mirando sobre todo el pico
+del Centro, y sumar el combinado y el rango adaptativo a la tubería en vivo; y (6) las sesiones con cinco personas
+que validen o desmientan la medición sintética del diseño.
 
 # 8. Bibliografía
 
 *(Formato APA provisional; ajustar a la norma que indique el curso.)*
 
+- Agnew, W., et al. (2024). The illusion of artificial inclusion. En *CHI 2024*.
+- Amershi, S., et al. (2019). Guidelines for human-AI interaction. En *CHI 2019*.
 - Ansari, A. F., et al. (2025). *Chronos-2: From univariate to universal forecasting* [Preprint]. arXiv.
   https://arxiv.org/abs/2510.15821. Modelo: `amazon/chronos-2` (Hugging Face, Apache-2.0).
+- Card, S. K., Moran, T. P., & Newell, A. (1980). The keystroke-level model for user performance time with
+  interactive systems. *Communications of the ACM, 23*(7), 396-410.
+- CNMC. (2025, 2026). Resoluciones RAP/DE/012/25 y RAP/DE/016/26 sobre el incentivo al error de la previsión de
+  demanda de Red Eléctrica (2024 y 2025). https://www.cnmc.es/sites/default/files/6336322.pdf;
+  https://www.cnmc.es/sites/default/files/6915601.pdf; umbrales 2023-2025:
+  https://www.cnmc.es/sites/default/files/5241389.pdf
 - Al-Quraan, M. M., Khan, A. R., Centeno, A., Zoha, A., Imran, M. A., & Mohjazi, L. (2023). FedraTrees: A novel
   computation-communication efficient federated learning framework investigated in smart grids. *Engineering
   Applications of Artificial Intelligence, 124*, 106654. https://doi.org/10.1016/j.engappai.2023.106654
@@ -877,6 +1050,8 @@ próximo año), con contextos más largos (8,192 periodos) y una licencia que pe
   `google/timesfm-2.5-200m-pytorch` y `google/timesfm-3.0-pytorch` (Hugging Face).
 - ENFEN. (2024). *Nota Técnica ENFEN 01-2024: categorías del Índice Costero El Niño*. Comisión Multisectorial
   ENFEN.
+- Gronier, G. (2016). Measuring the first impression: Testing the validity of the 5 second test. *Journal of
+  Usability Studies, 12*(1), 8-25.
 - Hewamalage, H., Ackermann, K., & Bergmeir, C. (2023). Forecast evaluation for data scientists: Common pitfalls
   and best practices. *Data Mining and Knowledge Discovery, 37*, 788-832.
 - Hong, T., & Fan, S. (2016). Probabilistic electric load forecasting: A tutorial review. *International Journal of
@@ -885,8 +1060,14 @@ próximo año), con contextos más largos (8,192 periodos) y una licencia que pe
   Forecasting, 30*(2), 357-363.
 - IGP. (2026). *Índice Costero El Niño (ICEN)* [Serie mensual]. Instituto Geofísico del Perú.
   http://met.igp.gob.pe/datos/ICEN.txt
+- Jiang, Y., et al. (2023). UEyes: Understanding visual saliency across user interface types. En *CHI 2023*.
+  Datos: Zenodo, https://doi.org/10.5281/zenodo.8010312 (CC BY 4.0).
 - Kaljevic, T., Arzola, I., & Zhang, Y. (2026). *Benchmarking time series foundation models for load forecasting
   under covariate uncertainty* [Preprint]. arXiv. https://arxiv.org/abs/2610.07232
+- Kay, M., Kola, T., Hullman, J., & Munson, S. (2016). When (ish) is my bus? User-centered visualizations of
+  uncertainty in everyday, mobile predictive systems. En *CHI 2016*.
+- Medlock, M. C., Wixon, D., Terrano, M., Romero, R., & Fulton, B. (2002). Using the RITE method to improve
+  products: A definition and a case study. En *Usability Professionals Association*.
 - Kshetrimayum, N., Hoque, N., & Nath, D. (2024). PConvLSTM: An effective parallel ConvLSTM-based model for
   short-term electricity load forecasting. *International Journal of Data Science and Analytics*.
 - Meyer, M., et al. (2024). *Benchmarking time series foundation models for short-term household electricity load
@@ -896,6 +1077,9 @@ próximo año), con contextos más largos (8,192 periodos) y una licencia que pe
   `mistralai/Timestral-209M`, `theforecastingcompany/t0-gamma`, `Datadog/Toto-2.0-313m` y `NX-AI/TiRex-2`.
 - Montero-Manso, P., & Hyndman, R. J. (2021). Principles and algorithms for forecasting groups of time series:
   Locality and globality. *International Journal of Forecasting, 37*(4), 1632-1653.
+- NESO. (2026). *Day-ahead half-hourly demand forecast performance* [Archivo abierto desde abril de 2021].
+  https://www.neso.energy/data-portal/day-ahead-half-hourly-demand-forecast-performance
+- Nielsen, J. (1994). *Usability engineering*. Morgan Kaufmann.
 - NOAA Climate Prediction Center. (2026). *Weekly Niño 1+2 SST and anomalies* [Serie semanal].
   https://www.cpc.ncep.noaa.gov/data/indices/
 - Open-Meteo. (2026). *Historical Weather API (reanálisis ERA5 de ECMWF)*. CC BY 4.0.
@@ -904,6 +1088,10 @@ próximo año), con contextos más largos (8,192 periodos) y una licencia que pe
   https://www.datosabiertos.gob.pe
 - Pedregosa, F., et al. (2011). Scikit-learn: Machine learning in Python. *Journal of Machine Learning Research,
   12*, 2825-2830.
+- PJM. (2026). *System operations report*, Operating Committee, 5 de febrero de 2026.
+  https://www.pjm.com/-/media/DotCom/committees-groups/committees/oc/2026/20260205/20260205-item-07---system-operations-report.pdf
+- Red Eléctrica de España. (2026). *Seguimiento de la demanda: previsión, programada y real*.
+  https://www.ree.es/en/node/14136
 - Red Eléctrica de España. (2026). *Seguimiento de la demanda de energía eléctrica: Ceuta* [Datos cada 5 minutos].
   https://demanda.ree.es/visiona/home
 - Salam, A., & El Hibaoui, A. (2018). *Power consumption of Tetouan city* [Dataset]. UCI Machine Learning
@@ -1015,6 +1203,23 @@ Las tablas de 2025 son de la corrida del notebook 02 del SEIN del 4 de noviembre
     local de 2026 con el mismo esquema (semilla 0): Centro a 24 h, semanas −9.35 a −3.34 y meses −9.06 a −3.15; los
     doce casos siguen excluyendo el cero. Los de 2025 no se reprodujeron en local (las predicciones de validación
     del Random Forest están en el Drive).
+[^hcd]: `docs/app-hcd.md` (iteraciones 1 a 8: tablas de §6, iteración 8 y "Recorrido de demo"), `docs/auditoria/`
+    (`metodo.md`, `linea-base.md`, `plan.md` con la tabla de PR y sus mediciones, `plan-juego.md` con la ronda RITE)
+    y los resultados versionados en `app/medicion/resultados/`. Cifras del playtest: `plan-juego.md`, "Estado tras la
+    ronda RITE". Todo sintético, medido el 13 y 14 de noviembre de 2026.
+[^vivo]: `experimentos/en_vivo/README.md` (qué es en vivo y qué no, tipos de fila, validaciones) y
+    `src/tetouan_power_forecast/en_vivo.py`; registro en `data/reportes/sein/en_vivo/` (`pronosticos.parquet`,
+    `seguimiento.parquet`, `resumen.parquet`, `corridas.jsonl`). Cifras leídas de `resumen.parquet` (nivel
+    "acumulado") el 19 de noviembre, con datos del COES hasta el 17 de noviembre (51 corridas). ICEN y Niño 1+2:
+    capas silver del proyecto (`exogenas/silver/icen.parquet` y `nino12_semanal.parquet`).
+[^sesgo]: Diagnóstico del 14 de noviembre de 2026 (`experimentos/sesgo/`: `diagnostico.py`, `remedios.py`,
+    `graficos.py`; tablas en `reportes/sein/sesgo/`; PR #53, sin fusionar). Intervalos por bootstrap de semanas
+    enteras, 2,000 réplicas. Temperatura de ERA5; del 8 al 13 de noviembre, el análisis de la API de pronóstico de
+    Open-Meteo llevado al nivel de ERA5.
+[^refs-int]: Revisión de productos del 13 de noviembre de 2026; se citan solo las cifras verificadas en su fuente:
+    CNMC (resoluciones RAP/DE/012/25 y RAP/DE/016/26 y umbrales 2023-2025), NESO (archivo abierto de desempeño) y PJM
+    (informe del Operating Committee del 5-feb-2026). El WAPE y el MAPE de 2026 del combinado: `docs/app-hcd.md`,
+    iteración 8 (tabla de «Confianza»), calculados sobre las 13,824 medias horas de la prueba.
 [^fm-otros]: MAE de 2026 a 1 h en el Centro calculados sobre las filas de la prueba desde
     `t0_c2048.parquet`, `toto2_c2048.parquet`, `timesfm3_c2048.parquet` y `tirex2_c2048.parquet` (51.8, 50.7, 53.2 y
     59.5 MW); el efecto de las covariables, desde `chronos2cov_c2048.parquet` frente a `chronos2_c2048.parquet`

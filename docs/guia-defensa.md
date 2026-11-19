@@ -2,7 +2,7 @@
 
 Grupo 3 · Metodología para Data Science · UPC 2026-2
 
-> **De dónde salen las cifras.** Del borrador del paper (`paper/paper.md`, versión del 13 de noviembre) y de la
+> **De dónde salen las cifras.** Del borrador del paper (`paper/paper.md`, versión del 19 de noviembre) y de la
 > auditoría metodológica (`docs/auditoria-metodologica.md`). Cada respuesta dice la sección y la tabla. Lo que
 > todavía no existe está marcado como **[PENDIENTE]**.
 >
@@ -13,9 +13,9 @@ Grupo 3 · Metodología para Data Science · UPC 2026-2
 
 ## Cómo usar esta guía
 
-1. Aprenderse la **hoja de cifras** (15 cifras). Es lo único que hay que memorizar.
+1. Aprenderse la **hoja de cifras** (17 cifras). Es lo único que hay que memorizar.
 2. Leer la lista de **cosas que NO hay que afirmar**. Equivocarse ahí es peor que no saber una cifra.
-3. Leer las **26 preguntas**. No hay que memorizar las respuestas: basta con la idea y la cifra.
+3. Leer las **30 preguntas**. No hay que memorizar las respuestas: basta con la idea y la cifra.
 
 **Cómo responder cualquier pregunta:** la idea en una frase → la cifra que la respalda → el límite, si lo hay.
 
@@ -44,6 +44,7 @@ puedo decir es que…». **Nunca inventar una cifra.**
 | 14 | **18 kW frente a más de 1,200 kW** | Lo que movió cambiar de algoritmo frente a cambiar el objetivo (del Entregable 7 a la versión en razón) | §7, lección 1 |
 | 15 | **Tetuán 41-56 % · Ceuta 2.31 frente a 4.62 %** | Tetuán: menos error que la mejor referencia en la prueba. Ceuta: MAPE sin haber visto un verano frente a la mejor regla simple | §5.1, tabla de la prueba; §5.2, tabla de MAPE |
 | 16 | **55 → 48 MW (1 h) · 86 → 75 (24 h) · Sur 24 h: 57 → 52** | La combinación final (Chronos-2 ajustado con calendario + híbrido XGBoost + Simons) frente al Random Forest, 2025 (54.6 → 48.2; 86.1 → 75.2; 56.7 → 51.8). En 2026: 54.1 → 48.8, 78.1 → 71.9 y 48.3 → 44.6; la diferencia excluye el cero en los 12 casos (2026, Centro 24 h: −6.2 MW, IC −8.7 a −3.8). Zero-shot solo, Simons: 49.7 a 1 h (gana) y 92.9 a 24 h (pierde) | §5.5, tabla de MAE y tabla de diferencias |
+| 17 | **5 días en vivo · Centro 90.7 frente a 120.3 MW · sesgo −68 · cobertura 67 %** | Seguimiento en vivo a 24 h al 17 de noviembre (Chronos-2 ajustado con calendario): el modelo le gana a la referencia en las tres áreas, pero el Centro subestima y el rango del 80 % cubre 67 % (73 % en los 21 días reconstruidos del 23-oct al 12-nov). Cambia cada día: la cifra vigente se lee en «Confianza» | §5.7 del informe técnico; short paper, tabla 7 |
 
 ---
 
@@ -54,7 +55,7 @@ Según la auditoría metodológica. La columna de la derecha dice el hallazgo.
 | # | No decir | Decir en cambio | Auditoría |
 |---|---|---|---|
 | 1 | «Las fallas no ayudan» o «las fallas no tienen efecto» | «La variable de fallas, tal como se pudo construir con el registro público, no distingue la operación normal de una falla (está activa el 91 % del tiempo), así que su efecto no es interpretable» | G2 |
-| 2 | «Nos comparamos con el pronóstico oficial (la Programación Diaria) del COES» | «No nos comparamos con el pronóstico oficial; nos medimos contra referencias ingenuas». Ojo: la ficha técnica y la pestaña «Operación» de la app todavía lo mencionan | G3 |
+| 2 | «Nos comparamos con el pronóstico oficial (la Programación Diaria) del COES» | «No nos comparamos con el pronóstico oficial; nos medimos contra referencias ingenuas». Esas menciones ya se quitaron de la app (iteración 2 del diseño) | G3 |
 | 3 | «La variable más importante es la media de 24 horas» | «`media_24h` es la escala para volver a MW, no una variable que el modelo vea. Lo que más pesa es la demanda actual» | G1 |
 | 4 | «Las hipótesis se escribieron antes de ver los datos de 2026» | «Se escribieron después de explorar los datos de 2026 y antes de evaluar ningún modelo en ellos» | D3 |
 | 5 | «El clima empeora el pronóstico» (a secas) | «En 2026, a 24 h, con temperaturas fuera de lo visto y un pronóstico simulado, el clima empeoró el error en el Norte y el Centro (+0.42 y +1.35 MW, menos del 2 % del error). Es un efecto chico, medido dentro de un solo año» | D4 |
@@ -68,11 +69,15 @@ Según la auditoría metodológica. La columna de la derecha dice el hallazgo.
 | 13 | «Los intervalos muestran que funcionará en el próximo Niño» | «Los intervalos miden la incertidumbre dentro de 2026: un solo año y un solo evento» | D5 |
 | 14 | «Las horas de mayor demanda de 2026 o los días fuera de rango son reglas que el operador puede usar» | «Son cortes definidos con los propios datos de 2026, para describir dónde falla el modelo» | D10 |
 | 15 | «Usamos el SAIDI, los feriados regionales y los comunicados de ENFEN», o «la app reentrena en vivo» | «M4 (SAIDI) no se corrió; los feriados son los nacionales; la alerta sale de los cambios de categoría del ICEN publicado. La adaptación de la app sale de la tabla del notebook 03» | D14, §13 |
-| 16 | «Los modelos fundacionales pasaron una prueba limpia (o intacta) en 2026», «reemplazan a nuestro modelo» o citar las diferencias de 2025 de la combinación como si no fueran optimistas | «Es una extensión posterior a la prueba: 2026 no entra en ningún ajuste ni elección (ajuste fino hasta 2024; pesos y variantes elegidos con 2025), pero ya se había inspeccionado en el notebook 03; una prueba intacta sería el periodo posterior al 22 de octubre de 2026. Las cifras de 2025 de la combinación son optimistas porque los pesos se eligieron ahí. No está en la app ni fue parte de las hipótesis» | §6.4, punto 11; D16 |
+| 16 | «Los modelos fundacionales pasaron una prueba limpia (o intacta) en 2026», «reemplazan a nuestro modelo» o citar las diferencias de 2025 de la combinación como si no fueran optimistas | «Es una extensión posterior a la prueba: 2026 no entra en ningún ajuste ni elección (ajuste fino hasta 2024; pesos y variantes elegidos con 2025), pero ya se había inspeccionado en el notebook 03; una prueba intacta sería el periodo posterior al 22 de octubre de 2026. Las cifras de 2025 de la combinación son optimistas porque los pesos se eligieron ahí. Es el modelo con el que abre la app (precalculado) y no fue parte de las hipótesis» | §6.4, punto 11; D16 |
+| 17 | «La app pronostica en tiempo real» o «el modelo corre en vivo a 1 hora» | «En vivo con un día de retraso: el COES publica el real de cada día a la mañana siguiente. El pronóstico de hoy a 24 h se emite y registra antes de que exista su real; el de 1 h necesita la demanda de una hora antes, que llega con el real, así que solo se reconstruye» | §4.6 y §5.7; §6.4, punto 12 |
+| 18 | «Validamos el diseño con usuarios» o «la app está probada con personas» | «El diseño se midió antes y después con instrumentos sintéticos (atención predicha, tareas con Playwright, tiempos estimados, evaluadores sintéticos). Sirve para detectar regresiones, no para afirmar que alguien entendió. Las sesiones con cinco personas están por hacer, con el protocolo escrito» | §5.6; §6.4, punto 14 |
+| 19 | «El Niño empezó en noviembre» o «el sesgo de noviembre lo causa El Niño» | «El evento viene de atrás: ICEN 0.96 en marzo y 3.98 en agosto; Niño 1+2 en +5.2 °C a mediados de octubre. El sesgo del Centro es una deriva lenta de estación y el pico de los días cálidos; el calor día a día explica entre 1 y 8 %. Sobre noviembre: **[PENDIENTE: situación de El Niño en noviembre, con fuentes oficiales]**» | §5.7 y §5.8 |
+| 20 | «Adoptamos una corrección de sesgo», «el rango adaptativo ya está en la app» o «el combinado corre en vivo» | «Ninguna de las 88 correcciones mejora la historia y no se adoptó ninguna. El rango adaptativo cumple la cobertura (79-81 %) pero es una propuesta sin fusionar (PR #53). En vivo corre Chronos-2 ajustado con calendario; el combinado necesita los pesos de Simons, que no están en esa máquina» | §5.8; §6.4, puntos 12 y 13 |
 
 ---
 
-## Las 26 preguntas más probables
+## Las 30 preguntas más probables
 
 ### A. Negocio y CRISP-DM
 
@@ -207,8 +212,9 @@ tabla de búsqueda). *Límite:* presupuestos distintos y búsqueda solo en el Ce
 
 Porque la regla de elección se escribió antes de ver las cifras: la mayor mejora promedio de las tres áreas frente a
 la mejor referencia. Con esa regla ganó Random Forest por 0.3 puntos, que decide el Sur; en la práctica es un empate
-y reportamos los dos. La app usa el XGBoost global porque empató en 2025 y en 2026 y pesa decenas de MB en vez de
-1 GB. Ninguna conclusión depende de cuál se elija.
+y reportamos los dos. La app ejecuta el XGBoost global porque empató en 2025 y en 2026 y pesa decenas de MB en vez de
+1 GB; los otros dos modelos de la app (el híbrido y el combinado, con el que abre) van precalculados porque necesitan
+GPU. Ninguna conclusión depende de cuál se elija.
 
 *Respaldo:* 43.2 frente a 42.9 % (§5.3); en 2026 a 1 h, Random Forest 51.7 / 57.9 / 29.1 % y XGBoost global 52.4 /
 58.4 / 29.2 % (§5.4); §4.6 y §6.4, punto 5.
@@ -332,15 +338,19 @@ de error, 1.5 °C, cuando el plan preveía 1 y 2 °C).
 **24. La rúbrica nombra Streamlit. ¿Por qué una app propia? ¿Ejecuta el modelo?**
 
 Sí ejecuta el modelo: el backend carga el XGBoost global entrenado con 2016-2025, calcula las variables con la misma
-función de los notebooks y responde pronósticos a 1 y 24 horas por área. Tiene lo que pide el enunciado: entradas del
-usuario (área, fecha, hora, horizonte y escenario), la predicción y gráficos explicativos (real contra predicho,
-residuos, error por régimen, ablación e importancia). Elegimos una app propia asumiendo ese riesgo, con la condición
-de que corra el modelo y no muestre resultados precalculados; la única tabla precalculada es la de reentrenamiento,
-porque no se puede reentrenar en vivo.
+función de los notebooks y responde pronósticos a 1 y 24 horas por área; los otros dos modelos (el híbrido y el
+combinado, que es con el que abre) necesitan GPU y la app lee sus pronósticos precalculados. La app se llama Curva
+y tiene tres pantallas: «Ahora» (la demanda de este momento, el pico de las próximas 24 horas y lo que dijimos
+ayer frente a lo que pasó), «Confianza» (cuánto acertó, mes a mes y en vivo) y «Detalle» (el modelo, los
+escenarios y el diagnóstico). Tiene lo que pide el enunciado: entradas del usuario (área, fecha, hora, horizonte,
+modelo y escenario), la predicción y gráficos explicativos (real contra predicho, residuos, error por régimen,
+ablación e importancia). Elegimos una app propia asumiendo ese riesgo, con la condición de que corra el modelo y no
+solo muestre resultados precalculados.
 
-*Respaldo:* §4.6 y §6.3; rúbrica, criterio VI (`tb1-final-requisitos.md`, sección (b)). *Ojo:* los intervalos de la
-app salen de los errores de 2025 del Random Forest (auditoría, M4). Decir «intervalos empíricos, de los errores de
-2025».
+*Respaldo:* §4.6, §5.6 y §6.3; README, «Qué es»; rúbrica, criterio VI (`tb1-final-requisitos.md`, sección (b)).
+*Ojo:* los intervalos del XGBoost salen de los errores de 2025 (auditoría, M4): decir «intervalos empíricos, de los
+errores de 2025». Los del combinado y los del registro en vivo son los cuantiles 10 y 90 de Chronos-2 (rango del
+80 %).
 
 **25. ¿Cómo queda su modelo frente a los modelos fundacionales, como TimesFM o Chronos-2?**
 
@@ -385,3 +395,71 @@ año.
 −9.19 a −2.93; Norte a 24 h en 2026, el caso más ajustado: −1.08, IC −1.91 a −0.36 (§5.5 del informe técnico, nota
 sobre bloques; §6.1, punto 1, del short paper). Es una comprobación adicional, todavía fuera del notebook 04.
 Resultado principal: Norte a 1 h, −21.6 MW, IC −22.1 a −21.1 (§5.4, tabla).
+
+### F. El pronóstico en vivo, el sesgo de noviembre y la validación del diseño
+
+**27. ¿Por qué el modelo subestima en noviembre? ¿Es por El Niño?**
+
+En los primeros cinco días en vivo el Centro quedó en promedio 68 MW por debajo de lo real, aunque sigue ganándole a
+la referencia. Lo que encontramos al diagnosticarlo es que el calor del día explica poco: las variables de
+temperatura explican entre 1 y 8 % de lo que varía el sesgo diario, y el sesgo de hoy casi no anticipa el de
+mañana. Lo que sí hay es una deriva lenta de estación, de 0.5 a 1 % del nivel: cuando arranca el calor el modelo
+queda corto durante semanas (pasó en febrero de 2025 y en enero y febrero de 2026), y cuando se enfría se pasa.
+Además, el pico de los días más cálidos ya quedaba corto en 2026 (38 MW en el 10 % de días más cálidos) aunque el
+MAE del día no empeorara. Y El Niño no «empezó» en noviembre: viene de marzo y tuvo su máximo en agosto. Sobre su
+situación en noviembre: **[PENDIENTE: situación de El Niño en noviembre, con fuentes oficiales]**.
+
+*Respaldo:* §5.7 (tabla en vivo: Centro −68.3 MW en vivo, −94.0 en lo ex ante estricto, −21.3 en el reconstruido) y
+§5.8, punto 1 (calor explica 1-8 %; autocorrelación del sesgo diario de −0.06 a 0.22; sesgo mensual del Centro −43 MW
+en febrero de 2025, −39 del 3 al 13 de noviembre) y punto 2 (pico 38 MW más corto, IC −72 a −6; matiza la hipótesis
+1). ICEN 0.96 en marzo y 3.98 en agosto; Niño 1+2 +5.2 °C a mediados de octubre (§5.7). El 1 y 2 de noviembre son
+calendario (feriado): −103 y −119 MW en el Centro, +60 y +87 en el Norte.
+
+**28. Si el sesgo es sistemático, ¿por qué no lo corrigieron?**
+
+Porque lo probamos y en la historia no funciona. Ensayamos 88 maneras de corregir el sesgo con los errores recientes,
+siempre con la misma regla de información (para corregir el día X solo valen los errores hasta X − 1): ninguna baja
+el error de 2025, y en 2026 la mejor queda en cero; en los 22 días en vivo sí habría ayudado (unos 3 %), pero son
+pocos días y no decidimos con ellos. Corregir por temperatura tampoco: ajustado en 2025, empeora el Centro de 2026
+porque El Niño lleva las anomalías fuera de lo visto. Lo que sí cumple lo que promete es un rango adaptativo, que
+abre o cierra cada borde según cuántos periodos quedaron fuera el día anterior: la cobertura pasa de 74-76 % a
+79-81 %, con un rango 12-18 % más ancho. Está propuesto, sin fusionar, y no cambia lo emitido ni lo que muestra la
+app. Lo que falta para el pico es información que el modelo no tiene: un pronóstico de temperatura a un día.
+
+*Respaldo:* §5.8, puntos 3 y 4 (88 variantes: la menos mala sube el MAE de 2025 0.25 %, las de un día entre 19 y
+46 %; en 2026 la mejor da 0.0 %; corrección por temperatura, +5.6 MW en el Centro; ACI con γ = 0.2 elegido con 2025:
+79.3-80.1 % en 2025, 79.3-80.5 % en 2026, 81.8-85.9 % en vivo, mismo puntaje de intervalo ±2 %; PR #53). Trabajo
+futuro (5): pronóstico de temperatura con archivo histórico (Open-Meteo, 0.94 °C de error en la media diaria).
+
+**29. ¿Qué quiere decir «en vivo» si el COES publica los datos al día siguiente?**
+
+Que el pronóstico se emite y queda registrado antes de que exista su real. Cada mañana, hacia las 10, el COES
+publica la demanda de ayer; con eso la tubería pronostica el perfil completo de hoy a 24 horas y lo guarda con su
+sello de tiempo, el sha256 de los pesos y del anexo y el commit del código. Cuando mañana llegue el real de hoy, se
+compara. No es tiempo real: lo real siempre llega con un día de retraso. Por eso el registro separa tres tipos de
+fila: *ex ante estricto* (al emitirse, el periodo todavía no empezaba), *en vivo* (ya había empezado, pero el COES no
+podía haber publicado su real) y *reconstruido* (emitido después, con los datos hasta su origen: el relleno del 23 de
+octubre al 12 de noviembre, todo el horizonte de 1 hora, porque necesita la demanda de una hora antes, y cualquier
+corrida atrasada). Y lo que mostramos es seguimiento en curso, no un resultado: son cinco días.
+
+*Respaldo:* §4.6 («El pronóstico en vivo») y §5.7; `experimentos/en_vivo/README.md`. Cifras al 17 de noviembre:
+240 periodos en vivo por área (5 días), 120 ex ante estrictos, 1,008 reconstruidos (21 días); 51 corridas. El modelo
+en vivo es Chronos-2 ajustado con calendario, no el combinado (§6.4, punto 12).
+
+**30. ¿Cómo validaron el diseño de la app sin personas? ¿Eso vale?**
+
+Vale para lo que sirve y no para más. Medimos antes y después de cada cambio con el mismo arnés: tareas automatizadas
+con Playwright y tiempos estimados con el modelo de pulsaciones (KLM), accesibilidad con axe-core, un lector de
+atención entrenado con miradas reales sobre interfaces (UEyes), pruebas de 5 segundos y de primer clic sintéticas
+y un playtest con personas sintéticas. Cada cambio tenía una medición clave y un umbral fijado antes, y lo que no lo
+cumplió se revirtió. Así la tarea principal pasó de cumplirse a medias a cumplirse entera, las infracciones de
+accesibilidad bajaron de 6 a 0 y la atención a la cifra de ahora subió de 1.2 a 8.2 %. Pero todo eso es sintético:
+un modelo que predice dónde caen los primeros vistazos y evaluadores sintéticos que son complacientes. Sirve para
+detectar regresiones y decidir qué observar, no para afirmar que alguien entendió una cifra. Lo que valida o
+desmiente todo esto son las sesiones con cinco personas, con el protocolo ya escrito.
+
+*Respaldo:* §4.6 («Cómo se validó el diseño») y §5.6 (tabla de PR: 5 s «¿qué es esto?» 1 de 4 → 4 de 4; atención en
+la cifra de ahora 1.2 → 8.2 %; cifras a la vista 61 → 10; fijar otra hora 6 acciones → 1; axe 6 → 0; peso 157 → 115
+KB; el punto de «ahora» **no cumple** el 3 % buscado); §6.4, punto 14; `docs/auditoria/plan-juego.md` (protocolo de
+30 minutos con cinco personas). Referencias: Card, Moran y Newell (1980); Jiang et al. (2023); Medlock et al.
+(2002); Agnew et al. (2024) sobre los evaluadores sintéticos.
