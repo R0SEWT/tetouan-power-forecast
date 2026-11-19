@@ -30,7 +30,7 @@ puedo decir es que…». **Nunca inventar una cifra.**
 |---|---|---|---|
 | 1 | **51.7 / 57.9 / 29.1 %** | Cuánto menos error que la mejor referencia tuvo el modelo a 1 h en 2026 (Norte / Centro / Sur) | §5.4, tabla «El modelo fijo frente a las referencias» |
 | 2 | **34.5 / 42.2 / 11.9 %** | Lo mismo, a 24 h. La mejora fue mayor que en 2025 en 5 de los 6 casos (todos menos el Sur a 24 h) | §5.4, misma tabla y texto que la sigue |
-| 3 | **ICEN 3.98** | Agosto de 2026: el valor más alto desde 1997-98 | §3, «Por qué ahora» |
+| 3 | **ICEN 3.98** | Agosto de 2026: el valor más alto desde 1997-98 (y 4.50 en setiembre, IGP). Para el ENFEN el evento empezó en marzo de 2026 y es extraordinario desde agosto | §3, «Por qué ahora»; §5.7 |
 | 4 | **Hasta +17 %** | Crecimiento de la demanda del Norte sobre 2025 (en julio; el rango del año es de 4 a 17 %) | §3 y §4.2 |
 | 5 | **+27 %** | Crecimiento de la demanda media del SEIN, de 5,496 MW (2016) a 6,982 MW (2025). Por eso el objetivo en razón | §4.2, «Crecimiento» |
 | 6 | **2016-2024 / 2025 / 2026** | Entrenamiento / validación (elegir) / prueba (una sola vez). Por área a 1 h: 154,791 / 17,518 / 13,920 periodos | §4.3, «Partición con hueco» |
@@ -72,7 +72,7 @@ Según la auditoría metodológica. La columna de la derecha dice el hallazgo.
 | 16 | «Los modelos fundacionales pasaron una prueba limpia (o intacta) en 2026», «reemplazan a nuestro modelo» o citar las diferencias de 2025 de la combinación como si no fueran optimistas | «Es una extensión posterior a la prueba: 2026 no entra en ningún ajuste ni elección (ajuste fino hasta 2024; pesos y variantes elegidos con 2025), pero ya se había inspeccionado en el notebook 03; una prueba intacta sería el periodo posterior al 22 de octubre de 2026. Las cifras de 2025 de la combinación son optimistas porque los pesos se eligieron ahí. Es el modelo con el que abre la app (precalculado) y no fue parte de las hipótesis» | §6.4, punto 11; D16 |
 | 17 | «La app pronostica en tiempo real» o «el modelo corre en vivo a 1 hora» | «En vivo con un día de retraso: el COES publica el real de cada día a la mañana siguiente. El pronóstico de hoy a 24 h se emite y registra antes de que exista su real; el de 1 h necesita la demanda de una hora antes, que llega con el real, así que solo se reconstruye» | §4.6 y §5.7; §6.4, punto 12 |
 | 18 | «Validamos el diseño con usuarios» o «la app está probada con personas» | «El diseño se midió antes y después con instrumentos sintéticos (atención predicha, tareas con Playwright, tiempos estimados, evaluadores sintéticos). Sirve para detectar regresiones, no para afirmar que alguien entendió. Las sesiones con cinco personas están por hacer, con el protocolo escrito» | §5.6; §6.4, punto 14 |
-| 19 | «El Niño empezó en noviembre» o «el sesgo de noviembre lo causa El Niño» | «El evento viene de atrás: ICEN 0.96 en marzo y 3.98 en agosto; Niño 1+2 en +5.2 °C a mediados de octubre. El sesgo del Centro es una deriva lenta de estación y el pico de los días cálidos; el calor día a día explica entre 1 y 8 %. Sobre noviembre: **[PENDIENTE: situación de El Niño en noviembre, con fuentes oficiales]**» | §5.7 y §5.8 |
+| 19 | «El Niño empezó en noviembre» o «el sesgo de noviembre lo causa El Niño» | «Para el ENFEN empezó en marzo de 2026 (alerta desde el 13 de febrero), es extraordinario desde agosto y seguiría así hasta febrero de 2027 (Comunicado N.° 20-2026); ICEN 4.50 en setiembre; Niño 1+2 en +5.4 °C al 11-nov. Noviembre es su pico, no su arranque. El sesgo del Centro no sigue la temperatura de cada día (r = −0.14 en 26 días) y Norte y Sur están sobrestimados: no hay base para un «régimen Niño» por el ICEN. Lo nuevo es que Lima cruzó los 23-24 °C de media desde fines de octubre, el umbral desde el que el Centro consume ~1.9 % más por °C» | §5.7 y §5.8, punto 5 |
 | 20 | «Adoptamos una corrección de sesgo», «el rango adaptativo ya está en la app» o «el combinado corre en vivo» | «Ninguna de las 88 correcciones mejora la historia y no se adoptó ninguna. El rango adaptativo cumple la cobertura (79-81 %) pero es una propuesta sin fusionar (PR #53). En vivo corre Chronos-2 ajustado con calendario; el combinado necesita los pesos de Simons, que no están en esa máquina» | §5.8; §6.4, puntos 12 y 13 |
 
 ---
@@ -398,24 +398,29 @@ Resultado principal: Norte a 1 h, −21.6 MW, IC −22.1 a −21.1 (§5.4, tabla
 
 ### F. El pronóstico en vivo, el sesgo de noviembre y la validación del diseño
 
-**27. ¿Por qué el modelo subestima en noviembre? ¿Es por El Niño?**
+**27. ¿Por qué el modelo subestima en noviembre? ¿El error de noviembre es por El Niño?**
 
 En los primeros cinco días en vivo el Centro quedó en promedio 68 MW por debajo de lo real, aunque sigue ganándole a
-la referencia. Lo que encontramos al diagnosticarlo es que el calor del día explica poco: las variables de
-temperatura explican entre 1 y 8 % de lo que varía el sesgo diario, y el sesgo de hoy casi no anticipa el de
-mañana. Lo que sí hay es una deriva lenta de estación, de 0.5 a 1 % del nivel: cuando arranca el calor el modelo
-queda corto durante semanas (pasó en febrero de 2025 y en enero y febrero de 2026), y cuando se enfría se pasa.
-Además, el pico de los días más cálidos ya quedaba corto en 2026 (38 MW en el 10 % de días más cálidos) aunque el
-MAE del día no empeorara. Y El Niño no «empezó» en noviembre: viene de marzo y tuvo su máximo en agosto. Sobre su
-situación en noviembre: **[PENDIENTE: situación de El Niño en noviembre, con fuentes oficiales]**.
+la referencia; del 1 al 17 de noviembre el sesgo va en −1.2 % del nivel, 16 de 17 días bajo cero. Que haga calor por
+El Niño sí se sostiene: Lima lleva unos +4.6 °C sobre lo normal desde octubre. Pero El Niño no «empezó» en
+noviembre: para el ENFEN el evento costero empezó en marzo de 2026, es extraordinario desde agosto y seguiría así
+hasta febrero de 2027; noviembre es su pico, no su arranque. Y el sesgo tampoco se explica como «un régimen de El
+Niño»: el sesgo del Centro no sigue la temperatura de cada día (r = −0.14 en 26 días, muy poca evidencia), Norte y
+Sur están sobrestimados, y el ICEN lleva en «extraordinaria» desde agosto, meses en que el sesgo fue casi nulo. Lo
+que cambió a fines de octubre es que la media diaria de Lima cruzó los 23-24 °C, el umbral desde el que el Centro
+consume alrededor de 1.9 % más por grado: el mismo arranque del calor que en enero y febrero de 2025 y 2026, dos
+meses antes de lo normal. La demanda del Centro va 11 % sobre noviembre de 2025; el calor explicaría 5 a 6 puntos.
+Lo que queda como trabajo futuro es probar la temperatura pronosticada con ese umbral, midiendo el pico.
 
-*Respaldo:* §5.7 (tabla en vivo: Centro −68.3 MW en vivo, −94.0 en lo ex ante estricto, −21.3 en el reconstruido) y
-§5.8, punto 1 (calor explica 1-8 %; autocorrelación del sesgo diario de −0.06 a 0.22; sesgo mensual del Centro −43 MW
-en febrero de 2025, −39 del 3 al 13 de noviembre) y punto 2 (pico 38 MW más corto, IC −72 a −6; matiza la hipótesis
-1). ICEN 0.96 en marzo y 3.98 en agosto; Niño 1+2 +5.2 °C a mediados de octubre (§5.7). El 1 y 2 de noviembre son
-calendario (feriado): −103 y −119 MW en el Centro, +60 y +87 en el Norte.
+*Respaldo:* §5.7 (tabla en vivo: Centro −68.3 MW en vivo, −94.0 en lo ex ante estricto, −21.3 en el reconstruido;
+ENFEN, Comunicado N.° 20-2026 del 13-nov; ICEN 0.96 en marzo, 3.98 en agosto, 4.50 en setiembre, IGP; Niño 1+2
++5.4 °C al 11-nov, NOAA) y §5.8, puntos 1 (calor explica 1-8 % del sesgo diario en 2025-2026), 2 (pico 38 MW más
+corto en los días más cálidos; matiza la hipótesis 1) y 5 (r = −0.14, IC −0.50 a +0.26; Norte +1.6 % y Sur +1.0 %
+de sesgo; respuesta 1.9 %/°C sobre 24 °C; +11.2 % de demanda, 5.6 puntos por calor, ~3 sin explicar). Cautelas:
+§6.4, punto 13 (26 días con autocorrelación, temperatura de reanálisis, umbral estimado con días de verano). El 1 y
+2 de noviembre son calendario (feriado): −103 y −119 MW en el Centro, +60 y +87 en el Norte.
 
-**28. Si el sesgo es sistemático, ¿por qué no lo corrigieron?**
+, ¿por qué no lo corrigieron?**
 
 Porque lo probamos y en la historia no funciona. Ensayamos 88 maneras de corregir el sesgo con los errores recientes,
 siempre con la misma regla de información (para corregir el día X solo valen los errores hasta X − 1): ninguna baja

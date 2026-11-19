@@ -148,7 +148,8 @@ tabla de la sección 6.1 del paper.
 **Qué decir:**
 
 - «¿Por qué ahora? Porque 2026 es un año extraordinario.»
-- «El Índice Costero El Niño, el ICEN, llegó a 3.98 en agosto. Es el valor más alto desde 1997-98.»
+- «El Índice Costero El Niño, el ICEN, llegó a 3.98 en agosto, el valor más alto desde 1997-98, y siguió subiendo:
+  4.50 en setiembre.»
 - «Y la demanda del Norte creció hasta 17 % sobre 2025.»
 - «Ese es justo el caso en que un modelo entrenado con el pasado puede fallar: la demanda sale de lo que vio.»
 - «Nuestro objetivo es una metodología que aguante eso, y medir qué ayuda más a adaptarla.»
@@ -157,7 +158,8 @@ tabla de la sección 6.1 del paper.
   en cada área y en cada horizonte.»
 - «Las reglas son: lo mismo que ahora, lo mismo que ayer a esa hora y lo mismo que la semana pasada a esa hora.»
 
-**Cifras:** ICEN de 3.98 (agosto de 2026); Norte hasta +17 % sobre 2025 (julio). **Fuente:** §3, «Por qué ahora».
+**Cifras:** ICEN de 3.98 (agosto de 2026) y 4.50 (setiembre, IGP); Norte hasta +17 % sobre 2025 (julio). **Fuente:**
+§3, «Por qué ahora». Para el ENFEN el evento empezó en marzo de 2026 (§5.7): no decir que empezó en noviembre.
 Criterio de éxito: §4.1, «Criterios de éxito», punto 1.
 
 **Pase:** «Ahora [Expositor 2] les cuenta con qué datos trabajamos.»
@@ -387,8 +389,10 @@ aquí.**
 - «El combinado está en vivo»: en vivo corre Chronos-2 ajustado con calendario (faltan los pesos de Simons en esa
   máquina). El combinado es el de la prueba de 2026 y el que abre la app.
 - «Validado con usuarios»: toda la medición del diseño es sintética; las sesiones con personas están por hacer.
-- «El Niño empezó en noviembre»: viene de atrás (ICEN 0.96 en marzo, 3.98 en agosto). Si preguntan por noviembre:
-  **[PENDIENTE: situación de El Niño en noviembre, con fuentes oficiales]**.
+- «El Niño empezó en noviembre»: para el ENFEN empezó en marzo de 2026 (alerta desde el 13 de febrero), es
+  extraordinario desde agosto y seguiría así hasta febrero de 2027 (Comunicado N.° 20-2026, 13-nov). ICEN 4.50 en
+  setiembre; Niño 1+2 en +5.4 °C al 11-nov. Noviembre es su pico, no su arranque. Y el sesgo del Centro no es «un
+  régimen Niño»: lo nuevo es que Lima cruzó los 23-24 °C de media desde fines de octubre (§5.8, punto 5).
 - El control «Falla en curso» de los escenarios: la variable de fallas no se pudo evaluar (auditoría, G2).
 
 **Plan B (si la app falla):**

@@ -78,8 +78,8 @@ el Norte no siempre se cubre desde el Centro.[^spec-negocio] Subestimar cuesta m
 arrancar generación cara de urgencia o, en el extremo, a cortar carga.
 
 **Por qué ahora.** El Niño Costero de 2026 es extraordinario: el Índice Costero El Niño (ICEN) llegó a 3.98 en
-agosto, el valor más alto desde 1997-98, y la demanda del Norte creció entre 4 y 17 % sobre 2025 (17 % en
-julio).[^nb01-sein] Es exactamente la situación en la que un pronóstico entrenado con el pasado puede fallar: la
+agosto, el valor más alto desde 1997-98 (y siguió subiendo: 4.50 en setiembre), y la demanda del Norte creció entre 4 y
+17 % sobre 2025 (17 % en julio).[^nb01-sein][^nino-nov] Es exactamente la situación en la que un pronóstico entrenado con el pasado puede fallar: la
 demanda sale del rango que el modelo vio.
 
 **El vacío.** Revisamos unos 70 trabajos que usan el dataset público de Tetuán: casi ninguno se compara con
@@ -752,10 +752,15 @@ ajustado con calendario, frente a la mejor referencia ingenua en las mismas fila
 A 1 hora todo es reconstruido (26 días): 51.3 MW en el Centro frente a 135.6 de la persistencia, 20.6 frente a 41.9
 en el Norte y 22.7 frente a 33.6 en el Sur. El modelo le gana a la referencia en todos los tramos y áreas, pero en
 el Centro **subestima** (sesgo de −68 MW en vivo y −94 en lo ex ante estricto) y el rango del 80 % cubre menos de
-lo que promete (67 % en vivo; 73 % en el reconstruido), mientras que en el Sur sobrestima. Noviembre llega después de
-meses de El Niño: el ICEN subió de 0.96 en marzo a 3.98 en agosto de 2026 y la anomalía de Niño 1+2 estaba en
-+5.2 °C a mediados de octubre; el evento viene de atrás, no empezó en noviembre *[PENDIENTE: situación de El Niño
-en noviembre, con fuentes oficiales]*. Qué hay detrás del sesgo del Centro se revisa en la sección 5.8.
+lo que promete (67 % en vivo; 73 % en el reconstruido), mientras que en el Sur sobrestima. Noviembre no es el arranque de El Niño sino su pico: para el ENFEN, el evento costero empezó en **marzo de 2026**
+(la alerta se activó el 13 de febrero), es de magnitud extraordinaria desde agosto y el pronóstico es que siga así
+hasta febrero de 2027 (Comunicado Oficial N.° 20-2026, del 13 de noviembre). El ICEN subió de 0.96 en marzo a 3.98
+en agosto y 4.50 en setiembre (IGP; el temporal de octubre, 4.69), y la anomalía de Niño 1+2 estaba en +5.4 °C el
+11 de noviembre (NOAA). Lima estuvo unos +4.6 °C sobre lo normal de 1991-2020 entre el 1 de octubre y el 12 de
+noviembre según ERA5 (un reanálisis, no una estación; el doble que en 1997 por estas fechas), y desde el 20 de
+octubre su media diaria pasó los 23-24 °C, el umbral desde el que la demanda del Centro sube alrededor de 1.9 % por
+°C. Qué hay detrás del sesgo del Centro, y por qué no es "un régimen de El Niño", se revisa en la sección
+5.8.[^nino-nov]
 
 ## 5.8 Diagnóstico del sesgo de noviembre: ¿calor o deriva?
 
@@ -790,9 +795,27 @@ hasta X − 1):[^sesgo]
    como modelo en paralelo (`chronos2ftcal+rango`, PR #53, sin fusionar); no cambia lo emitido ni lo que muestra la
    app.
 
-Lo que falta para el pico es información que el modelo no tiene: un pronóstico de temperatura a un día con archivo
-histórico (la *Previous Runs API* de Open-Meteo lo guarda para Lima desde 2024, con 0.94 °C de error en la media
-diaria frente a su análisis), probado como covariable futura entrenando con 2024 y eligiendo con 2025.
+5. **Noviembre no es un «régimen de El Niño» que el ICEN pueda marcar** (revisión del 19 de noviembre). En los 26
+   días con real (23 de octubre a 17 de noviembre), el sesgo diario del Centro no sigue la temperatura del día:
+   r = −0.14 con la anomalía media (IC 95 % −0.50 a +0.26) y −0.18 con la mínima quitada la tendencia; con tan pocos
+   días no se separa el calor de una deriva. Norte y Sur están **sobrestimados** en noviembre (+1.6 y +1.0 % del
+   nivel), al revés de lo que diría un régimen de calor; y el ICEN lleva en «extraordinaria» desde agosto, meses en
+   los que el sesgo mensual del Centro fue casi nulo (entre −9 y +11 MW de junio a octubre, con anomalías de +2.6 a
+   +4.4 °C): la categoría no distingue el mes que falla de los que no. Lo que cambió es que la temperatura absoluta
+   cruzó el umbral: el sesgo negativo aparece cuando Lima entra en terreno de verano, como en enero y febrero de
+   2025 y de 2026, solo que este año llegó dos meses antes. Del 1 al 17 de noviembre el sesgo va en −1.2 % del nivel
+   (16 de 17 días bajo cero) y el error del pico empeora semana a semana (−110, −118 y −191 MW, los últimos dos días
+   solos): en el borde superior de la deriva que estimó el diagnóstico, o algo por encima; a 1 hora casi desaparece
+   (−8 MW). La demanda del Centro va 11 % sobre noviembre de 2025 (del 3 al 17: 4,673 frente a 4,202 MW); con la
+   respuesta a la temperatura estimada en 2016-2025 (casi nula bajo 22 °C, 1.0 %/°C entre 22 y 24 y 1.9 %/°C sobre
+   24 °C), el calor de Lima explica unos 5.6 puntos, la tendencia habitual otros 2.5 a 3 y quedan unos 3 sin
+   explicar, vigentes desde junio, que no se pudieron atribuir.[^nino-nov]
+
+Lo que falta para el pico es información que el modelo no tiene: la temperatura **pronosticada** para el día
+objetivo, como exceso sobre un umbral de 23 °C (la *Previous Runs API* de Open-Meteo guarda el pronóstico a un día
+para Lima desde 2024, con 0.94 °C de error en la media diaria frente a su análisis), probada como covariable
+futura, eligiendo con 2025 y reportando 2026 y el tramo en vivo, con el sesgo y el error del pico del Centro en los
+días con pronóstico de 23 °C o más como métricas escritas antes. Sin implementar.
 
 ## 5.9 Contexto internacional
 
@@ -840,6 +863,8 @@ celdas de texto) para exportarlas a la versión final.
 | 17 | Sesgo diario a 24 h del 1 de octubre al 13 de noviembre y temperatura de Lima: el feriado, la subida lenta del Centro y el 13 de noviembre | `paper/figuras/fig6_sesgo_diario_en_vivo.png` (diagnóstico del 14-nov, `experimentos/sesgo/graficos.py`, PR #53) | 5.8 |
 | 18 | Cobertura del rango 10-90 antes y después del rango adaptativo, por año y área | `paper/figuras/fig7_cobertura_rango_adaptativo.png` (mismo diagnóstico) | 5.8 |
 | 19 | Capturas de «Ahora» (escritorio y celular) y de «Confianza» | `docs/img/curva-ahora-escritorio.jpg`, `docs/img/curva-ahora-movil.jpg`, `docs/img/app-hcd/it8-confianza-escritorio.jpg` | 4.6 |
+| 20 | Lima: temperatura media diaria de 2016-2025 por mes (cajas) y cada día de 2026 (puntos), con la franja de 23-24 °C desde la que la demanda del Centro sube ~1.9 % por °C | `paper/figuras/fig8_lima_noviembre_en_verano.png` (revisión del 19-nov; ERA5 de Open-Meteo; del 13 al 18-nov, análisis del modelo) | 5.7, 5.8 |
+| 21 | Anomalía diaria de temperatura por área (ERA5, base 1991-2020) y sesgo diario a 24 h del Centro, Norte y Sur, 1 de octubre a 17 de noviembre | `paper/figuras/fig9_anomalia_y_sesgo_diario.png` (misma revisión) | 5.8 |
 
 Nota a la figura 8: `media_24h` es la escala con la que la razón vuelve a MW, no una variable que el modelo vea;
 al permutarla se rompe la reconstrucción y salía como la más importante. Desde el PR #30 los notebooks la excluyen
@@ -933,7 +958,11 @@ Lo que un lector debe tener en cuenta antes de generalizar los resultados.
     horizonte de 1 hora solo puede reconstruirse.
 13. **El diagnóstico del sesgo es sobre pocos días en vivo** (22) y con ERA5 como temperatura; los deciles de calor
     se ordenan dentro de cada año; los episodios se definen con el error del propio modelo. Sus remedios no se
-    adoptaron; el rango adaptativo es una propuesta (PR #53) todavía sin fusionar.
+    adoptaron; el rango adaptativo es una propuesta (PR #53) todavía sin fusionar. La revisión de El Niño del 19 de
+    noviembre usa 26 días con autocorrelación y unas 50 correlaciones (que salgan algunas de 0.4 a 0.5 por azar es
+    esperable); la temperatura de Lima es de un reanálisis, no de estación (ERA5 da unos 2 °C menos de anomalía que
+    Campo de Marte), y del 13 al 18 de noviembre es el análisis de un modelo; el umbral de 23-24 °C se estimó con
+    días de enero a abril, y que valga en noviembre es un supuesto.
 14. **La validación del diseño es sintética**: atención predicha, tareas de robot, tiempos estimados y evaluadores
     sintéticos. Detecta regresiones; no dice que alguien entendió. Faltan las sesiones con personas.
 15. **El contexto internacional no es una comparación de igual a igual:** otros sistemas, perímetros, horizontes y
@@ -1003,8 +1032,11 @@ cifras a la vista en la primera apertura, 61 → 10; atención en la cifra de ah
 6 acciones → 1), con la salvedad de que nada se probó aún con personas. Desde el 13 de noviembre una tubería diaria
 emite el pronóstico del día antes de conocer su real: en cinco días en vivo le gana a la referencia en las tres
 áreas, pero el Centro subestima y su rango queda corto; el diagnóstico atribuye eso a una deriva lenta de estación
-y al pico de los días más cálidos, no al calor día a día, y ningún remedio barato lo arregla en la historia. Lo que
-sí cumple lo que promete es un rango adaptativo, propuesto y sin fusionar.
+y al pico de los días más cálidos, no al calor día a día, y ningún remedio barato lo arregla en la historia. El
+Niño no empezó en noviembre (para el ENFEN, en marzo de 2026; extraordinario desde agosto) y no hay base para
+tratar el mes como un régimen del ICEN: lo nuevo es que Lima cruzó los 23-24 °C de media desde fines de octubre, y
+lo que vale la pena probar es la temperatura pronosticada con ese umbral, midiendo el pico. Lo que sí cumple lo que
+promete es un rango adaptativo, propuesto y sin fusionar.
 
 **Trabajo futuro.** Seis cosas que este trabajo no hizo y que un lector del COES pediría primero: (1) comparar el
 pronóstico a 24 horas con la Programación Diaria del COES, evaluada sobre el perímetro del portal y en igualdad de
@@ -1050,6 +1082,12 @@ que validen o desmientan la medición sintética del diseño.
   `google/timesfm-2.5-200m-pytorch` y `google/timesfm-3.0-pytorch` (Hugging Face).
 - ENFEN. (2024). *Nota Técnica ENFEN 01-2024: categorías del Índice Costero El Niño*. Comisión Multisectorial
   ENFEN.
+- ENFEN. (2026a). *Comunicado Oficial ENFEN N.° 03-2026* (13 de febrero de 2026: activación de la Alerta de El Niño
+  Costero). https://enfen.imarpe.gob.pe/download/comunicado-oficial-enfen-n-03-2026/
+- ENFEN. (2026b). *Comunicado Oficial ENFEN N.° 20-2026* (13 de noviembre de 2026).
+  https://enfen.imarpe.gob.pe/download/comunicado-oficial-enfen-n-20-2026/
+- ENFEN. (2026c). *Informe Técnico ENFEN, Año 12, N.° 20* (al 11 de noviembre de 2026).
+  https://enfen.imarpe.gob.pe/download/informe-tecnico-enfen-ano-12-n20-al-11-noviembre-2026/?wpdmdl=2219
 - Gronier, G. (2016). Measuring the first impression: Testing the validity of the 5 second test. *Journal of
   Usability Studies, 12*(1), 8-25.
 - Hewamalage, H., Ackermann, K., & Bergmeir, C. (2023). Forecast evaluation for data scientists: Common pitfalls
@@ -1080,8 +1118,10 @@ que validen o desmientan la medición sintética del diseño.
 - NESO. (2026). *Day-ahead half-hourly demand forecast performance* [Archivo abierto desde abril de 2021].
   https://www.neso.energy/data-portal/day-ahead-half-hourly-demand-forecast-performance
 - Nielsen, J. (1994). *Usability engineering*. Morgan Kaufmann.
-- NOAA Climate Prediction Center. (2026). *Weekly Niño 1+2 SST and anomalies* [Serie semanal].
-  https://www.cpc.ncep.noaa.gov/data/indices/
+- NOAA Climate Prediction Center. (2026a). *Weekly Niño 1+2 SST and anomalies* [Serie semanal, base 1991-2020].
+  https://www.cpc.ncep.noaa.gov/data/indices/wksst9120.for
+- NOAA Climate Prediction Center. (2026b). *ENSO Diagnostic Discussion* (12 de noviembre de 2026).
+  https://www.cpc.ncep.noaa.gov/products/analysis_monitoring/enso_advisory/ensodisc.shtml
 - Open-Meteo. (2026). *Historical Weather API (reanálisis ERA5 de ECMWF)*. CC BY 4.0.
   https://open-meteo.com/en/docs/historical-weather-api
 - Osinergmin. (2026). *SAIDI y SAIFI por sistema eléctrico* [Dataset]. Plataforma Nacional de Datos Abiertos.
@@ -1220,6 +1260,18 @@ Las tablas de 2025 son de la corrida del notebook 02 del SEIN del 4 de noviembre
     CNMC (resoluciones RAP/DE/012/25 y RAP/DE/016/26 y umbrales 2023-2025), NESO (archivo abierto de desempeño) y PJM
     (informe del Operating Committee del 5-feb-2026). El WAPE y el MAPE de 2026 del combinado: `docs/app-hcd.md`,
     iteración 8 (tabla de «Confianza»), calculados sobre las 13,824 medias horas de la prueba.
+[^nino-nov]: Revisión del 19 de noviembre de 2026 contra fuentes oficiales (cálculos reproducibles fuera del repo).
+    ENFEN, Comunicado Oficial N.° 20-2026 (13-nov) e Informe Técnico Año 12 N.° 20 (al 11-nov), tablas 1, 3, 9 y
+    10; Comunicado N.° 03-2026 (13-feb, activación de la alerta). ICEN de setiembre: 4.50 en el archivo oficial del
+    IGP (`ICEN.txt`, consultado el 19-nov); la Tabla 3 del Informe Técnico N.° 20 trae 4.98, probable errata (el
+    temporal de setiembre del informe anterior era 4.58 y el de octubre es 4.69, que con 4.98 sería una bajada que
+    no cuadra con el mar). Niño 1+2: NOAA CPC, `wksst9120.for` (base 1991-2020): +5.3, +5.4, +5.6 y +5.4 °C las
+    semanas del 21-oct al 11-nov. Temperatura: ERA5 de Open-Meteo en los mismos puntos del proyecto, climatología
+    1991-2020 por día del año (±7 días); del 13 al 18-nov, análisis de su modelo de pronóstico corrido +1.1 °C para
+    empalmar con ERA5. Correlaciones sobre `seguimiento.parquet` (26 días, IC de Fisher). Respuesta de la demanda
+    del Centro a la temperatura de Lima: regresión con 2016-2025, efectos fijos de año-mes y día de la semana, IC por
+    bootstrap de meses: ~0 %/°C bajo 22 °C (IC −0.4 a +0.3), +1.0 %/°C entre 22 y 24 (0.3 a 1.6) y +1.9 %/°C sobre
+    24 °C (1.5 a 2.4). Crecimiento del Centro del 3 al 17-nov frente a 2025, mismo día de la semana: +11.2 %.
 [^fm-otros]: MAE de 2026 a 1 h en el Centro calculados sobre las filas de la prueba desde
     `t0_c2048.parquet`, `toto2_c2048.parquet`, `timesfm3_c2048.parquet` y `tirex2_c2048.parquet` (51.8, 50.7, 53.2 y
     59.5 MW); el efecto de las covariables, desde `chronos2cov_c2048.parquet` frente a `chronos2_c2048.parquet`
