@@ -14,22 +14,26 @@ from tetouan_power_forecast import en_vivo as ev
 from tetouan_power_forecast import temperatura_pronosticada as tp
 
 
-def _respuesta(desde, hasta, temp=None):
-    """Una respuesta de Open-Meteo con las seis ciudades: la misma temperatura en todas las variables."""
+def _respuesta(desde, hasta, temp=None, vacio=None):
+    """Una respuesta de Open-Meteo con las seis ciudades: la misma temperatura en todas las variables.
+
+    `vacio` = {área: fecha}: desde esa fecha, las ciudades del área vienen sin dato (null)."""
     tiempo = pd.date_range(desde, f"{hasta} 23:00", freq="h")
     temp = temp or {"norte": 26.0, "centro": 25.0, "sur": 19.0}
+    vacio = {a: pd.Timestamp(f) for a, f in (vacio or {}).items()}
     salida = []
     for area, _, _, _ in tp.LUGARES:
         horas = {"time": [f"{t:%Y-%m-%dT%H:%M}" for t in tiempo]}
+        valores = [None if area in vacio and t >= vacio[area] else temp[area] for t in tiempo]
         for variable in tp.VARIABLES:
-            horas[variable] = [temp[area]] * len(tiempo)
+            horas[variable] = valores
         salida.append({"hourly": horas})
     return json.dumps(salida).encode()
 
 
-def _archivo_anual(carpeta_datos, anio, desde, hasta, temp=None):
+def _archivo_anual(carpeta_datos, anio, desde, hasta, temp=None, vacio=None):
     destino = tp.carpeta(carpeta_datos) / f"{tp.MODELO}_{anio}.json"
-    tp._guardar(destino, _respuesta(desde, hasta, temp), modelo=tp.MODELO, desde=desde, hasta=hasta)
+    tp._guardar(destino, _respuesta(desde, hasta, temp, vacio), modelo=tp.MODELO, desde=desde, hasta=hasta)
 
 
 def _sin_ajuste(carpeta_datos):
@@ -185,6 +189,27 @@ def test_calor_salta_los_dias_sin_pronostico_de_temperatura(raiz):  # noqa: F811
     calor = ev.leer_registro(raiz).query("modelo == 'falso+calor'")
     assert pd.to_datetime(calor["fecha_objetivo"]).max() == pd.Timestamp("2026-10-24")
     assert any("sin pronóstico de temperatura" in m for m in mensajes)
+
+
+def test_calor_reintenta_solo_el_area_que_no_tenia_temperatura(raiz):  # noqa: F811
+    _con_tres_dias(raiz)
+    ev.emitir(raiz, ModeloFalso(), ahora=lambda: LIMA_10_05, progreso=_silencio)
+    _archivo_anual(raiz, 2026, "2026-08-01", "2026-10-31", vacio={"sur": "2026-10-25"})
+    _sin_ajuste(raiz)
+
+    def caida(url):
+        raise urllib.error.URLError("sin red")
+
+    ev.emitir_calor(raiz, "falso", hoy=dt.date(2026, 10, 26), descargar=caida, progreso=_silencio)
+    calor = ev.leer_registro(raiz).query("modelo == 'falso+calor'")
+    dias = calor.groupby("area")["fecha_objetivo"].max()
+    assert dias["SUR"] == pd.Timestamp("2026-10-24") and dias["CENTRO"] == pd.Timestamp("2026-10-26")
+    _archivo_anual(raiz, 2026, "2026-08-01", "2026-10-31")  # llegó lo que faltaba del Sur
+    n = ev.emitir_calor(raiz, "falso", hoy=dt.date(2026, 10, 26), descargar=caida, progreso=_silencio)
+    calor = ev.leer_registro(raiz).query("modelo == 'falso+calor'")
+    assert n == 48 * 3  # el Sur: 24 h del 25 y del 26, 1 h del 25
+    assert calor.groupby("area").size().nunique() == 1
+    assert not calor.duplicated(["horizonte", "area", "objetivo"]).any()
 
 
 def test_correr_emite_el_paralelo_y_un_fallo_no_frena_al_base(raiz, monkeypatch):  # noqa: F811

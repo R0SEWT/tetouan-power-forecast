@@ -685,9 +685,10 @@ def emitir_calor(raiz=None, nombre_base="chronos2ftcal", hoy=None, ahora=_ahora_
     version = f"{version_base}+{VERSION_CALOR}"
     base = base[base["version_pesos"] == version_base].copy()
     propias = registro[(registro["modelo"] == nombre) & (registro["version_pesos"] == version)]
-    hechas = set(zip(propias["horizonte"], pd.to_datetime(propias["fecha_objetivo"])))
+    # Por área: si a un área le faltó la temperatura un día, ese día se reintenta solo para ella
+    hechas = set(zip(propias["horizonte"], propias["area"], pd.to_datetime(propias["fecha_objetivo"])))
     base["fecha_objetivo"] = pd.to_datetime(base["fecha_objetivo"])
-    faltan = base[[k not in hechas for k in zip(base["horizonte"], base["fecha_objetivo"])]]
+    faltan = base[[k not in hechas for k in zip(base["horizonte"], base["area"], base["fecha_objetivo"])]]
     if faltan.empty:
         return 0
     tp.bajar_reciente(r.raiz, hoy or _hoy_lima(), descargar=descargar or tp.pedir)
@@ -710,7 +711,7 @@ def emitir_calor(raiz=None, nombre_base="chronos2ftcal", hoy=None, ahora=_ahora_
             g[columna] = g[columna].to_numpy(dtype=float) * factor
         partes.append(g)
     if sin_dato:
-        progreso(f"Calor: sin pronóstico de temperatura para {sorted(sin_dato)}; esos días se reintentan después")
+        progreso(f"Calor: sin pronóstico de temperatura para {sorted(sin_dato)} (alguna área); se reintentan después")
     nuevas = pd.concat(partes, ignore_index=True) if partes else pd.DataFrame()
     if nuevas.empty:
         return 0
