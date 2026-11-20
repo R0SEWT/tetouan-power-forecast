@@ -27,6 +27,16 @@ feriado como covariable pasada y futura y los cuantiles 10, 50 y 90 %. Cualquier
 con el formato de esos experimentos (`ChronosAjustado.pronosticar`) entra igual; así se sumará el combinado cuando
 estén los pesos de Simons (ver `experimentos/en_vivo/README.md`).
 
+En paralelo se registran dos variantes del mismo modelo, cada una con sus filas y su sello (lo ya emitido no cambia y
+la app sigue mostrando el base):
+
+- `chronos2ftcal+rango`: el mismo pronóstico central con el rango 10–90 recalibrado en línea (ACI por lado, ver
+  `emitir_rango`), para comparar en vivo su cobertura con la del modelo base.
+- `chronos2ftcal+calor`: el pronóstico corregido por la temperatura pronosticada sobre el umbral (ver `emitir_calor` y
+  `temperatura_pronosticada`).
+
+Si una variante falla (por ejemplo, sin red para la temperatura), queda en el log y las demás se registran igual.
+
 Capas, dentro de la carpeta de datos (`TETOUAN_DATA`):
 
 - coes/bronze/ieod_diario/AAAA-MM-DD/: el anexo tal cual, con las correcciones del COES aparte (con su sha256 en el
@@ -43,6 +53,7 @@ Uso, con el entorno que tiene Chronos-2 (`experimentos/en_vivo/entorno.sh`):
 
     python -m tetouan_power_forecast.en_vivo diario      # ingesta → pronóstico → evaluación
     python -m tetouan_power_forecast.en_vivo relleno     # lo mismo, sin emitir el día de hoy
+    python -m tetouan_power_forecast.en_vivo calor       # solo el modelo en paralelo «+calor»
 """
 
 import argparse
@@ -571,21 +582,26 @@ def _version_codigo():
     return salida.stdout.strip()
 
 
-def emitir(raiz=None, modelo=None, desde=ARRANQUE, hasta_objetivo=None, ahora=_ahora_utc, progreso=print):
+def emitir(raiz=None, modelo=None, desde=ARRANQUE, hasta_objetivo=None, ahora=_ahora_utc, progreso=print,
+           rangos=None):
     """Emite lo que falte en el registro con los datos que hay y lo agrega. Devuelve cuántas filas agregó.
 
     Para cada día objetivo X: a 24 h, desde los 48 orígenes del día anterior (datos hasta el fin de X − 1); a 1 h,
     desde los orígenes una hora antes de cada periodo de X (datos hasta el fin de X). El sello `emitido_en` se toma
     después de calcular, justo antes de escribir.
+
+    Si el modelo tiene un rango adaptativo en `rangos` (por defecto `RANGOS`: solo Chronos-2 ajustado), después se
+    emite también su modelo en paralelo «+rango» (ver `emitir_rango`), con su propio sello.
     """
     r = rutas(raiz)
     serie = serie_completa(r)
     modelo = modelo or ChronosAjustado()
+    rangos = RANGOS if rangos is None else rangos
     pendientes = emisiones_pendientes(leer_registro(r), modelo.nombre, modelo.version, _ultimo_dia(serie), desde,
                                       hasta_objetivo)
     if not pendientes:
         progreso("Pronóstico: no falta nada por emitir")
-        return 0
+        return _emitir_rango_de(r, modelo, rangos, serie, desde, hasta_objetivo, ahora, progreso)
     progreso(f"Pronóstico: {len(pendientes)} emisiones pendientes, de {min(d for _, d in pendientes)} a "
              f"{max(d for _, d in pendientes)}")
     demanda = serie.set_index("DateTime")[AREAS].asfreq("30min").interpolate(limit_direction="both")
@@ -620,6 +636,219 @@ def emitir(raiz=None, modelo=None, desde=ARRANQUE, hasta_objetivo=None, ahora=_a
     agregadas = agregar_al_registro(r, nuevas)
     cuenta = nuevas["tipo"].value_counts().to_dict()
     progreso(f"Pronóstico: {agregadas} filas nuevas en el registro ({cuenta}), emitidas {emitido:%Y-%m-%d %H:%M} UTC")
+    return agregadas + _emitir_rango_de(r, modelo, rangos, serie, desde, hasta_objetivo, ahora, progreso)
+
+
+# ---- Rango adaptativo: un modelo en paralelo -----------------------------------------------------------------------
+#
+# El rango 10–90 de Chronos-2 ajustado cubre menos de lo que dice: 74–76 % en 2025 y en 2026 (experimentos/sesgo). El
+# modelo en paralelo «chronos2ftcal+rango» tiene el mismo pronóstico central y el rango recalibrado en línea con ACI
+# por lado (Gibbs y Candès, 2021): cada borde se aleja o se acerca del centro con un factor exp(f) que se ajusta cada
+# día con lo que pasó el día anterior, f ← f + γ·(fracción de periodos fuera por ese lado − 10 %). Se eligió con 2025
+# (γ = 0.2: la cobertura más cercana al 80 % en el área que peor queda) y en 2026 cubrió 79–81 %.
+#
+# Regla de información: el rango del día objetivo X usa solo los reales de los días ≤ X − 1, los que ya llegaron al
+# emitir X a 24 h. Las filas del modelo base no cambian; las del modelo en paralelo son otras filas, con su propio sello
+# y su `tipo` (las del relleno de los días ya pasados salen como reconstruidas).
+
+SUFIJO_RANGO = "+rango"
+GAMMA_RANGO = 0.2
+INICIO_RANGO = ARRANQUE  # el estado de abajo es el de la víspera de este día
+# Estado del ACI (f del borde bajo, f del borde alto) al cerrar el 22 de octubre de 2026: el de recorrer los
+# pronósticos guardados de chronos2ftcal_c2048 desde el 1 de enero de 2025 con f = 0 (experimentos/sesgo/remedios.py,
+# `estado_inicial_rango`). Así el rango en vivo arranca calibrado en vez de aprender de cero.
+ESTADO_RANGO_CHRONOS = {
+    ("1h", "NORTE"): (0.109131205674, 0.080141843972),
+    ("1h", "CENTRO"): (0.121099290780, 0.154343971631),
+    ("1h", "SUR"): (0.104609929078, 0.088031914894),
+    ("24h", "NORTE"): (0.133333333333, 0.095833333333),
+    ("24h", "CENTRO"): (0.212500000000, 0.200000000000),
+    ("24h", "SUR"): (0.237500000000, 0.104166666667),
+}
+RANGOS = {"chronos2ftcal": ESTADO_RANGO_CHRONOS}
+
+
+def es_paralelo(modelo):
+    """Si el modelo es uno en paralelo («+rango», «+calor»: nombre con «+»). Se registra para compararlo; la app
+    muestra el base."""
+    return "+" in str(modelo)
+
+
+def version_rango(version_base, gamma=GAMMA_RANGO):
+    return f"{version_base}{SUFIJO_RANGO}-aci{gamma:g}"
+
+
+def factores_rango(filas, estado=None, gamma=GAMMA_RANGO):
+    """El factor (log) de cada borde con que se emite cada día objetivo, recorriendo los días en orden.
+
+    `filas`: una por periodo, con horizonte, area, fecha_objetivo, pred, q10, q90 y real (vacío si no llegó). El
+    factor del día X se fija antes de mirar su real; después, si el día tiene real, se actualiza con la fracción de
+    periodos que quedaron por debajo (o por encima) del rango corregido. Devuelve la tabla (horizonte, area,
+    fecha_objetivo, f_bajo, f_alto) y el estado final {(horizonte, área): (f_bajo, f_alto)}.
+    """
+    estado = dict(estado or {})
+    salida = []
+    for (horizonte, area), g in filas.groupby(["horizonte", "area"], sort=False):
+        fb, fa = estado.get((horizonte, area), (0.0, 0.0))
+        for dia, d in g.groupby("fecha_objetivo", sort=True):
+            salida.append((horizonte, area, pd.Timestamp(dia), fb, fa))
+            d = d[d["real"].notna()]
+            if d.empty:
+                continue
+            pred, real = d["pred"].to_numpy(dtype=float), d["real"].to_numpy(dtype=float)
+            bajo = pred - np.exp(fb) * (pred - d["q10"].to_numpy(dtype=float))
+            alto = pred + np.exp(fa) * (d["q90"].to_numpy(dtype=float) - pred)
+            fb += gamma * (float(np.mean(real < bajo)) - CUANTILES[0])  # meta: 10 % por debajo
+            fa += gamma * (float(np.mean(real > alto)) - (1 - CUANTILES[2]))  # y 10 % por encima
+        estado[(horizonte, area)] = (fb, fa)
+    return pd.DataFrame(salida, columns=["horizonte", "area", "fecha_objetivo", "f_bajo", "f_alto"]), estado
+
+
+def _emitir_rango_de(r, modelo, rangos, serie, desde, hasta_objetivo, ahora, progreso):
+    """El paralelo «+rango» del modelo, si tiene estado. Si falla, queda en el log y no frena al base ni a «+calor»."""
+    if modelo.nombre not in rangos:
+        return 0
+    try:
+        return emitir_rango(r, modelo.nombre, modelo.version, rangos[modelo.nombre], serie=serie, desde=desde,
+                            hasta_objetivo=hasta_objetivo, ahora=ahora, progreso=progreso)
+    except Exception as error:
+        log.exception("Rango: no se pudo emitir el modelo en paralelo")
+        progreso(f"Rango: no se pudo emitir el modelo en paralelo ({error}); el base y «+calor» siguen")
+        return 0
+
+
+def emitir_rango(raiz, nombre_base, version_base, estado, serie=None, desde=ARRANQUE, hasta_objetivo=None,
+                 ahora=_ahora_utc, progreso=print, gamma=GAMMA_RANGO):
+    """Emite las filas del modelo en paralelo «+rango» que falten, a partir de las del modelo base ya registradas.
+
+    No llama a ningún modelo: el pronóstico central es el del base y el rango sale de `factores_rango`, recorriendo
+    desde `INICIO_RANGO` con `estado` como punto de partida. Devuelve cuántas filas agregó.
+    """
+    r = rutas(raiz)
+    registro = leer_registro(r)
+    if registro.empty:
+        return 0
+    fechas = pd.to_datetime(registro["fecha_objetivo"])
+    base = registro[(registro["modelo"] == nombre_base) & (registro["version_pesos"] == version_base)
+                    & (fechas >= pd.Timestamp(INICIO_RANGO))].copy()
+    nombre, version = nombre_base + SUFIJO_RANGO, version_rango(version_base, gamma)
+    propias = registro[(registro["modelo"] == nombre) & (registro["version_pesos"] == version)]
+    hechas = set(zip(propias["horizonte"], pd.to_datetime(propias["fecha_objetivo"])))
+    base["fecha_objetivo"] = pd.to_datetime(base["fecha_objetivo"])
+    dias = base["fecha_objetivo"]
+    hasta = pd.Timestamp(hasta_objetivo) if hasta_objetivo is not None else dias.max()
+    elegibles = (dias >= pd.Timestamp(desde)) & (dias <= hasta)
+    faltan = elegibles & ~pd.Series([k in hechas for k in zip(base["horizonte"], dias)], index=base.index)
+    if not faltan.any():
+        return 0
+    serie = serie_completa(r) if serie is None else serie
+    largo = serie.set_index("DateTime")[AREAS].stack()
+    base["real"] = largo.reindex(pd.MultiIndex.from_arrays([base["objetivo"], base["area"]])).to_numpy(dtype=float)
+    factores, _ = factores_rango(base, estado, gamma)
+    factores["fecha_objetivo"] = factores["fecha_objetivo"].astype(base["fecha_objetivo"].dtype)
+    nuevas = base[faltan].merge(factores, on=["horizonte", "area", "fecha_objetivo"], how="left")
+    pred = nuevas["pred"].to_numpy(dtype=float)
+    nuevas["q10"] = pred - np.exp(nuevas["f_bajo"].to_numpy()) * (pred - nuevas["q10"].to_numpy(dtype=float))
+    nuevas["q90"] = pred + np.exp(nuevas["f_alto"].to_numpy()) * (nuevas["q90"].to_numpy(dtype=float) - pred)
+    emitido = ahora()
+    nuevas["modelo"], nuevas["version_pesos"], nuevas["emitido_en"] = nombre, version, emitido
+    nuevas["tipo"] = clasificar(emitido, nuevas["objetivo"])
+    nuevas["version_codigo"] = _version_codigo()
+    nuevas["fecha_objetivo"] = nuevas["fecha_objetivo"].astype(registro["fecha_objetivo"].dtype)
+    agregadas = agregar_al_registro(r, nuevas[COLUMNAS_REGISTRO])
+    progreso(f"Rango adaptativo: {agregadas} filas nuevas de {nombre} ({nuevas['tipo'].value_counts().to_dict()})")
+    return agregadas
+
+
+# ---- Corrección por calor: un modelo en paralelo -------------------------------------------------------------------
+#
+# «chronos2ftcal+calor» multiplica el pronóstico del base por 1 + β · grados, con los grados de la temperatura media
+# pronosticada (GFS, archivo de corridas previas de Open-Meteo) sobre el umbral del área en el día objetivo y un β ≥ 0
+# por bloque de horas que se reestima cada día con los errores del base desde 2025 (ver temperatura_pronosticada).
+# Elegido con 2025 en experimentos/temperatura (informe de noviembre de 2026): baja el error del pico del Centro en los
+# días cálidos; corre el sesgo hacia arriba en esos días. Las filas del base no cambian: las del paralelo son otras, con
+# su propio sello y tipo (el relleno de los días ya pasados sale como reconstruido). Si Open-Meteo no responde, se usa lo
+# ya guardado; si eso no cubre un día, ese día no se emite y se reintenta en la próxima corrida.
+
+SUFIJO_CALOR = "+calor"
+VERSION_CALOR = "calor-gfs-v1"
+
+
+def _continuos_base(r, registro, nombre_base, version_base, serie):
+    """El pronóstico del base por (horizonte, área, objetivo) desde 2025, sin cortes: los pronósticos guardados de los
+    experimentos (orígenes hasta el 22-oct-2026, la misma inferencia) y después el registro. Con su real."""
+    partes = []
+    guardado = r.raiz / "reportes" / "sein" / "fundacionales" / f"{nombre_base}_c{CONTEXTO}.parquet"
+    if guardado.exists():
+        t = pd.read_parquet(guardado)
+        for horizonte, p in PASOS.items():
+            partes.append(pd.DataFrame({"horizonte": horizonte, "area": t["area"], "origen": t["DateTime"],
+                                        "objetivo": t["DateTime"] + p * PASO, "pred": t[f"pred_{p}"]}))
+    propio = registro[(registro["modelo"] == nombre_base) & (registro["version_pesos"] == version_base)]
+    partes.append(propio[["horizonte", "area", "origen", "objetivo", "pred"]])
+    todo = pd.concat(partes, ignore_index=True).drop_duplicates(["horizonte", "area", "objetivo"], keep="first")
+    largo = serie.set_index("DateTime")[AREAS].stack()
+    todo["real"] = largo.reindex(pd.MultiIndex.from_arrays([todo["objetivo"], todo["area"]])).to_numpy(dtype=float)
+    return todo
+
+
+def emitir_calor(raiz=None, nombre_base="chronos2ftcal", hoy=None, ahora=_ahora_utc, descargar=None, progreso=print):
+    """Emite las filas que falten de «<base>+calor» a partir de las del base ya registradas. Devuelve cuántas agregó.
+
+    Solo corre si en la carpeta de datos está el archivo de pronósticos de temperatura (la descarga inicial la hace
+    `python -m experimentos.temperatura.descarga`); cada día baja la ventana reciente una vez.
+    """
+    from tetouan_power_forecast import temperatura_pronosticada as tp
+
+    r = rutas(raiz)
+    if not any(tp.carpeta(r.raiz).glob(f"{tp.MODELO}_[0-9][0-9][0-9][0-9].json")):
+        return 0
+    registro = leer_registro(r)
+    base = registro[registro["modelo"] == nombre_base]
+    if base.empty:
+        return 0
+    nombre = nombre_base + SUFIJO_CALOR
+    version_base = base.loc[base["emitido_en"].idxmax(), "version_pesos"]
+    version = f"{version_base}+{VERSION_CALOR}"
+    base = base[base["version_pesos"] == version_base].copy()
+    propias = registro[(registro["modelo"] == nombre) & (registro["version_pesos"] == version)]
+    # Por área: si a un área le faltó la temperatura un día, ese día se reintenta solo para ella
+    hechas = set(zip(propias["horizonte"], propias["area"], pd.to_datetime(propias["fecha_objetivo"])))
+    base["fecha_objetivo"] = pd.to_datetime(base["fecha_objetivo"])
+    faltan = base[[k not in hechas for k in zip(base["horizonte"], base["area"], base["fecha_objetivo"])]]
+    if faltan.empty:
+        return 0
+    tp.bajar_reciente(r.raiz, hoy or _hoy_lima(), descargar=descargar or tp.pedir)
+    por_desfase = tp.grados_por_desfase(r.raiz, tp.leer(r.raiz), tp.cargar_ajuste(r.raiz))
+    serie = serie_completa(r)
+    continuos = _continuos_base(r, registro, nombre_base, version_base, serie)
+    continuos["tp_cdd"] = np.nan
+    for (horizonte, area), g in continuos.groupby(["horizonte", "area"]):
+        continuos.loc[g.index, "tp_cdd"] = tp.grados_origen(por_desfase, g["origen"], horizonte, area)
+    betas = tp.betas_en_linea(continuos)
+    partes, sin_dato = [], set()
+    for (horizonte, area), g in faltan.groupby(["horizonte", "area"]):
+        g = g.copy()
+        g["grados"] = tp.grados_origen(por_desfase, g["origen"], horizonte, area)
+        completos = g.groupby("fecha_objetivo")["grados"].transform(lambda s: s.notna().all())
+        sin_dato |= {d.date() for d in g.loc[~completos, "fecha_objetivo"]}
+        g = g[completos]
+        factor = tp.factor_calor(betas, horizonte, area, g["objetivo"], g["grados"])
+        for columna in ("pred", "q10", "q90"):
+            g[columna] = g[columna].to_numpy(dtype=float) * factor
+        partes.append(g)
+    if sin_dato:
+        progreso(f"Calor: sin pronóstico de temperatura para {sorted(sin_dato)} (alguna área); se reintentan después")
+    nuevas = pd.concat(partes, ignore_index=True) if partes else pd.DataFrame()
+    if nuevas.empty:
+        return 0
+    emitido = ahora()
+    nuevas["modelo"], nuevas["version_pesos"], nuevas["emitido_en"] = nombre, version, emitido
+    nuevas["tipo"] = clasificar(emitido, nuevas["objetivo"])
+    nuevas["version_codigo"] = _version_codigo()
+    nuevas["fecha_objetivo"] = nuevas["fecha_objetivo"].astype(registro["fecha_objetivo"].dtype)
+    agregadas = agregar_al_registro(r, nuevas[COLUMNAS_REGISTRO])
+    progreso(f"Calor: {agregadas} filas nuevas de {nombre} ({nuevas['tipo'].value_counts().to_dict()})")
     return agregadas
 
 
@@ -694,10 +923,10 @@ def tabla_acumulada(resumen, horizonte="24h"):
         return "sin periodos con real todavía"
     acum = resumen[(resumen["nivel"] == "acumulado") & (resumen["horizonte"] == horizonte)]
     lineas = []
-    for f in acum.sort_values(["grupo", "area"]).itertuples():
-        lineas.append(f"{horizonte} {f.grupo:<16} {f.area:<6} {f.dias:>2} días · MAE {f.mae_modelo:6.1f} MW · "
-                      f"{f.referencia} {f.mae_referencia:6.1f} MW ({f.mejora_pct:+.0f} %) · sesgo {f.sesgo:+6.1f} · "
-                      f"cobertura 10–90 {f.cobertura_pct:5.1f} %")
+    for f in acum.sort_values(["modelo", "grupo", "area"]).itertuples():
+        lineas.append(f"{horizonte} {f.modelo:<19} {f.grupo:<16} {f.area:<6} {f.dias:>2} días · "
+                      f"MAE {f.mae_modelo:6.1f} MW · {f.referencia} {f.mae_referencia:6.1f} MW "
+                      f"({f.mejora_pct:+.0f} %) · sesgo {f.sesgo:+6.1f} · cobertura 10–90 {f.cobertura_pct:5.1f} %")
     return "\n".join(lineas)
 
 
@@ -742,12 +971,13 @@ def _candado(ruta):
 
 
 def correr(comando, raiz=None, portal=None, modelo=None, hoy=None, ahora=_ahora_utc, revisar=2, desde=ARRANQUE,
-           progreso=None):
+           progreso=None, temperatura=None):
     """Corre `diario` (ingesta → pronóstico → evaluación) o `relleno` (lo mismo sin emitir el día de hoy).
 
-    Devuelve el código de salida: 0 si todo salió, `SIN_PUBLICAR` (75) si el anexo de ayer todavía no está o si
-    otra corrida está en curso, `INVALIDO` (3) si un anexo no pasa las validaciones y 1 ante cualquier otro error.
-    Cada corrida deja una línea en corridas.jsonl con su duración.
+    Con el base se emiten sus modelos en paralelo: «+rango» (dentro de `emitir`) y «+calor» (`emitir_calor`;
+    `temperatura` es la función que baja de Open-Meteo, para las pruebas). El fallo de uno no frena a los otros. Devuelve el código de salida: 0 si todo salió, `SIN_PUBLICAR` (75) si el anexo de
+    ayer todavía no está o si otra corrida está en curso, `INVALIDO` (3) si un anexo no pasa las validaciones y 1 ante
+    cualquier otro error. Cada corrida deja una línea en corridas.jsonl con su duración.
     """
     r = rutas(raiz)
     progreso = progreso or log.info
@@ -767,6 +997,12 @@ def correr(comando, raiz=None, portal=None, modelo=None, hoy=None, ahora=_ahora_
             hasta = hoy - dt.timedelta(days=1) if comando == "relleno" else None
             linea["filas_emitidas"] = emitir(r, modelo, desde=desde, hasta_objetivo=hasta, ahora=ahora,
                                              progreso=progreso)
+            try:  # el modelo en paralelo nunca frena al base: si falla, queda en el log y se sigue
+                linea["filas_calor"] = emitir_calor(r, (modelo or ChronosAjustado).nombre, hoy=hoy, ahora=ahora,
+                                                    descargar=temperatura, progreso=progreso)
+            except Exception as error:
+                log.exception("Calor: no se pudo emitir el modelo en paralelo")
+                linea["filas_calor"] = f"error: {error}"
             _, resumen = evaluar(r, progreso)
             progreso("Acumulado:\n" + tabla_acumulada(resumen))
             if ingesta["faltante"] is not None:
@@ -796,7 +1032,8 @@ def _configurar_log(r):
 
 def main(argv=None):
     parser = argparse.ArgumentParser(prog="python -m tetouan_power_forecast.en_vivo", description=__doc__.split("\n")[0])
-    parser.add_argument("comando", choices=["diario", "relleno", "ingesta", "pronostico", "evaluacion", "verificar"])
+    parser.add_argument("comando", choices=["diario", "relleno", "ingesta", "pronostico", "calor", "evaluacion",
+                                            "verificar"])
     parser.add_argument("--raiz", help="carpeta de datos (por defecto TETOUAN_DATA)")
     parser.add_argument("--pesos", help=f"carpeta de Chronos-2 ajustado (por defecto {PESOS_CHRONOS})")
     parser.add_argument("--revisar", type=int, default=2, help="días anteriores a revisar por correcciones del COES")
@@ -827,6 +1064,9 @@ def _ejecutar(args, r):
         return SIN_PUBLICAR if resultado["faltante"] else 0
     if args.comando == "pronostico":
         emitir(r, modelo, desde=args.desde, progreso=log.info)
+        return 0
+    if args.comando == "calor":  # solo el modelo en paralelo, con lo que el base ya registró
+        emitir_calor(r, ChronosAjustado.nombre, hoy=args.hoy, progreso=log.info)
         return 0
     if args.comando == "evaluacion":
         _, resumen = evaluar(r, log.info)
