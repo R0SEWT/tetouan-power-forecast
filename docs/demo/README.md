@@ -31,7 +31,7 @@ en [`cronometro.json`](cronometro.json)). Quedan 47 segundos de margen para los 
    (`curl -LsSf https://astral.sh/uv/install.sh | sh`) y clona el repo:
    `git clone https://github.com/R0SEWT/tetouan-power-forecast && cd tetouan-power-forecast`. En Windows, usa Git
    Bash o WSL (no lo probamos en Windows).
-2. **Los datos.** La app necesita la carpeta `data` del proyecto (unos 230 MB de lo que usa la app), que no está en el
+2. **Los datos.** La app necesita la carpeta `data` del proyecto (unos 240 MB de lo que usa la app), que no está en el
    repo. Pídesela al dueño (está en su Drive, `datalake/tetouan-power-forecast`) y déjala junto al repo, en
    `../tetouan-power-forecast/data`; o di dónde está con `TETOUAN_DATA=/ruta/a/data`. Con rclone y acceso a ese
    Drive, `docs/demo/demo.sh --descargar` la baja sola.

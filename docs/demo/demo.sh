@@ -43,7 +43,7 @@ if ((descargar)); then
 remoto «gdrive:» que vea el Drive del proyecto. Si no lo tienes, pide la carpeta de datos al dueño (README del kit)."
   rclone listremotes | grep -qx 'gdrive:' || morir "rclone no tiene el remoto «gdrive:». Configúralo con rclone config
 o pide la carpeta de datos al dueño (README del kit)."
-  echo "   Bajando del Drive a $TETOUAN_DATA (la primera vez, unos 230 MB; después solo lo que cambió)..."
+  echo "   Bajando del Drive a $TETOUAN_DATA (la primera vez, unos 240 MB; después solo lo que cambió)..."
   for carpeta in coes/silver exogenas/silver modelos/sein/app reportes/sein/modelado reportes/sein/prueba_2026 \
     reportes/sein/en_vivo reportes/sein/app; do
     rclone copy "$drive/$carpeta" "$TETOUAN_DATA/$carpeta" --exclude ".corrida.lock" \
