@@ -7,20 +7,22 @@
 //
 // La pantalla es la de Chrome con zoom del 150 % en una pantalla de 1920×1080: 1280×720 px de página, capturados a
 // 1920×1080. Así el texto se sigue leyendo cuando Collaborate reduce la pantalla compartida a 1280×720 o menos.
-import { copyFileSync, mkdirSync, rmSync, symlinkSync, writeFileSync } from 'node:fs';
+import { copyFileSync, mkdirSync, mkdtempSync, rmSync, symlinkSync, writeFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import { API, WEB, abrirNavegador, vigilarRed } from './comun.mjs';
 
 const args = process.argv.slice(2);
-const DOCS = new URL('../../docs/demo/', import.meta.url).pathname;
+const DOCS = fileURLToPath(new URL('../../docs/demo/', import.meta.url));
 const CAPTURAS = join(DOCS, 'capturas');
 const DESVIO = /^https?:\/\/(localhost|127\.0\.0\.1):8000\/?$/.test(API) ? null : API.replace(/\/+$/, '');
 
 // El día de repaso y su respaldo. Fijos: no dependen del día en que se exponga.
 export const DIA = { fecha: '2026-08-27', hora: '19:00', pico: ['vie 28', '15:00'] };
 export const RESPALDO = { fecha: '2026-03-10', hora: '19:00' };
+const RESPALDO_PICO = { fecha: '2026-03-11', hora: '14:30' }; // lo que deja tocar su pico
 const ruta = (d) => `#/ahora/centro?fecha=${d.fecha}&hora=${d.hora}`;
 
 // Lo que dice el expositor, en el orden en que lo hace. Las cifras de «hoy» cambian cada día: se leen de la pantalla.
@@ -231,8 +233,7 @@ function imprimir({ tiempos, total }) {
 
 // Graba con el screencast de Chrome: cuadros de 1920×1080 solo cuando la pantalla cambia, con su hora.
 async function grabar(pagina, quieta, pasos, salida) {
-  const dir = join(tmpdir(), `tpf-demo-${Date.now()}`);
-  mkdirSync(dir, { recursive: true });
+  const dir = mkdtempSync(join(tmpdir(), 'tpf-demo-'));
   const cdp = await pagina.context().newCDPSession(pagina);
   const cuadros = [];
   cdp.on('Page.screencastFrame', async ({ data, metadata, sessionId }) => {
@@ -335,12 +336,15 @@ async function capturas(navegador) {
 
   await ir(ruta(RESPALDO));
   await foto(pagina, 'respaldo-repaso-10-03-2026');
+  // Tocar su pico deja la app en el 11/03 a las 14:30 (no es una etiqueta del eje: se abre por su enlace)
+  await ir(ruta(RESPALDO_PICO));
+  await foto(pagina, 'respaldo-pico-11-03-2026');
   await clic(pagina, 'role=link[name="¿Y si hace más calor?"]', false);
   await quieta();
   await clic(pagina, '[data-temp="2"]', false);
   await quieta(); await espera(400);
   await bajar(pagina, '#fraseEscenario', false);
-  await foto(pagina, 'respaldo-y-si-10-03-2026');
+  await foto(pagina, 'respaldo-y-si-11-03-2026');
   await contexto.close();
 
   // El paso 1 un día sin dato nuevo: el reloj de la API se pasa al día siguiente del último pronóstico, a las 19:00
@@ -378,15 +382,16 @@ async function capturas(navegador) {
 }
 
 async function pdf(navegador, orden) {
-  const html = join(tmpdir(), `tpf-plan-b-${Date.now()}.html`);
+  const dir = mkdtempSync(join(tmpdir(), 'tpf-plan-b-'));
+  const html = join(dir, 'plan-b.html');
   writeFileSync(html, `<!doctype html><meta charset="utf-8"><style>@page{size:1920px 1080px;margin:0}body{margin:0}
     img{display:block;width:1920px;height:1080px;break-after:page}</style>`
-    + orden.map((n) => `<img src="file://${join(CAPTURAS, `${n}.png`)}">`).join(''));
+    + orden.map((n) => `<img src="${pathToFileURL(join(CAPTURAS, `${n}.png`)).href}">`).join(''));
   const hoja = await navegador.newPage();
-  await hoja.goto(`file://${html}`, { waitUntil: 'load' });
+  await hoja.goto(pathToFileURL(html).href, { waitUntil: 'load' });
   await hoja.pdf({ path: join(DOCS, 'plan-b-capturas.pdf'), width: '1920px', height: '1080px', printBackground: true });
   await hoja.close();
-  rmSync(html, { force: true });
+  rmSync(dir, { recursive: true, force: true });
 }
 
 const navegador = await abrirNavegador();
@@ -397,6 +402,11 @@ try {
     console.log(`Capturas en ${CAPTURAS} y el PDF del plan B en ${join(DOCS, 'plan-b-capturas.pdf')}`);
   }
   if (args.includes('--video')) {
+    try {
+      execFileSync('ffmpeg', ['-version'], { stdio: 'ignore' });
+    } catch {
+      throw new Error('--video necesita ffmpeg en el PATH (en Ubuntu: sudo apt install ffmpeg).');
+    }
     const { contexto, pagina, quieta } = await nuevaPagina(navegador, { cursor: true });
     const medida = await grabar(pagina, quieta, PASOS, join(DOCS, 'recorrido-demo.mp4'));
     imprimir(medida);

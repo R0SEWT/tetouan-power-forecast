@@ -36,7 +36,8 @@ en [`cronometro.json`](cronometro.json)). Quedan 47 segundos de margen para los 
    `../tetouan-power-forecast/data`; o di dónde está con `TETOUAN_DATA=/ruta/a/data`. Con rclone y acceso a ese
    Drive, `docs/demo/demo.sh --descargar` la baja sola.
 3. **El ensayo.** `docs/demo/demo.sh --verificar`. La primera vez instala las dependencias (unos minutos). Tiene que
-   terminar en «Ensayo: todo listo.». Si dice FALTA o FALLA, el mensaje dice qué hacer.
+   terminar en «Ensayo: todo listo.» (o «listo, con avisos»: léelos; el más común es que todavía no hay pronóstico
+   de hoy). Si dice FALTA o FALLA, el mensaje dice qué hacer.
 4. **Collaborate.** Entren a la sala de prueba y comprueben que **el Expositor 5 y el Expositor 3 pueden compartir
    pantalla** (hace falta el rol de presentador; si no lo tienen, pedirlo a la profesora al entrar). Compartan la
    ventana de Chrome y pidan a otro que diga si lee la leyenda del gráfico.
@@ -202,11 +203,12 @@ reducidas a 1280×720, como las muestra Collaborate; al 100 % de zoom, la letra 
 | `paso3-y-si-2c.png` | Paso 3 |
 | `paso4-confianza.png`, `paso4b-confianza-en-vivo.png`, `paso4c-confianza-1h.png` | Paso 4 (a 24 h, el seguimiento en vivo y a 1 h: 48.8 MW) |
 | `extra-corrida-diaria.png` | El paso extra |
-| `respaldo-repaso-10-03-2026.png`, `respaldo-y-si-10-03-2026.png` | El día de respaldo |
+| `respaldo-repaso-10-03-2026.png`, `respaldo-pico-11-03-2026.png`, `respaldo-y-si-11-03-2026.png` | El día de respaldo: el repaso, su pico y «+2 °C» desde el pico |
 | `R1-ahora.png`, `R2-escenarios-2c.png`, `R2b-diagnostico.png`, `R3-confianza-en-vivo.png` | Las diapositivas de respaldo R1-R3 del guion y la figura 13 pendiente del informe técnico (§6.1: «Detalle», escenarios y diagnóstico) |
 | `movil-hoy.png`, `movil-repaso.png`, `movil-confianza.png` | En el celular (375×812, a 750×1624), para la diapositiva del diseño |
 
-**Regenerarlas** (con la app levantada; por ejemplo, la víspera, para que «hoy» sea reciente):
+**Regenerarlas** (con la app levantada, Node y, para el video, ffmpeg; por ejemplo, la víspera, para que «hoy» sea
+reciente):
 
 ```bash
 cd app/medicion && npm ci

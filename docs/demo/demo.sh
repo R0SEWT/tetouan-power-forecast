@@ -61,8 +61,9 @@ necesarios=(
   coes/silver/demanda_areas.parquet
   exogenas/silver/temperatura_areas.parquet exogenas/silver/icen.parquet
   exogenas/silver/nino12_semanal.parquet exogenas/silver/eventos_coes.parquet
-  modelos/sein/app/metadatos.json modelos/sein/app/xgboost_global_24h_M3.joblib
-  modelos/sein/fundacionales/combinado.json modelos/sein/fundacionales/xgb_simons_24h.joblib
+  modelos/sein/app/metadatos.json
+  modelos/sein/app/xgboost_global_{1h_M0,1h_M3,24h_M0,24h_M1,24h_M2,24h_M3}.joblib
+  modelos/sein/fundacionales/combinado.json modelos/sein/fundacionales/xgb_simons_{1h,24h}.joblib
   reportes/sein/fundacionales/simons_c2048.parquet reportes/sein/fundacionales/chronos2ftcal_c2048.parquet
   reportes/sein/modelado/predicciones_validacion_24h_centro.csv reportes/sein/prueba_2026/adaptacion.csv
 )
@@ -143,12 +144,15 @@ echo
 curl -sf "$api/salud" >/dev/null || morir "La API no respondió en 3 minutos (registro: $registro). Plan B del README."
 bien "La API responde: $(curl -sf "$api/salud")"
 if curl -sf "$base" >/dev/null; then bien "La web responde en http://localhost:$PUERTO_WEB"; else
-  aviso "La web no responde en :$PUERTO_WEB; la API también la sirve: http://localhost:$PUERTO_API/"
+  aviso "La web no responde en :$PUERTO_WEB; se usa la que sirve la API, en :$PUERTO_API."
+  base="http://localhost:$PUERTO_API/"
+  [[ $PUERTO_API != 8000 ]] && base+="?api=$api"
 fi
 
 paso "5/5 Cifras del guion"
-uv run --no-sync python docs/demo/verificar.py --api "$api"
-cifras=$?
+salida_cifras="${TMPDIR:-/tmp}/curva-demo-cifras-$PUERTO_API.txt"
+uv run --no-sync python docs/demo/verificar.py --api "$api" | tee "$salida_cifras"
+cifras=${PIPESTATUS[0]}
 if ((cifras == 1)); then
   aviso "Hay cifras que no coinciden con el guion (arriba). Si dice «prueba» o falta el combinado: plan B."
 elif ((cifras > 1)); then
@@ -160,7 +164,9 @@ paso2="${base}#/ahora/centro?fecha=2026-08-27&hora=19:00"
 respaldo="${base}#/ahora/centro?fecha=2026-03-10&hora=19:00"
 if ((verificar)); then
   echo
-  if ((cifras == 0)); then echo "Ensayo: todo listo."; else echo "Ensayo: revisa los avisos de arriba."; fi
+  if ((cifras != 0)); then echo "Ensayo: hay cifras que no coinciden; revisa arriba."
+  elif grep -q "AVISO" "$salida_cifras"; then echo "Ensayo: listo, con avisos (léelos arriba)."
+  else echo "Ensayo: todo listo."; fi
   exit "$cifras"
 fi
 
