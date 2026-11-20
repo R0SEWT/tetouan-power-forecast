@@ -44,11 +44,15 @@ remoto «gdrive:» que vea el Drive del proyecto. Si no lo tienes, pide la carpe
   rclone listremotes | grep -qx 'gdrive:' || morir "rclone no tiene el remoto «gdrive:». Configúralo con rclone config
 o pide la carpeta de datos al dueño (README del kit)."
   echo "   Bajando del Drive a $TETOUAN_DATA (la primera vez, unos 230 MB; después solo lo que cambió)..."
-  for carpeta in coes/silver exogenas/silver modelos/sein/app modelos/sein/fundacionales reportes/sein/modelado \
-    reportes/sein/prueba_2026 reportes/sein/en_vivo reportes/sein/app; do
+  for carpeta in coes/silver exogenas/silver modelos/sein/app reportes/sein/modelado reportes/sein/prueba_2026 \
+    reportes/sein/en_vivo reportes/sein/app; do
     rclone copy "$drive/$carpeta" "$TETOUAN_DATA/$carpeta" --exclude ".corrida.lock" \
       || morir "No se pudo bajar $carpeta del Drive."
   done
+  # De los fundacionales, solo lo que lee la app (no los pesos de Chronos-2, 478 MB, que usa la corrida en vivo)
+  rclone copy "$drive/modelos/sein/fundacionales" "$TETOUAN_DATA/modelos/sein/fundacionales" \
+    --include "combinado.json" --include "xgb_simons_*.joblib" \
+    || morir "No se pudieron bajar los modelos fundacionales del Drive."
   rclone copy "$drive/reportes/sein/fundacionales" "$TETOUAN_DATA/reportes/sein/fundacionales" \
     --include "simons_c2048.parquet" --include "chronos2ftcal_c2048.parquet" --include "tablas/**" \
     || morir "No se pudieron bajar los pronósticos fundacionales del Drive."
