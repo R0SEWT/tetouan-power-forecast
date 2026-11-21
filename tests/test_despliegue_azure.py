@@ -1,5 +1,6 @@
 """El despliegue en Azure App Service: requirements.txt desde uv.lock, el zip, los comandos de az y la prueba de humo."""
 
+import itertools
 import json
 import re
 import shutil
@@ -102,21 +103,26 @@ class AzFalso:
 
     simular = False
 
-    def __init__(self, cambios=None, cuenta=None):
+    def __init__(self, cambios=None, cuenta=None, ajustes=None):
         self.cambios = cambios or {}
         self.cuenta = cuenta or {"name": "Azure for Students", "state": "Enabled", "user": {"name": "u1@upc.edu.pe"}}
-        self.mensajes = []
+        self.ajustes = dict(publicar_azure.AJUSTES, **(ajustes or {}))
+        self.mensajes, self.escrituras = [], []
 
     def mostrar(self, texto):
         self.mensajes.append(texto)
 
     def __call__(self, *args, **kwargs):
         clave = " ".join(args[:3])
+        palabras = list(itertools.takewhile(lambda a: not a.startswith("--"), args))
+        if palabras[-1] not in ("show", "list"):  # set, update, create, config, stop, start...
+            self.escrituras.append(args)
+            return None
         respuestas = {
             "account show": self.cuenta,
             "webapp show --name": {"httpsOnly": True, "tags": dict(publicar_azure.ETIQUETAS)},
             "webapp config show": dict(publicar_azure.CONFIG),
-            "webapp config appsettings": [{"name": k, "value": v} for k, v in publicar_azure.AJUSTES.items()],
+            "webapp config appsettings": [{"name": k, "value": v} for k, v in self.ajustes.items()],
             "webapp log show": {"httpLogs": {"fileSystem": {"enabled": True}}},
             "appservice plan show": {"kind": "linux", "properties": {"reserved": True}, "sku": {"name": "B1"},
                                      "tags": dict(publicar_azure.ETIQUETAS)},
@@ -129,7 +135,7 @@ class AzFalso:
 
 def publicador(az):
     args = SimpleNamespace(app="curva-sein", grupo="curva-rg", plan="curva-plan", region="brazilsouth", sku=None,
-                           solo_config=False, espera=1, no_esperar=True, en_caliente=False, logs=0)
+                           solo_config=False, espera=1, no_esperar=True, en_caliente=False, logs=0, reiniciar=False)
     return publicar_azure.Publicador(args, az)
 
 
@@ -318,3 +324,23 @@ def test_kudu_espera_a_que_despierte_antes_de_subir(tmp_path, monkeypatch):
     mensajes = []
     assert kudu.desplegar(zip_ruta, mostrar=mensajes.append)["id"] == "nuevo"
     assert sum("todavía no responde" in m for m in mensajes) == 2
+
+
+def test_configurar_no_reescribe_lo_que_ya_esta_bien():
+    """Cada escritura reinicia la app; en B1 un reinicio con la app viva no cabe en memoria."""
+    az = AzFalso()
+    publicador(az).configurar()
+    assert az.escrituras == []
+    az = AzFalso(ajustes={"TPF_RECARGA_MIN": "30"})
+    publicador(az).configurar()
+    assert len(az.escrituras) == 1
+    assert az.escrituras[0][:4] == ("webapp", "config", "appsettings", "set")
+    assert "TPF_RECARGA_MIN=15" in az.escrituras[0] and not any("TPF_HF_DATASET" in x for x in az.escrituras[0])
+
+
+def test_reiniciar_detiene_y_prende(monkeypatch, capsys):
+    monkeypatch.setattr(publicar_azure, "requisitos", lambda raiz=None: "fastapi==1\n")
+    assert publicar_azure.main(["--dry-run", "--reiniciar"]) == 0
+    salida = capsys.readouterr().out
+    assert salida.index("webapp stop") < salida.index("webapp start")
+    assert "webapp restart" not in salida and "/api/publish" not in salida and "config set" not in salida

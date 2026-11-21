@@ -10,6 +10,7 @@ ni se baja nada pesado: el zip pesa ~1 MB. Los datos (68 MB) los baja la app al 
     python despliegue/publicar_azure.py                # crea lo que falte, configura, despliega y prueba
     python despliegue/publicar_azure.py --solo-config  # solo vuelve a aplicar y verificar la configuración
     python despliegue/publicar_azure.py --logs         # las últimas líneas del log de la app (y de la plataforma)
+    python despliegue/publicar_azure.py --reiniciar    # detener y prender (en B1, en vez de az webapp restart)
 
 Qué hace, en orden (y nada de lo que ya está hecho):
 
@@ -338,43 +339,68 @@ class Publicador:
             az.mostrar(f"Plan {a.plan}: a {a.sku}" + (f" (era {plan['sku']['name']})" if plan else "") + ":")
             az("appservice", "plan", "update", "--name", a.plan, *self.base, "--sku", a.sku)
 
+    def leer(self) -> dict:
+        """Lo que hoy tiene Azure: el sitio, su configuración, sus variables, los logs y el plan."""
+        a, az = self.args, self.az
+        return {
+            "sitio": az("webapp", "show", "--name", a.app, *self.base),
+            "config": az("webapp", "config", "show", "--name", a.app, *self.base),
+            "ajustes": {s["name"]: s["value"] for s in az("webapp", "config", "appsettings", "list", "--name", a.app,
+                                                           *self.base)},
+            "logs": az("webapp", "log", "show", "--name", a.app, *self.base),
+            "plan": az("appservice", "plan", "show", "--name", a.plan, *self.base),
+        }
+
     def configurar(self) -> None:
+        """Aplica solo lo que falta. Cada cambio de configuración reinicia la app, y en B1 un reinicio arranca la copia
+        nueva con la vieja viva (no caben las dos): por eso no se reescribe lo que ya está bien."""
         a, az = self.args, self.az
         az.mostrar("Configuración:")
-        az("webapp", "config", "set", "--name", a.app, *self.base, "--always-on", "true", "--http20-enabled", "true",
-           "--min-tls-version", "1.2", "--ftps-state", "Disabled", "--linux-fx-version", CONFIG["linuxFxVersion"],
-           "--startup-file", INICIO, "--generic-configurations", json.dumps({"healthCheckPath": SALUD}))
-        az("webapp", "update", "--name", a.app, *self.base, "--https-only", "true", "--set",
-           *[f"tags.{k}={v}" for k, v in ETIQUETAS.items()])
-        az("webapp", "config", "appsettings", "set", "--name", a.app, *self.base, "--settings",
-           *[f"{k}={v}" for k, v in AJUSTES.items()])
-        az("webapp", "log", "config", "--name", a.app, *self.base, "--docker-container-logging", "filesystem")
+        actual = None if az.simular else self.leer()
+        config = (actual or {}).get("config") or {}
+        if az.simular or any(config.get(k) != v for k, v in CONFIG.items()):
+            az("webapp", "config", "set", "--name", a.app, *self.base, "--always-on", "true", "--http20-enabled",
+               "true", "--min-tls-version", "1.2", "--ftps-state", "Disabled", "--linux-fx-version",
+               CONFIG["linuxFxVersion"], "--startup-file", INICIO, "--generic-configurations",
+               json.dumps({"healthCheckPath": SALUD}))
+        sitio = (actual or {}).get("sitio") or {}
+        if az.simular or not sitio.get("httpsOnly") or any((sitio.get("tags") or {}).get(k) != v
+                                                         for k, v in ETIQUETAS.items()):
+            az("webapp", "update", "--name", a.app, *self.base, "--https-only", "true", "--set",
+               *[f"tags.{k}={v}" for k, v in ETIQUETAS.items()])
+        ajustes = (actual or {}).get("ajustes") or {}
+        faltan = {k: v for k, v in AJUSTES.items() if az.simular or ajustes.get(k) != v}
+        if faltan:
+            az("webapp", "config", "appsettings", "set", "--name", a.app, *self.base, "--settings",
+               *[f"{k}={v}" for k, v in faltan.items()])
+        if az.simular or not self._logs_activos((actual or {}).get("logs") or {}):
+            az("webapp", "log", "config", "--name", a.app, *self.base, "--docker-container-logging", "filesystem")
+
+    @staticmethod
+    def _logs_activos(logs: dict) -> bool:
+        return ((logs.get("httpLogs") or {}).get("fileSystem") or {}).get("enabled") is True
 
     def verificar(self) -> list[str]:
         """Lee de vuelta lo configurado y devuelve lo que no quedó como se pidió."""
-        a, az = self.args, self.az
-        if az.simular:
+        a = self.args
+        if self.az.simular:
             return []
+        actual = self.leer()
+        sitio, config, ajustes, plan = actual["sitio"], actual["config"], actual["ajustes"], actual["plan"]
         problemas = []
-        sitio = az("webapp", "show", "--name", a.app, *self.base)
         if not sitio.get("httpsOnly"):
             problemas.append("HTTPS obligatorio no quedó activado")
         for k, v in ETIQUETAS.items():
             if (sitio.get("tags") or {}).get(k) != v:
                 problemas.append(f"la etiqueta {k}={v} no quedó en la Web App")
-        config = az("webapp", "config", "show", "--name", a.app, *self.base)
         for clave, esperado in CONFIG.items():
             if config.get(clave) != esperado:
                 problemas.append(f"{clave} es {config.get(clave)!r}, no {esperado!r}")
-        ajustes = {s["name"]: s["value"] for s in az("webapp", "config", "appsettings", "list", "--name", a.app,
-                                                      *self.base)}
         for clave, esperado in AJUSTES.items():
             if ajustes.get(clave) != esperado:
                 problemas.append(f"la variable {clave} es {ajustes.get(clave)!r}, no {esperado!r}")
-        logs = az("webapp", "log", "show", "--name", a.app, *self.base)
-        if ((logs.get("httpLogs") or {}).get("fileSystem") or {}).get("enabled") is not True:
+        if not self._logs_activos(actual["logs"]):
             problemas.append("los logs (filesystem) no quedaron activados")
-        plan = az("appservice", "plan", "show", "--name", a.plan, *self.base)
         propiedades = plan.get("properties") or {}  # az 2.9x anida aquí «reserved» (antes venía arriba)
         if not (plan.get("reserved") or propiedades.get("reserved")) or plan.get("kind") != "linux":
             problemas.append("el plan no es Linux")
@@ -384,6 +410,14 @@ class Publicador:
             if (plan.get("tags") or {}).get(k) != v:
                 problemas.append(f"la etiqueta {k}={v} no quedó en el plan")
         return problemas
+
+    def reiniciar(self) -> None:
+        """Detiene y prende la app. En B1 es la forma segura: «az webapp restart» arranca la copia nueva mientras la
+        vieja sigue viva, la máquina se queda sin memoria y la app tarda más (o Azure la mueve de máquina)."""
+        a, az = self.args, self.az
+        az.mostrar(f"Reinicio de {a.app} (detener y prender):")
+        az("webapp", "stop", "--name", a.app, *self.base)
+        az("webapp", "start", "--name", a.app, *self.base)
 
     def desplegar(self) -> None:
         a, az = self.args, self.az
@@ -419,6 +453,10 @@ class Publicador:
         if self.args.logs:
             self.az.mostrar(Kudu(self.az, self.args.app).logs(self.args.logs))
             return
+        if self.args.reiniciar:
+            self.reiniciar()
+            self.probar()
+            return
         if not self.args.solo_config:
             self.crear()
         self.cambiar_sku()  # antes de configurar: F1 no admite «Always On»
@@ -431,6 +469,10 @@ class Publicador:
         if self.args.solo_config:
             return
         self.desplegar()
+        self.probar()
+
+    def probar(self) -> None:
+        """Espera ``/salud`` y corre la prueba de humo (salvo en --dry-run o con --no-esperar)."""
         if self.az.simular or self.args.no_esperar:
             return
         self.az.mostrar(f"Prueba de humo en {self.url} (espera hasta {self.args.espera:.0f} min a /salud):")
@@ -447,6 +489,8 @@ def parser() -> argparse.ArgumentParser:
     p.add_argument("--region", default=REGION, help=f"región al crear (por defecto, {REGION})")
     p.add_argument("--sku", help=f"tamaño del plan (al crearlo, {SKU}); si se da y el plan existe con otro, lo cambia")
     p.add_argument("--solo-config", action="store_true", help="solo aplica y verifica la configuración")
+    p.add_argument("--reiniciar", action="store_true",
+                   help="detiene y prende la app (en B1, en vez de az webapp restart) y corre la prueba de humo")
     p.add_argument("--logs", type=int, nargs="?", const=60, default=0, metavar="LINEAS",
                    help="muestra las últimas líneas de los logs del contenedor (60) y termina")
     p.add_argument("--espera", type=float, default=15, help="minutos máximos de espera a /salud tras desplegar (15)")
