@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import sys
 from datetime import datetime
 from pathlib import Path
@@ -81,13 +82,18 @@ def main(argv=None) -> int:
             print(f"Subiría a {dataset_id}: {detalle}" + (" y reiniciaría el Space" if args.reiniciar else ""))
             return 0
         token = token_personal()
+        os.environ.setdefault("HF_HUB_DISABLE_PROGRESS_BARS", "1")  # una línea por corrida en el log del cron
         from huggingface_hub import CommitOperationAdd, HfApi
 
         api = HfApi(token=token)  # explícito: nunca el token guardado en el disco
         verificar_cuenta(api.whoami(), args.usuario)
         operaciones = [CommitOperationAdd(path_in_repo=r, path_or_fileobj=str(args.datos / r)) for r in nuevos]
+        antes = api.dataset_info(dataset_id).sha
         api.create_commit(dataset_id, operaciones, repo_type="dataset", commit_message=f"Registro en vivo al {ahora}")
         guardar_estado(ruta_estado, {**estado, **nuevos})
+        if api.dataset_info(dataset_id).sha == antes:  # el Hub ya tenía esos mismos archivos: no hubo commit
+            print(f"{ahora} INFO hf: el registro en vivo ya estaba en {dataset_id}")
+            return 0
         print(f"{ahora} INFO hf: subido a {dataset_id}: {detalle}")
         if args.reiniciar:
             api.restart_space(f"{args.usuario}/{args.space}")

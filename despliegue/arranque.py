@@ -118,7 +118,7 @@ def preparar(entorno=None) -> tuple[dict[str, str], object | None, Path | None]:
         problemas = verificar(cache)
         if problemas:
             raise RuntimeError("el paquete bajado no pasa la verificación: " + "; ".join(problemas[:3]))
-        log.info("Datos de %s listos en %s (%.0f s)", fuente, cache, time.monotonic() - inicio)
+        log.info("Datos listos en %s, bajados desde %s (%.0f s)", cache, fuente, time.monotonic() - inicio)
     except Exception as error:  # noqa: BLE001 - cualquier falla deja la app en datos de prueba, con aviso
         aviso = (f"No se pudieron bajar los datos reales ({_breve(error)}). Se muestran datos de prueba sintéticos; "
                  "revisa los logs del Space y el dataset.")
@@ -147,7 +147,7 @@ def main() -> None:
         hilo = threading.Thread(target=recargar, args=(fuente, cache, minutos, threading.Event()), daemon=True,
                                 name="recarga-en-vivo")
         hilo.start()
-        log.info("El registro en vivo se recarga de %s cada %g min", fuente, minutos)
+        log.info("El registro en vivo se recarga desde %s cada %g min", fuente, minutos)
     import uvicorn
 
     uvicorn.run("app.backend.main:app", host=os.environ.get("HOST", "0.0.0.0"), port=int(os.environ.get("PORT", "7860")),
