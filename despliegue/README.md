@@ -131,7 +131,7 @@ Desde una conexión de casa en Lima. En la laptop del dueño, como referencia, l
   pedidos chicos. La prueba de humo (16 pedidos, conexión nueva en cada uno) justo después de arrancar: mediana 615-763 ms,
   máximo 0.9-1.9 s. En el navegador, la página carga en 0.9 s y cada pantalla («Ahora», «Confianza», «Detalle») pide
   sus datos en 0.2-1.2 s, sin el aviso de datos de prueba.
-- **La B1 alcanza, pero justa.** Arranca y sirve todo sin errores ni avisos, y lo ya calculado responde en menos de
+- **La B1 arranca y sirve, pero no sobra nada.** Arranca y sirve todo sin errores ni avisos, y lo ya calculado responde en menos de
   1 s. Pero la máquina queda al 85-92 % de memoria y lo que se calcula por primera vez tarda 10-60 veces más que en la
   laptop; en B2, con el doble de memoria y de núcleos, entre 3 y 15 veces menos que en B1. Esa diferencia es mayor que
   el doble de CPU: buena parte es memoria (el sistema libera páginas mientras pandas arma tablas). **Qué se ve:** el
@@ -144,7 +144,10 @@ Desde una conexión de casa en Lima. En la laptop del dueño, como referencia, l
   con un despliegue en caliente. `WEBSITE_DISABLE_OVERLAPPED_RECYCLING=1` no lo evita en Linux (se probó). Por eso el
   script despliega y reinicia deteniendo y prendiendo, y no reescribe la configuración que ya está bien. Los reinicios
   que decida Azure (mantenimiento) no se pueden evitar: en B1 pueden dejarla ~15 min fuera.
-- **Recomendación: B2 al menos para la exposición** (29.93 USD/mes, ~1 USD por día): `python
+- **Y sin reiniciar también:** a las 10:50 (hora UTC) el sistema mató la app por falta de memoria (código de salida 137)
+  sin que nadie la reiniciara, con la app en reposo y Kudu activo (se estaban leyendo los logs con `--logs`). Azure la
+  volvió a arrancar sola, ~8 min sin servicio. En B1 la app vive al borde de la memoria.
+- **Recomendación: B2, como mínimo para la exposición** (29.93 USD/mes, ~1 USD por día): `python
   despliegue/publicar_azure.py --solo-config --sku B2` el día antes y `--sku B1` después (cada cambio de plan mueve la
   app de máquina, ~3-9 min sin servicio). Con B2 caben las dos copias, los reinicios no la tumban y se puede desplegar
   con `--en-caliente`. Si el crédito alcanza, dejarla en B2.
