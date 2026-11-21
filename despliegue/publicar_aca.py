@@ -12,7 +12,8 @@ repo, con ``az login`` hecho con la cuenta UPC (no hace falta que sea la suscrip
     python despliegue/publicar_aca.py --estado                # URL, imagen, revisión y réplicas prendidas
     python despliegue/publicar_aca.py --logs                  # las últimas líneas del contenedor (si está prendido)
     python despliegue/publicar_aca.py --metricas 24           # réplicas, pedidos, memoria y costo de las últimas 24 h
-    python despliegue/publicar_aca.py --apagar                # quita el ingreso: nadie la puede despertar
+    python despliegue/publicar_aca.py --apagar                # la detiene: nadie la puede despertar
+    python despliegue/publicar_aca.py --prender               # la vuelve a prender (y sigue apagándose sola)
     python despliegue/publicar_aca.py --borrar                # borra el grupo de recursos entero (pide confirmar)
 
 Qué hace, en orden (y nada de lo que ya está hecho):
@@ -60,6 +61,11 @@ REGION = "brazilsouth"  # la más cercana a Lima entre las que permite la suscri
 REGISTRO, REPOSITORIO = "ghcr.io", "r0sewt/curva"
 IMAGEN = f"{REGISTRO}/{REPOSITORIO}"
 PERFIL = "Consumption"
+# El modo del entorno. «Express» es el que creó el CLI (extensión containerapp 1.3.0b4) sin pedirlo, y con el que se
+# midió todo: mismas tarifas Consumption y cuotas gratis, sin cargo por el entorno, y arranques en frío de ~21 s
+# (agenda el contenedor en ~1 s). No admite dominios propios: para eso hace falta «WorkloadProfiles». Se fija aquí para
+# no depender del valor por defecto del CLI, que cambia entre versiones.
+MODO = "Express"
 API = "2025-07-01"  # la versión estable de la API de Microsoft.App con que se escribe y se lee la app
 PUERTO = 7860
 CPU, MEMORIA = 1.0, "2Gi"  # la app ocupa ~1 GB al arrancar y 1.25-1.6 GB en uso
@@ -256,8 +262,10 @@ def diferencias(app: dict | None, imagen: str, minimo: int) -> list[str]:
 
 
 def problemas_entorno(entorno: dict) -> list[str]:
-    """Lo que el entorno tiene distinto de lo pedido: sin Log Analytics, solo el perfil Consumption, etiquetas."""
+    """Lo que el entorno tiene distinto de lo pedido: el modo, sin Log Analytics, solo el perfil Consumption, etiquetas."""
     p, problemas = entorno.get("properties") or {}, []
+    if (p.get("environmentMode") or "").lower() != MODO.lower():
+        problemas.append(f"el entorno está en modo {p.get('environmentMode')!r}, no {MODO!r}")
     logs = p.get("appLogsConfiguration") or {}
     if logs.get("destination") not in (None, "", "none") or logs.get("logAnalyticsConfiguration"):
         problemas.append(f"el entorno guarda logs ({logs.get('destination')}): eso cobra aparte")
@@ -313,8 +321,7 @@ class Publicador:
         if entorno is None:
             az.mostrar(f"Entorno {a.entorno} (perfil Consumption, sin Log Analytics):")
             entorno = az("containerapp", "env", "create", "--name", a.entorno, *self.base, "--location", a.region,
-                         "--enable-workload-profiles", "true", "--logs-destination", "none", *self.etiquetas(),
-                         timeout=1800)
+                         "--environment-mode", MODO, "--logs-destination", "none", *self.etiquetas(), timeout=1800)
             if not az.simular:
                 entorno = az("containerapp", "env", "show", "--name", a.entorno, *self.base)
         if az.simular:
@@ -352,7 +359,13 @@ class Publicador:
             return False
         if app is not None:
             az.mostrar("Cambios:\n  - " + "\n  - ".join(pendientes))
-        texto = ascii_o_error(json.dumps(especificacion(imagen, minimo, entorno_id), indent=2), "la especificación")
+        spec = especificacion(imagen, minimo, entorno_id)
+        # Un PUT reemplaza todo: los dominios propios que tenga la app (los vincula «az containerapp hostname bind»,
+        # fuera de este script) se conservan
+        ingreso_actual = (((app or {}).get("properties") or {}).get("configuration") or {}).get("ingress") or {}
+        if ingreso_actual.get("customDomains"):
+            spec["properties"]["configuration"]["ingress"]["customDomains"] = ingreso_actual["customDomains"]
+        texto = ascii_o_error(json.dumps(spec, indent=2), "la especificación")
         # El id de la app sale del id del entorno: /subscriptions/<id>/resourceGroups/<grupo>/...
         suscripcion_id = entorno_id.split("/")[2]
         url = (f"https://management.azure.com/subscriptions/{suscripcion_id}/resourceGroups/{a.grupo}/providers/"
@@ -421,7 +434,7 @@ class Publicador:
         p = app.get("properties") or {}
         plantilla = p.get("template") or {}
         escala = plantilla.get("scale") or {}
-        az.mostrar(f"URL: {self.url(app) or 'sin ingreso (apagada con --apagar)'}")
+        az.mostrar(f"URL: {self.url(app)} ({p.get('runningStatus')})")
         az.mostrar(f"Imagen: {(plantilla.get('containers') or [{}])[0].get('image')}")
         az.mostrar(f"Réplicas: de {escala.get('minReplicas')} a {escala.get('maxReplicas')}; prendidas ahora: "
                    f"{len(replicas or [])}")
@@ -480,17 +493,38 @@ class Publicador:
                    f"{vcpu_s * factor:.0f} vCPU-s, {gib_s * factor:.0f} GiB-s, {pedidos * factor:.0f} pedidos "
                    f"-> {costo_mes(vcpu_s * factor, gib_s * factor, pedidos * factor):.2f} USD (descontado lo gratis).")
 
-    def apagar(self) -> None:
-        """Quita el ingreso: nadie la puede despertar y la réplica que quede se apaga sola."""
+    def _parar_o_prender(self, accion: str, estado: str) -> None:
+        """POST a ``/stop`` o ``/start`` de la API (el CLI de esta versión no trae esos comandos) y espera el estado."""
         a, az = self.args, self.az
-        az.mostrar(f"Se quita el ingreso de {a.app}: la URL deja de responder hasta que se vuelva a correr el script.")
-        az("containerapp", "ingress", "disable", "--name", a.app, *self.base)
+        app_id = ((None if az.simular else self.app()) or {}).get("id") or (
+            f"/subscriptions/SUSCRIPCION/resourceGroups/{a.grupo}/providers/Microsoft.App/containerApps/{a.app}")
+        az("rest", "--method", "post", "--url", f"https://management.azure.com{app_id}/{accion}?api-version={API}",
+           timeout=300)
         if az.simular:
             return
-        app = self.app() or {}
-        if ((app.get("properties") or {}).get("configuration") or {}).get("ingress"):
-            raise ErrorAzure("el ingreso sigue activo")
-        az.mostrar("Apagada (sin ingreso). Para prenderla: python despliegue/publicar_aca.py")
+        limite = time.monotonic() + 600
+        while time.monotonic() < limite:
+            actual = ((self.app() or {}).get("properties") or {}).get("runningStatus")
+            if actual == estado:
+                return
+            time.sleep(5)
+        raise ErrorAzure(f"la app no quedó «{estado}» en 10 min (está «{actual}»)")
+
+    def apagar(self) -> None:
+        """Detiene la app: nadie la puede despertar hasta ``--prender``. La configuración queda intacta."""
+        self.az.mostrar(f"Se detiene {self.args.app}: la URL deja de responder hasta --prender.")
+        self._parar_o_prender("stop", "Stopped")
+        self.az.mostrar("Detenida. Para prenderla: python despliegue/publicar_aca.py --prender")
+
+    def prender(self) -> None:
+        """Vuelve a prender una app detenida con ``--apagar`` (sigue escalando a cero sola)."""
+        self.az.mostrar(f"Se prende {self.args.app}:")
+        self._parar_o_prender("start", "Running")
+        self.probar(self.url(self.app()), self.imagen_actual())
+
+    def imagen_actual(self) -> str:
+        plantilla = ((self.app() or {}).get("properties") or {}).get("template") or {}
+        return (plantilla.get("containers") or [{}])[0].get("image", "")
 
     def borrar(self) -> None:
         a, az = self.args, self.az
@@ -528,6 +562,8 @@ class Publicador:
             return self.metricas(a.metricas)
         if a.apagar:
             return self.apagar()
+        if a.prender:
+            return self.prender()
         if a.borrar:
             return self.borrar()
         entorno_id = self.crear_base()
@@ -557,7 +593,8 @@ def parser() -> argparse.ArgumentParser:
                    help="las últimas líneas del contenedor (60; hasta 300) si hay una réplica prendida")
     p.add_argument("--metricas", type=float, nargs="?", const=24, default=0, metavar="HORAS",
                    help="réplicas, pedidos, memoria y costo de las últimas HORAS (24)")
-    p.add_argument("--apagar", action="store_true", help="quita el ingreso (nadie la puede despertar)")
+    p.add_argument("--apagar", action="store_true", help="detiene la app (nadie la puede despertar hasta --prender)")
+    p.add_argument("--prender", action="store_true", help="vuelve a prender la app detenida y corre la prueba de humo")
     p.add_argument("--borrar", action="store_true", help="borra el grupo de recursos entero (pide escribir su nombre)")
     p.add_argument("--si", action="store_true", help="con --borrar, no pide confirmación")
     p.add_argument("--probar", action="store_true", help="corre la prueba de humo aunque no haya cambios")

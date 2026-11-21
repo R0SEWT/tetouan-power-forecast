@@ -113,14 +113,16 @@ def test_resolver_comprueba_la_etiqueta_y_fija_latest_a_su_digest():
 
 def test_el_entorno_no_guarda_logs_ni_tiene_perfiles_dedicados():
     bien = {"tags": dict(publicar_aca.ETIQUETAS),
-            "properties": {"appLogsConfiguration": {"destination": None, "logAnalyticsConfiguration": None},
+            "properties": {"environmentMode": "Express",
+                           "appLogsConfiguration": {"destination": None, "logAnalyticsConfiguration": None},
                            "workloadProfiles": [{"name": "Consumption", "workloadProfileType": "Consumption"}]}}
     assert publicar_aca.problemas_entorno(bien) == []
     mal = copy.deepcopy(bien)
     mal["properties"]["appLogsConfiguration"] = {"destination": "log-analytics",
                                                  "logAnalyticsConfiguration": {"customerId": "x"}}
     mal["properties"]["workloadProfiles"].append({"name": "D4", "workloadProfileType": "D4"})
-    assert len(publicar_aca.problemas_entorno(mal)) == 2
+    mal["properties"]["environmentMode"] = "WorkloadProfiles"  # el modo se fija: no depende del CLI
+    assert len(publicar_aca.problemas_entorno(mal)) == 3
 
 
 def test_costo_descuenta_lo_gratis():
@@ -165,7 +167,7 @@ class AzFalso:
             "account show": {"name": "Azure for Students", "state": "Enabled", "user": {"name": "u1@upc.edu.pe"}},
             "group show": {"name": "curva-aca-rg", "tags": self.grupo_tags},
             "containerapp env show": {"id": ENTORNO_ID, "tags": dict(publicar_aca.ETIQUETAS), "properties": {
-                "appLogsConfiguration": {"destination": None},
+                "environmentMode": "Express", "appLogsConfiguration": {"destination": None},
                 "workloadProfiles": [{"name": "Consumption", "workloadProfileType": "Consumption"}]}},
             "containerapp show": self.app,
             "containerapp replica list": [{"name": f"r{i}"} for i in range(self.replicas)],
@@ -178,7 +180,7 @@ class AzFalso:
 def args(**cambios):
     valores = {"app": "curva", "grupo": "curva-aca-rg", "entorno": "curva-aca-env", "region": "brazilsouth",
                "imagen": None, "minimo": None, "estado": False, "logs": 0, "metricas": 0,
-               "apagar": False, "borrar": False, "si": False, "probar": False, "espera": 1, "no_esperar": True,
+               "apagar": False, "prender": False, "borrar": False, "si": False, "probar": False, "espera": 1, "no_esperar": True,
                "dry_run": False}
     return SimpleNamespace(**{**valores, **cambios})
 
@@ -256,15 +258,26 @@ def test_dry_run_no_llama_a_az_ni_a_la_red(monkeypatch, capsys):
     lineas_az = [linea for linea in salida.splitlines() if linea.strip().startswith("az ")]
     assert lineas_az and all("--subscription 'Azure for Students'" in linea for linea in lineas_az)
     for esperado in ("group create --name curva-aca-rg --location brazilsouth", "--logs-destination none",
-                     "--enable-workload-profiles true", "proyecto=curva", "curso=upc-mds",
+                     "--environment-mode Express", "proyecto=curva", "curso=upc-mds",
                      ("rest --method put --url https://management.azure.com/subscriptions/SUSCRIPCION/"
                       "resourceGroups/curva-aca-rg/providers/Microsoft.App/containerApps/curva?api-version=2025-07-01"),
                      '"image": "ghcr.io/r0sewt/curva:sha-1234567"', '"minReplicas": 0', '"maxReplicas": 1',
                      '"memory": "2Gi"', '"targetPort": 7860'):
         assert esperado in salida, esperado
     assert "account set" not in salida  # nunca cambia la suscripción por defecto del CLI
-    for opcion in ("--estado", "--logs", "--metricas", "--apagar", "--borrar"):
+    assert "--environment-mode Express" in salida  # no depende del valor por defecto del CLI
+    for opcion in ("--estado", "--logs", "--metricas", "--apagar", "--prender", "--borrar"):
         assert publicar_aca.main(["--dry-run", opcion]) == 0, opcion
     salida = capsys.readouterr().out
-    assert "containerapp ingress disable" in salida and "group delete --name curva-aca-rg --yes" in salida
+    assert "providers/Microsoft.App/containerApps/curva/stop?api-version=2025-07-01" in salida
+    assert "providers/Microsoft.App/containerApps/curva/start?api-version=2025-07-01" in salida
+    assert "group delete --name curva-aca-rg --yes" in salida
     assert "containerapp logs show" in salida and "monitor metrics list" in salida
+
+
+def test_un_cambio_conserva_los_dominios_propios_vinculados_fuera_del_script():
+    az = AzFalso(aplica=True)
+    dominio = [{"name": "curva.ejemplo.dev", "certificateId": "/x/managedCertificates/c", "bindingType": "SniEnabled"}]
+    az.app["properties"]["configuration"]["ingress"]["customDomains"] = dominio
+    publicar_aca.Publicador(args(minimo=1), az, RegistroFalso({})).publicar()
+    assert az.escritos[0]["properties"]["configuration"]["ingress"]["customDomains"] == dominio
