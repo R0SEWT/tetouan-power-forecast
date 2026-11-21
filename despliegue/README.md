@@ -62,7 +62,8 @@ dataset rosewt/curva-datos (público, 68 MB) ──descarga al arrancar (14 s)�
 
 Todo va en ASCII y el script lo **lee de vuelta** después de aplicarlo: si algo no quedó (por ejemplo, una tilde
 dañada en el comando de inicio), se detiene y dice qué. Solo escribe lo que difiere: cada cambio de configuración
-reinicia la app, y en B1 un reinicio así no cabe en memoria (ver «Mediciones»).
+reinicia la app, y en B1 un reinicio así no cabe en memoria (ver «Mediciones»). Si en B1 hay algo que cambiar, primero
+detiene la app y al final la vuelve a prender.
 
 ### Comandos
 

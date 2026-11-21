@@ -351,30 +351,54 @@ class Publicador:
             "plan": az("appservice", "plan", "show", "--name", a.plan, *self.base),
         }
 
-    def configurar(self) -> None:
+    def pendientes(self, actual: dict | None) -> list[tuple[str, ...]]:
+        """Los comandos de az que faltan para dejar la configuración como se pide (en --dry-run, todos)."""
+        a, simular = self.args, self.az.simular
+        actual = actual or {}
+        comandos = []
+        config = actual.get("config") or {}
+        if simular or any(config.get(k) != v for k, v in CONFIG.items()):
+            comandos.append(("webapp", "config", "set", "--name", a.app, *self.base, "--always-on", "true",
+                             "--http20-enabled", "true", "--min-tls-version", "1.2", "--ftps-state", "Disabled",
+                             "--linux-fx-version", CONFIG["linuxFxVersion"], "--startup-file", INICIO,
+                             "--generic-configurations", json.dumps({"healthCheckPath": SALUD})))
+        sitio = actual.get("sitio") or {}
+        if simular or not sitio.get("httpsOnly") or any((sitio.get("tags") or {}).get(k) != v
+                                                      for k, v in ETIQUETAS.items()):
+            comandos.append(("webapp", "update", "--name", a.app, *self.base, "--https-only", "true", "--set",
+                             *[f"tags.{k}={v}" for k, v in ETIQUETAS.items()]))
+        ajustes = actual.get("ajustes") or {}
+        faltan = {k: v for k, v in AJUSTES.items() if simular or ajustes.get(k) != v}
+        if faltan:
+            comandos.append(("webapp", "config", "appsettings", "set", "--name", a.app, *self.base, "--settings",
+                             *[f"{k}={v}" for k, v in faltan.items()]))
+        if simular or not self._logs_activos(actual.get("logs") or {}):
+            comandos.append(("webapp", "log", "config", "--name", a.app, *self.base, "--docker-container-logging",
+                             "filesystem"))
+        return comandos
+
+    def configurar(self) -> bool:
         """Aplica solo lo que falta. Cada cambio de configuración reinicia la app, y en B1 un reinicio arranca la copia
-        nueva con la vieja viva (no caben las dos): por eso no se reescribe lo que ya está bien."""
+        nueva con la vieja viva (no caben las dos): por eso no se reescribe lo que ya está bien y, si hay algo que
+        escribir en un plan chico, primero se detiene la app. Devuelve si la dejó detenida (hay que prenderla)."""
         a, az = self.args, self.az
         az.mostrar("Configuración:")
         actual = None if az.simular else self.leer()
-        config = (actual or {}).get("config") or {}
-        if az.simular or any(config.get(k) != v for k, v in CONFIG.items()):
-            az("webapp", "config", "set", "--name", a.app, *self.base, "--always-on", "true", "--http20-enabled",
-               "true", "--min-tls-version", "1.2", "--ftps-state", "Disabled", "--linux-fx-version",
-               CONFIG["linuxFxVersion"], "--startup-file", INICIO, "--generic-configurations",
-               json.dumps({"healthCheckPath": SALUD}))
-        sitio = (actual or {}).get("sitio") or {}
-        if az.simular or not sitio.get("httpsOnly") or any((sitio.get("tags") or {}).get(k) != v
-                                                         for k, v in ETIQUETAS.items()):
-            az("webapp", "update", "--name", a.app, *self.base, "--https-only", "true", "--set",
-               *[f"tags.{k}={v}" for k, v in ETIQUETAS.items()])
-        ajustes = (actual or {}).get("ajustes") or {}
-        faltan = {k: v for k, v in AJUSTES.items() if az.simular or ajustes.get(k) != v}
-        if faltan:
-            az("webapp", "config", "appsettings", "set", "--name", a.app, *self.base, "--settings",
-               *[f"{k}={v}" for k, v in faltan.items()])
-        if az.simular or not self._logs_activos((actual or {}).get("logs") or {}):
-            az("webapp", "log", "config", "--name", a.app, *self.base, "--docker-container-logging", "filesystem")
+        comandos = self.pendientes(actual)
+        if not comandos:
+            return False
+        sku = (a.sku or SKU) if az.simular else ((actual["plan"].get("sku") or {}).get("name"))
+        prendida = az.simular or (actual["sitio"].get("state") or "Running") == "Running"
+        detener = sku in PLANES_CHICOS and not a.en_caliente and prendida
+        if detener:
+            az.mostrar(f"Hay {len(comandos)} cambio(s) y el plan es {sku}: se detiene la app antes de aplicarlos "
+                       "(un cambio de configuración la reinicia solapada y en B1 no caben dos copias).")
+            az("webapp", "stop", "--name", a.app, *self.base)
+            if not az.simular:
+                self.esperar_detenida()
+        for comando in comandos:
+            az(*comando)
+        return detener
 
     @staticmethod
     def _logs_activos(logs: dict) -> bool:
@@ -476,13 +500,19 @@ class Publicador:
         if not self.args.solo_config:
             self.crear()
         self.cambiar_sku()  # antes de configurar: F1 no admite «Always On»
-        self.configurar()
-        problemas = self.verificar()
-        if problemas:
-            raise ErrorAzure("la configuración no quedó como se pidió:\n  - " + "\n  - ".join(problemas))
-        if not self.az.simular:
-            self.az.mostrar("Configuración verificada (leída de vuelta de Azure).")
+        detenida = self.configurar()
+        try:
+            problemas = self.verificar()
+            if problemas:
+                raise ErrorAzure("la configuración no quedó como se pidió:\n  - " + "\n  - ".join(problemas))
+            if not self.az.simular:
+                self.az.mostrar("Configuración verificada (leída de vuelta de Azure).")
+        finally:
+            if detenida and (self.args.solo_config or sys.exc_info()[0] is not None):
+                self.az("webapp", "start", "--name", self.args.app, *self.base)  # si no, la prende el despliegue
         if self.args.solo_config:
+            if detenida:
+                self.probar()
             return
         self.desplegar()
         self.probar()

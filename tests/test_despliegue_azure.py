@@ -120,6 +120,7 @@ class AzFalso:
             return None
         respuestas = {
             "account show": self.cuenta,
+            "group show --name": {"name": "curva-rg"},
             "webapp show --name": {"httpsOnly": True, "tags": dict(publicar_azure.ETIQUETAS)},
             "webapp config show": dict(publicar_azure.CONFIG),
             "webapp config appsettings": [{"name": k, "value": v} for k, v in self.ajustes.items()],
@@ -326,16 +327,18 @@ def test_kudu_espera_a_que_despierte_antes_de_subir(tmp_path, monkeypatch):
     assert sum("todavía no responde" in m for m in mensajes) == 2
 
 
-def test_configurar_no_reescribe_lo_que_ya_esta_bien():
+def test_configurar_no_reescribe_lo_que_ya_esta_bien(monkeypatch):
     """Cada escritura reinicia la app; en B1 un reinicio con la app viva no cabe en memoria."""
+    monkeypatch.setattr(publicar_azure.time, "sleep", lambda _: None)
+    monkeypatch.setattr(publicar_azure.humo, "pedir", lambda base, ruta, timeout=60: (403, "", 0.1, 0))
     az = AzFalso()
-    publicador(az).configurar()
+    assert publicador(az).configurar() is False
     assert az.escrituras == []
     az = AzFalso(ajustes={"TPF_RECARGA_MIN": "30"})
-    publicador(az).configurar()
-    assert len(az.escrituras) == 1
-    assert az.escrituras[0][:4] == ("webapp", "config", "appsettings", "set")
-    assert "TPF_RECARGA_MIN=15" in az.escrituras[0] and not any("TPF_HF_DATASET" in x for x in az.escrituras[0])
+    assert publicador(az).configurar() is True  # la dejó detenida: la prende quien sigue
+    assert az.escrituras[0][:2] == ("webapp", "stop") and len(az.escrituras) == 2
+    assert az.escrituras[1][:4] == ("webapp", "config", "appsettings", "set")
+    assert "TPF_RECARGA_MIN=15" in az.escrituras[1] and not any("TPF_HF_DATASET" in x for x in az.escrituras[1])
 
 
 def test_reiniciar_detiene_y_prende(monkeypatch, capsys):
@@ -354,3 +357,34 @@ def test_reiniciar_espera_a_que_la_app_deje_de_responder(monkeypatch):
     publicador(az).reiniciar()
     assert [e[:2] for e in az.escrituras] == [("webapp", "stop"), ("webapp", "start")]
     assert next(codigos, "agotado") == "agotado"  # preguntó hasta que dejó de dar 200
+
+
+def test_en_b1_detiene_la_app_antes_de_cambiar_la_configuracion(monkeypatch):
+    """Un cambio de configuración reinicia la app solapada; en B1 no caben dos copias."""
+    monkeypatch.setattr(publicar_azure.time, "sleep", lambda _: None)
+    monkeypatch.setattr(publicar_azure.humo, "pedir", lambda base, ruta, timeout=60: (403, "", 0.1, 0))
+    az = AzFalso(ajustes={"TPF_RECARGA_MIN": "30"})
+    pub = publicador(az)
+    pub.args.solo_config = True
+    monkeypatch.setattr(pub, "verificar", list)  # el Azure falso no cambia al escribir: nada que reclamar
+    pub.publicar()
+    pasos = [e[:2] if e[0] == "webapp" and e[1] in ("stop", "start") else e[:4] for e in az.escrituras]
+    assert pasos == [("webapp", "stop"), ("webapp", "config", "appsettings", "set"), ("webapp", "start")]
+
+
+def test_sin_cambios_de_configuracion_no_detiene_nada():
+    az = AzFalso()
+    pub = publicador(az)
+    pub.args.solo_config = True
+    pub.publicar()
+    assert az.escrituras == []
+
+
+def test_si_la_verificacion_falla_vuelve_a_prender_la_app(monkeypatch):
+    monkeypatch.setattr(publicar_azure.time, "sleep", lambda _: None)
+    monkeypatch.setattr(publicar_azure.humo, "pedir", lambda base, ruta, timeout=60: (403, "", 0.1, 0))
+    az = AzFalso(ajustes={"TPF_RECARGA_MIN": "30"})  # sigue mal después de escribir: la verificación falla
+    pub = publicador(az)
+    with pytest.raises(ErrorAzure, match="TPF_RECARGA_MIN"):
+        pub.publicar()
+    assert az.escrituras[-1][:2] == ("webapp", "start")
