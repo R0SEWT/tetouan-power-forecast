@@ -38,7 +38,7 @@ def pedido(**cambios):
 def test_salud(cliente):
     r = cliente.get("/salud")
     assert r.status_code == 200
-    assert r.json() == {"estado": "ok", "modelo": "prueba", "version_datos": "sin-datos"}
+    assert r.json() == {"estado": "ok", "modelo": "prueba", "version_datos": "sin-datos", "aviso": None}
 
 
 def test_modelos_lista_el_que_se_sirve(cliente):

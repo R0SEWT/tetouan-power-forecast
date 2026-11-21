@@ -14,6 +14,10 @@ repaso) y ``GET /confianza/{area}`` (el error de 2026 mes a mes y día a día, e
 Variables de entorno:
 - ``TPF_CORS_ORIGENES``: orígenes extra separados por comas, además de localhost y 127.0.0.1
   (por ejemplo la IP del celular en la red local o el dominio de Tailscale).
+- ``TPF_AVISO``: un aviso para la web (va en ``GET /salud``); lo pone el arranque del contenedor si no pudo bajar
+  los datos (``despliegue/arranque.py``).
+- ``TPF_SI_FALLA``: ``prueba`` para que, si el modelo real no carga, la API arranque con el de prueba y lo avise en vez
+  de caerse (el contenedor de despliegue lo usa; en local, sin ella, el error se ve al arrancar).
 - ``TPF_PRONOSTICADOR``: ``real`` para servir el modelo entrenado sobre las capas del SEIN
   (``pronosticador_real.py``, con ``TETOUAN_DATA`` apuntando a la carpeta de datos); si no, el de prueba.
   Si además están los archivos de los modelos híbrido y combinado (``pronosticador_hibrido.py``), se ofrecen
@@ -22,6 +26,7 @@ Variables de entorno:
   respuestas lo dicen en ``modelo``.
 """
 
+import logging
 import os
 from datetime import date, datetime
 from pathlib import Path
@@ -105,12 +110,14 @@ def crear_app(
     otros: list[Pronosticador] | None = None,
     web: Path | None = WEB,
     en_vivo: Path | None = None,
+    aviso: str | None = None,
 ) -> FastAPI:
     """Arma la API con el pronosticador dado (por defecto, el de prueba) y, si los hay, otros modelos elegibles.
 
     Las respuestas van comprimidas con gzip si el navegador lo acepta. Si ``web`` es una carpeta, la sirve en ``/``
     (la web encuentra la API en el mismo origen); las rutas de la API tienen prioridad. ``en_vivo`` es la carpeta de
     la tubería diaria (por defecto, ``reportes/sein/en_vivo`` de ``TETOUAN_DATA``); no depende del pronosticador.
+    ``aviso`` es un texto para la web (por ejemplo, que no se pudieron bajar los datos reales): va en ``GET /salud``.
     """
     app = FastAPI(
         title="Demanda por área del SEIN",
@@ -130,6 +137,7 @@ def crear_app(
     app.state.pronosticadores = {_id(p): p for p in [app.state.pronosticador, *(otros or [])]}
     app.state.en_vivo = LectorEnVivo(en_vivo)
     app.state.confianza = {}
+    app.state.aviso = aviso
 
     def respaldo(request: Request, p: Pronosticador) -> Pronosticador | None:
         """El modelo que responde por ``p`` fuera de su rango, si la API también lo sirve."""
@@ -155,7 +163,7 @@ def crear_app(
     @app.get("/salud", response_model=Salud)
     def salud(request: Request) -> Salud:
         p = modelo(request)
-        return Salud(modelo=p.modelo, version_datos=p.version_datos)
+        return Salud(modelo=p.modelo, version_datos=p.version_datos, aviso=request.app.state.aviso)
 
     @app.get("/modelos", response_model=list[ModeloDisponible])
     def modelos(request: Request) -> list[ModeloDisponible]:
@@ -379,4 +387,20 @@ def _pronosticadores_por_defecto() -> tuple[Pronosticador | None, list[Pronostic
     return PronosticadorCombinado(hibrido), [base, hibrido]
 
 
-app = crear_app(*_pronosticadores_por_defecto())
+def _app_por_defecto() -> FastAPI:
+    """La app con los modelos de las variables de entorno. Con ``TPF_SI_FALLA=prueba``, si el modelo real no carga,
+    arranca con el de prueba y lo avisa en ``/salud`` (así un Space con datos rotos no queda caído)."""
+    aviso = os.environ.get("TPF_AVISO") or None
+    try:
+        pronosticadores = _pronosticadores_por_defecto()
+    except Exception as error:
+        if os.environ.get("TPF_SI_FALLA") != "prueba":
+            raise
+        logging.getLogger("curva").exception("No se pudo cargar el modelo real")
+        pronosticadores = (None, [])
+        aviso = (f"No se pudo cargar el modelo real ({type(error).__name__}: {str(error)[:300]}). "
+                 "Se muestran datos de prueba sintéticos.")
+    return crear_app(*pronosticadores, aviso=aviso)
+
+
+app = _app_por_defecto()

@@ -8,12 +8,15 @@
 
 // ---- Configuración ---------------------------------------------------------
 
-// El backend se busca en el puerto 8000 del mismo host. Se puede cambiar con ?api=URL.
+// El backend sirve la web en su mismo origen (en local, en un contenedor o en Hugging Face Spaces detrás de HTTPS).
+// La excepción es app/levantar.sh, que sirve la web sola en :8080 con la API en :8000 del mismo host. Abierta como
+// archivo, se busca en localhost:8000. Se puede cambiar con ?api=URL.
 const API = (() => {
   const desdeUrl = new URLSearchParams(location.search).get('api');
   if (desdeUrl) return desdeUrl.replace(/\/+$/, '');
   if (location.protocol === 'file:' || !location.hostname) return 'http://localhost:8000';
-  return `${location.protocol}//${location.hostname}:8000`;
+  if (location.port === '8080') return `${location.protocol}//${location.hostname}:8000`;
+  return location.origin;
 })();
 
 let FECHA_MIN = '2025-01-01'; // cada modelo puede traer su primer día en /modelos
@@ -1432,6 +1435,9 @@ async function cargarBase() {
   if (LISTAS.has('detalle')) pintarSelectorModelo(); // si «Detalle» ya se cargó; si no, lo pinta al iniciarse
   aplicarModelo();
   $('#chipPrueba').hidden = salud.modelo !== 'prueba';
+  // Un aviso del servidor (por ejemplo, que no pudo bajar los datos reales y muestra los de prueba)
+  $('#bannerAviso').textContent = salud.aviso || '';
+  $('#bannerAviso').hidden = !salud.aviso;
   pintarRegimen();
 }
 
