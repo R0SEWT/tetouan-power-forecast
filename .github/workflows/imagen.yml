@@ -4,10 +4,8 @@
 #
 # Se dispara a mano (Actions -> Imagen -> Run workflow) y al hacer push a la rama del despliegue; no en cada PR.
 #
-# Copia en Azure Container Registry (opcional y transitoria): si existen la variable ACR_SERVIDOR (p. ej.
-# curvaaca.azurecr.io) y el secreto ACR_CLAVE (con la variable ACR_USUARIO), la misma imagen se sube tambien alli.
-# Sirve mientras el paquete de ghcr.io sea privado: Container Apps la baja de ACR con su identidad administrada, sin
-# guardar en Azure ningun token de GitHub. Cuando el paquete sea publico, se borran el registro y esas variables.
+# El paquete de ghcr.io quedo publico al publicarse (se comprobo bajando su manifiesto sin credenciales): Azure
+# Container Apps lo baja sin guardar ningun token.
 name: Imagen
 
 on:
@@ -42,21 +40,11 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Entrar a Azure Container Registry (si esta configurado)
-        if: vars.ACR_SERVIDOR != ''
-        uses: docker/login-action@v3
-        with:
-          registry: ${{ vars.ACR_SERVIDOR }}
-          username: ${{ vars.ACR_USUARIO }}
-          password: ${{ secrets.ACR_CLAVE }}
-
       - name: Etiquetas
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: |
-            ${{ env.IMAGEN }}
-            ${{ vars.ACR_SERVIDOR != '' && format('{0}/curva', vars.ACR_SERVIDOR) || '' }}
+          images: ${{ env.IMAGEN }}
           tags: |
             type=sha,prefix=sha-,format=short
             type=raw,value=latest
@@ -86,7 +74,8 @@ jobs:
           comprimida=$(docker buildx imagetools inspect --raw "$IMAGEN@$DIGEST" \
             | python3 -c "import json,sys; m=json.load(sys.stdin); print(sum(c['size'] for c in m['layers']))")
           docker pull -q "$IMAGEN@$DIGEST" >/dev/null
-          descomprimida=$(docker image inspect --format '{{.Size}}' "$IMAGEN@$DIGEST")
+          # El tamano que reporta docker image inspect depende del almacen de imagenes; du mide el disco de verdad
+          descomprimida=$(docker run --rm --user 0 --entrypoint du "$IMAGEN@$DIGEST" -sxb / | cut -f1)
           capas=$(docker buildx imagetools inspect --raw "$IMAGEN@$DIGEST" \
             | python3 -c "import json,sys; print(len(json.load(sys.stdin)['layers']))")
           {
