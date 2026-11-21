@@ -303,3 +303,37 @@ def test_actualizar_solo_sube_lo_que_cambio(tmp_path, capsys, monkeypatch):
     assert list(actualizar_hf.cambiados(datos, actualizar_hf.leer_estado(estado))) == [EN_VIVO[1]]
     assert actualizar_hf.main(argumentos) == 2  # cambió algo y no hay HF_TOKEN
 
+
+
+class ApiFalsa:
+    """Las etapas que va devolviendo el Hub para un Space."""
+
+    def __init__(self, etapas):
+        self.etapas, self.pedidos = list(etapas), 0
+
+    def get_space_runtime(self, _):
+        self.pedidos += 1
+        return type("Runtime", (), {"stage": self.etapas.pop(0) if len(self.etapas) > 1 else self.etapas[0]})()
+
+    def fetch_space_logs(self, *_, **__):
+        return iter(["línea del log\n"])
+
+
+def publicador(api):
+    args = publicar_hf.parser().parse_args(["rosewt"])
+    p = publicar_hf.Publicador(args, None)
+    p.api = api
+    return p
+
+
+def test_esperar_no_confunde_el_estado_de_antes_con_el_nuevo(monkeypatch, capsys):
+    monkeypatch.setattr(publicar_hf.time, "sleep", lambda _: None)
+    # Recién subido el código: el error de la vez anterior y el contenedor viejo no cuentan
+    api = ApiFalsa(["BUILD_ERROR", "BUILDING", "APP_STARTING", "RUNNING"])
+    assert publicador(api).esperar(5, cambio=True) == "RUNNING" and api.pedidos == 4
+    api = ApiFalsa(["RUNNING", "RUNNING", "BUILDING", "RUNNING"])
+    assert publicador(api).esperar(5, cambio=True) == "RUNNING" and api.pedidos == 4
+    # Sin cambios, el estado de ahora es la respuesta
+    with pytest.raises(publicar_hf.ErrorPublicacion, match="BUILD_ERROR"):
+        publicador(ApiFalsa(["BUILD_ERROR"])).esperar(5, cambio=False)
+    assert "línea del log" in capsys.readouterr().out

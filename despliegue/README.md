@@ -80,10 +80,10 @@ export HF_TOKEN=hf_...                 # en fish: set -x HF_TOKEN hf_...
 export HF_TOKEN_LECTURA=hf_...
 
 # 3. Ensayo sin red: arma el paquete y muestra qué haría
-uv run --no-project --with "huggingface_hub>=1.30,<2" python despliegue/publicar_hf.py USUARIO --dry-run
+uv run --no-project --with "huggingface_hub>=1.33,<2" python despliegue/publicar_hf.py USUARIO --dry-run
 
 # 4. Publicar: dataset y Space privados, y espera a que el Space responda en /salud
-uv run --no-project --with "huggingface_hub>=1.30,<2" python despliegue/publicar_hf.py USUARIO
+uv run --no-project --with "huggingface_hub>=1.33,<2" python despliegue/publicar_hf.py USUARIO
 ```
 
 Es idempotente: correrlo de nuevo solo sube lo que cambió (el paquete se arma en `~/.cache/curva-hf/paquete` y no se
@@ -121,7 +121,7 @@ Escribe una línea por corrida en el log (`INFO hf: ...` o `ERROR hf: ...`), com
   build, `?logs=build`). Desde Python:
 
   ```bash
-  uv run --no-project --with "huggingface_hub>=1.30,<2" python -c "import os; from huggingface_hub import HfApi; \
+  uv run --no-project --with "huggingface_hub>=1.33,<2" python -c "import os; from huggingface_hub import HfApi; \
     print(''.join(HfApi(token=os.environ['HF_TOKEN']).fetch_space_logs('USUARIO/curva')))"   # build=True: el build
   ```
 

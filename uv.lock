@@ -2688,7 +2688,7 @@ requires-dist = [
     { name = "fastapi", marker = "extra == 'app'", specifier = ">=0.115" },
     { name = "holidays", marker = "extra == 'app'", specifier = ">=0.50" },
     { name = "httpx", marker = "extra == 'app'", specifier = ">=0.27" },
-    { name = "huggingface-hub", marker = "extra == 'despliegue'", specifier = ">=1.30,<2" },
+    { name = "huggingface-hub", marker = "extra == 'despliegue'", specifier = ">=1.33,<2" },
     { name = "jupyterlab", marker = "extra == 'dev'", specifier = ">=4.0" },
     { name = "matplotlib", specifier = ">=3.8" },
     { name = "numpy", specifier = ">=1.26" },

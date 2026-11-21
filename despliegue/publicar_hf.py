@@ -4,7 +4,7 @@
 Con el token PERSONAL del dueño (permiso de escritura) en ``HF_TOKEN``, desde la raíz del repo:
 
     export HF_TOKEN=hf_...                     # el de tu cuenta personal, nunca el de una cuenta de trabajo
-    uv run --no-project --with "huggingface_hub>=1.30,<2" python despliegue/publicar_hf.py USUARIO
+    uv run --no-project --with "huggingface_hub>=1.33,<2" python despliegue/publicar_hf.py USUARIO
 
 Qué hace, en orden (y nada de lo que ya está hecho):
 
@@ -249,19 +249,21 @@ class Publicador:
         return nuevo
 
     def esperar(self, minutos: float, cambio: bool) -> str:
-        """Hasta «Running». Si se acaba de subir código o reiniciar, espera antes a que el Space viejo deje de correr
-        (hasta 2 min: un cambio de variables a veces no lo reinicia)."""
+        """Hasta «Running». Si se acaba de subir código o reiniciar, primero espera a que el Space deje la etapa en que
+        estaba (el contenedor viejo, o el error de la vez anterior): hasta 2 min, porque un cambio de variables a veces
+        no lo reinicia."""
         api, limite, anterior, inicio = self.api, time.monotonic() + minutos * 60, None, time.monotonic()
-        salio = not cambio
+        inicial, salio = None, not cambio
         while True:
             etapa = str(api.get_space_runtime(self.space_id).stage).split(".")[-1]
             if etapa != anterior:
                 print(f"  {time.monotonic() - inicio:5.0f} s  {etapa}")
                 anterior = etapa
-            salio = salio or etapa != "RUNNING"
-            if etapa == "RUNNING" and (salio or time.monotonic() - inicio > 120):
+            inicial = inicial or etapa
+            salio = salio or etapa != inicial or time.monotonic() - inicio > 120
+            if salio and etapa == "RUNNING":
                 return etapa
-            if etapa in ESTADOS_ERROR:
+            if salio and etapa in ESTADOS_ERROR:
                 self.mostrar_logs(build=etapa != "RUNTIME_ERROR")
                 raise ErrorPublicacion(f"El Space quedó en {etapa}. Los logs: https://huggingface.co/spaces/"
                                        f"{self.space_id}?logs=container (o ?logs=build)")
