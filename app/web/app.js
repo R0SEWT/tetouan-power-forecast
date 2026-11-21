@@ -624,6 +624,7 @@ function pintarAhora() {
   const calor = vivo && FECHA_MAX ? ` <a class="kpi-enlace" href="${rutaDetalle(A.area, { fecha: FECHA_MAX, hora: horaDe(d.ahora) }, 'escenarios')}" title="Escenarios de temperatura sobre el ${esc(fechaLarga(FECHA_MAX))}, el último día con datos de clima">¿Y si hace más calor?</a>` : '';
   $('#ahRespuesta').innerHTML = calor ? preg.html.replace(/<\/p>$/, `${calor}</p>`) : preg.html;
   $('#ahRespuesta').classList.remove('siguiendo'); // la cifra vuelve a ser la de la hora fijada
+  $('#ahLienzo')._cambiada = false;
   $('#ahModo').innerHTML = vivo
     ? `Lo real llega con un día de retraso: el COES, el operador del sistema eléctrico, publica cada mañana la demanda del día anterior. Lo demás es pronóstico, emitido ${emitidoTxt(d.emitido_en || d.ahora)}.`
     : `<b>Repaso de un día del historial.</b> Así se veía a las ${esc(horaDe(d.origen))}: lo real (del COES, el operador del sistema eléctrico) llega hasta esa hora y lo que sigue es lo que ya se había pronosticado.`;
@@ -1038,6 +1039,7 @@ function seguirHora(i) {
   const resp = $('#ahRespuesta');
   const caja = $('.r-ahora', resp);
   if (!caja) return;
+  el._cambiada = true; // la pregunta y la cifra muestran otra hora: volverHora tiene algo que deshacer
   resp.classList.toggle('siguiendo', k !== d.i_ahora);
   $('#principal').innerHTML = `<span class="pregunta-area">${esc(nombreArea(A.area))} · ${esc(ZONA_AREA[A.area] || 'Perú')}</span>`
     + `¿Acertamos el ${esc(fechaLarga(fh))} a las ${esc(horaDe(fh))}?`;
@@ -1082,12 +1084,23 @@ function volverHora() {
   const g = el._g;
   if (!g) return;
   const d = g.d;
-  $('#ahRespuesta').classList.remove('siguiendo');
-  if (d.modo === 'repaso') {
+  const resp = $('#ahRespuesta');
+  resp.classList.remove('siguiendo');
+  // Solo se deshace lo que cambió seguirHora, y en su sitio. Rehacer toda la respuesta (también al perder el foco,
+  // con lo ya fijado) reemplazaba el enlace «¿Y si hace más calor?» justo cuando se lo apretaba: el clic se perdía.
+  if (d.modo === 'repaso' && el._cambiada) {
     const preg = preguntaDelDia(d);
-    $('#ahRespuesta').innerHTML = preg.html;
+    const molde = document.createElement('template');
+    molde.innerHTML = preg.html;
+    const antes = $('.r-ahora', molde.content);
+    const caja = $('.r-ahora', resp);
+    if (antes && caja) {
+      $('.k', caja).innerHTML = $('.k', antes).innerHTML;
+      $('.n', caja).innerHTML = $('.n', antes).innerHTML;
+    } else resp.innerHTML = preg.html;
     $('#principal').innerHTML = `<span class="pregunta-area">${esc(nombreArea(A.area))} · ${esc(ZONA_AREA[A.area] || 'Perú')}</span>${esc(preg.q)}`;
   }
+  el._cambiada = false;
   $('.g-cursor-hora', el).setAttribute('visibility', 'hidden');
   el._i = null;
   el.classList.remove('siguiendo');
