@@ -58,6 +58,10 @@ GRUPO, PLAN, APP = "curva-rg", "curva-plan", "curva-sein"
 # canadacentral, southcentralus): ~104 ms de conexión TCP desde Lima, frente a 131 de East US 2 y 155 de Mexico Central
 REGION = "brazilsouth"
 SKU = "B1"
+# Planes de 1.75 GB o menos: no caben a la vez la app vieja y la nueva (~1.2 GB cada una) mientras App Service cambia de
+# una a otra. Al desplegar en B1 así, la máquina se quedó sin memoria y Azure movió la app a otra (~10 min caída). En
+# estos planes el script detiene la app mientras Oryx compila y la vuelve a prender con el código nuevo.
+PLANES_CHICOS = frozenset({"F1", "B1", "S1"})
 RUNTIME = "PYTHON:3.13"  # la misma versión del Dockerfile
 ETIQUETAS = {"proyecto": "curva", "curso": "upc-mds"}
 INICIO = "python despliegue/arranque.py"
@@ -214,8 +218,25 @@ class Kudu:
     def ultimo(self) -> dict | None:
         try:
             return self.json("/api/deployments/latest")
-        except ErrorAzure:
+        except (ErrorAzure, OSError):  # Kudu ocupado o despertando: se vuelve a preguntar
             return None
+
+    def despertar(self, minutos: float = 10, mostrar=print) -> dict | None:
+        """Espera a que Kudu responda (tras detener la app o cambiar de máquina tardó más de 2 min en contestar).
+        Devuelve el último despliegue, o ``None`` si todavía no hay ninguno."""
+        limite = time.monotonic() + minutos * 60
+        while True:
+            try:
+                codigo, cuerpo = self.pedir("/api/deployments/latest", timeout=60)
+                if codigo in (200, 404):
+                    return json.loads(cuerpo) if codigo == 200 and cuerpo.strip() else None
+                problema = f"HTTP {codigo}"
+            except OSError as error:
+                problema = str(error) or type(error).__name__
+            if time.monotonic() >= limite:
+                raise ErrorAzure(f"Kudu ({self.base}) no respondió en {minutos:.0f} min: {problema}")
+            mostrar(f"  Kudu todavía no responde ({problema}); reintento en 20 s")
+            time.sleep(20)
 
     def log_despliegue(self, id_despliegue: str, lineas: int = 40) -> list[str]:
         mensajes = []
@@ -231,7 +252,7 @@ class Kudu:
 
         Aunque se pide asíncrono, en Linux Kudu respondió recién al terminar la compilación (~7 min la primera vez): por
         eso el plazo del POST es largo, y si sí responde enseguida (202) se sigue el estado en ``deployments/latest``."""
-        anterior = (self.ultimo() or {}).get("id")
+        anterior = (self.despertar(mostrar=mostrar) or {}).get("id")
         codigo, cuerpo = self.pedir("/api/publish?type=zip&async=true", zip_ruta.read_bytes(), timeout=minutos * 60)
         if codigo not in (200, 202):
             raise ErrorAzure(f"Kudu no aceptó el zip: HTTP {codigo} {cuerpo[:300]!r}")
@@ -374,12 +395,24 @@ class Publicador:
                        f"({len(texto.splitlines()) - 1} dependencias fijas). Despliegue (Oryx compila en Azure):")
             inicio = time.monotonic()
             kudu = Kudu(az, a.app)
-            if az.simular:
-                az("account", "get-access-token", "--scope", Kudu.ALCANCE)
-                az.mostrar(f"  POST {kudu.base}/api/publish?type=zip&async=true  (el zip, con ese token)")
-                return
-            estado = kudu.desplegar(destino, mostrar=az.mostrar)
-            az.mostrar(f"Compilado y desplegado en {time.monotonic() - inicio:.0f} s (despliegue {estado['id'][:12]}).")
+            sku = a.sku or SKU if az.simular else az("appservice", "plan", "show", "--name", a.plan,
+                                                       *self.base)["sku"]["name"]
+            detener = sku in PLANES_CHICOS and not a.en_caliente
+            if detener:
+                az.mostrar(f"El plan es {sku}: no caben dos copias de la app. Se detiene mientras compila "
+                           "(~10 min sin servicio) y se prende con el código nuevo.")
+                az("webapp", "stop", "--name", a.app, *self.base)
+            try:
+                if az.simular:
+                    az("account", "get-access-token", "--scope", Kudu.ALCANCE)
+                    az.mostrar(f"  POST {kudu.base}/api/publish?type=zip&async=true  (el zip, con ese token)")
+                    return
+                estado = kudu.desplegar(destino, mostrar=az.mostrar)
+                az.mostrar(f"Compilado y desplegado en {time.monotonic() - inicio:.0f} s "
+                           f"(despliegue {estado['id'][:12]}).")
+            finally:
+                if detener:  # también si la compilación falló: vuelve a prender (con el código que haya quedado)
+                    az("webapp", "start", "--name", a.app, *self.base)
 
     def publicar(self) -> None:
         self.revisar_cuenta()
@@ -418,6 +451,8 @@ def parser() -> argparse.ArgumentParser:
                    help="muestra las últimas líneas de los logs del contenedor (60) y termina")
     p.add_argument("--espera", type=float, default=15, help="minutos máximos de espera a /salud tras desplegar (15)")
     p.add_argument("--no-esperar", action="store_true", help="no espera a /salud ni corre la prueba de humo")
+    p.add_argument("--en-caliente", action="store_true",
+                   help="despliega sin detener la app (solo en planes con memoria para dos copias, desde B2)")
     p.add_argument("--dry-run", action="store_true", help="muestra los comandos de az, sin tocar Azure")
     return p
 

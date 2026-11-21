@@ -92,6 +92,8 @@ def test_dry_run_no_llama_a_az(monkeypatch, capsys):
                      "POST https://curva-sein.scm.azurewebsites.net/api/publish?type=zip&async=true"):
         assert esperado in salida, esperado
     assert "account set" not in salida  # nunca cambia la suscripción por defecto del CLI
+    # en B1 no caben dos copias de la app: se detiene antes de subir el zip y se prende después
+    assert salida.index("webapp stop") < salida.index("/api/publish") < salida.index("webapp start")
     assert "webapp deploy" not in salida  # pide el token de Kudu en el tenant por defecto del CLI (403 aquí)
 
 
@@ -127,7 +129,7 @@ class AzFalso:
 
 def publicador(az):
     args = SimpleNamespace(app="curva-sein", grupo="curva-rg", plan="curva-plan", region="brazilsouth", sku=None,
-                           solo_config=False, espera=1, no_esperar=True)
+                           solo_config=False, espera=1, no_esperar=True, en_caliente=False, logs=0)
     return publicar_azure.Publicador(args, az)
 
 
@@ -297,3 +299,32 @@ def test_calentar_se_rinde_si_la_api_no_abre(monkeypatch):
         raise ConnectionRefusedError
 
     assert arranque.calentar(7860, espera_s=300, pedir=pedir) == 0
+
+
+def test_en_caliente_no_detiene_la_app(monkeypatch, capsys):
+    monkeypatch.setattr(publicar_azure, "requisitos", lambda raiz=None: "fastapi==1\n")
+    assert publicar_azure.main(["--dry-run", "--en-caliente"]) == 0
+    salida = capsys.readouterr().out
+    assert "webapp stop" not in salida and "/api/publish" in salida
+
+
+def test_kudu_espera_a_que_despierte_antes_de_subir(tmp_path, monkeypatch):
+    monkeypatch.setattr(publicar_azure.time, "sleep", lambda _: None)
+    zip_ruta = tmp_path / "curva.zip"
+    zip_ruta.write_bytes(b"PK")
+    kudu = KuduFalso(['{"id": "nuevo", "status": 4, "complete": true}'])
+    original, fallas = kudu.pedir, iter([TimeoutError("The read operation timed out"), (503, b"")])
+
+    def pedir(ruta, datos=None, timeout=120):
+        if ruta == "/api/deployments/latest" and not kudu.subido:
+            falla = next(fallas, None)
+            if isinstance(falla, Exception):
+                raise falla
+            if falla is not None:
+                return falla
+        return original(ruta, datos, timeout)
+
+    kudu.pedir = pedir
+    mensajes = []
+    assert kudu.desplegar(zip_ruta, mostrar=mensajes.append)["id"] == "nuevo"
+    assert sum("todavía no responde" in m for m in mensajes) == 2
