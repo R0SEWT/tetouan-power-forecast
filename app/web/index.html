@@ -23,8 +23,10 @@
   <script>
     (() => {
       const u = new URLSearchParams(location.search).get('api');
+      // Igual que API en app.js: el mismo origen, salvo la web sola de levantar.sh (:8080) o abierta como archivo
       const api = u ? u.replace(/\/+$/, '') : (location.protocol === 'file:' || !location.hostname
-        ? 'http://localhost:8000' : `${location.protocol}//${location.hostname}:8000`);
+        ? 'http://localhost:8000'
+        : location.port === '8080' ? `${location.protocol}//${location.hostname}:8000` : location.origin);
       const rutas = ['/salud', '/areas', '/resumen', '/modelos'];
       const h = location.hash || '#/';
       const m = h.match(/^#\/(ahora|area|confianza)\/([^?]+)(?:\?(.*))?$/);
@@ -76,6 +78,7 @@
     </header>
 
     <div id="bannerError" class="banner-error" role="alert" hidden></div>
+    <div id="bannerAviso" class="banner-error banner-aviso" role="status" hidden></div>
 
     <!-- Ahora: la pantalla de entrada. Un solo gráfico de hoy y las próximas 24 h, con las cifras arriba -->
     <main id="vistaAhora" class="pantalla" hidden>
