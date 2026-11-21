@@ -1,20 +1,165 @@
-# Curva en Hugging Face Spaces
+# Despliegue de Curva
 
-La app (la API FastAPI, que sirve también la web en su mismo origen) corre en un **Space Docker** de Hugging Face.
-Los datos no van en la imagen ni en el repo del Space: viven en un **dataset** del Hub, y el contenedor los baja al
-arrancar. Los dos repos son **privados** hasta que el dueño decida otra cosa.
+**Publicada en Azure App Service: <https://curva-sein.azurewebsites.net>** (ver [Azure App Service](#azure-app-service-publicada)).
+
+La app (la API FastAPI, que sirve también la web en su mismo origen) no lleva los datos: viven en un **dataset** del
+Hub de Hugging Face, y la app los baja al arrancar. El mismo arranque sirve para Azure App Service (código + Oryx) y
+para un **Space Docker** de Hugging Face (el `Dockerfile`; el resto de este documento, desde
+[Hugging Face Spaces](#hugging-face-spaces-estado-21-de-noviembre-de-2026)).
+
+## Azure App Service (publicada)
+
+**URL pública: <https://curva-sein.azurewebsites.net>** (la salud en `/salud`). Es pública a propósito: el dueño lo
+decidió, y el dataset `rosewt/curva-datos` también es público, así que no hay token ni secreto que guardar.
 
 ```text
-dataset USUARIO/curva-datos (privado, 68 MB) ──descarga al arrancar──▶ Space USUARIO/curva (Docker, CPU básico)
-        ▲                                                                   │  python -m despliegue.arranque
-        └── actualizar_hf.py: el registro en vivo de cada mañana            └▶ uvicorn en :7860 → /salud, la web
+dataset rosewt/curva-datos (público, 68 MB) ──descarga al arrancar (14 s)──▶ Web App curva-sein (Python 3.13, plan B1)
+        ▲                                                                     │  python despliegue/arranque.py
+        └── actualizar_hf.py: el registro en vivo de cada mañana              └▶ uvicorn en $PORT → /salud, la web
 ```
 
-## Estado (21 de noviembre de 2026)
+### Qué se creó y cuánto cuesta
 
-- **Dataset publicado:** [`rosewt/curva-datos`](https://huggingface.co/datasets/rosewt/curva-datos), privado, 68.1 MB
-  (24 archivos; los sha256 del Hub coinciden con `MANIFIESTO.json`). Se probó desde la laptop la descarga del registro
-  en vivo con el token (2.5 s) y que sin token no se puede leer.
+| Recurso | Nombre | Detalle |
+|---|---|---|
+| Suscripción | «Azure for Students» | La de la cuenta UPC del dueño (crédito de 100 USD, sin tarjeta). El script se niega a usar otra. |
+| Grupo de recursos | `curva-rg` | Brazil South. Etiquetas `proyecto=curva`, `curso=upc-mds` (también en el plan y la app). |
+| Plan de App Service | `curva-plan` | **B1 Linux**: 1 vCPU, 1.75 GB de RAM, 10 GB de disco, 1 instancia. |
+| Web App | `curva-sein` | Python 3.13 (la versión del `Dockerfile`), «Always On», solo HTTPS, TLS 1.2, sin FTP. |
+
+- **Costo: 0.020 USD por hora = 14.60 USD al mes** (B1 Linux en Brazil South, 730 h; API pública de precios de Azure,
+  21/11/2026). Se cobra **el plan**, esté la app prendida o detenida, hasta que se baje a F1 o se borre. Los 100 USD del
+  crédito alcanzan para ~6.8 meses de B1 sola; menos con otros recursos en la suscripción (hoy hay una VM de otro
+  curso). En East US 2 costaría 12.41 USD/mes; una B2 (3.5 GB) en Brazil South, 29.93.
+- **Región: Brazil South**, la más cercana a Lima entre las cinco que permite la política de la suscripción
+  («Allowed resource deployment regions»: `brazilsouth`, `mexicocentral`, `eastus2`, `canadacentral`,
+  `southcentralus`). Conexión TCP medida desde Lima (mínimo de 5): Brazil South 104 ms, East US 2 131, South Central US
+  137, Canada Central 152 y Mexico Central 155.
+- **Método: despliegue de código, compilado por App Service (Oryx).** El script sube un zip de ~0.2 MB (el código y un
+  `requirements.txt` sacado de `uv.lock`); Oryx instala las dependencias en Azure. No se construye ninguna imagen y la
+  laptop no baja nada pesado. Se descartó la imagen en ghcr.io: suma un workflow, la visibilidad del paquete y, si es
+  privado, una credencial de GitHub guardada en Azure; y Azure Container Registry cuesta aparte.
+- **Sin NCCL:** XGBoost para Linux depende de NCCL (cientos de MB, solo para varias GPU). El `requirements.txt` pide
+  `xgboost-cpu`, la misma versión (3.4.1) compilada sin CUDA: el módulo se llama igual y la API respondió **idéntico**
+  con una y otra en 462 pedidos (tres áreas, tres modelos, dos horizontes, variantes, escenarios, sensibilidad, «Ahora»
+  y «Confianza»).
+
+### Configuración (la aplica y la verifica el script)
+
+| Qué | Valor | Por qué |
+|---|---|---|
+| Comando de inicio | `python despliegue/arranque.py` | El mismo arranque del `Dockerfile`, corrido como archivo (pone `src/` en el path). |
+| `TPF_HF_DATASET` | `rosewt/curva-datos` | De dónde baja los datos. |
+| `TPF_PRONOSTICADOR` | `real` | El modelo entrenado (si los datos no bajan, el arranque cae a los de prueba y lo avisa). |
+| `TPF_CACHE`, `HF_HOME` | `/tmp/curva-datos`, `/tmp/hf` | Disco local: cada arranque baja el paquete limpio, sin basura en el `/home` persistente. |
+| `TPF_RECARGA_MIN` | `15` | Relee el registro en vivo del dataset cada 15 min. |
+| `MALLOC_ARENA_MAX` | `2` | Menos memoria fragmentada en una máquina justa. |
+| `WEBSITES_CONTAINER_START_TIME_LIMIT` | `900` | 15 min para arrancar (por defecto 230 s): extraer el entorno, bajar datos y cargar modelos. |
+| `SCM_DO_BUILD_DURING_DEPLOYMENT` | `true` | Que Oryx instale `requirements.txt`. |
+| Comprobación de salud | `/salud` | App Service la pide cada minuto. |
+| Logs del contenedor | `filesystem` | Para leerlos con `--logs` o en el portal. |
+| `PORT` | (lo pone App Service: 8000) | El arranque lo lee; no hace falta fijarlo. |
+
+Todo va en ASCII y el script lo **lee de vuelta** después de aplicarlo: si algo no quedó (por ejemplo, una tilde
+dañada en el comando de inicio), se detiene y dice qué. Solo escribe lo que difiere: cada cambio de configuración
+reinicia la app, y en B1 un reinicio así no cabe en memoria (ver «Mediciones»).
+
+### Comandos
+
+Desde la raíz del repo, con `az login` hecho (la cuenta UPC tiene que estar entre las del CLI; **no** hace falta que
+sea la suscripción por defecto: todo pasa `--subscription "Azure for Students"`).
+
+```bash
+python despliegue/publicar_azure.py --dry-run       # los comandos que correría, sin tocar Azure
+python despliegue/publicar_azure.py                 # crear lo que falte + configurar + desplegar + prueba de humo
+python despliegue/publicar_azure.py --solo-config   # solo reaplicar y verificar la configuración
+python despliegue/publicar_azure.py --logs          # las últimas 60 líneas del log de la app y de la plataforma
+python despliegue/publicar_azure.py --reiniciar     # detener y prender + prueba de humo (en B1, no «restart»)
+python despliegue/humo.py https://curva-sein.azurewebsites.net                 # prueba de humo, desde cualquier lado
+python despliegue/humo.py https://curva-sein.azurewebsites.net --esperar 900   # tras un reinicio
+```
+
+- **Actualizar el código:** `python despliegue/publicar_azure.py` otra vez (es idempotente: no recrea nada). **En B1 la
+  app queda 10-13 min sin servicio:** el script la detiene, Oryx compila (~5 min) y la prende con el código nuevo
+  (6.5-9 min hasta responder con todo calculado). Es a propósito: en B1 no caben a la vez la app vieja y la nueva, y
+  el primer despliegue «en caliente» dejó la máquina sin memoria; Azure movió la app a otra y estuvo ~10 min caída
+  igual. Desde B2 se puede desplegar sin detenerla con `--en-caliente`. Los datos no se redespliegan: se actualizan en el dataset
+  (`actualizar_hf.py`) y la app los relee sola cada 15 min.
+- **Ver logs:** `--logs` arriba, o en el portal: la Web App → «Log stream». **`az webapp log tail` y `az webapp deploy`
+  no funcionan en la laptop del dueño:** piden el token de Kudu en el tenant de la suscripción por defecto del CLI (la
+  del trabajo) y Kudu responde 403. El script pide ese token con `--subscription` y habla con Kudu directo.
+- **Reiniciar:** `python despliegue/publicar_azure.py --reiniciar` (detiene, prende y corre la prueba de humo; ~9 min).
+  **No usar `az webapp restart` ni el botón «Restart» del portal en B1:** arrancan la copia nueva con la vieja viva, no
+  caben las dos y la app quedó lenta 4 min y caída 13 min (se probó; ver «Mediciones»).
+- **Apagar sin borrar (deja de cobrar):** detener la app no basta, porque se cobra el plan. Hay que bajarlo a F1
+  (gratis; F1 no admite «Always On»). **No se probó** bajar a F1 (subir a B2 y volver a B1 sí):
+
+  ```bash
+  S="Azure for Students"
+  az webapp stop -n curva-sein -g curva-rg --subscription "$S"
+  az webapp config set -n curva-sein -g curva-rg --always-on false --subscription "$S"
+  az appservice plan update -n curva-plan -g curva-rg --sku F1 --subscription "$S"
+  ```
+
+  Para volver: `python despliegue/publicar_azure.py --solo-config --sku B1` (sube el plan, reactiva «Always On» y lo
+  verifica) y `az webapp start -n curva-sein -g curva-rg --subscription "$S"`. Si F1 falla, lo seguro es borrar.
+- **Borrar todo** (no se puede deshacer; la URL `curva-sein` queda libre para cualquiera):
+  `az group delete -n curva-rg --subscription "Azure for Students"`.
+- **Subir a B2** (probado: la app vuelve sola en ~3 min): `python despliegue/publicar_azure.py --solo-config --sku B2`;
+  volver con `--sku B1`. B2 cuesta 0.041 USD/h (29.93 USD/mes).
+
+### Mediciones (21 de noviembre de 2026)
+
+Desde una conexión de casa en Lima. En la laptop del dueño, como referencia, la app arranca en 8 s y su proceso ocupa
+1.05 GB al abrir el puerto y 1.18 GB tras el calentamiento.
+
+| Qué | B1 (lo publicado) | B2 (prueba de 5 min) | Laptop |
+|---|---|---|---|
+| Compilación de Oryx (`uv pip install` + comprimir el entorno) | 5-6 min | — | — |
+| **Arranque en frío:** prender → `/salud` responde (todo calculado) | **6.5-9 min** (medido 4 veces) | ~3.3 min | 8 s |
+| ・ de eso, cargar los modelos | 2.5-4 min | 58 s | 7 s |
+| ・ de eso, calentar los 10 pedidos de la web | 140-240 s | 75 s | 5 s |
+| «Confianza» de una combinación que nadie pidió aún (1 h, híbrido) | 18.8 s | 6.3 s | 0.9 s |
+| «Detalle» del híbrido (diagnóstico, primera vez) | 19.6 s | 1.3 s | 0.3 s |
+| Memoria de la máquina (métrica `MemoryPercentage` del plan) | 85-92 % de 1.75 GB | 60 % de 3.5 GB | — |
+| Memoria de la app (métrica `MemoryWorkingSet`) | 0.6-0.72 GB | — | 1.05-1.18 GB (RSS) |
+| Sin servicio al actualizar el código con el script | 10-13 min | (en caliente: ~0) | — |
+
+- **Latencia desde Lima:** conexión TCP 104 ms (la más baja de las regiones permitidas). Un pedido con conexión nueva
+  (TCP + TLS + respuesta) tarda ~340-440 ms y, con la conexión ya abierta (como hace el navegador), ~120-180 ms los
+  pedidos chicos. La prueba de humo (16 pedidos, conexión nueva en cada uno) justo después de arrancar: mediana 615-763 ms,
+  máximo 0.9-1.9 s. En el navegador, la página carga en 0.9 s y cada pantalla («Ahora», «Confianza», «Detalle») pide
+  sus datos en 0.2-1.2 s, sin el aviso de datos de prueba.
+- **La B1 alcanza, pero justa.** Arranca y sirve todo sin errores ni avisos, y lo ya calculado responde en menos de
+  1 s. Pero la máquina queda al 85-92 % de memoria y lo que se calcula por primera vez tarda 10-60 veces más que en la
+  laptop; en B2, con el doble de memoria y de núcleos, entre 3 y 15 veces menos que en B1. Esa diferencia es mayor que
+  el doble de CPU: buena parte es memoria (el sistema libera páginas mientras pandas arma tablas). **Qué se ve:** el
+  primer visitante después de un arranque ya no espera (el calentamiento corre antes de abrir el puerto), pero quien
+  abre por primera vez un modelo, horizonte o «Detalle» distinto de los de por defecto espera 20-40 s; después queda
+  guardado hasta el próximo reinicio.
+- **Riesgo de la B1: los reinicios solapados.** `az webapp restart`, el botón «Restart» del portal y los cambios de
+  configuración arrancan la copia nueva mientras la vieja sigue viva, y en B1 no caben las dos. Se probó dos veces:
+  la app respondió lenta 4 min y luego estuvo **13 min caída** hasta que Azure la movió a otra máquina; lo mismo pasó
+  con un despliegue en caliente. `WEBSITE_DISABLE_OVERLAPPED_RECYCLING=1` no lo evita en Linux (se probó). Por eso el
+  script despliega y reinicia deteniendo y prendiendo, y no reescribe la configuración que ya está bien. Los reinicios
+  que decida Azure (mantenimiento) no se pueden evitar: en B1 pueden dejarla ~15 min fuera.
+- **Recomendación: B2 al menos para la exposición** (29.93 USD/mes, ~1 USD por día): `python
+  despliegue/publicar_azure.py --solo-config --sku B2` el día antes y `--sku B1` después (cada cambio de plan mueve la
+  app de máquina, ~3-9 min sin servicio). Con B2 caben las dos copias, los reinicios no la tumban y se puede desplegar
+  con `--en-caliente`. Si el crédito alcanza, dejarla en B2.
+
+## Hugging Face Spaces: estado (21 de noviembre de 2026)
+
+```text
+dataset USUARIO/curva-datos (68 MB) ──descarga al arrancar──▶ Space USUARIO/curva (Docker, CPU básico)
+        ▲                                                         │  python -m despliegue.arranque
+        └── actualizar_hf.py: el registro en vivo de cada mañana  └▶ uvicorn en :7860 → /salud, la web
+```
+
+
+- **Dataset publicado:** [`rosewt/curva-datos`](https://huggingface.co/datasets/rosewt/curva-datos), 68.1 MB
+  (24 archivos; los sha256 del Hub coinciden con `MANIFIESTO.json`). Se creó privado y el dueño lo hizo **público**:
+  ya no hace falta `HF_TOKEN` para leerlo (lo que sigue sobre el token aplica solo si vuelve a ser privado).
 - **Space sin crear:** Hugging Face respondió `402 Payment Required` al crear `rosewt/curva`: «Static Spaces are free
   for everyone, but hosting Gradio and Docker Spaces on free cpu-basic requires a PRO subscription». Es un bloqueo del
   plan de la cuenta, no del código. Cuando el dueño decida (PRO, 9 USD/mes, o el plan B de abajo), el paso que falta es
@@ -195,6 +340,7 @@ el arranque (descarga simulada, fallas, recarga del registro en vivo) y los scri
 | `TPF_CACHE` | `~/datos` | Dónde se bajan los datos (pasa a ser `TETOUAN_DATA`). |
 | `TPF_RECARGA_MIN` | `15` | Minutos entre recargas del registro en vivo; `0` las apaga. |
 | `TPF_SI_FALLA` | `prueba` | Si el modelo real no carga, arranca con el de prueba y lo avisa (lo pone el arranque). |
+| `TPF_CALENTAR` | `1` | Al abrir el puerto, pide el resumen, «Ahora», «Confianza» y el diagnóstico de las tres áreas para que el primer visitante no espere sus cálculos; `0` lo apaga. |
 
 [overview]: https://huggingface.co/docs/hub/spaces-overview
 [docker]: https://huggingface.co/docs/hub/spaces-sdks-docker
