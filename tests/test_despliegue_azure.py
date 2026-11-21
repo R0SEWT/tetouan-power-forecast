@@ -266,39 +266,29 @@ def test_kudu_falla_con_el_log_si_la_compilacion_falla(tmp_path, monkeypatch):
 # ---- calentar la API al arrancar -------------------------------------------------------------------------------------
 
 
-def test_calentar_espera_la_salud_y_pide_lo_que_la_web_carga_primero(monkeypatch):
+def test_calentar_pide_lo_que_la_web_carga_primero_y_sigue_si_algo_falla():
     from despliegue import arranque
 
-    monkeypatch.setattr(arranque.time, "sleep", lambda _: None)
-    pedidos, intentos = [], iter([OSError("cargando"), OSError("cargando"), 200])
+    pedidos = []
 
-    def pedir(ruta, timeout):
-        if ruta == "/salud":
-            respuesta = next(intentos)
-            if isinstance(respuesta, Exception):
-                raise respuesta
-            return respuesta
-        pedidos.append(ruta)
-        if ruta == "/diagnostico/sur":
-            raise TimeoutError("lento")
-        return 200
+    class Cliente:
+        def get(self, ruta):
+            pedidos.append(ruta)
+            if ruta == "/diagnostico/sur":
+                raise RuntimeError("se cayó")
+            return SimpleNamespace(status_code=422 if ruta == "/ahora/sur" else 200)
 
-    assert arranque.calentar(7860, pedir=pedir) == len(arranque.CALENTAR) - 1  # una falla no corta el resto
+    assert arranque.calentar(None, cliente=Cliente()) == len(arranque.CALENTAR) - 2  # una falla no corta el resto
     assert pedidos == list(arranque.CALENTAR)
     assert pedidos[0] == "/resumen" and "/confianza/centro?horizonte=24h&variante=M3" in pedidos
 
 
-def test_calentar_se_rinde_si_la_api_no_abre(monkeypatch):
+def test_calentar_con_la_api_de_verdad_deja_el_resumen_listo():
+    pytest.importorskip("fastapi")
+    from app.backend.main import crear_app
     from despliegue import arranque
 
-    reloj = iter(range(0, 10_000, 100))
-    monkeypatch.setattr(arranque.time, "monotonic", lambda: next(reloj))
-    monkeypatch.setattr(arranque.time, "sleep", lambda _: None)
-
-    def pedir(ruta, timeout):
-        raise ConnectionRefusedError
-
-    assert arranque.calentar(7860, espera_s=300, pedir=pedir) == 0
+    assert arranque.calentar(crear_app(), rutas=("/salud", "/resumen", "/ahora/norte")) == 3
 
 
 def test_en_caliente_no_detiene_la_app(monkeypatch, capsys):

@@ -16,10 +16,10 @@ Variables de entorno:
 - ``TPF_CACHE``: dónde quedan los datos (por defecto ``~/datos``); pasa a ser ``TETOUAN_DATA``.
 - ``TPF_RECARGA_MIN``: cada cuántos minutos se vuelve a pedir al dataset el registro en vivo (15; 0 lo apaga). La API
   relee esos archivos cuando cambian, sin reiniciar: así llega la corrida de cada mañana (``actualizar_hf.py``).
-- ``TPF_CALENTAR``: ``1`` (por defecto) para pedir, apenas abre el puerto, lo que la web carga primero (el resumen, y
-  «Ahora» y «Confianza» de las tres áreas): la API los calcula una vez y los guarda. En una CPU de nube lenta (la B1 de
-  App Service) el primer resumen tardó 39 s y cada «Confianza» 11-18 s; así no los espera el primer visitante. ``0`` lo
-  apaga.
+- ``TPF_CALENTAR``: ``1`` (por defecto) para pedir, antes de abrir el puerto, lo que la web carga primero (el resumen, y
+  «Ahora», «Confianza» y el diagnóstico de las tres áreas): la API los calcula una vez y los guarda. En una CPU de nube
+  lenta (la B1 de App Service) el primer resumen tardó 39-45 s y cada «Confianza» 11-39 s; así no los espera el primer
+  visitante (a cambio, el puerto abre ~2 min más tarde en la B1). ``0`` lo apaga.
 """
 
 from __future__ import annotations
@@ -33,7 +33,6 @@ import shutil
 import sys
 import threading
 import time
-import urllib.request
 from pathlib import Path
 
 if not __package__:  # corrido como archivo (App Service): la raíz del repo y src/, como el PYTHONPATH del Dockerfile
@@ -159,33 +158,24 @@ CALENTAR = ("/resumen", *(ruta for area in AREAS for ruta in (
     f"/ahora/{area}", f"/confianza/{area}?horizonte=24h&variante=M3", f"/diagnostico/{area}")))
 
 
-def calentar(puerto: int, rutas=CALENTAR, espera_s: float = 900, pedir=None) -> int:
-    """Espera a que la API responda en ``puerto`` y le pide ``rutas`` una vez, para que queden calculadas. Devuelve
-    cuántas respondieron 200. Nunca lanza: si algo falla, el primer visitante solo espera más."""
-    base = f"http://127.0.0.1:{puerto}"
+def calentar(api, rutas=CALENTAR, cliente=None) -> int:
+    """Pide ``rutas`` a la API dentro del mismo proceso, ANTES de abrir el puerto, para que queden calculadas.
 
-    def _pedir(ruta: str, timeout: float) -> int:
-        with urllib.request.urlopen(base + ruta, timeout=timeout) as r:
-            r.read()
-            return r.status
+    Devuelve cuántas respondieron 200. Nunca lanza: si algo falla, el primer visitante solo espera más. Va antes de
+    abrir el puerto a propósito: la plataforma no manda visitas hasta que el puerto responde, y calentar con el puerto ya
+    abierto hacía que el primer visitante compitiera por la única CPU con el calentamiento (en la B1, 45 s el resumen).
+    """
+    if cliente is None:
+        import warnings
 
-    pedir = pedir or _pedir
-    limite = time.monotonic() + espera_s
-    while True:
-        try:
-            listo = pedir("/salud", 5) == 200
-        except Exception:  # noqa: BLE001 - todavía cargando los modelos
-            listo = False
-        if listo:
-            break
-        if time.monotonic() >= limite:
-            log.warning("No se calentó la API: no respondió en %.0f s", espera_s)
-            return 0
-        time.sleep(2)
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            from fastapi.testclient import TestClient
+        cliente = TestClient(api)  # sin «with»: la app no tiene lifespan y así no se ejecuta un cierre
     inicio, bien = time.monotonic(), 0
     for ruta in rutas:
         try:
-            bien += pedir(ruta, 300) == 200
+            bien += cliente.get(ruta).status_code == 200
         except Exception as error:  # noqa: BLE001
             log.warning("Al calentar %s: %s", ruta, _breve(error))
     log.info("API calentada: %d de %d pedidos en %.0f s", bien, len(rutas), time.monotonic() - inicio)
@@ -205,12 +195,14 @@ def main() -> None:
                                 name="recarga-en-vivo")
         hilo.start()
         log.info("El registro en vivo se recarga desde %s cada %g min", fuente, minutos)
-    puerto = int(os.environ.get("PORT", "7860"))
     if os.environ.get("TPF_CALENTAR", "1") != "0":
-        threading.Thread(target=calentar, args=(puerto,), daemon=True, name="calentar").start()
+        # Importarla carga los modelos; uvicorn reusa después este mismo módulo (no los vuelve a cargar)
+        from app.backend.main import app as api
+
+        calentar(api)
     import uvicorn
 
-    uvicorn.run("app.backend.main:app", host=os.environ.get("HOST", "0.0.0.0"), port=puerto,
+    uvicorn.run("app.backend.main:app", host=os.environ.get("HOST", "0.0.0.0"), port=int(os.environ.get("PORT", "7860")),
                 proxy_headers=True, forwarded_allow_ips="*")
 
 
