@@ -498,7 +498,12 @@ class Publicador:
     def publicar(self) -> None:
         self.revisar_cuenta()
         if self.args.logs:
-            self.az.mostrar(Kudu(self.az, self.args.app).logs(self.args.logs))
+            kudu = Kudu(self.az, self.args.app)
+            if self.az.simular:
+                self.az("account", "get-access-token", "--scope", Kudu.ALCANCE)
+                self.az.mostrar(f"  GET {kudu.base}/api/logs/docker y los dos logs más recientes (con ese token)")
+            else:
+                self.az.mostrar(kudu.logs(self.args.logs))
             return
         if self.args.reiniciar:
             self.reiniciar()

@@ -422,3 +422,14 @@ def test_si_falla_armar_el_despliegue_la_app_no_queda_detenida(monkeypatch):
     with pytest.raises(ErrorAzure, match="uv"):
         pub.publicar()
     assert az.escrituras[-1][:2] == ("webapp", "start")
+
+
+def test_logs_en_dry_run_no_usa_la_red(monkeypatch, capsys):
+    def prohibido(comando, *a, **k):
+        raise AssertionError(f"no debía correr {comando}")
+
+    monkeypatch.setattr(publicar_azure.subprocess, "run", prohibido)
+    monkeypatch.setattr(publicar_azure.urllib.request, "urlopen", prohibido)
+    assert publicar_azure.main(["--dry-run", "--logs"]) == 0
+    salida = capsys.readouterr().out
+    assert "account get-access-token" in salida and "/api/logs/docker" in salida
