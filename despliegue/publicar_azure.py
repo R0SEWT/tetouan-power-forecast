@@ -417,7 +417,23 @@ class Publicador:
         a, az = self.args, self.az
         az.mostrar(f"Reinicio de {a.app} (detener y prender):")
         az("webapp", "stop", "--name", a.app, *self.base)
+        if not az.simular:
+            self.esperar_detenida()
         az("webapp", "start", "--name", a.app, *self.base)
+
+    def esperar_detenida(self, segundos: float = 300) -> None:
+        """«az webapp stop» vuelve enseguida, pero el contenedor sigue respondiendo unos segundos: si se prende antes,
+        no se reinicia nada. Espera a que ``/salud`` deje de dar 200."""
+        limite = time.monotonic() + segundos
+        while time.monotonic() < limite:
+            try:
+                codigo = humo.pedir(self.url, "/salud", timeout=10)[0]
+            except OSError:
+                return
+            if codigo != 200:
+                return
+            time.sleep(3)
+        raise ErrorAzure(f"la app sigue respondiendo {segundos:.0f} s después de detenerla")
 
     def desplegar(self) -> None:
         a, az = self.args, self.az

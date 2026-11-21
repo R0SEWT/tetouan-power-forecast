@@ -344,3 +344,13 @@ def test_reiniciar_detiene_y_prende(monkeypatch, capsys):
     salida = capsys.readouterr().out
     assert salida.index("webapp stop") < salida.index("webapp start")
     assert "webapp restart" not in salida and "/api/publish" not in salida and "config set" not in salida
+
+
+def test_reiniciar_espera_a_que_la_app_deje_de_responder(monkeypatch):
+    monkeypatch.setattr(publicar_azure.time, "sleep", lambda _: None)
+    codigos = iter([200, 200, 403])
+    monkeypatch.setattr(publicar_azure.humo, "pedir", lambda base, ruta, timeout=60: (next(codigos), "", 0.1, 0))
+    az = AzFalso()
+    publicador(az).reiniciar()
+    assert [e[:2] for e in az.escrituras] == [("webapp", "stop"), ("webapp", "start")]
+    assert next(codigos, "agotado") == "agotado"  # preguntó hasta que dejó de dar 200
