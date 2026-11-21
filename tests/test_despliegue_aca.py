@@ -56,13 +56,14 @@ def test_la_especificacion_pide_lo_acordado():
     assert variables["TPF_HF_DATASET"] == "rosewt/curva-datos" and variables["TPF_PRONOSTICADOR"] == "real"
     assert variables["PORT"] == "7860" and "HF_TOKEN" not in variables  # el dataset es público
     assert "registries" not in p["configuration"] and "secrets" not in p["configuration"]  # la imagen es pública
+    assert variables["TPF_CALENTAR"] == "0"  # el puerto abre antes de los ~30 s en que la plataforma da 503
+    # La sonda de arranque es la que Container Apps pone por defecto: TCP cada 1 s, hasta 240 fallas (4 min)
     arranque = next(s for s in c["probes"] if s["type"] == "Startup")
-    assert arranque["httpGet"]["path"] == "/salud"
-    # los topes de Container Apps: 60 s de espera inicial, 10 fallas, 240 s entre intentos
+    assert arranque["tcpSocket"]["port"] == 7860 and arranque["periodSeconds"] == 1
+    assert arranque["periodSeconds"] * arranque["failureThreshold"] >= 4 * 60
+    # las otras dos son TCP (no /salud): con la CPU ocupada en un cálculo largo, el puerto igual acepta conexiones
     for sonda in c["probes"]:
-        assert sonda["initialDelaySeconds"] <= 60 and sonda["failureThreshold"] <= 10 and sonda["periodSeconds"] <= 240
-    margen = arranque["initialDelaySeconds"] + arranque["periodSeconds"] * arranque["failureThreshold"]
-    assert margen >= 4 * 30  # más de 4 veces los ~30 s que tardó en arrancar (descarga, modelos, calentamiento)
+        assert "tcpSocket" in sonda and sonda["initialDelaySeconds"] <= 60 and sonda["periodSeconds"] <= 240
 
 
 def test_lo_aplicado_pasa_la_verificacion_y_lo_distinto_no():

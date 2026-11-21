@@ -76,16 +76,19 @@ VARIABLES = {
     "TPF_RECARGA_MIN": "15",  # relee el registro en vivo del dataset cada 15 min (no mantiene la app prendida)
     "PORT": str(PUERTO),
     "MALLOC_ARENA_MAX": "2",  # menos memoria fragmentada
+    "TPF_CALENTAR": "0",  # abrir el puerto antes de los ~30 s en que la plataforma se rinde (ver SONDAS)
 }
-# La sonda de arranque espera /salud, que responde recién cuando la app bajó los datos, cargó los modelos y calentó
-# lo que la web pide primero: en Container Apps tardó ~30 s desde que arranca el contenedor (7 s la descarga). Cada
-# segundo de más en la sonda es espera del primer visitante, porque la plataforma retiene su pedido hasta que la
-# réplica está lista. Container Apps admite como máximo 60 s de espera inicial y 10 fallas seguidas: 30 s de espera y
-# 10 intentos cada 10 s le dan a la app ~130 s (más de 4 veces lo medido) antes de reiniciarla. Las otras dos son TCP:
-# con la única CPU ocupada en un cálculo largo, /salud puede tardar, pero el puerto sigue aceptando conexiones.
+# Arranque en frío: la plataforma retiene el primer pedido mientras prende la réplica, pero a los ~30 s se rinde y
+# responde 503 «App port is not ready» (se midió: la app abrió el puerto a los 31 s y el primer visitante vio ese error).
+# Por eso (1) el puerto se abre sin calentar antes (TPF_CALENTAR=0: abre ~10 s antes, a los ~20 s; en esta CPU cada
+# cálculo que se saltea tarda ~1 s cuando la web lo pide) y (2) la sonda de arranque es la que Container Apps pone por
+# defecto: TCP cada 1 s, hasta 240 fallas (4 min). Con una sonda HTTP, el tope documentado de 10 fallas obliga a elegir
+# entre detectar tarde (cada 10 s o más) o reiniciar pronto. El puerto lo abre uvicorn recién cuando los modelos están
+# cargados, así que «el puerto responde» es «la app está lista». Las otras dos también son TCP: con la única CPU
+# ocupada en un cálculo largo, /salud puede tardar, pero el puerto sigue aceptando conexiones.
 SONDAS = (
-    {"type": "Startup", "httpGet": {"path": SALUD, "port": PUERTO}, "initialDelaySeconds": 30, "periodSeconds": 10,
-     "timeoutSeconds": 5, "failureThreshold": 10},
+    {"type": "Startup", "tcpSocket": {"port": PUERTO}, "initialDelaySeconds": 1, "periodSeconds": 1,
+     "timeoutSeconds": 3, "failureThreshold": 240},
     {"type": "Readiness", "tcpSocket": {"port": PUERTO}, "initialDelaySeconds": 1, "periodSeconds": 10,
      "timeoutSeconds": 5, "failureThreshold": 3},
     {"type": "Liveness", "tcpSocket": {"port": PUERTO}, "initialDelaySeconds": 1, "periodSeconds": 30,
