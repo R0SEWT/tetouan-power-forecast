@@ -337,3 +337,74 @@ def test_esperar_no_confunde_el_estado_de_antes_con_el_nuevo(monkeypatch, capsys
     with pytest.raises(publicar_hf.ErrorPublicacion, match="BUILD_ERROR"):
         publicador(ApiFalsa(["BUILD_ERROR"])).esperar(5, cambio=False)
     assert "línea del log" in capsys.readouterr().out
+
+
+def test_rearmar_el_paquete_borra_lo_que_ya_no_va(tmp_path):
+    """Si un opcional desaparece del origen, no puede quedar en el paquete: la app elegiría el modelo viejo."""
+    datos, paquete = datos_falsos(tmp_path / "datos"), tmp_path / "paquete"
+    armar_paquete(datos, paquete, progreso=lambda _: None)
+    for ruta in ("reportes/sein/fundacionales/simons_c2048.parquet", EN_VIVO[2]):
+        (datos / ruta).unlink()
+    (paquete / "modelos/sein/ajeno.joblib").write_bytes(b"de otra corrida")
+    manifiesto = armar_paquete(datos, paquete, progreso=lambda _: None)
+    assert not (paquete / "reportes/sein/fundacionales/simons_c2048.parquet").exists()
+    assert not (paquete / EN_VIVO[2]).exists() and not (paquete / "modelos/sein/ajeno.joblib").exists()
+    assert "reportes/sein/fundacionales/simons_c2048.parquet" in manifiesto["omitidos"]
+    assert verificar(paquete) == []
+
+
+def test_el_arranque_borra_de_la_cache_lo_que_ya_no_esta_en_el_dataset(paquete, tmp_path):
+    cache = tmp_path / "cache"
+    viejo = cache / "reportes/sein/fundacionales/chronos2ftcal_c2048.parquet"
+    (cache / "reportes/sein/fundacionales").mkdir(parents=True)
+    (paquete / "reportes/sein/fundacionales/chronos2ftcal_c2048.parquet").unlink()
+    manifiesto = json.loads((paquete / MANIFIESTO).read_text())
+    del manifiesto["archivos"]["reportes/sein/fundacionales/chronos2ftcal_c2048.parquet"]
+    (paquete / MANIFIESTO).write_text(json.dumps(manifiesto))
+    viejo.write_bytes(b"de un dataset anterior")
+    (cache / EN_VIVO[0]).parent.mkdir(parents=True, exist_ok=True)
+    cambios, _, _ = arranque.preparar({"TPF_HF_DATASET": str(paquete), "TPF_CACHE": str(cache)})
+    assert cambios["TPF_PRONOSTICADOR"] == "real"
+    assert not viejo.exists()
+    assert (cache / EN_VIVO[0]).exists()  # el registro en vivo se conserva aunque llegue aparte
+
+
+def test_un_reinicio_fallido_queda_pendiente_y_se_reintenta(tmp_path, monkeypatch, capsys):
+    import sys
+    import types
+
+    llamadas = {"commits": 0, "reinicios": 0, "falla": True, "sha": "a"}
+
+    class HfApi:
+        def __init__(self, token):
+            assert token == "hf_personal"
+
+        def whoami(self):
+            return info()
+
+        def dataset_info(self, _):
+            return types.SimpleNamespace(sha=llamadas["sha"])
+
+        def create_commit(self, *a, **k):
+            llamadas["commits"] += 1
+            llamadas["sha"] += "b"
+
+        def restart_space(self, space):
+            assert space == "rosewt/curva"
+            llamadas["reinicios"] += 1
+            if llamadas.pop("falla", False):
+                raise ConnectionError("el Hub no responde")
+
+    falso = types.ModuleType("huggingface_hub")
+    falso.HfApi, falso.CommitOperationAdd = HfApi, lambda **k: k
+    monkeypatch.setitem(sys.modules, "huggingface_hub", falso)
+    monkeypatch.setenv("HF_TOKEN", "hf_personal")
+    datos, estado = datos_falsos(tmp_path / "datos"), tmp_path / "estado.json"
+    argumentos = ["rosewt", "--datos", str(datos), "--estado", str(estado), "--reiniciar"]
+    assert actualizar_hf.main(argumentos) == 1  # subió, pero el reinicio falló
+    assert llamadas["commits"] == 1 and actualizar_hf.leer_estado(estado)[actualizar_hf.REINICIO_PENDIENTE]
+    assert actualizar_hf.main(argumentos) == 0  # nada nuevo que subir, pero reintenta el reinicio
+    assert llamadas == {"commits": 1, "reinicios": 2, "sha": "ab"}
+    assert actualizar_hf.REINICIO_PENDIENTE not in actualizar_hf.leer_estado(estado)
+    assert actualizar_hf.main(argumentos) == 0 and llamadas["reinicios"] == 2  # ya al día: ni red
+    assert "reiniciado" in capsys.readouterr().out

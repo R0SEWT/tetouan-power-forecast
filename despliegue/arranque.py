@@ -19,6 +19,7 @@ Variables de entorno:
 from __future__ import annotations
 
 import filecmp
+import json
 import logging
 import os
 import re
@@ -27,7 +28,7 @@ import threading
 import time
 from pathlib import Path
 
-from despliegue.paquete import EN_VIVO, METADATOS_APP, verificar
+from despliegue.paquete import EN_VIVO, MANIFIESTO, METADATOS_APP, limpiar, verificar
 
 log = logging.getLogger("curva.arranque")
 REPO_ID = re.compile(r"^[\w.-]+/[\w.-]+$")
@@ -118,6 +119,10 @@ def preparar(entorno=None) -> tuple[dict[str, str], object | None, Path | None]:
         problemas = verificar(cache)
         if problemas:
             raise RuntimeError("el paquete bajado no pasa la verificación: " + "; ".join(problemas[:3]))
+        # Con una carpeta reutilizada (un volumen), lo que ya no está en el dataset no puede quedar: la app elige los
+        # modelos según qué archivos existen
+        manifiesto = json.loads((cache / MANIFIESTO).read_text())
+        limpiar(cache, [*manifiesto["archivos"], *EN_VIVO], progreso=log.info)  # el registro llega aparte
         log.info("Datos listos en %s, bajados desde %s (%.0f s)", cache, fuente, time.monotonic() - inicio)
     except Exception as error:  # noqa: BLE001 - cualquier falla deja la app en datos de prueba, con aviso
         aviso = (f"No se pudieron bajar los datos reales ({_breve(error)}). Se muestran datos de prueba sintéticos; "

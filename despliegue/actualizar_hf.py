@@ -29,6 +29,8 @@ from despliegue.cuenta import ErrorCuenta, revisar_destino, token_personal, veri
 from despliegue.paquete import EN_VIVO, mb, sha256
 from despliegue.publicar_hf import CACHE, DATASET, SPACE, datos_por_defecto
 
+REINICIO_PENDIENTE = "_reinicio_pendiente"
+
 
 def cambiados(datos: Path, estado: dict) -> dict[str, str]:
     """Los archivos del registro que existen y cuyo sha256 difiere del de la última subida, con su sha256."""
@@ -63,23 +65,30 @@ def main(argv=None) -> int:
     p.add_argument("--space", default=SPACE, help=f"nombre del Space, para --reiniciar (por defecto, {SPACE})")
     p.add_argument("--datos", type=Path, default=datos_por_defecto(), help="carpeta de datos (TETOUAN_DATA)")
     p.add_argument("--estado", type=Path, help="dónde se guardan los sha256 de lo subido")
-    p.add_argument("--reiniciar", action="store_true", help="reinicia el Space después de subir")
+    p.add_argument("--reiniciar", action="store_true",
+                   help="reinicia el Space después de subir (si falla, lo reintenta en la próxima corrida)")
     p.add_argument("--forzar", action="store_true", help="sube aunque nada haya cambiado desde la última vez")
     p.add_argument("--dry-run", action="store_true", help="muestra qué subiría, sin red")
     args = p.parse_args(argv)
     dataset_id = f"{args.usuario}/{args.dataset}"
     ruta_estado = args.estado or CACHE / f"subido-{args.usuario}-{args.dataset}.json"
     ahora = datetime.now().astimezone().strftime("%Y-%m-%d %H:%M")
+    space_id = f"{args.usuario}/{args.space}"
     try:
         revisar_destino(args.usuario)
-        estado = {} if args.forzar else leer_estado(ruta_estado)
-        nuevos = cambiados(args.datos, estado)
-        if not nuevos:
+        estado = leer_estado(ruta_estado)
+        # Un reinicio que falló queda pendiente y se reintenta en la próxima corrida, aunque no haya nada que subir
+        pendiente = args.reiniciar and bool(estado.get(REINICIO_PENDIENTE))
+        nuevos = cambiados(args.datos, {} if args.forzar else estado)
+        if not nuevos and not pendiente:
             print(f"{ahora} INFO hf: el registro en vivo ya está al día en {dataset_id}")
             return 0
         detalle = ", ".join(f"{Path(r).name} ({mb((args.datos / r).stat().st_size)})" for r in nuevos)
         if args.dry_run:
-            print(f"Subiría a {dataset_id}: {detalle}" + (" y reiniciaría el Space" if args.reiniciar else ""))
+            acciones = [f"subiría a {dataset_id}: {detalle}"] if nuevos else []
+            if args.reiniciar:
+                acciones.append(f"reiniciaría {space_id}" + (" (pendiente)" if pendiente else ""))
+            print("Simulación: " + "; ".join(acciones))
             return 0
         token = token_personal()
         os.environ.setdefault("HF_HUB_DISABLE_PROGRESS_BARS", "1")  # una línea por corrida en el log del cron
@@ -87,22 +96,29 @@ def main(argv=None) -> int:
 
         api = HfApi(token=token)  # explícito: nunca el token guardado en el disco
         verificar_cuenta(api.whoami(), args.usuario)
-        operaciones = [CommitOperationAdd(path_in_repo=r, path_or_fileobj=str(args.datos / r)) for r in nuevos]
-        antes = api.dataset_info(dataset_id).sha
-        api.create_commit(dataset_id, operaciones, repo_type="dataset", commit_message=f"Registro en vivo al {ahora}")
-        guardar_estado(ruta_estado, {**estado, **nuevos})
-        if api.dataset_info(dataset_id).sha == antes:  # el Hub ya tenía esos mismos archivos: no hubo commit
-            print(f"{ahora} INFO hf: el registro en vivo ya estaba en {dataset_id}")
-            return 0
-        print(f"{ahora} INFO hf: subido a {dataset_id}: {detalle}")
-        if args.reiniciar:
-            api.restart_space(f"{args.usuario}/{args.space}")
-            print(f"{ahora} INFO hf: Space {args.usuario}/{args.space} reiniciado")
+        if nuevos:
+            operaciones = [CommitOperationAdd(path_in_repo=r, path_or_fileobj=str(args.datos / r)) for r in nuevos]
+            antes = api.dataset_info(dataset_id).sha
+            api.create_commit(dataset_id, operaciones, repo_type="dataset",
+                              commit_message=f"Registro en vivo al {ahora}")
+            subido = api.dataset_info(dataset_id).sha != antes
+            estado.update(nuevos)
+            if args.reiniciar and subido:
+                estado[REINICIO_PENDIENTE] = True  # se guarda antes de reiniciar: si falla, la próxima lo reintenta
+            guardar_estado(ruta_estado, estado)
+            print(f"{ahora} INFO hf: " + (f"subido a {dataset_id}: {detalle}" if subido else
+                                          f"el registro en vivo ya estaba en {dataset_id}"))
+        if args.reiniciar and estado.get(REINICIO_PENDIENTE):
+            api.restart_space(space_id)
+            estado.pop(REINICIO_PENDIENTE)
+            guardar_estado(ruta_estado, estado)
+            print(f"{ahora} INFO hf: Space {space_id} reiniciado")
     except ErrorCuenta as error:
         print(f"{ahora} ERROR hf: {error}", file=sys.stderr)
         return 2
     except Exception as error:  # noqa: BLE001 - la red o el Hub: queda en el log del cron y se reintenta
-        print(f"{ahora} ERROR hf: no se pudo subir el registro en vivo: {error}", file=sys.stderr)
+        print(f"{ahora} ERROR hf: falló la actualización en Hugging Face (se reintenta en la próxima corrida): {error}",
+              file=sys.stderr)
         return 1
     return 0
 

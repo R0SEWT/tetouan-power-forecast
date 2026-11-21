@@ -61,6 +61,8 @@ EN_VIVO: tuple[str, ...] = (
     "reportes/sein/en_vivo/resumen.parquet",
 )
 MANIFIESTO = "MANIFIESTO.json"
+# Las carpetas del paquete que se arman con la lista de arriba: lo que haya en ellas fuera de la lista sobra
+CARPETAS = ("coes", "exogenas", "modelos", "reportes")
 VERSION = 1
 PRESET_XZ = 6
 BLOQUE = 1 << 20
@@ -112,12 +114,31 @@ def _leer_manifiesto(carpeta: Path) -> dict | None:
         return None
 
 
+def limpiar(carpeta: Path, conservar, progreso=print) -> list[str]:
+    """Borra de ``carpeta`` lo que hay en sus carpetas de datos y no está en ``conservar`` (rutas relativas).
+
+    La app elige el híbrido y el combinado según qué archivos existen, así que un archivo que ya no va en el paquete
+    (un opcional que desapareció del origen) no puede quedarse: se serviría un modelo viejo.
+    """
+    carpeta, conservar, borrados = Path(carpeta), set(conservar), []
+    for raiz in CARPETAS:
+        for archivo in sorted((carpeta / raiz).rglob("*"), reverse=True):
+            relativa = archivo.relative_to(carpeta).as_posix()
+            if archivo.is_file() and relativa not in conservar:
+                archivo.unlink()
+                borrados.append(relativa)
+                progreso(f"  borra {relativa}: ya no va en el paquete")
+            elif archivo.is_dir() and not any(archivo.iterdir()):
+                archivo.rmdir()
+    return borrados
+
+
 def armar_paquete(origen: Path, destino: Path, comprimir: bool = True, progreso=print) -> dict:
     """Arma en ``destino`` el paquete de datos de la app a partir de la carpeta de datos ``origen``.
 
     Escribe los archivos con sus rutas relativas, ``MANIFIESTO.json`` (bytes y sha256 de cada estático y del archivo
     original del que sale) y ``README.md`` (la ficha del dataset). Si ``destino`` ya tiene un paquete armado con los
-    mismos originales, no vuelve a comprimirlos. Devuelve el manifiesto.
+    mismos originales, no vuelve a comprimirlos, y borra lo que sobra de un paquete anterior. Devuelve el manifiesto.
     """
     origen, destino = Path(origen), Path(destino)
     estaticos = archivos_estaticos(origen)
@@ -148,6 +169,7 @@ def armar_paquete(origen: Path, destino: Path, comprimir: bool = True, progreso=
             en_vivo.append(ruta)
         else:
             progreso(f"  aviso: no está {ruta}; la app arranca sin el registro en vivo")
+    limpiar(destino, [*archivos, *en_vivo], progreso)
     manifiesto = {
         "version": VERSION,
         "generado": datetime.now(UTC).strftime("%Y-%m-%dT%H:%M:%SZ"),
