@@ -1,7 +1,9 @@
 """Arranque del contenedor: baja el paquete de datos de un dataset del Hub, lo verifica y levanta la API en ``$PORT``.
 
-Es el ``CMD`` del ``Dockerfile`` (``python -m despliegue.arranque``). Si la descarga o la verificación fallan, la app
-no se cae: arranca con los datos de prueba sintéticos y la web muestra el motivo (``aviso`` de ``GET /salud``).
+Es el ``CMD`` del ``Dockerfile`` (``python -m despliegue.arranque``) y el comando de inicio de Azure App Service, que
+lo corre como archivo (``python despliegue/arranque.py``, ver ``publicar_azure.py``). Si la descarga o la verificación
+fallan, la app no se cae: arranca con los datos de prueba sintéticos y la web muestra el motivo (``aviso`` de
+``GET /salud``).
 
 Variables de entorno:
 
@@ -14,6 +16,10 @@ Variables de entorno:
 - ``TPF_CACHE``: dónde quedan los datos (por defecto ``~/datos``); pasa a ser ``TETOUAN_DATA``.
 - ``TPF_RECARGA_MIN``: cada cuántos minutos se vuelve a pedir al dataset el registro en vivo (15; 0 lo apaga). La API
   relee esos archivos cuando cambian, sin reiniciar: así llega la corrida de cada mañana (``actualizar_hf.py``).
+- ``TPF_CALENTAR``: ``1`` (por defecto) para pedir, antes de abrir el puerto, lo que la web carga primero (el resumen, y
+  «Ahora», «Confianza» y el diagnóstico de las tres áreas): la API los calcula una vez y los guarda. En una CPU de nube
+  lenta (la B1 de App Service) el primer resumen tardó 39-45 s y cada «Confianza» 11-39 s; así no los espera el primer
+  visitante (a cambio, el puerto abre ~2 min más tarde en la B1). ``0`` lo apaga.
 """
 
 from __future__ import annotations
@@ -24,9 +30,14 @@ import logging
 import os
 import re
 import shutil
+import sys
 import threading
 import time
 from pathlib import Path
+
+if not __package__:  # corrido como archivo (App Service): la raíz del repo y src/, como el PYTHONPATH del Dockerfile
+    _RAIZ = Path(__file__).resolve().parents[1]
+    sys.path[:0] = [str(_RAIZ / "src"), str(_RAIZ)]
 
 from despliegue.paquete import EN_VIVO, MANIFIESTO, METADATOS_APP, limpiar, verificar
 
@@ -126,7 +137,7 @@ def preparar(entorno=None) -> tuple[dict[str, str], object | None, Path | None]:
         log.info("Datos listos en %s, bajados desde %s (%.0f s)", cache, fuente, time.monotonic() - inicio)
     except Exception as error:  # noqa: BLE001 - cualquier falla deja la app en datos de prueba, con aviso
         aviso = (f"No se pudieron bajar los datos reales ({_breve(error)}). Se muestran datos de prueba sintéticos; "
-                 "revisa los logs del Space y el dataset.")
+                 "revisa los logs de la app y el dataset.")
         log.error("%s", aviso)
         return {**cambios, "TPF_PRONOSTICADOR": "prueba", "TPF_AVISO": aviso}, None, None
     return {**cambios, "TETOUAN_DATA": str(cache), "TPF_PRONOSTICADOR": "real"}, fuente, cache
@@ -141,8 +152,39 @@ def recargar(fuente, cache: Path, minutos: float, parar: threading.Event) -> Non
             log.warning("No se pudo recargar el registro en vivo: %s", _breve(error))
 
 
+AREAS = ("norte", "centro", "sur")
+# Lo que pide la web al abrir (cargarBase) y al entrar a «Ahora» y «Confianza», con sus parámetros por defecto
+CALENTAR = ("/resumen", *(ruta for area in AREAS for ruta in (
+    f"/ahora/{area}", f"/confianza/{area}?horizonte=24h&variante=M3", f"/diagnostico/{area}")))
+
+
+def calentar(api, rutas=CALENTAR, cliente=None) -> int:
+    """Pide ``rutas`` a la API dentro del mismo proceso, ANTES de abrir el puerto, para que queden calculadas.
+
+    Devuelve cuántas respondieron 200. Nunca lanza: si algo falla, el primer visitante solo espera más. Va antes de
+    abrir el puerto a propósito: la plataforma no manda visitas hasta que el puerto responde, y calentar con el puerto ya
+    abierto hacía que el primer visitante compitiera por la única CPU con el calentamiento (en la B1, 45 s el resumen).
+    """
+    if cliente is None:
+        import warnings
+
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            from fastapi.testclient import TestClient
+        cliente = TestClient(api)  # sin «with»: la app no tiene lifespan y así no se ejecuta un cierre
+    inicio, bien = time.monotonic(), 0
+    for ruta in rutas:
+        try:
+            bien += cliente.get(ruta).status_code == 200
+        except Exception as error:  # noqa: BLE001
+            log.warning("Al calentar %s: %s", ruta, _breve(error))
+    log.info("API calentada: %d de %d pedidos en %.0f s", bien, len(rutas), time.monotonic() - inicio)
+    return bien
+
+
 def main() -> None:
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s")
+    logging.getLogger("httpx").setLevel(logging.WARNING)  # una línea por pedido al Hub, cada 15 min: solo ruido
     os.environ.setdefault("HF_HUB_DISABLE_PROGRESS_BARS", "1")
     os.environ.setdefault("HF_HUB_DISABLE_TELEMETRY", "1")
     cambios, fuente, cache = preparar()
@@ -153,6 +195,11 @@ def main() -> None:
                                 name="recarga-en-vivo")
         hilo.start()
         log.info("El registro en vivo se recarga desde %s cada %g min", fuente, minutos)
+    if os.environ.get("TPF_CALENTAR", "1") != "0":
+        # Importarla carga los modelos; uvicorn reusa después este mismo módulo (no los vuelve a cargar)
+        from app.backend.main import app as api
+
+        calentar(api)
     import uvicorn
 
     uvicorn.run("app.backend.main:app", host=os.environ.get("HOST", "0.0.0.0"), port=int(os.environ.get("PORT", "7860")),
