@@ -224,18 +224,53 @@ function aplicarModelo() {
 // index.html pide los datos de arranque antes de que baje este archivo; cada respuesta se usa una sola vez.
 const PRECARGA = window.PRECARGA instanceof Map ? window.PRECARGA : new Map();
 
+// El servidor se apaga solo cuando nadie lo usa (Azure Container Apps, cero réplicas) y la primera visita lo
+// despierta en ~20 s. Mientras tanto, el proxy de Netlify (que espera 26 s) o la plataforma responden 502, 503 o 504.
+// Esos pedidos se repiten con espera creciente durante ~60 s, con un aviso en vez del error. Sin conexión (el pedido
+// ni sale) no es el servidor dormido: el error con «Reintentar» se muestra enseguida, como antes.
+const DESPERTAR_MS = 60000;
+const REINTENTABLES = new Set([502, 503, 504]);
+let despertando = 0;
+function avisarDespertar(cambio) {
+  despertando = Math.max(0, despertando + cambio);
+  const aviso = document.getElementById('avisoDespertar');
+  if (aviso) aviso.hidden = despertando === 0;
+}
+const esperarMs = (ms) => new Promise((listo) => { setTimeout(listo, ms); });
+// Devuelve la respuesta (la última, si siguió fallando hasta el plazo) o null si nunca hubo conexión.
+async function pedirDespertando(ruta, opciones, precargada, plazo = DESPERTAR_MS) {
+  const inicio = Date.now();
+  let intento = 0;
+  let avisado = false;
+  try {
+    for (;;) {
+      let r = null;
+      try {
+        r = (intento === 0 && precargada && await precargada) || await fetch(API + ruta, opciones);
+      } catch {
+        r = null;
+      }
+      if (!r || !REINTENTABLES.has(r.status) || Date.now() - inicio >= plazo) return r;
+      if (!avisado) {
+        avisado = true;
+        avisarDespertar(1);
+      }
+      intento += 1;
+      await esperarMs(Math.min(1000 * 2 ** (intento - 1), 8000)); // 1, 2, 4, 8, 8... s
+    }
+  } finally {
+    if (avisado) avisarDespertar(-1);
+  }
+}
+
 async function api(ruta, cuerpo) {
   const opciones = cuerpo
     ? { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(cuerpo) }
     : undefined;
   const precargada = cuerpo ? null : PRECARGA.get(ruta);
   PRECARGA.delete(ruta);
-  let r;
-  try {
-    r = (precargada && await precargada) || await fetch(API + ruta, opciones);
-  } catch {
-    throw new ErrorApi(0, 'sin conexión');
-  }
+  const r = await pedirDespertando(ruta, opciones, precargada);
+  if (!r) throw new ErrorApi(0, 'sin conexión');
   let datos = null;
   try {
     datos = await r.json();
