@@ -1,0 +1,101 @@
+# Construye la imagen de Curva (el Dockerfile de la raiz) en los servidores de GitHub y la publica en
+# ghcr.io/r0sewt/curva con dos etiquetas: sha-<commit> (fija, la que usa Azure Container Apps) y latest.
+# Nada se construye ni se baja en la laptop. Ver despliegue/README.md, seccion "Azure Container Apps".
+#
+# Se dispara a mano (Actions -> Imagen -> Run workflow) y al hacer push a la rama del despliegue; no en cada PR.
+#
+# Copia en Azure Container Registry (opcional y transitoria): si existen la variable ACR_SERVIDOR (p. ej.
+# curvaaca.azurecr.io) y el secreto ACR_CLAVE (con la variable ACR_USUARIO), la misma imagen se sube tambien alli.
+# Sirve mientras el paquete de ghcr.io sea privado: Container Apps la baja de ACR con su identidad administrada, sin
+# guardar en Azure ningun token de GitHub. Cuando el paquete sea publico, se borran el registro y esas variables.
+name: Imagen
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [feature/despliegue-aca]
+
+permissions:
+  contents: read
+  packages: write
+
+concurrency:
+  group: imagen-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  IMAGEN: ghcr.io/r0sewt/curva
+
+jobs:
+  imagen:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: docker/setup-buildx-action@v3
+
+      - name: Entrar a ghcr.io
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Entrar a Azure Container Registry (si esta configurado)
+        if: vars.ACR_SERVIDOR != ''
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ vars.ACR_SERVIDOR }}
+          username: ${{ vars.ACR_USUARIO }}
+          password: ${{ secrets.ACR_CLAVE }}
+
+      - name: Etiquetas
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: |
+            ${{ env.IMAGEN }}
+            ${{ vars.ACR_SERVIDOR != '' && format('{0}/curva', vars.ACR_SERVIDOR) || '' }}
+          tags: |
+            type=sha,prefix=sha-,format=short
+            type=raw,value=latest
+          labels: |
+            org.opencontainers.image.title=curva
+            org.opencontainers.image.description=Curva: pronostico de demanda electrica por area del SEIN (API y web)
+
+      - name: Construir y publicar
+        id: build
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          platforms: linux/amd64
+          push: true
+          provenance: false
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Medir la imagen
+        env:
+          DIGEST: ${{ steps.build.outputs.digest }}
+          ETIQUETAS: ${{ steps.meta.outputs.tags }}
+        run: |
+          set -euo pipefail
+          comprimida=$(docker buildx imagetools inspect --raw "$IMAGEN@$DIGEST" \
+            | python3 -c "import json,sys; m=json.load(sys.stdin); print(sum(c['size'] for c in m['layers']))")
+          docker pull -q "$IMAGEN@$DIGEST" >/dev/null
+          descomprimida=$(docker image inspect --format '{{.Size}}' "$IMAGEN@$DIGEST")
+          capas=$(docker buildx imagetools inspect --raw "$IMAGEN@$DIGEST" \
+            | python3 -c "import json,sys; print(len(json.load(sys.stdin)['layers']))")
+          {
+            echo "### Imagen publicada"
+            echo
+            echo "| | |"
+            echo "|---|---|"
+            echo "| Etiquetas | \`$(echo "$ETIQUETAS" | tr '\n' ' ')\` |"
+            echo "| Digest | \`$DIGEST\` |"
+            echo "| Comprimida (lo que se descarga) | $(python3 -c "print(f'{$comprimida/1e6:.0f} MB')") en $capas capas |"
+            echo "| Descomprimida (en disco) | $(python3 -c "print(f'{$descomprimida/1e6:.0f} MB')") |"
+          } | tee -a "$GITHUB_STEP_SUMMARY"
