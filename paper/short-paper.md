@@ -310,7 +310,7 @@ referencia de 35.2 a 40.7 % en 2025 y de 37.9 a 42.3 % en 2026. **Los pesos se f
 2025 son optimistas; la de 2026 queda fuera del entrenamiento y de la selección, pero sobre un año ya
 inspeccionado.** Su ventaja es parecida en los meses neutros y en los de El
 Niño fuerte o extraordinario: es mejor en general, no más adaptable.
-Su intervalo 10-90 cubre entre 77 y 81 % de los periodos.
+Sus cuantiles 10-90 mezclados con los mismos pesos cubren entre 77 y 81 % de los periodos; la app muestra otro rango, el del 90 % calibrado con los errores de 2025, que en 2026 cubrió entre 89.6 y 91.8 % a 24 horas.
 
 **Tabla 6.** La combinación frente al Random Forest elegido: diferencia de MAE (MW) e intervalo del 95 % por
 bootstrap de días. Todos excluyen el cero.

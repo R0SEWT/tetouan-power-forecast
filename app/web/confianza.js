@@ -91,18 +91,20 @@ function pintarConfianzaPantalla() {
     + `El rango del ${nf0.format(meta)} % cubrió el <b>${nf1.format(t.cobertura_pct)} %</b> en el año${bajos.length ? `, pero quedó corto en ${esc(bajos.map((x) => mesLargo(x.mes)).join(', '))}` : ''}. `;
   if (rVivo) {
     const vv = veredictoCobertura(rVivo.cobertura_pct, vivo.nivel_rango_pct);
-    lead += `En vivo, desde el ${esc(fechaDiaMes(rVivo.desde))}, el rango del ${vivo.nivel_rango_pct} % cubrió el <b>${nf1.format(rVivo.cobertura_pct)} %</b>: ${esc(vv.texto)}. `;
+    lead += `En vivo${C.horizonte === '1h' ? ', a 24 h (a 1 hora no se emite en vivo),' : ','} desde el ${esc(fechaDiaMes(rVivo.desde))}, el rango del ${vivo.nivel_rango_pct} % cubrió el <b>${nf1.format(rVivo.cobertura_pct)} %</b>: ${esc(vv.texto)}. `;
   }
-  lead += 'Todo se mide contra la demanda real que publica el COES, el operador del sistema eléctrico, con pronósticos que el modelo no vio al entrenar; 2026 sí se usó para elegir el modelo.';
+  lead += 'Todo se mide contra la demanda real que publica el COES, el operador del sistema eléctrico, con pronósticos que el modelo no vio al entrenar. 2026 quedó fuera del entrenamiento y de la elección del modelo (se eligió con 2025), pero ya lo habíamos revisado antes: no es una prueba a ciegas.';
   $('#cfLead').innerHTML = lead;
 
   const ac = conf.acierto;
+  // El pico, El Niño y el registro en vivo solo se miden a 24 h: a 1 h se dice, para no mezclarlos con el resto
+  const a24 = C.horizonte === '1h' ? ' a 24 h' : '';
   $('#cfStats').innerHTML = [
     `<div class="stat"><p class="k">Error medio 2026</p><p class="n">${nf1.format(t.mae_modelo)}<small> MW</small></p><p class="d">${nf1.format(conf.mape_pct)} % de la demanda (MAPE)</p></div>`,
     `<div class="stat"><p class="k">Frente a la referencia</p><p class="n">${mejora >= 0 ? '−' : '+'}${nf0.format(Math.abs(mejora))}<small> %</small></p><p class="d">${nf1.format(t.mae_referencia)} MW la referencia</p></div>`,
-    ac ? `<div class="stat"><p class="k">Hora del pico (±1 h)</p><p class="n">${nf1.format(ac.pct_hora)}<small> %</small></p><p class="d">de ${nf0.format(ac.dias)} días; referencia ${nf1.format(ac.pct_hora_referencia)} %</p></div>`
+    ac ? `<div class="stat"><p class="k">Hora del pico${a24} (±1 h)</p><p class="n">${nf1.format(ac.pct_hora)}<small> %</small></p><p class="d">de ${nf0.format(ac.dias)} días; referencia ${nf1.format(ac.pct_hora_referencia)} %</p></div>`
       : `<div class="stat"><p class="k">Medias horas medidas</p><p class="n">${nf0.format(t.periodos)}</p><p class="d">de 2026</p></div>`,
-    statNino(diag),
+    statNino(diag, a24),
   ].join('');
 
   pintarMesAMes(seg, conf);
@@ -131,17 +133,17 @@ function pintarCoberturaVista(cubrio, meta, vCob, rVivo, vivo) {
     const cubre = Math.round(rVivo.cobertura_pct / 10);
     const nominal = vivo.nivel_rango_pct / 10;
     const debe = Number.isInteger(nominal) && cubre !== nominal ? `: cubre ${cubre} de cada 10, no ${nominal}` : '';
-    html += fila(vv.clase === 'bien' ? '' : ` aviso-vivo ${vv.clase}`, `En vivo, desde el ${esc(fechaCorta(rVivo.desde).replace(/ \d{4}$/, ''))}`, rVivo.cobertura_pct, vivo.nivel_rango_pct, vv, vv.clase === 'bien' ? '' : debe);
+    html += fila(vv.clase === 'bien' ? '' : ` aviso-vivo ${vv.clase}`, `En vivo${C.horizonte === '1h' ? ' a 24 h' : ''}, desde el ${esc(fechaCorta(rVivo.desde).replace(/ \d{4}$/, ''))}`, rVivo.cobertura_pct, vivo.nivel_rango_pct, vv, vv.clase === 'bien' ? '' : debe);
   }
   $('#cfCobVista').innerHTML = html;
 }
 
-function statNino(diag) {
+function statNino(diag, a24 = '') {
   const regs = diag && diag.mae_por_regimen;
   if (!regs || !regs.length) return '';
   const peor = regs.reduce((a, b) => (b.modelo > a.modelo ? b : a));
   const gana = regs.filter((r) => r.modelo < r.referencia).length;
-  return `<div class="stat"><p class="k">Con El Niño, donde más yerra</p><p class="n">${nf1.format(peor.modelo)}<small> MW</small></p>`
+  return `<div class="stat"><p class="k">Con El Niño${a24 ? `,${a24},` : ','} donde más yerra</p><p class="n">${nf1.format(peor.modelo)}<small> MW</small></p>`
     + `<p class="d">${esc(REGIMEN[peor.regimen] || peor.regimen)} · le gana a la referencia en ${gana === regs.length ? `las ${regs.length}` : `${gana} de ${regs.length}`} fases</p></div>`;
 }
 
@@ -208,7 +210,7 @@ function pintarCoberturaConf(seg, rVivo, vivo) {
 function avisoVivoCob(rVivo, vivo) {
   const vv = rVivo ? veredictoCobertura(rVivo.cobertura_pct, vivo.nivel_rango_pct) : null;
   if (!vv || vv.clase === 'bien') return '';
-  return `<div class="veredicto ${vv.clase} aviso-vivo" style="margin-top:8px">${ICONO[vv.clase]}<span>En vivo, desde el ${esc(fechaDiaMes(rVivo.desde))}, el rango del ${vivo.nivel_rango_pct} % cubrió el ${nf1.format(rVivo.cobertura_pct)} %: ${esc(vv.texto)}. Más abajo, en «El seguimiento en vivo».</span></div>`;
+  return `<div class="veredicto ${vv.clase} aviso-vivo" style="margin-top:8px">${ICONO[vv.clase]}<span>En vivo${C.horizonte === '1h' ? ' a 24 h' : ''}, desde el ${esc(fechaDiaMes(rVivo.desde))}, el rango del ${vivo.nivel_rango_pct} % cubrió el ${nf1.format(rVivo.cobertura_pct)} %: ${esc(vv.texto)}. Más abajo, en «El seguimiento en vivo».</span></div>`;
 }
 
 function lineaCobertura(el, meses, meta) {
@@ -382,7 +384,7 @@ function pintarMundo(conf) {
   const hasta = S.resumen && S.resumen.fechas_corte.prueba_hasta;
   const filas = MUNDO.map((f) => `<tr><td>${esc(f.quien)}</td><td>${esc(f.que)} <a href="${f.fuente}" rel="noopener" target="_blank">${esc(f.nombre)}</a></td><td>${esc(f.periodo)}</td><td class="n">${esc(f.valor)}</td></tr>`).join('');
   const nuestro = `<tr class="nuestro"><td><b>Este modelo · ${esc(area)}</b></td><td>${C.horizonte === '1h' ? '1 hora' : '24 horas'} exactas, cada 30 min, sin clima pronosticado. WAPE (como REE y Elia) y MAPE (como PJM, ISO-NE y NESO).</td><td>2026 (ene–${hasta ? esc(fechaCorta(hasta).replace(/ \d{4}$/, '')) : 'oct'})</td><td class="n">WAPE ${nf2(conf.wape_pct)} %<br>MAPE ${nf2(conf.mape_pct)} %</td></tr>`;
-  $('#cfMundo').innerHTML = `<div class="veredicto ojo">${ICONO.info}<span>No es una comparación de igual a igual: cambian la métrica, el horizonte y el tamaño del sistema (un área del SEIN es mucho más chica y ruidosa que un país), y 2026 ya se usó para elegir el modelo. Sirve para saber en qué orden de magnitud se mueven los operadores que publican su error.</span></div>`
+  $('#cfMundo').innerHTML = `<div class="veredicto ojo">${ICONO.info}<span>No es una comparación de igual a igual: cambian la métrica, el horizonte y el tamaño del sistema (un área del SEIN es mucho más chica y ruidosa que un país), y 2026, aunque quedó fuera del entrenamiento y de la elección del modelo, ya lo habíamos revisado antes. Sirve para saber en qué orden de magnitud se mueven los operadores que publican su error.</span></div>`
     + `<div class="tabla-scroll" tabindex="0" role="region" aria-label="Error de otros operadores" style="max-height:none;margin-top:12px"><table class="cmp"><caption class="visually-hidden">Error del pronóstico que publican otros operadores y el de este modelo</caption><thead><tr><th scope="col">Quién</th><th scope="col">Qué se mide y fuente</th><th scope="col">Periodo</th><th scope="col" style="text-align:right">Error</th></tr></thead><tbody>${filas}${nuestro}</tbody></table></div>`
     + '<p class="nota-pie">Fuentes consultadas el 13 de noviembre de 2026. No encontramos que el COES publique el error de su pronóstico ni de su programa.</p>';
 }
