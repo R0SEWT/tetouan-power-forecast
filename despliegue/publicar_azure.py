@@ -76,7 +76,9 @@ AJUSTES = {
     "HF_HOME": "/tmp/hf",  # la caché de huggingface_hub, fuera del /home persistente
     "MALLOC_ARENA_MAX": "2",  # menos memoria fragmentada: la B1 tiene 1.75 GB y la app usa ~1.25
     "PYTHONUNBUFFERED": "1",
-    "WEBSITES_CONTAINER_START_TIME_LIMIT": "900",  # 15 min para bajar los datos y cargar los modelos (230 s por defecto)
+    # El máximo (por defecto 230 s): en B1 el arranque con calentamiento tardó de 6.5 a más de 15 min (una vez se pasó
+    # de 900 s y Azure lo reinició en bucle)
+    "WEBSITES_CONTAINER_START_TIME_LIMIT": "1800",
 }
 CONFIG = {  # lo que se espera leer de vuelta en ``az webapp config show``
     "alwaysOn": True,

@@ -54,7 +54,7 @@ dataset rosewt/curva-datos (público, 68 MB) ──descarga al arrancar (14 s)�
 | `TPF_CACHE`, `HF_HOME` | `/tmp/curva-datos`, `/tmp/hf` | Disco local: cada arranque baja el paquete limpio, sin basura en el `/home` persistente. |
 | `TPF_RECARGA_MIN` | `15` | Relee el registro en vivo del dataset cada 15 min. |
 | `MALLOC_ARENA_MAX` | `2` | Menos memoria fragmentada en una máquina justa. |
-| `WEBSITES_CONTAINER_START_TIME_LIMIT` | `900` | 15 min para arrancar (por defecto 230 s): extraer el entorno, bajar datos y cargar modelos. |
+| `WEBSITES_CONTAINER_START_TIME_LIMIT` | `1800` | 30 min para arrancar, el máximo (por defecto 230 s). Con 900 s, un arranque lento en otra máquina se pasó y Azure lo reinició. |
 | `SCM_DO_BUILD_DURING_DEPLOYMENT` | `true` | Que Oryx instale `requirements.txt`. |
 | Comprobación de salud | `/salud` | App Service la pide cada minuto. |
 | Logs del contenedor | `filesystem` | Para leerlos con `--logs` o en el portal. |

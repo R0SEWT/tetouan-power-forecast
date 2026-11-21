@@ -87,7 +87,7 @@ def test_dry_run_no_llama_a_az(monkeypatch, capsys):
     lineas_az = [linea for linea in salida.splitlines() if linea.strip().startswith("az ")]
     assert lineas_az and all("--subscription 'Azure for Students'" in linea for linea in lineas_az)
     for esperado in ("brazilsouth", "--sku B1", "--is-linux", "PYTHON:3.13", "--always-on true", "--https-only true",
-                     "TPF_HF_DATASET=rosewt/curva-datos", "WEBSITES_CONTAINER_START_TIME_LIMIT=900",
+                     "TPF_HF_DATASET=rosewt/curva-datos", "WEBSITES_CONTAINER_START_TIME_LIMIT=1800",
                      "--docker-container-logging filesystem", "proyecto=curva", "curso=upc-mds",
                      "account get-access-token --scope https://appservice.azure.com/.default",
                      "POST https://curva-sein.scm.azurewebsites.net/api/publish?type=zip&async=true"):
