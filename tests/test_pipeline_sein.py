@@ -1,5 +1,6 @@
 """El pipeline del SEIN de punta a punta, sobre capas sintéticas escritas en una carpeta temporal."""
 
+import builtins
 import json
 
 import numpy as np
@@ -10,6 +11,7 @@ from tetouan_power_forecast.modelado_sein import preparar_datasets
 from tetouan_power_forecast.pipeline_sein import (
     CAPAS,
     VERSION,
+    feriados_peru,
     guardar,
     pipeline_sein,
     validar_demanda,
@@ -126,3 +128,18 @@ def test_detecta_una_temperatura_del_futuro(resultado):
     datos["temp"] = datos["temp"].shift(-2)  # la de una hora después: un dato que en t todavía no existía
     with pytest.raises(AssertionError, match="Regla de información"):
         verificar_regla_de_informacion(datos.dropna(subset=["temp"]), temperatura, "NORTE")
+
+
+def test_sin_el_paquete_holidays_avisa_o_corta(monkeypatch):
+    importar = builtins.__import__
+
+    def sin_holidays(nombre, *args, **kwargs):
+        if nombre == "holidays":
+            raise ImportError("no hay holidays")
+        return importar(nombre, *args, **kwargs)
+
+    monkeypatch.setattr(builtins, "__import__", sin_holidays)
+    with pytest.warns(UserWarning, match="holidays"):
+        assert feriados_peru(2024, 2025) == []
+    with pytest.raises(ImportError, match="FeriadoObjetivo"):
+        feriados_peru(2024, 2025, exigir=True)

@@ -14,7 +14,8 @@ Hace, en orden, los mismos pasos que los notebooks 01 a 03 del SEIN:
    cuántos valores no son positivos y cuánto se aparta Norte + Centro + Sur del SEIN. Corta solo si falta una columna
    o hay fechas repetidas (romperían los rezagos); lo demás lo reporta, como la auditoría del silver.
 3. **Recortar** a una fecha de corte opcional (`hasta`), para reproducir una corrida con los datos que había entonces.
-4. **Feriados** del Perú de los años que cubre la demanda (paquete `holidays`; sin él, quedan en cero y lo avisa).
+4. **Feriados** del Perú de los años que cubre la demanda (paquete `holidays`; sin él, quedan en cero y lo avisa, o
+   corta si se pide `exigir_feriados=True`, como al explicar modelos ya entrenados con el calendario).
 5. **Armar los datasets** de cada horizonte con `preparar_datasets`: variables en razón con la regla de información,
    partición (entrenamiento 2016-2024, validación 2025 y prueba 2026, con un hueco de H pasos antes de cada corte) y
    solo las filas completas para M0 a M3, por área y global.
@@ -118,11 +119,17 @@ def validar_demanda(demanda: pd.DataFrame) -> dict:
     }
 
 
-def feriados_peru(desde: int, hasta: int) -> list:
-    """Los feriados nacionales del Perú de `desde` a `hasta` (inclusive). Sin el paquete `holidays`, ninguno."""
+def feriados_peru(desde: int, hasta: int, exigir=False) -> list:
+    """Los feriados nacionales del Perú de `desde` a `hasta` (inclusive).
+
+    Sin el paquete `holidays` no hay ninguno: avisa y sigue, o corta si `exigir`. Un modelo entrenado con el
+    calendario y alimentado sin él vería todos los días como hábiles.
+    """
     try:
         import holidays
-    except ImportError:
+    except ImportError as error:
+        if exigir:
+            raise ImportError("Falta el paquete holidays (extra app): sin él, FeriadoObjetivo queda en cero") from error
         warnings.warn("Falta el paquete holidays: los feriados quedan en cero y el modelo no los ve.", stacklevel=2)
         return []
     return sorted(holidays.PE(years=range(desde, hasta + 1)))
@@ -142,11 +149,12 @@ def verificar_regla_de_informacion(datos: pd.DataFrame, temperatura: pd.DataFram
 
 
 def pipeline_sein(raiz=None, horizontes=tuple(HORIZONTES), variantes=tuple(VARIANTES_ABLACION), hasta=None,
-                  verificar=True) -> ResultadoPipeline:
+                  verificar=True, exigir_feriados=False) -> ResultadoPipeline:
     """De la carpeta de datos `raiz` a los datasets del SEIN listos para modelar, con su procedencia.
 
     `horizontes` son claves de `HORIZONTES` ("1h", "24h"); `hasta` recorta la demanda a esa fecha (inclusive) para
-    reproducir una corrida pasada. Ver los pasos en el docstring del módulo.
+    reproducir una corrida pasada; `exigir_feriados` corta si falta el calendario de feriados. Ver los pasos en el
+    docstring del módulo.
     """
     demanda, exogenas, huellas = cargar_capas_sein(raiz)
     if hasta is not None and "DateTime" in demanda.columns:
@@ -154,7 +162,7 @@ def pipeline_sein(raiz=None, horizontes=tuple(HORIZONTES), variantes=tuple(VARIA
     calidad = validar_demanda(demanda)  # la de lo que entra al modelo, ya recortado
     demanda = demanda.sort_values("DateTime").reset_index(drop=True)
     anios = demanda["DateTime"].dt.year
-    feriados = feriados_peru(int(anios.min()), int(anios.max()) + 1)
+    feriados = feriados_peru(int(anios.min()), int(anios.max()) + 1, exigir=exigir_feriados)
 
     datasets, filas = {}, {}
     for nombre_h in horizontes:

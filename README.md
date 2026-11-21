@@ -236,7 +236,7 @@ GPU, detrás de Tailscale.
 | Modelado y evaluación del SEIN en 2025 (2 a 3 h) | [`02_sein_modelado_evaluacion`](https://colab.research.google.com/github/R0SEWT/tetouan-power-forecast/blob/develop/notebooks/02_sein_modelado_evaluacion.ipynb) |
 | La prueba de 2026 (unas 3 h; retoma desde la caché si se cae) | [`03_sein_prueba_2026`](https://colab.research.google.com/github/R0SEWT/tetouan-power-forecast/blob/develop/notebooks/03_sein_prueba_2026.ipynb) |
 | Modelos fundacionales y modelo híbrido (un minuto: solo evalúa pronósticos ya generados) | [`04_sein_modelos_fundacionales`](https://colab.research.google.com/github/R0SEWT/tetouan-power-forecast/blob/develop/notebooks/04_sein_modelos_fundacionales.ipynb) |
-| Explicabilidad (SHAP) del modelo de la app, privacidad y seguridad (unos minutos, sin GPU; necesita `shap`) | [`05_sein_explicabilidad`](https://colab.research.google.com/github/R0SEWT/tetouan-power-forecast/blob/develop/notebooks/05_sein_explicabilidad.ipynb) |
+| Explicabilidad (SHAP) del modelo de la app, privacidad y seguridad (unos minutos, sin GPU; necesita `shap` y `holidays`) | [`05_sein_explicabilidad`](https://colab.research.google.com/github/R0SEWT/tetouan-power-forecast/blob/develop/notebooks/05_sein_explicabilidad.ipynb) |
 
 Los notebooks montan el Drive y dejan las capas en `Mi unidad/datalake/tetouan-power-forecast`. Para guardar cambios
 desde Colab, crea tu rama en GitHub y usa *Archivo › Guardar una copia en GitHub* eligiendo esa rama.
