@@ -225,10 +225,12 @@ function aplicarModelo() {
 const PRECARGA = window.PRECARGA instanceof Map ? window.PRECARGA : new Map();
 
 // El servidor se apaga solo cuando nadie lo usa (Azure Container Apps, cero réplicas) y la primera visita lo
-// despierta en ~20 s. Mientras tanto, el proxy de Netlify (que espera 26 s) o la plataforma responden 502, 503 o 504.
-// Esos pedidos se repiten con espera creciente durante ~60 s, con un aviso en vez del error. Sin conexión (el pedido
-// ni sale) no es el servidor dormido: el error con «Reintentar» se muestra enseguida, como antes.
+// despierta en ~20 s. Mientras tanto, el proxy de Netlify retiene el pedido (hasta 26 s) o responde 502, 503 o 504,
+// igual que la plataforma mientras arranca. Si un pedido tarda más de AVISO_MS o vuelve con uno de esos códigos, se
+// muestra un aviso breve; los códigos se reintentan con espera creciente durante ~60 s antes de mostrar el error.
+// Sin conexión (el pedido ni sale) no es el servidor dormido: el error con «Reintentar» sale enseguida, como antes.
 const DESPERTAR_MS = 60000;
+const AVISO_MS = 4000; // más que el cálculo más lento de la API con el servidor prendido (~3 s la primera vez)
 const REINTENTABLES = new Set([502, 503, 504]);
 let despertando = 0;
 function avisarDespertar(cambio) {
@@ -242,19 +244,24 @@ async function pedirDespertando(ruta, opciones, precargada, plazo = DESPERTAR_MS
   const inicio = Date.now();
   let intento = 0;
   let avisado = false;
+  const avisar = () => {
+    if (avisado) return;
+    avisado = true;
+    avisarDespertar(1);
+  };
   try {
     for (;;) {
       let r = null;
+      const lento = setTimeout(avisar, AVISO_MS);
       try {
         r = (intento === 0 && precargada && await precargada) || await fetch(API + ruta, opciones);
       } catch {
         r = null;
+      } finally {
+        clearTimeout(lento);
       }
       if (!r || !REINTENTABLES.has(r.status) || Date.now() - inicio >= plazo) return r;
-      if (!avisado) {
-        avisado = true;
-        avisarDespertar(1);
-      }
+      avisar();
       intento += 1;
       await esperarMs(Math.min(1000 * 2 ** (intento - 1), 8000)); // 1, 2, 4, 8, 8... s
     }

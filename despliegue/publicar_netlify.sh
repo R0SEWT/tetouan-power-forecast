@@ -39,9 +39,11 @@ if command -v netlify >/dev/null 2>&1; then netlify=(netlify); else netlify=(npx
 commit="$(git rev-parse --short HEAD 2>/dev/null || echo sin-commit)"
 "${netlify[@]}" deploy --prod --no-build --dir "$carpeta" --site "$sitio_id" --message "${1:-publicar_netlify.sh desde $commit}"
 
-# Prueba: la web sale del CDN y la API responde a través del proxy (puede tardar si el servidor dormía)
+# Prueba: la web sale del CDN y la API responde a través del proxy (puede tardar si el servidor dormía).
+# CURVA_SIN_DESPERTAR=1 prueba solo la web, sin pedir /salud (no prende el servidor si está en cero réplicas).
 codigo=$(curl -s -o /dev/null -w '%{http_code}' "https://$dominio/")
 [[ "$codigo" == 200 ]] || { echo "ERROR: https://$dominio/ respondió $codigo" >&2; exit 1; }
+if [[ -n "${CURVA_SIN_DESPERTAR:-}" ]]; then echo "publicado: https://$dominio (la web responde 200)"; exit 0; fi
 for intento in 1 2 3 4 5 6; do
   codigo=$(curl -s -o /dev/null -w '%{http_code}' --max-time 40 "https://$dominio/salud" || true)
   [[ "$codigo" == 200 ]] && break
