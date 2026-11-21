@@ -388,3 +388,37 @@ def test_si_la_verificacion_falla_vuelve_a_prender_la_app(monkeypatch):
     with pytest.raises(ErrorAzure, match="TPF_RECARGA_MIN"):
         pub.publicar()
     assert az.escrituras[-1][:2] == ("webapp", "start")
+
+
+def test_si_una_escritura_falla_vuelve_a_prender_la_app(monkeypatch):
+    monkeypatch.setattr(publicar_azure.time, "sleep", lambda _: None)
+    monkeypatch.setattr(publicar_azure.humo, "pedir", lambda base, ruta, timeout=60: (403, "", 0.1, 0))
+
+    class AzQueFalla(AzFalso):
+        def __call__(self, *args, **kwargs):
+            if args[:4] == ("webapp", "config", "appsettings", "set"):
+                raise ErrorAzure("az webapp config: 500")
+            return super().__call__(*args, **kwargs)
+
+    az = AzQueFalla(ajustes={"TPF_RECARGA_MIN": "30"})
+    pub = publicador(az)
+    pub.args.solo_config = True
+    with pytest.raises(ErrorAzure, match="500"):
+        pub.publicar()
+    assert [e[:2] for e in az.escrituras] == [("webapp", "stop"), ("webapp", "start")]
+
+
+def test_si_falla_armar_el_despliegue_la_app_no_queda_detenida(monkeypatch):
+    monkeypatch.setattr(publicar_azure.time, "sleep", lambda _: None)
+    monkeypatch.setattr(publicar_azure.humo, "pedir", lambda base, ruta, timeout=60: (403, "", 0.1, 0))
+
+    def sin_uv(raiz=None):
+        raise ErrorAzure("hace falta uv")
+
+    monkeypatch.setattr(publicar_azure, "requisitos", sin_uv)
+    az = AzFalso(ajustes={"TPF_RECARGA_MIN": "30"})
+    pub = publicador(az)
+    monkeypatch.setattr(pub, "verificar", list)
+    with pytest.raises(ErrorAzure, match="uv"):
+        pub.publicar()
+    assert az.escrituras[-1][:2] == ("webapp", "start")

@@ -394,10 +394,15 @@ class Publicador:
             az.mostrar(f"Hay {len(comandos)} cambio(s) y el plan es {sku}: se detiene la app antes de aplicarlos "
                        "(un cambio de configuración la reinicia solapada y en B1 no caben dos copias).")
             az("webapp", "stop", "--name", a.app, *self.base)
-            if not az.simular:
+        try:
+            if detener and not az.simular:
                 self.esperar_detenida()
-        for comando in comandos:
-            az(*comando)
+            for comando in comandos:
+                az(*comando)
+        except BaseException:
+            if detener:  # que una escritura fallida no deje la app detenida
+                az("webapp", "start", "--name", a.app, *self.base)
+            raise
         return detener
 
     @staticmethod
@@ -514,7 +519,12 @@ class Publicador:
             if detenida:
                 self.probar()
             return
-        self.desplegar()
+        try:
+            self.desplegar()
+        except BaseException:
+            if detenida:  # p. ej. falló requirements.txt antes de que desplegar() la detuviera y prendiera
+                self.az("webapp", "start", "--name", self.args.app, *self.base)
+            raise
         self.probar()
 
     def probar(self) -> None:
