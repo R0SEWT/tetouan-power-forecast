@@ -34,7 +34,10 @@ TETOUAN_DATA=/ruta/a/los/datos uv run python paper/quarto/figuras/generar.py
 
 Las salidas (`*.html`, `*.tex`, `*.pdf` de la raíz de esta carpeta, `*_files/`) no se versionan.
 
-## Diferencias con `../short-paper.md`
+## Diferencias con la primera versión en Markdown
+
+La primera versión del short paper (`paper/short-paper.md` y su `.docx`) se retiró para que no hubiera dos con
+cifras distintas; sigue en el historial de git.
 
 El PDF tiene 6-8 páginas de IEEE con las referencias: el texto se acortó y lo que salió quedó en el informe técnico
 (`../paper.md`) y en el repositorio, que el paper cita. El detalle de qué se recortó y dónde quedó está en la

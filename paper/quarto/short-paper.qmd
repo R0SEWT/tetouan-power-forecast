@@ -3,7 +3,6 @@ title: "Pronóstico de demanda eléctrica de muy corto plazo ante niveles no vis
 subtitle: "Trabajo final (TB1) · Metodología para Data Science (1ACC0240) · UPC · ciclo 2026-2 · Grupo 3"
 # ---------------------------------------------------------------------------------------------------------
 # AUTORES: este es el único lugar donde se completan (nombre, correo). El orden de la lista es el del paper.
-# En paper/short-paper.md figuran «Vilchez, Rody» y, sin apellidos, Marcelo, Adrián, Andre y Olenka.
 # ---------------------------------------------------------------------------------------------------------
 author:
   - name: Rody Sebastian Vilchez Marin
@@ -52,7 +51,7 @@ abstract: |
   pronóstico junto con cuánto acertó.
 ---
 
-<!-- Versión corta para la entrega, en Quarto, estilo IEEE. Sale de paper/short-paper.md; el informe técnico
+<!-- Versión corta para la entrega, en Quarto, estilo IEEE. Sale de la primera versión en Markdown (retirada; en el historial de git); el informe técnico
 completo, con la fuente de cada cifra, es paper/paper.md. Los comentarios HTML como este indican de qué notebook,
 celda o tabla sale cada cifra y no aparecen en el documento compilado. Resumen: frente_referencias.csv (notebook
 03, celda 9) y fundacionales/tablas/comparacion.csv (notebook 04). -->
