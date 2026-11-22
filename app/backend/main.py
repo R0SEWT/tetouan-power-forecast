@@ -36,6 +36,7 @@ from zoneinfo import ZoneInfo
 from fastapi import FastAPI, HTTPException, Query, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.gzip import GZipMiddleware
+from fastapi.routing import APIRoute
 
 from .ahora import desde_historial, metricas_confianza
 from .contrato import (
@@ -105,6 +106,31 @@ def _id(pronosticador: Pronosticador) -> str:
     return getattr(pronosticador, "id", pronosticador.modelo)
 
 
+# Caché de las respuestas de datos. Los datos cambian una vez al día y la app relee el registro en vivo cada 15 min.
+# Publicada detrás de Netlify (curva.rosewt.dev), la CDN guarda cada respuesta 30 min: una visita repetida no llega al
+# servidor de Container Apps y no lo despierta si está en cero réplicas. Cada nodo de la CDN tiene su propia caché (se
+# midió: una visita nueva puede caer en un nodo vacío y llegar al servidor), así que cuanto más dura, menos veces lo
+# despierta un visitante automático; 30 min es lo más que se acordó. El navegador la guarda 1 min. Netlify no
+# cachea por defecto lo que viene de un proxy, solo con estas cabeceras; los errores (y los 502/503/504 de la
+# plataforma o del proxy, que no las traen) no se guardan. La clave de la caché es la URL completa, con sus parámetros
+# (Netlify-Vary no cambia eso en un proxy: se probó). Ver despliegue/README.md.
+CACHE_NAVEGADOR = "public, max-age=60"
+CACHE_CDN = "public, s-maxage=1800"
+SIN_CACHE = "no-store"
+
+
+def _rutas_api(app: FastAPI) -> tuple[frozenset[str], tuple[str, ...]]:
+    """Las rutas exactas de la API y los prefijos de las que llevan área."""
+    exactas, prefijos = set(), set()
+    for r in app.routes:
+        if isinstance(r, APIRoute):
+            if "{" in r.path:
+                prefijos.add(r.path.split("{", 1)[0])
+            else:
+                exactas.add(r.path)
+    return frozenset(exactas), tuple(sorted(prefijos))
+
+
 def crear_app(
     pronosticador: Pronosticador | None = None,
     otros: list[Pronosticador] | None = None,
@@ -133,6 +159,22 @@ def crear_app(
         allow_headers=["Content-Type"],
     )
     app.add_middleware(GZipMiddleware, minimum_size=GZIP_MINIMO)
+
+    @app.middleware("http")
+    async def cache_de_datos(request: Request, call_next):
+        respuesta = await call_next(request)
+        if not hasattr(request.app.state, "rutas_api"):  # después de declarar las rutas, una sola vez
+            request.app.state.rutas_api = _rutas_api(request.app)
+        exactas, prefijos = request.app.state.rutas_api
+        ruta = request.url.path
+        if ruta in exactas or ruta.startswith(prefijos):
+            if request.method == "GET" and respuesta.status_code == 200:
+                respuesta.headers["Cache-Control"] = CACHE_NAVEGADOR
+                respuesta.headers["Netlify-CDN-Cache-Control"] = CACHE_CDN
+            else:  # errores y POST: nunca en una caché
+                respuesta.headers["Cache-Control"] = SIN_CACHE
+        return respuesta
+
     app.state.pronosticador = pronosticador or PronosticadorDePrueba()
     app.state.pronosticadores = {_id(p): p for p in [app.state.pronosticador, *(otros or [])]}
     app.state.en_vivo = LectorEnVivo(en_vivo)

@@ -224,18 +224,60 @@ function aplicarModelo() {
 // index.html pide los datos de arranque antes de que baje este archivo; cada respuesta se usa una sola vez.
 const PRECARGA = window.PRECARGA instanceof Map ? window.PRECARGA : new Map();
 
+// El servidor se apaga solo cuando nadie lo usa (Azure Container Apps, cero réplicas) y la primera visita lo
+// despierta en ~20 s. Mientras tanto, el proxy de Netlify retiene el pedido (hasta 26 s) o responde 502, 503 o 504,
+// igual que la plataforma mientras arranca. Si un pedido tarda más de AVISO_MS o vuelve con uno de esos códigos, se
+// muestra un aviso breve; los códigos se reintentan con espera creciente durante ~60 s antes de mostrar el error.
+// Sin conexión (el pedido ni sale) no es el servidor dormido: el error con «Reintentar» sale enseguida, como antes.
+const DESPERTAR_MS = 60000;
+const AVISO_MS = 4000; // más que el cálculo más lento de la API con el servidor prendido (~3 s la primera vez)
+const REINTENTABLES = new Set([502, 503, 504]);
+let despertando = 0;
+function avisarDespertar(cambio) {
+  despertando = Math.max(0, despertando + cambio);
+  const aviso = document.getElementById('avisoDespertar');
+  if (aviso) aviso.hidden = despertando === 0;
+}
+const esperarMs = (ms) => new Promise((listo) => { setTimeout(listo, ms); });
+// Devuelve la respuesta (la última, si siguió fallando hasta el plazo) o null si nunca hubo conexión.
+async function pedirDespertando(ruta, opciones, precargada, plazo = DESPERTAR_MS) {
+  const inicio = Date.now();
+  let intento = 0;
+  let avisado = false;
+  const avisar = () => {
+    if (avisado) return;
+    avisado = true;
+    avisarDespertar(1);
+  };
+  try {
+    for (;;) {
+      let r = null;
+      const lento = setTimeout(avisar, AVISO_MS);
+      try {
+        r = (intento === 0 && precargada && await precargada) || await fetch(API + ruta, opciones);
+      } catch {
+        r = null;
+      } finally {
+        clearTimeout(lento);
+      }
+      if (!r || !REINTENTABLES.has(r.status) || Date.now() - inicio >= plazo) return r;
+      avisar();
+      intento += 1;
+      await esperarMs(Math.min(1000 * 2 ** (intento - 1), 8000)); // 1, 2, 4, 8, 8... s
+    }
+  } finally {
+    if (avisado) avisarDespertar(-1);
+  }
+}
+
 async function api(ruta, cuerpo) {
   const opciones = cuerpo
     ? { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(cuerpo) }
     : undefined;
   const precargada = cuerpo ? null : PRECARGA.get(ruta);
   PRECARGA.delete(ruta);
-  let r;
-  try {
-    r = (precargada && await precargada) || await fetch(API + ruta, opciones);
-  } catch {
-    throw new ErrorApi(0, 'sin conexión');
-  }
+  const r = await pedirDespertando(ruta, opciones, precargada);
+  if (!r) throw new ErrorApi(0, 'sin conexión');
   let datos = null;
   try {
     datos = await r.json();

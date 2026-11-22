@@ -168,7 +168,8 @@ class Azure:
             ascii_o_error(arg, "un argumento de az")
         return ["az", *args, "--subscription", self.suscripcion, "--only-show-errors", "-o", "json"]
 
-    def __call__(self, *args: str, puede_faltar: bool = False, timeout: float = 600):
+    def __call__(self, *args: str, puede_faltar: bool = False, timeout: float = 600, texto: bool = False):
+        """Corre ``az``. Devuelve el JSON de la respuesta o, con ``texto``, lo que imprimió tal cual (logs)."""
         comando = self.comando(*args)
         if self.simular:
             self.mostrar("  " + " ".join(f"'{a}'" if " " in a or "|" in a else a for a in comando))
@@ -179,7 +180,21 @@ class Azure:
                                  or "was not found" in r.stderr or "ResourceGroupNotFound" in r.stderr):
                 return None
             raise ErrorAzure(f"az {' '.join(args[:3])}: {r.stderr.strip()[:800]}")
+        if texto:
+            return r.stdout
         return json.loads(r.stdout) if r.stdout.strip() else None
+
+
+def revisar_cuenta(az: Azure) -> None:
+    """Se niega a seguir si la suscripción no es «Azure for Students» o la cuenta no es de la UPC."""
+    cuenta = az("account", "show")
+    if cuenta is None:  # --dry-run
+        return
+    usuario = (cuenta.get("user") or {}).get("name", "")
+    if cuenta.get("name") != SUSCRIPCION or not usuario.lower().endswith(DOMINIO):
+        raise ErrorAzure(f"la suscripción es «{cuenta.get('name')}» con una cuenta que no es {DOMINIO}: "
+                         f"este script solo publica en «{SUSCRIPCION}» con la cuenta de la UPC")
+    az.mostrar(f"Suscripción «{cuenta['name']}» ({cuenta.get('state')}), cuenta {DOMINIO}.")
 
 
 class Kudu:
@@ -303,14 +318,7 @@ class Publicador:
         return f"https://{self.args.app}.azurewebsites.net"
 
     def revisar_cuenta(self) -> None:
-        cuenta = self.az("account", "show")
-        if cuenta is None:  # --dry-run
-            return
-        usuario = (cuenta.get("user") or {}).get("name", "")
-        if cuenta.get("name") != SUSCRIPCION or not usuario.lower().endswith(DOMINIO):
-            raise ErrorAzure(f"la suscripción es «{cuenta.get('name')}» con una cuenta que no es {DOMINIO}: "
-                             f"este script solo publica en «{SUSCRIPCION}» con la cuenta de la UPC")
-        self.az.mostrar(f"Suscripción «{cuenta['name']}» ({cuenta.get('state')}), cuenta {DOMINIO}.")
+        revisar_cuenta(self.az)
 
     def etiquetas(self) -> list[str]:
         return ["--tags", *[f"{k}={v}" for k, v in ETIQUETAS.items()]]
