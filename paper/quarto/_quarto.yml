@@ -1,0 +1,30 @@
+# Formato del short paper. El contenido (texto, autores, bibliografía) vive en short-paper.qmd y no depende del
+# estilo: para cambiar de estilo (por ejemplo, una plantilla de congreso a dos columnas) basta con reemplazar el
+# bloque `format:` de abajo y, si el estilo lo pide, la línea `csl:`. Ver README.md.
+
+project:
+  type: default
+  render:
+    - short-paper.qmd
+
+number-sections: true
+date-format: long
+link-citations: true
+# Estilo de las referencias (archivo .csl junto a este). Sin esta línea, Quarto usa Chicago autor-fecha.
+# csl: estilo.csl
+
+format:
+  # Vista previa sin LaTeX: `quarto render --to html` (un solo archivo, con las figuras dentro).
+  html:
+    embed-resources: true
+    toc: false
+    fig-cap-location: bottom
+    tbl-cap-location: top
+  # PDF genérico (necesita TinyTeX): se reemplaza por el del estilo que se elija.
+  pdf:
+    documentclass: article
+    papersize: a4
+    geometry: margin=2.5cm
+    fig-cap-location: bottom
+    tbl-cap-location: top
+    colorlinks: true
