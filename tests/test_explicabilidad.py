@@ -4,10 +4,12 @@ import pytest
 
 from tetouan_power_forecast.explicabilidad import (
     FAMILIAS,
+    NOMBRES_LLANOS,
     a_mw,
     contribuciones,
     familia_de,
     importancia,
+    llano,
     por_familia,
 )
 from tetouan_power_forecast.modelado_sein import gradient_boosting_global, preparar_datasets, tramo
@@ -22,6 +24,14 @@ def test_cada_variable_de_m3_cae_en_una_sola_familia():
     assert familia_de("area_cod") == "Código de área"
     assert familia_de("nino12_ssta") == "El Niño"
     assert familia_de("media_24h") == "Otras"  # la escala no es una variable
+
+
+def test_cada_variable_tiene_un_nombre_llano_distinto():
+    todas = {c for columnas in FAMILIAS.values() for c in columnas}
+    assert todas == set(NOMBRES_LLANOS)  # ni una sin nombre, ni nombres de variables que ya no existen
+    assert len(set(NOMBRES_LLANOS.values())) == len(NOMBRES_LLANOS)  # dos variables no se confunden en un gráfico
+    assert llano("FeriadoObjetivo") == "Feriado el día objetivo"
+    assert llano("media_24h") == "media_24h"  # la escala no es una variable: queda como está
 
 
 def test_en_mw_la_explicacion_suma_el_pronostico():
