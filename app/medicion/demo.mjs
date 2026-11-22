@@ -7,7 +7,7 @@
 //
 // La pantalla es la de Chrome con zoom del 150 % en una pantalla de 1920×1080: 1280×720 px de página, capturados a
 // 1920×1080. Así el texto se sigue leyendo cuando Collaborate reduce la pantalla compartida a 1280×720 o menos.
-import { copyFileSync, mkdirSync, mkdtempSync, rmSync, symlinkSync, writeFileSync } from 'node:fs';
+import { copyFileSync, mkdirSync, mkdtempSync, readdirSync, rmSync, symlinkSync, writeFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
@@ -17,6 +17,8 @@ import { API, WEB, abrirNavegador, vigilarRed } from './comun.mjs';
 const args = process.argv.slice(2);
 const DOCS = fileURLToPath(new URL('../../docs/demo/', import.meta.url));
 const CAPTURAS = join(DOCS, 'capturas');
+// La web busca la API en su mismo origen (o en :8000 si está en :8080): se le dice dónde está, sea cual sea el puerto.
+const PAGINA = `${WEB}/?api=${API.replace(/\/+$/, '')}`;
 const DESVIO = /^https?:\/\/(localhost|127\.0\.0\.1):8000\/?$/.test(API) ? null : API.replace(/\/+$/, '');
 
 // El día de repaso y su respaldo. Fijos: no dependen del día en que se exponga.
@@ -32,7 +34,8 @@ export const PASOS = [
       ['decir', 'Esta es Curva: corre nuestros modelos sobre la demanda que publica el COES. Lo real llega hasta ayer, '
         + 'porque el COES publica cada día a la mañana siguiente; desde la línea punteada todo es pronóstico, emitido '
         + 'hoy antes de conocer el real.'],
-      ['bajar', 'text=Lo que dijimos para ayer a esta hora'],
+      // El recuadro de «lo que dijimos»: su título cambia si ese día no hay dato nuevo («Lo que se dijo un día antes»)
+      ['bajar', '#ahAyerTit'],
       ['decir', 'Aquí, lo que dijimos para ayer a esta hora y lo que pasó.'],
     ],
   },
@@ -187,7 +190,7 @@ async function recorrer(pagina, quieta, pasos, { hablar = true, suave = true, al
     let habla = 0;
     if (paso.ruta) {
       const a = Date.now();
-      await pagina.goto(`${WEB}/${paso.ruta}`);
+      await pagina.goto(`${PAGINA}${paso.ruta}`);
       await quieta();
       await pagina.evaluate(() => scrollTo(0, 0)); // como abrir la pestaña del paso
       await rotular(pagina, `${n + 1}/${pasos.length} · ${paso.titulo}`);
@@ -242,7 +245,7 @@ async function grabar(pagina, quieta, pasos, salida) {
     cuadros.push({ archivo, t: metadata.timestamp });
     await cdp.send('Page.screencastFrameAck', { sessionId }).catch(() => {});
   });
-  await pagina.goto(`${WEB}/${pasos[0].ruta}`);
+  await pagina.goto(`${PAGINA}${pasos[0].ruta}`);
   await quieta();
   await espera(800);
   await cdp.send('Page.startScreencast', { format: 'jpeg', quality: 92, maxWidth: 1920, maxHeight: 1080 });
@@ -274,13 +277,12 @@ async function grabar(pagina, quieta, pasos, salida) {
   return medida;
 }
 
-async function capturas(navegador) {
-  mkdirSync(CAPTURAS, { recursive: true });
-  const archivo = (nombre) => join(CAPTURAS, `${nombre}.png`);
+async function capturas(navegador, carpeta) {
+  const archivo = (nombre) => join(carpeta, `${nombre}.png`);
   const foto = (pagina, nombre) => pagina.screenshot({ path: archivo(nombre) });
   const { contexto, pagina, quieta } = await nuevaPagina(navegador);
   const ir = async (r) => {
-    await pagina.goto(`${WEB}/${r}`);
+    await pagina.goto(`${PAGINA}${r}`);
     await quieta();
     await pagina.evaluate(() => scrollTo(0, 0));
     await espera(400);
@@ -288,7 +290,7 @@ async function capturas(navegador) {
 
   await ir('#/ahora/centro');
   await foto(pagina, 'paso1-hoy');
-  await bajar(pagina, 'text=Lo que dijimos para ayer a esta hora', false);
+  await bajar(pagina, '#ahAyerTit', false);
   await foto(pagina, 'paso1b-lo-que-dijimos');
 
   await ir(ruta(DIA));
@@ -361,7 +363,7 @@ async function capturas(navegador) {
       return r.fallback({ url: url.toString() });
     });
     await sinDato.pagina.clock.setFixedTime(new Date(`${reloj}:00-05:00`));
-    await sinDato.pagina.goto(`${WEB}/#/ahora/centro`);
+    await sinDato.pagina.goto(`${PAGINA}#/ahora/centro`);
     await sinDato.quieta(); await espera(400);
     await sinDato.pagina.screenshot({ path: archivo('paso1-sin-dato-nuevo') });
     await sinDato.contexto.close();
@@ -370,7 +372,7 @@ async function capturas(navegador) {
   const movil = await nuevaPagina(navegador, { movil: true });
   for (const [nombre, r] of [['movil-hoy', '#/ahora/centro'], ['movil-repaso', ruta(DIA)],
     ['movil-confianza', '#/confianza/centro']]) {
-    await movil.pagina.goto(`${WEB}/${r}`);
+    await movil.pagina.goto(`${PAGINA}${r}`);
     await movil.quieta(); await espera(400);
     await movil.pagina.screenshot({ path: archivo(nombre) });
   }
@@ -381,24 +383,36 @@ async function capturas(navegador) {
     'paso3-y-si-2c', 'paso4-confianza', 'paso4b-confianza-en-vivo', 'extra-corrida-diaria'];
 }
 
-async function pdf(navegador, orden) {
+async function pdf(navegador, orden, carpeta, destino) {
   const dir = mkdtempSync(join(tmpdir(), 'tpf-plan-b-'));
   const html = join(dir, 'plan-b.html');
   writeFileSync(html, `<!doctype html><meta charset="utf-8"><style>@page{size:1920px 1080px;margin:0}body{margin:0}
     img{display:block;width:1920px;height:1080px;break-after:page}</style>`
-    + orden.map((n) => `<img src="${pathToFileURL(join(CAPTURAS, `${n}.png`)).href}">`).join(''));
+    + orden.map((n) => `<img src="${pathToFileURL(join(carpeta, `${n}.png`)).href}">`).join(''));
   const hoja = await navegador.newPage();
   await hoja.goto(pathToFileURL(html).href, { waitUntil: 'load' });
-  await hoja.pdf({ path: join(DOCS, 'plan-b-capturas.pdf'), width: '1920px', height: '1080px', printBackground: true });
+  await hoja.pdf({ path: destino, width: '1920px', height: '1080px', printBackground: true });
   await hoja.close();
   rmSync(dir, { recursive: true, force: true });
+}
+
+// Todo se genera en una carpeta temporal y se copia a docs/demo solo si la generación terminó: un corte a medias no
+// deja capturas o videos de dos corridas mezclados.
+function publicar(origen, destino) {
+  mkdirSync(destino, { recursive: true });
+  for (const nombre of readdirSync(origen)) copyFileSync(join(origen, nombre), join(destino, nombre));
 }
 
 const navegador = await abrirNavegador();
 try {
   if (args.includes('--capturas')) {
-    const orden = await capturas(navegador);
-    await pdf(navegador, orden);
+    const tmp = mkdtempSync(join(tmpdir(), 'tpf-capturas-'));
+    const orden = await capturas(navegador, tmp);
+    await pdf(navegador, orden, tmp, join(tmp, 'plan-b-capturas.pdf'));
+    copyFileSync(join(tmp, 'plan-b-capturas.pdf'), join(DOCS, 'plan-b-capturas.pdf'));
+    rmSync(join(tmp, 'plan-b-capturas.pdf'));
+    publicar(tmp, CAPTURAS);
+    rmSync(tmp, { recursive: true, force: true });
     console.log(`Capturas en ${CAPTURAS} y el PDF del plan B en ${join(DOCS, 'plan-b-capturas.pdf')}`);
   }
   if (args.includes('--video')) {
@@ -408,13 +422,16 @@ try {
       throw new Error('--video necesita ffmpeg en el PATH (en Ubuntu: sudo apt install ffmpeg).');
     }
     const { contexto, pagina, quieta } = await nuevaPagina(navegador, { cursor: true });
-    const medida = await grabar(pagina, quieta, PASOS, join(DOCS, 'recorrido-demo.mp4'));
+    const tmp = mkdtempSync(join(tmpdir(), 'tpf-videos-'));
+    const medida = await grabar(pagina, quieta, PASOS, join(tmp, 'recorrido-demo.mp4'));
     imprimir(medida);
-    const extra = await grabar(pagina, quieta, [EXTRA], join(DOCS, 'corrida-diaria.mp4'));
+    const extra = await grabar(pagina, quieta, [EXTRA], join(tmp, 'corrida-diaria.mp4'));
     imprimir(extra);
-    writeFileSync(join(DOCS, 'cronometro.json'), `${JSON.stringify({
+    writeFileSync(join(tmp, 'cronometro.json'), `${JSON.stringify({
       medido: new Date().toISOString(), palabras_por_minuto: 140, recorrido: medida, extra,
     }, null, 2)}\n`);
+    publicar(tmp, DOCS);
+    rmSync(tmp, { recursive: true, force: true });
     await contexto.close();
   }
   if (args.includes('--cronometro')) {

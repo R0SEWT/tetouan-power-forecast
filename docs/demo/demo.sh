@@ -62,7 +62,6 @@ necesarios=(
   exogenas/silver/temperatura_areas.parquet exogenas/silver/icen.parquet
   exogenas/silver/nino12_semanal.parquet exogenas/silver/eventos_coes.parquet
   modelos/sein/app/metadatos.json
-  modelos/sein/app/xgboost_global_{1h_M0,1h_M3,24h_M0,24h_M1,24h_M2,24h_M3}.joblib
   modelos/sein/fundacionales/combinado.json modelos/sein/fundacionales/xgb_simons_{1h,24h}.joblib
   reportes/sein/fundacionales/simons_c2048.parquet reportes/sein/fundacionales/chronos2ftcal_c2048.parquet
   reportes/sein/modelado/predicciones_validacion_24h_centro.csv reportes/sein/prueba_2026/adaptacion.csv
@@ -90,14 +89,34 @@ else
 fi
 
 paso "3/5 Python y dependencias"
-if uv run --no-sync python -c "import pandas, sklearn, xgboost, pyarrow, fastapi, uvicorn, holidays" 2>/dev/null; then
+# Lo que levantar.sh no agrega con --with (fastapi, uvicorn, xgboost y holidays van aparte)
+if uv run --no-sync python -c "import pandas, sklearn, pyarrow" 2>/dev/null; then
   bien "Entorno listo"
+elif [[ -n ${UV_PROJECT_ENVIRONMENT:-} ]]; then
+  morir "El entorno de UV_PROJECT_ENVIRONMENT ($UV_PROJECT_ENVIRONMENT) no tiene pandas, scikit-learn o pyarrow.
+demo.sh no instala nada en un entorno ajeno: quita esa variable (unset UV_PROJECT_ENVIRONMENT) y vuelve a correr."
 else
   echo "   Instalando dependencias (la primera vez tarda unos minutos y necesita internet)..."
   uv sync --frozen --inexact --extra app || morir "No se pudieron instalar las dependencias con uv. Revisa la conexión a
 internet y vuelve a correr. Si persiste, usa el plan B del README del kit."
   bien "Dependencias instaladas"
 fi
+# Todos los modelos que nombra metadatos.json (la API carga cada uno al arrancar y se cae si falta alguno)
+faltan_modelos=$(uv run --no-sync python - "$TETOUAN_DATA/modelos/sein/app" <<'PY'
+import json, sys
+from pathlib import Path
+carpeta = Path(sys.argv[1])
+for clave in json.loads((carpeta / "metadatos.json").read_text())["columnas"]:
+    if not (carpeta / f"xgboost_global_{clave}.joblib").is_file():
+        print(f"modelos/sein/app/xgboost_global_{clave}.joblib")
+PY
+) || morir "No se pudo leer $TETOUAN_DATA/modelos/sein/app/metadatos.json: vuelve a copiar esa carpeta de datos."
+if [[ -n $faltan_modelos ]]; then
+  printf '   FALTA  %s\n' $faltan_modelos
+  morir "metadatos.json nombra modelos que no están en la carpeta de datos. Vuelve a copiar modelos/sein/app completa
+(del Drive del dueño, o con docs/demo/demo.sh --descargar); sin ellos la API no arranca."
+fi
+bien "Están todos los modelos que nombra metadatos.json"
 
 paso "4/5 Levantar la app"
 ocupado() { (exec 3<>"/dev/tcp/127.0.0.1/$1") 2>/dev/null; }
@@ -116,7 +135,8 @@ if [[ $PUERTO_WEB == "$PUERTO_API" ]]; then PUERTO_WEB=$(libre $((PUERTO_API + 1
 export PUERTO_API PUERTO_WEB
 api="http://localhost:$PUERTO_API"
 base="http://localhost:$PUERTO_WEB/"
-[[ $PUERTO_API != 8000 ]] && base+="?api=$api"
+# Como levantar.sh: la web de :8080 busca la API en :8000; con otros puertos se le dice dónde está
+[[ $PUERTO_API != 8000 || $PUERTO_WEB != 8080 ]] && base+="?api=$api"
 registro="${TMPDIR:-/tmp}/curva-demo-$PUERTO_API.log"
 app/levantar.sh >"$registro" 2>&1 &
 pid=$!
@@ -132,21 +152,24 @@ trap 'exit 130' INT TERM
 printf '   Esperando a la API en %s ' "$api"
 for _ in $(seq 1 90); do
   if curl -sf "$api/salud" >/dev/null; then break; fi
-  if ! kill -0 "$pid" 2>/dev/null; then
+  if ! kill -0 "$pid" 2>/dev/null || grep -qE "Traceback|startup failed|address already in use" "$registro"; then
     echo
     tail -n 15 "$registro" >&2
-    morir "La app se cerró al arrancar (registro completo: $registro). Plan B del README."
+    morir "La API no pudo arrancar (registro completo: $registro). Si dice «address already in use», otro programa
+tomó el puerto: vuelve a correr demo.sh. Si no, plan B del README."
   fi
   printf '.'
   sleep 2
 done
 echo
 curl -sf "$api/salud" >/dev/null || morir "La API no respondió en 3 minutos (registro: $registro). Plan B del README."
+# Que la API que respondió sea la de este arranque y no otra que tomó el puerto entre la revisión y el arranque
+grep -q "Uvicorn running on http://127.0.0.1:$PUERTO_API" "$registro" \
+  || morir "Respondió en :$PUERTO_API una API que no es la de este arranque. Vuelve a correr demo.sh."
 bien "La API responde: $(curl -sf "$api/salud")"
 if curl -sf "$base" >/dev/null; then bien "La web responde en http://localhost:$PUERTO_WEB"; else
   aviso "La web no responde en :$PUERTO_WEB; se usa la que sirve la API, en :$PUERTO_API."
-  base="http://localhost:$PUERTO_API/"
-  [[ $PUERTO_API != 8000 ]] && base+="?api=$api"
+  base="http://localhost:$PUERTO_API/"  # servida por la API, la web la busca en su mismo origen
 fi
 
 paso "5/5 Cifras del guion"

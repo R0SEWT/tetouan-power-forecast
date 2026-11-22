@@ -13,6 +13,7 @@ import argparse
 import json
 import sys
 import urllib.error
+import urllib.parse
 import urllib.request
 from datetime import datetime, timedelta, timezone
 
@@ -60,6 +61,8 @@ def pedir(api, ruta, cuerpo=None):
 
 def revisar_salud(api, inf):
     salud = pedir(api, "/salud")
+    if salud.get("aviso"):
+        inf.aviso(f"La app avisa: {salud['aviso']}")
     if salud.get("estado") == "ok" and salud.get("modelo", "").startswith("Combinado"):
         inf.ok(f"Modelo real: {salud['modelo']} ({salud.get('version_datos')})")
         return True
@@ -84,7 +87,7 @@ def revisar_momento(api, inf, origen, critico):
         inf.falla(texto) if critico else inf.aviso(texto)
 
 
-def revisar_escenario(api, inf, origen):
+def revisar_escenario(api, inf, origen, critico):
     pedido = {"area": "centro", "origen": origen, "horizonte": "24h", "variante": "M3", "modelo": "XGBoost global"}
     base = pedir(api, "/pronostico", pedido)["pronostico"]
     calor = pedir(api, "/pronostico", {**pedido, "escenario": {"delta_temp_c": 2}})["pronostico"]
@@ -93,8 +96,9 @@ def revisar_escenario(api, inf, origen):
     if cambio == ESCENARIO[origen]:
         inf.ok(f"«¿Y si…?» desde {origen.replace('T', ' ')}: +2 °C sube el pico {cambio:+d} MW")
     else:
-        inf.aviso(f"«¿Y si…?» desde {origen.replace('T', ' ')}: el guion dice {ESCENARIO[origen]:+d} MW y la app "
-                  f"calcula {cambio:+d} MW. Di la cifra de la pantalla (¿cambiaron los modelos?).")
+        texto = (f"«¿Y si…?» desde {origen.replace('T', ' ')}: el guion dice {ESCENARIO[origen]:+d} MW y la app "
+                 f"calcula {cambio:+d} MW (¿cambiaron los modelos?). Corrige la frase o di la de la pantalla.")
+        inf.falla(texto) if critico else inf.aviso(texto)
 
 
 def revisar_confianza(api, inf):
@@ -114,6 +118,7 @@ def revisar_confianza(api, inf):
 
 
 def revisar_en_vivo(api, inf, hoy):
+    local = urllib.parse.urlparse(api).hostname in ("localhost", "127.0.0.1", "::1")
     d = pedir(api, "/en-vivo/centro")
     ultimo = d.get("ultimo")
     if not ultimo:
@@ -131,8 +136,9 @@ def revisar_en_vivo(api, inf, hoy):
                   "hora de exponer, di la frase del README para «sin dato nuevo».")
     else:
         dias = (hoy - fecha).days
-        inf.aviso(f"En vivo: el registro está atrasado {dias} días (último pronóstico: {fecha:%d/%m}). En esta "
-                  "máquina no corre la corrida diaria: actualízalo con docs/demo/demo.sh --descargar.")
+        remedio = ("En esta máquina no corre la corrida diaria: actualízalo con docs/demo/demo.sh --descargar."
+                   if local else "Esta copia de la app se actualiza aparte: di la fecha que muestra la pantalla.")
+        inf.aviso(f"En vivo: el registro está atrasado {dias} días (último pronóstico: {fecha:%d/%m}). {remedio}")
     vivo = next((r for r in d.get("resumen", []) if r["grupo"] == "en_vivo" and r["horizonte"] == "24h"), None)
     if vivo:
         print(f"         Para leer en «Confianza» (paso 4): en vivo, {vivo['dias']} días, el rango del 80 % "
@@ -154,11 +160,11 @@ def main(argv=None):
         if revisar_salud(api, inf):
             revisar_momento(api, inf, DIA, critico=True)
             revisar_momento(api, inf, PICO, critico=True)
-            revisar_escenario(api, inf, PICO)
+            revisar_escenario(api, inf, PICO, critico=True)
             revisar_confianza(api, inf)
             revisar_momento(api, inf, RESPALDO, critico=False)
             revisar_momento(api, inf, RESPALDO_PICO, critico=False)
-            revisar_escenario(api, inf, RESPALDO_PICO)
+            revisar_escenario(api, inf, RESPALDO_PICO, critico=False)
         revisar_en_vivo(api, inf, hoy)
     except (urllib.error.URLError, TimeoutError, ConnectionError) as error:
         print(f"  FALLA  La API no responde en {api}: {error}")
