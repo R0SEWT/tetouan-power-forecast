@@ -1,0 +1,41 @@
+% Preámbulo del short paper en IEEEtran (conference, dos columnas).
+
+% pdflatex no trae estos caracteres del texto: el signo menos (U+2212), gamma y delta.
+\ifPDFTeX
+  \DeclareUnicodeCharacter{2212}{\textminus}
+  \DeclareUnicodeCharacter{03B3}{\ensuremath{\gamma}}
+  \DeclareUnicodeCharacter{0394}{\ensuremath{\Delta}}
+\fi
+% Cortes de línea en cualquier punto de las URL largas de la bibliografía.
+\usepackage{xurl}
+\usepackage{booktabs,array}
+
+% Títulos de figuras y tablas al estilo del IEEE: «Figura 1.» en letra chica; «TABLA I» centrado, con el título
+% en versalitas debajo. Quarto carga el paquete caption para sus referencias cruzadas.
+\usepackage{caption}
+\DeclareCaptionLabelFormat{mayusculas}{\MakeUppercase{#1}~#2}
+\captionsetup{font=footnotesize,labelsep=period}
+\captionsetup[table]{labelformat=mayusculas,labelsep=newline,justification=centering,textfont=sc}
+
+% Nueva fila de autores en IEEEtran (estilos/autores.lua la pone cada tres autores y antes de la afiliación).
+\makeatletter
+\newcommand{\linebreakand}{%
+  \end{@IEEEauthorhalign}
+  \hfill\mbox{}\par
+  \mbox{}\hfill\begin{@IEEEauthorhalign}
+}
+\makeatother
+
+% El resumen del paper es el «Resumen ejecutivo» que pide el enunciado (babel lo llamaría «Resumen»).
+\AtBeginDocument{\renewcommand{\abstractname}{Resumen ejecutivo}}
+
+% Las tablas anchas van a lo ancho de la página (table*), que LaTeX solo coloca arriba de una página; las
+% figuras, a una columna, cerca de donde se citan.
+\setcounter{dbltopnumber}{2}
+\renewcommand{\dbltopfraction}{0.85}
+\renewcommand{\dblfloatpagefraction}{0.7}
+\renewcommand{\topfraction}{0.85}
+\renewcommand{\bottomfraction}{0.6}
+\renewcommand{\textfraction}{0.1}
+\renewcommand{\floatpagefraction}{0.75}
+\setcounter{totalnumber}{4}

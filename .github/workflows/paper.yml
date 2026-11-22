@@ -1,0 +1,40 @@
+name: Paper en PDF
+
+# Compila el short paper (paper/quarto/) en estilo IEEE con Quarto y TinyTeX y sube el PDF como artefacto.
+# Corre en cada push que toque paper/quarto/ o este archivo, y a mano.
+on:
+  push:
+    paths:
+      - "paper/quarto/**"
+      - ".github/workflows/paper.yml"
+  workflow_dispatch:
+
+jobs:
+  pdf:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: paper/quarto
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Quarto y TinyTeX
+        uses: quarto-dev/quarto-actions/setup@v2
+        with:
+          version: 1.10.19
+          tinytex: true
+
+      - name: Compilar el PDF
+        run: |
+          quarto render short-paper.qmd --to pdf --output short-paper-ieee.pdf -M keep-tex:true
+          ls -la
+
+      - name: Subir el PDF (y el LaTeX, para revisar)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: short-paper-ieee
+          path: |
+            paper/quarto/*.pdf
+            paper/quarto/*.tex
+          if-no-files-found: warn

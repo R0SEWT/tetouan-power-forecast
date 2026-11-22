@@ -1,0 +1,430 @@
+% Referencias del short paper del TB1 (Grupo 3).
+%
+% Verificación (22-nov-2026): cada DOI se resolvió en doi.org y sus metadatos (autores, título, revista,
+% volumen, páginas) se tomaron de ahí; cada URL respondió, salvo donde se indica. Las fichas de Hugging Face
+% se consultaron por su API (licencia); las versiones de los paquetes son las de
+% experimentos/fundacionales/README.md.
+%
+% Cambio frente a la bibliografía de short-paper.md: «Wei (2023)» tenía otro título; el DOI
+% 10.1109/ICECCME57830.2023.10252535 (el mismo de docs/estado-del-arte.md) corresponde al artículo de abajo.
+
+% --- Metodología, evaluación y algoritmos ---------------------------------------------------------------
+
+@book{chapman2000,
+  author    = {Chapman, Pete and Clinton, Julian and Kerber, Randy and Khabaza, Thomas and Reinartz, Thomas
+               and Shearer, Colin and Wirth, Rüdiger},
+  title     = {{CRISP-DM} 1.0: Step-by-step data mining guide},
+  publisher = {SPSS Inc.},
+  year      = {2000},
+  langid    = {english}
+}
+
+@article{tashman2000,
+  author  = {Tashman, Leonard J.},
+  title   = {Out-of-sample tests of forecasting accuracy: An analysis and review},
+  journal = {International Journal of Forecasting},
+  volume  = {16},
+  number  = {4},
+  pages   = {437--450},
+  year    = {2000},
+  doi     = {10.1016/S0169-2070(00)00065-0},
+  langid  = {english}
+}
+
+@article{bergmeir2018,
+  author  = {Bergmeir, Christoph and Hyndman, Rob J. and Koo, Bonsoo},
+  title   = {A note on the validity of cross-validation for evaluating autoregressive time series prediction},
+  journal = {Computational Statistics \& Data Analysis},
+  volume  = {120},
+  pages   = {70--83},
+  year    = {2018},
+  doi     = {10.1016/j.csda.2017.11.003},
+  langid  = {english}
+}
+
+@article{hewamalage2023,
+  author  = {Hewamalage, Hansika and Ackermann, Klaus and Bergmeir, Christoph},
+  title   = {Forecast evaluation for data scientists: Common pitfalls and best practices},
+  journal = {Data Mining and Knowledge Discovery},
+  volume  = {37},
+  number  = {2},
+  pages   = {788--832},
+  year    = {2023},
+  doi     = {10.1007/s10618-022-00894-5},
+  langid  = {english}
+}
+
+@article{hong2014,
+  author  = {Hong, Tao and Pinson, Pierre and Fan, Shu},
+  title   = {Global Energy Forecasting Competition 2012},
+  journal = {International Journal of Forecasting},
+  volume  = {30},
+  number  = {2},
+  pages   = {357--363},
+  year    = {2014},
+  doi     = {10.1016/j.ijforecast.2013.07.001},
+  langid  = {english}
+}
+
+@article{monteromanso2021,
+  author  = {Montero-Manso, Pablo and Hyndman, Rob J.},
+  title   = {Principles and algorithms for forecasting groups of time series: Locality and globality},
+  journal = {International Journal of Forecasting},
+  volume  = {37},
+  number  = {4},
+  pages   = {1632--1653},
+  year    = {2021},
+  doi     = {10.1016/j.ijforecast.2021.03.004},
+  langid  = {english}
+}
+
+@article{pedregosa2011,
+  author  = {Pedregosa, Fabian and Varoquaux, Gaël and Gramfort, Alexandre and Michel, Vincent
+             and Thirion, Bertrand and Grisel, Olivier and Blondel, Mathieu and Prettenhofer, Peter
+             and Weiss, Ron and Dubourg, Vincent and Vanderplas, Jake and Passos, Alexandre
+             and Cournapeau, David and Brucher, Matthieu and Perrot, Matthieu and Duchesnay, Édouard},
+  title   = {Scikit-learn: Machine learning in {Python}},
+  journal = {Journal of Machine Learning Research},
+  volume  = {12},
+  pages   = {2825--2830},
+  year    = {2011},
+  url     = {https://www.jmlr.org/papers/v12/pedregosa11a.html},
+  langid  = {english}
+}
+
+@inproceedings{chen2016,
+  author    = {Chen, Tianqi and Guestrin, Carlos},
+  title     = {{XGBoost}: A scalable tree boosting system},
+  booktitle = {Proceedings of the 22nd {ACM} {SIGKDD} International Conference on Knowledge Discovery and
+               Data Mining},
+  pages     = {785--794},
+  publisher = {ACM},
+  year      = {2016},
+  doi       = {10.1145/2939672.2939785},
+  langid    = {english}
+}
+
+% --- Modelos fundacionales --------------------------------------------------------------------------------
+
+@misc{ansari2025,
+  author       = {Ansari, Abdul Fatir and Shchur, Oleksandr and Küken, Jaris and Auer, Andreas and Han, Boran
+                  and Mercado, Pedro and Rangapuram, Syama Sundar and Shen, Huibin and Stella, Lorenzo
+                  and Zhang, Xiyuan and Goswami, Mononito and Kapoor, Shubham and Maddix, Danielle C.
+                  and Guerron, Pablo and Hu, Tony and Yin, Junming and Erickson, Nick and Desai, Prateek Mutalik
+                  and Wang, Hao and Rangwala, Huzefa and Karypis, George and Wang, Yuyang
+                  and Bohlke-Schneider, Michael},
+  title        = {Chronos-2: From univariate to universal forecasting},
+  howpublished = {arXiv:2510.15821},
+  year         = {2025},
+  doi          = {10.48550/arXiv.2510.15821},
+  note         = {Pesos: amazon/chronos-2 en Hugging Face (Apache-2.0), paquete chronos-forecasting 2.3.2},
+  langid       = {english}
+}
+
+@inproceedings{das2024,
+  author    = {Das, Abhimanyu and Kong, Weihao and Sen, Rajat and Zhou, Yichen},
+  title     = {A decoder-only foundation model for time-series forecasting},
+  booktitle = {Proceedings of the 41st International Conference on Machine Learning},
+  volume    = {235},
+  pages     = {10148--10167},
+  publisher = {PMLR},
+  year      = {2024},
+  url       = {https://proceedings.mlr.press/v235/das24c.html},
+  note      = {Pesos: google/timesfm-2.5-200m-pytorch (Apache-2.0) y google/timesfm-3.0-pytorch (licencia no
+               comercial) en Hugging Face, paquete timesfm 3.0.2},
+  langid    = {english}
+}
+
+@misc{simons297m,
+  author       = {{abel-lab}},
+  title        = {Simons-297M},
+  howpublished = {Hugging Face},
+  year         = {2026},
+  url          = {https://huggingface.co/abel-lab/Simons-297M},
+  urldate      = {2026-11-22},
+  note         = {Licencia OpenMDW-1.1; paquete simons 0.1.1},
+  langid       = {english}
+}
+
+@misc{timestral209m,
+  author       = {{Mistral AI}},
+  title        = {Timestral-209M},
+  howpublished = {Hugging Face},
+  year         = {2026},
+  url          = {https://huggingface.co/mistralai/Timestral-209M},
+  urldate      = {2026-11-22},
+  note         = {Licencia MIT modificada; paquete timestral 1.0.0},
+  langid       = {english}
+}
+
+@misc{t0gamma,
+  author       = {{The Forecasting Company}},
+  title        = {T0-gamma},
+  howpublished = {Hugging Face},
+  year         = {2026},
+  url          = {https://huggingface.co/theforecastingcompany/t0-gamma},
+  urldate      = {2026-11-22},
+  note         = {Licencia Apache-2.0; paquete tfc-t0 0.6.1},
+  langid       = {english}
+}
+
+@misc{toto2,
+  author       = {{Datadog}},
+  title        = {Toto-2.0-313m},
+  howpublished = {Hugging Face},
+  year         = {2026},
+  url          = {https://huggingface.co/Datadog/Toto-2.0-313m},
+  urldate      = {2026-11-22},
+  note         = {Licencia Apache-2.0; paquete toto-2 2.0.0},
+  langid       = {english}
+}
+
+@misc{tirex2,
+  author       = {{NX-AI}},
+  title        = {TiRex-2},
+  howpublished = {Hugging Face},
+  year         = {2026},
+  url          = {https://huggingface.co/NX-AI/TiRex-2},
+  urldate      = {2026-11-22},
+  note         = {Licencia Apache-2.0; paquete tirex-2 0.5.0},
+  langid       = {english}
+}
+
+@misc{kaljevic2026,
+  author       = {Kaljevic, Tomas and Arzola, Ivan and Zhang, Yu},
+  title        = {Benchmarking time series foundation models for load forecasting under covariate uncertainty},
+  howpublished = {arXiv:2610.07232},
+  year         = {2026},
+  doi          = {10.48550/arXiv.2610.07232},
+  langid       = {english}
+}
+
+% --- Antecedentes: Tetuán y Ceuta ------------------------------------------------------------------------
+
+@misc{salam2018,
+  author       = {Salam, Abdulwahed and El Hibaoui, Abdelaaziz},
+  title        = {Power consumption of {Tetouan} city},
+  howpublished = {UCI Machine Learning Repository},
+  year         = {2018},
+  doi          = {10.24432/C5B034},
+  note         = {Dataset},
+  langid       = {english}
+}
+
+@inproceedings{wei2023,
+  author    = {Wei, Hua-Liang},
+  title     = {System identification-informed transparent and explainable machine learning with application to
+               power consumption forecasting},
+  booktitle = {2023 3rd International Conference on Electrical, Computer, Communications and Mechatronics
+               Engineering ({ICECCME})},
+  pages     = {1--6},
+  publisher = {IEEE},
+  year      = {2023},
+  doi       = {10.1109/ICECCME57830.2023.10252535},
+  langid    = {english}
+}
+
+@misc{ree_ceuta,
+  author       = {{Red Eléctrica de España}},
+  title        = {Seguimiento de la demanda de energía eléctrica: {Ceuta}},
+  year         = {2026},
+  url          = {https://demanda.ree.es/visiona/home},
+  langid       = {spanish}
+}
+
+% --- Datos del SEIN y exógenas ---------------------------------------------------------------------------
+
+@misc{coes_ieod,
+  author       = {{COES}},
+  title        = {Informe de Evaluación de la Operación Diaria ({IEOD}), anexo diario; eventos relevantes},
+  howpublished = {Comité de Operación Económica del Sistema Interconectado Nacional},
+  year         = {2026},
+  url          = {https://www.coes.org.pe},
+  note         = {Serie de 2016 a 2026},
+  langid       = {spanish}
+}
+
+@misc{openmeteo,
+  author       = {{Open-Meteo}},
+  title        = {Historical Weather {API} (reanálisis {ERA5} de {ECMWF})},
+  year         = {2026},
+  url          = {https://open-meteo.com/en/docs/historical-weather-api},
+  note         = {Licencia CC BY 4.0},
+  langid       = {spanish}
+}
+
+@misc{igp_icen,
+  author       = {{Instituto Geofísico del Perú}},
+  title        = {Índice Costero El Niño ({ICEN})},
+  year         = {2026},
+  url          = {http://met.igp.gob.pe/datos/ICEN.txt},
+  note         = {Serie mensual},
+  langid       = {spanish}
+}
+
+@misc{noaa_nino12,
+  author       = {{NOAA Climate Prediction Center}},
+  title        = {Weekly {Niño} 1+2 {SST} and anomalies},
+  year         = {2026},
+  url          = {https://www.cpc.ncep.noaa.gov/data/indices/wksst9120.for},
+  note         = {Serie semanal, base 1991--2020},
+  langid       = {english}
+}
+
+% Sin URL pública localizada: los informes del IGP la citan para el ICEN con la climatología 1991-2020, y
+% src/tetouan_power_forecast/modelado_sein.py toma de ella las categorías del ICEN.
+@techreport{enfen2024,
+  author      = {{Comisión Multisectorial ENFEN}},
+  title       = {Nota Técnica {ENFEN} 01-2024},
+  institution = {Comisión Multisectorial encargada del Estudio Nacional del Fenómeno El Niño},
+  year        = {2024},
+  note        = {Índice Costero El Niño (ICEN) y sus categorías},
+  langid      = {spanish}
+}
+
+@misc{enfen2026comunicado,
+  author       = {{Comisión Multisectorial ENFEN}},
+  title        = {Comunicado Oficial {ENFEN} N.° 20-2026},
+  year         = {2026},
+  date         = {2026-11-13},
+  url          = {https://enfen.imarpe.gob.pe/download/comunicado-oficial-enfen-n-20-2026/},
+  langid       = {spanish}
+}
+
+@techreport{enfen2026informe,
+  author      = {{Comisión Multisectorial ENFEN}},
+  title       = {Informe Técnico {ENFEN}, año 12, N.° 20 (al 11 de noviembre de 2026)},
+  institution = {Comisión Multisectorial encargada del Estudio Nacional del Fenómeno El Niño},
+  year        = {2026},
+  url         = {https://enfen.imarpe.gob.pe/download/informe-tecnico-enfen-ano-12-n20-al-11-noviembre-2026/?wpdmdl=2219},
+  langid      = {spanish}
+}
+
+% --- Contexto internacional ------------------------------------------------------------------------------
+
+@techreport{cnmc2024umbrales,
+  author      = {{Comisión Nacional de los Mercados y la Competencia}},
+  title       = {Resolución por la que se aprueban los umbrales para el cálculo de los incentivos a la retribución
+                 del operador del sistema eléctrico en el periodo regulatorio 2023-2025},
+  institution = {CNMC},
+  type        = {Resolución},
+  number      = {INF/DE/583/23},
+  year        = {2024},
+  date        = {2024-03-21},
+  url         = {https://www.cnmc.es/sites/default/files/5241389.pdf},
+  langid      = {spanish}
+}
+
+@techreport{cnmc2025,
+  author      = {{Comisión Nacional de los Mercados y la Competencia}},
+  title       = {Resolución por la que se aprueban los valores definitivos de los incentivos a la retribución del
+                 operador del sistema para el año 2024},
+  institution = {CNMC},
+  type        = {Resolución},
+  number      = {RAP/DE/012/25},
+  year        = {2025},
+  date        = {2025-12-11},
+  url         = {https://www.cnmc.es/sites/default/files/6336322.pdf},
+  langid      = {spanish}
+}
+
+@techreport{cnmc2026,
+  author      = {{Comisión Nacional de los Mercados y la Competencia}},
+  title       = {Resolución por la que se aprueban los valores definitivos de los incentivos a la retribución del
+                 operador del sistema para el año 2025},
+  institution = {CNMC},
+  type        = {Resolución},
+  number      = {RAP/DE/016/26},
+  year        = {2026},
+  date        = {2026-10-22},
+  url         = {https://www.cnmc.es/sites/default/files/6915601.pdf},
+  langid      = {spanish}
+}
+
+@misc{ree_seguimiento,
+  author       = {{Red Eléctrica de España}},
+  title        = {Seguimiento de la demanda: previsión, programada y real},
+  year         = {2026},
+  url          = {https://www.ree.es/en/node/14136},
+  langid       = {spanish}
+}
+
+% La URL responde 403 a clientes automáticos (protección del sitio); en el navegador abre.
+@misc{neso,
+  author       = {{National Energy System Operator}},
+  title        = {Day-ahead half-hourly demand forecast performance},
+  year         = {2026},
+  url          = {https://www.neso.energy/data-portal/day-ahead-half-hourly-demand-forecast-performance},
+  note         = {Archivo abierto desde abril de 2021},
+  langid       = {english}
+}
+
+@misc{pjm2026,
+  author       = {{PJM Interconnection}},
+  title        = {System operations report},
+  howpublished = {Operating Committee},
+  year         = {2026},
+  date         = {2026-02-05},
+  url          = {https://www.pjm.com/-/media/DotCom/committees-groups/committees/oc/2026/20260205/20260205-item-07---system-operations-report.pdf},
+  langid       = {english}
+}
+
+% --- Diseño de la app ------------------------------------------------------------------------------------
+
+@article{card1980,
+  author  = {Card, Stuart K. and Moran, Thomas P. and Newell, Allen},
+  title   = {The keystroke-level model for user performance time with interactive systems},
+  journal = {Communications of the ACM},
+  volume  = {23},
+  number  = {7},
+  pages   = {396--410},
+  year    = {1980},
+  doi     = {10.1145/358886.358895},
+  langid  = {english}
+}
+
+@inproceedings{jiang2023,
+  author    = {Jiang, Yue and Leiva, Luis A. and Rezazadegan Tavakoli, Hamed and Houssel, Paul R. B.
+               and Kylmälä, Julia and Oulasvirta, Antti},
+  title     = {{UEyes}: Understanding visual saliency across user interface types},
+  booktitle = {Proceedings of the 2023 {CHI} Conference on Human Factors in Computing Systems},
+  pages     = {1--21},
+  publisher = {ACM},
+  year      = {2023},
+  doi       = {10.1145/3544548.3581096},
+  note      = {Datos: Zenodo, doi:10.5281/zenodo.8010312 (CC BY 4.0)},
+  langid    = {english}
+}
+
+% Sin DOI: actas de la conferencia de la UPA de 2002.
+@inproceedings{medlock2002,
+  author    = {Medlock, Michael C. and Wixon, Dennis and Terrano, Mark and Romero, Ramon and Fulton, Bill},
+  title     = {Using the {RITE} method to improve products: A definition and a case study},
+  booktitle = {Usability Professionals Association Annual Conference},
+  year      = {2002},
+  langid    = {english}
+}
+
+@inproceedings{agnew2024,
+  author    = {Agnew, William and Bergman, A. Stevie and Chien, Jennifer and Díaz, Mark and El-Sayed, Seliem
+               and Pittman, Jaylen and Mohamed, Shakir and McKee, Kevin R.},
+  title     = {The illusion of artificial inclusion},
+  booktitle = {Proceedings of the {CHI} Conference on Human Factors in Computing Systems},
+  pages     = {1--12},
+  publisher = {ACM},
+  year      = {2024},
+  doi       = {10.1145/3613904.3642703},
+  langid    = {english}
+}
+
+% --- Este trabajo -----------------------------------------------------------------------------------------
+
+@misc{informe,
+  author       = {{Grupo 3, Metodología para Data Science, UPC}},
+  title        = {Pronóstico de demanda eléctrica de muy corto plazo del {SEIN}: informe técnico, notebooks y código},
+  howpublished = {Repositorio en GitHub},
+  year         = {2026},
+  url          = {https://github.com/R0SEWT/tetouan-power-forecast},
+  note         = {Informe técnico en paper/paper.md},
+  langid       = {spanish}
+}
