@@ -1,0 +1,64 @@
+{
+  "medido": "2026-11-20T17:17:25.308Z",
+  "palabras_por_minuto": 140,
+  "recorrido": {
+    "tiempos": [
+      {
+        "paso": "paso1",
+        "titulo": "Hoy, en vivo",
+        "segundos": 25.5,
+        "habla_s": 24.4,
+        "acciones_s": 1.1,
+        "en_el_video": "0:00"
+      },
+      {
+        "paso": "paso2",
+        "titulo": "Un día de El Niño",
+        "segundos": 35.6,
+        "habla_s": 33.4,
+        "acciones_s": 2.2,
+        "en_el_video": "0:26"
+      },
+      {
+        "paso": "paso3",
+        "titulo": "¿Y si hace más calor?",
+        "segundos": 27.5,
+        "habla_s": 24.4,
+        "acciones_s": 3.1,
+        "en_el_video": "1:01"
+      },
+      {
+        "paso": "paso4",
+        "titulo": "Confianza",
+        "segundos": 39.6,
+        "habla_s": 38.5,
+        "acciones_s": 1.1,
+        "en_el_video": "1:29"
+      },
+      {
+        "paso": "paso5",
+        "titulo": "Cierre",
+        "segundos": 5.1,
+        "habla_s": 5.1,
+        "acciones_s": 0,
+        "en_el_video": "2:08"
+      }
+    ],
+    "total": 133.339,
+    "video_s": 134.8
+  },
+  "extra": {
+    "tiempos": [
+      {
+        "paso": "extra",
+        "titulo": "La corrida diaria (solo si preguntan)",
+        "segundos": 30,
+        "habla_s": 27.8,
+        "acciones_s": 2.1,
+        "en_el_video": "0:00"
+      }
+    ],
+    "total": 29.951,
+    "video_s": 31.5
+  }
+}

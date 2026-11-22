@@ -6,6 +6,9 @@ Exposición de 20 minutos · Grupo 3 · Metodología para Data Science · UPC 20
 > noviembre) o de la auditoría metodológica (`docs/auditoria-metodologica.md`). Cada bloque dice la sección y la
 > tabla. Si el paper cambia antes de la exposición (por ejemplo, al recortarlo), hay que revisar las cifras de
 > este guion contra la versión final. Lo que todavía no existe está marcado como **[PENDIENTE]**.
+>
+> **La demo tiene su kit: [`docs/demo/README.md`](demo/README.md)**, con la lista de 30 minutos antes, el recorrido
+> con sus URL y tiempos medidos, el plan B (capturas en PDF y video) y las preguntas probables de la profesora.
 
 ## Cómo usar este guion
 
@@ -17,9 +20,11 @@ Exposición de 20 minutos · Grupo 3 · Metodología para Data Science · UPC 20
 - **Todos tienen que estar y hablar.** En la rúbrica (criterio I), la ausencia de un integrante está en el nivel
   «Insuficiente» (`course-meto-data-science/docs/tb1-final-requisitos.md`, secciones (b) y (d); es un borrador
   hecho sin acceso al Aula).
-- Si la exposición es virtual, como el avance: **una sola persona (Expositor 5) comparte pantalla todo el tiempo**,
-  con la presentación y la app abiertas. Los demás dicen «siguiente, por favor». Así no se pierde tiempo cambiando
-  de pantalla.
+- La exposición es **virtual, por Class Collaborate**, con los cinco con cámara y audio; después vienen unos 10
+  minutos de preguntas de la profesora. **Una sola persona (Expositor 5) comparte pantalla todo el tiempo**, con la
+  presentación y la app abiertas. Los demás dicen «siguiente, por favor». Así no se pierde tiempo cambiando de
+  pantalla. **El Expositor 3 es el respaldo:** si se cae la conexión del Expositor 5, comparte él (la presentación en
+  PDF, las capturas y el video de la demo).
 
 ## Reparto
 
@@ -87,8 +92,10 @@ tabla de la sección 6.1 del paper.
 
 **Diapositivas de respaldo** (van después de la 12; solo se muestran en el plan B o si preguntan):
 
-- **R1, R2 y R3.** Capturas de la app: «Ahora», escenarios con +2 °C y «Confianza» con el seguimiento en vivo (plan B de la demo; sirven también como
-  la figura 13 del paper, que sigue pendiente, §6.1).
+- **R1, R2 y R3.** Capturas de la app: «Ahora», escenarios con +2 °C y «Confianza» con el seguimiento en vivo, ya
+  tomadas en `docs/demo/capturas/` (`R1-ahora.png`, `R2-escenarios-2c.png`, `R3-confianza-en-vivo.png`; además
+  `R2b-diagnostico.png`). Sirven también como la figura 13 del informe técnico, pendiente en su §6.1. El plan B de la
+  demo usa la secuencia completa de `docs/demo/plan-b-capturas.pdf`.
 - **R4.** Tabla «Las hipótesis, una por una» (§5.4).
 - **R5.** Tablas de ablación y de adaptación de 2026 (§5.4).
 - **R6.** Limitaciones (§6.4).
@@ -342,45 +349,65 @@ la suerte de una semilla: el ajuste fino se repitió con tres semillas y el erro
 
 ### 15:40–18:40 · Demo de la app · Expositor 5
 
+> **Todo lo de la demo está en el kit: [`docs/demo/README.md`](demo/README.md)** (lista de 30 minutos antes, el
+> recorrido con sus URL, el plan B y las preguntas probables de la profesora). Lo de aquí es el resumen.
+
 La app se llama **Curva** y tiene tres pantallas: «Ahora», «Confianza» y «Detalle» (README, «Qué es»; paper §4.6 y
-§5.6). El recorrido es «Ahora» → tocar el gráfico → «¿Y si hace más calor?» → «Confianza», con la cobertura honesta
-y el seguimiento en vivo. Dura 3 minutos; se ensaya con cronómetro.
+§5.6). El recorrido es «Ahora» de hoy → un día de El Niño en repaso → tocar el pico → «¿Y si hace más calor?» →
+«Confianza», con la cobertura honesta y el seguimiento en vivo. Medido con un expositor simulado (140 palabras por
+minuto): **2:13**, con 47 segundos de margen (`docs/demo/cronometro.json`). Se ensaya con cronómetro.
 
-**Antes de la exposición (el día anterior y 30 minutos antes):**
+**Antes de la exposición** (la víspera y 30 minutos antes; detalle en el kit):
 
-1. Levantar la app con el modelo real: `app/levantar.sh` desde la raíz del repo (API en `:8000`, web en `:8080`;
-   README, «Levantarla en 3 pasos»). La terminal debe decir `Pronosticador: real`.
-2. Abrir `http://localhost:8080/#/` y comprobar que **no** aparece el chip «Datos de prueba: series sintéticas». Si
-   aparece, ese día se va directo al plan B.
-3. Comprobar que la corrida de la mañana entró: la cabecera de «Ahora» debe decir «Hoy · datos del COES al [ayer],
-   24:00». Si dice un día anterior, correr `experimentos/en_vivo/diario.sh` (sale con 75 si el COES todavía no
-   publicó el anexo; reintentar más tarde). Si a la hora de la exposición sigue sin el día de ayer, el paso 1 del
-   recorrido se hace en **repaso** (segunda ruta) y se dice que el registro en vivo llega hasta el último día
-   cargado.
-4. Abrir en pestañas aparte las rutas del recorrido (repaso, escenarios y «Confianza») para no escribirlas en vivo.
-5. Tomar las capturas R1 («Ahora»), R2 (escenarios con +2 °C) y R3 («Confianza» con el seguimiento en vivo) con el
-   mismo recorrido y ponerlas en la presentación. Mientras no se tomen, sirven `docs/img/curva-ahora-escritorio.jpg`
-   y `docs/img/app-hcd/it8-confianza-escritorio.jpg`.
-6. El Expositor 3 tiene el PDF de la presentación con las capturas, por si se cae la conexión del Expositor 5.
+1. Levantar y comprobar todo con un comando: `docs/demo/demo.sh` desde la raíz del repo. Revisa las dependencias y
+   los datos, levanta la app (si 8000 u 8080 están ocupados, usa otros puertos y lo dice), comprueba `/salud` y que las
+   cifras de esta tabla coinciden con las de la app, y abre las dos pestañas del recorrido. La víspera:
+   `docs/demo/demo.sh --verificar`.
+2. Si dice «prueba» o falta el combinado (o aparece el chip «Datos de prueba: series sintéticas»), ese día se va
+   directo al plan B.
+3. La cabecera de «Ahora» debe decir «Hoy · datos del COES al [ayer], 24:00». Si dice un día anterior, no se arregla:
+   el paso 1 se hace igual, con la frase de «sin dato nuevo» (abajo).
+4. Chrome con **zoom del 150 %** y se comparte **la ventana de Chrome**: así el texto se lee aunque Collaborate achique
+   la pantalla compartida.
+5. El Expositor 3 tiene descargados el PDF de capturas y el video del recorrido (`docs/demo/plan-b-capturas.pdf` y
+   `docs/demo/recorrido-demo.mp4`) y puede compartir pantalla en Collaborate: es el respaldo.
+6. El Expositor 5 y el Expositor 3 abren unos minutos antes la app publicada,
+   **https://curva.rosewt.dev/#/ahora/centro?fecha=2026-08-27&hora=19:00**, y la dejan abierta: es la misma app, con
+   las mismas cifras, y si estaba dormida tarda unos 22 segundos en despertar.
 
-**El recorrido, minuto a minuto** (el caso de repaso está verificado con el arnés: Centro, martes 10 de marzo de 2026,
-19:00, a 24 horas, combinado; `docs/app-hcd.md`, «Recorrido de demo»):
+**El recorrido, minuto a minuto** (días fijos, que no dependen de la fecha en que se expone: el principal, Centro,
+jueves 27 de agosto de 2026, 19:00; el respaldo, martes 10 de marzo de 2026, 19:00):
 
 | Tiempo | Dónde | Qué decir |
 |---|---|---|
-| 15:40–16:20 | **«Ahora»**, Centro: `http://localhost:8080/#/` (hoy). Si no hay día de hoy, el repaso: `http://localhost:8080/#/ahora/centro?fecha=2026-03-10&hora=19:00`. | «Esta es Curva. Corre nuestros modelos sobre la demanda que publica el COES. Arriba, cuánta demanda hay ahora, cuánta en una hora y el pico de las próximas 24 horas con su hora. Lo real llega hasta ayer a las 24:00, porque el COES publica cada día a la mañana siguiente; todo lo que sigue es pronóstico, emitido hoy en la mañana, antes de conocer el real. Al lado, "Lo que dijimos ayer para esta hora": lo que dijimos, lo que pasó y si cayó dentro del rango.» |
-| 16:20–16:40 | **Tocar o arrastrar el gráfico** hasta la hora del pico. | «Tocar el gráfico fija la hora: las cifras y el rango se mueven con el dedo. El pronóstico va con su rango, la banda donde debería caer la demanda 8 de cada 10 veces en vivo (9 de cada 10 en el repaso de 2026).» |
-| 16:40–17:20 | Enlace **«¿Y si hace más calor?»** (abre «Detalle» en el mismo momento, sección «¿Y si…?»; en vivo abre el último día con clima cargado). Elegir **+2 °C**. En repaso: `http://localhost:8080/#/area/centro?fecha=2026-03-10&hora=19:00&horizonte=24h&variante=M0&modelo=combinado` y la sección «¿Y si…?». | «A 24 horas podemos preguntar: ¿y si mañana hace dos grados más? El pronóstico sube unos 15 megavatios. Lo calcula el modelo base, el XGBoost, porque es el único que usa el clima; el combinado, el que abre por defecto, no lo usa. Esto supone que el COES recibe el pronóstico de ENFEN. Y ojo: en 2026, a 24 horas, el clima empeoró el pronóstico; por eso no recomendamos apoyarse en él en un evento extraordinario.» |
-| 17:20–18:20 | **«Confianza»**, Centro: `http://localhost:8080/#/confianza/centro`. Leer el titular y las cinco cifras; bajar a «El seguimiento en vivo». | «Aquí la app dice cuánto acertó. En 2026 se equivocó menos que la referencia los diez meses, y el rango del 90 % cubrió el 91 % de las medias horas. Y aquí está lo honesto: desde el 13 de noviembre emitimos el pronóstico de cada día antes de que exista su real. [Leer la cifra de la pantalla.] Al 17 de noviembre, en cinco días en vivo, el modelo le gana a la referencia, pero en el Centro subestima y su rango del 80 % cubrió el 67 %: lo mostramos en rojo. Es seguimiento en curso, no un resultado.» |
-| 18:20–18:40 | Volver a la presentación. | «Lo que ven lo medimos antes y después de cada cambio con instrumentos sintéticos; todavía no lo probamos con personas: es lo siguiente. Regreso a la presentación.» **Pase:** «[Expositor 1] cierra.» |
+| 15:40–16:05 | **«Ahora», hoy**, Centro (pestaña 1): `http://localhost:8080/#/ahora/centro`. Al final, bajar hasta «Lo que dijimos para ayer a esta hora» (sin dato nuevo se llama «Lo que se dijo un día antes»). | «Esta es Curva: corre nuestros modelos sobre la demanda que publica el COES. Lo real llega hasta ayer, porque el COES publica cada día a la mañana siguiente; desde la línea punteada todo es pronóstico, emitido hoy antes de conocer el real. [bajar] Aquí, lo que dijimos para ayer a esta hora y lo que pasó.» |
+| 16:05–16:41 | **Un día de El Niño** (pestaña 2): `http://localhost:8080/#/ahora/centro?fecha=2026-08-27&hora=19:00`. Tocar en el gráfico el punto del pico («Pico 5,007 · 15:00»); después, un clic en el título «¿Acertamos…?». | «Ahora, un día de la prueba: el 27 de agosto de 2026, el mes en que el ICEN llegó a 3.98. El modelo no vio 2026 al entrenarse. Un día antes pronosticó 4,810 megavatios para las 19:00; fue 4,772, dentro del rango. [tocar el pico] Toco el pico: para las 15:00 del día siguiente dijo 5,007 y fue 5,027.» |
+| 16:41–17:09 | Enlace **«¿Y si hace más calor?»** (abre «Detalle» en ese momento, sección «¿Y si…?»). Elegir **+2 °C** y bajar hasta la frase «Si hiciera 2 °C más…». | «¿Y si mañana hace dos grados más? Lo calcula el XGBoost, el único modelo que usa el clima. [+2 °C] El pico sube 8 megavatios, 0.2 %: casi nada. Y en 2026 el clima empeoró el pronóstico a 24 horas: no conviene apoyarse en él en un evento extraordinario.» |
+| 17:09–17:48 | **«Confianza»**, en la cabecera (queda en el Centro, a 24 horas). Leer el titular y la tarjeta roja «En vivo, desde el 13 nov». | «Aquí la app dice cuánto acertó: en 2026 le ganó a la referencia los diez meses, con 71.9 megavatios de error a 24 horas, 47 % menos, y su rango del 90 % cubrió el 91 %. Y lo honesto: en vivo, desde el 13 de noviembre, el rango del 80 % cubre el [leer la cifra roja] %: queda corto y lo mostramos en rojo. Es seguimiento en curso, no un resultado.» |
+| 17:48–17:53 | Volver a la presentación. | «El diseño lo medimos con instrumentos sintéticos; falta probarlo con personas.» **Pase:** «[Expositor 1] cierra.» |
 
-**Cifras:** repaso del 10/03/2026 a las 19:00 (Centro, 24 h, combinado): pronóstico 4,767 MW, rango 4,588 a 4,929,
-real 4,784; error del día 31.1 MW, 53 % menos que «la semana pasada» (65.9); +2 °C → +15 MW (`docs/app-hcd.md`,
-«Recorrido de demo»). «Confianza» (2026, combinado, Centro): 10 de 10 meses; cobertura del rango del 90 %, 91.1 %
-(`docs/app-hcd.md`, iteración 8). En vivo al 17 de noviembre (Chronos-2 ajustado con calendario, 24 h): Centro, MAE
-90.7 frente a 120.3 de la referencia, sesgo −68 MW, cobertura 66.7 %; reconstruido del 23-oct al 12-nov, 73.2 %
-(§5.7 del informe técnico; short paper, tabla 7). **La cifra en vivo cambia cada día: leerla de la pantalla, no de
-aquí.**
+Entre 17:53 y 18:40 quedan 47 segundos de margen. **Paso extra de 30 segundos** (la corrida diaria, «Detalle» → «En
+vivo»): solo si al terminar «Confianza» el reloj marca 17:50 o menos; si no, se guarda para las preguntas (texto en el
+kit). Si la profesora pregunta por mantenimiento (datos nuevos, columnas que cambian, reentrenar, automatización), las
+respuestas cortas están en el kit, «Preguntas probables de la profesora».
+
+**Cifras:** día principal, 27/08/2026 a las 19:00 (Centro, 24 h, combinado): pronóstico 4,810 MW, rango 4,629 a 4,974,
+real 4,772; el día completo, 40.7 MW frente a 77.0 de «la semana pasada» (47 % menos), solo al marcar «Mostrar lo que
+pasó después» (sin marcarlo se ve el error hasta las 19:00: 43.4 frente a 82.8). Al tocar el pico (28/08, 15:00):
+dijimos 5,007 (4,819 a 5,178), fue 5,027. Desde ahí, +2 °C sube el pico de las 15:30 en 8 MW (+0.2 %). «Confianza»
+(2026, combinado, Centro): 10 de 10 meses; 71.9 MW frente a 135.4 a 24 h (−47 %; 48.8 MW a 1 h, en «A 1 hora»);
+cobertura del rango del 90 %, 91.1 %. En vivo (Chronos-2 ajustado con calendario, 24 h), al 19 de noviembre: 7 días,
+Centro 82.9 MW frente a 133.3 de la referencia, cobertura del 80 %, 70.2 %; reconstruido del 23-oct al 12-nov, 73.2 %
+(§5.7 del informe técnico; el short paper, tabla 7, da las cifras al 17 de noviembre). **La cifra en vivo cambia cada
+día: leerla de la pantalla, no de aquí** (`demo.sh` la imprime antes de empezar). Día de respaldo, 10/03/2026 a las
+19:00: dijimos 4,767 (4,588 a 4,929), fue 4,784; el día completo, 31.1 MW frente a 65.9 (53 % menos, también al
+marcar «Mostrar lo que pasó después»); al tocar el pico (11/03, 14:30), dijimos 4,977 y fue 4,961, y +2 °C sube el
+pico 20 MW. Todas verificadas contra la app con los modelos de Colab el 20 de noviembre (`docs/demo/verificar.py`).
+
+**Si no hay dato nuevo ese día** (el COES no publicó, o la laptop no tiene la copia del día del registro en vivo): la
+pantalla dice que el pronóstico de hoy todavía no sale y muestra lo último que se pronosticó. Se dice: «Hoy el COES
+todavía no publicó la demanda de ayer: la app lo dice y muestra lo último que se pronosticó. Por eso decimos "en vivo
+con un día de retraso", no "tiempo real".» El resto del recorrido usa días fijos y no cambia.
 
 **Lo que no hay que decir en la demo:**
 
@@ -393,17 +420,22 @@ aquí.**
   extraordinario desde agosto y seguiría así hasta febrero de 2027 (Comunicado N.° 20-2026, 13-nov). ICEN 4.50 en
   setiembre; Niño 1+2 en +5.4 °C al 11-nov. Noviembre es su pico, no su arranque. Y el sesgo del Centro no es «un
   régimen Niño»: lo nuevo es que Lima cruzó los 23-24 °C de media desde fines de octubre (§5.8, punto 5).
+- La fase de El Niño del día de repaso a partir del chip «El Niño costero: extraordinario»: el chip muestra el último
+  ICEN publicado, no el de ese día (en agosto sí era extraordinario; en marzo, no).
 - El control «Falla en curso» de los escenarios: la variable de fallas no se pudo evaluar (auditoría, G2).
 
-**Plan B (si la app falla):**
+**Plan B (si falla la app o la conexión de quien comparte):**
 
 - **Regla:** si en 20 segundos la app no carga, sale un error o aparece el chip «Datos de prueba», no se arregla en
   vivo.
-- **Frase:** «La app corre en una máquina del grupo. Para no perder tiempo, les muestro las capturas que tomamos con
-  el mismo recorrido.»
-- Pasar a R1 («Ahora»), R2 (escenarios) y R3 («Confianza») y decir el mismo texto de la tabla. Dura lo mismo.
-- Si se cae la conexión del Expositor 5: el Expositor 3 comparte el PDF y sigue desde donde se quedó.
-- Al final, ofrecer: «Si desean, en la defensa la mostramos en vivo».
+- **Si falla la app local y el Expositor 5 sigue conectado:** pasa a la pestaña de **https://curva.rosewt.dev** (ya
+  despierta) y sigue el mismo recorrido. Si esa tampoco responde: «Para no perder tiempo, les muestro las capturas que
+  tomamos con el mismo recorrido.» Comparte `docs/demo/plan-b-capturas.pdf` (una página por paso, también son R1-R3) y dice el
+  mismo texto de la tabla. Dura lo mismo.
+- **Si se cae la conexión o la laptop del Expositor 5:** el **Expositor 3** dice «Sigo yo», comparte su pestaña de
+  https://curva.rosewt.dev o, si no responde, el PDF (o el video
+  `docs/demo/recorrido-demo.mp4`, 2:15, sin audio) y dice las frases desde el paso en que se cortó.
+- Al final, ofrecer: «Si desean, en las preguntas la mostramos en vivo».
 
 ### 18:40–20:00 · Diapositiva 12 · Expositor 1
 
@@ -431,11 +463,14 @@ lección 1; límites: §6.4, puntos 1 y 8.
 
 ## Checklist del día
 
-- Los cinco conectados 15 minutos antes, con micrófono probado (y cámara, si la piden).
-- El Expositor 5 comparte pantalla: presentación y app abiertas, la app en «Ahora» (Centro) con la corrida de la
-  mañana hecha (la cabecera dice «datos del COES al [ayer]») y las rutas del recorrido en pestañas aparte.
-- La cifra de cobertura en vivo de «Confianza» se lee de la pantalla ese día: cambia cada mañana.
-- El Expositor 3 tiene el PDF con las capturas de respaldo.
+- Los cinco conectados a Collaborate 15 minutos antes, con micrófono y cámara probados. El Expositor 5 y el
+  Expositor 3 comprueban que pueden compartir pantalla.
+- El Expositor 5 corrió `docs/demo/demo.sh` 30 minutos antes (todo en OK) y sigue la lista de verificación del kit
+  (`docs/demo/README.md`): presentación y app abiertas, Chrome al 150 %, las dos pestañas del recorrido, y la cabecera
+  de «Ahora» dice «datos del COES al [ayer]».
+- La cifra de cobertura en vivo de «Confianza» se lee de la pantalla ese día: cambia cada mañana (`demo.sh` la
+  imprime).
+- El Expositor 3 tiene el PDF de la presentación, `docs/demo/plan-b-capturas.pdf` y `docs/demo/recorrido-demo.mp4`.
 - Una persona (por ejemplo, el Expositor 2, que termina temprano) lleva el tiempo y avisa por el chat del grupo si
   a los 10:30 todavía no empezó el Expositor 4.
 - Si el paper cambió, revisar las cifras de las diapositivas 8, 9 y 10 contra la versión final.
