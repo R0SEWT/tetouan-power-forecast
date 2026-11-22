@@ -21,6 +21,8 @@ tetouan = "tetouan_power_forecast.medallon:main"
 [project.optional-dependencies]
 dev = ["pytest>=8.0", "ruff>=0.4", "jupyterlab>=4.0"]
 app = ["fastapi>=0.115", "uvicorn>=0.30", "httpx>=0.27", "holidays>=0.50"]
+# El contenedor de despliegue (Hugging Face Spaces) baja los datos de un dataset del Hub: ver despliegue/README.md
+despliegue = ["huggingface_hub>=1.33,<2"]
 
 [build-system]
 requires = ["hatchling"]
