@@ -55,4 +55,6 @@ Antes, todos los gráficos de los notebooks del SEIN (01 a 04) y del 02 de Tetu�
   una variable que diga si el día anterior fue domingo o feriado (el peor error de 2026 es un feriado en lunes) y un
   control de saltos aislados por área en la validación del anexo (el traspaso del 4 de agosto pasa la validación
   actual).
-- El Entregable 8 todavía no está publicado en el Aula; la sección 8 del notebook 05 está pensada para él.
+- El Entregable 8 (explicabilidad, privacidad y seguridad) está en `entregables/Entregable8_MDS_Grupo03.ipynb`, con
+  su PDF: parte del notebook 05 y suma la importancia por permutación lado a lado, LIME como contraste del peor
+  error, la búsqueda de datos personales en los eventos del COES y los riesgos del despliegue público.

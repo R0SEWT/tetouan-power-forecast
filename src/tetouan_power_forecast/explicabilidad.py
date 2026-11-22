@@ -29,6 +29,47 @@ FAMILIAS = {
 }
 FAMILIAS_M0 = ("Demanda reciente", "Calendario", "Código de área")
 
+# El nombre de cada variable en palabras de quien programa la operación, para los gráficos que lee el negocio
+# (Entregable 8). Las de demanda van en razón: divididas por la media de las últimas 24 h del área. «Hora objetivo»
+# es t+H, la hora que se pronostica.
+NOMBRES_LLANOS = {
+    "Area_t": "Demanda ahora (÷ media 24 h)",
+    "Area_t_menos_1": "Demanda hace 30 min (÷ media 24 h)",
+    "Area_t_menos_2": "Demanda hace 1 h (÷ media 24 h)",
+    "Area_t_menos_4": "Demanda hace 2 h (÷ media 24 h)",
+    "Area_ayer": "Demanda 24 h antes de la hora objetivo (÷ media 24 h)",
+    "Area_semana_pasada": "Demanda 7 días antes de la hora objetivo (÷ media 24 h)",
+    "Area_media_1h": "Media de la última hora (÷ media 24 h)",
+    "Area_desv_1h": "Variación en la última hora (÷ media 24 h)",
+    "Area_m24_vs_m7d": "Último día frente a la semana (media 24 h ÷ media 7 días)",
+    "Hour": "Hora del día (ahora)",
+    "MinuteOfDay": "Minuto del día (ahora)",
+    "DayOfWeek": "Día de la semana (ahora)",
+    "Time_Sin": "Hora del día (ahora, seno)",
+    "Time_Cos": "Hora del día (ahora, coseno)",
+    "Week_Sin": "Día de la semana (ahora, seno)",
+    "Week_Cos": "Día de la semana (ahora, coseno)",
+    "Obj_Sin": "Hora objetivo (seno)",
+    "Obj_Cos": "Hora objetivo (coseno)",
+    "DiaSemanaObjetivo": "Día de la semana objetivo",
+    "FinDeSemanaObjetivo": "Fin de semana objetivo",
+    "FeriadoObjetivo": "Feriado el día objetivo",
+    "Cuarentena": "Cuarentena de 2020",
+    "area_cod": "Área (código)",
+    "temp": "Temperatura ahora",
+    "temp_media_24h": "Temperatura media de 24 h",
+    "temp_anomalia": "Anomalía de temperatura (frente a lo normal)",
+    "temp_objetivo": "Temperatura pronosticada a la hora objetivo",
+    "icen": "ICEN (El Niño costero)",
+    "nino12_ssta": "Anomalía del mar en Niño 1+2",
+    "fallas_en_curso": "Fallas en curso en la red",
+}
+
+
+def llano(columna: str) -> str:
+    """El nombre llano de una variable (el de la columna si no tiene uno)."""
+    return NOMBRES_LLANOS.get(columna, columna)
+
 
 def familia_de(columna: str) -> str:
     for familia, columnas in FAMILIAS.items():
