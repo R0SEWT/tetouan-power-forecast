@@ -349,8 +349,9 @@ solo muestre resultados precalculados.
 
 *Respaldo:* §4.6, §5.6 y §6.3; README, «Qué es»; rúbrica, criterio VI (`tb1-final-requisitos.md`, sección (b)).
 *Ojo:* los intervalos del XGBoost salen de los errores de 2025 (auditoría, M4): decir «intervalos empíricos, de los
-errores de 2025». Los del combinado y los del registro en vivo son los cuantiles 10 y 90 de Chronos-2 (rango del
-80 %).
+errores de 2025». Los del combinado también: cuantiles 5 y 95 del error de la mezcla en 2025 (rango del 90 %; en
+2026, a 24 h, cubrió 91.1 / 89.6 / 91.8 % en Centro / Norte / Sur). Los del registro en vivo son los cuantiles 10 y
+90 de Chronos-2 (rango del 80 %).
 
 **25. ¿Cómo queda su modelo frente a los modelos fundacionales, como TimesFM o Chronos-2?**
 

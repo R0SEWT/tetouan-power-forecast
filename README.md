@@ -71,8 +71,10 @@ app/levantar.sh
 ```
 
 `app/levantar.sh` usa el modelo real si encuentra los datos y, si no, el de prueba. La API también sirve la web en
-http://localhost:8000/. Con Docker: `docker build -t curva .` y `docker run --rm -p 8000:8000 curva` (con el modelo
-real, montando los datos: ver el [`Dockerfile`](Dockerfile); todavía sin probar de punta a punta).
+http://localhost:8000/. Con Docker: `docker build -t curva .` y `docker run --rm -p 7860:7860 curva` (con el modelo
+real, montando los datos o bajándolos de un dataset del Hub: ver el [`Dockerfile`](Dockerfile)). Para publicarla en
+Hugging Face Spaces (un dataset privado con el paquete de datos de 68 MB y un Space Docker), ver
+[`despliegue/README.md`](despliegue/README.md).
 
 <p align="right">(<a href="#inicio">volver arriba</a>)</p>
 
@@ -84,7 +86,7 @@ real, montando los datos: ver el [`Dockerfile`](Dockerfile); todavía sin probar
 |---|---|---|
 | **El modelo de la app, prueba de 2026, a 24 h** | Error medio de **71.9 MW** en el Centro (27.9 en el Norte y 44.6 en el Sur); el Random Forest, 78.1 MW en el Centro | [`docs/app-hcd.md`](docs/app-hcd.md), iteración 4; [notebook 04](notebooks/04_sein_modelos_fundacionales.ipynb) |
 | **Frente a la mejor referencia ingenua, 2026, a 1 h** | Le gana en las tres áreas: **52 %** menos error en el Norte, **58 %** en el Centro y **29 %** en el Sur | [notebook 03](notebooks/03_sein_prueba_2026.ipynb) |
-| **¿El rango cumple lo que promete?** | Prueba de 2026, a 24 h: el rango del 90 % cubrió el **91.1 / 89.6 / 91.8 %** (Centro / Norte / Sur). En vivo, desde el 23 de octubre, el del 80 % cubrió **73.2 %** en el Centro y **74.3 %** en el Norte: queda corto, y la app lo dice | [`docs/app-hcd.md`](docs/app-hcd.md), iteraciones 4 y 8 |
+| **¿El rango cumple lo que promete?** | Prueba de 2026, a 24 h: el rango del 90 % cubrió el **91.1 / 89.6 / 91.8 %** (Centro / Norte / Sur). En el tramo reconstruido (23 de octubre → 12 de noviembre), el del 80 % cubrió **73.2 %** en el Centro y **74.3 %** en el Norte: queda corto, y la app lo dice. Reconstruido es calculado después de conocerse el real, con los datos que habría tenido ese día; en vivo, desde el 13 de noviembre, cada pronóstico se emite antes de que exista su real | [`docs/app-hcd.md`](docs/app-hcd.md), iteraciones 4 y 8 |
 | **Validación externa, Ceuta** | Sin haber visto un verano: **2.31 %** de MAPE frente a **4.62 %** de la mejor referencia | [`docs/historico.md`](docs/historico.md) |
 | **Usabilidad medida** | Fijar otra hora y otro día (T1): **15 → 6 acciones**; peso de «Ahora» **78 → 44 KB**; 0 infracciones de axe | [`docs/auditoria/plan.md`](docs/auditoria/plan.md) |
 

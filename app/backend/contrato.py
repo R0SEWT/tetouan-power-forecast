@@ -42,6 +42,8 @@ class Salud(BaseModel):
     estado: Literal["ok"] = "ok"
     modelo: str
     version_datos: str
+    aviso: str | None = Field(default=None, description="Algo que la web debe mostrar, como que se usan datos de "
+                              "prueba porque no se pudieron bajar los reales")
 
 
 class ModeloDisponible(BaseModel):
