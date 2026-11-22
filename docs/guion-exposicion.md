@@ -371,13 +371,16 @@ minuto): **2:13**, con 47 segundos de margen (`docs/demo/cronometro.json`). Se e
    la pantalla compartida.
 5. El Expositor 3 tiene descargados el PDF de capturas y el video del recorrido (`docs/demo/plan-b-capturas.pdf` y
    `docs/demo/recorrido-demo.mp4`) y puede compartir pantalla en Collaborate: es el respaldo.
+6. El Expositor 5 y el Expositor 3 abren unos minutos antes la app publicada,
+   **https://curva.rosewt.dev/#/ahora/centro?fecha=2026-08-27&hora=19:00**, y la dejan abierta: es la misma app, con
+   las mismas cifras, y si estaba dormida tarda unos 22 segundos en despertar.
 
 **El recorrido, minuto a minuto** (días fijos, que no dependen de la fecha en que se expone: el principal, Centro,
 jueves 27 de agosto de 2026, 19:00; el respaldo, martes 10 de marzo de 2026, 19:00):
 
 | Tiempo | Dónde | Qué decir |
 |---|---|---|
-| 15:40–16:05 | **«Ahora», hoy**, Centro (pestaña 1): `http://localhost:8080/#/ahora/centro`. Al final, bajar hasta «Lo que dijimos para ayer a esta hora». | «Esta es Curva: corre nuestros modelos sobre la demanda que publica el COES. Lo real llega hasta ayer, porque el COES publica cada día a la mañana siguiente; desde la línea punteada todo es pronóstico, emitido hoy antes de conocer el real. [bajar] Aquí, lo que dijimos para ayer a esta hora y lo que pasó.» |
+| 15:40–16:05 | **«Ahora», hoy**, Centro (pestaña 1): `http://localhost:8080/#/ahora/centro`. Al final, bajar hasta «Lo que dijimos para ayer a esta hora» (sin dato nuevo se llama «Lo que se dijo un día antes»). | «Esta es Curva: corre nuestros modelos sobre la demanda que publica el COES. Lo real llega hasta ayer, porque el COES publica cada día a la mañana siguiente; desde la línea punteada todo es pronóstico, emitido hoy antes de conocer el real. [bajar] Aquí, lo que dijimos para ayer a esta hora y lo que pasó.» |
 | 16:05–16:41 | **Un día de El Niño** (pestaña 2): `http://localhost:8080/#/ahora/centro?fecha=2026-08-27&hora=19:00`. Tocar en el gráfico el punto del pico («Pico 5,007 · 15:00»); después, un clic en el título «¿Acertamos…?». | «Ahora, un día de la prueba: el 27 de agosto de 2026, el mes en que el ICEN llegó a 3.98. El modelo no vio 2026 al entrenarse. Un día antes pronosticó 4,810 megavatios para las 19:00; fue 4,772, dentro del rango. [tocar el pico] Toco el pico: para las 15:00 del día siguiente dijo 5,007 y fue 5,027.» |
 | 16:41–17:09 | Enlace **«¿Y si hace más calor?»** (abre «Detalle» en ese momento, sección «¿Y si…?»). Elegir **+2 °C** y bajar hasta la frase «Si hiciera 2 °C más…». | «¿Y si mañana hace dos grados más? Lo calcula el XGBoost, el único modelo que usa el clima. [+2 °C] El pico sube 8 megavatios, 0.2 %: casi nada. Y en 2026 el clima empeoró el pronóstico a 24 horas: no conviene apoyarse en él en un evento extraordinario.» |
 | 17:09–17:48 | **«Confianza»**, en la cabecera (queda en el Centro, a 24 horas). Leer el titular y la tarjeta roja «En vivo, desde el 13 nov». | «Aquí la app dice cuánto acertó: en 2026 le ganó a la referencia los diez meses, con 71.9 megavatios de error a 24 horas, 47 % menos, y su rango del 90 % cubrió el 91 %. Y lo honesto: en vivo, desde el 13 de noviembre, el rango del 80 % cubre el [leer la cifra roja] %: queda corto y lo mostramos en rojo. Es seguimiento en curso, no un resultado.» |
@@ -425,10 +428,12 @@ con un día de retraso", no "tiempo real".» El resto del recorrido usa días fi
 
 - **Regla:** si en 20 segundos la app no carga, sale un error o aparece el chip «Datos de prueba», no se arregla en
   vivo.
-- **Si falla la app y el Expositor 5 sigue conectado:** «Para no perder tiempo, les muestro las capturas que tomamos
-  con el mismo recorrido.» Comparte `docs/demo/plan-b-capturas.pdf` (una página por paso, también son R1-R3) y dice el
+- **Si falla la app local y el Expositor 5 sigue conectado:** pasa a la pestaña de **https://curva.rosewt.dev** (ya
+  despierta) y sigue el mismo recorrido. Si esa tampoco responde: «Para no perder tiempo, les muestro las capturas que
+  tomamos con el mismo recorrido.» Comparte `docs/demo/plan-b-capturas.pdf` (una página por paso, también son R1-R3) y dice el
   mismo texto de la tabla. Dura lo mismo.
-- **Si se cae la conexión o la laptop del Expositor 5:** el **Expositor 3** dice «Sigo yo», comparte el PDF (o el video
+- **Si se cae la conexión o la laptop del Expositor 5:** el **Expositor 3** dice «Sigo yo», comparte su pestaña de
+  https://curva.rosewt.dev o, si no responde, el PDF (o el video
   `docs/demo/recorrido-demo.mp4`, 2:15, sin audio) y dice las frases desde el paso en que se cortó.
 - Al final, ofrecer: «Si desean, en las preguntas la mostramos en vivo».
 

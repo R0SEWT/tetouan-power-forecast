@@ -8,7 +8,7 @@ del guion ([`docs/guion-exposicion.md`](../guion-exposicion.md)) y se hace **com
 | Quién | Qué hace en la demo |
 |---|---|
 | **Expositor 5** | Levanta la app en su laptop, comparte pantalla y dice las frases. |
-| **Expositor 3 (respaldo)** | Tiene descargados el PDF de capturas y el video. Si se cae la conexión del Expositor 5, comparte él y dice las mismas frases. |
+| **Expositor 3 (respaldo)** | Tiene abierta la app publicada (https://curva.rosewt.dev) y descargados el PDF de capturas y el video. Si se cae la conexión del Expositor 5, comparte él y dice las mismas frases. |
 | **Expositor 2** | Lleva el tiempo y avisa por el chat del grupo. |
 
 Lo medido: el recorrido completo dura **2:13** con un expositor simulado que lee a 140 palabras por minuto (cifras
@@ -41,7 +41,10 @@ en [`cronometro.json`](cronometro.json)). Quedan 47 segundos de margen para los 
 4. **Collaborate.** Entren a la sala de prueba y comprueben que **el Expositor 5 y el Expositor 3 pueden compartir
    pantalla** (hace falta el rol de presentador; si no lo tienen, pedirlo a la profesora al entrar). Compartan la
    ventana de Chrome y pidan a otro que diga si lee la leyenda del gráfico.
-5. **El respaldo.** El Expositor 3 descarga `plan-b-capturas.pdf` y `recorrido-demo.mp4` y ensaya las frases.
+5. **El respaldo.** El Expositor 3 descarga `plan-b-capturas.pdf` y `recorrido-demo.mp4`, ensaya las frases y prueba
+   el recorrido en **la app publicada, https://curva.rosewt.dev** (la misma app, sin instalar nada; las URL del recorrido
+   valen cambiando `http://localhost:8080` por `https://curva.rosewt.dev`). Se comprobó que da las mismas cifras:
+   `python3 docs/demo/verificar.py --api https://curva.rosewt.dev`.
 6. **En vivo.** El registro en vivo solo se actualiza en la máquina donde corre la corrida diaria (la del dueño) y en
    su copia del Drive. Si la demo se hace desde otra laptop, el día de la exposición hay que traer la copia del día
    (`demo.sh --descargar`); si no, el paso 1 se verá con días de atraso (ver «Si no hay dato nuevo»).
@@ -63,6 +66,9 @@ en [`cronometro.json`](cronometro.json)). Quedan 47 segundos de margen para los 
       nuevo», abajo.
 - [ ] La presentación abierta en otra ventana, lista en la diapositiva 11.
 - [ ] Expositor 3: PDF y video abiertos (el video en una pestaña de Chrome, pausado en 0:00).
+- [ ] Expositor 5 y Expositor 3: abrir **https://curva.rosewt.dev/#/ahora/centro?fecha=2026-08-27&hora=19:00** en una
+      pestaña aparte y dejarla abierta. Si nadie la usó en un rato, el servidor está dormido y tarda unos 22 segundos en
+      despertar («Despertando el servidor…»): por eso se abre ahora y no en medio de la demo.
 - [ ] Expositor 2: cronómetro listo; avisa si a las 17:50 no empezó el paso 4.
 
 ## El recorrido
@@ -72,7 +78,7 @@ tiempos son los medidos; en la exposición, el paso 1 empieza a las 15:40.
 
 | Paso | Tiempo (exposición) | Dónde | Qué hacer |
 |---|---|---|---|
-| 1. Hoy, en vivo | 0:00–0:25 (15:40–16:05) | Pestaña 1: `http://localhost:8080/#/ahora/centro` | Al final, bajar con la rueda hasta «Lo que dijimos para ayer a esta hora» |
+| 1. Hoy, en vivo | 0:00–0:25 (15:40–16:05) | Pestaña 1: `http://localhost:8080/#/ahora/centro` | Al final, bajar con la rueda hasta «Lo que dijimos para ayer a esta hora» (sin dato nuevo se llama «Lo que se dijo un día antes») |
 | 2. Un día de El Niño | 0:25–1:01 (16:05–16:41) | Pestaña 2: `http://localhost:8080/#/ahora/centro?fecha=2026-08-27&hora=19:00` | Tocar en el gráfico el punto del pico («Pico 5,007 · 15:00», a la derecha). Después, un clic en el título «¿Acertamos…?» |
 | 3. ¿Y si hace más calor? | 1:01–1:29 (16:41–17:09) | Desde el paso 2 | Clic en el enlace azul «¿Y si hace más calor?»; luego en «+2 °C»; bajar un poco hasta la frase «Si hiciera 2 °C más…» |
 | 4. Confianza | 1:29–2:08 (17:09–17:48) | Clic en «Confianza», en la cabecera | Leer el titular y la tarjeta roja «En vivo, desde el 13 nov» |
@@ -144,13 +150,17 @@ sintéticas», no se arregla en vivo.
 
 | Qué falla | Qué se hace |
 |---|---|
-| La app no arranca o falla, pero el Expositor 5 sigue conectado | Dice: «Para no perder tiempo, les muestro las capturas del mismo recorrido». Comparte `plan-b-capturas.pdf` (página por paso) y dice las mismas frases. |
-| Se cae la conexión o la laptop del Expositor 5 | El Expositor 3 dice «Sigo yo», comparte el PDF (o el video) y dice las frases desde el paso en que se cortó. |
+| La app local no arranca o falla, pero el Expositor 5 sigue conectado | Pasa a la pestaña de **https://curva.rosewt.dev** (ya abierta y despierta) y sigue el mismo recorrido: las mismas cifras. Si esa tampoco responde: «Para no perder tiempo, les muestro las capturas del mismo recorrido», comparte `plan-b-capturas.pdf` (página por paso) y dice las mismas frases. |
+| Se cae la conexión o la laptop del Expositor 5 | El Expositor 3 dice «Sigo yo», comparte su pestaña de https://curva.rosewt.dev (o, si no responde, el PDF o el video) y dice las frases desde el paso en que se cortó. |
 | Falla internet, pero no la app | La app corre en la laptop y no necesita internet; lo que se cae es Collaborate: pasa al Expositor 3. |
 | La pantalla compartida se ve chica o borrosa | Subir el zoom de Chrome (Ctrl y +). Compartir la ventana de Chrome, no toda la pantalla. Si alguien cambió la resolución o conectó otro monitor, Ctrl y 0 y volver a subir hasta que la cabecera entre en una fila. |
-| `demo.sh` dice FALLA en las cifras | Si dice «prueba» o falta el combinado: plan B con el PDF. Si solo cambió «¿Y si…?», se dice la cifra de la pantalla. |
+| `demo.sh` dice FALLA en las cifras | Si dice «prueba» o falta el combinado: la app publicada o el PDF. Si es «¿Y si…?» (cambiaron los modelos), antes de exponer se cambia la frase por la cifra que da la app. |
 | Los puertos 8000 u 8080 están ocupados | `demo.sh` usa otros sin cerrar nada y lo avisa; usa las URL que imprime (llevan `?api=`). |
 
+- **La app publicada** (https://curva.rosewt.dev) es la misma app en internet, con las mismas cifras del recorrido. Su
+  registro en vivo se actualiza aparte y puede ir atrasado (el 22 de noviembre llegaba al 20): en el paso 1, di la fecha
+  que muestra la pantalla. Despierta en unos 22 segundos si estaba dormida; ya despierta, el recorrido completo tardó
+  2:19 (medido el 22 de noviembre).
 - **El PDF** ([`plan-b-capturas.pdf`](plan-b-capturas.pdf)) es lo más seguro: lo avanza quien habla. Páginas: 1 hoy,
   2 «lo que dijimos», 3 el 27 de agosto, 4 el pico, 5 «+2 °C», 6 «Confianza», 7 el seguimiento en vivo, 8 la corrida
   diaria (extra). En Collaborate se puede compartir la ventana del lector de PDF o, si la sala lo permite, subirlo con
