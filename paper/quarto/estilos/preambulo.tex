@@ -17,6 +17,15 @@
 \captionsetup{font=footnotesize,labelsep=period}
 \captionsetup[table]{labelformat=mayusculas,labelsep=newline,justification=centering,textfont=sc}
 
+% Nueva fila de autores en IEEEtran (estilos/autores.lua la pone cada tres autores y antes de la afiliación).
+\makeatletter
+\newcommand{\linebreakand}{%
+  \end{@IEEEauthorhalign}
+  \hfill\mbox{}\par
+  \mbox{}\hfill\begin{@IEEEauthorhalign}
+}
+\makeatother
+
 % El resumen del paper es el «Resumen ejecutivo» que pide el enunciado (babel lo llamaría «Resumen»).
 \AtBeginDocument{\renewcommand{\abstractname}{Resumen ejecutivo}}
 

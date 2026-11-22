@@ -1,7 +1,7 @@
 # Configuración del short paper: el contenido vive en short-paper.qmd; aquí solo va el formato.
 # PDF: IEEE de conferencia (IEEEtran, dos columnas, Times, referencias IEEE). No hay una extensión de Quarto
 # mantenida para IEEE, así que va con la clase y tres piezas propias en estilos/: el bloque de autores
-# (title.tex), el preámbulo y un filtro que convierte las tablas en flotantes (tablas.lua). Ver README.md.
+# (title.tex y autores.lua), el preámbulo y un filtro que convierte las tablas en flotantes (tablas.lua). Ver README.md.
 
 project:
   type: default
@@ -22,6 +22,7 @@ format:
       - estilos/title.tex
     include-in-header: estilos/preambulo.tex
     filters:
+      - estilos/autores.lua
       - estilos/tablas.lua
     tablas-entorno: "table*"
     default-image-extension: pdf

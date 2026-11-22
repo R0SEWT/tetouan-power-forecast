@@ -4,7 +4,7 @@
 |---|---|
 | `short-paper.qmd` | El paper: el texto, las tablas, las citas y el resumen ejecutivo (en el YAML, como `abstract`). Los **autores** se completan solo aquí, en el YAML del inicio |
 | `_quarto.yml` | El formato: IEEE de conferencia (IEEEtran, dos columnas, Times) para el PDF y una vista previa en HTML |
-| `estilos/` | Lo propio de IEEE: el bloque de autores (`title.tex`), el preámbulo (`preambulo.tex`), el filtro que convierte las tablas en flotantes a lo ancho de la página (`tablas.lua`) y el CSL oficial de las referencias (`ieee.csl`) |
+| `estilos/` | Lo propio de IEEE: el bloque de autores (`title.tex` y `autores.lua`: un bloque por autor en filas de tres y la afiliación común debajo), el preámbulo (`preambulo.tex`), el filtro que convierte las tablas en flotantes a lo ancho de la página (`tablas.lua`) y el CSL oficial de las referencias (`ieee.csl`) |
 | `referencias.bib` | La bibliografía. Cada DOI se resolvió en doi.org y cada URL se abrió el 22-nov-2026; las excepciones van comentadas en el archivo |
 | `figuras/` | Las cinco figuras, a una columna (8.9 cm), con letra de 8 pt y la paleta Okabe-Ito, en PDF (las del paper) y PNG (las de la vista previa). Las dibuja `figuras/generar.py` a partir de las tablas que ya escribieron los notebooks, sin recalcular ningún modelo |
 
