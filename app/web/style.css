@@ -630,6 +630,12 @@ a {
   font-size: 14px;
 }
 
+/* Un aviso del servidor (datos de prueba porque no se pudieron bajar los reales): informa, no es un error */
+.banner-aviso {
+  border-color: var(--axis);
+  background: var(--surface-2);
+}
+
 /* ---- Pantallas de producto ---- */
 /* Mientras baja «Confianza» o «Detalle» (la primera vez): la pantalla de la que se viene se atenúa y una línea
    avanza bajo la cabecera. Con movimiento reducido, la línea aparece quieta. */

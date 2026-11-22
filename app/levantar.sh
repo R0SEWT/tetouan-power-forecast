@@ -20,7 +20,9 @@ uv run --no-sync --with fastapi --with uvicorn uvicorn app.backend.web:app --por
 web=$!
 trap 'kill $api $web 2>/dev/null' EXIT INT TERM
 url="http://localhost:${PUERTO_WEB:-8080}"
-# La web busca la API en :8000; si el puerto es otro, se le pasa con ?api=URL.
-if [[ "${PUERTO_API:-8000}" != 8000 ]]; then url+="/?api=http://localhost:$PUERTO_API"; fi
+# Servida en :8080, la web busca la API en :8000; con otros puertos se le pasa con ?api=URL.
+if [[ "${PUERTO_API:-8000}" != 8000 || "${PUERTO_WEB:-8080}" != 8080 ]]; then
+  url+="/?api=http://localhost:${PUERTO_API:-8000}"
+fi
 echo "Abre $url"
 wait

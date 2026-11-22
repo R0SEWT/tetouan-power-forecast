@@ -71,8 +71,10 @@ app/levantar.sh
 ```
 
 `app/levantar.sh` usa el modelo real si encuentra los datos y, si no, el de prueba. La API también sirve la web en
-http://localhost:8000/. Con Docker: `docker build -t curva .` y `docker run --rm -p 8000:8000 curva` (con el modelo
-real, montando los datos: ver el [`Dockerfile`](Dockerfile); todavía sin probar de punta a punta).
+http://localhost:8000/. Con Docker: `docker build -t curva .` y `docker run --rm -p 7860:7860 curva` (con el modelo
+real, montando los datos o bajándolos de un dataset del Hub: ver el [`Dockerfile`](Dockerfile)). Para publicarla en
+Hugging Face Spaces (un dataset privado con el paquete de datos de 68 MB y un Space Docker), ver
+[`despliegue/README.md`](despliegue/README.md).
 
 <p align="right">(<a href="#inicio">volver arriba</a>)</p>
 
