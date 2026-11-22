@@ -5,7 +5,7 @@
 | `short-paper.qmd` | El contenido completo de `../short-paper.md`, con secciones numeradas por Quarto, referencias cruzadas a tablas y figuras y citas a `referencias.bib`. Los **autores** se completan solo aquí, en el YAML del inicio |
 | `_quarto.yml` | Lo común a todos los formatos y la vista previa en HTML |
 | `_quarto-<perfil>.yml` | Un estilo por perfil, solo formato: `generico` (artículo A4, el de por defecto), `ieee` (IEEEtran de conferencia, dos columnas), `lncs` (Springer LNCS, una columna) y `elsevier` (elsarticle en modo preprint, una columna) |
-| `estilos/` | Lo propio de cada estilo: los CSL oficiales de las referencias (`csl/`), el bloque de autores de IEEE y LNCS, el filtro de tablas a dos columnas de IEEE y el preámbulo común |
+| `estilos/` | Lo propio de cada estilo: los CSL oficiales de las referencias (`csl/`), el bloque de autores de IEEE y LNCS, los preámbulos y el filtro común que convierte las tablas en flotantes (a lo ancho de la página en IEEE) |
 | `_extensions/` | La extensión `quarto-journals/elsevier` (la única de los tres estilos con una extensión de Quarto mantenida) |
 | `referencias.bib` | La bibliografía en BibTeX. Cada DOI se resolvió en doi.org y cada URL se abrió el 22-nov-2026; las excepciones van comentadas en el archivo |
 | `figuras/` | Copia de `../figuras/fig1` a `fig5`, exportadas tal cual de los notebooks (ver `../README.md`) |

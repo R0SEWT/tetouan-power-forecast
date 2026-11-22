@@ -1,15 +1,20 @@
-# Springer LNCS: llncs a una columna, referencias con el CSL de LNCS (equivalente a splncs04).
+# Springer LNCS: llncs a una columna, referencias con el CSL de LNCS (el equivalente de splncs04).
 # No hay una extensión de Quarto mantenida para LNCS, así que va con la clase y el bloque de autores propio
 # de estilos/lncs/title.tex.
 csl: estilos/csl/springer-lecture-notes-in-computer-science.csl
 format:
   pdf:
     documentclass: llncs
+    papersize: a4
     pdf-engine: pdflatex
     template-partials:
       - estilos/lncs/title.tex
     include-in-header:
       - estilos/comun/preambulo.tex
+      - estilos/lncs/preambulo.tex
+    filters:
+      - estilos/comun/tablas.lua
+    tablas-letra: small
     fig-pos: tbp
     fig-cap-location: bottom
     tbl-cap-location: top

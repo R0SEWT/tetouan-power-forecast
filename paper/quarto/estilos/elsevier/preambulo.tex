@@ -1,0 +1,11 @@
+% Las citas de citeproc (pandoc) pasan por \cite, que natbib (lo carga elsarticle) reinterpreta y deja como
+% «[1code]»: aquí se imprime solo el número, con su enlace a la entrada de la bibliografía.
+\usepackage{booktabs,array}
+\RenewDocumentCommand\citeproc{mm}{\hyperlink{cite.#1}{#2}}
+% Portada de elsarticle en español; ningún autor figura como autor de contacto, así que no va esa nota.
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd{\printFirstPageNotes}{Email address:}{Correo:}{}{}
+\patchcmd{\printFirstPageNotes}{Email addresses:}{Correos:}{}{}
+\def\cortext[#1]#2{}
+\makeatother

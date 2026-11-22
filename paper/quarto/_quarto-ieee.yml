@@ -1,7 +1,7 @@
 # IEEE de conferencia: IEEEtran a dos columnas, Times, referencias IEEE numéricas (CSL oficial del IEEE).
 # No hay una extensión de Quarto mantenida para IEEE (las que existen no se actualizan desde 2023-2025 y no
-# resuelven las tablas a dos columnas), así que va con la clase y dos piezas propias en estilos/ieee/:
-# el bloque de autores (title.tex) y un filtro que pasa las tablas a tabular a lo ancho de la página.
+# resuelven las tablas a dos columnas), así que va con la clase y un bloque de autores propio
+# (estilos/ieee/title.tex). Tablas y figuras a lo ancho de la página.
 csl: estilos/csl/ieee.csl
 format:
   pdf:
@@ -15,7 +15,9 @@ format:
       - estilos/comun/preambulo.tex
       - estilos/ieee/preambulo.tex
     filters:
-      - estilos/ieee/tablas.lua
+      - estilos/comun/tablas.lua
+    tablas-entorno: "table*"
+    tablas-letra: footnotesize
     fig-env: figure*
     fig-pos: tp
     fig-cap-location: bottom
