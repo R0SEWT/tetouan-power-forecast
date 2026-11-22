@@ -15,7 +15,6 @@ format:
       - estilos/elsevier/preambulo.tex
     filters:
       - estilos/comun/tablas.lua
-    tablas-letra: small
     fig-pos: tbp
     fig-cap-location: bottom
     tbl-cap-location: top

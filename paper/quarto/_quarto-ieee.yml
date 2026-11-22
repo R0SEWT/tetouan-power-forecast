@@ -17,7 +17,6 @@ format:
     filters:
       - estilos/comun/tablas.lua
     tablas-entorno: "table*"
-    tablas-letra: footnotesize
     fig-env: figure*
     fig-pos: tp
     fig-cap-location: bottom

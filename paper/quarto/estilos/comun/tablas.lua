@@ -6,7 +6,7 @@
 -- primera palabra de cada celda. Quarto pone el título y la etiqueta, así que las referencias cruzadas siguen
 -- funcionando. Cada perfil elige, en su formato:
 --   tablas-entorno: table (por defecto) o table* (a lo ancho de la página, para dos columnas)
---   tablas-letra:   small (por defecto), footnotesize, etc.
+--   tablas-letra:   footnotesize (por defecto), small, etc.
 
 local function celda(cell)
   local latex = pandoc.write(pandoc.Pandoc(cell.contents), "latex")
@@ -56,7 +56,7 @@ local function anchos(tbl, atributo)
 end
 
 local entorno = "table"
-local letra = "small"
+local letra = "footnotesize"
 
 local function tabular(tbl, atributo)
   local w = anchos(tbl, atributo)
