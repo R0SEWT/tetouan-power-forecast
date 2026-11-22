@@ -890,6 +890,14 @@ de la importancia; la figura se exporta de esa versión.
   el Centro y 43.4 en el Sur; dentro del grupo mandan `Area_t` (23.0 / 119.5 / 22.7) y la media de la última hora
   (10.1 / 55.3 / 11.2), y después el calendario diario (`Time_Cos` y `MinuteOfDay`, unos 14-15 MW en el Centro).
   El clima suma 0.18 / 1.10 / 0.23 MW; El Niño, 0.02 / 0.04 / 0.02; las fallas, 0.00 / −0.01 / 0.00.[^imp25]
+- **Explicabilidad con SHAP (notebook 05).** Sobre el XGBoost de la app (M3), en una muestra de 2025 y 2026, los
+  valores SHAP pasados a MW confirman lo que dice la permutación con otro método y otro modelo: en 2026, a 1 hora, la
+  demanda reciente mueve el pronóstico 347 MW en el Centro y el calendario 93, frente a 6.6 del clima y 4.9 de El Niño;
+  a 24 horas mandan `Area_semana_pasada` y la hora del día. Las exógenas pesan más en 2026 que en 2025 sin mejorar el
+  error. Los tres casos locales muestran un pico del Centro acertado con 13 MW de error, el peor error de 2026 (776 MW,
+  el feriado del lunes 29 de junio, por restar el feriado sobre un punto de partida de fin de semana) y que en pleno
+  El Niño sus variables mueven el pronóstico del Norte menos de 20 MW. El notebook incluye la sección de privacidad y
+  seguridad del modelo del Entregable 8.
 
 ## 6.3 La app
 

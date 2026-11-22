@@ -431,6 +431,14 @@ como parámetros × 4 bytes (círculo vacío). -->
 El peso no ordena el error: el XGBoost de 20 MB empata con el Random Forest de 1 GB, y TiRex-2 pesa como el
 Chronos-2 ajustado y es el peor; el combinado, el mejor, es también el más pesado (1.7 GB).
 
+**Explicabilidad.** Con SHAP sobre el XGBoost de la app (notebook 05), la demanda reciente y el calendario explican
+casi todo el pronóstico: en 2026, a 1 hora, lo mueven 347 y 93 MW en el Centro, frente a menos de 7 MW del clima y de
+El Niño; a 24 horas mandan la semana pasada a la misma hora y la hora del día. Coincide con la importancia por
+permutación. El peor error de 2026 (776 MW) fue el feriado del lunes 29 de junio: el modelo restó 558 MW por el
+feriado sobre un punto de partida que ya era de fin de semana. El notebook cierra con la privacidad y la seguridad del
+modelo: sin datos personales, con un registro inmutable de pronósticos y la validación del anexo.
+<!-- notebooks/05_sein_explicabilidad.ipynb, secciones 3 y 7. -->
+
 ## 6.1 Limitaciones y amenazas a la validez
 
 1. **Un solo año y un solo evento en la prueba.** Los intervalos de 2026 miden la incertidumbre dentro de 2026; no
