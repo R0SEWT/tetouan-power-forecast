@@ -31,6 +31,47 @@ def test_las_reglas_de_netlify_cubren_todas_las_rutas_de_la_api():
     assert all(r.endswith("/{area}") for r in rutas if "{" in r)  # el comodín /* de Netlify cubre un solo segmento
 
 
+def rutas_de_la_api() -> tuple[set[str], set[str]]:
+    rutas = {r.path for r in crear_app(PronosticadorDePrueba(), web=None).routes
+             if getattr(r, "methods", None) and not r.path.startswith(("/docs", "/redoc", "/openapi"))}
+    return {r for r in rutas if "{" not in r}, {r.split("{")[0] for r in rutas if "{" in r}
+
+
+def test_robots_bloquea_todas_las_rutas_de_datos_y_deja_la_portada():
+    lineas = (RAIZ / "app" / "web" / "robots.txt").read_text().splitlines()
+    bloqueadas = {linea.split(":", 1)[1].strip() for linea in lineas if linea.startswith("Disallow:")}
+    exactas, prefijos = rutas_de_la_api()
+    assert bloqueadas == exactas | prefijos
+    assert "Allow: /" in lineas and "User-agent: *" in lineas
+    # los archivos de la web no quedan bloqueados (p. ej. /confianza.js frente a /confianza/)
+    web = {"/" + p.name for p in (RAIZ / "app" / "web").iterdir()}
+    assert not any(w.startswith(b) for w in web for b in bloqueadas)
+
+
+def test_las_respuestas_de_datos_se_cachean_en_netlify_y_los_errores_nunca():
+    from fastapi.testclient import TestClient
+
+    from app.backend.main import CACHE_CDN, CACHE_NAVEGADOR
+
+    c = TestClient(crear_app(PronosticadorDePrueba()))
+    exactas, prefijos = rutas_de_la_api()
+    for ruta in ["/salud", "/modelos", "/areas", "/resumen", "/ahora/centro", "/en-vivo/centro", "/diagnostico/centro",
+                 "/confianza/centro?horizonte=24h&variante=M3"]:
+        r = c.get(ruta)
+        assert r.status_code == 200, ruta
+        assert r.headers["cache-control"] == CACHE_NAVEGADOR == "public, max-age=60"
+        assert r.headers["netlify-cdn-cache-control"] == CACHE_CDN == "public, s-maxage=900"
+        # la clave de la caché: los parámetros que usa la API, y ningún otro
+        assert r.headers["netlify-vary"] == "query=ahora|fecha|horizonte|modelo|origen|variante"
+    # cubre todas las rutas GET de la API (las de área, por su prefijo)
+    assert {"/salud", "/modelos", "/areas", "/resumen"} <= exactas and "/ahora/" in prefijos
+    for r in (c.get("/series/atlantida?fecha=2026-01-01"), c.get("/confianza/centro?horizonte=3h"),
+              c.post("/pronostico", json={})):
+        assert r.status_code >= 400 and r.headers["cache-control"] == "no-store"
+        assert "netlify-cdn-cache-control" not in r.headers
+    assert "netlify-cdn-cache-control" not in c.get("/").headers  # la web estática: la sirve Netlify
+
+
 @pytest.mark.skipif(shutil.which("bash") is None, reason="hace falta bash")
 def test_el_dry_run_arma_la_web_y_las_reglas_sin_publicar():
     salida = subprocess.run(["bash", str(SCRIPT), "--dry-run"], capture_output=True, text=True, check=True).stdout
