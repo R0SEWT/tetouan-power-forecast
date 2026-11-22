@@ -1,0 +1,460 @@
+{
+  "etiqueta": "netlify-despertar",
+  "version": "it8",
+  "fecha": "2026-11-21T22:24:22.119Z",
+  "modelo": "Combinado: Chronos-2 ajustado + híbrido",
+  "caso": {
+    "area": "centro",
+    "fecha": "2026-03-10",
+    "hora": "19:00",
+    "idx": 38,
+    "horizonte": "24h",
+    "variante": "M3"
+  },
+  "tareas": {
+    "t1": {
+      "nombre": "Pronóstico de un área, horizonte y fecha, con intervalo y real",
+      "fichas": {
+        "pronostico": [
+          "4,767"
+        ],
+        "intervalo inferior": [
+          "4,588"
+        ],
+        "intervalo superior": [
+          "4,929"
+        ],
+        "real": [
+          "4,784"
+        ]
+      },
+      "escritorio": {
+        "cumplida": true,
+        "vistos": 4,
+        "total": 4,
+        "faltan": [],
+        "acciones": 15,
+        "clics": 0,
+        "escrituras": 2,
+        "pulsaciones": 13,
+        "desplazamientos": 0,
+        "segundos_robot": 1.15,
+        "segundos_klm": 7.1
+      },
+      "movil": {
+        "cumplida": true,
+        "vistos": 4,
+        "total": 4,
+        "faltan": [],
+        "acciones": 16,
+        "clics": 0,
+        "escrituras": 2,
+        "pulsaciones": 13,
+        "desplazamientos": 1,
+        "segundos_robot": 1.3,
+        "segundos_klm": 8.1
+      }
+    },
+    "t2": {
+      "nombre": "¿Se puede confiar? Error reciente frente a la referencia",
+      "fichas": {
+        "error del modelo": [
+          "31.1",
+          "31 MW"
+        ],
+        "comparación con la referencia": [
+          "65.9",
+          "35 MW",
+          "35 MW menos"
+        ]
+      },
+      "escritorio": {
+        "cumplida": true,
+        "vistos": 2,
+        "total": 2,
+        "faltan": [],
+        "acciones": 1,
+        "clics": 1,
+        "escrituras": 0,
+        "pulsaciones": 0,
+        "desplazamientos": 0,
+        "segundos_robot": 0.18,
+        "segundos_klm": 2.7
+      },
+      "movil": {
+        "cumplida": true,
+        "vistos": 2,
+        "total": 2,
+        "faltan": [],
+        "acciones": 1,
+        "clics": 1,
+        "escrituras": 0,
+        "pulsaciones": 0,
+        "desplazamientos": 0,
+        "segundos_robot": 0.2,
+        "segundos_klm": 2.7
+      }
+    },
+    "t3": {
+      "nombre": "Efecto de +2 °C en el pronóstico a 24 h",
+      "fichas": {
+        "cambio del escenario": [
+          "4 MW",
+          "4,906"
+        ]
+      },
+      "escritorio": {
+        "cumplida": true,
+        "vistos": 1,
+        "total": 1,
+        "faltan": [],
+        "acciones": 2,
+        "clics": 2,
+        "escrituras": 0,
+        "pulsaciones": 0,
+        "desplazamientos": 0,
+        "segundos_robot": 1.14,
+        "segundos_klm": 5.3
+      },
+      "movil": {
+        "cumplida": true,
+        "vistos": 1,
+        "total": 1,
+        "faltan": [],
+        "acciones": 2,
+        "clics": 2,
+        "escrituras": 0,
+        "pulsaciones": 0,
+        "desplazamientos": 0,
+        "segundos_robot": 1.14,
+        "segundos_klm": 5.3
+      }
+    },
+    "t4": {
+      "nombre": "Diagnóstico: régimen de El Niño con más error",
+      "fichas": {
+        "régimen": [
+          "Niño moderado"
+        ],
+        "error": [
+          "80.6"
+        ]
+      },
+      "escritorio": {
+        "cumplida": true,
+        "vistos": 2,
+        "total": 2,
+        "faltan": [],
+        "acciones": 1,
+        "clics": 1,
+        "escrituras": 0,
+        "pulsaciones": 0,
+        "desplazamientos": 0,
+        "segundos_robot": 0.58,
+        "segundos_klm": 2.7
+      },
+      "movil": {
+        "cumplida": true,
+        "vistos": 2,
+        "total": 2,
+        "faltan": [],
+        "acciones": 2,
+        "clics": 1,
+        "escrituras": 0,
+        "pulsaciones": 0,
+        "desplazamientos": 1,
+        "segundos_robot": 0.8,
+        "segundos_klm": 3.7
+      }
+    }
+  },
+  "axe": {
+    "pantallas": 40,
+    "infracciones": 0,
+    "nodos": 0,
+    "buenas_practicas_nodos": 0,
+    "reglas": {},
+    "corridas": [
+      {
+        "estado": "inicio",
+        "vista": "movil",
+        "tema": "dark",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "inicio",
+        "vista": "movil",
+        "tema": "light",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "inicio",
+        "vista": "escritorio",
+        "tema": "dark",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "inicio",
+        "vista": "escritorio",
+        "tema": "light",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "area",
+        "vista": "movil",
+        "tema": "dark",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "area",
+        "vista": "movil",
+        "tema": "light",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "area",
+        "vista": "escritorio",
+        "tema": "dark",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "area",
+        "vista": "escritorio",
+        "tema": "light",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "despues",
+        "vista": "movil",
+        "tema": "dark",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "despues",
+        "vista": "movil",
+        "tema": "light",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "despues",
+        "vista": "escritorio",
+        "tema": "dark",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "despues",
+        "vista": "escritorio",
+        "tema": "light",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "confianza",
+        "vista": "movil",
+        "tema": "dark",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "confianza",
+        "vista": "movil",
+        "tema": "light",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "confianza",
+        "vista": "escritorio",
+        "tema": "dark",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "confianza",
+        "vista": "escritorio",
+        "tema": "light",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "confianza_1h",
+        "vista": "movil",
+        "tema": "dark",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "confianza_1h",
+        "vista": "movil",
+        "tema": "light",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "confianza_1h",
+        "vista": "escritorio",
+        "tema": "dark",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "confianza_1h",
+        "vista": "escritorio",
+        "tema": "light",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "sin_api",
+        "vista": "movil",
+        "tema": "dark",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "sin_api",
+        "vista": "movil",
+        "tema": "light",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "sin_api",
+        "vista": "escritorio",
+        "tema": "dark",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "sin_api",
+        "vista": "escritorio",
+        "tema": "light",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "detalle",
+        "vista": "movil",
+        "tema": "dark",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "detalle",
+        "vista": "movil",
+        "tema": "light",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "detalle",
+        "vista": "escritorio",
+        "tema": "dark",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "detalle",
+        "vista": "escritorio",
+        "tema": "light",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "escenarios",
+        "vista": "movil",
+        "tema": "dark",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "escenarios",
+        "vista": "movil",
+        "tema": "light",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "escenarios",
+        "vista": "escritorio",
+        "tema": "dark",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "escenarios",
+        "vista": "escritorio",
+        "tema": "light",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "diagnostico",
+        "vista": "movil",
+        "tema": "dark",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "diagnostico",
+        "vista": "movil",
+        "tema": "light",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "diagnostico",
+        "vista": "escritorio",
+        "tema": "dark",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "diagnostico",
+        "vista": "escritorio",
+        "tema": "light",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "ficha",
+        "vista": "movil",
+        "tema": "dark",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "ficha",
+        "vista": "movil",
+        "tema": "light",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "ficha",
+        "vista": "escritorio",
+        "tema": "dark",
+        "reglas": [],
+        "nodos": 0
+      },
+      {
+        "estado": "ficha",
+        "vista": "escritorio",
+        "tema": "light",
+        "reglas": [],
+        "nodos": 0
+      }
+    ]
+  }
+}
