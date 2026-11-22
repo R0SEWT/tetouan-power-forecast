@@ -1,0 +1,17 @@
+# Curva: la portada y la web se pueden indexar; las rutas de datos de la API, no. Cada pedido a la API puede prender
+# el servidor (Azure Container Apps, que se apaga solo cuando nadie lo usa) y cobra mientras está prendido.
+User-agent: *
+Allow: /
+Disallow: /salud
+Disallow: /modelos
+Disallow: /areas
+Disallow: /resumen
+Disallow: /pronostico
+Disallow: /sensibilidad
+Disallow: /series/
+Disallow: /diagnostico/
+Disallow: /seguimiento/
+Disallow: /pico/
+Disallow: /en-vivo/
+Disallow: /ahora/
+Disallow: /confianza/
