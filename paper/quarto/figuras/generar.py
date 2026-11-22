@@ -40,7 +40,7 @@ MARCAS_MW = {"NORTE": [800, 1200], "CENTRO": [3000, 6000], "SUR": [500, 2000]}
 
 plt.rcParams.update({
     "font.family": "sans-serif",
-    "font.sans-serif": ["Nimbus Sans", "Liberation Sans", "DejaVu Sans"],
+    "font.sans-serif": ["Liberation Sans", "DejaVu Sans"],
     "font.size": 8,
     "axes.titlesize": 8,
     "axes.labelsize": 8,
