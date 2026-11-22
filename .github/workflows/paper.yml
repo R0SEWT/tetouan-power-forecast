@@ -1,0 +1,63 @@
+name: Paper en PDF
+
+# Compila el short paper (paper/quarto/) en los tres estilos con Quarto y TinyTeX, y sube los PDF como
+# artefacto. Corre en cada push que toque paper/quarto/ o este archivo, y a mano.
+on:
+  push:
+    paths:
+      - "paper/quarto/**"
+      - ".github/workflows/paper.yml"
+  workflow_dispatch:
+
+jobs:
+  pdf:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: paper/quarto
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Quarto y TinyTeX
+        uses: quarto-dev/quarto-actions/setup@v2
+        with:
+          version: 1.10.19
+          tinytex: true
+
+      - name: IEEE de conferencia
+        id: ieee
+        continue-on-error: true
+        run: |
+          quarto render short-paper.qmd --profile ieee --to pdf --output ieee.pdf
+          cp short-paper.tex ieee.tex
+
+      - name: Springer LNCS
+        id: lncs
+        continue-on-error: true
+        run: |
+          quarto render short-paper.qmd --profile lncs --to pdf --output springer-lncs.pdf
+          cp short-paper.tex springer-lncs.tex
+
+      - name: Elsevier
+        id: elsevier
+        continue-on-error: true
+        run: |
+          quarto render short-paper.qmd --profile elsevier --to elsevier-pdf --output elsevier.pdf
+          cp short-paper.tex elsevier.tex
+
+      - name: Subir los PDF (y el LaTeX, para revisar)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: paper-pdf
+          path: |
+            paper/quarto/*.pdf
+            paper/quarto/*.tex
+            paper/quarto/*.log
+          if-no-files-found: warn
+
+      - name: Fallar si algún estilo no compiló
+        if: steps.ieee.outcome == 'failure' || steps.lncs.outcome == 'failure' || steps.elsevier.outcome == 'failure'
+        run: |
+          echo "IEEE: ${{ steps.ieee.outcome }} · LNCS: ${{ steps.lncs.outcome }} · Elsevier: ${{ steps.elsevier.outcome }}"
+          exit 1

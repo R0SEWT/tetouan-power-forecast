@@ -1,0 +1,11 @@
+# Perfil por defecto: PDF de artículo genérico, una columna, A4. Referencias en Chicago autor-fecha (Quarto).
+format:
+  pdf:
+    documentclass: article
+    papersize: a4
+    geometry: margin=2.5cm
+    pdf-engine: pdflatex
+    include-in-header: estilos/comun/preambulo.tex
+    fig-cap-location: bottom
+    tbl-cap-location: top
+    colorlinks: true

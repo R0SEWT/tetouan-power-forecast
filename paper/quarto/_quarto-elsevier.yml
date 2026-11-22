@@ -1,0 +1,17 @@
+# Elsevier: elsarticle en modo preprint, una columna, con la extensión mantenida quarto-journals/elsevier
+# (_extensions/). Referencias numéricas con el CSL de Elsevier (equivalente a elsarticle-num).
+csl: estilos/csl/elsevier-with-titles.csl
+format:
+  elsevier-pdf:
+    journal:
+      formatting: preprint
+      layout: onecolumn
+      cite-style: number
+    cite-method: citeproc
+    pdf-engine: pdflatex
+    include-in-header:
+      - estilos/comun/preambulo.tex
+    fig-pos: tbp
+    fig-cap-location: bottom
+    tbl-cap-location: top
+    keep-tex: true

@@ -3,7 +3,10 @@
 | Archivo | Qué es |
 |---|---|
 | `short-paper.qmd` | El contenido completo de `../short-paper.md`, con secciones numeradas por Quarto, referencias cruzadas a tablas y figuras y citas a `referencias.bib`. Los **autores** se completan solo aquí, en el YAML del inicio |
-| `_quarto.yml` | El formato, y solo el formato: para cambiar de estilo se edita el bloque `format:` (y `csl:`, si el estilo lo pide) |
+| `_quarto.yml` | Lo común a todos los formatos y la vista previa en HTML |
+| `_quarto-<perfil>.yml` | Un estilo por perfil, solo formato: `generico` (artículo A4, el de por defecto), `ieee` (IEEEtran de conferencia, dos columnas), `lncs` (Springer LNCS, una columna) y `elsevier` (elsarticle en modo preprint, una columna) |
+| `estilos/` | Lo propio de cada estilo: los CSL oficiales de las referencias (`csl/`), el bloque de autores de IEEE y LNCS, el filtro de tablas a dos columnas de IEEE y el preámbulo común |
+| `_extensions/` | La extensión `quarto-journals/elsevier` (la única de los tres estilos con una extensión de Quarto mantenida) |
 | `referencias.bib` | La bibliografía en BibTeX. Cada DOI se resolvió en doi.org y cada URL se abrió el 22-nov-2026; las excepciones van comentadas en el archivo |
 | `figuras/` | Copia de `../figuras/fig1` a `fig5`, exportadas tal cual de los notebooks (ver `../README.md`) |
 
@@ -20,17 +23,22 @@ El PDF necesita una distribución de LaTeX. Con TinyTeX, una sola vez y luego ca
 
 ```bash
 quarto install tinytex
-quarto render short-paper.qmd --to pdf
+quarto render short-paper.qmd --to pdf                                         # genérico
+quarto render short-paper.qmd --profile ieee --to pdf --output ieee.pdf
+quarto render short-paper.qmd --profile lncs --to pdf --output springer-lncs.pdf
+quarto render short-paper.qmd --profile elsevier --to elsevier-pdf --output elsevier.pdf
 ```
+
+Sin LaTeX en la máquina, el workflow `.github/workflows/paper.yml` compila los tres estilos en cada push que toque
+esta carpeta y sube los PDF como artefacto (`gh run download <id> -n paper-pdf`).
 
 Las salidas (`*.html`, `*.tex`, `*_files/`) no se versionan.
 
 ## Cambiar de estilo
 
-- **Extensión de Quarto** (por ejemplo, la plantilla de una revista o un congreso): `quarto add <usuario/repo>` dentro de
-  esta carpeta y, en `_quarto.yml`, reemplazar `pdf:` por el formato que trae la extensión (`<nombre>-pdf:`).
-- **Clase de LaTeX propia**: cambiar `documentclass:` y sus opciones en el bloque `pdf:`.
-- **Referencias**: copiar el `.csl` del estilo a esta carpeta y descomentar `csl:`.
+Cada estilo es un perfil: para elegir uno basta con usar su `--profile`, o volverlo el de por defecto en
+`profile: default:` de `_quarto.yml`. Para sumar otro estilo se agrega un `_quarto-<perfil>.yml` (con una extensión,
+`quarto add <usuario/repo>` y su formato `<nombre>-pdf:`) y su nombre al grupo de perfiles.
 
 Lo que depende del estilo y queda por decidir al elegirlo: si «Título del proyecto» y «Resumen ejecutivo» siguen como
 secciones (así los pide el enunciado) o pasan al bloque del título y al resumen de la plantilla; el ancho de las

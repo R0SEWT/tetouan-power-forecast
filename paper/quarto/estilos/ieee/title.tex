@@ -1,0 +1,5 @@
+$-- Bloque de título y autores para IEEEtran (conference). Los datos salen del YAML de short-paper.qmd.
+\title{$title$$if(subtitle)$\\[0.4em]{\normalsize $subtitle$}$endif$}
+\author{\IEEEauthorblockN{$for(by-author)$$it.name.literal$$sep$, $endfor$}
+\IEEEauthorblockA{$for(by-affiliation)$\textit{$it.name$}\\ $it.city$, $it.country$$endfor$\\
+\parbox{0.8\textwidth}{\centering $for(by-author)$$it.email$$sep$, $endfor$}}}

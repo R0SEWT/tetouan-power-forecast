@@ -1,17 +1,26 @@
-# Formato del short paper. El contenido (texto, autores, bibliografía) vive en short-paper.qmd y no depende del
-# estilo: para cambiar de estilo (por ejemplo, una plantilla de congreso a dos columnas) basta con reemplazar el
-# bloque `format:` de abajo y, si el estilo lo pide, la línea `csl:`. Ver README.md.
+# Configuración común del short paper. El contenido vive en short-paper.qmd y es uno solo; cada estilo es un
+# perfil de Quarto con su propio archivo, que solo agrega el formato:
+#
+#   _quarto-generico.yml  PDF de artículo genérico (el perfil por defecto)
+#   _quarto-ieee.yml      IEEE de conferencia: IEEEtran, dos columnas (plantilla propia en estilos/ieee/)
+#   _quarto-lncs.yml      Springer LNCS: llncs, una columna (plantilla propia en estilos/lncs/)
+#   _quarto-elsevier.yml  Elsevier: elsarticle en modo preprint, una columna (extensión quarto-journals/elsevier)
+#
+# Ejemplo: quarto render short-paper.qmd --profile ieee --to pdf. Ver README.md.
 
 project:
   type: default
   render:
     - short-paper.qmd
 
+profile:
+  default: generico
+  group:
+    - [generico, ieee, lncs, elsevier]
+
 number-sections: true
 date-format: long
 link-citations: true
-# Estilo de las referencias (archivo .csl junto a este). Sin esta línea, Quarto usa Chicago autor-fecha.
-# csl: estilo.csl
 
 format:
   # Vista previa sin LaTeX: `quarto render --to html` (un solo archivo, con las figuras dentro).
@@ -20,11 +29,3 @@ format:
     toc: false
     fig-cap-location: bottom
     tbl-cap-location: top
-  # PDF genérico (necesita TinyTeX): se reemplaza por el del estilo que se elija.
-  pdf:
-    documentclass: article
-    papersize: a4
-    geometry: margin=2.5cm
-    fig-cap-location: bottom
-    tbl-cap-location: top
-    colorlinks: true

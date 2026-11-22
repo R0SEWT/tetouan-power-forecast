@@ -1,0 +1,8 @@
+$-- Bloque de título y autores para llncs. Los datos salen del YAML de short-paper.qmd.
+\title{$title$}
+$if(subtitle)$
+\subtitle{$subtitle$}
+$endif$
+\author{$for(by-author)$$it.name.literal$$sep$ \and $endfor$}
+\institute{$for(by-affiliation)$$it.name$, $it.city$, $it.country$$endfor$\\
+\email{$for(by-author)$$it.email$$sep$, $endfor$}}
