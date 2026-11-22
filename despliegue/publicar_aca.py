@@ -175,10 +175,10 @@ def resolver(imagen: str, registro: Registro | None = None) -> str:
     return f"{IMAGEN}@{digest}" if etiqueta == "latest" else ref
 
 
-def especificacion(imagen: str, minimo: int, entorno_id: str) -> dict:
+def especificacion(imagen: str, minimo: int, entorno_id: str, region: str = REGION) -> dict:
     """La app completa, el cuerpo del PUT a la API de Container Apps (crea o reemplaza la app entera)."""
     return {
-        "location": REGION,
+        "location": region,  # la del entorno: Container Apps exige que la app esté en la misma región
         "tags": dict(ETIQUETAS),
         "properties": {
             "environmentId": entorno_id,
@@ -325,8 +325,11 @@ class Publicador:
             if not az.simular:
                 entorno = az("containerapp", "env", "show", "--name", a.entorno, *self.base)
         if az.simular:
+            self.region_entorno = a.region
             return (f"/subscriptions/SUSCRIPCION/resourceGroups/{a.grupo}/providers/Microsoft.App/"
                     f"managedEnvironments/{a.entorno}")
+        # La app va en la región del entorno (si ya existía en otra, manda la suya: «Brazil South» -> brazilsouth)
+        self.region_entorno = (entorno.get("location") or a.region).lower().replace(" ", "")
         problemas = problemas_entorno(entorno)
         if problemas:
             raise ErrorAzure("el entorno no quedó como se pide:\n  - " + "\n  - ".join(problemas))
@@ -359,7 +362,7 @@ class Publicador:
             return False
         if app is not None:
             az.mostrar("Cambios:\n  - " + "\n  - ".join(pendientes))
-        spec = especificacion(imagen, minimo, entorno_id)
+        spec = especificacion(imagen, minimo, entorno_id, getattr(self, "region_entorno", self.args.region))
         # Un PUT reemplaza todo: los dominios propios que tenga la app (los vincula «az containerapp hostname bind»,
         # fuera de este script) se conservan
         ingreso_actual = (((app or {}).get("properties") or {}).get("configuration") or {}).get("ingress") or {}

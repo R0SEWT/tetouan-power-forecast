@@ -281,3 +281,23 @@ def test_un_cambio_conserva_los_dominios_propios_vinculados_fuera_del_script():
     az.app["properties"]["configuration"]["ingress"]["customDomains"] = dominio
     publicar_aca.Publicador(args(minimo=1), az, RegistroFalso({})).publicar()
     assert az.escritos[0]["properties"]["configuration"]["ingress"]["customDomains"] == dominio
+
+
+def test_la_app_va_en_la_region_del_entorno(capsys):
+    """Con --region distinta de la de por defecto, el entorno y la app se crean en la misma (Azure lo exige)."""
+    assert publicar_aca.main(["--dry-run", "--region", "eastus2", "--imagen", "sha-1234567"]) == 0
+    salida = capsys.readouterr().out
+    assert "--location eastus2" in salida and '"location": "eastus2"' in salida and "brazilsouth" not in salida
+    # Si el entorno ya existe, manda su región, tal como la devuelve Azure
+    az = AzFalso(aplica=True)
+    az.app = None
+    entorno = AzFalso.__call__(az, "containerapp", "env", "show")
+    entorno["location"] = "Canada Central"
+    original = AzFalso.__call__
+
+    def con_region(self, *a, **k):
+        return entorno if a[:3] == ("containerapp", "env", "show") else original(self, *a, **k)
+
+    az.__class__ = type("AzEnCanada", (AzFalso,), {"__call__": con_region})
+    publicar_aca.Publicador(args(imagen="sha-1234567"), az, RegistroFalso({"sha-1234567": "sha256:a"})).publicar()
+    assert az.escritos[0]["location"] == "canadacentral"
