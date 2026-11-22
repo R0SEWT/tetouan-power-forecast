@@ -107,13 +107,15 @@ def _id(pronosticador: Pronosticador) -> str:
 
 
 # Caché de las respuestas de datos. Los datos cambian una vez al día y la app relee el registro en vivo cada 15 min.
-# Publicada detrás de Netlify (curva.rosewt.dev), la CDN guarda cada respuesta 15 min: una visita repetida no llega al
-# servidor de Container Apps y no lo despierta si está en cero réplicas. El navegador la guarda 1 min. Netlify no
+# Publicada detrás de Netlify (curva.rosewt.dev), la CDN guarda cada respuesta 30 min: una visita repetida no llega al
+# servidor de Container Apps y no lo despierta si está en cero réplicas. Cada nodo de la CDN tiene su propia caché (se
+# midió: una visita nueva puede caer en un nodo vacío y llegar al servidor), así que cuanto más dura, menos veces lo
+# despierta un visitante automático; 30 min es lo más que se acordó. El navegador la guarda 1 min. Netlify no
 # cachea por defecto lo que viene de un proxy, solo con estas cabeceras; los errores (y los 502/503/504 de la
 # plataforma o del proxy, que no las traen) no se guardan. Netlify-Vary arma la clave de la caché con los parámetros
 # que usa la API (y no con otros: un parámetro inventado no se salta la caché). Ver despliegue/README.md.
 CACHE_NAVEGADOR = "public, max-age=60"
-CACHE_CDN = "public, s-maxage=900"
+CACHE_CDN = "public, s-maxage=1800"
 SIN_CACHE = "no-store"
 
 

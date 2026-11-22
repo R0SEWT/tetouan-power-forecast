@@ -60,7 +60,7 @@ def test_las_respuestas_de_datos_se_cachean_en_netlify_y_los_errores_nunca():
         r = c.get(ruta)
         assert r.status_code == 200, ruta
         assert r.headers["cache-control"] == CACHE_NAVEGADOR == "public, max-age=60"
-        assert r.headers["netlify-cdn-cache-control"] == CACHE_CDN == "public, s-maxage=900"
+        assert r.headers["netlify-cdn-cache-control"] == CACHE_CDN == "public, s-maxage=1800"
         # la clave de la caché: los parámetros que usa la API, y ningún otro
         assert r.headers["netlify-vary"] == "query=ahora|fecha|horizonte|modelo|origen|variante"
     # cubre todas las rutas GET de la API (las de área, por su prefijo)
