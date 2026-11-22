@@ -6,24 +6,28 @@ subtitle: "Trabajo final (TB1) · Metodología para Data Science (1ACC0240) · U
 # En paper/short-paper.md figuran «Vilchez, Rody» y, sin apellidos, Marcelo, Adrián, Andre y Olenka.
 # ---------------------------------------------------------------------------------------------------------
 author:
-  - name: Integrante 1
-    email: uXXXXXXXXX@upc.edu.pe
+  - name: Rody Sebastian Vilchez Marin
+    email: u202216562@upc.edu.pe
     affiliations:
       - ref: upc
-  - name: Integrante 2
-    email: uXXXXXXXXX@upc.edu.pe
+  - name: Adrian Roy Chaña Sandoval
+    email: u202219278@upc.edu.pe
     affiliations:
       - ref: upc
-  - name: Integrante 3
-    email: uXXXXXXXXX@upc.edu.pe
+  - name: Andre Huerta Castro
+    email: u201910153@upc.edu.pe
     affiliations:
       - ref: upc
-  - name: Integrante 4
-    email: uXXXXXXXXX@upc.edu.pe
+  - name: Marcelo Sebastian Neyra Santa Cruz
+    email: u202217241@upc.edu.pe
     affiliations:
       - ref: upc
-  - name: Integrante 5
-    email: uXXXXXXXXX@upc.edu.pe
+  - name: Olenka Nicole Palma De Los Santos
+    email: u20231c033@upc.edu.pe
+    affiliations:
+      - ref: upc
+  - name: Victoria Alejandra Ubaldo Gamarra
+    email: pcccvuba@upc.edu.pe
     affiliations:
       - ref: upc
 affiliations:
