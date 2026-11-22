@@ -1,54 +1,48 @@
-# El short paper en Quarto
+# El short paper en Quarto (estilo IEEE)
 
 | Archivo | Qué es |
 |---|---|
-| `short-paper.qmd` | El contenido completo de `../short-paper.md`, con secciones numeradas por Quarto, referencias cruzadas a tablas y figuras y citas a `referencias.bib`. Los **autores** se completan solo aquí, en el YAML del inicio |
-| `_quarto.yml` | Lo común a todos los formatos y la vista previa en HTML |
-| `_quarto-<perfil>.yml` | Un estilo por perfil, solo formato: `generico` (artículo A4, el de por defecto), `ieee` (IEEEtran de conferencia, dos columnas), `lncs` (Springer LNCS, una columna) y `elsevier` (elsarticle en modo preprint, una columna) |
-| `estilos/` | Lo propio de cada estilo: los CSL oficiales de las referencias (`csl/`), el bloque de autores de IEEE y LNCS, los preámbulos y el filtro común que convierte las tablas en flotantes (a lo ancho de la página en IEEE) |
-| `_extensions/` | La extensión `quarto-journals/elsevier` (la única de los tres estilos con una extensión de Quarto mantenida) |
-| `referencias.bib` | La bibliografía en BibTeX. Cada DOI se resolvió en doi.org y cada URL se abrió el 22-nov-2026; las excepciones van comentadas en el archivo |
-| `figuras/` | Copia de `../figuras/fig1` a `fig5`, exportadas tal cual de los notebooks (ver `../README.md`) |
+| `short-paper.qmd` | El paper: el texto, las tablas, las citas y el resumen ejecutivo (en el YAML, como `abstract`). Los **autores** se completan solo aquí, en el YAML del inicio |
+| `_quarto.yml` | El formato: IEEE de conferencia (IEEEtran, dos columnas, Times) para el PDF y una vista previa en HTML |
+| `estilos/` | Lo propio de IEEE: el bloque de autores (`title.tex`), el preámbulo (`preambulo.tex`), el filtro que convierte las tablas en flotantes a lo ancho de la página (`tablas.lua`) y el CSL oficial de las referencias (`ieee.csl`) |
+| `referencias.bib` | La bibliografía. Cada DOI se resolvió en doi.org y cada URL se abrió el 22-nov-2026; las excepciones van comentadas en el archivo |
+| `figuras/` | Las cinco figuras, a una columna (8.9 cm), con letra de 8 pt y la paleta Okabe-Ito, en PDF (las del paper) y PNG (las de la vista previa). Las dibuja `figuras/generar.py` a partir de las tablas que ya escribieron los notebooks, sin recalcular ningún modelo |
+
+No hay una extensión de Quarto mantenida para IEEE (las que existen no se actualizan desde 2023-2025 y no resuelven
+las tablas a dos columnas, porque pandoc las escribe como `longtable`), así que el estilo va con la clase IEEEtran y
+las tres piezas de `estilos/`.
 
 ## Compilar
 
-Vista previa sin LaTeX (Quarto trae pandoc; no descarga nada):
+Sin LaTeX en la máquina, el workflow `.github/workflows/paper.yml` compila el PDF en cada push que toque esta
+carpeta y lo sube como artefacto (`gh run download <id> -n short-paper-ieee`).
+
+En local, la vista previa no necesita LaTeX (Quarto trae pandoc); el PDF necesita TinyTeX, que se instala una vez:
 
 ```bash
 cd paper/quarto
 quarto render short-paper.qmd --to html   # short-paper.html, un solo archivo con las figuras dentro
+quarto install tinytex                    # una sola vez
+quarto render short-paper.qmd --to pdf    # short-paper.pdf
 ```
 
-El PDF necesita una distribución de LaTeX. Con TinyTeX, una sola vez y luego cada vez que se quiera el PDF:
+Las figuras se rehacen, si cambian los datos, con la carpeta de datos del proyecto:
 
 ```bash
-quarto install tinytex
-quarto render short-paper.qmd --to pdf                                         # genérico
-quarto render short-paper.qmd --profile ieee --to pdf --output ieee.pdf
-quarto render short-paper.qmd --profile lncs --to pdf --output springer-lncs.pdf
-quarto render short-paper.qmd --profile elsevier --to elsevier-pdf --output elsevier.pdf
+TETOUAN_DATA=/ruta/a/los/datos uv run python paper/quarto/figuras/generar.py
 ```
 
-Sin LaTeX en la máquina, el workflow `.github/workflows/paper.yml` compila los tres estilos en cada push que toque
-esta carpeta y sube los PDF como artefacto (`gh run download <id> -n paper-pdf`).
-
-Las salidas (`*.html`, `*.tex`, `*_files/`) no se versionan.
-
-## Cambiar de estilo
-
-Cada estilo es un perfil: para elegir uno basta con usar su `--profile`, o volverlo el de por defecto en
-`profile: default:` de `_quarto.yml`. Para sumar otro estilo se agrega un `_quarto-<perfil>.yml` (con una extensión,
-`quarto add <usuario/repo>` y su formato `<nombre>-pdf:`) y su nombre al grupo de perfiles.
-
-Lo que depende del estilo y queda por decidir al elegirlo: si «Título del proyecto» y «Resumen ejecutivo» siguen como
-secciones (así los pide el enunciado) o pasan al bloque del título y al resumen de la plantilla; el ancho de las
-tablas grandes (1, 3, 4 y 7) y de las figuras; el estilo de las referencias; y la extensión.
+Las salidas (`*.html`, `*.tex`, `*.pdf` de la raíz de esta carpeta, `*_files/`) no se versionan.
 
 ## Diferencias con `../short-paper.md`
 
-- Frases nuevas: el enlace a la app publicada (<https://curva.rosewt.dev>), SHAP en los resultados de 2025, la
-  temperatura pronosticada (PR #55) en el seguimiento en vivo y en el trabajo futuro, y el Entregable 8.
-- Citas en el texto para todas las referencias de la bibliografía.
-- Correcciones: la limitación 3 estaba cortada (se completó con la frase de `../paper.md`); el diagnóstico del sesgo
-  decía «cuatro cosas» y listaba cinco (la quinta es de la revisión del 19-nov); la referencia de Wei (2023) tenía
-  otro título (el DOI correcto es el de `docs/estado-del-arte.md`).
+El PDF tiene 6-8 páginas de IEEE con las referencias: el texto se acortó y lo que salió quedó en el informe técnico
+(`../paper.md`) y en el repositorio, que el paper cita. El detalle de qué se recortó y dónde quedó está en la
+descripción del PR. Además:
+
+- El título del paper cumple la sección «título» del enunciado y el resumen ejecutivo es el resumen del paper.
+- Frases nuevas: el enlace a la app publicada (<https://curva.rosewt.dev>), SHAP con su figura, la temperatura
+  pronosticada y el rango adaptativo que corren en paralelo (PR #53 y #55) y el Entregable 8.
+- Cifras al día: la cuarentena de 2020 y su rebote, −32 y +51 %, salen de la misma serie de la figura 1 (el short
+  paper redondeaba a −30 y +40 %).
+- Correcciones: la referencia de Wei (2023) tenía otro título (el DOI correcto es el de `docs/estado-del-arte.md`).

@@ -1,31 +1,37 @@
-# Configuración común del short paper. El contenido vive en short-paper.qmd y es uno solo; cada estilo es un
-# perfil de Quarto con su propio archivo, que solo agrega el formato:
-#
-#   _quarto-generico.yml  PDF de artículo genérico (el perfil por defecto)
-#   _quarto-ieee.yml      IEEE de conferencia: IEEEtran, dos columnas (plantilla propia en estilos/ieee/)
-#   _quarto-lncs.yml      Springer LNCS: llncs, una columna (plantilla propia en estilos/lncs/)
-#   _quarto-elsevier.yml  Elsevier: elsarticle en modo preprint, una columna (extensión quarto-journals/elsevier)
-#
-# Ejemplo: quarto render short-paper.qmd --profile ieee --to pdf. Ver README.md.
+# Configuración del short paper: el contenido vive en short-paper.qmd; aquí solo va el formato.
+# PDF: IEEE de conferencia (IEEEtran, dos columnas, Times, referencias IEEE). No hay una extensión de Quarto
+# mantenida para IEEE, así que va con la clase y tres piezas propias en estilos/: el bloque de autores
+# (title.tex), el preámbulo y un filtro que convierte las tablas en flotantes (tablas.lua). Ver README.md.
 
 project:
   type: default
   render:
     - short-paper.qmd
 
-profile:
-  default: generico
-  group:
-    - [generico, ieee, lncs, elsevier]
-
 number-sections: true
-date-format: long
 link-citations: true
+csl: estilos/ieee.csl
 
 format:
+  pdf:
+    documentclass: IEEEtran
+    classoption: [conference]
+    fontfamily: mathptmx
+    pdf-engine: pdflatex
+    template-partials:
+      - estilos/title.tex
+    include-in-header: estilos/preambulo.tex
+    filters:
+      - estilos/tablas.lua
+    tablas-entorno: "table*"
+    default-image-extension: pdf
+    fig-pos: "!htbp"
+    fig-cap-location: bottom
+    tbl-cap-location: top
   # Vista previa sin LaTeX: `quarto render --to html` (un solo archivo, con las figuras dentro).
   html:
     embed-resources: true
     toc: false
+    default-image-extension: png
     fig-cap-location: bottom
     tbl-cap-location: top

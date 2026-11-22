@@ -1,9 +1,0 @@
-% Común a todos los estilos en PDF.
-% pdflatex no trae estos caracteres del texto: el signo menos (U+2212), gamma y delta.
-\ifPDFTeX
-  \DeclareUnicodeCharacter{2212}{\textminus}
-  \DeclareUnicodeCharacter{03B3}{\ensuremath{\gamma}}
-  \DeclareUnicodeCharacter{0394}{\ensuremath{\Delta}}
-\fi
-% Cortes de línea en cualquier punto de las URL largas de la bibliografía.
-\usepackage{xurl}

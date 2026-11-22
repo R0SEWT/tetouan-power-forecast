@@ -1,7 +1,7 @@
 name: Paper en PDF
 
-# Compila el short paper (paper/quarto/) en los tres estilos con Quarto y TinyTeX, y sube los PDF como
-# artefacto. Corre en cada push que toque paper/quarto/ o este archivo, y a mano.
+# Compila el short paper (paper/quarto/) en estilo IEEE con Quarto y TinyTeX y sube el PDF como artefacto.
+# Corre en cada push que toque paper/quarto/ o este archivo, y a mano.
 on:
   push:
     paths:
@@ -24,40 +24,17 @@ jobs:
           version: 1.10.19
           tinytex: true
 
-      - name: IEEE de conferencia
-        id: ieee
-        continue-on-error: true
+      - name: Compilar el PDF
         run: |
-          quarto render short-paper.qmd --profile ieee --to pdf --output ieee.pdf
-          cp short-paper.tex ieee.tex
+          quarto render short-paper.qmd --to pdf --output short-paper-ieee.pdf -M keep-tex:true
+          ls -la
 
-      - name: Springer LNCS
-        id: lncs
-        continue-on-error: true
-        run: |
-          quarto render short-paper.qmd --profile lncs --to pdf --output springer-lncs.pdf
-          cp short-paper.tex springer-lncs.tex
-
-      - name: Elsevier
-        id: elsevier
-        continue-on-error: true
-        run: |
-          quarto render short-paper.qmd --profile elsevier --to elsevier-pdf --output elsevier.pdf
-          cp short-paper.tex elsevier.tex
-
-      - name: Subir los PDF (y el LaTeX, para revisar)
+      - name: Subir el PDF (y el LaTeX, para revisar)
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: paper-pdf
+          name: short-paper-ieee
           path: |
             paper/quarto/*.pdf
             paper/quarto/*.tex
-            paper/quarto/*.log
           if-no-files-found: warn
-
-      - name: Fallar si algún estilo no compiló
-        if: steps.ieee.outcome == 'failure' || steps.lncs.outcome == 'failure' || steps.elsevier.outcome == 'failure'
-        run: |
-          echo "IEEE: ${{ steps.ieee.outcome }} · LNCS: ${{ steps.lncs.outcome }} · Elsevier: ${{ steps.elsevier.outcome }}"
-          exit 1
