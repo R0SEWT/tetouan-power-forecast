@@ -112,24 +112,23 @@ def _id(pronosticador: Pronosticador) -> str:
 # midió: una visita nueva puede caer en un nodo vacío y llegar al servidor), así que cuanto más dura, menos veces lo
 # despierta un visitante automático; 30 min es lo más que se acordó. El navegador la guarda 1 min. Netlify no
 # cachea por defecto lo que viene de un proxy, solo con estas cabeceras; los errores (y los 502/503/504 de la
-# plataforma o del proxy, que no las traen) no se guardan. Netlify-Vary arma la clave de la caché con los parámetros
-# que usa la API (y no con otros: un parámetro inventado no se salta la caché). Ver despliegue/README.md.
+# plataforma o del proxy, que no las traen) no se guardan. La clave de la caché es la URL completa, con sus parámetros
+# (Netlify-Vary no cambia eso en un proxy: se probó). Ver despliegue/README.md.
 CACHE_NAVEGADOR = "public, max-age=60"
 CACHE_CDN = "public, s-maxage=1800"
 SIN_CACHE = "no-store"
 
 
-def _rutas_api(app: FastAPI) -> tuple[frozenset[str], tuple[str, ...], str]:
-    """Las rutas exactas de la API, los prefijos de las que llevan área y la lista de parámetros para Netlify-Vary."""
-    exactas, prefijos, parametros = set(), set(), set()
+def _rutas_api(app: FastAPI) -> tuple[frozenset[str], tuple[str, ...]]:
+    """Las rutas exactas de la API y los prefijos de las que llevan área."""
+    exactas, prefijos = set(), set()
     for r in app.routes:
         if isinstance(r, APIRoute):
             if "{" in r.path:
                 prefijos.add(r.path.split("{", 1)[0])
             else:
                 exactas.add(r.path)
-            parametros.update(p.alias for p in r.dependant.query_params)
-    return frozenset(exactas), tuple(sorted(prefijos)), "query=" + "|".join(sorted(parametros))
+    return frozenset(exactas), tuple(sorted(prefijos))
 
 
 def crear_app(
@@ -166,13 +165,12 @@ def crear_app(
         respuesta = await call_next(request)
         if not hasattr(request.app.state, "rutas_api"):  # después de declarar las rutas, una sola vez
             request.app.state.rutas_api = _rutas_api(request.app)
-        exactas, prefijos, vary = request.app.state.rutas_api
+        exactas, prefijos = request.app.state.rutas_api
         ruta = request.url.path
         if ruta in exactas or ruta.startswith(prefijos):
             if request.method == "GET" and respuesta.status_code == 200:
                 respuesta.headers["Cache-Control"] = CACHE_NAVEGADOR
                 respuesta.headers["Netlify-CDN-Cache-Control"] = CACHE_CDN
-                respuesta.headers["Netlify-Vary"] = vary
             else:  # errores y POST: nunca en una caché
                 respuesta.headers["Cache-Control"] = SIN_CACHE
         return respuesta

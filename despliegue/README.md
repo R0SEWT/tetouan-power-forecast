@@ -183,6 +183,43 @@ las descargas); la salida de datos a internet es gratis hasta 100 GB al mes (una
 sondas de salud no cuentan como pedidos.
 
 
+### Presupuesto y cómo ver el consumo
+
+**Alerta de presupuesto** (creada el 22/11/2026, con la API de Cost Management): `mensual-5usd`, a nivel de toda la
+suscripción «Azure for Students», **5 USD por mes**, de noviembre de 2026 a diciembre de 2027. Avisa por correo a la
+cuenta UPC de la suscripción (la de `az account show --subscription "Azure for Students" --query user.name`) cuando el
+gasto **real** llega al **50 %** y al **100 %** y cuando el **pronosticado** llega al **100 %**. Es solo un aviso: no
+apaga nada. Abarca todo lo que cobra en la suscripción, también la B1 de App Service (14.60 USD al mes: si sigue
+prendida, los avisos llegarán) y los recursos de otros cursos. Ya existía otro presupuesto, `credito-estudiante`
+(100 USD por año), que no se tocó.
+
+```bash
+S="Azure for Students"; SUB=$(az account show --subscription "$S" --query id -o tsv)
+B="https://management.azure.com/subscriptions/$SUB/providers/Microsoft.Consumption/budgets"
+az rest --method get --url "$B/mensual-5usd?api-version=2023-05-01" --subscription "$S" \
+  --query "properties.{monto:amount,gastado:currentSpend.amount,pronostico:forecastSpend.amount}"
+# Cambiar el monto (p. ej. a 10 USD): leer, editar y volver a escribir el mismo presupuesto
+az rest --method get --url "$B/mensual-5usd?api-version=2023-05-01" --subscription "$S" > /tmp/presupuesto.json
+#   editar "amount" en /tmp/presupuesto.json (y, si se quiere, los umbrales en "notifications")
+az rest --method put --url "$B/mensual-5usd?api-version=2023-05-01" --subscription "$S" --body @/tmp/presupuesto.json
+az rest --method delete --url "$B/mensual-5usd?api-version=2023-05-01" --subscription "$S"   # borrarlo
+```
+
+También en el portal: Cost Management → Budgets. **Para ver el consumo del mes por grupo de recursos** (los datos
+llegan con 8-24 h de atraso):
+
+```bash
+echo '{"type":"ActualCost","timeframe":"MonthToDate","dataset":{"granularity":"None",
+  "aggregation":{"total":{"name":"Cost","function":"Sum"}},
+  "grouping":[{"type":"Dimension","name":"ResourceGroupName"}]}}' > /tmp/consulta.json
+az rest --method post --url "https://management.azure.com/subscriptions/$SUB/providers/Microsoft.CostManagement/query?api-version=2023-11-01" \
+  --subscription "$S" --body @/tmp/consulta.json --query properties.rows
+```
+
+El 22/11/2026 daba, en lo que va de noviembre: `curva-rg` (App Service) 0.28 USD, `curva-aca-rg` (Container Apps)
+0.003 USD (103 vCPU-s y 206 GiB-s), y los grupos de otros cursos. `python despliegue/publicar_aca.py --metricas 24`
+estima el de Container Apps al momento, desde las métricas.
+
 ## Netlify: `curva.rosewt.dev` (la web en el CDN, la API en Container Apps)
 
 **URL pública: <https://curva.rosewt.dev>** (también <https://curva-rosewt.netlify.app>). El dueño eligió esta
@@ -233,6 +270,55 @@ enseguida, el aviso salió a los 4 s de espera y se fue cuando llegaron todos lo
 («Ahora» y «Confianza», escritorio y móvil): 0 infracciones. Netlify agrega a los sitios de cuentas gratis su script
 `hud` (el botón «Powered by Netlify» abajo a la derecha, igual que en `uni.rosewt.dev`), que tapa una esquina del
 contenido.
+
+### Caché en la CDN y `robots.txt` (para que las visitas automáticas no despierten al servidor)
+
+Si alguien mantuviera la app despierta todo el mes (un monitor o un robot que pide datos cada pocos minutos), se
+cobraría la tarifa activa: ~73 USD al mes. Dos defensas:
+
+- **Las respuestas de datos se guardan en la CDN de Netlify.** Netlify **no** guarda lo que viene de un proxy salvo que
+  el origen lo pida con cabeceras de caché: «responses coming from Netlify Functions, Edge Functions, Netlify Server,
+  and proxies are not cached by default» ([Netlify, Caching overview](https://docs.netlify.com/build/caching/caching-overview/)).
+  El backend (`app/backend/main.py`, `cache_de_datos`) agrega a cada respuesta **200 de un GET de la API**:
+
+  | Cabecera | Valor | Para qué |
+  |---|---|---|
+  | `Cache-Control` | `public, max-age=60` | El navegador la reusa 1 min. |
+  | `Netlify-CDN-Cache-Control` | `public, s-maxage=1800` | La CDN de Netlify la guarda 30 min (solo Netlify lee esta cabecera). |
+
+  La clave de la caché es la URL completa con sus parámetros: `/confianza/norte?horizonte=1h` y `?horizonte=24h` son
+  entradas distintas (bien), pero un parámetro inventado (`?x=123`) también hace una entrada nueva y llega al servidor.
+  Se probó `Netlify-Vary: query=<los parámetros de la API>` para que los ignorara y en un proxy no cambia nada (la
+  misma URL con y sin `?q=…`, por la misma conexión, falló las dos veces), así que se quitó. Los errores de la API y
+  los `POST` llevan `Cache-Control: no-store`. Los 502/503/504 de la plataforma («App port
+  is not ready») o del proxy no traen cabeceras de caché, y sin ellas Netlify no guarda nada de un proxy: el aviso de
+  «Despertando el servidor» y los reintentos siguen igual (verificado: un 404 pedido dos veces llega dos veces al
+  origen, `fwd=miss` sin `stored`). `/salud` también se guarda porque la web la pide al arrancar; si se guardara solo
+  lo demás, cada visita despertaría al servidor por ella. Con 30 min en la CDN y 15 min de recarga del registro, lo
+  que se ve puede tener hasta ~45 min de atraso (los datos cambian una vez al día). Cada publicación del sitio de
+  Netlify borra esta caché; para borrarla sin publicar: `netlify api purgeCache --data '{"body": {"site_id":
+  "1e12ea46-b8c6-4245-9ef1-06fd67209b14"}}'`. La cabecera `cache-status` dice si respondió la caché (`hit`) o el
+  servidor (`fwd=miss`).
+
+  **Medido con la app dormida** (Chrome nuevo en cada visita; pedidos que llegaron a Azure según la métrica
+  `Requests`):
+
+  | Visita a `https://curva.rosewt.dev` | Aciertos de la caché | Pedidos que llegaron a Azure | La app | «Ahora» con datos |
+  |---|---|---|---|---|
+  | 1. 05:07 UTC, caché vacía (recién publicado) | 0 de 8 | 8 | se despertó | 22.8 s (con el aviso) |
+  | 2. 05:14, con la app ya de vuelta en cero | **8 de 8** | **0** | **siguió en cero** | **0.6 s** |
+  | 3. 05:15, otro navegador nuevo | 0 de 8 | 8 | se despertó | 22.9 s (con el aviso) |
+
+  **Cada nodo de la CDN tiene su propia caché.** La visita 2 cayó en el nodo que había atendido la 1 y no tocó Azure;
+  la 3 cayó en otro nodo, vacío. Netlify comparte la caché entre nodos (`durable`) solo para sus Functions, no para un
+  proxy. Por eso la CDN guarda 30 min (lo más que se acordó, en vez de 15): cada nodo pide los datos a lo sumo una
+  vez cada 30 min. Un visitante automático todavía puede despertar al servidor, pero muchas menos veces.
+- **`robots.txt`** ([`app/web/robots.txt`](../app/web/robots.txt), servido en <https://curva.rosewt.dev/robots.txt>)
+  deja la portada y bloquea las 13 rutas de datos: `/salud`, `/modelos`, `/areas`, `/resumen`, `/pronostico`,
+  `/sensibilidad` y `/series/`, `/diagnostico/`, `/seguimiento/`, `/pico/`, `/en-vivo/`, `/ahora/`, `/confianza/`.
+  Los buscadores que ejecutan la web para indexarla no piden esas rutas, y la página igual se indexa. Un test
+  comprueba que están todas las rutas de la API y que no bloquea archivos de la web (`/confianza.js` no cae en
+  `/confianza/`). Los robots que no ejecutan JavaScript solo bajan la página, que sale del CDN y no toca Azure.
 
 ### DNS y certificado
 
