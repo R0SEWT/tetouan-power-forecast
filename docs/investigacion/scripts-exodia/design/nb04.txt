@@ -1,0 +1,695 @@
+
+===== CELL 0 [markdown] =====
+# Demanda eléctrica por área del SEIN: modelos fundacionales y un modelo híbrido
+
+**TB1 · Metodología para Data Science (1ACC0240) · UPC · ciclo 2026-2 · Grupo 3**
+
+Notebook 04 de CRISP-DM para el caso peruano: una **extensión del modelado**. La pregunta es si los modelos
+fundacionales de series de tiempo (preentrenados con millones de series, que pronostican sin entrenarse con nuestros
+datos) le ganan al Random Forest elegido en el notebook 02, y si conviene combinarlos con él.
+
+**Reglas de esta corrida**
+
+- **Mismas filas y misma vara.** Cada modelo pronostica desde los mismos orígenes que los notebooks 02 (validación de
+  2025) y 03 (prueba de 2026), a 1 h y a 24 h, en las tres áreas. Se mide el MAE, la mejora frente a la mejor
+  referencia ingenua y la diferencia con el modelo elegido, con su intervalo por bootstrap de días.
+- **Todo se elige con 2025.** Qué fundacional usar, qué variante de ajuste fino, los pesos de la combinación y la
+  propuesta final salen de la validación de 2025. La prueba de 2026 solo se reporta.
+- **La prueba de 2026 ya se había usado** en el notebook 03, antes de este trabajo. Esto es una extensión posterior:
+  2026 ya no es una prueba virgen para el proyecto, y se declara.
+- **Sin entrenar con el futuro.** Los modelos fundacionales reciben como contexto solo la demanda hasta el origen. El
+  ajuste fino y el apilado se entrenan con datos hasta 2024, con el hueco de H pasos.
+
+| Paso | Qué hace |
+|---|---|
+| 1. Datos y protocolo | Los pronósticos por origen de cada modelo y cómo se obtuvieron |
+| 2. Ocho modelos sin entrenar | Zero-shot frente al Random Forest y a las referencias |
+| 3. Longitud del contexto | 43 días frente a 171 días de historia |
+| 4. Chronos-2: covariables, calendario y ajuste fino | Si la temperatura, los feriados o un ajuste con nuestros datos ayudan |
+| 5. Modelo híbrido | XGBoost con el pronóstico fundacional como variable (apilado) |
+| 6. Combinación lineal | Promedio ponderado del fundacional y el Random Forest |
+| 7. Mes a mes y por régimen de El Niño | Si se adaptan mejor al cambio de nivel de 2026 |
+| 8. Intervalos | Cobertura del intervalo 10–90 |
+| 9. Qué mira el modelo híbrido | Importancia por grupo de variables |
+| 10. Costo | Tiempo de cómputo y qué hace falta para servirlo |
+| 11. Robustez | Tres semillas del ajuste fino y control de fuga |
+| 12. Propuesta | El modelo que sale de la regla, fijada con 2025 |
+| 13. Guardar | Tablas para la app y el paper |
+
+Este notebook es liviano: solo lee los pronósticos y evalúa (corre en un minuto, sin GPU). Los pronósticos se
+generaron en Colab con una GPU L4 con los scripts de [`experimentos/fundacionales`](../experimentos/fundacionales/) y
+están en el Drive, en `reportes/sein/fundacionales/`.
+
+===== CELL 1 [markdown] =====
+# Configuración
+
+===== CELL 2 [code] =====
+import os
+import sys
+from pathlib import Path
+
+EN_COLAB = "google.colab" in sys.modules
+if EN_COLAB and "TETOUAN_DATA" not in os.environ:
+    RAMA = "develop"
+    !pip install -q "git+https://github.com/R0SEWT/tetouan-power-forecast@{RAMA}"
+    from tetouan_power_forecast.medallon import usar_drive
+    usar_drive()
+elif not EN_COLAB:
+    os.environ.setdefault("TETOUAN_DATA", str(Path.cwd().parent / "data"))
+
+===== CELL 3 [code] =====
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+from IPython.display import display
+
+from tetouan_power_forecast.evaluacion import mae_por_grupo
+from tetouan_power_forecast.fundacionales import (
+    ELEGIDO,
+    NOMBRE_ELEGIDO,
+    alinear,
+    cargar_base,
+    cargar_pronosticos,
+    combinar_modelos,
+    comparar,
+    separar_nombre,
+)
+from tetouan_power_forecast.medallon import raiz_datos
+from tetouan_power_forecast.modelado_sein import categoria_icen
+from tetouan_power_forecast.variables_sein import AREAS, HORIZONTES, PASO, REFERENCIAS
+
+RAIZ = raiz_datos()
+REPORTES = RAIZ / "reportes" / "sein"
+CARPETA = REPORTES / "fundacionales"
+NOMBRES = {a: a.capitalize() for a in AREAS}
+COLORES = {"NORTE": "#E69F00", "CENTRO": "#0072B2", "SUR": "#009E73"}
+PALETA = ["#000000", "#0072B2", "#D55E00", "#009E73", "#CC79A7", "#E69F00", "#56B4E9", "#F0E442"]  # Okabe-Ito
+CONTEXTO_BASE = 2048  # periodos de 30 min: unos 43 días
+pd.set_option("display.width", 200)
+pd.set_option("display.max_columns", 30)
+
+# Qué es cada archivo de la carpeta: nombre para mostrar, tipo y licencia de los pesos.
+CATALOGO = {
+    "simons": ("Simons 297M", "zero-shot", "OpenMDW-1.1"),
+    "timestral": ("Timestral 209M", "zero-shot", "MIT modificada"),
+    "t0": ("T0-gamma", "zero-shot", "Apache-2.0"),
+    "chronos2": ("Chronos-2", "zero-shot", "Apache-2.0"),
+    "timesfm3": ("TimesFM 3.0", "zero-shot", "no comercial"),
+    "toto2": ("Toto 2.0 313M", "zero-shot", "Apache-2.0"),
+    "timesfm25": ("TimesFM 2.5", "zero-shot", "Apache-2.0"),
+    "tirex2": ("TiRex-2", "zero-shot", "Apache-2.0"),
+    "chronos2cov": ("Chronos-2 + temperatura y feriados", "covariables", "Apache-2.0"),
+    "chronos2cal": ("Chronos-2 + feriados", "covariables", "Apache-2.0"),
+    "chronos2ft_a": ("Chronos-2 ajustado (tasa 1e-6, 1000 pasos)", "ajuste fino", "Apache-2.0"),
+    "chronos2ft_b": ("Chronos-2 ajustado (tasa 1e-5, 5000 pasos)", "ajuste fino", "Apache-2.0"),
+    "chronos2ft_c": ("Chronos-2 ajustado (tasa 1e-6, 4000 pasos)", "ajuste fino", "Apache-2.0"),
+    "chronos2ftcal": ("Chronos-2 ajustado con feriados (tasa 1e-6, 3000 pasos)", "ajuste fino", "Apache-2.0"),
+    "chronos2ftcal2": ("Chronos-2 ajustado con calendario ampliado (tasa 1e-6, 3000 pasos)", "ajuste fino", "Apache-2.0"),
+    "chronos2ftcal_s2": ("Chronos-2 ajustado con feriados, semilla 2", "robustez", "Apache-2.0"),
+    "chronos2ftcal_s3": ("Chronos-2 ajustado con feriados, semilla 3", "robustez", "Apache-2.0"),
+    "xgb_base_todo": ("XGBoost global (todas las filas)", "apilado", "—"),
+    "xgb_base": ("XGBoost global", "apilado", "—"),
+    "xgb_chronos2": ("XGBoost + Chronos-2", "apilado", "Apache-2.0"),
+    "xgb_simons": ("XGBoost + Simons", "apilado", "OpenMDW-1.1"),
+    "xgb_ambos": ("XGBoost + Chronos-2 + Simons", "apilado", "varias"),
+    "combinacion": ("Combinación (ajuste fino + híbrido)", "combinación", "varias"),
+}
+
+
+def etiqueta(nombre):
+    modelo, contexto = separar_nombre(nombre)
+    texto = CATALOGO.get(modelo, (modelo, "otro", "?"))[0]
+    return texto if contexto in (None, CONTEXTO_BASE) else f"{texto} (contexto {contexto})"
+
+
+def tipo(nombre):
+    return CATALOGO.get(separar_nombre(nombre)[0], (None, "otro", None))[1]
+
+
+def tabla_mae(filas, titulo):
+    # MAE por año, horizonte y área (una fila por modelo), con la mejora media frente a la mejor referencia
+    mae = filas.pivot_table(index="Modelo", columns=["Año", "Horizonte", "Área"], values="MAE (MW)", sort=False)
+    mejora = filas.pivot_table(index="Modelo", columns="Año", values="Mejora vs. mejor referencia (%)", sort=False)
+    mae = mae[[c for c in mae.columns]].round(1)
+    for anio in mejora.columns:
+        mae[(anio, "Mejora media", "(%)")] = mejora[anio].round(1)
+    mae = mae.sort_index(axis=1, level=0, sort_remaining=False)
+    display(mae.style.format("{:.1f}").set_caption(titulo))
+    return mae
+
+===== CELL 4 [markdown] =====
+# 1. Datos y protocolo
+
+Cada archivo de `reportes/sein/fundacionales/` tiene los pronósticos de un modelo: una fila por **origen** (cada 30
+minutos, de enero de 2025 a octubre de 2026) y área, con el pronóstico a 1 h (2 pasos) y a 24 h (48 pasos) y sus
+cuantiles 10 y 90. Cómo se generaron:
+
+- **Zero-shot.** Para cada origen t, el modelo recibe la demanda del área hasta t (2048 periodos, unos 43 días) y
+  pronostica los 48 periodos siguientes. De ahí se toman el paso 2 y el paso 48. No ve nada posterior a t y no se
+  entrena con nuestros datos. El pronóstico puntual es la mediana.
+- **Huecos.** La capa silver tiene 336 periodos vacíos; en el contexto se interpolan. Las filas que se evalúan son
+  las de los notebooks 02 y 03, que ya excluyen los objetivos vacíos.
+- **Variantes de Chronos-2.** Con covariables (temperatura pasada y pronóstico de temperatura simulado como en el
+  resto del proyecto, y feriados), solo con feriados, y con ajuste fino usando la demanda hasta 2024.
+- **Apilado.** Un XGBoost global sobre el objetivo en razón, con las variables de M0 más el pronóstico zero-shot del
+  fundacional. Se entrena con orígenes de marzo de 2016 a 2024 (para los que también se generó el pronóstico
+  fundacional), con el hueco de H pasos.
+
+El modelo con que se compara todo es el **Random Forest por área** elegido en el notebook 02 (M0, sin reentrenar).
+
+===== CELL 5 [code] =====
+pronosticos = cargar_pronosticos(CARPETA)
+pronosticos.pop(f"combinacion_c{CONTEXTO_BASE}", None)  # se vuelve a armar en la §6 con lo que se elija en 2025
+inventario = pd.DataFrame([{"Archivo": n, "Modelo": etiqueta(n), "Tipo": tipo(n), "Contexto (periodos)": separar_nombre(n)[1],
+                            "Licencia de los pesos": CATALOGO.get(separar_nombre(n)[0], ("", "", "?"))[2],
+                            "Orígenes": t["DateTime"].nunique(), "Desde": t["DateTime"].min(), "Hasta": t["DateTime"].max()}
+                           for n, t in pronosticos.items()])
+display(inventario.sort_values(["Tipo", "Modelo"]).style.hide(axis="index").set_caption("Pronósticos disponibles"))
+
+comparacion, combinacion, mensual = comparar(REPORTES, pronosticos)
+comparacion["Tipo"] = comparacion["Modelo"].map(lambda n: "elegido" if n == NOMBRE_ELEGIDO else tipo(n))
+comparacion["Archivo"] = comparacion["Modelo"]
+comparacion["Modelo"] = comparacion["Modelo"].map(lambda n: n if n == NOMBRE_ELEGIDO else etiqueta(n))
+comparacion["Distinguible"] = (comparacion["IC 95 % bajo"] > 0) | (comparacion["IC 95 % alto"] < 0)
+elegido = comparacion[comparacion["Tipo"] == "elegido"]
+print(f"{len(pronosticos)} modelos · {comparacion['Periodos'].iloc[0]:,} periodos en la primera celda de la tabla")
+
+
+def orden_2025(filas):
+    # los modelos de mejor a peor por su mejora media en 2025
+    media = filas[filas["Año"] == "2025"].groupby("Modelo")["Mejora vs. mejor referencia (%)"].mean()
+    return list(media.sort_values(ascending=False).index)
+
+
+def con_elegido(filas):
+    orden = [NOMBRE_ELEGIDO] + [m for m in orden_2025(filas) if m != NOMBRE_ELEGIDO]
+    junto = pd.concat([elegido, filas[filas["Tipo"] != "elegido"]])
+    return junto.set_index("Modelo").loc[orden].reset_index()
+
+
+def mejor_de(tipo_modelo):
+    # el modelo de ese tipo con mayor mejora media en 2025 (los apilados, sin contar el XGBoost base)
+    d = comparacion[(comparacion["Tipo"] == tipo_modelo) & (comparacion["Año"] == "2025")
+                    & comparacion["Archivo"].map(lambda n: separar_nombre(n)[1] == CONTEXTO_BASE)]
+    if tipo_modelo == "apilado":
+        d = d[~d["Archivo"].str.startswith("xgb_base")]
+    return None if d.empty else d.groupby("Archivo")["Mejora vs. mejor referencia (%)"].mean().idxmax()
+--- out:
+<pandas.io.formats.style.Styler at 0x7fe4481a0ec0>
+--- out(stream):
+26 modelos · 17,518 periodos en la primera celda de la tabla
+
+
+===== CELL 6 [markdown] =====
+# 2. Ocho modelos sin entrenar
+
+Los ocho modelos con el mismo contexto (2048 periodos), ordenados por su mejora media en 2025. La mejora es frente a
+la mejor de las tres referencias ingenuas (persistencia, ayer, semana pasada) en cada área y horizonte.
+
+===== CELL 7 [code] =====
+base = comparacion[(comparacion["Tipo"] == "zero-shot") & comparacion["Archivo"].map(lambda n: separar_nombre(n)[1] == CONTEXTO_BASE)]
+t_zero = tabla_mae(con_elegido(base), "MAE (MW) de los modelos zero-shot, contexto de 2048 periodos")
+
+fig, ejes = plt.subplots(1, 2, figsize=(15, 5), sharey=True)
+for eje, h in zip(ejes, HORIZONTES):
+    d = con_elegido(base)
+    d = d[(d["Año"] == "2025") & (d["Horizonte"] == h)].pivot_table(index="Modelo", columns="Área", values="Mejora vs. mejor referencia (%)", sort=False)
+    d[[NOMBRES[a] for a in AREAS]].iloc[::-1].plot.barh(ax=eje, color=[COLORES[a] for a in AREAS], width=0.8)
+    eje.axvline(0, color="black", lw=0.8)
+    eje.set_title(f"Validación de 2025, a {h}")
+    eje.set_xlabel("Mejora del MAE frente a la mejor referencia (%)")
+    eje.set_ylabel("")
+plt.tight_layout()
+plt.show()
+
+d = base[base["Año"] == "2025"]
+ganan = d.merge(elegido[["Año", "Horizonte", "Área", "MAE (MW)"]], on=["Año", "Horizonte", "Área"], suffixes=("", " elegido"))
+resumen = ganan.assign(gana=ganan["IC 95 % alto"] < 0, pierde=ganan["IC 95 % bajo"] > 0).groupby(["Horizonte", "Modelo"])[["gana", "pierde"]].sum()
+display(resumen.unstack(0).style.set_caption("Áreas (de 3) en que el modelo le gana o pierde frente al elegido en 2025, con diferencia distinguible"))
+--- out:
+<pandas.io.formats.style.Styler at 0x7fe44823a350>
+--- out:
+<Figure size 1500x500 with 2 Axes>
+[image]
+--- out:
+<pandas.io.formats.style.Styler at 0x7fe44071bc50>
+
+===== CELL 8 [markdown] =====
+**Lectura del gráfico.**
+
+- **A 1 h, seis de los ocho fundacionales le ganan al Random Forest sin haber visto nunca un dato del COES** (Simons: 49.7 frente a 54.6 MW en el Centro). Para un operador sin una historia propia larga, un fundacional ya es una base competitiva para el tiempo real.
+- **A 24 h ninguno alcanza al Random Forest en el Centro** (el mejor, Simons, 92.9 frente a 86.1 MW), y los ocho pierden con diferencia distinguible en dos de las tres áreas. Sin saber qué día es mañana (feriado, fin de semana), mirar la curva no alcanza para el programa del día siguiente.
+- **Elegir el fundacional importa sobre todo a 24 h:** en el Centro van de 92.9 a 115.2 MW, frente a 49.7 a 57.6 MW a 1 h. Y los de licencia abierta (Simons, Chronos-2) están entre los mejores: no hace falta uno de uso restringido.
+
+
+===== CELL 9 [markdown] =====
+# 3. Longitud del contexto
+
+Con 2048 periodos el modelo ve unos 43 días; con 8192, unos 171. Más contexto deja ver más semanas y feriados
+parecidos, pero cuesta más cómputo. Se comparan los modelos que se corrieron con los dos contextos.
+
+===== CELL 10 [code] =====
+zs = comparacion[comparacion["Tipo"].isin(["zero-shot", "ajuste fino"])].copy()
+zs["Base"] = zs["Archivo"].map(lambda n: separar_nombre(n)[0])
+zs["Contexto"] = zs["Archivo"].map(lambda n: separar_nombre(n)[1])
+con_varios = zs.groupby("Base")["Contexto"].nunique()
+con_varios = list(con_varios[con_varios > 1].index)
+if con_varios:
+    d = zs[zs["Base"].isin(con_varios)]
+    t_contexto = d.assign(Modelo=d["Base"].map(lambda b: CATALOGO.get(b, (b,))[0])).pivot_table(
+        index=["Modelo", "Contexto"], columns=["Año", "Horizonte", "Área"], values="MAE (MW)")
+    display(t_contexto.style.format("{:.1f}").set_caption("MAE (MW) según la longitud del contexto"))
+    cambio = d.pivot_table(index=["Base", "Año", "Horizonte", "Área"], columns="Contexto", values="MAE (MW)")
+    cambio["Cambio (%)"] = 100 * (cambio[cambio.columns.max()] / cambio[CONTEXTO_BASE] - 1)
+    display(cambio["Cambio (%)"].groupby(["Base", "Año", "Horizonte"]).mean().unstack([1, 2]).round(1)
+            .style.format("{:+.1f}").set_caption("Cambio medio del MAE al pasar al contexto largo (%): negativo, mejora"))
+else:
+    print("Todavía no hay modelos corridos con más de un contexto.")
+--- out:
+<pandas.io.formats.style.Styler at 0x7fe4cc756210>
+--- out:
+<pandas.io.formats.style.Styler at 0x7fe44ee27390>
+
+===== CELL 11 [markdown] =====
+# 4. Chronos-2: covariables, calendario y ajuste fino
+
+Chronos-2 acepta covariables y trae su propio ajuste fino, así que se usa para tres preguntas:
+
+- **¿Ayuda la temperatura?** Temperatura pasada del área y, a futuro, el pronóstico simulado (la observada más un
+  error de 1.5 °C por día de emisión), igual que en M1. Más los feriados.
+- **¿Ayudan solo los feriados?** La misma corrida sin la temperatura.
+- **¿Ayuda ajustarlo con nuestros datos?** Ajuste fino completo con la demanda de las tres áreas **solo hasta 2024**
+  (contexto de 2048 periodos, horizonte de 48, lote de 256). Se probaron cuatro variantes y se comparan en 2025:
+
+| Variante | Tasa de aprendizaje | Pasos | Covariables | Tiempo |
+|---|---|---|---|---|
+| a | 1e-6 | 1000 | ninguna | 9 min |
+| b | 1e-5 | 5000 | ninguna | 45 min |
+| c | 1e-6 | 4000 | ninguna | 36 min |
+| con feriados | 1e-6 | 3000 | feriado (pasado y futuro) | 26 min |
+| con calendario ampliado | 1e-6 | 3000 | feriado, sábado, domingo, víspera y puente | 26 min |
+
+===== CELL 12 [code] =====
+familia = comparacion[comparacion["Archivo"].str.startswith("chronos2") & comparacion["Archivo"].map(lambda n: separar_nombre(n)[1] == CONTEXTO_BASE) & (comparacion["Tipo"] != "robustez")]
+t_chronos = tabla_mae(con_elegido(familia), "MAE (MW) de las variantes de Chronos-2")
+ajustes = familia[familia["Tipo"] == "ajuste fino"]
+if len(ajustes):
+    MEJOR_AJUSTE = orden_2025(ajustes)[0]
+    print("Variante de ajuste fino elegida con 2025:", MEJOR_AJUSTE)
+    d = ajustes[ajustes["Modelo"] == MEJOR_AJUSTE]
+    display(d.pivot_table(index=["Año", "Horizonte"], columns="Área", values=["Δ MAE vs. elegido (MW)", "IC 95 % bajo", "IC 95 % alto"])
+            .round(2).style.format("{:+.2f}").set_caption(f"{MEJOR_AJUSTE}: diferencia de MAE con el Random Forest (negativo, mejora)"))
+--- out:
+<pandas.io.formats.style.Styler at 0x7fe44ee27390>
+--- out(stream):
+Variante de ajuste fino elegida con 2025: Chronos-2 ajustado con feriados (tasa 1e-6, 3000 pasos)
+
+--- out:
+<pandas.io.formats.style.Styler at 0x7fe44060d1d0>
+
+===== CELL 13 [markdown] =====
+# 5. Modelo híbrido: XGBoost con el pronóstico fundacional como variable
+
+El fundacional ve muy bien la forma reciente de la curva, pero no sabe de feriados ni del nivel de la última semana
+como los sabe el modelo del proyecto. El apilado junta las dos cosas: al XGBoost global en razón (M0) se le agregan
+tres variables del fundacional, todas divididas por la escala `media_24h`: su pronóstico al horizonte, el ancho de su
+intervalo 10–90 y su pronóstico al otro horizonte.
+
+Como el fundacional es zero-shot, sus pronósticos sobre el entrenamiento son tan "fuera de muestra" como los de la
+prueba: no hay fuga al usarlos como variable. El XGBoost base se entrena con las mismas filas, para que la diferencia
+se deba solo a las variables nuevas.
+
+===== CELL 14 [code] =====
+apilado = comparacion[comparacion["Tipo"] == "apilado"]
+t_apilado = tabla_mae(con_elegido(apilado), "MAE (MW) del XGBoost base y de los apilados")
+d = apilado[apilado["Archivo"].str.startswith(("xgb_simons", "xgb_chronos2", "xgb_ambos"))]
+delta = d.assign(Texto=d.apply(lambda f: f"{f['Δ MAE vs. elegido (MW)']:+.2f} [{f['IC 95 % bajo']:+.2f}, {f['IC 95 % alto']:+.2f}]"
+                                + ("" if f["Distinguible"] else " ·"), axis=1))
+display(delta.pivot_table(index=["Modelo", "Año", "Horizonte"], columns="Área", values="Texto", aggfunc="first", sort=False)
+        .style.set_caption("Diferencia de MAE (MW) con el Random Forest e intervalo al 95 %: negativo, el apilado mejora; «·», no se distingue de cero"))
+--- out:
+<pandas.io.formats.style.Styler at 0x7fe44ee27390>
+--- out:
+<pandas.io.formats.style.Styler at 0x7fe4cc756210>
+
+===== CELL 15 [markdown] =====
+# 6. Combinación lineal
+
+La forma más simple de juntar dos modelos: `w · fundacional + (1 − w) · Random Forest`. El peso `w` se busca en 2025
+(en pasos de 0.05) por área y horizonte, y se aplica tal cual en 2026. En 2025 el resultado es optimista, porque el
+peso se eligió ahí; el de 2026 es el honesto.
+
+===== CELL 16 [code] =====
+combinacion["Etiqueta"] = combinacion["Modelo"].map(etiqueta)
+combinacion["Tipo"] = combinacion["Modelo"].map(tipo)
+d = combinacion[combinacion["Tipo"].isin(["zero-shot", "ajuste fino"]) & combinacion["Modelo"].map(lambda n: separar_nombre(n)[1] == CONTEXTO_BASE)]
+display(d.pivot_table(index="Etiqueta", columns=["Año", "Horizonte", "Área"], values="Δ MAE vs. elegido (MW)")
+        .style.format("{:+.2f}").set_caption("Combinación con el Random Forest: diferencia de MAE (MW) frente al Random Forest solo"))
+display(d[d["Año"] == "2025"].pivot_table(index="Etiqueta", columns=["Horizonte", "Área"], values="Peso del modelo")
+        .style.format("{:.2f}").set_caption("Peso del fundacional en la combinación (fijado en 2025)"))
+--- out:
+<pandas.io.formats.style.Styler at 0x7fe44ee27390>
+--- out:
+<pandas.io.formats.style.Styler at 0x7fe44ee27390>
+
+===== CELL 17 [markdown] =====
+## La combinación de los dos mejores
+
+Lo mismo, pero entre los dos mejores modelos de este notebook según 2025: el mejor ajuste fino y el mejor apilado.
+Se equivocan de forma distinta (uno es una red que mira la curva; el otro, árboles con las variables del proyecto), y
+por eso promediarlos puede ayudar. El ajuste fino usa datos hasta 2024 y los pesos se fijan en 2025, por área y
+horizonte; en 2026 no se toca nada. Sus pronósticos se guardan junto a los demás para la app.
+
+===== CELL 18 [code] =====
+NOMBRE_COMBINACION = f"combinacion_c{CONTEXTO_BASE}"
+PRIMERO, SEGUNDO = mejor_de("ajuste fino"), mejor_de("apilado")
+if PRIMERO and SEGUNDO:
+    mezcla, pesos_mezcla = combinar_modelos(REPORTES, pronosticos[PRIMERO], pronosticos[SEGUNDO])
+    mezcla.to_parquet(CARPETA / f"{NOMBRE_COMBINACION}.parquet")
+    pronosticos[NOMBRE_COMBINACION] = mezcla
+    print("Se combinan:", etiqueta(PRIMERO), "y", etiqueta(SEGUNDO))
+    display(pesos_mezcla.pivot_table(index="Horizonte", columns="Área", values="Peso del primero")
+            .style.format("{:.2f}").set_caption(f"Peso de «{etiqueta(PRIMERO)}» en la combinación (fijado en 2025)"))
+    filas_mezcla = comparar(REPORTES, {NOMBRE_COMBINACION: mezcla})[0]
+    filas_mezcla = filas_mezcla[filas_mezcla["Modelo"] == NOMBRE_COMBINACION].assign(Tipo="combinación", Archivo=NOMBRE_COMBINACION, Modelo="Combinación (ajuste fino + híbrido)")
+    filas_mezcla["Distinguible"] = (filas_mezcla["IC 95 % bajo"] > 0) | (filas_mezcla["IC 95 % alto"] < 0)
+    mensual = pd.concat([mensual, comparar(REPORTES, {NOMBRE_COMBINACION: mezcla})[2]], ignore_index=True)
+    comparacion = pd.concat([comparacion, filas_mezcla], ignore_index=True)
+    d = comparacion[comparacion["Archivo"].isin([PRIMERO, SEGUNDO, NOMBRE_COMBINACION])]
+    t_mezcla = tabla_mae(con_elegido(d), "MAE (MW): la combinación frente a sus dos partes y al Random Forest")
+    display(filas_mezcla.assign(Texto=filas_mezcla.apply(lambda f: f"{f['Δ MAE vs. elegido (MW)']:+.2f} [{f['IC 95 % bajo']:+.2f}, {f['IC 95 % alto']:+.2f}]"
+                                                         + ("" if f["Distinguible"] else " ·"), axis=1))
+            .pivot_table(index=["Año", "Horizonte"], columns="Área", values="Texto", aggfunc="first")
+            .style.set_caption("Combinación: diferencia de MAE (MW) con el Random Forest e intervalo al 95 %; «·», no se distingue de cero"))
+--- out(stream):
+Se combinan: Chronos-2 ajustado con feriados (tasa 1e-6, 3000 pasos) y XGBoost + Simons
+
+--- out:
+<pandas.io.formats.style.Styler at 0x7fe44823a210>
+--- out:
+<pandas.io.formats.style.Styler at 0x7fe44ee27390>
+--- out:
+<pandas.io.formats.style.Styler at 0x7fe44ee27390>
+
+===== CELL 19 [markdown] =====
+# 7. Mes a mes y por régimen de El Niño
+
+En 2026 el nivel de la demanda se salió de lo visto (notebook 03). Un fundacional mira solo las últimas semanas, así
+que podría adaptarse mejor que un modelo entrenado hasta 2025. Se compara el mejor zero-shot, el mejor ajuste fino,
+el mejor apilado (elegidos con 2025) y la combinación con el Random Forest, mes a mes y por categoría del ICEN del mes.
+
+===== CELL 20 [code] =====
+DESTACADOS = [m for m in (mejor_de("zero-shot"), mejor_de("ajuste fino"), mejor_de("apilado"), NOMBRE_COMBINACION) if m in pronosticos]
+print("Elegidos con 2025:", {m: etiqueta(m) for m in DESTACADOS})
+
+fig, ejes = plt.subplots(2, 3, figsize=(17, 8), sharex=True)
+for i, h in enumerate(HORIZONTES):
+    for j, a in enumerate(AREAS):
+        eje = ejes[i, j]
+        for k, m in enumerate(DESTACADOS):
+            d = mensual[(mensual["Modelo"] == m) & (mensual["Horizonte"] == h) & (mensual["Área"] == NOMBRES[a])]
+            eje.plot(pd.PeriodIndex(d["Mes"], freq="M").to_timestamp(), 100 * (d["MAE (MW)"] / d["MAE del elegido (MW)"] - 1),
+                     marker="o", ms=3, color=PALETA[k + 1], label=etiqueta(m))
+        eje.axhline(0, color="black", lw=0.8)
+        eje.axvline(pd.Timestamp("2026-01-01"), color="gray", ls=":", lw=1)
+        eje.set_title(f"{NOMBRES[a]}, a {h}")
+        if j == 0:
+            eje.set_ylabel("MAE frente al Random Forest (%)")
+ejes[0, 0].legend(fontsize=8)
+fig.suptitle("Error mensual frente al Random Forest: por debajo de cero, mejor. La línea punteada separa 2025 de 2026")
+fig.autofmt_xdate()
+plt.tight_layout()
+plt.show()
+--- out(stream):
+Elegidos con 2025: {'simons_c2048': 'Simons 297M', 'chronos2ftcal_c2048': 'Chronos-2 ajustado con feriados (tasa 1e-6, 3000 pasos)', 'xgb_simons_c2048': 'XGBoost + Simons', 'combinacion_c2048': 'Combinación (ajuste fino + híbrido)'}
+
+--- out:
+<Figure size 1700x800 with 6 Axes>
+[image]
+
+===== CELL 21 [markdown] =====
+**Lectura del gráfico.**
+
+- **La combinación (rosa) queda por debajo de cero en casi todos los meses del Centro, a 1 h y a 24 h:** su ventaja sobre el Random Forest es estable, no la suma de unos pocos meses buenos.
+- **Simons sin ajustar se dispara a 24 h en abril** (más de 40 % peor que el Random Forest en el Centro, en 2025 y en 2026) **y en julio de 2025**: Semana Santa y Fiestas Patrias. Ajustado con feriados (naranja), esos picos desaparecen: el calendario es lo que le faltaba.
+- **El híbrido XGBoost + Simons (verde) se va por encima de cero en el Sur a 24 h**, sobre todo en la segunda mitad de 2026: por eso la propuesta lo combina con el ajuste fino en vez de usarlo solo. Antes y después de enero de 2026 el patrón es el mismo: no hay señal de que los fundacionales sigan mejor el cambio de nivel de El Niño.
+
+
+===== CELL 22 [code] =====
+icen = pd.read_parquet(RAIZ / "exogenas" / "silver" / "icen.parquet")
+ICEN_DEFINITIVO = icen.set_index(icen["mes"].dt.to_period("M"))["icen"]
+ORDEN_ICEN = ["neutra", "cálida débil", "cálida moderada", "cálida fuerte", "cálida extraordinaria", "sin ICEN publicado"]
+filas = []
+for h, paso in HORIZONTES.items():
+    for a in AREAS:
+        b = cargar_base(REPORTES, "2026", h, a)
+        objetivo = b["DateTime"] + paso * PASO
+        icen_mes = objetivo.dt.to_period("M").map(ICEN_DEFINITIVO)
+        regimen = np.where(icen_mes.isna(), "sin ICEN publicado", categoria_icen(icen_mes).astype(str))
+        preds = {NOMBRE_ELEGIDO: b[ELEGIDO], "Mejor referencia": b[min(REFERENCIAS, key=lambda r: (b[r] - b["real"]).abs().mean())]}
+        preds |= {etiqueta(m): alinear(b, pronosticos[m], a, paso)["pred"] for m in DESTACADOS}
+        tabla = mae_por_grupo(b["real"], preds, regimen)
+        for grupo, fila in tabla.iterrows():
+            filas.append({"Horizonte": h, "Área": NOMBRES[a], "Régimen": grupo, "Periodos": int((regimen == grupo).sum()),
+                          **{k: 100 * (1 - fila[k] / fila["Mejor referencia"]) for k in preds if k != "Mejor referencia"}})
+regimenes = pd.DataFrame(filas)
+regimenes["Régimen"] = pd.Categorical(regimenes["Régimen"], ORDEN_ICEN, ordered=True)
+display(regimenes.set_index(["Horizonte", "Área", "Régimen"]).sort_index().round(1)
+        .style.format("{:.1f}", subset=[c for c in regimenes.columns if c not in ("Horizonte", "Área", "Régimen", "Periodos")])
+        .set_caption("Prueba de 2026: mejora del MAE frente a la mejor referencia (%) por categoría de El Niño (ICEN del mes)"))
+--- out:
+<pandas.io.formats.style.Styler at 0x7fe44029b250>
+
+===== CELL 23 [markdown] =====
+# 8. Intervalos
+
+Los fundacionales dan cuantiles, así que su intervalo 10–90 debería contener lo real el 80 % de las veces. En el
+apilado, el intervalo sale de los cuantiles del error relativo de 2025 por área: en 2025 es dentro de muestra (por
+eso queda en 80 % casi exacto) y el dato honesto es el de 2026.
+
+===== CELL 24 [code] =====
+d = comparacion[comparacion["Tipo"].isin(["zero-shot", "ajuste fino", "apilado", "combinación"]) & comparacion["Cobertura 10–90 (%)"].notna()
+                & comparacion["Archivo"].map(lambda n: separar_nombre(n)[1] == CONTEXTO_BASE)]
+t_cobertura = d.pivot_table(index="Modelo", columns=["Año", "Horizonte"], values="Cobertura 10–90 (%)")
+display(t_cobertura.style.format("{:.1f}").set_caption("Cobertura del intervalo 10–90 (%), media de las tres áreas; lo ideal es 80"))
+--- out:
+<pandas.io.formats.style.Styler at 0x7fe44029b250>
+
+===== CELL 25 [markdown] =====
+# 9. Qué mira el modelo híbrido
+
+Importancia por permutación en la validación de 2025: cuánto sube el MAE (MW, suma de las tres áreas) al desordenar
+cada variable, agregada por grupo. La escala `media_24h` no entra, como en el notebook 02.
+
+===== CELL 26 [code] =====
+ruta = CARPETA / "importancias_chronos2_simons.csv"
+if ruta.exists():
+    imp = pd.read_csv(ruta)
+    imp = imp[imp["variable"] != "media_24h"]
+    por_grupo = imp.pivot_table(index=["config", "h"], columns="grupo", values="aumento_mae_mw", aggfunc="sum")
+    por_grupo["Parte del fundacional (%)"] = 100 * por_grupo["fundacional"] / por_grupo.sum(axis=1)
+    display(por_grupo.rename(index=lambda n: etiqueta(n + f"_c{CONTEXTO_BASE}") if n.startswith("xgb") else n).round(1)
+            .style.format("{:.1f}").set_caption("Aumento del MAE al permutar (MW), por grupo de variables"))
+    top = imp[imp["config"] == "xgb_simons"].sort_values("aumento_mae_mw", ascending=False).groupby("h").head(6)
+    display(top[["h", "variable", "grupo", "aumento_mae_mw"]].round(1).style.hide(axis="index")
+            .set_caption("Las seis variables más importantes del XGBoost + Simons"))
+else:
+    print("No está la tabla de importancias del apilado.")
+--- out:
+<pandas.io.formats.style.Styler at 0x7fe44029b250>
+--- out:
+<pandas.io.formats.style.Styler at 0x7fe44029b250>
+
+===== CELL 27 [markdown] =====
+# 10. Costo
+
+Tiempos medidos en Colab con una GPU L4 (23 GB), contexto de 2048 periodos: los 95,040 pronósticos de 48 pasos de
+2025 y 2026 (31,680 orígenes por tres áreas). El apilado necesita además los pronósticos del fundacional sobre el
+entrenamiento (464,832 más) y después entrena en segundos.
+
+===== CELL 28 [code] =====
+MINUTOS = {"TiRex-2": 2.3, "Simons 297M": 8.1, "T0-gamma": 9.5, "Chronos-2": 11.1, "Toto 2.0 313M": 11.9, "Timestral 209M": 15.2,
+           "TimesFM 2.5": 17.4, "TimesFM 3.0": 20.8}
+costo = pd.DataFrame({"Minutos (2025 + 2026)": MINUTOS})
+costo["Pronósticos por segundo"] = (95_040 / (costo["Minutos (2025 + 2026)"] * 60)).round(0)
+costo["Milisegundos por pronóstico"] = (1000 / costo["Pronósticos por segundo"]).round(1)
+display(costo.sort_values("Minutos (2025 + 2026)").style.format({"Minutos (2025 + 2026)": "{:.1f}", "Pronósticos por segundo": "{:.0f}",
+        "Milisegundos por pronóstico": "{:.1f}"}).set_caption("Costo de inferencia zero-shot en una GPU L4"))
+print("Otros tiempos: Simons sobre el entrenamiento (2016–2024), 39.5 min · ajuste fino de Chronos-2 con feriados, "
+      "3000 pasos en 26 min · XGBoost apilado, ~6 s por modelo.")
+--- out:
+<pandas.io.formats.style.Styler at 0x7fe44029b250>
+--- out(stream):
+Otros tiempos: Simons sobre el entrenamiento (2016–2024), 39.5 min · ajuste fino de Chronos-2 con feriados, 3000 pasos en 26 min · XGBoost apilado, ~6 s por modelo.
+
+
+===== CELL 29 [markdown] =====
+# 11. Robustez
+
+**¿Depende el resultado de la semilla?** El ajuste fino elegido se repitió con la misma receta y otras dos semillas
+(2 y 3; la corrida original usó 42). Si la ventaja sobre el Random Forest fuera suerte del entrenamiento, las tres
+corridas darían errores distintos. Las semillas extra no compiten en ninguna tabla ni en la elección: solo se usan
+aquí.
+
+**Control de fuga del ajuste fino.** Se revisó el código de ajuste e inferencia:
+
+- El ajuste corta las series en las fechas anteriores al 1 de enero de 2025 (la última muestra es la de las 23:30
+  del 31 de diciembre de 2024) y el script lo comprueba con un `assert`. No usa datos de validación, así que tampoco
+  elige un punto de control mirando datos posteriores.
+- En la inferencia, la demanda y las covariables pasadas llegan hasta el origen. La única covariable futura es el
+  feriado, que sale del calendario y se conoce de antemano.
+- Los 336 periodos vacíos de la capa silver son siete días enteros entre diciembre de 2017 y diciembre de 2020:
+  ninguno cae en el contexto de un origen de 2025 o 2026, así que la interpolación no toca la evaluación.
+
+===== CELL 30 [code] =====
+semillas = comparacion[comparacion["Archivo"].str.startswith("chronos2ftcal_s") | (comparacion["Archivo"] == f"chronos2ftcal_c{CONTEXTO_BASE}")]
+if semillas["Archivo"].nunique() > 1:
+    claves = ["Año", "Horizonte", "Área"]
+    rango = semillas.groupby(claves, sort=False)["MAE (MW)"].agg(["min", "max"])
+    rango["Rango entre semillas (MW)"] = rango["max"] - rango["min"]
+    rango["Random Forest (MW)"] = elegido.set_index(claves)["MAE (MW)"]
+    rango["Ventaja mínima sobre el Random Forest (MW)"] = rango["Random Forest (MW)"] - rango["max"]
+    rango = rango.rename(columns={"min": "MAE mínimo (MW)", "max": "MAE máximo (MW)"})
+    display(rango.style.format("{:.2f}").set_caption(f"Chronos-2 ajustado con feriados: {semillas['Archivo'].nunique()} semillas"))
+    print(f"Mayor diferencia entre semillas: {rango['Rango entre semillas (MW)'].max():.2f} MW · "
+          f"menor ventaja sobre el Random Forest: {rango['Ventaja mínima sobre el Random Forest (MW)'].min():.2f} MW")
+else:
+    print("Todavía no están las corridas con otras semillas.")
+--- out:
+<pandas.io.formats.style.Styler at 0x7fe44029b250>
+--- out(stream):
+Mayor diferencia entre semillas: 0.19 MW · menor ventaja sobre el Random Forest: 0.70 MW
+
+
+===== CELL 31 [markdown] =====
+# 12. Propuesta
+
+La misma regla del notebook 02: se propone el modelo con **mayor mejora media frente a la mejor referencia en la
+validación de 2025** (promedio de las tres áreas y los dos horizontes). Compiten todos los modelos de este notebook y
+el Random Forest elegido. La combinación de los dos mejores también entra, con una salvedad: sus seis pesos se
+ajustaron en ese mismo 2025, así que ahí parte con una pequeña ventaja; por eso se reporta al lado el mejor modelo
+individual, que no tiene ese problema, y 2026 sirve de confirmación.
+
+===== CELL 32 [code] =====
+candidatos = comparacion[comparacion["Archivo"].map(lambda n: n == NOMBRE_ELEGIDO or separar_nombre(n)[1] == CONTEXTO_BASE)
+                         & (comparacion["Tipo"] != "robustez")]
+ranking = candidatos.pivot_table(index=["Modelo", "Tipo"], columns=["Año", "Horizonte"], values="Mejora vs. mejor referencia (%)")
+ranking[("2025", "media")] = ranking["2025"].mean(axis=1)
+ranking[("2026", "media")] = ranking["2026"].mean(axis=1)
+ranking = ranking.sort_values(("2025", "media"), ascending=False).sort_index(axis=1, level=0, sort_remaining=False)
+display(ranking.style.format("{:.1f}").set_caption("Mejora media frente a la mejor referencia (%), ordenado por 2025"))
+PROPUESTO = ranking.index[0][0]
+INDIVIDUAL = next(m for m, t in ranking.index if t != "combinación")
+print("Modelo propuesto por la regla (2025):", PROPUESTO)
+print("Mejor modelo individual (2025):", INDIVIDUAL)
+d = comparacion[comparacion["Modelo"] == PROPUESTO]
+if PROPUESTO != NOMBRE_ELEGIDO:
+    display(d.assign(Resultado=np.where(d["IC 95 % alto"] < 0, "mejor", np.where(d["IC 95 % bajo"] > 0, "peor", "no se distingue")))
+            .pivot_table(index=["Año", "Horizonte"], columns="Área", values="Resultado", aggfunc="first")
+            .style.set_caption(f"{PROPUESTO} frente al Random Forest elegido"))
+--- out:
+<pandas.io.formats.style.Styler at 0x7fe44029b4d0>
+--- out(stream):
+Modelo propuesto por la regla (2025): Combinación (ajuste fino + híbrido)
+Mejor modelo individual (2025): Chronos-2 ajustado con feriados (tasa 1e-6, 3000 pasos)
+
+--- out:
+<pandas.io.formats.style.Styler at 0x7fe44029b4d0>
+
+===== CELL 33 [markdown] =====
+# 13. Guardar
+
+===== CELL 34 [code] =====
+tablas = CARPETA / "tablas"
+tablas.mkdir(exist_ok=True)
+comparacion.to_csv(tablas / "comparacion.csv", index=False)
+combinacion.to_csv(tablas / "combinacion.csv", index=False)
+mensual.to_csv(tablas / "mensual.csv", index=False)
+regimenes.to_csv(tablas / "regimenes_2026.csv", index=False)
+if PRIMERO and SEGUNDO:
+    pesos_mezcla.assign(Primero=PRIMERO, Segundo=SEGUNDO).to_csv(tablas / "pesos_combinacion.csv", index=False)
+ranking.to_csv(tablas / "ranking.csv")
+if semillas["Archivo"].nunique() > 1:
+    rango.to_csv(tablas / "robustez_semillas.csv")
+print("Tablas en", tablas)
+--- out(stream):
+Tablas en /home/rody/Code/lab/courses/tetouan-power-forecast/data/reportes/sein/fundacionales/tablas
+
+
+===== CELL 35 [markdown] =====
+# Conclusiones
+
+Todo lo que se elige sale de la validación de 2025. Las cifras de 2026 se reportan, pero la prueba ya se había usado
+en el notebook 03: aquí es una confirmación, no una prueba virgen.
+
+**1. Sin entrenar, los fundacionales ya le ganan al Random Forest a 1 h.** Con 43 días de contexto y sin ver nunca
+nuestros datos, Simons baja el MAE de 2025 a 1 h de 54.6 a 49.7 MW en el Centro, de 19.7 a 18.8 en el Norte y de 24.1
+a 22.4 en el Sur. Seis de los ocho modelos quedan por delante del Random Forest a ese horizonte (TimesFM 2.5 y TiRex-2
+no). En 2026 el orden se mantiene (Simons: 50.6, 19.3 y 21.3 MW).
+
+**2. A 24 h, sin entrenar no alcanza, y el motivo son los feriados.** El mejor zero-shot (Simons) queda en 92.9 MW en
+el Centro frente a 86.1 del Random Forest; solo gana en el Sur (54.2 frente a 56.7). El error mensual lo explica: los
+peores meses son abril y julio, los de Semana Santa y Fiestas Patrias. El fundacional ve la
+forma reciente de la curva, pero no sabe qué día es mañana. Darle cuatro veces más historia (171 días en vez de
+43) ayuda poco: a 24 h en el Centro, Simons pasa de 92.9 a 91.5 MW, Timestral de 97.6 a 91.0 y Chronos-2 de 101.0 a
+97.1, todos todavía por detrás del Random Forest; a 1 h casi no cambia.
+
+**3. La temperatura no ayuda; el calendario sí.** Darle a Chronos-2 la temperatura y su pronóstico empeora en 2026 (a
+24 h en el Centro, 97.6 MW frente a 87.3 sin covariables), igual que pasó con M1 en el notebook 03. Darle solo los
+feriados mejora el Centro a 24 h en 2025 (de 101.0 a 93.0 MW).
+
+**4. El mejor modelo individual es Chronos-2 ajustado con nuestros datos y con feriados.** Con la regla del notebook 02
+(mayor mejora media frente a la mejor referencia en 2025), entre los modelos individuales gana el ajuste fino de Chronos-2 con la demanda hasta 2024
+y los feriados como covariable: 40.0 % de mejora media frente a 35.2 % del Random Forest. Le gana al Random Forest en
+las tres áreas y los dos horizontes de 2025, con diferencias que se distinguen de cero: a 1 h, 49.8 frente a 54.6 MW
+en el Centro; a 24 h, 75.6 frente a 86.1 (−10.5 MW, IC 95 %: −13.8 a −7.2), 27.1 frente a 28.8 en el Norte y 51.8
+frente a 56.7 en el Sur. En 2026 se confirma en cinco de los seis casos (a 24 h: Centro 72.5 frente a 78.1; Sur 44.6
+frente a 48.3); en el Norte a 24 h la diferencia no se distingue (28.2 frente a 29.0). De las cinco variantes, las de
+ajuste suave (tasa 1e-6) mejoran al zero-shot y la que lleva feriados es la mejor; ampliar el calendario (sábado,
+domingo, víspera y puente) no suma (78.2 MW en el Centro a 24 h) y usar un contexto más largo en la inferencia,
+tampoco (77.2). La agresiva (tasa 1e-5, 5000 pasos) sobreajusta: empeora en el Sur a 24 h (63.9 MW) y su intervalo
+se rompe.
+
+**5. El modelo híbrido mejora sin ajustar ninguna red, pero falla en el Sur.** El XGBoost con el pronóstico zero-shot de
+Simons como variable mejora al Random Forest en el Centro y el Norte (2025: 49.0 MW a 1 h y 81.3 a 24 h en el Centro;
+2026: 49.2 y 75.6), pero en el Sur a 24 h no mejora en 2025 y es peor en 2026 (49.8 frente a
+48.3 MW). El pronóstico fundacional pasa a ser su variable principal: explica entre dos tercios y tres cuartos de la
+importancia por permutación. La combinación lineal de un fundacional con el Random Forest también mejora en todos los
+casos, aunque menos que el ajuste fino.
+
+**6. La propuesta: combinar el ajuste fino con el híbrido.** Los dos mejores modelos se equivocan de forma distinta,
+y promediarlos con un peso por área y horizonte da el mejor resultado de todo el notebook: le gana al Random Forest
+en los doce casos (tres áreas, dos horizontes, dos años), siempre con diferencia distinguible de cero. En 2025: a 1 h,
+48.2 MW en el Centro (−6.4), 18.5 en el Norte y 22.5 en el Sur; a 24 h, 75.2 (−10.9), 26.9 y 51.8. En 2026, sin tocar
+nada: a 1 h, 48.8, 18.8 y 20.9 MW; a 24 h, 71.9 (−6.2; IC 95 %: −8.7 a −3.8), 27.9 y 44.6. La mejora media frente a la
+mejor referencia sube de 35.2 a 40.7 % en 2025 y de 37.9 a 42.3 % en 2026. A 1 h pesan parecido los dos modelos; a
+24 h manda el ajuste fino (peso de 0.70 a 0.95). El ajuste fino solo usa datos hasta 2024 y los pesos se fijaron en
+2025; como esos pesos se eligieron en el mismo año con que se ordena, la alternativa de un solo modelo es el
+Chronos-2 ajustado con feriados, que queda a menos de un punto.
+
+**7. No se adaptan mejor a El Niño; son mejores en general.** La ventaja del modelo propuesto frente al Random Forest
+es parecida en los meses neutros y en los de El Niño fuerte o extraordinario: no hay señal de que el fundacional
+siga mejor el cambio de nivel de 2026. El objetivo en razón del proyecto ya absorbía ese cambio.
+
+**8. Los intervalos.** Los cuantiles de los fundacionales sin ajustar están bien calibrados: su intervalo 10–90
+contiene lo real cerca del 80 % de las veces en los dos años (Simons: 81 % a 1 h y 80 % a 24 h). Los de Chronos-2
+quedan cortos (75 %), con o sin ajuste suave, y los de la combinación, entre 77 y 80 %.
+
+**9. El resultado no depende de la semilla y no hay fuga.** Repetir el ajuste fino con otras dos semillas mueve el
+MAE como mucho 0.19 MW (Centro a 24 h en 2026), frente a una ventaja sobre el Random Forest de entre 0.7 y 10.5 MW
+según el caso. El código se revisó: el ajuste solo ve datos hasta el 31 de diciembre de 2024, no usa validación para
+elegir un punto de control, y la única covariable futura es el feriado.
+
+**Límites y qué hay que declarar**
+
+- **Un solo año para elegir.** La propuesta sale de 2025 y la diferencia entre los primeros puestos es de pocos
+  puntos. Las variantes de ajuste fino se compararon en ese mismo año.
+- **2026 ya estaba vista** cuando se hizo este trabajo. Nada se eligió con ella, pero deja de ser una prueba limpia.
+- **Qué vieron los fundacionales al preentrenarse no se puede auditar.** No hay indicios de que la demanda del COES
+  esté en sus datos, pero no se puede descartar; varios se entrenaron con series de carga eléctrica de otros países.
+- **Huecos.** Los 336 periodos vacíos de la capa silver se interpolan en el contexto.
+- **Hace falta GPU.** Un pronóstico cuesta entre 1 y 13 ms en una L4; el ajuste fino con feriados, 26 minutos. El Random Forest y el XGBoost corren en CPU. Para la app, lo práctico es servir pronósticos ya calculados.
+- **Licencias.** Chronos-2 (Apache-2.0) y Simons (OpenMDW-1.1) permiten cualquier uso. TimesFM 3.0 es solo para uso
+  no comercial y Timestral limita el uso en empresas grandes: aquí se usan con fines académicos.
+- **Lo que no se hizo.** Búsqueda de hiperparámetros del apilado, ajuste fino de otros modelos, y reentrenar durante
+  2026.

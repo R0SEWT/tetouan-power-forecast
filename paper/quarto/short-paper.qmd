@@ -43,9 +43,11 @@ abstract: |
   demanda sale de lo que el modelo vio: en 2026, El Niño Costero extraordinario llevó la del Norte hasta 17 % sobre
   2025. Siguiendo CRISP-DM, pronosticamos la **razón** entre la demanda futura y la media de las últimas 24 horas,
   solo con variables conocidas al predecir, contra la **mejor de tres referencias ingenuas** y con intervalos por
-  **bootstrap de días**. Elegido con 2025 y probado una sola vez en 2026, un Random Forest redujo el error frente a
-  esa referencia en 51.7, 57.9 y 29.1 % a 1 hora (Norte, Centro y Sur) y en 34.5, 42.2 y 11.9 % a 24 horas, más que
-  en 2025. Clima, El Niño y reentrenar cambian el error alrededor de 1 %, y con temperaturas nunca vistas el clima
+  **bootstrap de días**. En el reanálisis de Tetuán, promediar los deltas diario y semanal supera al modelo en dos
+  de tres zonas. En Ceuta, el delta semanal supera al modelo sin verano en los cinco veranos (2.06 frente a 2.33 %
+  de MAPE). En el SEIN, un Random Forest elegido con 2025 redujo el error de 2026 frente a las referencias
+  históricas en 51.7, 57.9 y 29.1 % a 1 hora (Norte, Centro y Sur) y en 34.5, 42.2 y 11.9 % a 24 horas.
+  Clima simulado, El Niño y reentrenar cambian el error alrededor de 1 %, y con temperaturas nunca vistas el clima simulado
   empeora el pronóstico a 24 horas. Como extensión, una combinación de Chronos-2 ajustado y un XGBoost híbrido baja
   el error del Centro en 2025 de 54.6 a 48.2 MW a 1 hora y de 86.1 a 75.2 a 24 horas. La app Curva publica el
   pronóstico junto con cuánto acertó.
@@ -72,12 +74,12 @@ pares que midan el efecto de El Niño sobre la demanda del SEIN.
 <!-- notebook 01 del SEIN, celdas 19 y 26; spec §1. -->
 
 **Antecedentes y objetivo.** La metodología se diseñó con el consumo de Tetuán (Marruecos; un año cada 10 minutos)
-[@salam2018; @wei2023], donde el modelo en razón quedó entre 41 y 56 % por debajo de la mejor referencia ingenua, y se
-verificó en Ceuta [@ree_ceuta], donde no haber visto un verano costó un 20 % más de error, no el doble; el detalle
-está en el informe técnico [@informe]. Aquí buscamos una metodología que se sostenga cuando la demanda sale de lo
+[@salam2018; @wei2023] y se aplicó a Ceuta [@ree_ceuta]. Se conserva la regla histórica de las tres referencias
+y se añade un reanálisis con referencias estacionales más fuertes (@sec-reanalisis). Aquí buscamos una metodología
+que se sostenga cuando la demanda sale de lo
 visto y medimos qué ayuda más durante un evento extraordinario: sumar información exógena (clima, El Niño, fallas) o
 reentrenar más seguido. La contribución no es una arquitectura nueva sino un protocolo de evaluación orientado a la
-operación: regla de información, objetivo en razón, vara exigente, intervalos y prueba fuera de distribución.
+operación: regla de información, referencias estacionales, objetivo en razón, intervalos y evaluación fuera de distribución.
 
 <!-- Tetuán: reportes/modelado/prueba.csv y notebook 02 de Tetuán, celdas 21 y 24. Ceuta: docs/historico.md, §8. -->
 
@@ -209,14 +211,28 @@ Model [@card1980], axe-core, un lector de atención entrenado con UEyes [@jiang2
 [@medlock2002] con personas sintéticas, que tienden a ser complacientes [@agnew2024]. **Nada se probó aún con
 personas.**
 
-**Pronóstico en vivo.** Desde el 13 de noviembre de 2026 una corrida diaria baja el anexo del IEOD, lo valida y
-registra el pronóstico de hoy a 24 horas con Chronos-2 ajustado, con su sello de tiempo y el sha256 de los pesos y del
-anexo, antes de que exista su real.
+**Pronóstico en vivo.** Desde el 13 de noviembre de 2026 una corrida diaria valida el anexo del IEOD y registra
+el pronóstico rodante de 24 horas de Chronos-2 ajustado con un sello de tiempo y el SHA-256 de los pesos y del anexo.
+La corrida se emite hacia las 10:00 del propio día objetivo. Los periodos posteriores a la emisión forman la
+muestra estrictamente anticipada.
 
 <!-- app/backend/pronosticador_real.py; docs/app-hcd.md y docs/auditoria/; despliegue/README.md (PR #57 y #62);
 experimentos/en_vivo/README.md y src/tetouan_power_forecast/en_vivo.py. -->
 
 # Resultados del modelo {#sec-resultados}
+
+## Reanálisis de Tetuán y Ceuta {#sec-reanalisis}
+
+El delta diario suma a la demanda actual el cambio a la misma hora del día anterior. El semanal usa el cambio
+de la semana anterior. En Tetuán, sobre las 7,841 filas exactas de prueba por zona, la reducción de MAE del
+modelo global es de 44.8, 55.9 y 40.7 % frente a la mejor de tres referencias históricas. Frente al delta diario
+es de 18.5, 12.3 y −9.4 %. Frente al promedio simple de ambos deltas es de 3.8, −3.9 y −16.5 %.
+
+En Ceuta se reprodujo el modelo V4 sin veranos de entrenamiento sobre 8,928 orígenes por verano de 2022–26.
+Su MAPE medio fue 2.33 %, frente a 2.06 % del delta semanal y 1.87 % del promedio de ambos deltas. El delta
+semanal gana los cinco veranos. Estos resultados son descriptivos sobre ventanas ya examinadas.
+
+<!-- experimentos/historico/reanalisis_tb1.py, reportes/tb1/reanalisis.csv y docs/protocolo-reanalisis-tb1.md. -->
 
 ## Validación en 2025: elección del modelo {#sec-validacion}
 
@@ -402,13 +418,13 @@ shap_por_familia.csv); entregables/Entregable8_MDS_Grupo03.ipynb. -->
    meses enteros, la combinación sigue ganando al Random Forest en los doce casos.
 2. **Efectos chicos y muchas comparaciones:** los de exógenas y reentrenamiento (0.09 a 1.48 MW) salen de 66
    intervalos sin corrección; lo robusto es su tamaño, no cada signo.
-3. **El supuesto COES-ENFEN es optimista:** ERA5 hace de observado y el error de temperatura simulado (1.5 °C) no
-   tiene sesgo; si aun así el clima empeora el pronóstico a 24 horas, con un pronóstico real difícilmente ayudaría.
+3. **El clima se simuló:** ERA5 hace de observado y el error de temperatura simulado (1.5 °C) carece de sesgo.
+   El resultado depende de esa simulación y se contrastará con pronósticos archivados.
    La variable de fallas no se pudo evaluar (activa el 91 % del tiempo).
 4. **Empate y búsqueda acotada:** Random Forest y XGBoost difieren en 0.3 puntos; los hiperparámetros se buscaron
    solo en el Centro a 1 hora, y las hipótesis se escribieron tras explorar los datos de 2026.
-5. **Datos:** la prueba llega al 17 de octubre, el IEOD sustituye al SCADA y no se comparó con la Programación Diaria
-   del COES, la vara oficial.
+5. **Datos:** la prueba llega al 17 de octubre y el IEOD sustituye al SCADA. Queda pendiente la evaluación a
+   día siguiente contra una edición del Programa Diario del COES identificada y archivada al publicarse.
 6. **Fundacionales:** no es una prueba intacta, las licencias difieren (TimesFM 3.0 es no comercial) y exigen GPU;
    el ajuste fino es robusto a la semilla (0.19 MW entre tres semillas).
 7. **En vivo y diseño:** el seguimiento en vivo son cinco días y la validación del diseño es sintética.
@@ -420,10 +436,10 @@ El detalle de cada una está en el informe técnico [@informe].
 **Conclusiones.** (1) Durante El Niño extraordinario de 2026, un modelo en razón entrenado hasta 2025 y sin tocar le
 gana a la mejor referencia ingenua en las tres áreas y los dos horizontes (51.7, 57.9 y 29.1 % a 1 hora; 34.5, 42.2 y
 11.9 % a 24 horas), más que en un año normal, y no se degrada a medida que El Niño se intensifica. Lo que sostiene el
-pronóstico es la metodología (la razón con la media de 24 horas y la vara exigente), no las exógenas ni el
-reentrenamiento: ambos cambian el error alrededor de 1 %, y con temperaturas nunca vistas el clima empeora el
-pronóstico a 24 horas. Para el operador: modelo en razón, reentrenado cada semana, con el clima a 1 hora y sin
-exógenas a 24 horas. (2) Combinar Chronos-2 ajustado con el híbrido baja el error del Centro en 2025 de 54.6 a
+pronóstico frente a esas referencias se obtiene con la razón respecto a la media de 24 horas. En esta evaluación,
+las exógenas y el reentrenamiento cambian el error alrededor de 1 %, y el clima simulado empeora el pronóstico a
+24 horas en el Norte y Centro. La prueba frente al programa del operador queda pendiente. (2) Combinar
+Chronos-2 ajustado con el híbrido baja el error del Centro en 2025 de 54.6 a
 48.2 MW a 1 hora y de 86.1 a 75.2 a 24 horas, y el del Sur a 24 horas, el punto débil, de 56.7 a 51.8; se propone
 como siguiente versión, con la cautela de que se eligió con un solo año y exige GPU. (3) Curva ejecuta los modelos y
 dice cuánto acertó; desde el 13 de noviembre el pronóstico del día se emite antes de conocer su real, y en sus

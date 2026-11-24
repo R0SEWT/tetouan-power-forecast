@@ -44,10 +44,11 @@ de información**); el modelo se compara contra la **mejor de tres referencias i
 que ayer o que la semana pasada a esa hora); y toda diferencia se reporta con su intervalo por **bootstrap de
 días**.
 
-Resultados. En Tetuán, el modelo queda entre 41 y 56 % por debajo de la mejor referencia ingenua en la prueba y le
-gana en los 24 meses-zona del origen móvil.[^tet-prueba] En Ceuta, el objetivo en razón le gana al modelo en
-nivel en los 25 pares de verano e historia, y entrenar sin haber visto un verano cuesta 0.38 puntos de MAPE
-(2.31 frente a 1.93 %), la mitad del error de la mejor referencia (4.62 %).[^ceuta] En el SEIN, durante 2026
+Resultados. En Tetuán, el modelo queda entre 41 y 56 % por debajo de la mejor de las tres referencias históricas
+en la prueba.[^tet-prueba] Frente al promedio de los deltas diario y semanal, gana en Zona 1 y pierde en las zonas
+2 y 3. En Ceuta, el objetivo en razón le gana al modelo en nivel en la corrida histórica.[^ceuta] En el reanálisis,
+el V4 sin verano queda en 2.33 % de MAPE frente a 2.06 % del delta semanal, que gana los cinco veranos.
+En el SEIN, durante 2026
 (ICEN de 3.98 en agosto, el mayor desde 1997-98), un modelo entrenado hasta 2025 y sin tocar durante la prueba
 redujo el error a 1 hora en 51.7 % (Norte), 57.9 % (Centro) y 29.1 % (Sur) frente a la mejor referencia, y a 24
 horas en 34.5, 42.2 y 11.9 %; la mejora fue mayor que en 2025 en cinco de los seis casos.[^fr26] Reentrenar cada
@@ -402,6 +403,17 @@ prueba:[^tet-prueba]
 | Zona 2 | Semana pasada, 973.5 | 429.4 · 1.91 % | 55.9 % | −544.1 (−727.2 a −394.1) | 335.1 / 832.6 | 415.0 (57.4 %) |
 | Zona 3 | Ayer, 723.1 | 429.0 · 3.63 % | 40.7 % | −294.0 (−441.6 a −168.9) | 350.6 / 553.6 | 415.5 (42.5 %) |
 
+**Reanálisis descriptivo con referencias fuertes.** Se evalúan las mismas 7,841 filas por zona. El delta suma
+a la demanda actual el cambio a la hora objetivo observado el día anterior o la semana anterior. La última
+columna es la reducción relativa del MAE del modelo frente al promedio de ambos deltas. Las ventanas ya se habían
+examinado y el protocolo documenta el cambio de comparadores respecto de la evaluación original.
+
+| Zona | Modelo global (MAE) | Delta diario (MAE) | Promedio de deltas (MAE) | Reducción relativa frente al promedio |
+|---|---:|---:|---:|---:|
+| 1 | 462.5 | 567.5 | 480.7 | +3.8 % |
+| 2 | 429.4 | 489.9 | 413.2 | −3.9 % |
+| 3 | 429.0 | 392.1 | 368.2 | −16.5 % |
+
 En el origen móvil (marzo a octubre), el modelo le gana a la mejor referencia del mes en los 24 meses-zona; en
 julio, el primer mes de verano que el modelo nunca vio, la Zona 3 queda en 554 kW frente a 934 de la mejor
 referencia.[^tet-movil] Dónde pierde: en el Ramadán, en la Zona 3, 631 frente a 588 kW de la mejor referencia
@@ -441,10 +453,27 @@ verano" entrena con enero a junio del mismo año, como el pliegue de julio de Te
 |---:|---:|---:|---:|---:|---:|---:|
 | 4.62 | 2.87 | **2.31** | 2.10 | **1.93** | 1.84 | 1.81 |
 
-El objetivo en razón le gana al objetivo en nivel en los 25 pares de verano e historia (2020-2026). No haber visto
+En la evaluación original, el objetivo en razón le gana al objetivo en nivel en los 25 pares de verano e historia de
+2022 a 2026. No haber visto
 un verano cuesta 0.38 puntos con la razón (+20 %) y 0.77 con el nivel (+37 %, hasta 1.2 puntos en 2024). El segundo
 año baja el MAPE 0.1 puntos y el tercero casi nada. Con eso se responde la pregunta de Tetuán: lo que más pesa es
 haber visto un verano; con un año más de datos, el error de verano bajaría alrededor de un 20 %, no a la mitad.
+
+**Reanálisis descriptivo sobre las mismas filas.** Se regeneró el V4 sin verano con la receta histórica.
+El promedio de V4 regenerado (2.33 %) queda 0.02 puntos por encima del agregado de la corrida original. Los
+cinco veranos tienen 8,928 pares cada uno, sin demanda no positiva. El delta semanal gana en los cinco y el
+promedio de ambos deltas obtiene el menor MAPE de los tres métodos de la tabla.
+
+| Verano | V4 sin verano, MAPE % | Delta semanal, MAPE % | Promedio de deltas, MAPE % |
+|---|---:|---:|---:|
+| 2022 | 2.73 | 2.33 | 2.03 |
+| 2023 | 2.07 | 1.97 | 1.78 |
+| 2024 | 2.78 | 2.29 | 2.17 |
+| 2025 | 1.88 | 1.76 | 1.59 |
+| 2026 | 2.18 | 1.98 | 1.77 |
+| Media de los cinco veranos | 2.33 | 2.06 | 1.87 |
+
+El [protocolo de reanálisis](../docs/protocolo-reanalisis-tb1.md) documenta las ventanas y métricas.
 
 ## 5.3 SEIN: validación en 2025 (OE3, año normal)
 
@@ -832,7 +861,8 @@ igual** (otro tamaño de sistema, otro perímetro, otro horizonte y otros años)
   comité el error horario y del pico de cada mes (enero de 2026: 1.73 % y 1.87 %).
 - En conjunto, el error al día siguiente que publican los operadores está entre 1.5 y 3 %. El combinado del
   proyecto, en la prueba de 2026 a 24 horas, da un WAPE de 1.64 % en el Centro, 2.44 % en el Norte y 2.46 % en el Sur
-  (MAPE de 1.66, 2.50 y 2.49 %). Es competitivo en orden de magnitud; lo que ningún operador revisado hace es poner
+  (MAPE de 1.66, 2.50 y 2.49 %). La comparación con una edición identificada del Programa Diario del COES queda
+  pendiente; lo que ningún operador revisado hace es poner
   el error y la cobertura del rango en el mismo tablero del pronóstico, que es lo que hace la pantalla «Confianza».
 
 # 6. Visualización y análisis

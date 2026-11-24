@@ -1,0 +1,323 @@
+Installed 5 packages in 37ms
+### cell 5
+                   Archivo                                                                   Modelo         Tipo  Contexto (periodos) Licencia de los pesos  Orígenes                Desde                Hasta
+0       chronos2ft_b_c2048                               Chronos-2 ajustado (tasa 1e-5, 5000 pasos)  ajuste fino                 2048            Apache-2.0     31680  2025-01-01 00:00:00  2026-10-22 23:30:00
+1       chronos2ft_a_c2048                               Chronos-2 ajustado (tasa 1e-6, 1000 pasos)  ajuste fino                 2048            Apache-2.0     31680  2025-01-01 00:00:00  2026-10-22 23:30:00
+2       chronos2ft_c_c2048                               Chronos-2 ajustado (tasa 1e-6, 4000 pasos)  ajuste fino                 2048            Apache-2.0     31680  2025-01-01 00:00:00  2026-10-22 23:30:00
+3     chronos2ftcal2_c2048       Chronos-2 ajustado con calendario ampliado (tasa 1e-6, 3000 pasos)  ajuste fino                 2048            Apache-2.0     31680  2025-01-01 00:00:00  2026-10-22 23:30:00
+4      chronos2ftcal_c2048                  Chronos-2 ajustado con feriados (tasa 1e-6, 3000 pasos)  ajuste fino                 2048            Apache-2.0     31680  2025-01-01 00:00:00  2026-10-22 23:30:00
+5      chronos2ftcal_c8192  Chronos-2 ajustado con feriados (tasa 1e-6, 3000 pasos) (contexto 8192)  ajuste fino                 8192            Apache-2.0     31680  2025-01-01 00:00:00  2026-10-22 23:30:00
+6       xgb_chronos2_c2048                                                      XGBoost + Chronos-2      apilado                 2048            Apache-2.0     31680  2025-01-01 00:00:00  2026-10-22 23:30:00
+7          xgb_ambos_c2048                                             XGBoost + Chronos-2 + Simons      apilado                 2048                varias     31680  2025-01-01 00:00:00  2026-10-22 23:30:00
+8         xgb_simons_c2048                                                         XGBoost + Simons      apilado                 2048           OpenMDW-1.1     31680  2025-01-01 00:00:00  2026-10-22 23:30:00
+9           xgb_base_c2048                                                           XGBoost global      apilado                 2048                     —     31681  2025-01-01 00:00:00  2026-10-23 00:00:00
+10     xgb_base_todo_c2048                                         XGBoost global (todas las filas)      apilado                 2048                     —     31681  2025-01-01 00:00:00  2026-10-23 00:00:00
+11       chronos2cal_c2048                                                     Chronos-2 + feriados  covariables                 2048            Apache-2.0     31680  2025-01-01 00:00:00  2026-10-22 23:30:00
+12       chronos2cov_c2048                                       Chronos-2 + temperatura y feriados  covariables                 2048            Apache-2.0     31680  2025-01-01 00:00:00  2026-10-22 23:30:00
+13  chronos2ftcal_s2_c2048                               Chronos-2 ajustado con feriados, semilla 2     robustez                 2048            Apache-2.0     31680  2025-01-01 00:00:00  2026-10-22 23:30:00
+14  chronos2ftcal_s3_c2048                               Chronos-2 ajustado con feriados, semilla 3     robustez                 2048            Apache-2.0     31680  2025-01-01 00:00:00  2026-10-22 23:30:00
+15          chronos2_c2048                                                                Chronos-2    zero-shot                 2048            Apache-2.0     31680  2025-01-01 00:00:00  2026-10-22 23:30:00
+16          chronos2_c8192                                                Chronos-2 (contexto 8192)    zero-shot                 8192            Apache-2.0     31680  2025-01-01 00:00:00  2026-10-22 23:30:00
+17            simons_c2048                                                              Simons 297M    zero-shot                 2048           OpenMDW-1.1     31680  2025-01-01 00:00:00  2026-10-22 23:30:00
+18            simons_c8192                                              Simons 297M (contexto 8192)    zero-shot                 8192           OpenMDW-1.1     31680  2025-01-01 00:00:00  2026-10-22 23:30:00
+19                t0_c2048                                                                 T0-gamma    zero-shot                 2048            Apache-2.0     31680  2025-01-01 00:00:00  2026-10-22 23:30:00
+20            tirex2_c2048                                                                  TiRex-2    zero-shot                 2048            Apache-2.0     31680  2025-01-01 00:00:00  2026-10-22 23:30:00
+21         timesfm25_c2048                                                              TimesFM 2.5    zero-shot                 2048            Apache-2.0     31680  2025-01-01 00:00:00  2026-10-22 23:30:00
+22          timesfm3_c2048                                                              TimesFM 3.0    zero-shot                 2048          no comercial     31680  2025-01-01 00:00:00  2026-10-22 23:30:00
+23         timestral_c2048                                                           Timestral 209M    zero-shot                 2048        MIT modificada     31680  2025-01-01 00:00:00  2026-10-22 23:30:00
+24         timestral_c8192                                           Timestral 209M (contexto 8192)    zero-shot                 8192        MIT modificada     31680  2025-01-01 00:00:00  2026-10-22 23:30:00
+25             toto2_c2048                                                            Toto 2.0 313M    zero-shot                 2048            Apache-2.0     31680  2025-01-01 00:00:00  2026-10-22 23:30:00
+### cell 7
+                                Año               2025                                                                                                                                 2026                                                                                                                       
+                          Horizonte                 1h                                                      24h                                             Mejora media                 1h                                                        24h                                                Mejora media
+                               Área              Norte             Centro                Sur              Norte             Centro                Sur                (%)              Norte             Centro                 Sur               Norte              Centro                 Sur                 (%)
+                             Modelo Unnamed: 1_level_3 Unnamed: 2_level_3 Unnamed: 3_level_3 Unnamed: 4_level_3 Unnamed: 5_level_3 Unnamed: 6_level_3 Unnamed: 7_level_3 Unnamed: 8_level_3 Unnamed: 9_level_3 Unnamed: 10_level_3 Unnamed: 11_level_3 Unnamed: 12_level_3 Unnamed: 13_level_3 Unnamed: 14_level_3
+0  Random Forest por área (elegido)               19.7               54.6               24.1               28.8               86.1               56.7               35.2               20.2               54.1                22.4                29.0                78.1                48.3                37.9
+1                       Simons 297M               18.8               49.7               22.4               30.0               92.9               54.2               36.4               19.3               50.6                21.3                30.9                83.4                46.8                38.3
+2                    Timestral 209M               19.0               50.0               22.5               30.5               97.6               54.2               35.6               19.5               51.0                21.4                31.5                87.1                46.8                37.5
+3                     Toto 2.0 313M               19.0               50.0               22.5               30.7               96.6               55.1               35.4               19.5               50.7                21.4                30.9                84.6                46.9                38.1
+4                          T0-gamma               19.2               51.0               22.8               30.9               94.9               55.6               34.9               19.6               51.8                21.4                31.5                85.9                48.0                37.1
+5                       TimesFM 3.0               19.3               52.2               23.1               30.4              101.0               55.0               34.2               19.9               53.2                21.8                32.1                91.9                47.3                35.9
+6                         Chronos-2               19.4               52.2               23.2               33.0              101.0               55.2               33.0               19.9               52.6                21.6                31.6                87.3                46.9                36.9
+7                       TimesFM 2.5               19.9               56.0               23.8               31.2              107.5               57.0               31.4               20.6               57.0                22.4                32.0                98.5                49.3                33.4
+8                           TiRex-2               20.2               57.6               23.6               34.5              115.2               54.2               29.7               20.7               59.5                22.1                36.0               112.9                48.1                30.3
+### cell 7
+  Unnamed: 0_level_0               gana                                pierde                   
+           Horizonte                 1h                24h                 1h                24h
+              Modelo Unnamed: 1_level_2 Unnamed: 2_level_2 Unnamed: 3_level_2 Unnamed: 4_level_2
+0          Chronos-2                  2                  0                  0                  2
+1        Simons 297M                  3                  1                  0                  2
+2           T0-gamma                  3                  0                  0                  2
+3            TiRex-2                  0                  1                  2                  2
+4        TimesFM 2.5                  0                  0                  1                  2
+5        TimesFM 3.0                  3                  0                  0                  2
+6     Timestral 209M                  3                  1                  0                  2
+7      Toto 2.0 313M                  3                  0                  0                  2
+### cell 10
+                                        Unnamed: 0_level_0       Año               2025                                                                                                              2026                                                                                                   
+                                        Unnamed: 0_level_1 Horizonte                 1h                                                      24h                                                       1h                                                        24h                                        
+                                        Unnamed: 0_level_2      Área             Centro              Norte                Sur             Centro              Norte                Sur             Centro              Norte                 Sur              Centro               Norte                 Sur
+                                                    Modelo  Contexto Unnamed: 2_level_3 Unnamed: 3_level_3 Unnamed: 4_level_3 Unnamed: 5_level_3 Unnamed: 6_level_3 Unnamed: 7_level_3 Unnamed: 8_level_3 Unnamed: 9_level_3 Unnamed: 10_level_3 Unnamed: 11_level_3 Unnamed: 12_level_3 Unnamed: 13_level_3
+0                                                Chronos-2      2048               52.2               19.4               23.2              101.0               33.0               55.2               52.6               19.9                21.6                87.3                31.6                46.9
+1                                                Chronos-2      8192               52.1               19.4               23.3               97.1               31.5               55.3               52.7               19.9                21.6                87.7                32.0                46.3
+2  Chronos-2 ajustado con feriados (tasa 1e-6, 3000 pasos)      2048               49.8               18.8               22.9               75.6               27.1               51.8               50.3               19.2                21.1                72.5                28.2                44.6
+3  Chronos-2 ajustado con feriados (tasa 1e-6, 3000 pasos)      8192               50.0               18.9               23.2               77.2               27.5               52.3               50.2               19.2                21.2                73.0                28.4                44.3
+4                                              Simons 297M      2048               49.7               18.8               22.4               92.9               30.0               54.2               50.6               19.3                21.3                83.4                30.9                46.8
+5                                              Simons 297M      8192               49.6               18.8               22.2               91.5               29.2               53.4               50.5               19.2                21.1                82.1                30.0                45.3
+6                                           Timestral 209M      2048               50.0               19.0               22.5               97.6               30.5               54.2               51.0               19.5                21.4                87.1                31.5                46.8
+7                                           Timestral 209M      8192               49.0               18.7               22.4               91.0               29.2               53.2               49.9               19.2                21.0                83.1                30.0                45.2
+### cell 10
+             Año               2025                                  2026                   
+       Horizonte                 1h                24h                 1h                24h
+            Base Unnamed: 1_level_2 Unnamed: 2_level_2 Unnamed: 3_level_2 Unnamed: 4_level_2
+0       chronos2                0.1               -2.7                0.1                0.1
+1  chronos2ftcal                0.7                1.5               -0.1                0.2
+2         simons               -0.5               -1.9               -0.5               -2.5
+3      timestral               -1.2               -4.3               -2.0               -4.2
+### cell 12
+                                                                  Año               2025                                                                                                                                 2026                                                                                                                       
+                                                            Horizonte                 1h                                                      24h                                             Mejora media                 1h                                                        24h                                                Mejora media
+                                                                 Área              Norte             Centro                Sur              Norte             Centro                Sur                (%)              Norte             Centro                 Sur               Norte              Centro                 Sur                 (%)
+                                                               Modelo Unnamed: 1_level_3 Unnamed: 2_level_3 Unnamed: 3_level_3 Unnamed: 4_level_3 Unnamed: 5_level_3 Unnamed: 6_level_3 Unnamed: 7_level_3 Unnamed: 8_level_3 Unnamed: 9_level_3 Unnamed: 10_level_3 Unnamed: 11_level_3 Unnamed: 12_level_3 Unnamed: 13_level_3 Unnamed: 14_level_3
+0                                    Random Forest por área (elegido)               19.7               54.6               24.1               28.8               86.1               56.7               35.2               20.2               54.1                22.4                29.0                78.1                48.3                37.9
+1             Chronos-2 ajustado con feriados (tasa 1e-6, 3000 pasos)               18.8               49.8               22.9               27.1               75.6               51.8               40.0               19.2               50.3                21.1                28.2                72.5                44.6                41.6
+2  Chronos-2 ajustado con calendario ampliado (tasa 1e-6, 3000 pasos)               18.8               50.0               22.7               28.0               78.2               52.3               39.3               19.2               50.6                21.0                28.4                74.9                45.0                41.1
+3                          Chronos-2 ajustado (tasa 1e-6, 1000 pasos)               19.0               50.8               22.8               29.6               89.8               53.3               36.8               19.3               51.0                21.3                29.9                81.6                45.3                39.4
+4                          Chronos-2 ajustado (tasa 1e-6, 4000 pasos)               19.0               50.4               23.1               29.3               87.4               54.7               36.7               19.3               50.5                21.3                29.6                81.5                44.9                39.7
+5                                                Chronos-2 + feriados               19.4               51.7               23.5               32.2               93.0               55.8               34.0               20.0               52.3                21.8                31.5                85.3                47.8                36.8
+6                                                           Chronos-2               19.4               52.2               23.2               33.0              101.0               55.2               33.0               19.9               52.6                21.6                31.6                87.3                46.9                36.9
+7                                  Chronos-2 + temperatura y feriados               19.7               53.5               24.0               34.2               97.9               57.1               31.7               20.3               54.0                22.2                34.6                97.6                49.7                33.0
+8                          Chronos-2 ajustado (tasa 1e-5, 5000 pasos)               19.8               52.5               27.6               31.3               92.2               63.9               30.0               20.1               52.6                24.7                32.9                91.7                51.9                32.7
+### cell 12
+  Unnamed: 0_level_0 Unnamed: 1_level_0       IC 95 % alto                                             IC 95 % bajo                                       Δ MAE vs. elegido (MW)                                       
+  Unnamed: 0_level_1               Área             Centro              Norte                Sur             Centro              Norte                Sur                 Centro              Norte                 Sur
+                 Año          Horizonte Unnamed: 2_level_2 Unnamed: 3_level_2 Unnamed: 4_level_2 Unnamed: 5_level_2 Unnamed: 6_level_2 Unnamed: 7_level_2     Unnamed: 8_level_2 Unnamed: 9_level_2 Unnamed: 10_level_2
+0               2025                 1h              -3.92              -0.52              -0.72              -6.01              -1.19              -1.76                  -4.86              -0.84               -1.18
+1               2025                24h              -7.16              -0.92              -2.74             -13.80              -2.54              -7.15                 -10.47              -1.71               -4.88
+2               2026                 1h              -3.01              -0.71              -1.00              -4.44              -1.23              -1.57                  -3.73              -0.99               -1.29
+3               2026                24h              -3.07               0.12              -1.71              -8.28              -1.65              -5.47                  -5.66              -0.77               -3.63
+### cell 14
+                                Año               2025                                                                                                                                 2026                                                                                                                       
+                          Horizonte                 1h                                                      24h                                             Mejora media                 1h                                                        24h                                                Mejora media
+                               Área              Norte             Centro                Sur              Norte             Centro                Sur                (%)              Norte             Centro                 Sur               Norte              Centro                 Sur                 (%)
+                             Modelo Unnamed: 1_level_3 Unnamed: 2_level_3 Unnamed: 3_level_3 Unnamed: 4_level_3 Unnamed: 5_level_3 Unnamed: 6_level_3 Unnamed: 7_level_3 Unnamed: 8_level_3 Unnamed: 9_level_3 Unnamed: 10_level_3 Unnamed: 11_level_3 Unnamed: 12_level_3 Unnamed: 13_level_3 Unnamed: 14_level_3
+0  Random Forest por área (elegido)               19.7               54.6               24.1               28.8               86.1               56.7               35.2               20.2               54.1                22.4                29.0                78.1                48.3                37.9
+1                  XGBoost + Simons               18.6               49.0               23.5               27.9               81.3               57.0               37.6               18.9               49.2                21.2                28.7                75.6                49.8                39.6
+2      XGBoost + Chronos-2 + Simons               18.6               49.0               23.5               28.0               81.7               57.0               37.5               18.9               49.2                21.2                28.6                75.5                50.1                39.6
+3               XGBoost + Chronos-2               18.7               49.9               23.5               28.6               82.7               56.9               37.0               19.0               50.0                21.2                28.7                77.3                49.7                39.3
+4  XGBoost global (todas las filas)               19.6               53.5               24.7               28.6               85.7               57.9               34.9               20.0               54.0                22.6                29.3                80.8                49.4                37.1
+5                    XGBoost global               19.6               53.6               24.7               28.6               85.9               57.7               34.9               20.0               54.1                22.5                29.3                80.7                49.4                37.1
+### cell 14
+              Unnamed: 0_level_0 Unnamed: 1_level_0      Área                   Norte                  Centro                     Sur
+                          Modelo                Año Horizonte      Unnamed: 3_level_1      Unnamed: 4_level_1      Unnamed: 5_level_1
+0   XGBoost + Chronos-2 + Simons               2025        1h    -1.07 [-1.32, -0.85]    -5.59 [-6.54, -4.77]  -0.61 [-1.28, +0.26] ·
+1   XGBoost + Chronos-2 + Simons               2025       24h    -0.84 [-1.48, -0.20]    -4.39 [-6.62, -2.13]  +0.31 [-0.92, +1.54] ·
+2   XGBoost + Chronos-2 + Simons               2026        1h    -1.21 [-1.41, -0.98]    -4.84 [-5.50, -4.15]    -1.27 [-1.52, -1.03]
+3   XGBoost + Chronos-2 + Simons               2026       24h  -0.37 [-0.95, +0.21] ·    -2.68 [-4.40, -0.94]    +1.77 [+0.50, +3.04]
+4            XGBoost + Chronos-2               2025        1h    -0.94 [-1.23, -0.70]    -4.75 [-5.66, -3.98]  -0.57 [-1.10, +0.14] ·
+5            XGBoost + Chronos-2               2025       24h  -0.22 [-0.85, +0.38] ·    -3.39 [-5.57, -1.37]  +0.22 [-0.81, +1.29] ·
+6            XGBoost + Chronos-2               2026        1h    -1.12 [-1.31, -0.93]    -4.05 [-4.65, -3.41]    -1.19 [-1.41, -0.98]
+7            XGBoost + Chronos-2               2026       24h  -0.25 [-0.82, +0.31] ·  -0.82 [-2.38, +0.81] ·    +1.43 [+0.37, +2.56]
+8               XGBoost + Simons               2025        1h    -1.10 [-1.35, -0.89]    -5.62 [-6.58, -4.80]  -0.60 [-1.13, +0.07] ·
+9               XGBoost + Simons               2025       24h    -0.90 [-1.49, -0.33]    -4.77 [-7.05, -2.47]  +0.28 [-0.86, +1.42] ·
+10              XGBoost + Simons               2026        1h    -1.24 [-1.42, -1.03]    -4.85 [-5.46, -4.23]    -1.18 [-1.48, -0.80]
+11              XGBoost + Simons               2026       24h  -0.24 [-0.78, +0.30] ·    -2.57 [-4.19, -0.90]    +1.54 [+0.29, +2.80]
+### cell 16
+                                                                   Año               2025                                                                                                              2026                                                                                                  
+                                                             Horizonte                 1h                                                      24h                                                       1h                                                       24h                                        
+                                                                  Área             Centro              Norte                Sur             Centro              Norte                Sur             Centro              Norte                Sur              Centro               Norte                 Sur
+                                                              Etiqueta Unnamed: 1_level_3 Unnamed: 2_level_3 Unnamed: 3_level_3 Unnamed: 4_level_3 Unnamed: 5_level_3 Unnamed: 6_level_3 Unnamed: 7_level_3 Unnamed: 8_level_3 Unnamed: 9_level_3 Unnamed: 10_level_3 Unnamed: 11_level_3 Unnamed: 12_level_3
+0                                                            Chronos-2              -3.99              -0.78              -1.31              -0.38              -0.03              -2.08              -3.12              -0.84              -1.20               -0.80               -0.09               -1.84
+1                           Chronos-2 ajustado (tasa 1e-5, 5000 pasos)              -3.64              -0.58              -0.26              -3.78              -0.67              -0.75              -3.20              -0.78              -0.51               -0.17               -0.43               -1.51
+2                           Chronos-2 ajustado (tasa 1e-6, 1000 pasos)              -4.69              -0.97              -1.56              -2.48              -0.52              -3.56              -3.92              -1.14              -1.47               -2.05               -0.51               -3.30
+3                           Chronos-2 ajustado (tasa 1e-6, 4000 pasos)              -4.99              -0.94              -1.42              -4.11              -0.70              -2.80              -4.27              -1.14              -1.44               -2.07               -0.70               -3.76
+4   Chronos-2 ajustado con calendario ampliado (tasa 1e-6, 3000 pasos)              -5.28              -1.07              -1.60              -8.89              -1.21              -4.42              -4.31              -1.23              -1.58               -4.69               -1.12               -3.38
+5              Chronos-2 ajustado con feriados (tasa 1e-6, 3000 pasos)              -5.46              -1.06              -1.55             -10.94              -1.88              -4.92              -4.48              -1.24              -1.55               -6.22               -1.13               -3.84
+6                                                          Simons 297M              -5.35              -1.02              -1.74              -1.41              -0.36              -2.78              -4.16              -1.07              -1.33               -1.86               -0.33               -2.00
+7                                                             T0-gamma              -4.54              -0.85              -1.48              -0.78              -0.18              -1.69              -3.48              -0.92              -1.30               -1.21               -0.15               -1.12
+8                                                              TiRex-2              -1.85              -0.46              -0.94              -0.52              -0.12              -3.03              -1.20              -0.59              -0.90               -0.18               -0.11               -1.31
+9                                                          TimesFM 2.5              -2.06              -0.57              -0.85              -0.68              -0.42              -1.21              -1.42              -0.54              -0.72               -0.22               -0.32               -0.93
+10                                                         TimesFM 3.0              -3.88              -0.77              -1.30              -0.53              -0.42              -2.19              -2.78              -0.80              -1.04               -0.84               -0.04               -1.86
+11                                                      Timestral 209M              -5.20              -0.92              -1.78              -0.54              -0.26              -2.76              -3.98              -0.96              -1.25               -1.04               -0.17               -2.02
+12                                                       Toto 2.0 313M              -5.37              -0.95              -1.76              -0.71              -0.26              -2.41              -4.25              -0.98              -1.28               -1.72               -0.28               -2.14
+### cell 16
+                                                             Horizonte                 1h                                                      24h                                      
+                                                                  Área             Centro              Norte                Sur             Centro              Norte                Sur
+                                                              Etiqueta Unnamed: 1_level_2 Unnamed: 2_level_2 Unnamed: 3_level_2 Unnamed: 4_level_2 Unnamed: 5_level_2 Unnamed: 6_level_2
+0                                                            Chronos-2               0.65               0.55               0.65               0.10               0.05               0.65
+1                           Chronos-2 ajustado (tasa 1e-5, 5000 pasos)               0.60               0.45               0.20               0.40               0.30               0.20
+2                           Chronos-2 ajustado (tasa 1e-6, 1000 pasos)               0.75               0.65               0.70               0.40               0.40               0.85
+3                           Chronos-2 ajustado (tasa 1e-6, 4000 pasos)               0.75               0.65               0.65               0.50               0.40               0.65
+4   Chronos-2 ajustado con calendario ampliado (tasa 1e-6, 3000 pasos)               0.75               0.70               0.70               0.75               0.65               0.95
+5              Chronos-2 ajustado con feriados (tasa 1e-6, 3000 pasos)               0.75               0.70               0.70               0.85               0.80               0.90
+6                                                          Simons 297M               0.80               0.70               0.80               0.30               0.30               0.80
+7                                                             T0-gamma               0.70               0.65               0.75               0.20               0.20               0.65
+8                                                              TiRex-2               0.40               0.40               0.55               0.10               0.10               0.70
+9                                                          TimesFM 2.5               0.45               0.45               0.55               0.15               0.25               0.45
+10                                                         TimesFM 3.0               0.65               0.55               0.70               0.15               0.30               0.70
+11                                                      Timestral 209M               0.75               0.70               0.80               0.20               0.25               0.75
+12                                                       Toto 2.0 313M               0.75               0.70               0.80               0.20               0.25               0.65
+### cell 18
+       Área             Centro              Norte                Sur
+  Horizonte Unnamed: 1_level_1 Unnamed: 2_level_1 Unnamed: 3_level_1
+0        1h               0.45               0.35               0.65
+1       24h               0.85               0.70               0.95
+### cell 18
+                                                       Año               2025                                                                                                                                 2026                                                                                                                       
+                                                 Horizonte                 1h                                                      24h                                             Mejora media                 1h                                                        24h                                                Mejora media
+                                                      Área              Norte             Centro                Sur              Norte             Centro                Sur                (%)              Norte             Centro                 Sur               Norte              Centro                 Sur                 (%)
+                                                    Modelo Unnamed: 1_level_3 Unnamed: 2_level_3 Unnamed: 3_level_3 Unnamed: 4_level_3 Unnamed: 5_level_3 Unnamed: 6_level_3 Unnamed: 7_level_3 Unnamed: 8_level_3 Unnamed: 9_level_3 Unnamed: 10_level_3 Unnamed: 11_level_3 Unnamed: 12_level_3 Unnamed: 13_level_3 Unnamed: 14_level_3
+0                         Random Forest por área (elegido)               19.7               54.6               24.1               28.8               86.1               56.7               35.2               20.2               54.1                22.4                29.0                78.1                48.3                37.9
+1                      Combinación (ajuste fino + híbrido)               18.5               48.2               22.5               26.9               75.2               51.8               40.7               18.8               48.8                20.9                27.9                71.9                44.6                42.3
+2  Chronos-2 ajustado con feriados (tasa 1e-6, 3000 pasos)               18.8               49.8               22.9               27.1               75.6               51.8               40.0               19.2               50.3                21.1                28.2                72.5                44.6                41.6
+3                                         XGBoost + Simons               18.6               49.0               23.5               27.9               81.3               57.0               37.6               18.9               49.2                21.2                28.7                75.6                49.8                39.6
+### cell 18
+  Unnamed: 0_level_0      Área                  Centro                 Norte                   Sur
+                 Año Horizonte      Unnamed: 2_level_1    Unnamed: 3_level_1    Unnamed: 4_level_1
+0               2025        1h    -6.39 [-7.63, -5.37]  -1.21 [-1.51, -0.96]  -1.56 [-1.88, -1.28]
+1               2025       24h  -10.85 [-14.08, -7.73]  -1.96 [-2.71, -1.24]  -4.92 [-7.09, -2.86]
+2               2026        1h    -5.22 [-5.84, -4.57]  -1.37 [-1.56, -1.14]  -1.55 [-1.81, -1.28]
+3               2026       24h    -6.23 [-8.67, -3.81]  -1.08 [-1.80, -0.35]  -3.71 [-5.49, -1.87]
+### cell 22
+   Unnamed: 0_level_0 Unnamed: 1_level_0     Unnamed: 2_level_0           Periodos Random Forest por área (elegido)        Simons 297M Chronos-2 ajustado con feriados (tasa 1e-6, 3000 pasos)   XGBoost + Simons Combinación (ajuste fino + híbrido)
+            Horizonte               Área                Régimen Unnamed: 3_level_1               Unnamed: 4_level_1 Unnamed: 5_level_1                                      Unnamed: 6_level_1 Unnamed: 7_level_1                  Unnamed: 8_level_1
+0                  1h             Centro                 neutra               1486                             56.7               61.5                                                    61.4               61.4                                62.2
+1                  1h             Centro           cálida débil               2832                             59.8               64.4                                                    63.9               65.2                                65.4
+2                  1h             Centro        cálida moderada               1440                             56.6               58.3                                                    59.1               60.2                                60.5
+3                  1h             Centro          cálida fuerte               2928                             56.2               58.3                                                    58.7               59.5                                59.8
+4                  1h             Centro  cálida extraordinaria               2976                             56.9               58.6                                                    59.1               60.1                                60.2
+5                  1h             Centro     sin ICEN publicado               2258                             60.6               61.6                                                    62.1               62.8                                63.0
+6                  1h              Norte                 neutra               1486                             42.9               48.7                                                    49.0               48.6                                49.3
+7                  1h              Norte           cálida débil               2832                             49.4               52.1                                                    52.2               53.1                                53.3
+8                  1h              Norte        cálida moderada               1440                             51.4               52.3                                                    53.2               53.9                                54.3
+9                  1h              Norte          cálida fuerte               2928                             52.9               54.9                                                    56.1               55.9                                56.4
+10                 1h              Norte  cálida extraordinaria               2976                             51.7               52.1                                                    51.7               53.3                                53.3
+11                 1h              Norte     sin ICEN publicado               2258                             58.9               60.6                                                    60.9               61.4                                61.8
+12                 1h                Sur                 neutra               1486                             21.7               25.7                                                    26.0               25.8                                26.4
+13                 1h                Sur           cálida débil               2832                             21.9               23.8                                                    25.1               24.8                                26.1
+14                 1h                Sur        cálida moderada               1440                             32.6               35.5                                                    35.7               36.7                                37.3
+15                 1h                Sur          cálida fuerte               2928                             31.6               37.8                                                    38.1               35.7                                38.3
+16                 1h                Sur  cálida extraordinaria               2976                             33.0               36.5                                                    37.1               37.2                                38.1
+17                 1h                Sur     sin ICEN publicado               2258                             34.6               36.7                                                    36.9               37.8                                38.0
+18                24h             Centro                 neutra               1440                             52.3               53.7                                                    58.0               53.5                                58.0
+19                24h             Centro           cálida débil               2832                             38.2               42.6                                                    43.4               41.6                                43.6
+20                24h             Centro        cálida moderada               1440                             51.0               34.1                                                    53.0               51.2                                53.3
+21                24h             Centro          cálida fuerte               2928                             39.4               30.9                                                    39.5               38.8                                40.5
+22                24h             Centro  cálida extraordinaria               2976                             42.6               37.3                                                    50.6               46.4                                51.0
+23                24h             Centro     sin ICEN publicado               2255                             33.5               32.9                                                    36.4               35.8                                36.9
+24                24h              Norte                 neutra               1440                             25.4               25.3                                                    28.9               25.9                                29.0
+25                24h              Norte           cálida débil               2832                             25.2               19.2                                                    25.0               26.7                                26.1
+26                24h              Norte        cálida moderada               1440                             44.0               35.0                                                    44.9               43.3                                45.5
+27                24h              Norte          cálida fuerte               2928                             38.8               34.2                                                    44.9               40.8                                44.6
+28                24h              Norte  cálida extraordinaria               2976                             33.6               29.9                                                    31.5               33.8                                33.8
+29                24h              Norte     sin ICEN publicado               2255                             41.4               39.5                                                    44.0               40.2                                44.0
+30                24h                Sur                 neutra               1440                             20.4               23.6                                                    25.6               19.7                                25.9
+31                24h                Sur           cálida débil               2832                             10.9               15.0                                                    18.3                7.1                                18.3
+32                24h                Sur        cálida moderada               1440                             12.7               11.4                                                    20.3               12.6                                20.5
+33                24h                Sur          cálida fuerte               2928                             13.7               19.3                                                    20.1               11.1                                20.4
+34                24h                Sur  cálida extraordinaria               2976                             13.0               10.9                                                    13.9                8.2                                14.2
+35                24h                Sur     sin ICEN publicado               2255                              3.1                8.4                                                    17.0                0.7                                16.9
+### cell 24
+                                                                   Año               2025                                  2026                   
+                                                             Horizonte                 1h                24h                 1h                24h
+                                                                Modelo Unnamed: 1_level_2 Unnamed: 2_level_2 Unnamed: 3_level_2 Unnamed: 4_level_2
+0                                                            Chronos-2               74.7               74.8               74.5               75.1
+1                           Chronos-2 ajustado (tasa 1e-5, 5000 pasos)               72.1               56.7               73.0               56.8
+2                           Chronos-2 ajustado (tasa 1e-6, 1000 pasos)               75.5               75.4               75.6               75.5
+3                           Chronos-2 ajustado (tasa 1e-6, 4000 pasos)               76.0               73.0               76.6               74.2
+4   Chronos-2 ajustado con calendario ampliado (tasa 1e-6, 3000 pasos)               75.6               76.1               75.7               76.2
+5              Chronos-2 ajustado con feriados (tasa 1e-6, 3000 pasos)               75.4               75.0               75.6               75.1
+6                                  Combinación (ajuste fino + híbrido)               79.5               76.9               79.8               76.9
+7                                                          Simons 297M               81.3               80.2               80.8               79.9
+8                                                             T0-gamma               79.1               80.8               78.9               80.1
+9                                                              TiRex-2               80.5               83.1               80.4               83.2
+10                                                         TimesFM 2.5               81.9               78.9               81.6               79.3
+11                                                         TimesFM 3.0               81.0               80.0               80.2               80.5
+12                                                      Timestral 209M               81.5               79.9               81.5               80.1
+13                                                       Toto 2.0 313M               80.1               79.6               79.9               79.7
+14                                                 XGBoost + Chronos-2               80.0               80.0               81.2               81.0
+15                                        XGBoost + Chronos-2 + Simons               80.0               80.0               81.0               80.7
+16                                                    XGBoost + Simons               80.0               80.0               81.1               80.5
+17                                                      XGBoost global               80.0               80.0               81.1               80.9
+18                                    XGBoost global (todas las filas)               80.0               80.0               81.0               81.1
+### cell 26
+             Unnamed: 0_level_0 grupo demanda y calendario        fundacional Parte del fundacional (%)
+                         config     h   Unnamed: 2_level_1 Unnamed: 3_level_1        Unnamed: 4_level_1
+0  XGBoost + Chronos-2 + Simons    1h                 18.8              143.9                      88.5
+1  XGBoost + Chronos-2 + Simons   24h                 41.1              129.5                      75.9
+2           XGBoost + Chronos-2    1h                 53.6              115.8                      68.4
+3           XGBoost + Chronos-2   24h                 64.4               71.9                      52.7
+4              XGBoost + Simons    1h                 43.4              131.9                      75.2
+5              XGBoost + Simons   24h                 51.7              112.3                      68.5
+### cell 26
+      h            variable                 grupo  aumento_mae_mw
+0    1h      fm_simons_pred           fundacional           130.1
+1   24h      fm_simons_pred           fundacional           108.7
+2    1h              Area_t  demanda y calendario            29.3
+3   24h            area_cod  demanda y calendario            10.8
+4   24h     FeriadoObjetivo  demanda y calendario             7.5
+5   24h         MinuteOfDay  demanda y calendario             7.2
+6   24h  Area_semana_pasada  demanda y calendario             6.2
+7   24h              Area_t  demanda y calendario             3.0
+8    1h      fm_simons_otro           fundacional             1.5
+9    1h       Area_media_1h  demanda y calendario             1.5
+10   1h            area_cod  demanda y calendario             1.4
+11   1h         MinuteOfDay  demanda y calendario             1.4
+### cell 28
+       Unnamed: 0  Minutos (2025 + 2026)  Pronósticos por segundo  Milisegundos por pronóstico
+0         TiRex-2                    2.3                      689                          1.5
+1     Simons 297M                    8.1                      196                          5.1
+2        T0-gamma                    9.5                      167                          6.0
+3       Chronos-2                   11.1                      143                          7.0
+4   Toto 2.0 313M                   11.9                      133                          7.5
+5  Timestral 209M                   15.2                      104                          9.6
+6     TimesFM 2.5                   17.4                       91                         11.0
+7     TimesFM 3.0                   20.8                       76                         13.2
+### cell 30
+   Unnamed: 0_level_0 Unnamed: 1_level_0 Unnamed: 2_level_0    MAE mínimo (MW)    MAE máximo (MW) Rango entre semillas (MW) Random Forest (MW) Ventaja mínima sobre el Random Forest (MW)
+                  Año          Horizonte               Área Unnamed: 3_level_1 Unnamed: 4_level_1        Unnamed: 5_level_1 Unnamed: 6_level_1                         Unnamed: 7_level_1
+0                2025                 1h              Norte              18.82              18.84                      0.02              19.67                                       0.82
+1                2025                 1h             Centro              49.76              49.81                      0.06              54.62                                       4.80
+2                2025                 1h                Sur              22.85              22.89                      0.04              24.06                                       1.18
+3                2025                24h              Norte              27.13              27.17                      0.05              28.83                                       1.66
+4                2025                24h             Centro              75.61              75.65                      0.04              86.10                                      10.45
+5                2025                24h                Sur              51.76              51.84                      0.08              56.72                                       4.88
+6                2026                 1h              Norte              19.15              19.18                      0.02              20.15                                       0.98
+7                2026                 1h             Centro              50.30              50.38                      0.08              54.05                                       3.68
+8                2026                 1h                Sur              21.14              21.14                      0.01              22.43                                       1.29
+9                2026                24h              Norte              28.19              28.26                      0.07              28.97                                       0.70
+10               2026                24h             Centro              72.30              72.49                      0.19              78.15                                       5.66
+11               2026                24h                Sur              44.62              44.65                      0.03              48.28                                       3.63
+### cell 32
+                                                    Unnamed: 0_level_0          Año               2025                                                     2026                                      
+                                                    Unnamed: 0_level_1    Horizonte                 1h                24h              media                 1h                24h              media
+                                                                Modelo         Tipo Unnamed: 2_level_2 Unnamed: 3_level_2 Unnamed: 4_level_2 Unnamed: 5_level_2 Unnamed: 6_level_2 Unnamed: 7_level_2
+0                                  Combinación (ajuste fino + híbrido)  combinación               47.6               33.8               40.7               50.3               34.2               42.3
+1              Chronos-2 ajustado con feriados (tasa 1e-6, 3000 pasos)  ajuste fino               46.5               33.5               40.0               49.4               33.7               41.6
+2   Chronos-2 ajustado con calendario ampliado (tasa 1e-6, 3000 pasos)  ajuste fino               46.6               32.0               39.3               49.4               32.8               41.1
+3                                                     XGBoost + Simons      apilado               46.3               28.9               37.6               49.7               29.4               39.6
+4                                         XGBoost + Chronos-2 + Simons      apilado               46.3               28.7               37.5               49.8               29.4               39.6
+5                                                  XGBoost + Chronos-2      apilado               45.9               28.0               37.0               49.5               29.1               39.3
+6                           Chronos-2 ajustado (tasa 1e-6, 1000 pasos)  ajuste fino               46.1               27.4               36.8               48.9               29.8               39.4
+7                           Chronos-2 ajustado (tasa 1e-6, 4000 pasos)  ajuste fino               46.0               27.5               36.7               49.1               30.3               39.7
+8                                                          Simons 297M    zero-shot               46.9               25.9               36.4               49.0               27.7               38.3
+9                                                       Timestral 209M    zero-shot               46.7               24.4               35.6               48.6               26.4               37.5
+10                                                       Toto 2.0 313M    zero-shot               46.7               24.0               35.4               48.7               27.4               38.1
+11                                    Random Forest por área (elegido)      elegido               43.2               27.2               35.2               46.3               29.6               37.9
+12                                                            T0-gamma    zero-shot               45.9               24.0               34.9               48.3               25.9               37.1
+13                                    XGBoost global (todas las filas)      apilado               43.0               26.9               34.9               46.2               28.0               37.1
+14                                                      XGBoost global      apilado               42.8               26.9               34.9               46.2               28.0               37.1
+15                                                         TimesFM 3.0    zero-shot               45.1               23.3               34.2               47.4               24.4               35.9
+16                                                Chronos-2 + feriados  covariables               44.8               23.3               34.0               47.5               26.2               36.8
+17                                                           Chronos-2    zero-shot               44.9               21.0               33.0               47.7               26.1               36.9
+18                                  Chronos-2 + temperatura y feriados  covariables               43.5               19.8               31.7               46.4               19.7               33.0
+19                                                         TimesFM 2.5    zero-shot               42.8               20.0               31.4               45.1               21.6               33.4
+20                          Chronos-2 ajustado (tasa 1e-5, 5000 pasos)  ajuste fino               39.9               20.1               30.0               44.3               21.0               32.7
+21                                                             TiRex-2    zero-shot               42.4               16.9               29.7               44.7               15.8               30.3
+### cell 32
+  Unnamed: 0_level_0      Área             Centro              Norte                Sur
+                 Año Horizonte Unnamed: 2_level_1 Unnamed: 3_level_1 Unnamed: 4_level_1
+0               2025        1h              mejor              mejor              mejor
+1               2025       24h              mejor              mejor              mejor
+2               2026        1h              mejor              mejor              mejor
+3               2026       24h              mejor              mejor              mejor

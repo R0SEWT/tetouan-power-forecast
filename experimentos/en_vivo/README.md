@@ -156,3 +156,25 @@ emitido; su primer tramo también sería reconstruido.
 - No se compara el SEIN del anexo con el total del tiempo real del portal (debería quedar 50 a 130 MW por debajo).
 - Los días no laborables que decreta el gobierno sobre la marcha no están en `holidays`.
 - No hay alerta si el portal deja de responder: solo el código de salida y el log.
+
+## Archivo de publicaciones del COES
+
+El colector guarda el anexo de despacho del programa diario, los archivos de despacho de
+actualizaciones y reprogramaciones, la demanda del portal y de la API, y el pronóstico
+automático con su banda. Para capturar con el entorno Python del proyecto:
+
+```bash
+python -m tetouan_power_forecast.archivo_coes --archivo /ruta/privada/archivo-coes
+```
+
+Prográmalo cada 30 minutos. El Ejecutado se vuelve a consultar durante los dos días
+posteriores al día objetivo para conservar sus revisiones. Los bytes originales
+quedan en `objetos/`, identificados por
+SHA-256. Cada corrida deja un manifiesto en `capturas/` con la fecha objetivo, el origen,
+la hora de observación en UTC y los estados de captura, ausencia y error. El sello de
+actualización que publica el COES para el pronóstico automático se registra como dato de
+la fuente. Una primera observación del anexo solo acredita que estaba disponible a esa hora.
+Respalda ambos directorios para conservar juntos los manifiestos y sus archivos.
+En Exodia, la entrada de cron `tpf-archivo-coes` ejecuta el colector. La tarea
+`tpf-archivo-coes-respaldo.timer` de la máquina de respaldo recoge el archivo
+de Exodia y lo copia cada día al Drive del proyecto.
