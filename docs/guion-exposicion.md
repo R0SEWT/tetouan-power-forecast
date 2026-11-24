@@ -3,9 +3,10 @@
 Exposición de 20 minutos · Grupo 3 · Metodología para Data Science · UPC 2026-2
 
 > **De dónde salen las cifras.** Todas salen del borrador del paper (`paper/paper.md`, versión del 19 de
-> noviembre) o de la auditoría metodológica (`docs/auditoria-metodologica.md`). Cada bloque dice la sección y la
-> tabla. Si el paper cambia antes de la exposición (por ejemplo, al recortarlo), hay que revisar las cifras de
-> este guion contra la versión final. Lo que todavía no existe está marcado como **[PENDIENTE]**.
+> noviembre, con el reanálisis de Tetuán y Ceuta del 23 de noviembre) o de la auditoría metodológica
+> (`docs/auditoria-metodologica.md`). Cada bloque dice la sección y la tabla. Si el paper cambia antes de la
+> exposición (por ejemplo, al recortarlo), hay que revisar las cifras de este guion contra la versión final. Lo
+> que todavía no existe está marcado como **[PENDIENTE]**.
 >
 > **La demo tiene su kit: [`docs/demo/README.md`](demo/README.md)**, con la lista de 30 minutos antes, el recorrido
 > con sus URL y tiempos medidos, el plan B (capturas en PDF y video) y las preguntas probables de la profesora.
@@ -70,9 +71,10 @@ tabla de la sección 6.1 del paper.
    Ridge, Random Forest y XGBoost; validación cruzada temporal de 5 pliegues; regla escrita antes. Tabla corta de
    2025: Random Forest 43.2 %, XGBoost 42.9 %, Ridge 26.4 %. Importancia en el Centro: demanda y calendario
    248.0 MW, clima 1.10 MW. Figura 8 del paper. (§4.4 y §5.3)
-8. **Antes de 2026: ¿el método se sostiene?**
-   Tres filas: Tetuán, 41 a 56 % menos error que la mejor referencia; Ceuta, sin haber visto un verano, 2.31 % de
-   error frente a 4.62 %; SEIN 2023-2025, gana en 108 de 108 meses-área. Figura 5 del paper. (§5.1, §5.2 y §5.3)
+8. **Antes de 2026: lo que aprendimos con poca historia**
+   Tres filas: Tetuán, gana a las tres reglas simples (41 a 56 % menos error), pero frente al promedio de los
+   deltas gana en 1 de 3 zonas; Ceuta, el delta semanal gana los 5 veranos (2.06 frente a 2.33 %); SEIN 2023-2025,
+   gana a las tres reglas en 108 de 108 meses-área. Figura 5 del paper. (§5.1, §5.2 y §5.3, con sus reanálisis)
 9. **La prueba: 2026 con El Niño extraordinario**
    Tabla de seis celdas: a 1 h, 51.7 / 57.9 / 29.1 %; a 24 h, 34.5 / 42.2 / 11.9 %. Dos mensajes: «mejor que en
    2025 en 5 de 6 casos» y «en el Norte, la mejora sube con El Niño: 42.9 % en enero, 61.6 % en septiembre».
@@ -87,8 +89,9 @@ tabla de la sección 6.1 del paper.
     2024 + nuestro XGBoost» y «Extensión posterior a la prueba: elegido con 2025, confirmado en 2026». (§5.5, tabla
     de MAE)
 12. **Conclusiones y recomendación**
-    Tres conclusiones (una por objetivo), la recomendación para el operador en cuatro puntos, la lección («cambiar el
-    objetivo movió más de 1,200 kW; cambiar el algoritmo, 18») y los límites en una línea. (§2, §6.4 y §7)
+    Tres conclusiones (Tetuán y Ceuta; el SEIN; el método), la recomendación para el operador en cuatro puntos, la
+    lección («cambiar el objetivo movió más de 1,200 kW; cambiar el algoritmo, 18») y los límites en una línea.
+    (§2, §5.1, §5.2, §6.4 y §7)
 
 **Diapositivas de respaldo** (van después de la 12; solo se muestran en el plan B o si preguntan):
 
@@ -112,7 +115,7 @@ tabla de la sección 6.1 del paper.
 | 4:30–6:30 | 2:00 | 5 · Lo que encontramos | 2 |
 | 6:30–8:40 | 2:10 | 6 · Preparación | 3 |
 | 8:40–10:30 | 1:50 | 7 · Modelado | 3 |
-| 10:30–11:40 | 1:10 | 8 · Antes de 2026 | 4 |
+| 10:30–11:40 | 1:10 | 8 · Antes de 2026: poca historia | 4 |
 | 11:40–13:20 | 1:40 | 9 · La prueba de 2026 | 4 |
 | 13:20–14:40 | 1:20 | 10 · ¿Qué ayuda a adaptarse? | 4 |
 | 14:40–15:40 | 1:00 | 11 · Modelos fundacionales | 5 |
@@ -267,16 +270,25 @@ Centro: 248.0 MW (demanda y calendario) frente a 1.10 MW (clima): §5.3, «Las e
 
 **Qué decir:**
 
-- «Antes de la prueba de 2026, el método pasó tres filtros.»
-- «En Tetuán, con un solo año de datos, el error quedó entre 41 y 56 % por debajo de la mejor referencia. Y le
-  ganó en los 24 meses-zona.»
-- «En Ceuta, sin haber visto nunca un verano, el modelo en razón tuvo 2.31 % de error, contra 4.62 % de la mejor
-  regla simple.»
-- «Y en el SEIN, mes a mes de 2023 a 2025, le ganó a la mejor referencia en los 108 meses-área, con El Niño de 2023
-  adentro.»
+- «Antes de 2026 probamos el método con poca historia: Tetuán y Ceuta.»
+- «En Tetuán, con un año de datos, el modelo tuvo entre 41 y 56 % menos error que las tres reglas simples.»
+- «Después probamos una regla más fuerte, el delta: la demanda de ahora más lo que cambió a esa hora ayer o la
+  semana pasada.»
+- «Frente al promedio de los dos deltas, el modelo gana en una zona y pierde en dos.»
+- «En Ceuta, el delta semanal le gana los cinco veranos: 2.06 contra 2.33 % de error.»
+- «La lección: con poca historia, la conclusión depende de contra qué te comparas.»
+- «Por eso en el SEIN entrenamos con nueve años, solo con lo que se sabía al predecir, y probamos fuera de lo
+  visto. De 2023 a 2025 le ganó a las tres reglas en los 108 meses-área.»
 
-**Cifras:** Tetuán 44.8 / 55.9 / 40.7 % (§5.1, tabla de la prueba); Ceuta 2.31 % frente a 4.62 % de MAPE (§5.2,
-tabla de MAPE); SEIN 108 de 108 meses-área, mejora mediana de 44.6 % (§5.3, «Estable en el tiempo»).
+**Cifras:** Tetuán, frente a las tres reglas: 44.8 / 55.9 / 40.7 % (§5.1, tabla de la prueba); frente al promedio de
+los deltas: +3.8 / −3.9 / −16.5 % (§5.1, «Reanálisis descriptivo con referencias fuertes»). Ceuta, modelo sin verano
+2.33 % frente a 2.06 % del delta semanal, que gana los cinco veranos (§5.2, «Reanálisis descriptivo»). SEIN 108 de
+108 meses-área frente a la mejor de las tres reglas, mejora mediana de 44.6 % (§5.3, «Estable en el tiempo»).
+
+**Ojo:** no decir que en Tetuán «le gana a todo» ni que el delta es «un error del modelo»: es una referencia más
+fuerte que agregamos después, sobre ventanas ya vistas, y el resultado es descriptivo
+(`docs/protocolo-reanalisis-tb1.md`). Tampoco decir que en el SEIN le gana al delta o al COES: esas comparaciones
+están en curso (guía de defensa, preguntas 31 a 34).
 
 ### 11:40–13:20 · Diapositiva 9 · Expositor 4
 
@@ -284,8 +296,8 @@ tabla de MAPE); SEIN 108 de 108 meses-área, mejora mediana de 44.6 % (§5.3, «
 
 - «Ahora, la prueba de verdad: 2026, con El Niño extraordinario.»
 - «El modelo se entrenó hasta 2025 y no se tocó durante la prueba. La corrimos una sola vez.»
-- «A una hora, el error bajó 51.7 % en el Norte, 57.9 % en el Centro y 29.1 % en el Sur, frente a la mejor
-  referencia.»
+- «A una hora, el error bajó 51.7 % en el Norte, 57.9 % en el Centro y 29.1 % en el Sur, frente a la mejor de
+  las tres reglas simples.»
 - «A 24 horas, 34.5, 42.2 y 11.9 %.»
 - «Ganó en las tres áreas y en los dos horizontes, con intervalos lejos del cero.»
 - «Y lo más interesante: en cinco de los seis casos la mejora fue mayor que en 2025, que fue un año normal.»
@@ -442,22 +454,23 @@ con un día de retraso", no "tiempo real".» El resto del recorrido usa días fi
 **Qué decir:**
 
 - «Para cerrar, tres conclusiones.»
-- «Uno: con un solo año de datos se puede pronosticar a una hora sin aprender el nivel. Lo mostró Tetuán.»
-- «Dos: no haber visto un verano cuesta un 20 % más de error, no el doble. Lo mostró Ceuta.»
-- «Tres: durante El Niño de 2026, un modelo entrenado hasta 2025 y sin tocar le ganó a la mejor referencia en las
-  tres áreas y en los dos horizontes.»
-- «Lo que sostiene el pronóstico es el método: la razón y una vara exigente. No el clima, ni reentrenar.»
-- «Nuestra recomendación para el operador: pronosticar la razón, medirse contra la mejor regla simple, reentrenar
-  cada semana a una hora y no apoyarse en el clima a 24 horas durante un evento extraordinario.»
+- «Uno: con poca historia, una regla estacional fuerte es difícil de superar: el delta le ganó al modelo en dos
+  zonas de Tetuán y en los cinco veranos de Ceuta.»
+- «Dos: en El Niño de 2026, el modelo entrenado hasta 2025 y sin tocar le ganó a las tres reglas simples en todas
+  las áreas y horizontes. Combinado con un modelo fundacional, mejora más.»
+- «Tres: lo que más aporta es pedir la razón, no el nivel. No el clima, ni reentrenar.»
+- «Nuestra recomendación para el operador: pronosticar la razón, medirse contra la regla simple más fuerte,
+  reentrenar cada semana a una hora y no apoyarse en el clima a 24 horas durante un evento extraordinario.»
 - «Y la lección más grande: CRISP-DM es un ciclo. En el Entregable 7 nuestros modelos perdían contra "ayer a la
   misma hora". Volvimos a la preparación.»
 - «Cambiar de algoritmo movió 18 kilovatios. Cambiar el objetivo, más de 1,200.»
-- «Nuestros límites: probamos un solo año y un solo evento, no nos comparamos con el pronóstico oficial del COES, y
-  el seguimiento en vivo lleva pocos días.»
+- «Nuestros límites: un solo año y un solo evento, la comparación con el COES y con los deltas en el SEIN sigue en
+  curso, y el seguimiento en vivo lleva pocos días.»
 - «Muchas gracias. Quedamos atentos a sus preguntas.»
 
-**Cifras:** conclusiones por objetivo: §7; recomendación: §2 (último párrafo); 18 kW frente a más de 1,200 kW: §7,
-lección 1; límites: §6.4, puntos 1 y 8.
+**Cifras:** Tetuán y Ceuta frente a los deltas: §5.1 y §5.2 (reanálisis); SEIN y combinación: §5.4 y §5.5;
+recomendación: §2 (último párrafo); 18 kW frente a más de 1,200 kW: §7, lección 1; límites: §6.4, puntos 1, 8 y 9.
+**Ojo:** no decir que el modelo le gana al COES ni al pronóstico oficial (guía de defensa, pregunta 33).
 
 ---
 
@@ -473,4 +486,4 @@ lección 1; límites: §6.4, puntos 1 y 8.
 - El Expositor 3 tiene el PDF de la presentación, `docs/demo/plan-b-capturas.pdf` y `docs/demo/recorrido-demo.mp4`.
 - Una persona (por ejemplo, el Expositor 2, que termina temprano) lleva el tiempo y avisa por el chat del grupo si
   a los 10:30 todavía no empezó el Expositor 4.
-- Si el paper cambió, revisar las cifras de las diapositivas 8, 9 y 10 contra la versión final.
+- Si el paper cambió, revisar las cifras de las diapositivas 8, 9, 10 y 12 contra la versión final.

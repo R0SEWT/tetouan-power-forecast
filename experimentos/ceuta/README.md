@@ -62,6 +62,11 @@ puntos (un 20 % más de error); V0, 0.77 (37 %). Más de un año de historia apo
 y lo que significa para Tetuán están en
 [`docs/historico.md`](../../docs/historico.md#resultado-de-la-validación-externa).
 
+En el reanálisis del 23 de noviembre (`experimentos/historico/reanalisis_tb1.py`), V4 sin verano regenerado
+queda en 2.33 % de MAPE medio y el delta semanal le gana en los cinco veranos (2.06 %); el promedio de los
+deltas diario y semanal da 1.87 %. Ver el paper, §5.2, y
+[`docs/protocolo-reanalisis-tb1.md`](../../docs/protocolo-reanalisis-tb1.md).
+
 ## Alcance
 
 - **Ceuta es otro sistema**, con otra mezcla de clientes. Lo que se aprende ahí es evidencia indirecta sobre
