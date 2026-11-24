@@ -83,8 +83,8 @@ agosto, el valor más alto desde 1997-98 (y siguió subiendo: 4.50 en setiembre)
 17 % sobre 2025 (17 % en julio).[^nb01-sein][^nino-nov] Es exactamente la situación en la que un pronóstico entrenado con el pasado puede fallar: la
 demanda sale del rango que el modelo vio.
 
-**El vacío.** Revisamos 43 trabajos sobre el dataset público de Tetuán (41 con evidencia de que lo usan): solo 4 de
-los 41 se comparan con una referencia ingenua, la persistencia,[^lit-tet] muchos pronostican
+**El vacío.** Revisamos 43 trabajos que usan el dataset público de Tetuán (41 de predicción o regresión): solo 4
+de esos 41 se comparan con una referencia ingenua, la persistencia,[^lit-tet] muchos pronostican
 a 10 minutos, donde copiar el valor actual ya da un R² de 0.99, y varios usan información del instante que
 pronostican.[^eda-tet] Para el Perú no encontramos estudios revisados por pares que midan el efecto de El Niño
 sobre la demanda de Lima o del SEIN.[^spec-negocio]
