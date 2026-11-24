@@ -1,0 +1,16 @@
+# Quién expone cada bloque (docs/guion-exposicion.md, «Reparto»). Es lo único que se completa a mano:
+# cambiar «[nombre]» por el nombre de cada expositor y volver a renderizar (bash render.sh). El chip de arriba a
+# la derecha de cada diapositiva y el pie lo toman de aquí.
+#
+# Pendiente: confirmar si el grupo es de cinco o de seis. Si es de seis, agregar «e6» aquí y repartirle un bloque
+# en index.qmd (y en el guion).
+expositor:
+  e1: "Expositor 1 · [nombre]"   # 0:00-3:00 y 18:40-20:00: el problema, El Niño, los objetivos y el cierre
+  e2: "Expositor 2 · [nombre]"   # 3:00-6:30: los datos y lo que encontramos
+  e3: "Expositor 3 · [nombre]"   # 6:30-10:30: preparación y modelado (y respaldo si se cae quien comparte)
+  e4: "Expositor 4 · [nombre]"   # 10:30-14:40: resultados
+  e5: "Expositor 5 · [nombre]"   # 14:40-18:40: fundacionales y la demo; comparte pantalla toda la exposición
+
+# Integrantes del Grupo 3 que firman el short paper (paper/quarto/short-paper.qmd, sin la profesora, que va
+# como última autora). Si el grupo es de seis, sumar aquí al sexto.
+integrantes: "Rody Vilchez · Adrian Chaña · Andre Huerta · Marcelo Neyra · Olenka Palma"

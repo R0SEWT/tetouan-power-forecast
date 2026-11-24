@@ -1,0 +1,15 @@
+# Deck de la exposición final (TB1) en Quarto + reveal.js. Cómo se renderiza y se presenta: README.md.
+project:
+  type: default
+  output-dir: _site
+  render:
+    - index.qmd
+
+# Sin kernel: las cifras del texto se leen de _deck.yml (shortcode meta) y los gráficos de D3, de datos.js.
+# Los dos los escribe datos.py desde las tablas de los notebooks. Renderizar no depende de Python ni de Jupyter.
+engine: markdown
+lang: es
+
+metadata-files:
+  - _deck.yml     # las cifras (datos.py)
+  - equipo.yml    # quién expone cada bloque: se completa a mano
