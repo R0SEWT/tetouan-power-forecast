@@ -83,8 +83,8 @@ agosto, el valor más alto desde 1997-98 (y siguió subiendo: 4.50 en setiembre)
 17 % sobre 2025 (17 % en julio).[^nb01-sein][^nino-nov] Es exactamente la situación en la que un pronóstico entrenado con el pasado puede fallar: la
 demanda sale del rango que el modelo vio.
 
-**El vacío.** Revisamos unos 70 trabajos que usan el dataset público de Tetuán: casi ninguno se compara con
-referencias ingenuas (solo dos con la persistencia y ninguno con "ayer" o "la semana pasada"), muchos pronostican
+**El vacío.** Revisamos 43 trabajos sobre el dataset público de Tetuán (41 con evidencia de que lo usan): solo 4 de
+los 41 se comparan con una referencia ingenua, la persistencia,[^lit-tet] muchos pronostican
 a 10 minutos, donde copiar el valor actual ya da un R² de 0.99, y varios usan información del instante que
 pronostican.[^eda-tet] Para el Perú no encontramos estudios revisados por pares que midan el efecto de El Niño
 sobre la demanda de Lima o del SEIN.[^spec-negocio]
@@ -1212,6 +1212,7 @@ Las tablas de 2025 son de la corrida del notebook 02 del SEIN del 4 de noviembre
     celda de hallazgos (celda 26).
 [^nb03-datos]: `notebooks/03_sein_prueba_2026.ipynb`, celda 5: 13,920 filas de prueba a 1 h (del 1 de enero al 17
     de octubre de 2026 a las 23:30) y 13,871 a 24 h (hasta el 16 de octubre a las 23:00).
+[^lit-tet]: `docs/investigacion/revision-literatura-y-baseline-coes.md`, §1 y §2 (tabla de los 43 trabajos y su método de verificación).
 [^eda-tet]: `docs/estado-del-arte.md` (resumen y §3); `notebooks/01_datos_preparacion.ipynb`, celdas 44
     (hallazgos), 66 (validación cruzada temporal) y 72 (ablación); `docs/investigacion.md`, §2 y §3.
 [^spec-eval]: Spec, §8.5 "Regímenes y criterios".
