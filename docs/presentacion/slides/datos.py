@@ -20,6 +20,7 @@ from __future__ import annotations
 
 import json
 import os
+import sys
 from pathlib import Path
 
 import numpy as np
@@ -30,6 +31,7 @@ RAIZ_REPO = AQUI.parents[2]  # docs/presentacion/slides → raíz del repo
 AREAS = ["Norte", "Centro", "Sur"]
 HORIZONTES = ["1h", "24h"]
 MENOS = "−"  # signo menos tipográfico, como en el informe
+SIN_DATOS = 3  # código de salida cuando no hay carpeta de datos: render.sh usa entonces lo versionado
 
 # Lo que solo está en el informe técnico (paper/paper.md, versión del 19 de noviembre con el reanálisis del 23).
 DEL_INFORME = {
@@ -149,7 +151,8 @@ def raiz_datos() -> Path:
     for c in candidatas:
         if c and (Path(c) / "reportes" / "sein").is_dir():
             return Path(c)
-    raise SystemExit("No encuentro la carpeta de datos: TETOUAN_DATA=/ruta/a/los/datos (ver docs/datos.md).")
+    print("No encuentro la carpeta de datos: TETOUAN_DATA=/ruta/a/los/datos (ver docs/datos.md).", file=sys.stderr)
+    raise SystemExit(SIN_DATOS)
 
 
 # ------------------------------------------------------------------ (1) un día del Centro, como lo muestra Curva

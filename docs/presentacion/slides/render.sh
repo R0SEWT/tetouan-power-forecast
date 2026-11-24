@@ -6,17 +6,26 @@
 #   bash render.sh          # el deck
 #   bash render.sh --pdf    # además, _site/deck.pdf (respaldo para el plan B o para imprimir)
 #
-# datos.py necesita la carpeta de datos (TETOUAN_DATA, ./data o la del checkout principal). Si no está, se
-# renderiza con lo que ya está versionado (datos.js, _deck.yml, generado/ e img/portada.svg).
+# datos.py necesita la carpeta de datos (TETOUAN_DATA, ./data o la del checkout principal). Si no está (o no hay
+# uv), se renderiza con lo que ya está versionado (datos.js, _deck.yml, generado/ e img/portada.svg). Si está y una
+# cifra no coincide con la del informe, datos.py falla y el render se detiene: no se publica nada desactualizado.
 set -euo pipefail
 cd "$(dirname "$0")"
 
 command -v quarto >/dev/null 2>&1 || { echo "error: falta quarto (https://quarto.org)" >&2; exit 1; }
 
-if command -v uv >/dev/null 2>&1 && uv run --quiet python datos.py; then
-  :
+sin_datos=3  # el código con que sale datos.py cuando no encuentra la carpeta de datos
+if command -v uv >/dev/null 2>&1; then
+  codigo=0
+  uv run --quiet python datos.py || codigo=$?
+  if [ "$codigo" -eq "$sin_datos" ]; then
+    echo "aviso: sin la carpeta de datos; se usan los datos versionados" >&2
+  elif [ "$codigo" -ne 0 ]; then
+    echo "error: datos.py falló (código $codigo); el deck no se renderiza con cifras viejas" >&2
+    exit "$codigo"
+  fi
 else
-  echo "aviso: no se pudo correr datos.py (¿falta la carpeta de datos?); se usan los datos versionados" >&2
+  echo "aviso: falta uv; se usan los datos versionados" >&2
 fi
 quarto render index.qmd
 

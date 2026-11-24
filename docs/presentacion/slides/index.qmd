@@ -653,7 +653,7 @@ En todas las áreas y horizontes. Combinado con un modelo fundacional, mejora m�
 
 [Lo que más aporta es pedir la razón, no el nivel]{.t}
 
-Ni el clima ni reentrenar mueven más de alrededor de 1 % el error.
+El clima y reentrenar mueven el error alrededor de 1 %.
 :::
 :::
 
