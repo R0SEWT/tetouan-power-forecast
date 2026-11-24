@@ -27,3 +27,15 @@ def test_h48_del_anexo_es_el_cierre_que_figura_como_medianoche_en_el_portal():
 def test_no_acepta_otra_hora_como_cierre_del_anexo():
     with pytest.raises(ValueError, match="Rejilla inesperada"):
         leer_pdo(anexo("23:57"), "2026-11-23")
+
+
+def test_el_ejecutado_usa_la_captura_mas_reciente_y_el_programa_la_primera():
+    from experimentos.en_vivo.conciliar_coes import preferir
+
+    temprano = {"fuente": "ejecutado_portal", "observado_utc": "2026-11-22T15:00:00Z"}
+    tarde = {"fuente": "ejecutado_portal", "observado_utc": "2026-11-23T15:00:00Z"}
+    assert preferir(tarde, temprano) and not preferir(temprano, tarde)
+    pdo_temprano = {"fuente": "pdo", "observado_utc": "2026-11-21T20:00:00Z"}
+    pdo_tarde = {"fuente": "pdo", "observado_utc": "2026-11-22T20:00:00Z"}
+    assert preferir(pdo_temprano, pdo_tarde) and not preferir(pdo_tarde, pdo_temprano)
+    assert preferir(temprano, None)

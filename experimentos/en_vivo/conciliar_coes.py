@@ -92,6 +92,18 @@ def leer_portal(contenido, dia):
 
 
 LECTORES = {"pdo": leer_pdo, "demanda_programada_api": leer_api, "ejecutado_portal": leer_portal}
+# El programa (PDO y API) vale en su primera versión, la publicada antes del día. El ejecutado se completa después
+# del día, así que se toma la captura más reciente.
+MAS_RECIENTE = {"ejecutado_portal"}
+
+
+def preferir(evento, anterior):
+    """True si `evento` debe reemplazar a `anterior` para su fuente."""
+    if anterior is None:
+        return True
+    if evento["fuente"] in MAS_RECIENTE:
+        return evento["observado_utc"] > anterior["observado_utc"]
+    return evento["observado_utc"] < anterior["observado_utc"]
 
 
 def conciliar(raices, dias, ieod):
@@ -104,7 +116,7 @@ def conciliar(raices, dias, ieod):
                     continue
                 clave = dia, fuente
                 anterior = eventos.get(clave)
-                if anterior is None or evento["observado_utc"] < anterior[1]["observado_utc"]:
+                if preferir(evento, anterior[1] if anterior else None):
                     eventos[clave] = (raiz, evento)
 
     tablas = []
