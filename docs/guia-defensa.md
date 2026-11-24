@@ -246,7 +246,7 @@ persistencia pero perdía contra «ayer» (§7, lección 1); las referencias, en
 
 **16. ¿Cómo quedan frente a los trabajos publicados? ¿En qué referencias se apoyan?**
 
-Revisamos unos 70 trabajos sobre el dataset de Tetuán: casi ninguno se compara con referencias ingenuas, y varios
+Revisamos 43 trabajos sobre el dataset de Tetuán: de los 41 de predicción, solo 4 se comparan con una referencia ingenua, y varios
 pronostican a 10 minutos o usan información del instante que pronostican. Contra la persistencia, que es lo único que
 reportan, nuestra mejora supera a la de los trabajos comparables; contra la mejor de tres referencias es menor; y
 contra el promedio de los deltas, la referencia más fuerte que probamos, gana solo en la Zona 1. Esa última es la
