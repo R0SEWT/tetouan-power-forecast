@@ -589,7 +589,8 @@ TPF_WEB=http://localhost:8000 node medir.mjs --version it4 --etiqueta it6-mismo-
 
 ## Iteración 8: «Ahora» y «Confianza», las pantallas de entrada
 
-La vara de esta iteración no es «bueno para un curso», sino **mejor que lo que hoy ofrece el COES**, con las mejores
+La vara de esta iteración no es «bueno para un curso», sino **mejor que lo que hoy ofrece el COES** en cómo se muestra
+el pronóstico y su error (no en su precisión: la comparación con el programa del COES sigue en curso), con las mejores
 referencias de afuera (CAISO, REE, RTE para la pantalla del día; PJM, ISO-NE, NESO y la CNMC para el error). La app
 tenía casi todas las piezas, pero las presentaba como un informe largo: sin «ahora» en el gráfico, con el pico en
 prosa y con el error escondido en la tercera pestaña del diagnóstico. Ahora hay tres pantallas, con la cabecera

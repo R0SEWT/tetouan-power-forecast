@@ -397,7 +397,10 @@ resultado, no como excusa.
   comparación con el estado del arte (Tabla 1 de `docs/paper/estructura.md`) es contra la persistencia, porque es
   lo único que los demás trabajos reportan; contra la mejor referencia la mejora es menor (41-56 %, no 73-75 %:
   44.8, 55.9 y 40.7 % en `prueba.csv`).
-  Las dos cifras tienen que ir juntas. (7) La fila "Total (suma de las zonas), MAPE 1.42 frente a 6.48 %" de esa
+  Las dos cifras tienen que ir juntas. *Nota posterior (reanálisis del 23 de noviembre):* frente a una referencia
+  más fuerte, el promedio de los deltas diario y semanal, el modelo gana en la Zona 1 (3.8 %) y pierde en las Zonas
+  2 y 3 (−3.9 y −16.5 %), sobre las mismas 7,841 filas por zona; esa cifra también tiene que ir junto a las otras
+  (paper, §5.1; `docs/protocolo-reanalisis-tb1.md`). (7) La fila "Total (suma de las zonas), MAPE 1.42 frente a 6.48 %" de esa
   tabla sale de los archivos de predicciones del Drive y no la pude verificar en local: marcarla como "por
   verificar" hasta recalcularla.
 - **M7.** Las conclusiones del notebook 02 de Tetuán siguen vacías. No es un problema metodológico, pero sí de
@@ -408,7 +411,9 @@ iteraciones y tasa 0.05, **sin ajuste de hiperparámetros, con una sola semilla 
 sistema distinto (sin veraneo como el de la Zona 3, con feriados españoles). Sus cifras (razón sin verano 2.31 %
 de MAPE frente a 4.62 % de la mejor ingenua y 2.87 % del modelo en nivel) sostienen la **dirección** del
 resultado, no su tamaño. El paper debe presentarla como evidencia de apoyo. El CSV `resultados_validacion.csv`
-está en el Drive, no en local.
+está en el Drive, no en local. *Nota posterior (reanálisis del 23 de noviembre):* sobre las mismas filas, el delta
+semanal le gana al modelo en razón sin verano en los cinco veranos de 2022 a 2026 (MAPE medio 2.06 frente a 2.33 %;
+paper, §5.2).
 
 **Entregable 7 (D15).** La versión entregada al curso (4 de noviembre) evaluaba en nivel y contra la
 persistencia: los dos modelos le ganaban a la persistencia pero perdían contra "ayer" (Random Forest 1,795 kW y
@@ -499,7 +504,9 @@ inspeccionado; una prueba intacta sería el periodo posterior al 22-oct-2026 (tr
 3. Búsqueda de hiperparámetros con validación cruzada temporal (5 pliegues, hueco de H) solo en el entrenamiento;
    validación de 2025 para elegir; prueba de 2026 una sola vez, con el modelo y los hiperparámetros verificados
    contra lo guardado por el notebook 02.
-4. Referencia exigente: la mejor de tres referencias ingenuas, elegida en el propio tramo.
+4. Referencia exigente: la mejor de tres referencias ingenuas, elegida en el propio tramo. *Nota posterior:* el
+   reanálisis del 23 de noviembre mostró que en Tetuán y Ceuta hay referencias más fuertes, los deltas, y que el
+   modelo no les gana en dos de tres zonas ni en los veranos de Ceuta (§12).
 5. Intervalos por bootstrap pareado de días (2,000 réplicas) para toda diferencia que se reporta.
 6. Reentrenamiento por bloques con ventana creciente y hueco antes de cada bloque; hiperparámetros congelados.
 7. Hipótesis escritas y commiteadas (5-nov) antes de la corrida de 2026 (6-nov), evaluadas con reglas en código.
@@ -537,4 +544,9 @@ Ninguno es necesario para el paper; están ordenados por lo que aportarían.
    con `empresa_area`. Es la única que exigiría rehacer M3 en 2025 y 2026 (unas 3 horas).
 4. **Hash del gold en la clave de la caché** y recálculo de dos bloques (D7).
 5. **Comparación con la Programación Diaria** (G3): bajar el portal del COES y evaluar "día siguiente". Es lo que la
-   spec dejó como opcional y lo que más pediría un lector del COES.
+   spec dejó como opcional y lo que más pediría un lector del COES. *Nota posterior (23 de noviembre):* en curso. Ya
+   hay un archivo diario de las ediciones del programa (`src/tetouan_power_forecast/archivo_coes.py`) y una
+   conciliación de fuentes (`docs/conciliacion-demanda-coes.md`). Con los datos públicos, el programa del día
+   siguiente tuvo un MAPE de 1.50 % en 2025 para todo el SEIN
+   (`docs/investigacion/revision-literatura-y-baseline-coes.md`, §5.3); no se compara con las cifras del proyecto
+   hasta tener la misma ventana, el mismo perímetro y la misma regla de información.

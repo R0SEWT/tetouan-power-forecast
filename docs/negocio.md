@@ -103,6 +103,13 @@ Hoy, la mejor referencia ingenua en la prueba tiene un MAPE de 2.9 % en la Zona 
 en la Zona 2 (semana pasada) y 6.0 % en la Zona 3 (ayer). La persistencia es la más débil en las tres
 ([investigación, §3](investigacion.md#3-qué-tan-difícil-es-cada-zona-las-referencias-ingenuas)).
 
+**Nota posterior (reanálisis del 23 de noviembre).** El criterio 1 se cumplió en la prueba (entre 41 y 56 % menos
+MAE que la mejor de las tres). Después se agregó una referencia más fuerte, el promedio de los deltas diario y
+semanal (la demanda actual más el cambio a esa hora el día o la semana anterior), y frente a ella el modelo gana en
+la Zona 1 (3.8 %) y pierde en las Zonas 2 y 3 (−3.9 y −16.5 %). Se reportan los dos criterios; el de la referencia
+más fuerte se agregó después de ver los resultados. Detalle en el
+[protocolo del reanálisis](protocolo-reanalisis-tb1.md) y en el paper, §5.1.
+
 **Cómo se evalúa.**
 
 - Partición cronológica 70/15/15. La prueba (noviembre y diciembre) no se toca hasta el final.
