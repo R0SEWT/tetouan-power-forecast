@@ -1,0 +1,281 @@
+/*-- scss:defaults --*/
+@import url('https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500..800&family=Inter:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;600&display=swap');
+
+// Tokens. Los colores son los de la app Curva (app/web/style.css), con un significado por color:
+// tinta = lo real, azul = el pronóstico del modelo y su rango, naranja = la referencia simple. El XGBoost va en un
+// azul más claro y el combinado en uno más oscuro: se distinguen por la luminosidad, no solo por el tono, así que
+// se leen igual con daltonismo. El gris es lo que no se entrenó con nuestros datos.
+$tinta: #0E1726;
+$texto: #0E1726;
+$papel: #FFFFFF;
+$pagina: #F4F6F8;
+$niebla: #F0F3F6;
+$superficie: #E7EBF0;
+$borde: #E3E7EC;
+$eje: #C7CED8;
+$suave: #435063;
+$nota: #5D6878;
+$gris: #6B7385;
+$pron: #2A78D6;
+$pron-texto: #1F63B8;
+$pron-claro: #9CC3F0;
+$pron-banda: rgba(42, 120, 214, 0.28);
+$comb: #0B3A75;
+$ref: #D65A24;
+$ref-claro: #F2B494;
+$celeste: #7DB3F2;
+$bien: #0A7D0A;
+$mal: #B42318;
+$ojo: #FAB219;
+
+$body-bg: $papel;
+$body-color: $texto;
+$link-color: $pron-texto;
+$font-family-sans-serif: "Inter", Arial, sans-serif;
+$font-family-monospace: "IBM Plex Mono", "Courier New", monospace;
+$presentation-font-size-root: 34px;
+$presentation-heading-font: "Inter Tight", Arial, sans-serif;
+$presentation-heading-color: $texto;
+$presentation-heading-font-weight: 700;
+$presentation-heading-letter-spacing: -0.02em;
+$presentation-h2-font-size: 1.3em;
+
+/*-- scss:rules --*/
+.reveal .slides section { text-align: left; }
+.reveal h1, .reveal h2 { line-height: 1.1; }
+.reveal h2 { margin-bottom: 0.35em; max-width: 92%; }
+.reveal .centro { text-align: center; }
+
+// Fondo oscuro: reveal marca la diapositiva con .has-dark-background
+.reveal .has-dark-background,
+.reveal .has-dark-background h1,
+.reveal .has-dark-background h2 { color: #EEF2F6; }
+.reveal .has-dark-background .eyebrow { color: $celeste; }
+.reveal .has-dark-background .suave { color: #B8C2CE; }
+.reveal .has-dark-background .sub { color: #C9D1DA; }
+.reveal .has-dark-background .nota { color: #8E99A6; }
+.reveal .has-dark-background a { color: $celeste; }
+
+.eyebrow {
+  font-family: $font-family-monospace;
+  font-size: 0.46em;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: $pron-texto;
+  margin-bottom: 0.3em !important;
+}
+.suave { color: $suave; }
+.nota { color: $nota; font-size: 0.5em; line-height: 1.35; display: inline-block; }
+.reveal .footer { color: $gris; font-size: 0.42em; }
+.reveal .slide-number { color: $gris; background: transparent; }
+.azul { color: $pron-texto; }
+.naranja { color: $ref; }
+.tenue { color: $gris; }
+
+// Una sola idea grande por diapositiva
+.pregunta {
+  font-family: $presentation-heading-font;
+  font-weight: 700;
+  font-size: 1.6em;
+  line-height: 1.14;
+  letter-spacing: -0.02em;
+}
+.cifra {
+  font-family: $presentation-heading-font;
+  font-weight: 800;
+  font-size: 3.2em;
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+.cifra.media { font-size: 2.1em; white-space: nowrap; }
+.cifra.chica { font-size: 1.35em; }
+.sub { font-size: 0.92em; line-height: 1.3; color: $suave; margin-top: 0.3em; }
+
+// Quién habla: chip arriba a la derecha de cada diapositiva
+.quien {
+  position: absolute; top: auto; bottom: -0.75em; left: 3.4em; right: auto; z-index: 20;
+  font-family: $font-family-monospace; font-size: 0.4em; letter-spacing: 0.08em;
+  text-transform: uppercase; color: $gris;
+}
+.has-dark-background .quien { color: #8E99A6; }
+
+// Tarjetas en columnas: dos, tres o cuatro
+.tarjetas { display: grid; gap: 0.8em; margin-top: 0.6em; }
+.tarjetas.dos { grid-template-columns: repeat(2, 1fr); }
+.tarjetas.dos > div { padding: 0.8em 1em 1em; }
+.tarjetas.dos p .cifra { font-size: 3.4em; margin: 0.1em 0; }
+.tarjetas.tres { grid-template-columns: repeat(3, 1fr); }
+.tarjetas > div { background: $niebla; border-radius: 14px; padding: 0.6em 0.8em 0.7em; }
+.tarjetas > div.destacada { background: rgba($pron, 0.1); box-shadow: inset 0 0 0 2px rgba($pron, 0.45); }
+.tarjetas p { font-size: 0.7em; line-height: 1.36; margin: 0.3em 0 0; }
+.tarjetas p .cifra { display: block; font-size: 2.6em; }
+.tarjetas p .cifra.media { font-size: 1.9em; }
+.tarjetas p .t { display: block; font-family: $presentation-heading-font; font-weight: 700; font-size: 1.25em;
+  line-height: 1.2; color: $texto; }
+.tarjetas p .k { display: block; font-family: $font-family-monospace; font-size: 0.82em; letter-spacing: 0.08em;
+  text-transform: uppercase; color: $gris; }
+.tarjetas .num { display: inline-block; width: 1.7em; height: 1.7em; line-height: 1.7em; text-align: center;
+  border-radius: 999px; background: $tinta; color: #FFFFFF; font-family: $presentation-heading-font;
+  font-weight: 800; font-size: 0.85em; }
+.tarjetas .destacada .num { background: $pron; }
+
+// Hallazgos: 2 × 2, con el número a la izquierda
+.hallazgos { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.8em 1em; margin-top: 0.6em; }
+.hallazgos > div { background: $niebla; border-radius: 14px; padding: 0.65em 0.85em 0.75em; }
+.hallazgos p { font-size: 0.7em; line-height: 1.38; margin: 0; color: $suave; }
+.hallazgos p .t { display: block; font-family: $presentation-heading-font; font-weight: 700; font-size: 1.3em;
+  line-height: 1.2; color: $texto; margin-bottom: 0.15em; }
+.hallazgos p .t b { color: $pron-texto; }
+
+// Línea de tiempo de la partición: tres tramos con su hueco
+.particion { display: flex; gap: 0.35em; margin-top: 0.7em; align-items: stretch; }
+.particion > div { border-radius: 10px; padding: 0.35em 0.6em; color: #FFFFFF; }
+.particion p { margin: 0; font-size: 0.56em; line-height: 1.3; }
+.particion p b { font-family: $presentation-heading-font; font-size: 1.2em; }
+.particion .entrenar { flex: 9; background: $tinta; }
+.particion .validar { flex: 2.6; background: $pron-texto; }
+.particion .probar { flex: 2.6; background: $ref; }
+.particion .hueco { flex: 0 0 0.6em; padding: 0; background: repeating-linear-gradient(135deg, $eje 0 4px,
+  transparent 4px 8px); border-radius: 4px; }
+
+// Aviso y llamada
+.aviso {
+  border-left: 6px solid $ref; background: rgba($ref, 0.08);
+  padding: 0.5em 0.85em; border-radius: 0 10px 10px 0; font-size: 0.72em; line-height: 1.38; margin-top: 0.7em;
+}
+.aviso b { font-family: $presentation-heading-font; }
+.llamada {
+  border-left: 6px solid $pron; background: rgba($pron, 0.08);
+  padding: 0.5em 0.85em; border-radius: 0 10px 10px 0; font-size: 0.72em; line-height: 1.38; margin-top: 0.7em;
+}
+.llamada b { font-family: $presentation-heading-font; }
+
+// Fichas
+.chips { display: flex; flex-wrap: wrap; gap: 0.4em; margin-top: 0.6em; align-items: center; }
+.chip { background: $niebla; border-radius: 999px; padding: 0.22em 0.85em; font-size: 0.58em; white-space: nowrap; }
+.chip.on { background: $tinta; color: #FFFFFF; }
+.chip.azul { background: $pron; color: #FFFFFF; }
+.chip.ref { background: rgba($ref, 0.14); color: #8A3510; }
+
+// Lista con aire
+.lista { font-size: 0.74em; line-height: 1.38; }
+.lista li { margin-bottom: 0.3em; }
+.cierre { font-family: $presentation-heading-font; font-weight: 700; font-size: 1.05em; margin-top: 0.7em; }
+
+// Dos cifras grandes lado a lado
+.par { display: flex; gap: 1.6em; align-items: flex-end; margin-top: 0.4em; }
+.par p { margin: 0; font-size: 0.72em; line-height: 1.32; color: $suave; max-width: 15em; }
+.par p .cifra { display: block; font-size: 3.6em; margin-bottom: 0.08em; }
+
+// La lección final: 18 frente a 1,200
+.leccion { display: flex; gap: 1.4em; align-items: baseline; margin-top: 0.7em; }
+.leccion p { margin: 0; font-size: 0.68em; color: $suave; }
+.leccion p .cifra { font-size: 1.6em; margin-right: 0.15em; }
+
+// Imágenes: capturas de la app
+.figura { display: block; margin: 0.2em auto 0; max-width: 100%; }
+.captura { border: 1px solid $borde; border-radius: 10px; box-shadow: 0 6px 24px rgba($tinta, 0.12); }
+.qr { width: 4.6em; background: #FFFFFF; padding: 0.22em; border-radius: 10px; }
+
+// Respaldo
+.reveal table { font-size: 0.52em; }
+.reveal .respaldo table { font-size: 0.56em; width: 100%; }
+.reveal .respaldo.chica table { font-size: 0.46em; }
+.reveal table th { background: $tinta; color: #FFFFFF; font-weight: 600; }
+.reveal table td, .reveal table th { padding: 0.24em 0.55em; vertical-align: top; line-height: 1.3; }
+.reveal table td strong { color: $tinta; }
+.respaldo .eyebrow { color: $gris; }
+
+// Marcas de paso para los gráficos: fragmentos invisibles que no ocupan lugar
+.reveal .slides section .paso { position: absolute; width: 0; height: 0; overflow: hidden; margin: 0; }
+
+// Portada propia (sin la diapositiva de título automática, para que lleve notas)
+.reveal .slides section.portada .titulo-portada { font-family: $presentation-heading-font; font-weight: 800;
+  font-size: 1.95em; line-height: 1.06; letter-spacing: -0.025em; max-width: 60%; margin: 0.15em 0 0.25em; }
+.reveal .slides section.portada .sub { max-width: 58%; color: $celeste; font-size: 0.95em; }
+.reveal .slides section.portada .autores { margin-top: 1.4em; font-size: 0.6em; color: #EEF2F6; font-weight: 600;
+  max-width: 62%; }
+.reveal .slides section.portada .curso { font-size: 0.5em; color: #B8C2CE; margin-top: 0.2em; }
+.marca { display: inline-flex; align-items: center; gap: 0.35em; font-family: $presentation-heading-font;
+  font-weight: 800; font-size: 0.7em; letter-spacing: -0.01em; }
+.marca svg { width: 1.5em; height: 1.5em; }
+
+// La diapositiva de la demo: el recorrido en pasos
+.recorrido { display: flex; flex-direction: column; gap: 0.35em; margin-top: 0.4em; }
+.recorrido p { margin: 0; font-size: 0.66em; line-height: 1.3; display: flex; gap: 0.6em; align-items: baseline; }
+.recorrido p b { font-family: $font-family-monospace; font-size: 0.85em; color: $pron-texto; min-width: 1.4em; }
+.url { font-family: $font-family-monospace; font-size: 0.8em; font-weight: 600; }
+
+// ------------------------------------------------------------------ gráficos de D3 (js/graficos.js)
+.d3 svg { display: block; width: 100%; height: auto; overflow: visible; }
+.d3 { margin-top: 0.2em; }
+svg.g text { font-family: $font-family-sans-serif; font-size: 20px; fill: $texto; font-variant-numeric: tabular-nums; }
+svg.g .g-titulo { font-family: $presentation-heading-font; font-weight: 700; font-size: 22px; }
+svg.g .g-et { font-size: 18px; fill: $suave; }
+svg.g .g-suave { fill: $nota; }
+svg.g .g-valor { font-family: $presentation-heading-font; font-weight: 800; font-size: 24px; }
+svg.g .g-num { font-family: $font-family-monospace; font-size: 16px; fill: $suave; }
+svg.g .g-eje text { font-size: 16px; fill: $suave; }
+svg.g .g-eje path, svg.g .g-eje line { stroke: $eje; }
+svg.g .g-rejilla line { stroke: $borde; }
+svg.g .g-rejilla path { display: none; }
+svg.g .g-ley text { font-size: 18px; fill: $suave; }
+svg.g .g-bien { fill: $pron-texto; }
+svg.g .g-mal { fill: $ref; }
+
+// Series: un color por significado, en todos los gráficos
+svg.g .s-ref { fill: $ref; stroke: $ref; }
+svg.g .s-ref-claro { fill: $ref-claro; stroke: $ref-claro; }
+svg.g .s-rf { fill: $pron; stroke: $pron; }
+svg.g .s-xgb { fill: $pron-claro; stroke: $pron-claro; }
+svg.g .s-comb { fill: $comb; stroke: $comb; }
+svg.g .s-real { fill: $tinta; stroke: $tinta; }
+svg.g .s-gris { fill: $gris; stroke: $gris; }
+svg.g .t-ref { fill: #A8431A; }
+svg.g .t-rf { fill: $pron-texto; }
+svg.g .t-comb { fill: $comb; }
+svg.g .t-gris { fill: $gris; }
+
+// (1) El día del Centro
+svg.g .d-banda { fill: $pron-banda; }
+svg.g .d-pred { fill: none; stroke: $pron-texto; stroke-width: 3.5; }
+svg.g .d-real { fill: none; stroke: $tinta; stroke-width: 3.5; }
+svg.g .d-semana { fill: none; stroke: $ref; stroke-width: 2.5; stroke-dasharray: 8 6; }
+svg.g .d-marca { stroke: $eje; stroke-width: 1.5; stroke-dasharray: 4 4; }
+svg.g .d-punto-real { fill: $tinta; stroke: $papel; stroke-width: 3; }
+svg.g .d-punto-pred { fill: $pron-texto; stroke: $papel; stroke-width: 3; }
+svg.g .d-caja { fill: $papel; stroke: $eje; stroke-width: 1.5; }
+
+// (2) Barras de la prueba
+svg.g .b-cero { stroke: $eje; stroke-width: 1.5; }
+svg.g .b-cien { stroke: $ref; stroke-width: 2; stroke-dasharray: 6 5; }
+
+// (3) Mes a mes
+svg.g .m-modelo { fill: none; stroke: $pron; stroke-width: 3.5; }
+svg.g .m-ref { fill: none; stroke: $ref; stroke-width: 3; stroke-dasharray: 9 6; }
+svg.g .m-panel { fill: none; }
+svg.g .m-fondo { fill: $niebla; }
+svg.g .m-marca { fill: none; stroke: $tinta; stroke-width: 3; }
+
+// (4) Reanálisis
+svg.g .r-linea { stroke: $eje; stroke-width: 6; stroke-linecap: round; }
+svg.g .r-hueco { fill: $papel; stroke-width: 4; }
+
+// (5) Peso frente a rendimiento
+svg.g .p-vacio { fill: $papel !important; stroke-width: 3.5; }
+svg.g .p-lleno { stroke: $papel; stroke-width: 2; }
+svg.g .p-linea-rf { stroke: $pron; stroke-width: 2.5; stroke-dasharray: 8 6; }
+svg.g .p-et { font-size: 16px; fill: $suave; }
+svg.g .p-et-fuerte { font-family: $presentation-heading-font; font-weight: 700; font-size: 17px; fill: $comb; }
+svg.g .p-guia { stroke: $eje; stroke-width: 1; }
+
+// Barras horizontales sencillas
+svg.g .b-tinta { fill: $tinta; }
+svg.g .b-rf { fill: $pron; }
+svg.g .b-xgb { fill: $pron-claro; }
+svg.g .b-gris { fill: #A9B0BC; }
+svg.g .b-pista { fill: $niebla; }
+
+// En el PDF (?print-pdf) cada diapositiva va en su .pdf-page y la sección mide lo que su contenido: se le da la altura
+// de la página para que el chip de quién habla quede abajo, como en pantalla.
+html.reveal-print .reveal .slides .pdf-page > section { height: calc(100% - 40px); }

@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Metodología para Data Science · Grupo 3</title>
+<meta name="description" content="Presentaciones del Grupo 3 (Curva, pronóstico de la demanda eléctrica del SEIN) en Metodología para Data Science, UPC 2026-2.">
+<style>
+  :root {
+    --tinta: #0E1726; --papel: #FFFFFF; --texto: #0E1726; --suave: #435063; --borde: #E3E7EC;
+    --azul: #1F63B8; --celeste: #7DB3F2; --ref: #D65A24;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--papel); color: var(--texto);
+    font: 17px/1.5 Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  }
+  header { background: var(--tinta); color: #EEF2F6; padding: 56px 16px 48px; }
+  main, .ancho { max-width: 860px; margin: 0 auto; }
+  main { padding: 32px 16px 56px; }
+  .eyebrow {
+    font: 600 13px/1.4 "IBM Plex Mono", ui-monospace, "Courier New", monospace;
+    letter-spacing: 0.12em; text-transform: uppercase; color: var(--celeste); margin: 0 0 10px;
+  }
+  h1 { font-size: clamp(30px, 6vw, 46px); line-height: 1.08; letter-spacing: -0.02em; margin: 0 0 12px; }
+  header p { margin: 0; color: #C9D1DA; max-width: 640px; }
+  h2 { font-size: 15px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--suave); margin: 0 0 14px; }
+  .tarjeta {
+    display: block; border: 1px solid var(--borde); border-radius: 14px; padding: 20px 22px;
+    text-decoration: none; color: inherit; background: var(--papel);
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  .tarjeta:hover, .tarjeta:focus-visible { border-color: var(--azul); box-shadow: 0 6px 24px rgba(14, 23, 38, 0.12); outline: none; }
+  .tarjeta .tag { font: 600 12px/1 "IBM Plex Mono", ui-monospace, monospace; color: var(--ref); letter-spacing: 0.1em; }
+  .tarjeta h3 { font-size: 22px; line-height: 1.2; margin: 8px 0 6px; letter-spacing: -0.01em; }
+  .tarjeta p { margin: 0; color: var(--suave); }
+  .enlaces { display: flex; flex-wrap: wrap; gap: 8px 18px; margin-top: 12px; font-size: 15px; }
+  .enlaces a { color: var(--azul); }
+  .pie { color: var(--suave); font-size: 14px; margin-top: 40px; border-top: 1px solid var(--borde); padding-top: 16px; }
+  .pie a { color: var(--azul); }
+</style>
+</head>
+<body>
+<header>
+  <div class="ancho">
+    <p class="eyebrow">Metodología para Data Science · UPC · 2026-2</p>
+    <h1>Grupo 3: Curva</h1>
+    <p>Pronóstico de la demanda eléctrica de muy corto plazo ante niveles no vistos: de Tetuán a El Niño de 2026
+      en el SEIN, por áreas, a 1 y a 24 horas.</p>
+  </div>
+</header>
+<main>
+  <h2>Presentaciones</h2>
+  <a class="tarjeta" href="tb1/">
+    <span class="tag">TB1 · EXPOSICIÓN FINAL</span>
+    <h3>Pronóstico de la demanda eléctrica ante niveles nunca vistos</h3>
+    <p>Tetuán, Ceuta y la prueba de 2026 en el SEIN, con El Niño extraordinario: los datos, la preparación, los
+      resultados frente a las referencias, los modelos fundacionales y la app. Las notas del orador se abren con
+      la tecla S.</p>
+  </a>
+  <div class="enlaces">
+    <a href="tb1/curva-tb1.pdf">PDF del TB1</a>
+    <a href="https://curva.rosewt.dev">La app, Curva</a>
+    <a href="https://github.com/R0SEWT/tetouan-power-forecast">Repositorio</a>
+  </div>
+  <p class="pie">Datos: COES (anexo diario del IEOD), UCI (Tetuán) y Red Eléctrica (Ceuta).
+    Fuente de este sitio: <a href="https://github.com/R0SEWT/tetouan-power-forecast/tree/develop/docs/presentacion">docs/presentacion</a>.
+    Las demás entregas, en <a href="https://uni.rosewt.dev">uni.rosewt.dev</a>.</p>
+</main>
+</body>
+</html>
