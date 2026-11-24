@@ -25,7 +25,10 @@ transferencia del 25 de octubre; y Chronos-2 sin ajuste en Colab Pro como refere
 [validación externa en Ceuta](#resultado-de-la-validación-externa), con los veranos de 2020 a 2026,
 respalda la elección: el objetivo en razón le ganó al modelo actual en todos los casos, y entrenar sin
 haber visto un verano subió su MAPE de julio y agosto de 1.93 a 2.31 %, la mitad que la mejor referencia
-ingenua (4.62 %).
+ingenua (4.62 %). El reanálisis del 23 de noviembre matiza esto: frente a una referencia más fuerte, el delta
+semanal, el modelo sin verano pierde en los cinco veranos (2.33 frente a 2.06 %), y en Tetuán el promedio de los
+deltas diario y semanal le gana al modelo en las Zonas 2 y 3 (paper, §5.1 y §5.2;
+[protocolo](protocolo-reanalisis-tb1.md)).
 
 ## Opciones ordenadas por impacto y factibilidad
 
@@ -535,6 +538,13 @@ rango, y da una cifra para el paper: con un año más de datos, el error de vera
 20 %, no a la mitad. Sigue siendo evidencia de otro sistema, con otra mezcla de clientes y sin el veraneo
 de la Zona 3.
 
+**Reanálisis del 23 de noviembre.** Esas cifras comparan el modelo con la mejor de las tres referencias
+ingenuas. Frente al delta semanal (la demanda actual más el cambio a esa hora la semana anterior), sobre las
+mismas filas, el modelo en razón sin verano pierde en los cinco veranos: MAPE medio de 2.33 % frente a 2.06 %,
+y 1.87 % del promedio de los deltas diario y semanal. El 20 % mide cuánto empeora el propio modelo sin verano;
+no dice que el modelo supere a una referencia estacional fuerte. Detalle en el paper, §5.2, y en el
+[protocolo del reanálisis](protocolo-reanalisis-tb1.md).
+
 Los resultados por verano están en `reportes/ceuta/resultados_validacion.csv`, dentro de la carpeta de
 datos; el diseño y cómo correrlo, en [`experimentos/ceuta/`](../experimentos/ceuta/).
 
@@ -667,7 +677,7 @@ anual).
 > El verano de la Zona 3 solo se evalúa con origen móvil, como un rango entre una cota pesimista y una
 > optimista. Como evidencia indirecta, en Ceuta, un sistema vecino con datos de 2019 a 2026, entrenar sin
 > haber visto un verano subió el MAPE de julio y agosto de 1.93 a 2.31 %, todavía la mitad que la mejor
-> referencia ingenua.
+> referencia ingenua, aunque el delta semanal le gana en los cinco veranos (2.06 %).
 
 ## Anexo: el experimento
 

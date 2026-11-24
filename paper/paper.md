@@ -44,10 +44,11 @@ de información**); el modelo se compara contra la **mejor de tres referencias i
 que ayer o que la semana pasada a esa hora); y toda diferencia se reporta con su intervalo por **bootstrap de
 días**.
 
-Resultados. En Tetuán, el modelo queda entre 41 y 56 % por debajo de la mejor referencia ingenua en la prueba y le
-gana en los 24 meses-zona del origen móvil.[^tet-prueba] En Ceuta, el objetivo en razón le gana al modelo en
-nivel en los 25 pares de verano e historia, y entrenar sin haber visto un verano cuesta 0.38 puntos de MAPE
-(2.31 frente a 1.93 %), la mitad del error de la mejor referencia (4.62 %).[^ceuta] En el SEIN, durante 2026
+Resultados. En Tetuán, el modelo queda entre 41 y 56 % por debajo de la mejor de las tres referencias históricas
+en la prueba.[^tet-prueba] Frente al promedio de los deltas diario y semanal, gana en Zona 1 y pierde en las zonas
+2 y 3. En Ceuta, el objetivo en razón le gana al modelo en nivel en la corrida histórica.[^ceuta] En el reanálisis,
+el V4 sin verano queda en 2.33 % de MAPE frente a 2.06 % del delta semanal, que gana los cinco veranos.
+En el SEIN, durante 2026
 (ICEN de 3.98 en agosto, el mayor desde 1997-98), un modelo entrenado hasta 2025 y sin tocar durante la prueba
 redujo el error a 1 hora en 51.7 % (Norte), 57.9 % (Centro) y 29.1 % (Sur) frente a la mejor referencia, y a 24
 horas en 34.5, 42.2 y 11.9 %; la mejora fue mayor que en 2025 en cinco de los seis casos.[^fr26] Reentrenar cada
@@ -402,6 +403,17 @@ prueba:[^tet-prueba]
 | Zona 2 | Semana pasada, 973.5 | 429.4 · 1.91 % | 55.9 % | −544.1 (−727.2 a −394.1) | 335.1 / 832.6 | 415.0 (57.4 %) |
 | Zona 3 | Ayer, 723.1 | 429.0 · 3.63 % | 40.7 % | −294.0 (−441.6 a −168.9) | 350.6 / 553.6 | 415.5 (42.5 %) |
 
+**Reanálisis descriptivo con referencias fuertes.** Se evalúan las mismas 7,841 filas por zona. El delta suma
+a la demanda actual el cambio a la hora objetivo observado el día anterior o la semana anterior. La última
+columna es la reducción relativa del MAE del modelo frente al promedio de ambos deltas. Las ventanas ya se habían
+examinado y el protocolo documenta el cambio de comparadores respecto de la evaluación original.
+
+| Zona | Modelo global (MAE) | Delta diario (MAE) | Promedio de deltas (MAE) | Reducción relativa frente al promedio |
+|---|---:|---:|---:|---:|
+| 1 | 462.5 | 567.5 | 480.7 | +3.8 % |
+| 2 | 429.4 | 489.9 | 413.2 | −3.9 % |
+| 3 | 429.0 | 392.1 | 368.2 | −16.5 % |
+
 En el origen móvil (marzo a octubre), el modelo le gana a la mejor referencia del mes en los 24 meses-zona; en
 julio, el primer mes de verano que el modelo nunca vio, la Zona 3 queda en 554 kW frente a 934 de la mejor
 referencia.[^tet-movil] Dónde pierde: en el Ramadán, en la Zona 3, 631 frente a 588 kW de la mejor referencia
@@ -441,10 +453,28 @@ verano" entrena con enero a junio del mismo año, como el pliegue de julio de Te
 |---:|---:|---:|---:|---:|---:|---:|
 | 4.62 | 2.87 | **2.31** | 2.10 | **1.93** | 1.84 | 1.81 |
 
-El objetivo en razón le gana al objetivo en nivel en los 25 pares de verano e historia (2020-2026). No haber visto
+En la evaluación original, el objetivo en razón le gana al objetivo en nivel en los 25 pares de verano e historia de
+2022 a 2026. No haber visto
 un verano cuesta 0.38 puntos con la razón (+20 %) y 0.77 con el nivel (+37 %, hasta 1.2 puntos en 2024). El segundo
-año baja el MAPE 0.1 puntos y el tercero casi nada. Con eso se responde la pregunta de Tetuán: lo que más pesa es
-haber visto un verano; con un año más de datos, el error de verano bajaría alrededor de un 20 %, no a la mitad.
+año baja el MAPE 0.1 puntos y el tercero casi nada. Con eso se respondía la pregunta de Tetuán: lo que más pesa es
+haber visto un verano; con un año más de datos, el error de verano bajaría alrededor de un 20 %, no a la mitad. Esa
+cifra mide cuánto empeora el propio modelo sin verano, no cómo queda frente a una referencia estacional fuerte.
+
+**Reanálisis descriptivo sobre las mismas filas.** Se regeneró el V4 sin verano con la receta histórica.
+El promedio de V4 regenerado (2.33 %) queda 0.02 puntos por encima del agregado de la corrida original. Los
+cinco veranos tienen 8,928 pares cada uno, sin demanda no positiva. El delta semanal gana en los cinco y el
+promedio de ambos deltas obtiene el menor MAPE de los tres métodos de la tabla.
+
+| Verano | V4 sin verano, MAPE % | Delta semanal, MAPE % | Promedio de deltas, MAPE % |
+|---|---:|---:|---:|
+| 2022 | 2.73 | 2.33 | 2.03 |
+| 2023 | 2.07 | 1.97 | 1.78 |
+| 2024 | 2.78 | 2.29 | 2.17 |
+| 2025 | 1.88 | 1.76 | 1.59 |
+| 2026 | 2.18 | 1.98 | 1.77 |
+| Media de los cinco veranos | 2.33 | 2.06 | 1.87 |
+
+El [protocolo de reanálisis](../docs/protocolo-reanalisis-tb1.md) documenta las ventanas y métricas.
 
 ## 5.3 SEIN: validación en 2025 (OE3, año normal)
 
@@ -832,7 +862,8 @@ igual** (otro tamaño de sistema, otro perímetro, otro horizonte y otros años)
   comité el error horario y del pico de cada mes (enero de 2026: 1.73 % y 1.87 %).
 - En conjunto, el error al día siguiente que publican los operadores está entre 1.5 y 3 %. El combinado del
   proyecto, en la prueba de 2026 a 24 horas, da un WAPE de 1.64 % en el Centro, 2.44 % en el Norte y 2.46 % en el Sur
-  (MAPE de 1.66, 2.50 y 2.49 %). Es competitivo en orden de magnitud; lo que ningún operador revisado hace es poner
+  (MAPE de 1.66, 2.50 y 2.49 %). La comparación con una edición identificada del Programa Diario del COES queda
+  pendiente; lo que ningún operador revisado hace es poner
   el error y la cobertura del rango en el mismo tablero del pronóstico, que es lo que hace la pantalla «Confianza».
 
 # 6. Visualización y análisis
@@ -948,7 +979,9 @@ Lo que un lector debe tener en cuenta antes de generalizar los resultados.
    temperatura del dataset no coincide con fuentes externas, el modelo pierde en el Ramadán de la Zona 3 y su
    ventaja baja tras la transferencia del 25 de octubre. Ceuta se corrió sin ajuste de hiperparámetros, con una
    semilla y sin intervalos: sostiene la dirección del resultado, no su tamaño, y es otro sistema con otra mezcla
-   de clientes.
+   de clientes. En el reanálisis, el promedio de los deltas le gana al modelo en las Zonas 2 y 3 de Tetuán y el
+   delta semanal le gana al modelo sin verano en los cinco veranos de Ceuta (§5.1 y §5.2); son resultados
+   descriptivos sobre ventanas ya examinadas.
 10. **Validez de constructo.** El MAE no refleja la asimetría entre subestimar y sobrestimar; por eso se reporta
     aparte la subestimación en las horas de mayor demanda.
 11. **La extensión con modelos fundacionales no es una prueba ciega.** Se hizo después de la prueba de 2026, así
@@ -981,19 +1014,23 @@ Lo que un lector debe tener en cuenta antes de generalizar los resultados.
 **Conclusiones, una por objetivo.**
 
 - **OE1 (Tetuán).** Con un solo año de datos se puede pronosticar a una hora sin aprender el nivel: el modelo en
-  razón queda entre 41 y 56 % por debajo de la mejor referencia ingenua en la prueba y le gana en los 24 meses-zona
-  del origen móvil, incluido el primer verano que nunca vio. Frente a la persistencia, que es lo que la
-  literatura reporta, la mejora (−55 a −75 %) supera a la de los trabajos publicados sobre el dataset, y la
-  comparación contra la mejor de tres referencias, que casi nadie hace, es la que da la medida honesta.
-- **OE2 (Ceuta).** La elección generaliza: el objetivo en razón le gana al nivel en los 25 pares de verano e
-  historia, y no haber visto un verano cuesta un 20 % más de error, no el doble. Lo que más pesa es ver un
-  verano; el segundo y el tercer año aportan poco.
+  razón queda entre 41 y 56 % por debajo de la mejor de las tres referencias históricas en la prueba y le gana en
+  los 24 meses-zona del origen móvil, incluido el primer verano que nunca vio. Frente a la persistencia, que es lo
+  que la literatura reporta, la mejora (−55 a −75 %) supera a la de los trabajos publicados sobre el dataset. Pero
+  frente al promedio de los deltas diario y semanal, una referencia estacional más fuerte, gana en la Zona 1
+  (3.8 %) y pierde en las Zonas 2 y 3 (−3.9 y −16.5 %): con un año de datos, esa referencia no se supera en dos de
+  tres zonas, y esa es la medida más honesta.
+- **OE2 (Ceuta).** El objetivo en razón le gana al nivel en los 25 pares de verano e historia, y el segundo y el
+  tercer año aportan poco. Pero en el reanálisis sobre las mismas filas, el delta semanal le gana al modelo sin
+  verano en los cinco veranos (2.06 frente a 2.33 % de MAPE): la elección del objetivo se repite en otro sistema,
+  pero sin un verano visto no alcanza a una referencia estacional fuerte.
 - **OE3 (SEIN).** Durante El Niño extraordinario de 2026, un modelo entrenado hasta 2025 y sin tocar le gana a la
   mejor referencia en las tres áreas y los dos horizontes (51.7, 57.9 y 29.1 % a 1 hora; 34.5, 42.2 y 11.9 % a
   24 horas), más que en un año normal, y no se degrada a medida que El Niño se intensifica. Lo que sostiene el
-  pronóstico es la metodología (la razón con la media de 24 horas y la vara exigente), no las exógenas ni el
-  reentrenamiento: reentrenar cada semana baja el error alrededor del 1 % a 1 hora; a 24 horas, sin exógenas, no
-  se distingue de no hacerlo, y con clima y El Niño (M2) baja el error en las tres áreas (−0.16, −0.72 y −0.66 MW)
+  pronóstico frente a esas referencias es la razón con la media de 24 horas, no las exógenas ni el
+  reentrenamiento (la comparación con referencias estacionales y con el programa del COES queda pendiente):
+  reentrenar cada semana baja el error alrededor del 1 % a 1 hora; a 24 horas, sin exógenas, no se distingue de no
+  hacerlo, y con clima y El Niño (M2) baja el error en las tres áreas (−0.16, −0.72 y −0.66 MW)
   sin llegar al nivel del modelo fijo sin exógenas; el clima ayuda menos del 1 % a 1 hora en el Centro y
   **empeora** el pronóstico a 24 horas con temperaturas nunca vistas; El Niño no ayuda en ningún caso. Para el
   operador: modelo en razón, reentrenado cada semana, con el clima a 1 hora y sin exógenas a 24 horas, donde el
@@ -1010,7 +1047,7 @@ Lo que un lector debe tener en cuenta antes de generalizar los resultados.
    18 kW; cambiar el objetivo, más de 1,200.
 2. **La referencia define la conclusión.** Contra la persistencia cualquier modelo parece bueno; contra la mejor
    de tres referencias, solo los que aprenden la forma del día. Varios trabajos publicados sobre Tetuán no
-   superan a "ayer".
+   superan a "ayer", y el propio modelo de Tetuán no supera al promedio de los deltas en dos de tres zonas.
 3. **Los árboles no extrapolan; la razón sí.** Pedirle al modelo que aprenda el nivel con un año de datos, o con
    una demanda que crece 27 % en nueve años, es pedirle lo que no puede. Pedirle la forma respecto del último día
    es lo que aguanta un verano nuevo o un Niño extraordinario.

@@ -196,9 +196,13 @@ vivo) o [`corrida-diaria.mp4`](corrida-diaria.mp4).
   (no interpola). La app lo dice en la pantalla.
 - **¿Cómo saben que el código no se rompe?** La regla de información y la app tienen pruebas automáticas (pytest) que
   corren en GitHub en cada cambio, junto con ruff.
+- **¿Le ganan al COES?** No lo sabemos todavía y no lo decimos. «La referencia» de «Confianza» es la mejor de tres
+  reglas simples, no el programa del COES. Con datos públicos, ese programa tuvo un MAPE de 1.50 % en 2025 para todo
+  el SEIN, pero no se compara directo con la app: otra ventana, otro perímetro y otra información al emitir. La
+  comparación justa está en curso (guía de defensa, pregunta 33).
 
 Fuentes: [`experimentos/en_vivo/README.md`](../../experimentos/en_vivo/README.md) y la guía de defensa, preguntas 13,
-24 y 29.
+24, 29 y 33.
 
 ## Las capturas
 

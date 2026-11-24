@@ -35,7 +35,7 @@ packages = ["src/tetouan_power_forecast"]
 line-length = 100
 target-version = "py312"
 # Los notebooks (y los entregables) vienen de Colab y se revisan a mano; ruff cubre src/ y tests/.
-extend-exclude = ["notebooks", "entregables"]
+extend-exclude = ["notebooks", "entregables", "docs/investigacion/scripts-exodia"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

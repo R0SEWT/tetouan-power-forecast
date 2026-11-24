@@ -1,0 +1,2 @@
+5 * * * * cd /home/cip-exodia/Code/cip-it-analytics/notebooks && /home/cip-exodia/.local/bin/uv run python triage_cycle.py --apply --yes >> /home/cip-exodia/Code/cip-it-analytics/data/triage_cron.log 2>&1
+*/10 * * * * /home/cip-exodia/hf-gate/run.sh  # hf-gate: aprobar solicitudes del dataset Track 1 (horario en run.sh)

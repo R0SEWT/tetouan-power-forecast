@@ -1,0 +1,74 @@
+===== [0] markdown
+# 00 · Medallón de datos en Google Drive
+
+Este notebook prepara los datos que usan los demás. Corre en Colab y deja tres capas en Google Drive:
+
+| Capa | Qué es |
+|---|---|
+| **bronze** | El CSV de UCI tal como se descargó, con su procedencia (URL, DOI, licencia, fecha y sha256). |
+| **silver** | Los mismos datos con columnas normalizadas, fechas como fecha y orden cronológico. Antes de guardarse pasan una auditoría de calidad; si algo falla, el pipeline se detiene. |
+| **gold** | El dataset t+6 de cada zona, listo para modelar, con la partición cronológica 70/15/15 en la columna `particion`. Las 6 filas anteriores a cada corte quedan como `hueco`, porque su objetivo cae en la partición siguiente. |
+
+Las capas viven en `Mi unidad/datalake/tetouan-power-forecast`. Si alguien del grupo te compartió esa
+carpeta, agrégala a tu unidad con *Organizar › Agregar acceso directo* y el notebook la encuentra sola.
+
+Cada capa se reutiliza si ya existe. El bronze ya está en el Drive, así que esto tarda segundos; si no
+estuviera, se descargaría de UCI, que tarda unos 5 minutos.
+===== [1] markdown
+## Instalación
+
+El código del pipeline vive en el repo del grupo y se instala desde GitHub.
+===== [2] code
+RAMA = "develop"  # rama del repo desde la que se instala el código
+!pip install -q "git+https://github.com/R0SEWT/tetouan-power-forecast@{RAMA}"
+===== [3] markdown
+## Google Drive
+
+Colab pide permiso para montar el Drive la primera vez.
+===== [4] code
+from tetouan_power_forecast.medallon import usar_drive
+
+raiz = usar_drive()
+print(f"Capas en: {raiz}")
+===== [5] markdown
+## Bronze: el CSV de UCI y su procedencia
+===== [6] code
+import json
+
+from tetouan_power_forecast.medallon import bronze
+
+csv = bronze()
+print(json.dumps(json.loads(csv.with_suffix(".json").read_text()), indent=2, ensure_ascii=False))
+===== [7] markdown
+## Silver: limpieza y auditoría de calidad
+===== [8] code
+from IPython.display import Markdown, display
+
+from tetouan_power_forecast.medallon import silver
+
+ruta_silver = silver()
+display(Markdown(ruta_silver.with_name("auditoria.md").read_text()))
+===== [9] markdown
+## Gold: el dataset t+6 de cada zona
+===== [10] code
+import pandas as pd
+
+from tetouan_power_forecast.medallon import gold
+
+for zona in (1, 2, 3):
+    df = pd.read_parquet(gold(zona=zona))
+    filas = df["particion"].value_counts().reindex(["entrenamiento", "hueco", "validacion", "prueba"])
+    print(f"Zona {zona}: {len(df):,} filas × {df.shape[1]} columnas · " + " · ".join(
+        f"{p}: {n:,}" for p, n in filas.items()))
+===== [11] markdown
+## Cómo usarlo desde otro notebook
+
+```python
+from tetouan_power_forecast.medallon import cargar_gold, usar_drive
+
+usar_drive()
+df = cargar_gold(zona=1)
+```
+
+Para rehacer una capa aunque ya exista: `bronze(forzar=True)`, `silver(forzar=True)` o
+`gold(zona=1, forzar=True)`. Si se rehace el silver, conviene rehacer también el gold.

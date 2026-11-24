@@ -1,0 +1,618 @@
+
+===== [0] markdown =====
+# Demanda eléctrica por área del SEIN: comprensión y preparación de los datos
+
+**TB1 · Metodología para Data Science (1ACC0240) · UPC · ciclo 2026-2 · Grupo 3**
+
+Notebook 01 de CRISP-DM para el caso peruano: comprensión de los datos y preparación. El problema, la regla de
+información y el plan están en la
+[spec del proyecto](https://github.com/R0SEWT/tetouan-power-forecast/blob/develop/docs/superpowers/specs/2026-10-23-demanda-sein-areas-design.md);
+las fuentes y su calidad, en
+[`docs/peru/`](https://github.com/R0SEWT/tetouan-power-forecast/tree/develop/docs/peru).
+
+Lee las capas que arman `00_medallon_coes` y `00c_exogenas`: la demanda del SEIN y de sus tres áreas cada 30
+minutos (IEOD del COES, de 2016 a hoy) y las exógenas (ERA5, ICEN, Niño 1+2, SAIDI y eventos del COES).
+
+===== [1] markdown =====
+# Configuración
+
+===== [2] code =====
+import os
+import sys
+from pathlib import Path
+
+EN_COLAB = "google.colab" in sys.modules
+if EN_COLAB and "TETOUAN_DATA" not in os.environ:
+    RAMA = "develop"
+    !pip install -q "git+https://github.com/R0SEWT/tetouan-power-forecast@{RAMA}"
+    from tetouan_power_forecast.medallon import usar_drive
+    usar_drive()
+elif not EN_COLAB:
+    os.environ.setdefault("TETOUAN_DATA", str(Path.cwd().parent / "data"))
+
+===== [3] code =====
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+from IPython.display import Markdown, display
+
+from tetouan_power_forecast.coes import cargar_demanda_areas
+from tetouan_power_forecast.evaluacion import errores
+from tetouan_power_forecast.exogenas import fallas_en_curso
+from tetouan_power_forecast.medallon import raiz_datos
+from tetouan_power_forecast.variables_sein import (
+    AREAS,
+    HORIZONTES,
+    REFERENCIAS,
+    columnas_variante,
+    dataset_area,
+    filas_comunes,
+    particion,
+)
+
+RAIZ = raiz_datos()
+COLORES = {"NORTE": "#E69F00", "CENTRO": "#0072B2", "SUR": "#009E73", "SEIN": "#555555"}
+pd.set_option("display.width", 160)
+
+demanda = cargar_demanda_areas()
+silver_exo = RAIZ / "exogenas" / "silver"
+temperatura = pd.read_parquet(silver_exo / "temperatura_areas.parquet")
+icen = pd.read_parquet(silver_exo / "icen.parquet")
+nino12 = pd.read_parquet(silver_exo / "nino12_semanal.parquet")
+saidi = pd.read_parquet(silver_exo / "saidi_saifi.parquet")
+eventos = pd.read_parquet(silver_exo / "eventos_coes.parquet")
+try:
+    import holidays
+    FERIADOS = list(holidays.PE(years=range(2016, 2027)))
+except ImportError:
+    FERIADOS = []
+print(f"Demanda: {len(demanda):,} periodos de 30 min, de {demanda['DateTime'].min()} a {demanda['DateTime'].max()}")
+print(f"Temperatura ERA5: {len(temperatura):,} horas · ICEN: {len(icen)} meses · Niño 1+2: {len(nino12)} semanas")
+print(f"SAIDI: {len(saidi):,} filas · eventos del COES: {len(eventos):,} · feriados: {len(FERIADOS)}")
+--- out ---
+Demanda: 189,504 periodos de 30 min, de 2016-01-01 00:30:00 a 2026-10-23 00:00:00
+Temperatura ERA5: 94,632 horas · ICEN: 920 meses · Niño 1+2: 2355 semanas
+SAIDI: 54,191 filas · eventos del COES: 21,788 · feriados: 160
+
+
+===== [4] markdown =====
+# Comprensión de los datos
+
+## Fuente, procedencia y auditoría
+
+La demanda sale de la hoja `DEMANDA_AREAS` del anexo diario del IEOD del COES. Cada valor es la demanda media de un
+periodo de 30 minutos, en MW, con la marca de tiempo al **final** del periodo (00:30 es el periodo de 00:00 a
+00:30). En el IEOD, Norte + Centro + Sur = SEIN. La auditoría del silver:
+
+===== [5] code =====
+display(Markdown((RAIZ / "coes" / "silver" / "auditoria.md").read_text()))
+--- out ---
+# Auditoría del silver de demanda por área (IEOD del COES)
+
+Registros: 189,504 · desde 2016-01-01 00:30:00 hasta 2026-10-23 00:00:00 (hora de Lima, fin de cada periodo)
+
+| Chequeo | Resultado | Detalle |
+|---|---|---|
+| Un registro cada 30 minutos | ok | 189,504 de 189,504 |
+| Sin fechas repetidas | ok | 0 |
+| Norte + Centro + Sur = SEIN (±1 MW) | REVISAR | 48 periodos fuera; desvío máximo 47.6 MW |
+| Sin faltantes | REVISAR | 336 periodos con algún área vacía (0.18%) |
+| Demanda positiva | ok | 0 valores no positivos |
+| Días con anexo | REVISAR | 7 días sin anexo: 2017-12-27, 2018-06-07, 2018-08-11, 2019-03-30, 2019-07-31, 2020-11-04, 2020-12-25 |
+
+
+===== [6] code =====
+anio = demanda["DateTime"].dt.year
+calidad = pd.DataFrame({
+    "periodos": demanda.groupby(anio).size(),
+    **{f"faltan {a.lower()}": demanda[a].isna().groupby(anio).sum() for a in AREAS},
+    "N+C+S−SEIN máx (MW)": (demanda[AREAS].sum(axis=1, min_count=3) - demanda["SEIN"]).abs().groupby(anio).max(),
+    "no positivos": (demanda[AREAS] <= 0).any(axis=1).groupby(anio).sum(),
+})
+display(calidad.round(2))
+--- out ---
+          periodos  faltan norte  faltan centro  faltan sur  N+C+S−SEIN máx (MW)  no positivos
+DateTime                                                                                      
+2016         17567             0              0           0                 0.00             0
+2017         17520            48             48          48                 0.00             0
+2018         17520            96             96          96                 0.00             0
+2019         17520            96             96          96                 5.66             0
+2020         17568            96             96          96                 0.00             0
+2021         17520             0              0           0                 0.00             0
+2022         17520             0              0           0                 0.00             0
+2023         17520             0              0           0                 0.00             0
+2024         17568             0              0           0                 0.00             0
+2025         17520             0              0           0                 0.00             0
+2026         14161             0              0           0                47.60             0
+
+===== [7] markdown =====
+## Escala y crecimiento de cada área
+
+===== [8] code =====
+mensual = demanda.set_index("DateTime")[["SEIN", *AREAS]].resample("MS").mean()
+fig, eje = plt.subplots(figsize=(14, 4.5))
+for c in ["SEIN", *AREAS]:
+    eje.plot(mensual.index, mensual[c], color=COLORES[c], label=c.capitalize())
+eje.set_ylabel("Demanda media mensual (MW)")
+eje.legend(ncol=4)
+eje.set_title("Demanda media mensual del SEIN y de sus áreas")
+plt.tight_layout()
+plt.show()
+anual = demanda.groupby(anio)[["SEIN", *AREAS]].mean()
+display(anual.round(0))
+print("Participación de cada área en el SEIN (%):")
+display((100 * anual[AREAS].div(anual["SEIN"], axis=0)).round(1))
+--- out ---
+<Figure size 1400x450 with 1 Axes>
+--- out ---
+            SEIN   NORTE  CENTRO     SUR
+DateTime                                
+2016      5496.0   777.0  3379.0  1340.0
+2017      5591.0   749.0  3446.0  1396.0
+2018      5797.0   806.0  3555.0  1436.0
+2019      6035.0   851.0  3697.0  1487.0
+2020      5598.0   850.0  3366.0  1382.0
+2021      6166.0   908.0  3745.0  1512.0
+2022      6402.0   949.0  3872.0  1581.0
+2023      6660.0   974.0  3989.0  1697.0
+2024      6830.0  1017.0  4068.0  1744.0
+2025      6982.0  1063.0  4162.0  1758.0
+2026      7340.0  1148.0  4376.0  1816.0
+--- out ---
+Participación de cada área en el SEIN (%):
+
+--- out ---
+          NORTE  CENTRO   SUR
+DateTime                     
+2016       14.1    61.5  24.4
+2017       13.4    61.6  25.0
+2018       13.9    61.3  24.8
+2019       14.1    61.3  24.6
+2020       15.2    60.1  24.7
+2021       14.7    60.7  24.5
+2022       14.8    60.5  24.7
+2023       14.6    59.9  25.5
+2024       14.9    59.6  25.5
+2025       15.2    59.6  25.2
+2026       15.6    59.6  24.7
+
+===== [9] markdown =====
+**Lectura del gráfico.**
+
+- **El nivel de la demanda envejece rápido.** El SEIN pasó de 5,496 MW de media en 2016 a 6,982 MW en 2025 (+27 %), y 2026 va en 7,340 MW. Un programa que se apoye en el nivel de años pasados queda corto cada año: por eso el modelo aprende la razón entre la demanda futura y la media de las últimas 24 h, y no el nivel.
+- **El Centro manda en MW.** Lima es el 60 % del sistema (61.5 % en 2016, 59.6 % en 2025), así que su error domina el error del SEIN. Por eso el modelo se elige con la mejora promedio de las tres áreas frente a su mejor referencia, y no con el MAE total, que solo miraría al Centro.
+- **El Norte es el que más rápido sale de lo visto.** Gana peso año a año (14.1 % en 2016, 15.6 % en 2026) y en 2026 su media es 1,148 MW, 8 % sobre 2025 (1,063 MW). Es el área donde la prueba de 2026 pone más a prueba al modelo.
+- **2020 es un escalón, no una tendencia.** La cuarentena bajó el SEIN a 5,598 MW (−7 % frente a 2019) y en 2021 ya estaba en 6,166 MW: el modelo lo ve con el indicador `Cuarentena` para no aprender de ese año relaciones que no se repiten.
+
+
+===== [10] markdown =====
+## Perfil diario y deriva del pico
+
+La investigación encontró que el pico diario del SEIN se fue del atardecer al mediodía. Se mide por área: la
+fracción de días cuyo máximo cae entre las 18 y las 23 h.
+
+===== [11] code =====
+inicio = demanda["DateTime"] - pd.Timedelta(minutes=30)  # el día y la hora se asignan por el inicio del periodo
+diaria = demanda.assign(dia=inicio.dt.normalize(), hora=inicio.dt.hour)
+filas = []
+for a in ["SEIN", *AREAS]:
+    idx = diaria.dropna(subset=[a]).groupby("dia")[a].idxmax()
+    horas = diaria.loc[idx, ["dia", "hora"]]
+    filas.append(horas.assign(area=a, anio=horas["dia"].dt.year, punta=horas["hora"].between(18, 22)))
+picos = pd.concat(filas)
+deriva = picos.pivot_table(index="anio", columns="area", values="punta", aggfunc="mean") * 100
+display(deriva.round(1).rename_axis(columns="% de días con el máximo entre 18 y 23 h"))
+
+fig, ejes = plt.subplots(1, 3, figsize=(16, 4), sharey=False)
+for eje, a in zip(ejes, AREAS):
+    perfil = diaria[diaria["dia"].dt.year.isin([2016, 2021, 2025])].groupby([diaria["dia"].dt.year, "hora"])[a].mean()
+    for anio_, serie in perfil.groupby(level=0):
+        eje.plot(serie.index.get_level_values(1), serie / serie.mean(), label=str(anio_))
+    eje.set_title(a.capitalize())
+    eje.set_xlabel("Hora (inicio del periodo)")
+ejes[0].set_ylabel("Demanda / media del día")
+ejes[0].legend()
+plt.suptitle("Perfil diario medio en tres años: cómo se movió el pico")
+plt.tight_layout()
+plt.show()
+--- out ---
+% de días con el máximo entre 18 y 23 h  CENTRO  NORTE  SEIN   SUR
+anio                                                              
+2016                                       38.5   97.3  87.2  93.2
+2017                                       45.3   98.4  83.8  83.2
+2018                                       40.8   97.5  83.2  82.6
+2019                                       33.9   97.0  80.4  84.8
+2020                                       48.1   92.0  71.2  66.8
+2021                                       22.5   79.7  43.0  72.3
+2022                                       21.6   67.1  42.5  80.5
+2023                                       18.9   41.4  24.9  76.7
+2024                                       18.3   57.1  27.6  84.2
+2025                                       19.5   72.6  33.4  76.2
+2026                                       19.0   53.2  27.5  64.4
+--- out ---
+<Figure size 1600x400 with 3 Axes>
+
+===== [12] markdown =====
+**Lectura del gráfico.**
+
+- **La hora crítica del sistema se movió al mediodía.** En 2016 el máximo del SEIN caía entre las 18 y las 23 h el 87.2 % de los días; en 2023, el 24.9 % (27.5 % en 2026). Reservar capacidad solo para la punta de la noche deja descubierto el mediodía.
+- **El cambio viene del Centro y del Norte, no del Sur.** El Centro pasó de 38.5 a 19.0 % de los días con el máximo de noche y el Norte de 97.3 a 53.2 %; el Sur sigue de noche (entre 64.4 y 93.2 % según el año). Por eso las horas de mayor demanda se definen por área y por año en la evaluación, y no con un horario fijo.
+- **La hora del día no basta para pronosticar la forma del día.** La curva de 2025 ya no es la de 2016, así que el modelo recibe la demanda de ayer y de la semana pasada a la misma hora, que traen la forma reciente en vez de la de hace diez años.
+
+
+===== [13] markdown =====
+## Semana y feriados
+
+===== [14] code =====
+por_dia = demanda.set_index("DateTime")[AREAS].resample("D").mean().dropna()
+semana = por_dia.groupby(por_dia.index.day_of_week).mean() / por_dia.mean()
+semana.index = ["lun", "mar", "mié", "jue", "vie", "sáb", "dom"]
+display(semana.round(3).T.rename_axis(columns="Consumo del día / promedio"))
+if FERIADOS:
+    feriado = por_dia.index.isin(pd.to_datetime(FERIADOS))
+    habiles = por_dia[(por_dia.index.day_of_week < 5) & ~feriado].mean()
+    efecto = 100 * (por_dia[feriado & (por_dia.index.day_of_week < 5)].mean() / habiles - 1)
+    print("Feriados entre semana frente a un día hábil (%):", efecto.round(1).to_dict())
+--- out ---
+Consumo del día / promedio    lun    mar    mié    jue    vie    sáb    dom
+NORTE                       0.990  1.019  1.021  1.022  1.021  1.002  0.925
+CENTRO                      0.998  1.026  1.026  1.025  1.023  0.992  0.910
+SUR                         1.006  0.999  0.994  0.994  1.004  1.009  0.994
+--- out ---
+Feriados entre semana frente a un día hábil (%): {'NORTE': -7.1, 'CENTRO': -10.9, 'SUR': 0.4}
+
+
+===== [15] markdown =====
+## Temperatura y demanda
+
+La temperatura de cada área es la media de sus ciudades en ERA5 (Norte: Piura, Chiclayo y Trujillo; Centro: Lima;
+Sur: Arequipa y Tacna). Se compara la temperatura media diaria con la demanda media diaria de los días hábiles.
+
+===== [16] code =====
+temp_dia = temperatura.set_index("fecha_hora").resample("D").mean()
+temp_dia.columns = [c.upper() for c in temp_dia.columns]
+habiles = por_dia[por_dia.index.day_of_week < 5]
+fig, ejes = plt.subplots(1, 3, figsize=(16, 4.5))
+correlaciones = {}
+for eje, a in zip(ejes, AREAS):
+    unido = pd.concat([temp_dia[a], habiles[a] / habiles[a].rolling(365, min_periods=60, center=True).mean()],
+                      axis=1, keys=["temp", "demanda_rel"]).dropna()
+    correlaciones[a] = unido.corr().iloc[0, 1]
+    eje.scatter(unido["temp"], unido["demanda_rel"], s=3, alpha=0.3, color=COLORES[a])
+    eje.set(title=f"{a.capitalize()} · r = {correlaciones[a]:.2f}", xlabel="Temperatura media del día (°C)")
+ejes[0].set_ylabel("Demanda del día / media móvil anual")
+plt.suptitle("Temperatura y demanda en días hábiles (sin la tendencia)")
+plt.tight_layout()
+plt.show()
+--- out ---
+<Figure size 1600x450 with 3 Axes>
+
+===== [17] markdown =====
+**Lectura del gráfico.**
+
+- **Lima es la que más responde al calor** (r = 0.34 en el Centro, 0.23 en el Norte): la demanda sube desde unos 22 °C. Es la única área donde la temperatura podría anticipar algo que la demanda reciente todavía no muestra.
+- **En el Sur la temperatura no explica la demanda** (r = −0.07). Pesa una carga que no depende del clima, probablemente la minera e industrial: ahí sumar clima al modelo no puede ayudar.
+- **Aun en el Centro la relación es débil:** a una misma temperatura la demanda relativa varía mucho. Anticipa lo que después mide la ablación del notebook 02: con la demanda de la última hora a la vista, el clima suma muy poco.
+
+
+===== [18] markdown =====
+## El Niño: 2017, 2023 y 2026
+
+El ICEN mide El Niño Costero (Niño 1+2). Se compara con la demanda de cada mes frente al mismo mes del año anterior,
+que quita la estacionalidad pero no el crecimiento (unos +2 a +4 % al año).
+
+===== [19] code =====
+icen_m = icen.set_index("mes")["icen"]
+variacion = 100 * (mensual[AREAS] / mensual[AREAS].shift(12) - 1)
+fig, (eje1, eje2) = plt.subplots(2, 1, figsize=(14, 7), sharex=True)
+eje1.bar(icen_m.loc["2016":].index, icen_m.loc["2016":], width=25,
+         color=np.where(icen_m.loc["2016":] > 0.4, "#D55E00", "#56B4E9"))
+eje1.axhline(0.4, color="grey", lw=0.8, ls="--")
+eje1.set_ylabel("ICEN")
+eje1.set_title("El Niño Costero (ICEN) y la demanda frente al mismo mes del año anterior")
+for a in AREAS:
+    eje2.plot(variacion.index, variacion[a], color=COLORES[a], label=a.capitalize())
+eje2.axhline(0, color="black", lw=0.8)
+eje2.set_ylabel("Variación interanual (%)")
+eje2.legend(ncol=3)
+plt.tight_layout()
+plt.show()
+for nombre, desde, hasta in [("Niño Costero 2017", "2017-01", "2017-04"), ("Niño Costero 2023", "2023-03", "2023-07"),
+                             ("Niño extraordinario 2026", "2026-03", "2026-10")]:
+    tabla = pd.concat([icen_m.loc[desde:hasta].rename("ICEN"), variacion.loc[desde:hasta]], axis=1)
+    display(tabla.round(2).style.set_caption(nombre))
+--- out ---
+<Figure size 1400x700 with 2 Axes>
+--- out ---
+<pandas.io.formats.style.Styler at 0x785326519940>
+--- out ---
+<pandas.io.formats.style.Styler at 0x78532666f890>
+--- out ---
+<pandas.io.formats.style.Styler at 0x78532666f890>
+
+===== [20] markdown =====
+**Lectura del gráfico.**
+
+- **El Niño de 2017 bajó la demanda del Norte** (−6.6 % en marzo y −6.0 % en abril frente al año anterior): las lluvias y los daños pesaron más que el calor. Un modelo que subiera la demanda cuando sube el ICEN se habría equivocado de signo.
+- **En 2023 creció más el Sur (6.1 a 16.2 %) que el Norte (2.2 a 6.3 %)**, así que ese crecimiento no vino del clima. Con efectos de signo distinto en cada episodio, el ICEN difícilmente sirve como variable del modelo.
+- **2026 es otro régimen.** Con el ICEN subiendo de 0.96 en marzo a 3.98 en agosto, el Norte creció hasta 17.3 % (julio), el Centro hasta 9.0 % (junio) y el Sur entre 0.6 y 5.8 %. Es un nivel que el modelo nunca vio al entrenar, y el riesgo para el operador está en el Norte.
+
+
+===== [21] markdown =====
+## Fallas del COES y SAIDI de Osinergmin
+
+Las fallas cuentan como en curso desde su inicio hasta su final, con un máximo de 2 días (los registros de meses
+o años son indisponibilidades). El SAIDI es la duración media de los cortes por usuario de cada sistema eléctrico.
+
+===== [22] code =====
+en_curso = pd.Series(fallas_en_curso(demanda["DateTime"], eventos).to_numpy(), index=demanda["DateTime"])
+print("Fallas en curso por periodo, por año:")
+display(en_curso.groupby(en_curso.index.year).agg(["mean", "max"]).round(2).T)
+eventos_mes = eventos.set_index("inicio").resample("MS").size()
+norte = saidi[saidi["nombre_empresa"].str.contains("ENOSA|ELECTRONORTE|HIDRANDINA|ELECTRONOROESTE", case=False,
+                                                      na=False)]
+saidi_norte = norte.groupby("mes")["saidi"].median()
+fig, (eje1, eje2) = plt.subplots(2, 1, figsize=(14, 6), sharex=True)
+eje1.plot(eventos_mes.loc["2016":].index, eventos_mes.loc["2016":], color="#555555")
+eje1.set_ylabel("Eventos por mes (COES)")
+eje2.plot(saidi_norte.loc["2016":].index, saidi_norte.loc["2016":], color=COLORES["NORTE"])
+eje2.set_ylabel("SAIDI mensual, mediana\nde los sistemas del norte")
+plt.tight_layout()
+plt.show()
+--- out ---
+Fallas en curso por periodo, por año:
+
+--- out ---
+DateTime  2016  2017  2018  2019  2020  2021  2022  2023  2024  2025  2026
+mean      0.47  0.55  0.65  0.61  0.52  0.98  1.17  1.24  1.42  1.67   1.8
+max       6.00  6.00  6.00  6.00  6.00  7.00  6.00  7.00  8.00  8.00   9.0
+--- out ---
+<Figure size 1400x600 with 2 Axes>
+
+===== [23] markdown =====
+**Lectura del gráfico.**
+
+- **Las fallas registradas crecen con los años:** de 0.47 eventos en curso por periodo en 2016 a 1.67 en 2025 (1.80 en 2026). Parece reflejar cómo se registran los eventos más que una red que falla más, y tal como está la variable no separa la operación normal de una falla.
+- **El SAIDI del norte tiene sus picos más altos a inicios de 2017 y de 2023**, los dos Niños costeros con lluvias: los cortes al usuario sí siguen al clima extremo. Pero el SAIDI es mensual y se publica con rezago, demasiado tarde para un pronóstico a 1 o 24 h.
+- **Por eso M4 (con SAIDI) queda fuera y las fallas entran en M3 solo para medir si ayudan.** La ablación del notebook 02 muestra que no: sumar una variable cuesta conseguirla a tiempo cada día, y esta no lo paga.
+
+
+===== [24] markdown =====
+## La cuarentena de 2020
+
+===== [25] code =====
+semanal = demanda.set_index("DateTime")[AREAS].resample("W").mean()
+s20, s19 = semanal.loc["2020-02":"2020-09"], semanal.loc["2019-02":"2019-09"]
+s19.index = s19.index + pd.DateOffset(years=1)
+comparada = 100 * (s20 / s19.reindex(s20.index, method="nearest") - 1)
+fig, eje = plt.subplots(figsize=(12, 4))
+for a in AREAS:
+    eje.plot(comparada.index, comparada[a], color=COLORES[a], label=a.capitalize())
+eje.axvline(pd.Timestamp("2020-03-16"), color="black", lw=0.8, ls="--")
+eje.set_ylabel("Frente a la misma semana de 2019 (%)")
+eje.legend()
+eje.set_title("La cuarentena de 2020 por área")
+plt.tight_layout()
+plt.show()
+--- out ---
+<Figure size 1200x400 with 1 Axes>
+
+===== [26] markdown =====
+**Lectura del gráfico.**
+
+- **La cuarentena golpeó distinto a cada área:** el Centro cayó 30 a 35 % y el Sur hasta 40 % frente a la misma semana de 2019; el Norte, 13 a 21 %.
+- **La recuperación tampoco fue pareja.** El Norte volvió a lo normal en julio; el Centro y el Sur seguían por debajo en septiembre (el Centro, unos 5 %). Un modelo global tiene que poder distinguir áreas que se mueven distinto.
+- **Para el modelo, 2020 es un régimen que no se repite:** entra como indicador (`Cuarentena`) para que esas semanas no le enseñen relaciones falsas entre la hora, el día y la demanda.
+
+
+===== [27] markdown =====
+## Qué tan difícil es cada área: las referencias ingenuas
+
+MAPE (%) de cada referencia por área, horizonte y año: persistencia, ayer y semana pasada a la misma hora. A 24 h,
+"ayer" y la persistencia coinciden.
+
+===== [28] code =====
+filas = []
+for nombre_h, h in HORIZONTES.items():
+    for a in AREAS:
+        d = dataset_area(demanda, a, horizonte=h)
+        for anio_, g in d.dropna(subset=["real", *REFERENCIAS]).groupby(d["DateTime"].dt.year):
+            fila = {"horizonte": nombre_h, "area": a, "anio": anio_}
+            fila.update({ref: errores(g["real"], g[ref])["MAPE (%)"] for ref in REFERENCIAS})
+            filas.append(fila)
+referencias = pd.DataFrame(filas)
+referencias["mejor"] = referencias[REFERENCIAS].idxmin(axis=1)
+display(referencias.pivot_table(index="anio", columns=["horizonte", "area"],
+                                values=["persistencia", "ayer", "semana_pasada"]).round(2))
+--- out ---
+            ayer                                persistencia                                semana_pasada                               
+horizonte     1h                24h                       1h                24h                        1h                24h            
+area      CENTRO NORTE   SUR CENTRO NORTE   SUR       CENTRO NORTE   SUR CENTRO NORTE   SUR        CENTRO NORTE   SUR CENTRO NORTE   SUR
+anio                                                                                                                                    
+2016        5.57  5.18  4.42   5.61  5.21  4.42         3.44  4.17  2.33   5.61  5.21  4.42          3.19  3.97  5.37   3.20  3.97  5.36
+2017        5.81  5.62  4.23   5.80  5.62  4.22         3.41  4.37  2.19   5.80  5.62  4.22          3.50  4.74  5.10   3.50  4.73  5.09
+2018        5.53  5.26  3.54   5.54  5.27  3.56         3.27  4.03  1.98   5.54  5.27  3.56          3.39  4.03  4.45   3.39  4.03  4.45
+2019        5.39  5.45  3.62   5.39  5.47  3.62         3.15  3.92  1.87   5.39  5.47  3.62          3.24  4.30  4.72   3.24  4.30  4.72
+2020        5.19  5.69  4.95   5.14  5.63  4.95         3.40  3.95  2.01   5.14  5.63  4.95          4.23  5.06  8.79   4.23  5.06  8.81
+2021        4.79  5.29  3.71   4.83  5.33  3.71         2.99  3.81  1.78   4.83  5.33  3.71          3.42  4.23  5.84   3.42  4.23  5.84
+2022        5.05  5.48  4.07   5.04  5.48  4.07         3.02  3.98  1.81   5.04  5.48  4.07          3.28  4.09  5.68   3.29  4.09  5.67
+2023        5.35  5.53  4.81   5.33  5.54  4.81         3.00  3.88  1.85   5.33  5.54  4.81          3.66  4.77  6.24   3.65  4.78  6.25
+2024        5.08  4.98  3.48   5.10  4.96  3.49         3.02  3.75  1.77   5.10  4.96  3.49          3.49  3.83  4.85   3.50  3.82  4.84
+2025        5.21  5.37  4.27   5.22  5.39  4.27         2.99  3.64  1.94   5.22  5.39  4.27          3.44  3.90  5.95   3.44  3.90  5.95
+2026        4.97  5.16  3.05   4.92  5.11  3.04         2.99  3.67  1.74   4.92  5.11  3.04          3.10  3.91  4.51   3.10  3.90  4.52
+
+===== [29] markdown =====
+# Preparación de los datos
+
+El dataset de cada área y horizonte sale de `dataset_area` (`src/tetouan_power_forecast/variables_sein.py`), con la
+regla de información de la spec (§6): la temperatura en t es la última hora publicada; a 24 h, la de t+H es un
+pronóstico simulado con un error por día de emisión; el ICEN, el Niño 1+2 y el SAIDI entran según su publicación;
+las fallas cuentan como mucho dos días. La partición: entrenamiento 2016-2024, validación 2025 y prueba 2026, con un
+hueco de H pasos antes de cada corte.
+
+===== [30] code =====
+filas = []
+for nombre_h, h in HORIZONTES.items():
+    for a in AREAS:
+        d = dataset_area(demanda, a, horizonte=h, temperatura=temperatura, icen=icen, nino12=nino12,
+                         eventos=eventos, feriados=FERIADOS)
+        d["particion"] = particion(d["DateTime"], h)
+        comunes = filas_comunes(d, ["M0", "M1", "M2", "M3"])
+        conteo = comunes["particion"].value_counts()
+        filas.append({"horizonte": nombre_h, "area": a, "variables_M0": len(columnas_variante(d, "M0")) - 1,
+                      "variables_M3": len(columnas_variante(d, "M3")) - 1, **conteo.to_dict(),
+                      "desde": comunes["DateTime"].min(), "hasta": comunes["DateTime"].max()})
+resumen = pd.DataFrame(filas)
+display(resumen)
+print(f"Variables de M3 ({a.capitalize()}, {nombre_h}):", columnas_variante(d, "M3"))
+--- out ---
+  horizonte    area  variables_M0  variables_M3  entrenamiento  validacion  prueba  hueco      desde               hasta
+0        1h   NORTE            26            33         154791       17518   13920      4 2016-01-08 2026-10-17 23:30:00
+1        1h  CENTRO            26            33         154791       17518   13920      4 2016-01-08 2026-10-17 23:30:00
+2        1h     SUR            26            33         154791       17518   13920      4 2016-01-08 2026-10-17 23:30:00
+3       24h   NORTE            26            33         154423       17472   13871     96 2016-01-08 2026-10-16 23:00:00
+4       24h  CENTRO            26            33         154423       17472   13871     96 2016-01-08 2026-10-16 23:00:00
+5       24h     SUR            26            33         154423       17472   13871     96 2016-01-08 2026-10-16 23:00:00
+--- out ---
+Variables de M3 (Sur, 24h): ['Hour', 'MinuteOfDay', 'DayOfWeek', 'Time_Sin', 'Time_Cos', 'Week_Sin', 'Week_Cos', 'Obj_Sin', 'Obj_Cos', 'DiaSemanaObjetivo', 'FinDeSemanaObjetivo', 'FeriadoObjetivo', 'Cuarentena', 'Area_t', 'Area_t_menos_1', 'Area_t_menos_2', 'Area_t_menos_4', 'Area_ayer', 'Area_semana_pasada', 'Area_media_1h', 'Area_desv_1h', 'Area_m24_vs_m7d', 'Norte_t', 'Norte_t_menos_2', 'Centro_t', 'Centro_t_menos_2', 'media_24h', 'temp', 'temp_media_24h', 'temp_anomalia', 'temp_objetivo', 'icen', 'nino12_ssta', 'fallas_en_curso']
+
+
+===== [31] code =====
+# Chequeos de la regla de información en el dataset real
+d = dataset_area(demanda, "CENTRO", horizonte=2, temperatura=temperatura)
+horaria = temperatura.set_index("fecha_hora")["centro"]
+muestra = d.dropna(subset=["temp"]).sample(200, random_state=0)
+esperada = horaria.reindex(pd.DatetimeIndex(muestra["DateTime"]), method="ffill").to_numpy()
+assert np.allclose(muestra["temp"], esperada), "la temperatura en t debe ser la última hora publicada"
+assert (d["DateTime"].diff().dropna() == pd.Timedelta(minutes=30)).all(), "un periodo cada 30 minutos"
+print("Regla de información verificada en una muestra de 200 periodos.")
+--- out ---
+Regla de información verificada en una muestra de 200 periodos.
+
+
+===== [32] markdown =====
+## Pipeline reproducible
+
+Todo lo de esta preparación se rehace con **una sola llamada que recibe la ruta de los datos**:
+`pipeline_sein(ruta)`, en [`src/tetouan_power_forecast/pipeline_sein.py`](../src/tetouan_power_forecast/pipeline_sein.py)
+(con su test, `tests/test_pipeline_sein.py`). Por dentro llama a `preparar_datasets`, la misma función con que los
+notebooks 02 y 03 arman sus datasets; el notebook 05 ya parte del pipeline.
+
+| Paso | Qué hace | Por qué |
+|---|---|---|
+| 1. Cargar | Las capas silver de la carpeta (demanda del IEOD, temperatura de ERA5, ICEN, Niño 1+2 y eventos del COES), con el sha256 de cada archivo | Saber con qué datos exactos se corrió |
+| 2. Validar | Corta si falta una columna o hay fechas repetidas; reporta periodos faltantes, valores vacíos, no positivos y el desvío de Norte + Centro + Sur frente al SEIN | Una fecha repetida correría todos los rezagos; lo demás se documenta, como en la auditoría de arriba |
+| 3. Recortar | Opcional: la demanda hasta una fecha de corte (`hasta`) | Reproducir esta corrida aunque el silver siga creciendo con los días nuevos |
+| 4. Feriados | Los del Perú, de los años que cubre la demanda | Un feriado entre semana le quita 7 % al Norte y 11 % al Centro (sección «Semana y feriados») |
+| 5. Datasets | Variables en razón con la media de 24 h, con la regla de información; partición 2016-2024 / 2025 / 2026 con un hueco de H pasos; solo filas completas para M0 a M3 | La demanda del SEIN creció 27 % en diez años: un modelo que aprende el nivel envejece, uno que aprende la razón no. El hueco evita que un objetivo cruce el corte, y las filas comunes permiten comparar M0 a M3 en los mismos periodos |
+| 6. Verificar | La regla de información en 200 periodos por área y horizonte | Que ninguna variable use un dato que en t todavía no se había publicado |
+| 7. Procedencia | Versión del pipeline (`v1`) y del paquete, ruta, sha256 de las capas y filas por partición; `guardar` la escribe con los datasets en `gold/sein/v1/` | Versionar: `VERSION` sube cuando cambia lo que sale (variables, partición o regla), no cuando cambian los datos |
+
+Desde la consola: `python -m tetouan_power_forecast.pipeline_sein --raiz <carpeta> --hasta 2026-10-23 --guardar`.
+Aquí se corre con la misma fecha de corte que la demanda cargada arriba y se comprueba que da las mismas filas que la
+tabla de la preparación paso a paso.
+
+
+===== [33] code =====
+from tetouan_power_forecast.pipeline_sein import pipeline_sein
+
+# Una sola llamada: la ruta de los datos y la fecha de corte, la de la demanda que usó este notebook. Así la
+# comparación de abajo vale aunque el silver crezca con días nuevos
+corrida = pipeline_sein(RAIZ, hasta=demanda["DateTime"].max())
+p = corrida.procedencia
+print(f"Pipeline {p['version_pipeline']} · paquete {p['version_paquete']} · corte {p['hasta']} · "
+      f"{p['feriados']} feriados · regla de información verificada: {p['regla_de_informacion_verificada']}")
+display(pd.DataFrame(p["capas"]).T.assign(sha256=lambda t: t["sha256"].str[:16] + "…"))
+display(pd.Series(p["calidad_demanda"], name="Calidad de la demanda").to_frame())
+
+# Las filas por partición tienen que coincidir con las de la preparación paso a paso (celda de `resumen`)
+filas_pipeline = pd.DataFrame([{"horizonte": h, "area": a, **conteo} for h, por_area in p["filas_por_particion"].items()
+                               for a, conteo in por_area.items()]).set_index(["horizonte", "area"])
+filas_a_mano = resumen.set_index(["horizonte", "area"])
+columnas = ["entrenamiento", "validacion", "prueba", "hueco"]
+assert (filas_pipeline[columnas] == filas_a_mano[columnas]).all().all(), "el pipeline no reproduce la preparación"
+display(filas_pipeline[columnas])
+print("El pipeline reproduce las filas de la preparación paso a paso en los dos horizontes y las tres áreas.")
+
+--- out ---
+Pipeline v1 · paquete 0.1.0 · corte 2026-10-23 00:00:00 · 177 feriados · regla de información verificada: True
+
+--- out ---
+                                                  ruta             sha256
+demanda              coes/silver/demanda_areas.parquet  202fc75463a9a9cd…
+temperatura  exogenas/silver/temperatura_areas.parquet  b0e8c9312bb0cd8d…
+icen                      exogenas/silver/icen.parquet  b8d4328ccf21afdc…
+nino12          exogenas/silver/nino12_semanal.parquet  6490278cf01ae2d8…
+eventos           exogenas/silver/eventos_coes.parquet  3a0ec1c72f253262…
+--- out ---
+                                                 Calidad de la demanda
+periodos                                                        189504
+desde                                              2016-01-01 00:30:00
+hasta                                              2026-10-23 00:00:00
+periodos_faltantes                                                   0
+valores_vacios               {'NORTE': 336, 'CENTRO': 336, 'SUR': 336}
+no_positivos                                                         0
+desvio_max_areas_vs_sein_mw                                     47.596
+--- out ---
+                  entrenamiento  validacion  prueba  hueco
+horizonte area                                            
+1h        NORTE          154791       17518   13920      4
+          CENTRO         154791       17518   13920      4
+          SUR            154791       17518   13920      4
+24h       NORTE          154423       17472   13871     96
+          CENTRO         154423       17472   13871     96
+          SUR            154423       17472   13871     96
+--- out ---
+El pipeline reproduce las filas de la preparación paso a paso en los dos horizontes y las tres áreas.
+
+
+===== [34] markdown =====
+# Hallazgos
+
+**Calidad.** La serie va del 1 de enero de 2016 al 23 de octubre de 2026: 189,504 periodos de 30 minutos. Quedan vacíos un
+día en 2017 y dos en cada año de 2018 a 2020, en las tres áreas a la vez, y no hay valores negativos ni en cero.
+Norte + Centro + Sur = SEIN de forma exacta, salvo algunos periodos de 2019 (hasta 5.7 MW) y de 2026 (hasta 47.6 MW,
+a revisar en la auditoría antes de la prueba).
+
+**Crecimiento.** La demanda media del SEIN pasó de 5,496 MW en 2016 a 6,982 MW en 2025 (+27 %), con la caída de la
+cuarentena en 2020 (−7 % frente a 2019). El Centro es el 60 % del sistema, el Sur el 25 % y el Norte el 15 %, y el
+Norte gana peso año a año (14.1 % en 2016, 15.6 % en lo que va de 2026). **Con la demanda creciendo así, un modelo que
+aprenda el nivel queda viejo rápido:** por eso el objetivo es la razón con la media de 24 h.
+
+**El pico se movió.** En 2016 el 87 % de los días el máximo del SEIN caía entre las 18 y las 23 h; desde 2023, entre
+25 y 33 %. El cambio viene del Centro (de 38.5 % a 19 % de los días), donde la demanda queda alta desde las 10 h
+hasta la noche, y en parte del Norte. El Sur sigue con su pico de noche. Por eso las horas de mayor demanda se
+definen por área y por año, y no con un horario fijo.
+
+**Semana, feriados y temperatura: el Sur es distinto.** El domingo el Norte y el Centro consumen 7.5 y 9 % menos que el
+promedio, y un feriado entre semana les quita 7 y 11 % frente a un día hábil. En el Sur casi no hay diferencia (el
+domingo −0.6 %, el feriado +0.4 %), y la temperatura no explica su demanda (r = −0.07, frente a 0.34 en el Centro y
+0.23 en el Norte; en Lima la demanda sube con el calor desde unos 22 °C). La demanda del Sur depende menos del
+calendario y del clima, probablemente por el peso de la carga minera e industrial. Es también el área donde el
+modelo le gana por menos a las referencias.
+
+**El Niño no es una sola señal.** En El Niño costero de 2017 la demanda del Norte **cayó** 6 a 7 % en marzo y abril
+frente al año anterior (probablemente pesaron más las lluvias y los daños que el calor). En 2023 el Norte creció 2 a 6 % y el Sur
+6 a 16 %, más que el Norte, así que su crecimiento no vino del clima. En 2026, con el ICEN subiendo hasta 3.98 en
+agosto, el Norte crece 4 a 17 % frente a 2025 (17 % en julio), el Centro 1 a 9 % y el Sur 0.6 a 6 %. Con efectos de
+signo distinto según el episodio, el ICEN como variable difícilmente ayuda al modelo, y así salió en la validación.
+
+**Las fallas del COES tienen tendencia.** El número medio de eventos en curso por periodo pasó de 0.47 en 2016 a 1.67
+en 2025 (1.80 en 2026), y en 2025 hay al menos uno en curso en el 91 % de los periodos. Parece reflejar cómo se
+registran los eventos más que una red que falla más: tal como está, la variable no separa la operación normal de una
+falla.
+
+**La cuarentena de 2020** bajó la demanda del Centro 30 a 35 % y la del Sur hasta 40 % frente a la misma semana de
+2019, y la del Norte 13 a 21 %. El Norte volvió a lo normal en julio; el Centro y el Sur seguían por debajo en
+septiembre (el Centro, unos 5 %). Entra al modelo como indicador.
+
+**Qué tan difícil es cada área.** A 1 h, la mejor referencia en 2025 es la persistencia en las tres áreas (MAPE de 3.0 a
+3.4 % en el Centro, 3.6 a 4.4 % en el Norte y 1.7 a 2.3 % en el Sur, según el año); en 2016 "la semana pasada" le
+ganaba en el Centro y el Norte. A 24 h gana "la semana pasada" en el Centro y el Norte, y
+la persistencia en el Sur, donde "la semana pasada" es mala (4.5 a 8.8 %) porque su patrón semanal es débil. El
+modelo se compara siempre contra la mejor de las tres en cada área y horizonte.
+
+**Preparación.** Cada área queda con 154,791 periodos de entrenamiento (2016-2024), 17,518 de validación (2025) y
+13,920 de prueba (enero a octubre de 2026) a 1 h, con un hueco de una hora antes de cada corte (24 h a 24 h). Entran 26
+variables en M0 y 33 en M3. La primera semana de 2016 queda fuera, porque hace falta para el rezago semanal. La regla de
+información se verificó en una muestra de 200 periodos: la temperatura en t es la última hora ya publicada.
